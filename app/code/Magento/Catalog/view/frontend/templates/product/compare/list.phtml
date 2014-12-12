@@ -1,30 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 /* @var $this \Magento\Catalog\Block\Product\Compare\ListCompare */
 ?>
 <?php $_total = $this->getItems()->getSize() ?>
-<?php if($_total): ?>
+<?php if ($_total): ?>
     <a href="#" class="action print" title="<?php echo __('Print This Page') ?>">
         <span><?php echo __('Print This Page') ?></span>
     </a>
@@ -40,9 +21,9 @@
                 <caption class="table-caption"><?php echo __('Compare Products') ?></caption>
                 <thead>
                 <tr>
-                    <?php $_i=0 ?>
-                    <?php foreach($this->getItems() as $_item): ?>
-                        <?php if($_i++==0): ?>
+                    <?php $_i = 0 ?>
+                    <?php foreach ($this->getItems() as $_item): ?>
+                        <?php if ($_i++ == 0): ?>
                             <th scope="row" class="cell label remove"><span><?php echo __('Remove Product') ?></span></th>
                         <?php endif; ?>
                         <td class="cell remove product">
@@ -60,8 +41,8 @@
                     <?php $_i = 0; ?>
                     <?php $_helper = $this->helper('Magento\Catalog\Helper\Output'); ?>
                     <?php /** @var $_item \Magento\Catalog\Model\Product */ ?>
-                    <?php foreach($this->getItems() as $_item): ?>
-                        <?php if($_i++==0): ?>
+                    <?php foreach ($this->getItems() as $_item): ?>
+                        <?php if ($_i++ == 0): ?>
                             <th scope="row" class="cell label product"><span><?php echo __('Product') ?></span></th>
                         <?php endif; ?>
                         <td data-th="<?php echo $this->escapeHtml(__('Product')); ?>" class="cell product info">
@@ -78,7 +59,7 @@
                             <?php echo $this->getProductPrice($_item, '-compare-list-top') ?>
                             <div class="product-item-actions">
                                 <div class="actions-primary">
-                                    <?php if($_item->isSaleable()): ?>
+                                    <?php if ($_item->isSaleable()): ?>
                                         <button type="button" class="action tocart primary"
                                                 data-url="<?php echo $this->helper('Magento\Catalog\Helper\Product\Compare')->getAddToCartUrl($_item) ?>">
                                             <span><?php echo __('Add to Cart') ?></span>
@@ -107,8 +88,8 @@
                 <?php foreach ($this->getAttributes() as $_attribute): ?>
                     <tr>
                         <?php $_i = 0 ?>
-                        <?php foreach($this->getItems() as $_item): ?>
-                            <?php if($_i++==0): ?>
+                        <?php foreach ($this->getItems() as $_item): ?>
+                            <?php if ($_i++ == 0): ?>
                                 <th scope="row" class="cell label">
                                     <span class="attribute label">
                                         <?php echo $this->escapeHtml($_attribute->getStoreLabel() ? $_attribute->getStoreLabel() : __($_attribute->getFrontendLabel())) ?>

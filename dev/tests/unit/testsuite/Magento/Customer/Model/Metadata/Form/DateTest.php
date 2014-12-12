@@ -2,30 +2,10 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\Date
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
-use Magento\Customer\Api\Data\ValidationRuleDataBuilder;
 
 class DateTest extends AbstractFormTestCase
 {
@@ -88,7 +68,7 @@ class DateTest extends AbstractFormTestCase
      */
     public function testValidateValue($value, $validation, $required, $expected)
     {
-        $validationRules = array();
+        $validationRules = [];
         $validationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])
@@ -134,42 +114,42 @@ class DateTest extends AbstractFormTestCase
 
     public function validateValueDataProvider()
     {
-        return array(
-            'false value, load original' => array(false, array(), false, true),
-            'Empty value, not required' => array('', array(), false, true),
-            'Empty value, required' => array('', array(), true, array('"Space Date" is a required value.')),
-            'Valid date, min set' => array('1961-5-5', array('date_range_min' => strtotime('4/12/1961')), false, true),
-            'Below min, only min set' => array(
+        return [
+            'false value, load original' => [false, [], false, true],
+            'Empty value, not required' => ['', [], false, true],
+            'Empty value, required' => ['', [], true, ['"Space Date" is a required value.']],
+            'Valid date, min set' => ['1961-5-5', ['date_range_min' => strtotime('4/12/1961')], false, true],
+            'Below min, only min set' => [
                 '1957-10-4',
-                array('date_range_min' => strtotime('1961/04/12')),
+                ['date_range_min' => strtotime('1961/04/12')],
                 false,
-                array('Please enter a valid date equal to or greater than 12/04/1961 at Space Date.')
-            ),
-            'Below min, min and max set' => array(
+                ['Please enter a valid date equal to or greater than 12/04/1961 at Space Date.'],
+            ],
+            'Below min, min and max set' => [
                 '1957-10-4',
-                array('date_range_min' => strtotime('1961/04/12'), 'date_range_max' => strtotime('12/1/2013')),
+                ['date_range_min' => strtotime('1961/04/12'), 'date_range_max' => strtotime('12/1/2013')],
                 false,
-                array('Please enter a valid date between 12/04/1961 and 01/12/2013 at Space Date.')
-            ),
-            'Above max, only max set' => array(
+                ['Please enter a valid date between 12/04/1961 and 01/12/2013 at Space Date.'],
+            ],
+            'Above max, only max set' => [
                 '2014-1-30',
-                array('date_range_max' => strtotime('12/1/2013')),
+                ['date_range_max' => strtotime('12/1/2013')],
                 false,
-                array('Please enter a valid date less than or equal to 01/12/2013 at Space Date.')
-            ),
-            'Valid, min and max' => array(
+                ['Please enter a valid date less than or equal to 01/12/2013 at Space Date.'],
+            ],
+            'Valid, min and max' => [
                 '1961-5-5',
-                array('date_range_min' => strtotime('4/12/1961'), 'date_range_max' => strtotime('12/1/2013')),
+                ['date_range_min' => strtotime('4/12/1961'), 'date_range_max' => strtotime('12/1/2013')],
                 false,
-                true
-            ),
-            'Invalid date' => array(
+                true,
+            ],
+            'Invalid date' => [
                 'abc',
-                array(),
+                [],
                 false,
-                array('dateFalseFormat' => '"Space Date" does not fit the entered date format.')
-            )
-        );
+                ['dateFalseFormat' => '"Space Date" does not fit the entered date format.'],
+            ]
+        ];
     }
 
     /**
@@ -185,13 +165,13 @@ class DateTest extends AbstractFormTestCase
 
     public function compactAndRestoreValueDataProvider()
     {
-        return array(
-            array(1, 1),
-            array(false, false),
-            array('', null),
-            array('test', 'test'),
-            array(array('element1', 'element2'), array('element1', 'element2'))
-        );
+        return [
+            [1, 1],
+            [false, false],
+            ['', null],
+            ['test', 'test'],
+            [['element1', 'element2'], ['element1', 'element2']]
+        ];
     }
 
     /**

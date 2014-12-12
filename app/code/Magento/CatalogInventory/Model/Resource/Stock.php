@@ -1,31 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\CatalogInventory\Model\Resource;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Framework\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Stock resource model
@@ -137,12 +118,12 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function lockProductsStock($productIds, $websiteId)
     {
         if (empty($productIds)) {
-            return array();
+            return [];
         }
         $itemTable = $this->getTable('cataloginventory_stock_item');
         $productTable = $this->getTable('catalog_product_entity');
-        $select = $this->_getWriteAdapter()->select()->from(array('si' => $itemTable))
-            ->join(array('p' => $productTable), 'p.entity_id=si.product_id', array('type_id'))
+        $select = $this->_getWriteAdapter()->select()->from(['si' => $itemTable])
+            ->join(['p' => $productTable], 'p.entity_id=si.product_id', ['type_id'])
             ->where('website_id=?', $websiteId)
             ->where('product_id IN(?)', $productIds)
             ->forUpdate(true);
@@ -164,7 +145,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         $adapter = $this->_getWriteAdapter();
-        $conditions = array();
+        $conditions = [];
         foreach ($items as $productId => $qty) {
             $case = $adapter->quoteInto('?', $productId);
             $result = $adapter->quoteInto("qty{$operator}?", $qty);
@@ -172,10 +153,10 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         $value = $adapter->getCaseSql('product_id', $conditions, 'qty');
-        $where = array('product_id IN (?)' => array_keys($items), 'website_id = ?' => $websiteId);
+        $where = ['product_id IN (?)' => array_keys($items), 'website_id = ?' => $websiteId];
 
         $adapter->beginTransaction();
-        $adapter->update($this->getTable('cataloginventory_stock_item'), array('qty' => $value), $where);
+        $adapter->update($this->getTable('cataloginventory_stock_item'), ['qty' => $value], $where);
         $adapter->commit();
 
         return $this;
@@ -189,12 +170,12 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _initConfig()
     {
         if (!$this->_isConfig) {
-            $configMap = array(
+            $configMap = [
                 '_isConfigManageStock' => \Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK,
                 '_isConfigBackorders' => \Magento\CatalogInventory\Model\Configuration::XML_PATH_BACKORDERS,
                 '_configMinQty' => \Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_QTY,
-                '_configNotifyStockQty' => \Magento\CatalogInventory\Model\Configuration::XML_PATH_NOTIFY_STOCK_QTY
-            );
+                '_configNotifyStockQty' => \Magento\CatalogInventory\Model\Configuration::XML_PATH_NOTIFY_STOCK_QTY,
+            ];
 
             foreach ($configMap as $field => $const) {
                 $this->{$field} = (int) $this->_scopeConfig->getValue(
@@ -219,7 +200,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
         $adapter = $this->_getWriteAdapter();
-        $values = array('is_in_stock' => 0, 'stock_status_changed_auto' => 1);
+        $values = ['is_in_stock' => 0, 'stock_status_changed_auto' => 1];
 
         $select = $adapter->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
             ->where('type_id IN(?)', $this->_configTypeIds);
@@ -253,7 +234,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
         $adapter = $this->_getWriteAdapter();
-        $values = array('is_in_stock' => 1);
+        $values = ['is_in_stock' => 1];
 
         $select = $adapter->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
             ->where('type_id IN(?)', $this->_configTypeIds);
@@ -293,7 +274,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $currentDbTime = $adapter->quoteInto('?', $this->dateTime->formatDate(true));
         $conditionalDate = $adapter->getCheckSql($condition, $currentDbTime, 'NULL');
 
-        $value = array('low_stock_date' => new \Zend_Db_Expr($conditionalDate));
+        $value = ['low_stock_date' => new \Zend_Db_Expr($conditionalDate)];
 
         $select = $adapter->select()->from($this->getTable('catalog_product_entity'), 'entity_id')
             ->where('type_id IN(?)', $this->_configTypeIds);
@@ -326,33 +307,33 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $this->_configNotifyStockQty,
             'invtr.notify_stock_qty'
         );
-        $conditions = array(
-            array(
+        $conditions = [
+            [
                 $adapter->prepareSqlCondition('invtr.use_config_manage_stock', 1),
                 $adapter->prepareSqlCondition($this->_isConfigManageStock, 1),
-                $adapter->prepareSqlCondition('invtr.qty', array('lt' => $qtyIf))
-            ),
-            array(
+                $adapter->prepareSqlCondition('invtr.qty', ['lt' => $qtyIf]),
+            ],
+            [
                 $adapter->prepareSqlCondition('invtr.use_config_manage_stock', 0),
                 $adapter->prepareSqlCondition('invtr.manage_stock', 1)
-            )
-        );
+            ],
+        ];
 
-        $where = array();
+        $where = [];
         foreach ($conditions as $k => $part) {
             $where[$k] = join(' ' . \Zend_Db_Select::SQL_AND . ' ', $part);
         }
 
         $where = $adapter->prepareSqlCondition(
             'invtr.low_stock_date',
-            array('notnull' => true)
+            ['notnull' => true]
         ) . ' ' . \Zend_Db_Select::SQL_AND . ' ((' . join(
             ') ' . \Zend_Db_Select::SQL_OR . ' (',
             $where
         ) . '))';
 
         $collection->joinTable(
-            array('invtr' => 'cataloginventory_stock_item'),
+            ['invtr' => 'cataloginventory_stock_item'],
             'product_id = entity_id',
             $fields,
             $where

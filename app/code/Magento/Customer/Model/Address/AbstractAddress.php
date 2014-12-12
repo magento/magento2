@@ -1,34 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Customer\Model\Address;
 
-use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressDataBuilder;
-use Magento\Customer\Api\Data\RegionInterface;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\RegionDataBuilder;
+use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Framework\Api\AttributeDataBuilder;
 
@@ -74,14 +55,14 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
      *
      * @var \Magento\Directory\Model\Country[]
      */
-    protected static $_countryModels = array();
+    protected static $_countryModels = [];
 
     /**
      * Directory region models
      *
      * @var \Magento\Directory\Model\Region[]
      */
-    protected static $_regionModels = array();
+    protected static $_regionModels = [];
 
     /**
      * Directory data
@@ -157,7 +138,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
         RegionDataBuilder $regionBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_directoryData = $directoryData;
         $data = $this->_implodeStreetField($data);
@@ -458,7 +439,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
         if (!($formatType = $this->getConfig()->getFormatByCode($type)) || !$formatType->getRenderer()) {
             return null;
         }
-        $this->_eventManager->dispatch('customer_address_format', array('type' => $formatType, 'address' => $this));
+        $this->_eventManager->dispatch('customer_address_format', ['type' => $formatType, 'address' => $this]);
         return $formatType->getRenderer()->render($this);
     }
 
@@ -496,22 +477,26 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
         $addressId = $this->getId();
 
         $attributes = $this->_addressMetadataService->getAllAttributesMetadata();
-        $addressData = array();
+        $addressData = [];
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();
             if (!is_null($this->getData($code))) {
-                $addressData[$code] = $this->getDataUsingMethod($code);
+                if ($code === AddressInterface::STREET) {
+                    $addressData[$code] = $this->getDataUsingMethod($code);
+                } else {
+                    $addressData[$code] = $this->getData($code);
+                }
             }
         }
 
         /** @var RegionInterface $region */
         $region = $this->_regionBuilder
             ->populateWithArray(
-                array(
+                [
                     RegionInterface::REGION => $this->getRegion(),
                     RegionInterface::REGION_ID => $this->getRegionId(),
-                    RegionInterface::REGION_CODE => $this->getRegionCode()
-                )
+                    RegionInterface::REGION_CODE => $this->getRegionCode(),
+                ]
             )
             ->create();
 
@@ -544,7 +529,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         if (!\Zend_Validate::is($this->getFirstname(), 'NotEmpty')) {
             $errors[] = __('Please enter the first name.');
         }

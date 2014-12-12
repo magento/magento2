@@ -1,27 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-
 
 /**
  * Reports quote collection
@@ -44,14 +24,14 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
      *
      * @var array
      */
-    protected $_joinedFields = array();
+    protected $_joinedFields = [];
 
     /**
      * Map
      *
      * @var array
      */
-    protected $_map = array('fields' => array('store_id' => 'main_table.store_id'));
+    protected $_map = ['fields' => ['store_id' => 'main_table.store_id']];
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Collection
@@ -111,7 +91,7 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
     {
         $this->addFieldToFilter(
             'items_count',
-            array('neq' => '0')
+            ['neq' => '0']
         )->addFieldToFilter(
             'main_table.is_active',
             '1'
@@ -124,9 +104,8 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
             'updated_at'
         );
         if (is_array($storeIds) && !empty($storeIds)) {
-            $this->addFieldToFilter('store_id', array('in' => $storeIds));
+            $this->addFieldToFilter('store_id', ['in' => $storeIds]);
         }
-
 
         return $this;
     }
@@ -147,8 +126,8 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
 
         $ordersSubSelect = clone $this->getSelect();
         $ordersSubSelect->reset()->from(
-            array('oi' => $this->getTable('sales_order_item')),
-            array('orders' => new \Zend_Db_Expr('COUNT(1)'), 'product_id')
+            ['oi' => $this->getTable('sales_order_item')],
+            ['orders' => new \Zend_Db_Expr('COUNT(1)'), 'product_id']
         )->group(
             'oi.product_id'
         );
@@ -158,30 +137,30 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
         )->reset(
             \Zend_Db_Select::COLUMNS
         )->joinInner(
-            array('quote_items' => $this->getTable('sales_quote_item')),
+            ['quote_items' => $this->getTable('sales_quote_item')],
             'quote_items.quote_id = main_table.entity_id',
             null
         )->joinInner(
-            array('e' => $this->getTable('catalog_product_entity')),
+            ['e' => $this->getTable('catalog_product_entity')],
             'e.entity_id = quote_items.product_id',
             null
         )->joinInner(
-            array('product_name' => $productAttrNameTable),
+            ['product_name' => $productAttrNameTable],
             "product_name.entity_id = e.entity_id\n                AND product_name.attribute_id = {$productAttrNameId}\n                AND product_name.store_id = " .
             \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-            array('name' => 'product_name.value')
+            ['name' => 'product_name.value']
         )->joinInner(
-            array('product_price' => $productAttrPriceTable),
+            ['product_price' => $productAttrPriceTable],
             "product_price.entity_id = e.entity_id AND product_price.attribute_id = {$productAttrPriceId}",
-            array('price' => new \Zend_Db_Expr('product_price.value * main_table.base_to_global_rate'))
+            ['price' => new \Zend_Db_Expr('product_price.value * main_table.base_to_global_rate')]
         )->joinLeft(
-            array('order_items' => new \Zend_Db_Expr(sprintf('(%s)', $ordersSubSelect))),
+            ['order_items' => new \Zend_Db_Expr(sprintf('(%s)', $ordersSubSelect))],
             'order_items.product_id = e.entity_id',
-            array()
+            []
         )->columns(
             'e.*'
         )->columns(
-            array('carts' => new \Zend_Db_Expr('COUNT(quote_items.item_id)'))
+            ['carts' => new \Zend_Db_Expr('COUNT(quote_items.item_id)')]
         )->columns(
             'order_items.orders'
         )->where(
@@ -202,7 +181,7 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
      */
     public function addStoreFilter($storeIds)
     {
-        $this->addFieldToFilter('store_id', array('in' => $storeIds));
+        $this->addFieldToFilter('store_id', ['in' => $storeIds]);
         return $this;
     }
 
@@ -226,31 +205,31 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
         $attrEmailTableName = $attrEmail->getBackend()->getTable();
 
         $adapter = $this->getSelect()->getAdapter();
-        $customerName = $adapter->getConcatSql(array('cust_fname.value', 'cust_lname.value'), ' ');
+        $customerName = $adapter->getConcatSql(['cust_fname.value', 'cust_lname.value'], ' ');
         $this->getSelect()->joinInner(
-            array('cust_email' => $attrEmailTableName),
+            ['cust_email' => $attrEmailTableName],
             'cust_email.entity_id = main_table.customer_id',
-            array('email' => 'cust_email.email')
+            ['email' => 'cust_email.email']
         )->joinInner(
-            array('cust_fname' => $attrFirstnameTableName),
+            ['cust_fname' => $attrFirstnameTableName],
             implode(
                 ' AND ',
-                array(
+                [
                     'cust_fname.entity_id = main_table.customer_id',
                     $adapter->quoteInto('cust_fname.attribute_id = ?', (int)$attrFirstnameId)
-                )
+                ]
             ),
-            array('firstname' => 'cust_fname.value')
+            ['firstname' => 'cust_fname.value']
         )->joinInner(
-            array('cust_lname' => $attrLastnameTableName),
+            ['cust_lname' => $attrLastnameTableName],
             implode(
                 ' AND ',
-                array(
+                [
                     'cust_lname.entity_id = main_table.customer_id',
                     $adapter->quoteInto('cust_lname.attribute_id = ?', (int)$attrLastnameId)
-                )
+                ]
             ),
-            array('lastname' => 'cust_lname.value', 'customer_name' => $customerName)
+            ['lastname' => 'cust_lname.value', 'customer_name' => $customerName]
         );
 
         $this->_joinedFields['customer_name'] = $customerName;
@@ -281,11 +260,11 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
     {
         if (is_array($storeIds)) {
             $this->getSelect()->columns(
-                array('subtotal' => '(main_table.base_subtotal_with_discount*main_table.base_to_global_rate)')
+                ['subtotal' => '(main_table.base_subtotal_with_discount*main_table.base_to_global_rate)']
             );
             $this->_joinedFields['subtotal'] = '(main_table.base_subtotal_with_discount*main_table.base_to_global_rate)';
         } else {
-            $this->getSelect()->columns(array('subtotal' => 'main_table.base_subtotal_with_discount'));
+            $this->getSelect()->columns(['subtotal' => 'main_table.base_subtotal_with_discount']);
             $this->_joinedFields['subtotal'] = 'main_table.base_subtotal_with_discount';
         }
 

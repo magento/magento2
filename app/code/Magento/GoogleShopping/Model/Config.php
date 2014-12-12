@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\GoogleShopping\Model;
 
@@ -35,7 +16,7 @@ class Config extends \Magento\Framework\Object
      *
      * @var array
      */
-    protected $_config = array();
+    protected $_config = [];
 
     /**
      * Core store config
@@ -47,7 +28,7 @@ class Config extends \Magento\Framework\Object
     /**
      * Store manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -58,15 +39,15 @@ class Config extends \Magento\Framework\Object
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        array $data = array()
+        array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
@@ -177,7 +158,7 @@ class Config extends \Magento\Framework\Object
     public function getDestinationsInfo($storeId = null)
     {
         $destinations = $this->getConfigData('destinations', $storeId);
-        $destinationsInfo = array();
+        $destinationsInfo = [];
         foreach ($destinations as $key => $name) {
             $destinationsInfo[$name] = $this->getConfigData($key, $storeId);
         }
@@ -266,7 +247,7 @@ class Config extends \Magento\Framework\Object
     public function getAttributeGroupsFlat()
     {
         $groups = $this->getConfigData('attribute_groups');
-        $groupFlat = array();
+        $groupFlat = [];
         foreach ($groups as $group => $subAttributes) {
             foreach ($subAttributes as $subAttribute => $value) {
                 $groupFlat[$subAttribute] = $group;
@@ -303,7 +284,7 @@ class Config extends \Magento\Framework\Object
      */
     public function getRequiredAttributes()
     {
-        $requiredAttributes = array();
+        $requiredAttributes = [];
         foreach ($this->getAttributes() as $group => $attributes) {
             foreach ($attributes as $attributeName => $attribute) {
                 if ($attribute['required']) {

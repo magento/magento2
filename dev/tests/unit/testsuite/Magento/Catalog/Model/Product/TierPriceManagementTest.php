@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -82,37 +63,37 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->repositoryMock = $this->getMock(
             '\Magento\Catalog\Model\ProductRepository',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->priceBuilderMock = $this->getMock(
             'Magento\Catalog\Api\Data\ProductTierPriceDataBuilder',
-            array('populateWithArray', 'create'),
-            array(),
+            ['populateWithArray', 'create'],
+            [],
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->websiteMock =
-            $this->getMock('Magento\Store\Model\Website', array('getId', '__wakeup'), array(), '', false);
+            $this->getMock('Magento\Store\Model\Website', ['getId', '__wakeup'], [], '', false);
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            array('getData', 'getIdBySku', 'load', '__wakeup', 'save', 'validate', 'setData'),
-            array(),
+            ['getData', 'getIdBySku', 'load', '__wakeup', 'save', 'validate', 'setData'],
+            [],
             '',
             false
         );
         $this->configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->priceModifierMock =
-            $this->getMock('Magento\Catalog\Model\Product\PriceModifier', array(), array(), '', false);
+            $this->getMock('Magento\Catalog\Model\Product\PriceModifier', [], [], '', false);
         $this->repositoryMock->expects($this->any())->method('get')->with('product_sku')
             ->will($this->returnValue($this->productMock));
         $this->groupManagementMock =
-            $this->getMock('Magento\Customer\Api\GroupManagementInterface', array(), array(), '', false);
+            $this->getMock('Magento\Customer\Api\GroupManagementInterface', [], [], '', false);
         $this->groupRepositoryMock =
-            $this->getMock('Magento\Customer\Api\GroupRepositoryInterface', array(), array(), '', false);
+            $this->getMock('Magento\Customer\Api\GroupRepositoryInterface', [], [], '', false);
 
         $this->service = new TierPriceManagement(
             $this->repositoryMock,
@@ -140,7 +121,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getData')
             ->with('tier_price')
-            ->will($this->returnValue(array($groupData)));
+            ->will($this->returnValue([$groupData]));
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
@@ -167,26 +148,26 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
 
     public function getListDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 1,
                 'all',
-                array('website_price' => 10, 'price' => 5, 'all_groups' => 1, 'price_qty' => 5),
-                array('value' => 10, 'qty' => 5)
-            ),
-            array(
+                ['website_price' => 10, 'price' => 5, 'all_groups' => 1, 'price_qty' => 5],
+                ['value' => 10, 'qty' => 5],
+            ],
+            [
                 0,
                 1,
-                array('website_price' => 10, 'price' => 5, 'all_groups' => 0, 'cust_group' => 1, 'price_qty' => 5),
-                array('value' => 5, 'qty' => 5)
-            ),
-            array(
+                ['website_price' => 10, 'price' => 5, 'all_groups' => 0, 'cust_group' => 1, 'price_qty' => 5],
+                ['value' => 5, 'qty' => 5]
+            ],
+            [
                 0,
                 'all',
-                array('website_price' => 10, 'price' => 5, 'all_groups' => 0, 'cust_group' => 1, 'price_qty' => 5),
-                array()
-            )
-        );
+                ['website_price' => 10, 'price' => 5, 'all_groups' => 0, 'cust_group' => 1, 'price_qty' => 5],
+                []
+            ]
+        ];
     }
 
     public function testSuccessDeleteTierPrice()
@@ -252,7 +233,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             ->with('tier_price')
             ->will(
                 $this->returnValue(
-                    array(array('all_groups' => 0, 'website_id' => 0, 'price_qty' => 4, 'price' => 50))
+                    [['all_groups' => 0, 'website_id' => 0, 'price_qty' => 4, 'price' => 50]]
                 )
             );
         $this->configMock
@@ -263,21 +244,21 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->once())->method('setData')->with(
             'tier_price',
-            array(
-                array('all_groups' => 0, 'website_id' => 0, 'price_qty' => 4, 'price' => 50),
-                array(
+            [
+                ['all_groups' => 0, 'website_id' => 0, 'price_qty' => 4, 'price' => 50],
+                [
                     'cust_group' => 32000,
                     'price' => 100,
                     'website_price' => 100,
                     'website_id' => 0,
                     'price_qty' => 3
-                )
-            )
+                ]
+            ]
         );
         $this->repositoryMock->expects($this->once())->method('save')->with($this->productMock);
         $group = $this->getMock('\Magento\Customer\Model\Data\Group',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -298,7 +279,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             ->with('tier_price')
             ->will(
                 $this->returnValue(
-                    array(array('cust_group' => 1, 'website_id' => 0, 'price_qty' => 4, 'price' => 50))
+                    [['cust_group' => 1, 'website_id' => 0, 'price_qty' => 4, 'price' => 50]]
                 )
             );
         $this->configMock
@@ -309,10 +290,10 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->once())->method('setData')->with(
             'tier_price',
-            array(
-                array('cust_group' => 1, 'website_id' => 0, 'price_qty' => 4, 'price' => 50),
-                array('cust_group' => 1, 'website_id' => 0, 'price_qty' => 3, 'price' => 100, 'website_price' => 100)
-            )
+            [
+                ['cust_group' => 1, 'website_id' => 0, 'price_qty' => 4, 'price' => 50],
+                ['cust_group' => 1, 'website_id' => 0, 'price_qty' => 3, 'price' => 100, 'website_price' => 100]
+            ]
         );
         $this->repositoryMock->expects($this->once())->method('save')->with($this->productMock);
         $this->service->add('product_sku', 1, 100, 3);
@@ -326,7 +307,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             ->with('tier_price')
             ->will(
                 $this->returnValue(
-                    array(array('cust_group' => 1, 'website_id' => 0, 'price_qty' => 3, 'price' => 50))
+                    [['cust_group' => 1, 'website_id' => 0, 'price_qty' => 3, 'price' => 50]]
                 )
             );
         $this->configMock
@@ -337,9 +318,9 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->once())->method('setData')->with(
             'tier_price',
-            array(
-                array('cust_group' => 1, 'website_id' => 0, 'price_qty' => 3, 'price' => 100)
-            )
+            [
+                ['cust_group' => 1, 'website_id' => 0, 'price_qty' => 3, 'price' => 100]
+            ]
         );
         $this->repositoryMock->expects($this->once())->method('save')->with($this->productMock);
         $this->service->add('product_sku', 1, 100, 3);
@@ -357,12 +338,12 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getData')
             ->with('tier_price')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->groupRepositoryMock->expects($this->once())->method('getById')->will($this->returnValue($group));
         $this->productMock->expects($this->once())->method('validate')->will(
             $this->returnValue(
-                array('attr1' => '', 'attr2' => '')
+                ['attr1' => '', 'attr2' => '']
             )
         );
         $this->repositoryMock->expects($this->never())->method('save');
@@ -380,7 +361,7 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getData')
             ->with('tier_price')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->groupRepositoryMock->expects($this->once())->method('getById')->will($this->returnValue($group));
         $this->repositoryMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));
@@ -407,4 +388,4 @@ class TierPriceManagementTest extends \PHPUnit_Framework_TestCase
             [10, -15]
         ];
     }
-} 
+}

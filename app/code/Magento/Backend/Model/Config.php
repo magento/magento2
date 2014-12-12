@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Model;
 
@@ -88,7 +69,7 @@ class Config extends \Magento\Framework\Object
     protected $_configValueFactory;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -99,7 +80,7 @@ class Config extends \Magento\Framework\Object
      * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
      * @param \Magento\Backend\Model\Config\Loader $configLoader
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -109,8 +90,8 @@ class Config extends \Magento\Framework\Object
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
         \Magento\Backend\Model\Config\Loader $configLoader,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
-        array $data = array()
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        array $data = []
     ) {
         parent::__construct($data);
         $this->_eventManager = $eventManager;
@@ -147,7 +128,7 @@ class Config extends \Magento\Framework\Object
         /* @var $saveTransaction \Magento\Framework\DB\Transaction */
 
         // Extends for old config data
-        $extraOldGroups = array();
+        $extraOldGroups = [];
 
         foreach ($groups as $groupId => $groupData) {
             $this->_processGroup(
@@ -173,7 +154,7 @@ class Config extends \Magento\Framework\Object
             // website and store codes can be used in event implementation, so set them as well
             $this->_eventManager->dispatch(
                 "admin_system_config_changed_section_{$this->getSection()}",
-                array('website' => $this->getWebsite(), 'store' => $this->getStore())
+                ['website' => $this->getWebsite(), 'store' => $this->getStore()]
             );
         } catch (\Exception $e) {
             // re-init configuration
@@ -222,11 +203,11 @@ class Config extends \Magento\Framework\Object
 
         // set value for group field entry by fieldname
         // use extra memory
-        $fieldsetData = array();
+        $fieldsetData = [];
         if (isset($groupData['fields'])) {
             if ($group->shouldCloneFields()) {
                 $cloneModel = $group->getCloneModel();
-                $mappedFields = array();
+                $mappedFields = [];
 
                 /** @var $field \Magento\Backend\Model\Config\Structure\Element\Field */
                 foreach ($group->getChildren() as $field) {
@@ -257,7 +238,7 @@ class Config extends \Magento\Framework\Object
                     ->_configValueFactory
                     ->create();
 
-                $data = array(
+                $data = [
                     'field' => $fieldId,
                     'groups' => $groups,
                     'group_id' => $group->getId(),
@@ -266,7 +247,7 @@ class Config extends \Magento\Framework\Object
                     'scope_code' => $scopeCode,
                     'field_config' => $field->getData(),
                     'fieldset_data' => $fieldsetData
-                );
+                ];
                 $backendModel->addData($data);
 
                 $this->_checkSingleStoreMode($field, $backendModel);
@@ -352,7 +333,7 @@ class Config extends \Magento\Framework\Object
      * @param array $oldConfig Config data to extend
      * @return array
      */
-    public function extendConfig($path, $full = true, $oldConfig = array())
+    public function extendConfig($path, $full = true, $oldConfig = [])
     {
         $extended = $this->_configLoader->getConfigByPath($path, $this->getScope(), $this->getScopeId(), $full);
         if (is_array($oldConfig) && !empty($oldConfig)) {

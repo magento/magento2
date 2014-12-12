@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\SalesRule\Model\Resource\Report\Rule;
 
@@ -87,7 +68,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 $this->getStoreTZOffsetQuery($sourceTable, $aggregationField, $from, $to)
             );
 
-            $columns = array(
+            $columns = [
                 'period' => $periodExpr,
                 'store_id' => 'store_id',
                 'order_status' => 'status',
@@ -143,17 +124,17 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                         0
                     ) . ') * base_to_global_rate)',
                     0
-                )
-            );
+                ),
+            ];
 
             $select = $adapter->select();
-            $select->from(array('source_table' => $sourceTable), $columns)->where('coupon_code IS NOT NULL');
+            $select->from(['source_table' => $sourceTable], $columns)->where('coupon_code IS NOT NULL');
 
             if ($subSelect !== null) {
                 $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
             }
 
-            $select->group(array($periodExpr, 'store_id', 'status', 'coupon_code'));
+            $select->group([$periodExpr, 'store_id', 'status', 'coupon_code']);
 
             $select->having('COUNT(entity_id) > 0');
 
@@ -161,7 +142,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
 
             $select->reset();
 
-            $columns = array(
+            $columns = [
                 'period' => 'period',
                 'store_id' => new \Zend_Db_Expr('0'),
                 'order_status' => 'order_status',
@@ -173,8 +154,8 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 'total_amount' => 'SUM(total_amount)',
                 'subtotal_amount_actual' => 'SUM(subtotal_amount_actual)',
                 'discount_amount_actual' => 'SUM(discount_amount_actual)',
-                'total_amount_actual' => 'SUM(total_amount_actual)'
-            );
+                'total_amount_actual' => 'SUM(total_amount_actual)',
+            ];
 
             $select->from($table, $columns)->where('store_id <> 0');
 
@@ -182,7 +163,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
             }
 
-            $select->group(array('period', 'order_status', 'coupon_code'));
+            $select->group(['period', 'order_status', 'coupon_code']);
 
             $adapter->query($select->insertFromSelect($table, array_keys($columns)));
             $adapter->commit();

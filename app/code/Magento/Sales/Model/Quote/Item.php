@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Quote;
 
@@ -146,21 +127,21 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      *
      * @var array
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Item options by code cache
      *
      * @var array
      */
-    protected $_optionsByCode = array();
+    protected $_optionsByCode = [];
 
     /**
      * Not Represent options
      *
      * @var array
      */
-    protected $_notRepresentOptions = array('info_buyRequest');
+    protected $_notRepresentOptions = ['info_buyRequest'];
 
     /**
      * Flag stating that options were successfully saved
@@ -223,7 +204,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_errorInfos = $statusListFactory->create();
         $this->_localeFormat = $localeFormat;
@@ -353,7 +334,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         $oldQty = $this->_getData('qty');
         $this->setData('qty', $qty);
 
-        $this->_eventManager->dispatch('sales_quote_item_qty_set_after', array('item' => $this));
+        $this->_eventManager->dispatch('sales_quote_item_qty_set_after', ['item' => $this]);
 
         if ($this->getQuote() && $this->getQuote()->getIgnoreOldQty()) {
             return $this;
@@ -379,8 +360,8 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     {
         $qtyOptions = $this->getData('qty_options');
         if (is_null($qtyOptions)) {
-            $productIds = array();
-            $qtyOptions = array();
+            $productIds = [];
+            $qtyOptions = [];
             foreach ($this->getOptions() as $option) {
                 /** @var $option \Magento\Sales\Model\Quote\Item\Option */
                 if (is_object($option->getProduct())
@@ -440,7 +421,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
 
         $this->_eventManager->dispatch(
             'sales_quote_item_set_product',
-            array('product' => $product, 'quote_item' => $this)
+            ['product' => $product, 'quote_item' => $this]
         );
 
         return $this;
@@ -552,7 +533,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      * @param array $arrAttributes
      * @return array
      */
-    public function toArray(array $arrAttributes = array())
+    public function toArray(array $arrAttributes = [])
     {
         $data = parent::toArray($arrAttributes);
 
@@ -786,8 +767,8 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         parent::__clone();
         $options = $this->getOptions();
         $this->_quote = null;
-        $this->_options = array();
-        $this->_optionsByCode = array();
+        $this->_options = [];
+        $this->_optionsByCode = [];
         foreach ($options as $option) {
             $this->addOption(clone $option);
         }

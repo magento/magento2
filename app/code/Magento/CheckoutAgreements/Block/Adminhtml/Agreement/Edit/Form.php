@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement\Edit;
 
@@ -42,7 +23,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
-        array $data = array()
+        array $data = []
     ) {
         $this->_systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -69,63 +50,63 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $model = $this->_coreRegistry->registry('checkout_agreement');
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
+            ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
         $fieldset = $form->addFieldset(
             'base_fieldset',
-            array('legend' => __('Terms and Conditions Information'), 'class' => 'fieldset-wide')
+            ['legend' => __('Terms and Conditions Information'), 'class' => 'fieldset-wide']
         );
 
         if ($model->getId()) {
-            $fieldset->addField('agreement_id', 'hidden', array('name' => 'agreement_id'));
+            $fieldset->addField('agreement_id', 'hidden', ['name' => 'agreement_id']);
         }
         $fieldset->addField(
             'name',
             'text',
-            array(
+            [
                 'name' => 'name',
                 'label' => __('Condition Name'),
                 'title' => __('Condition Name'),
                 'required' => true
-            )
+            ]
         );
 
         $fieldset->addField(
             'is_active',
             'select',
-            array(
+            [
                 'label' => __('Status'),
                 'title' => __('Status'),
                 'name' => 'is_active',
                 'required' => true,
-                'options' => array('1' => __('Enabled'), '0' => __('Disabled'))
-            )
+                'options' => ['1' => __('Enabled'), '0' => __('Disabled')]
+            ]
         );
 
         $fieldset->addField(
             'is_html',
             'select',
-            array(
+            [
                 'label' => __('Show Content as'),
                 'title' => __('Show Content as'),
                 'name' => 'is_html',
                 'required' => true,
-                'options' => array(0 => __('Text'), 1 => __('HTML'))
-            )
+                'options' => [0 => __('Text'), 1 => __('HTML')]
+            ]
         );
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $field = $fieldset->addField(
                 'store_id',
                 'multiselect',
-                array(
+                [
                     'name' => 'stores[]',
                     'label' => __('Store View'),
                     'title' => __('Store View'),
                     'required' => true,
                     'values' => $this->_systemStore->getStoreValuesForForm(false, true)
-                )
+                ]
             );
             $renderer = $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
@@ -135,7 +116,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $fieldset->addField(
                 'store_id',
                 'hidden',
-                array('name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId())
+                ['name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId()]
             );
             $model->setStoreId($this->_storeManager->getStore(true)->getId());
         }
@@ -143,7 +124,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'checkbox_text',
             'editor',
-            array(
+            [
                 'name' => 'checkbox_text',
                 'label' => __('Checkbox Text'),
                 'title' => __('Checkbox Text'),
@@ -151,32 +132,32 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'cols' => '30',
                 'wysiwyg' => false,
                 'required' => true
-            )
+            ]
         );
 
         $fieldset->addField(
             'content',
             'editor',
-            array(
+            [
                 'name' => 'content',
                 'label' => __('Content'),
                 'title' => __('Content'),
                 'style' => 'height:24em;',
                 'wysiwyg' => false,
                 'required' => true
-            )
+            ]
         );
 
         $fieldset->addField(
             'content_height',
             'text',
-            array(
+            [
                 'name' => 'content_height',
                 'label' => __('Content Height (css)'),
                 'title' => __('Content Height'),
                 'maxlength' => 25,
                 'class' => 'validate-css-length'
-            )
+            ]
         );
 
         $form->setValues($model->getData());

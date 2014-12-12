@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -93,7 +74,7 @@ class Matrix extends \Magento\Backend\Block\Template
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix,
         ProductRepositoryInterface $productRepository,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_configurableType = $configurableType;
@@ -149,7 +130,7 @@ class Matrix extends \Magento\Backend\Block\Template
      */
     public function getEditProductUrl($id)
     {
-        return $this->getUrl('catalog/*/edit', array('id' => $id));
+        return $this->getUrl('catalog/*/edit', ['id' => $id]);
     }
 
     /**
@@ -168,10 +149,10 @@ class Matrix extends \Magento\Backend\Block\Template
                     if (isset($configurableData[$key])) {
                         $attributes[$key] = array_replace_recursive($attribute, $configurableData[$key]);
                         $attributes[$key]['values'] = array_merge(
-                            isset($attribute['values']) ? $attribute['values'] : array(),
+                            isset($attribute['values']) ? $attribute['values'] : [],
                             isset($configurableData[$key]['values'])
                             ? array_filter($configurableData[$key]['values'])
-                            : array()
+                            : []
                         );
                     }
                 }
@@ -198,9 +179,9 @@ class Matrix extends \Magento\Backend\Block\Template
      */
     public function getAssociatedProducts()
     {
-        $productByUsedAttributes = array();
+        $productByUsedAttributes = [];
         foreach ($this->_getAssociatedProducts() as $product) {
-            $keys = array();
+            $keys = [];
             foreach ($this->getUsedAttributes() as $attribute) {
                 /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
                 $keys[] = $product->getData($attribute->getAttributeCode());
@@ -224,7 +205,7 @@ class Matrix extends \Magento\Backend\Block\Template
             // form data overrides any relations stored in database
             return $this->_configurableType->getUsedProducts($product);
         }
-        $products = array();
+        $products = [];
         foreach ($ids as $productId) {
             try {
                 $products[] = $this->productRepository->getById($productId);

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Paypal\Block\Express;
 
@@ -140,7 +121,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $alias,
         $shortcutTemplate,
         \Magento\Checkout\Model\Session $checkoutSession = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_paypalData = $paypalData;
         $this->_paypalConfigFactory = $paypalConfigFactory;
@@ -192,7 +173,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
             $this->setImageUrl($config->getExpressCheckoutShortcutImageUrl($this->_localeResolver->getLocaleCode()));
         } else {
             /**@todo refactor checkout model. Move getCheckoutShortcutImageUrl to helper or separate model */
-            $parameters = array('params' => array('quote' => $quote, 'config' => $config));
+            $parameters = ['params' => ['quote' => $quote, 'config' => $config]];
             $checkoutModel = $this->_checkoutFactory->create($this->_checkoutType, $parameters);
             $this->setImageUrl($checkoutModel->getCheckoutShortcutImageUrl());
         }
@@ -203,7 +184,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
             $this->setConfirmationUrl(
                 $this->getUrl(
                     $this->_startAction,
-                    array(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => 1)
+                    [\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT => 1]
                 )
             );
             $this->setConfirmationMessage(

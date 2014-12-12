@@ -1,30 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Log\Model\Resource;
 
 /**
- * Log aggregation resource model 
+ * Log aggregation resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -50,7 +31,7 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $adapter = $this->_getReadAdapter();
         $select = $adapter->select()->from(
             $this->getTable('log_summary'),
-            array($adapter->quoteIdentifier('date') => 'MAX(add_date)')
+            [$adapter->quoteIdentifier('date') => 'MAX(add_date)']
         );
 
         return $adapter->fetchOne($select);
@@ -67,7 +48,7 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getCounts($from, $to, $store)
     {
         $adapter = $this->_getReadAdapter();
-        $result = array('customers' => 0, 'visitors' => 0);
+        $result = ['customers' => 0, 'visitors' => 0];
         $select = $adapter->select()->from(
             $this->getTable('log_customer'),
             'visitor_id'
@@ -84,7 +65,6 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $customers = $adapter->fetchCol($select);
         $result['customers'] = count($customers);
-
 
         $select = $adapter->select();
         $select->from(
@@ -106,7 +86,6 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         $result['visitors'] = $adapter->fetchOne($select);
-
 
         return $result;
     }
@@ -138,7 +117,7 @@ class Aggregation extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function removeEmpty($date)
     {
         $adapter = $this->_getWriteAdapter();
-        $condition = array('add_date < ?' => $date, 'customer_count = 0', 'visitor_count = 0');
+        $condition = ['add_date < ?' => $date, 'customer_count = 0', 'visitor_count = 0'];
         $adapter->delete($this->getTable('log_summary'), $condition);
     }
 

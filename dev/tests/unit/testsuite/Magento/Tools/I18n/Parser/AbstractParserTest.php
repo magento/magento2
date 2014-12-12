@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Tools\I18n\Parser;
 
@@ -34,7 +15,7 @@ class AbstractParserTest extends \PHPUnit_Framework_TestCase
     {
         $this->_parserMock = $this->getMockForAbstractClass(
             'Magento\Tools\I18n\Parser\AbstractParser',
-            array(),
+            [],
             '',
             false
         );
@@ -55,16 +36,16 @@ class AbstractParserTest extends \PHPUnit_Framework_TestCase
 
     public function dataProviderForValidateOptions()
     {
-        return array(
-            array(array(array('paths' => array())), 'Missed "type" in parser options.'),
-            array(array(array('type' => '', 'paths' => array())), 'Missed "type" in parser options.'),
-            array(
-                array(array('type' => 'wrong_type', 'paths' => array())),
+        return [
+            [[['paths' => []]], 'Missed "type" in parser options.'],
+            [[['type' => '', 'paths' => []]], 'Missed "type" in parser options.'],
+            [
+                [['type' => 'wrong_type', 'paths' => []]],
                 'Adapter is not set for type "wrong_type".'
-            ),
-            array(array(array('type' => 'php')), '"paths" in parser options must be array.'),
-            array(array(array('type' => 'php', 'paths' => '')), '"paths" in parser options must be array.')
-        );
+            ],
+            [[['type' => 'php']], '"paths" in parser options must be array.'],
+            [[['type' => 'php', 'paths' => '']], '"paths" in parser options must be array.']
+        ];
     }
 
     public function getPhrases()

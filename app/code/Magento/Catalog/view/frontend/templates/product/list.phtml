@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 ?>
 <?php
@@ -40,16 +21,16 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
     <?php echo $this->getToolbarHtml() ?>
     <?php echo $this->getAdditionalHtml() ?>
     <?php if ($this->getMode() == 'grid') {
-        $viewMode ='grid';
-        $image = 'category_page_grid';
-        $showDescription = false;
-        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
-    } else {
-        $viewMode ='list';
-        $image = 'category_page_list';
-        $showDescription = true;
-        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
-    }
+    $viewMode = 'grid';
+    $image = 'category_page_grid';
+    $showDescription = false;
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+} else {
+    $viewMode = 'list';
+    $image = 'category_page_list';
+    $showDescription = true;
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+}
     /**
      * Position for actions regarding image size changing in vde if needed
      */
@@ -57,7 +38,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
     $position = '';
     if ($pos != null) {
         $position = ' style="left:' . $this->getVar("{$image}:width") . 'px;'
-            .'top:' . $this->getVar("{$image}:height") . 'px;"';
+            . 'top:' . $this->getVar("{$image}:height") . 'px;"';
     }
     ?>
     <div class="products wrapper <?php echo $viewMode; ?> products-<?php echo $viewMode; ?>">
@@ -65,7 +46,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
         <ol class="products list items product-items">
             <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
-                <?php echo ($iterator++==1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
+                <?php echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
                 <div class="product-item-info">
                     <?php // Product Image ?>
                     <a href="<?php echo $_product->getProductUrl() ?>" class="product photo product-item-photo">
@@ -83,7 +64,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
 
                         <div class="product-item-inner">
                             <div class="product actions product-item-actions"<?php echo strpos($pos, $viewMode . '-actions') ? $position : ''; ?>>
-                                <div class="actions-primary"<?php echo strpos($pos, $viewMode . '-primary') ? $position: ''; ?>>
+                                <div class="actions-primary"<?php echo strpos($pos, $viewMode . '-primary') ? $position : ''; ?>>
                                     <?php if ($_product->isSaleable()): ?>
                                         <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart primary"
                                                 data-post='<?php echo $this->getAddToCartPostParams($_product); ?>'>
@@ -124,7 +105,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                         </div>
                     </div>
                 </div>
-                <?php echo ($iterator==count($_productCollection)+1) ? '</li>' : '' ?>
+                <?php echo($iterator == count($_productCollection)+1) ? '</li>' : '' ?>
             <?php endforeach; ?>
         </ol>
     </div>

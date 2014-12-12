@@ -1,25 +1,5 @@
 // /**
-// //  * Magento
-//  *
-//  * NOTICE OF LICENSE
-//  *
-//  * This source file is subject to the Academic Free License (AFL 3.0)
-//  * that is bundled with this package in the file LICENSE_AFL.txt.
-//  * It is also available through the world-wide-web at this URL:
-//  * http://opensource.org/licenses/afl-3.0.php
-//  * If you did not receive a copy of the license and are unable to
-//  * obtain it through the world-wide-web, please send an email
-//  * to license@magentocommerce.com so we can send you a copy immediately.
-//  *
-//  * DISCLAIMER
-//  *
-//  * Do not edit or add to this file if you wish to upgrade Magento to newer
-//  * versions in the future. If you wish to customize Magento for your
-//  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @category    design
-//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 //  */
 
 //
@@ -104,9 +84,7 @@
         .bundle-summary .subtitle {
             border-bottom: 1px #e4e4e4 solid;
             padding-bottom: 16px;
-            margin-bottom: 25px;
-        }
-        .product-details {
+            margin-bottom: @indent-m-base;
         }
         .price-box {
             margin-bottom: @indent-base;
@@ -114,14 +92,6 @@
                 display: block;
                 margin-bottom: @indent-xs-base;
             }
-            .price {
-                font-size: @price-size;
-                line-height: @price-size;
-                font-weight: @font-weight-semibold;
-                color: @price-color;
-            }
-        }
-        .field.qty {
         }
 
         .bundle-summary {
@@ -216,13 +186,22 @@
             float: right;
             width: 40%;
             position: relative;
-            > .title,
-            .bundle-summary .subtitle {
-            }
             .price-box {
-                .price {
+                .price-wrapper,
+                .price-wrapper > .price {
                     font-size: @price-size-desktop;
                     line-height: @price-size-desktop;
+                    font-weight: @font-weight-semibold;
+                    color: @price-color;
+                }
+            }
+            .price-container {
+                .weee {
+                    color: @price-color;
+                    .price {
+                        .font-size(12);
+                        font-weight: @font-weight-bold;
+                    }
                 }
             }
             .price-including-tax + .price-excluding-tax {

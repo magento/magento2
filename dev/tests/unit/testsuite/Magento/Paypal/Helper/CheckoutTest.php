@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -53,12 +34,12 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $this->_session = $this->getMockBuilder(
             'Magento\Checkout\Model\Session'
         )->disableOriginalConstructor()->setMethods(
-            array('getLastRealOrder', 'replaceQuote', 'unsLastRealOrderId', '__wakeup')
+            ['getLastRealOrder', 'replaceQuote', 'unsLastRealOrderId', '__wakeup']
         )->getMock();
         $this->_quoteFactory = $this->getMockBuilder(
             'Magento\Sales\Model\QuoteFactory'
         )->disableOriginalConstructor()->setMethods(
-            array('create', '__wakeup')
+            ['create', '__wakeup']
         )->getMock();
 
         $this->_checkout = new \Magento\Paypal\Helper\Checkout($this->_session, $this->_quoteFactory);
@@ -71,12 +52,12 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      * @param array $mockMethods
      * @return \Magento\Sales\Model\Order|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getOrderMock($hasOrderId, $mockMethods = array())
+    protected function _getOrderMock($hasOrderId, $mockMethods = [])
     {
         $order = $this->getMockBuilder(
             'Magento\Sales\Model\Order'
         )->disableOriginalConstructor()->setMethods(
-            array_merge(array('getId', '__wakeup'), $mockMethods)
+            array_merge(['getId', '__wakeup'], $mockMethods)
         )->getMock();
         $order->expects($this->once())->method('getId')->will($this->returnValue($hasOrderId ? 'order id' : null));
         return $order;
@@ -91,7 +72,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     public function testCancelCurrentOrder($hasOrderId, $isOrderCancelled, $expectedResult)
     {
         $comment = 'Some test comment';
-        $order = $this->_getOrderMock($hasOrderId, array('registerCancellation', 'save'));
+        $order = $this->_getOrderMock($hasOrderId, ['registerCancellation', 'save']);
         $order->setData(
             'state',
             $isOrderCancelled ? \Magento\Sales\Model\Order::STATE_CANCELED : 'some another state'
@@ -121,11 +102,11 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      */
     public function cancelCurrentOrderDataProvider()
     {
-        return array(
-            array(true, false, true),
-            array(true, true, false),
-            array(false, true, false),
-            array(false, false, false)
-        );
+        return [
+            [true, false, true],
+            [true, true, false],
+            [false, true, false],
+            [false, false, false]
+        ];
     }
 }

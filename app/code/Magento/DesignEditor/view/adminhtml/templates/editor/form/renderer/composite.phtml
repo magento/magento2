@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 ?>
 <?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Composite */ ?>
@@ -47,7 +28,7 @@ $advancedAfter = $element->getAdvancedPosition() == 'after'; // To place advance
         <div class="comment"><?php echo $this->escapeHtml($element->getComment()) ?></div>
     <?php endif; ?>
 
-    <?php echo ($isField) ? '<div class="control">' : ''; ?>
+    <?php echo($isField) ? '<div class="control">' : ''; ?>
 
     <?php if ($element->hasHtmlContent() && !$isField): ?>
         <?php echo $element->getHtmlContent(); ?>
@@ -61,14 +42,14 @@ $advancedAfter = $element->getAdvancedPosition() == 'after'; // To place advance
 
         <?php echo $this->getHtml(); ?>
 
-        <?php echo ($isField && $count > 1) ? '</div>' : '' ?>
+        <?php echo($isField && $count > 1) ? '</div>' : '' ?>
 
         <?php if ($element->getComment() && $isField): ?>
             <div class="note"><?php echo $this->escapeHtml($element->getComment()) ?></div>
         <?php endif; ?>
 
         <?php if ($element->hasAdvanced() && !$isField): ?>
-            <?php echo (!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : ''?>
+            <?php echo(!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : ''?>
             <details class="details" id="details<?php echo $id ?>">
                 <summary class="details-summary" id="details-summary<?php echo $id ?>">
                     <span><?php echo $element->getAdvancedLabel() ?></span>
@@ -83,7 +64,7 @@ $advancedAfter = $element->getAdvancedPosition() == 'after'; // To place advance
             </div>
         <?php endif; ?>
 
-        <?php echo ($isField) ? '</div>' : ''; ?>
+        <?php echo($isField) ? '</div>' : ''; ?>
 
     <?php endif; ?>
 

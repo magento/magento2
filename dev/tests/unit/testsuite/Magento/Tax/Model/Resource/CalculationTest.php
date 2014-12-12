@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Tax\Model\Resource;
 
@@ -38,7 +19,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     {
         // create the mocks
         $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $storeManager = $this->getMock('Magento\Framework\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
 
         $taxData = $this->getMock('Magento\Tax\Helper\Data', ['getPostCodeSubStringLength'], [], '', false);
         $taxData
@@ -87,9 +68,9 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
         );
 
         // verify code(s) are present within the array
-        $this->assertTrue( in_array($code1, $resultsArr, 'Expected to find code "' . $code1 . '"'));
+        $this->assertTrue(in_array($code1, $resultsArr, 'Expected to find code "' . $code1 . '"'));
         if ($code2) {
-            $this->assertTrue( in_array($code2, $resultsArr, 'Expected to find code "' . $code2 . '"'));
+            $this->assertTrue(in_array($code2, $resultsArr, 'Expected to find code "' . $code2 . '"'));
         }
     }
 
@@ -99,13 +80,9 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     public function dataProviderCreateSearchPostCodeTemplates()
     {
         return [
-            'USA basic' =>
-                ['78729', null],
-            'USA zip+4' =>
-                ['54321', '12345-6789'],
-            'Poland' =>
-                ['05-509', null]
+            'USA basic' => ['78729', null],
+            'USA zip+4' => ['54321', '12345-6789'],
+            'Poland' => ['05-509', null]
         ];
     }
 }
- 

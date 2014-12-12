@@ -1,28 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\App;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,6 +54,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     protected $configLoaderMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystemMock;
+
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -87,10 +75,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['load'])
             ->getMock();
         $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->responseMock = $this->getMockBuilder('Magento\Framework\App\Response\Http')
-            ->disableOriginalConstructor()
-            ->setMethods(['setBody', '__wakeup', 'sendHeaders', 'sendResponse', 'setRedirect'])
-            ->getMock();
+        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->frontControllerMock = $this->getMockBuilder('Magento\Framework\App\FrontControllerInterface')
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
@@ -99,6 +84,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
+        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
 
         $this->http = $this->objectManager->getObject(
             'Magento\Framework\App\Http',
@@ -109,7 +95,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
                 'request' => $this->requestMock,
                 'response' => $this->responseMock,
                 'configLoader' => $this->configLoaderMock,
-                'filesystem' => $this->getMock('Magento\Framework\Filesystem', [], [], '', false),
+                'filesystem' => $this->filesystemMock,
             ]
         );
     }
@@ -145,7 +131,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
             ->with(
                 'controller_front_send_response_before',
-                array('request' => $this->requestMock, 'response' => $this->responseMock)
+                ['request' => $this->requestMock, 'response' => $this->responseMock]
             );
         $this->assertSame($this->responseMock, $this->http->launch());
     }
@@ -167,16 +153,53 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->http->launch();
     }
 
-    public function testNotInstalledException()
+    public function testHandleDeveloperModeNotInstalled()
     {
-        $expectedException = new \Exception('Test Message');
-        $bootstrapMock = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
-        $bootstrapMock->expects($this->once())->method('isDeveloperMode')->willReturn(true);
-        $bootstrapMock->expects($this->once())->method('getErrorCode')->willReturn(Bootstrap::ERR_IS_INSTALLED);
+        $dir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $dir->expects($this->once())->method('getAbsolutePath')->willReturn(__DIR__);
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::ROOT)
+            ->willReturn($dir);
+        $this->responseMock->expects($this->once())->method('setRedirect')->with('/_files/');
+        $this->responseMock->expects($this->once())->method('sendHeaders');
+        $bootstrap = $this->getBootstrapNotInstalled();
+        $bootstrap->expects($this->once())->method('getParams')->willReturn([
+            'SCRIPT_NAME' => '/index.php',
+            'DOCUMENT_ROOT' => __DIR__,
+            'SCRIPT_FILENAME' => __DIR__ . '/index.php',
+            SetupInfo::PARAM_NOT_INSTALLED_URL_PATH => '_files',
+        ]);
+        $this->assertTrue($this->http->catchException($bootstrap, new \Exception('Test Message')));
+    }
 
-        $path = $this->http->getInstallerRedirectPath([]);
-        $this->responseMock->expects($this->once())->method('setRedirect')->with($path)->will($this->returnSelf());
-        $this->responseMock->expects($this->once())->method('sendHeaders')->will($this->returnSelf());
-        $this->assertTrue($this->http->catchException($bootstrapMock, $expectedException));
+    public function testHandleDeveloperMode()
+    {
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->will($this->throwException(new \Exception('strange error')));
+        $this->responseMock->expects($this->once())->method('setHttpResponseCode')->with(500);
+        $this->responseMock->expects($this->once())->method('setHeader')->with('Content-Type', 'text/plain');
+        $constraint = new \PHPUnit_Framework_Constraint_StringStartsWith('strange error');
+        $this->responseMock->expects($this->once())->method('setBody')->with($constraint);
+        $this->responseMock->expects($this->once())->method('sendResponse');
+        $bootstrap = $this->getBootstrapNotInstalled();
+        $bootstrap->expects($this->once())->method('getParams')->willReturn(
+            ['DOCUMENT_ROOT' => 'something', 'SCRIPT_FILENAME' => 'something/else']
+        );
+        $this->assertTrue($this->http->catchException($bootstrap, new \Exception('Test')));
+    }
+
+    /**
+     * Prepares a mock of bootstrap in "not installed" state
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getBootstrapNotInstalled()
+    {
+        $bootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
+        $bootstrap->expects($this->once())->method('isDeveloperMode')->willReturn(true);
+        $bootstrap->expects($this->once())->method('getErrorCode')->willReturn(Bootstrap::ERR_IS_INSTALLED);
+        return $bootstrap;
     }
 }

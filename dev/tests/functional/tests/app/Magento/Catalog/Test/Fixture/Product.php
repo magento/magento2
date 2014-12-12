@@ -1,31 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\System\Config;
 use Mtf\Factory\Factory;
 use Mtf\Fixture\DataFixture;
+use Mtf\System\Config;
 
 class Product extends DataFixture
 {
@@ -54,14 +35,14 @@ class Product extends DataFixture
      *
      * @var array
      */
-    protected $categories = array();
+    protected $categories = [];
 
     /**
      * List of fixtures from created products
      *
      * @var array
      */
-    protected $products = array();
+    protected $products = [];
 
     /**
      * Custom constructor to create product with assigned category
@@ -69,15 +50,15 @@ class Product extends DataFixture
      * @param Config $configuration
      * @param array $placeholders
      */
-    public function __construct(Config $configuration, $placeholders = array())
+    public function __construct(Config $configuration, $placeholders = [])
     {
         parent::__construct($configuration, $placeholders);
 
         if (isset($placeholders['categories'])) {
             $this->categories = $placeholders['categories'];
         } else {
-            $this->_placeholders['category::getCategoryName'] = array($this, 'categoryProvider');
-            $this->_placeholders['category::getCategoryId'] = array($this, 'categoryProvider');
+            $this->_placeholders['category::getCategoryName'] = [$this, 'categoryProvider'];
+            $this->_placeholders['category::getCategoryId'] = [$this, 'categoryProvider'];
         }
     }
 
@@ -88,18 +69,18 @@ class Product extends DataFixture
     {
         $this->_data = array_merge_recursive(
             $this->_data,
-            array(
-                'fields' => array(
-                    'name' => array(
+            [
+                'fields' => [
+                    'name' => [
                         'value' => substr(get_class($this), strrpos(get_class($this), '\\') + 1) . ' %isolation%',
-                        'group' => static::GROUP_PRODUCT_DETAILS
-                    ),
-                    'sku' => array(
+                        'group' => static::GROUP_PRODUCT_DETAILS,
+                    ],
+                    'sku' => [
                         'value' => substr(get_class($this), strrpos(get_class($this), '\\') + 1) . '_sku_%isolation%',
-                        'group' => static::GROUP_PRODUCT_DETAILS
-                    )
-                )
-            )
+                        'group' => static::GROUP_PRODUCT_DETAILS,
+                    ],
+                ]
+            ]
         );
     }
 
@@ -126,7 +107,7 @@ class Product extends DataFixture
     {
         list($productData, $method) = explode('::', $placeholder);
         $product = $this->getProduct($this->formatProductType($productData));
-        return is_callable(array($product, $method)) ? $product->$method() : null;
+        return is_callable([$product, $method]) ? $product->$method() : null;
     }
 
     /**
@@ -185,7 +166,7 @@ class Product extends DataFixture
     {
         list($key, $method) = explode('::', $placeholder);
         $category = $this->getCategory($key);
-        return is_callable(array($category, $method)) ? $category->$method() : null;
+        return is_callable([$category, $method]) ? $category->$method() : null;
     }
 
     /**
@@ -222,7 +203,7 @@ class Product extends DataFixture
      */
     public function getCategoryIds()
     {
-        $categoryIds = array();
+        $categoryIds = [];
         /** @var Category $category */
         foreach ($this->categories as $category) {
             $categoryIds[] = $category->getCategoryId();
@@ -324,7 +305,7 @@ class Product extends DataFixture
     public function getProductOptions()
     {
         $selections = $this->getData('checkout/selections');
-        $options = array();
+        $options = [];
         if (!empty($selection)) {
             foreach ($selections as $selection) {
                 $options[$selection['attribute_name']] = $selection['option_name'];
@@ -341,7 +322,7 @@ class Product extends DataFixture
      */
     public function getUrlParams($urlKey)
     {
-        $params = array();
+        $params = [];
         $config = $this->getDataConfig();
         if (!empty($config[$urlKey]) && is_array($config[$urlKey])) {
             foreach ($config[$urlKey] as $key => $value) {

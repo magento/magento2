@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -147,11 +128,11 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
         if ($this->_data) {
             $children = $this->_data['sections'];
         }
-        $child = array();
+        $child = [];
         foreach ($pathParts as $pathPart) {
             if ($children && (array_key_exists($pathPart, $children))) {
                 $child = $children[$pathPart];
-                $children = array_key_exists('children', $child) ? $child['children'] : array();
+                $children = array_key_exists('children', $child) ? $child['children'] : [];
             } else {
                 $child = $this->_createEmptyElement($pathParts);
                 break;
@@ -181,7 +162,7 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
                 $elementType = 'field';
         }
         $elementId = array_pop($pathParts);
-        return array('id' => $elementId, 'path' => implode('/', $pathParts), '_elementType' => $elementType);
+        return ['id' => $elementId, 'path' => implode('/', $pathParts), '_elementType' => $elementType];
     }
 
     /**
@@ -193,7 +174,7 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
      */
     public function getFieldPathsByAttribute($attributeName, $attributeValue)
     {
-        $result = array();
+        $result = [];
         foreach ($this->_data['sections'] as $section) {
             if (!isset($section['children'])) {
                 continue;
@@ -227,7 +208,7 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
      */
     protected function _getGroupFieldPathsByAttribute(array $fields, $parentPath, $attributeName, $attributeValue)
     {
-        $result = array();
+        $result = [];
         foreach ($fields as $field) {
             if (isset($field['children'])) {
                 $result += $this->_getGroupFieldPathsByAttribute(
@@ -236,7 +217,7 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
                     $attributeName,
                     $attributeValue
                 );
-            } else if (isset($field[$attributeName]) && $field[$attributeName] == $attributeValue) {
+            } elseif (isset($field[$attributeName]) && $field[$attributeName] == $attributeValue) {
                 $result[] = $parentPath . '/' . $field['id'];
             }
         }

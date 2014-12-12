@@ -2,26 +2,7 @@
 /**
  * Proxy generator
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
@@ -51,33 +32,33 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $properties = parent::_getClassProperties();
 
         // protected $_instanceName = null;
-        $properties[] = array(
+        $properties[] = [
             'name' => '_instanceName',
             'visibility' => 'protected',
-            'docblock' => array(
+            'docblock' => [
                 'shortDescription' => 'Proxied instance name',
-                'tags' => array(array('name' => 'var', 'description' => 'string'))
-            )
-        );
+                'tags' => [['name' => 'var', 'description' => 'string']],
+            ],
+        ];
 
-        $properties[] = array(
+        $properties[] = [
             'name' => '_subject',
             'visibility' => 'protected',
-            'docblock' => array(
+            'docblock' => [
                 'shortDescription' => 'Proxied instance',
-                'tags' => array(array('name' => 'var', 'description' => '\\' . $this->_getSourceClassName()))
-            )
-        );
+                'tags' => [['name' => 'var', 'description' => '\\' . $this->_getSourceClassName()]],
+            ],
+        ];
 
         // protected $_shared = null;
-        $properties[] = array(
+        $properties[] = [
             'name' => '_isShared',
             'visibility' => 'protected',
-            'docblock' => array(
+            'docblock' => [
                 'shortDescription' => 'Instance shareability flag',
-                'tags' => array(array('name' => 'var', 'description' => 'bool'))
-            )
-        );
+                'tags' => [['name' => 'var', 'description' => 'bool']],
+            ],
+        ];
         return $properties;
     }
 
@@ -91,24 +72,24 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $construct = $this->_getDefaultConstructorDefinition();
 
         // create proxy methods for all non-static and non-final public methods (excluding constructor)
-        $methods = array($construct);
-        $methods[] = array(
+        $methods = [$construct];
+        $methods[] = [
             'name' => '__sleep',
             'body' => 'return array(\'_subject\', \'_isShared\');',
-            'docblock' => array('tags' => array(array('name' => 'return', 'description' => 'array')))
-        );
-        $methods[] = array(
+            'docblock' => ['tags' => [['name' => 'return', 'description' => 'array']]],
+        ];
+        $methods[] = [
             'name' => '__wakeup',
             'body' => '$this->_objectManager = \Magento\Framework\App\ObjectManager::getInstance();',
-            'docblock' => array('shortDescription' => 'Retrieve ObjectManager from global scope')
-        );
-        $methods[] = array(
+            'docblock' => ['shortDescription' => 'Retrieve ObjectManager from global scope'],
+        ];
+        $methods[] = [
             'name' => '__clone',
             'body' => "\$this->_subject = clone \$this->_getSubject();",
-            'docblock' => array('shortDescription' => 'Clone proxied instance')
-        );
+            'docblock' => ['shortDescription' => 'Clone proxied instance'],
+        ];
 
-        $methods[] = array(
+        $methods[] = [
             'name' => '_getSubject',
             'visibility' => 'protected',
             'body' => "if (!\$this->_subject) {\n" .
@@ -117,11 +98,11 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             "        : \$this->_objectManager->create(\$this->_instanceName);\n" .
             "}\n" .
             "return \$this->_subject;",
-            'docblock' => array(
+            'docblock' => [
                 'shortDescription' => 'Get proxied instance',
-                'tags' => array(array('name' => 'return', 'description' => '\\' . $this->_getSourceClassName()))
-            )
-        );
+                'tags' => [['name' => 'return', 'description' => '\\' . $this->_getSourceClassName()]],
+            ],
+        ];
         $reflectionClass = new \ReflectionClass($this->_getSourceClassName());
         $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
@@ -130,7 +111,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
                 $method->isStatic() ||
                 $method->isDestructor()) && !in_array(
                     $method->getName(),
-                    array('__sleep', '__wakeup', '__clone')
+                    ['__sleep', '__wakeup', '__clone']
                 )
             ) {
                 $methods[] = $this->_getMethodInfo($method);
@@ -149,7 +130,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $reflection = new \ReflectionClass($typeName);
 
         if ($reflection->isInterface()) {
-            $this->_classGenerator->setImplementedInterfaces(array($typeName));
+            $this->_classGenerator->setImplementedInterfaces([$typeName]);
         } else {
             $this->_classGenerator->setExtendedClass($typeName);
         }
@@ -164,19 +145,19 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getMethodInfo(\ReflectionMethod $method)
     {
-        $parameterNames = array();
-        $parameters = array();
+        $parameterNames = [];
+        $parameters = [];
         foreach ($method->getParameters() as $parameter) {
             $parameterNames[] = '$' . $parameter->getName();
             $parameters[] = $this->_getMethodParameterInfo($parameter);
         }
 
-        $methodInfo = array(
+        $methodInfo = [
             'name' => $method->getName(),
             'parameters' => $parameters,
             'body' => $this->_getMethodBody($method->getName(), $parameterNames),
-            'docblock' => array('shortDescription' => '{@inheritdoc}')
-        );
+            'docblock' => ['shortDescription' => '{@inheritdoc}'],
+        ];
 
         return $methodInfo;
     }
@@ -195,28 +176,28 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
          *  $shared = false
          * )
          */
-        return array(
+        return [
             'name' => '__construct',
-            'parameters' => array(
-                array('name' => 'objectManager', 'type' => '\Magento\Framework\ObjectManagerInterface'),
-                array('name' => 'instanceName', 'defaultValue' => $this->_getSourceClassName()),
-                array('name' => 'shared', 'defaultValue' => true)
-            ),
+            'parameters' => [
+                ['name' => 'objectManager', 'type' => '\Magento\Framework\ObjectManagerInterface'],
+                ['name' => 'instanceName', 'defaultValue' => $this->_getSourceClassName()],
+                ['name' => 'shared', 'defaultValue' => true],
+            ],
             'body' => "\$this->_objectManager = \$objectManager;" .
             "\n\$this->_instanceName = \$instanceName;" .
             "\n\$this->_isShared = \$shared;",
-            'docblock' => array(
+            'docblock' => [
                 'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
-                'tags' => array(
-                    array(
+                'tags' => [
+                    [
                         'name' => 'param',
-                        'description' => '\Magento\Framework\ObjectManagerInterface $objectManager'
-                    ),
-                    array('name' => 'param', 'description' => 'string $instanceName'),
-                    array('name' => 'param', 'description' => 'bool $shared')
-                )
-            )
-        );
+                        'description' => '\Magento\Framework\ObjectManagerInterface $objectManager',
+                    ],
+                    ['name' => 'param', 'description' => 'string $instanceName'],
+                    ['name' => 'param', 'description' => 'bool $shared'],
+                ],
+            ]
+        ];
     }
 
     /**
@@ -226,7 +207,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      * @param array $parameters
      * @return string
      */
-    protected function _getMethodBody($name, array $parameters = array())
+    protected function _getMethodBody($name, array $parameters = [])
     {
         if (count($parameters) == 0) {
             $methodCall = sprintf('%s()', $name);

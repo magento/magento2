@@ -3,12 +3,16 @@
     "description": "N/A",
     "require": {
         "php": "~5.4.11|~5.5.0",
-        "magento/module-payment": "0.1.0-alpha107",
-        "magento/framework": "0.1.0-alpha107",
+        "magento/module-payment": "0.1.0-alpha108",
+        "magento/framework": "0.1.0-alpha108",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.1.0-alpha107",
+    "version": "0.1.0-alpha108",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "extra": {
         "map": [
             [

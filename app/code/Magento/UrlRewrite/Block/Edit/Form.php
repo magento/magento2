@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\UrlRewrite\Block\Edit;
 
@@ -48,7 +29,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var array
      */
-    protected $_formValues = array();
+    protected $_formValues = [];
 
     /**
      * Adminhtml data
@@ -90,7 +71,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\UrlRewrite\Model\UrlRewriteFactory $rewriteFactory,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Backend\Helper\Data $adminhtmlData,
-        array $data = array()
+        array $data = []
     ) {
         $this->optionProvider = $optionProvider;
         $this->_rewriteFactory = $rewriteFactory;
@@ -120,15 +101,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _initFormValues()
     {
         $model = $this->_getModel();
-        $this->_formValues = array(
+        $this->_formValues = [
             'store_id' => $model->getStoreId(),
             'entity_type' => $model->getEntityType(),
             'entity_id' => $model->getEntityId(),
             'request_path' => $model->getRequestPath(),
             'target_path' => $model->getTargetPath(),
             'redirect_type' => $model->getRedirectType(),
-            'description' => $model->getDescription()
-        );
+            'description' => $model->getDescription(),
+        ];
 
         $sessionData = $this->_getSessionData();
         if ($sessionData) {
@@ -155,27 +136,27 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         // Prepare form
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            array('data' => array('id' => 'edit_form', 'use_container' => true, 'method' => 'post'))
+            ['data' => ['id' => 'edit_form', 'use_container' => true, 'method' => 'post']]
         );
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('URL Rewrite Information')));
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('URL Rewrite Information')]);
 
         $fieldset->addField(
             'entity_type',
             'hidden',
-            array(
+            [
                 'name' => 'entity_type',
                 'value' => $this->_formValues['entity_type']
-            )
+            ]
         );
 
         $fieldset->addField(
             'entity_id',
             'hidden',
-            array(
+            [
                 'name' => 'entity_id',
                 'value' => $this->_formValues['entity_id']
-            )
+            ]
         );
 
         $this->_prepareStoreElement($fieldset);
@@ -183,44 +164,44 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'request_path',
             'text',
-            array(
+            [
                 'label' => __('Request Path'),
                 'title' => __('Request Path'),
                 'name' => 'request_path',
                 'required' => true,
                 'value' => $this->_formValues['request_path']
-            )
+            ]
         );
 
         $fieldset->addField(
             'target_path',
             'text',
-            array(
+            [
                 'label' => __('Target Path'),
                 'title' => __('Target Path'),
                 'name' => 'target_path',
                 'required' => true,
                 'disabled' => false,
                 'value' => $this->_formValues['target_path']
-            )
+            ]
         );
 
         $fieldset->addField(
             'redirect_type',
             'select',
-            array(
+            [
                 'label' => __('Redirect Type'),
                 'title' => __('Redirect Type'),
                 'name' => 'redirect_type',
                 'options' => $this->optionProvider->toOptionArray(),
                 'value' => $this->_formValues['redirect_type']
-            )
+            ]
         );
 
         $fieldset->addField(
             'description',
             'textarea',
-            array(
+            [
                 'label' => __('Description'),
                 'title' => __('Description'),
                 'name' => 'description',
@@ -228,7 +209,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'rows' => 5,
                 'value' => $this->_formValues['description'],
                 'wrap' => 'soft'
-            )
+            ]
         );
 
         $this->setForm($form);
@@ -249,19 +230,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $fieldset->addField(
                 'store_id',
                 'hidden',
-                array('name' => 'store_id', 'value' => $this->_storeManager->getStore(true)->getId())
+                ['name' => 'store_id', 'value' => $this->_storeManager->getStore(true)->getId()]
             );
         } else {
             $storeElement = $fieldset->addField(
                 'store_id',
                 'select',
-                array(
+                [
                     'label' => __('Store'),
                     'title' => __('Store'),
                     'name' => 'store_id',
                     'required' => true,
                     'value' => $this->_formValues['store_id']
-                )
+                ]
             );
             try {
                 $stores = $this->_getStoresListRestrictedByEntityStores($this->_getEntityStores());
@@ -290,7 +271,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _formPostInit($form)
     {
         $form->setAction(
-            $this->_adminhtmlData->getUrl('adminhtml/*/save', array('id' => $this->_getModel()->getId()))
+            $this->_adminhtmlData->getUrl('adminhtml/*/save', ['id' => $this->_getModel()->getId()])
         );
         return $this;
     }

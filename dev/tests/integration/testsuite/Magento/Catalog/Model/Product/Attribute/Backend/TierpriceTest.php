@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
@@ -54,10 +35,10 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     {
         $product = new \Magento\Framework\Object();
         $product->setTierPrice(
-            array(
-                array('website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'price' => 8),
-                array('website_id' => 0, 'cust_group' => 1, 'price_qty' => 5, 'price' => 5)
-            )
+            [
+                ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'price' => 8],
+                ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 5, 'price' => 5],
+            ]
         );
         $this->assertTrue($this->_model->validate($product));
     }
@@ -69,10 +50,10 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     {
         $product = new \Magento\Framework\Object();
         $product->setTierPrice(
-            array(
-                array('website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'price' => 8),
-                array('website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'price' => 8)
-            )
+            [
+                ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'price' => 8],
+                ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'price' => 8],
+            ]
         );
 
         $this->_model->validate($product);
@@ -85,11 +66,11 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     {
         $product = new \Magento\Framework\Object();
         $product->setTierPrice(
-            array(
-                array('website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'price' => 8),
-                array('website_id' => 0, 'cust_group' => 1, 'price_qty' => 5, 'price' => 5),
-                array('website_id' => 1, 'cust_group' => 1, 'price_qty' => 5, 'price' => 5)
-            )
+            [
+                ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'price' => 8],
+                ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 5, 'price' => 5],
+                ['website_id' => 1, 'cust_group' => 1, 'price_qty' => 5, 'price' => 5],
+            ]
         );
 
         $this->_model->validate($product);
@@ -97,11 +78,11 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
 
     public function testPreparePriceData()
     {
-        $data = array(
-            array('website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'price' => 8),
-            array('website_id' => 0, 'cust_group' => 1, 'price_qty' => 5, 'price' => 5),
-            array('website_id' => 1, 'cust_group' => 1, 'price_qty' => 5, 'price' => 5)
-        );
+        $data = [
+            ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'price' => 8],
+            ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 5, 'price' => 5],
+            ['website_id' => 1, 'cust_group' => 1, 'price_qty' => 5, 'price' => 5],
+        ];
 
         $newData = $this->_model->preparePriceData($data, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, 1);
         $this->assertEquals(2, count($newData));
@@ -135,12 +116,12 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
         $product->unlockAttributes();
         $product->setOrigData();
         $product->setTierPrice(
-            array(
-                array('website_id' => 0, 'cust_group' => 32000, 'price_qty' => 2, 'price' => 7, 'delete' => true),
-                array('website_id' => 0, 'cust_group' => 32000, 'price_qty' => 5, 'price' => 4),
-                array('website_id' => 0, 'cust_group' => 32000, 'price_qty' => 10, 'price' => 3),
-                array('website_id' => 0, 'cust_group' => 32000, 'price_qty' => 20, 'price' => 2)
-            )
+            [
+                ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 2, 'price' => 7, 'delete' => true],
+                ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 5, 'price' => 4],
+                ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 10, 'price' => 3],
+                ['website_id' => 0, 'cust_group' => 32000, 'price_qty' => 20, 'price' => 2],
+            ]
         );
 
         $this->_model->afterSave($product);
@@ -159,10 +140,10 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveEmpty()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->setCurrentStore(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore(
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
             )
@@ -173,7 +154,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
         );
         $product->load(1);
         $product->setOrigData();
-        $product->setTierPrice(array());
+        $product->setTierPrice([]);
         $this->_model->afterSave($product);
 
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

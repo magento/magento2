@@ -1,32 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Eav\Model\Resource\Entity;
 
-use Magento\Framework\Model\AbstractModel;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * EAV attribute resource model
@@ -40,10 +21,10 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @var array
      */
-    protected static $_entityAttributes = array();
+    protected static $_entityAttributes = [];
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -56,12 +37,12 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Class constructor
      *
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Type $eavEntityType
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         Type $eavEntityType
     ) {
         $this->_storeManager = $storeManager;
@@ -86,9 +67,9 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _initUniqueFields()
     {
-        $this->_uniqueFields = array(
-            array('field' => array('attribute_code', 'entity_type_id'), 'title' => __('Attribute with the same code'))
-        );
+        $this->_uniqueFields = [
+            ['field' => ['attribute_code', 'entity_type_id'], 'title' => __('Attribute with the same code')],
+        ];
         return $this;
     }
 
@@ -102,7 +83,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByCode(AbstractModel $object, $entityTypeId, $code)
     {
-        $bind = array(':entity_type_id' => $entityTypeId);
+        $bind = [':entity_type_id' => $entityTypeId];
         $select = $this->_getLoadSelect('attribute_code', $code, $object)->where('entity_type_id = :entity_type_id');
         $data = $this->_getReadAdapter()->fetchRow($select, $bind);
 
@@ -124,10 +105,10 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         if (intval($object->getAttributeGroupId()) > 0) {
             $adapter = $this->_getReadAdapter();
-            $bind = array(
+            $bind = [
                 ':attribute_set_id' => $object->getAttributeSetId(),
-                ':attribute_group_id' => $object->getAttributeGroupId()
-            );
+                ':attribute_group_id' => $object->getAttributeGroupId(),
+            ];
             $select = $adapter->select()->from(
                 $this->getTable('eav_entity_attribute'),
                 new \Zend_Db_Expr("MAX(sort_order)")
@@ -157,7 +138,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $this->_getWriteAdapter()->delete(
             $this->getTable('eav_entity_attribute'),
-            array('entity_attribute_id = ?' => $object->getEntityAttributeId())
+            ['entity_attribute_id = ?' => $object->getEntityAttributeId()]
         );
 
         return $this;
@@ -225,14 +206,14 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (is_array($storeLabels)) {
             $adapter = $this->_getWriteAdapter();
             if ($object->getId()) {
-                $condition = array('attribute_id =?' => $object->getId());
+                $condition = ['attribute_id =?' => $object->getId()];
                 $adapter->delete($this->getTable('eav_attribute_label'), $condition);
             }
             foreach ($storeLabels as $storeId => $label) {
                 if ($storeId == 0 || !strlen($label)) {
                     continue;
                 }
-                $bind = array('attribute_id' => $object->getId(), 'store_id' => $storeId, 'value' => $label);
+                $bind = ['attribute_id' => $object->getId(), 'store_id' => $storeId, 'value' => $label];
                 $adapter->insert($this->getTable('eav_attribute_label'), $bind);
             }
         }
@@ -252,16 +233,16 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($additionalTable) {
             $adapter = $this->_getWriteAdapter();
             $data = $this->_prepareDataForTable($object, $this->getTable($additionalTable));
-            $bind = array(':attribute_id' => $object->getId());
+            $bind = [':attribute_id' => $object->getId()];
             $select = $adapter->select()->from(
                 $this->getTable($additionalTable),
-                array('attribute_id')
+                ['attribute_id']
             )->where(
                 'attribute_id = :attribute_id'
             );
             $result = $adapter->fetchOne($select, $bind);
             if ($result) {
-                $where = array('attribute_id = ?' => $object->getId());
+                $where = ['attribute_id = ?' => $object->getId()];
                 $adapter->update($this->getTable($additionalTable), $data, $where);
             } else {
                 $adapter->insert($this->getTable($additionalTable), $data);
@@ -297,15 +278,15 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $table = $this->getTable('eav_entity_attribute');
 
             $sortOrder = $attributeSortOrder ?: $this->_getMaxSortOrder($object) + 1;
-            $data = array(
+            $data = [
                 'entity_type_id' => $object->getEntityTypeId(),
                 'attribute_set_id' => $setId,
                 'attribute_group_id' => $groupId,
                 'attribute_id' => $attributeId,
-                'sort_order' => $sortOrder
-            );
+                'sort_order' => $sortOrder,
+            ];
 
-            $where = array('attribute_id =?' => $attributeId, 'attribute_set_id =?' => $setId);
+            $where = ['attribute_id =?' => $attributeId, 'attribute_set_id =?' => $setId];
 
             $adapter->delete($table, $where);
             $adapter->insert($table, $data);
@@ -326,10 +307,10 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $this;
         }
 
-        $defaultValue = $object->getDefault() ?: array();
+        $defaultValue = $object->getDefault() ?: [];
         if (isset($option['value'])) {
             if (!is_array($object->getDefault())) {
-                $object->setDefault(array());
+                $object->setDefault([]);
             }
             $defaultValue = $this->_processAttributeOptions($object, $option);
         }
@@ -347,7 +328,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _processAttributeOptions($object, $option)
     {
-        $defaultValue = array();
+        $defaultValue = [];
         foreach ($option['value'] as $optionId => $values) {
             $intOptionId = $this->_updateAttributeOption($object, $optionId, $option);
             if ($intOptionId === false) {
@@ -390,7 +371,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
             if ($frontendInput === 'multiselect') {
                 $defaultValue[] = $intOptionId;
             } elseif ($frontendInput === 'select') {
-                $defaultValue = array($intOptionId);
+                $defaultValue = [$intOptionId];
             }
         }
     }
@@ -405,8 +386,8 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _saveDefaultValue($object, $defaultValue)
     {
         if ($defaultValue !== null) {
-            $bind = array('default_value' => implode(',', $defaultValue));
-            $where = array('attribute_id = ?' => $object->getId());
+            $bind = ['default_value' => implode(',', $defaultValue)];
+            $where = ['attribute_id = ?' => $object->getId()];
             $this->_getWriteAdapter()->update($this->getMainTable(), $bind, $where);
         }
     }
@@ -427,19 +408,19 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if (!empty($option['delete'][$optionId])) {
             if ($intOptionId) {
-                $adapter->delete($table, array('option_id = ?' => $intOptionId));
+                $adapter->delete($table, ['option_id = ?' => $intOptionId]);
             }
             return false;
         }
 
         $sortOrder = empty($option['order'][$optionId]) ? 0 : $option['order'][$optionId];
         if (!$intOptionId) {
-            $data = array('attribute_id' => $object->getId(), 'sort_order' => $sortOrder);
+            $data = ['attribute_id' => $object->getId(), 'sort_order' => $sortOrder];
             $adapter->insert($table, $data);
             $intOptionId = $adapter->lastInsertId($table);
         } else {
-            $data = array('sort_order' => $sortOrder);
-            $where = array('option_id = ?' => $intOptionId);
+            $data = ['sort_order' => $sortOrder];
+            $where = ['option_id = ?' => $intOptionId];
             $adapter->update($table, $data, $where);
         }
 
@@ -458,13 +439,13 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $adapter = $this->_getWriteAdapter();
         $table = $this->getTable('eav_attribute_option_value');
 
-        $adapter->delete($table, array('option_id = ?' => $optionId));
+        $adapter->delete($table, ['option_id = ?' => $optionId]);
 
         $stores = $this->_storeManager->getStores(true);
         foreach ($stores as $store) {
             $storeId = $store->getId();
             if (!empty($values[$storeId]) || isset($values[$storeId]) && $values[$storeId] == '0') {
-                $data = array('option_id' => $optionId, 'store_id' => $storeId, 'value' => $values[$storeId]);
+                $data = ['option_id' => $optionId, 'store_id' => $storeId, 'value' => $values[$storeId]];
                 $adapter->insert($table, $data);
             }
         }
@@ -480,14 +461,14 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getIdByCode($entityType, $code)
     {
         $adapter = $this->_getReadAdapter();
-        $bind = array(':entity_type_code' => $entityType, ':attribute_code' => $code);
+        $bind = [':entity_type_code' => $entityType, ':attribute_code' => $code];
         $select = $adapter->select()->from(
-            array('a' => $this->getTable('eav_attribute')),
-            array('a.attribute_id')
+            ['a' => $this->getTable('eav_attribute')],
+            ['a.attribute_id']
         )->join(
-            array('t' => $this->getTable('eav_entity_type')),
+            ['t' => $this->getTable('eav_entity_type')],
             'a.entity_type_id = t.entity_type_id',
-            array()
+            []
         )->where(
             't.entity_type_code = :entity_type_code'
         )->where(
@@ -506,7 +487,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getAttributeCodesByFrontendType($frontendType)
     {
         $adapter = $this->_getReadAdapter();
-        $bind = array(':frontend_input' => $frontendType);
+        $bind = [':frontend_input' => $frontendType];
         $select = $adapter->select()->from(
             $this->getTable('eav_attribute'),
             'attribute_code'
@@ -550,13 +531,13 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         /** @var $select Select */
         $select = $adapter->select()->joinLeft(
-            array('t1' => $attribute->getBackend()->getTable()),
+            ['t1' => $attribute->getBackend()->getTable()],
             $joinCondition,
-            array()
+            []
         )->joinLeft(
-            array('t2' => $attribute->getBackend()->getTable()),
+            ['t2' => $attribute->getBackend()->getTable()],
             sprintf($joinConditionTemplate, 't1', 't2', 't2', 't2', 't2', $storeId),
-            array($attribute->getAttributeCode() => $valueExpr)
+            [$attribute->getAttributeCode() => $valueExpr]
         );
         if ($attribute->getFlatAddChildData()) {
             $select->where("e.is_child = ?", 0);
@@ -606,7 +587,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if ($additionalTable) {
             $adapter = $this->_getReadAdapter();
-            $bind = array(':attribute_id' => $object->getId());
+            $bind = [':attribute_id' => $object->getId()];
             $select = $adapter->select()->from(
                 $this->getTable($additionalTable)
             )->where(
@@ -631,10 +612,10 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getStoreLabelsByAttributeId($attributeId)
     {
         $adapter = $this->_getReadAdapter();
-        $bind = array(':attribute_id' => $attributeId);
+        $bind = [':attribute_id' => $attributeId];
         $select = $adapter->select()->from(
             $this->getTable('eav_attribute_label'),
-            array('store_id', 'value')
+            ['store_id', 'value']
         )->where(
             'attribute_id = :attribute_id'
         );
@@ -653,7 +634,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $adapter = $this->_getReadAdapter();
         $select = $adapter->select()->from(
             $this->getMainTable(),
-            array('attribute_id')
+            ['attribute_id']
         )->where(
             'attribute_id IN (?)',
             $attributeIds

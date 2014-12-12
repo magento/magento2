@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Model\Config\Structure;
 
@@ -35,14 +16,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @var string[]
      */
-    protected $_mapperList = array(
+    protected $_mapperList = [
         \Magento\Backend\Model\Config\Structure\Mapper\Factory::MAPPER_EXTENDS,
         \Magento\Backend\Model\Config\Structure\Mapper\Factory::MAPPER_PATH,
         \Magento\Backend\Model\Config\Structure\Mapper\Factory::MAPPER_DEPENDENCIES,
         \Magento\Backend\Model\Config\Structure\Mapper\Factory::MAPPER_ATTRIBUTE_INHERITANCE,
         \Magento\Backend\Model\Config\Structure\Mapper\Factory::MAPPER_IGNORE,
-        \Magento\Backend\Model\Config\Structure\Mapper\Factory::MAPPER_SORTING
-    );
+        \Magento\Backend\Model\Config\Structure\Mapper\Factory::MAPPER_SORTING,
+    ];
 
     /**
      * Map of single=>plural sub-node names per node
@@ -51,12 +32,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @var array
      */
-    protected $_nameMap = array(
-        'system' => array('tab' => 'tabs', 'section' => 'sections'),
-        'section' => array('group' => 'children'),
-        'group' => array('field' => 'children', 'group' => 'children'),
-        'depends' => array('field' => 'fields')
-    );
+    protected $_nameMap = [
+        'system' => ['tab' => 'tabs', 'section' => 'sections'],
+        'section' => ['group' => 'children'],
+        'group' => ['field' => 'children', 'group' => 'children'],
+        'depends' => ['field' => 'fields'],
+    ];
 
     /**
      * @param \Magento\Backend\Model\Config\Structure\Mapper\Factory $mapperFactory
@@ -97,11 +78,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
         $children = $root->childNodes;
 
-        $processedSubLists = array();
+        $processedSubLists = [];
         for ($i = 0; $i < $children->length; $i++) {
             $child = $children->item($i);
             $childName = $child->nodeName;
-            $convertedChild = array();
+            $convertedChild = [];
 
             switch ($child->nodeType) {
                 case XML_COMMENT_NODE:
@@ -145,8 +126,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
             if (in_array($childName, $processedSubLists)) {
                 $result = $this->_addProcessedNode($convertedChild, $result, $childName);
-            } else if (array_key_exists($childName, $result)) {
-                $result[$childName] = array($result[$childName], $convertedChild);
+            } elseif (array_key_exists($childName, $result)) {
+                $result[$childName] = [$result[$childName], $convertedChild];
                 $processedSubLists[] = $childName;
             } else {
                 $result[$childName] = $convertedChild;
@@ -156,7 +137,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         if (count($result) == 1 && array_key_exists('value', $result)) {
             $result = $result['value'];
         }
-        if ($result == array()) {
+        if ($result == []) {
             $result = null;
         }
 
@@ -183,13 +164,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * Process element attributes
-     * 
+     *
      * @param \DOMNode $root
      * @return array
      */
     protected function _processAttributes(\DOMNode $root)
     {
-        $result = array();
+        $result = [];
 
         if ($root->hasAttributes()) {
             $attributes = $root->attributes;

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Image\Adapter;
 
@@ -30,20 +11,20 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @var array
      */
-    protected $_requiredExtensions = array("gd");
+    protected $_requiredExtensions = ["gd"];
 
     /**
      * Image output callbacks by type
      *
      * @var array
      */
-    private static $_callbacks = array(
-        IMAGETYPE_GIF => array('output' => 'imagegif', 'create' => 'imagecreatefromgif'),
-        IMAGETYPE_JPEG => array('output' => 'imagejpeg', 'create' => 'imagecreatefromjpeg'),
-        IMAGETYPE_PNG => array('output' => 'imagepng', 'create' => 'imagecreatefrompng'),
-        IMAGETYPE_XBM => array('output' => 'imagexbm', 'create' => 'imagecreatefromxbm'),
-        IMAGETYPE_WBMP => array('output' => 'imagewbmp', 'create' => 'imagecreatefromxbm')
-    );
+    private static $_callbacks = [
+        IMAGETYPE_GIF => ['output' => 'imagegif', 'create' => 'imagecreatefromgif'],
+        IMAGETYPE_JPEG => ['output' => 'imagejpeg', 'create' => 'imagecreatefromjpeg'],
+        IMAGETYPE_PNG => ['output' => 'imagepng', 'create' => 'imagecreatefrompng'],
+        IMAGETYPE_XBM => ['output' => 'imagexbm', 'create' => 'imagecreatefromxbm'],
+        IMAGETYPE_WBMP => ['output' => 'imagewbmp', 'create' => 'imagecreatefromxbm'],
+    ];
 
     /**
      * Whether image was resized or not
@@ -162,7 +143,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             }
         }
 
-        $functionParameters = array($this->_imageHandler, $fileName);
+        $functionParameters = [$this->_imageHandler, $fileName];
 
         $quality = $this->quality();
         if ($quality !== null) {
@@ -231,7 +212,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             try {
                 // fill truecolor png with alpha transparency
                 if ($isAlpha) {
-
                     if (!imagealphablending($imageResourceTo, false)) {
                         throw new \Exception('Failed to set alpha blending for PNG image.');
                     }
@@ -388,7 +368,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {
-        list($watermarkSrcWidth, $watermarkSrcHeight, $watermarkFileType, ) = $this->_getImageOptions($imagePath);
+        list($watermarkSrcWidth, $watermarkSrcHeight, $watermarkFileType,) = $this->_getImageOptions($imagePath);
         $this->_getFileAttributes();
         $watermark = call_user_func(
             $this->_getCallback('create', $watermarkFileType, 'Unsupported watermark image format.'),
@@ -426,7 +406,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         if ($this->getWatermarkPosition() == self::POSITION_TILE) {
             $tile = true;
         } elseif ($this->getWatermarkPosition() == self::POSITION_STRETCH) {
-
             $newWatermark = imagecreatetruecolor($this->_imageSrcWidth, $this->_imageSrcHeight);
             imagealphablending($newWatermark, false);
             $col = imagecolorallocate($newWatermark, 255, 255, 255);

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Model\Layout;
 
@@ -84,42 +65,42 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
+        $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->sessionMock = $this->getMock(
             'Magento\Framework\Session\Generic',
-            array('clearStorage', 'setData', 'getData'),
-            array(),
+            ['clearStorage', 'setData', 'getData'],
+            [],
             '',
             false
         );
         $this->customerSessionMock = $this->getMock(
             'Magento\Customer\Model\Session',
-            array('getCustomerGroupId', 'setCustomerGroupId', 'clearStorage', 'setCustomer'),
-            array(),
+            ['getCustomerGroupId', 'setCustomerGroupId', 'clearStorage', 'setCustomer'],
+            [],
             '',
             false
         );
         $this->customerFactoryMock = $this->getMock(
             'Magento\Customer\Model\CustomerFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->customerMock = $this->getMock(
             'Magento\Customer\Model\Customer',
-            array('setGroupId', '__wakeup'),
-            array(),
+            ['setGroupId', '__wakeup'],
+            [],
             '',
             false
         );
-        $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', array(), array(), '', false);
-        $this->visitorMock = $this->getMock('Magento\Customer\Model\Visitor', array(), array(), '', false);
+        $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
+        $this->visitorMock = $this->getMock('Magento\Customer\Model\Visitor', [], [], '', false);
         $this->customerFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->customerMock));
-        $this->cacheConfigMock = $this->getMock('Magento\PageCache\Model\Config', array(), array(), '', false);
+        $this->cacheConfigMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
 
         $this->plugin = new DepersonalizePlugin(
             $this->sessionMock,
@@ -160,7 +141,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with($this->equalTo(\Magento\Framework\Data\Form\FormKey::FORM_KEY));
         $output = $this->plugin->beforeGenerateXml($this->layoutMock);
-        $this->assertEquals(array(), $output);
+        $this->assertEquals([], $output);
     }
 
     /**
@@ -177,7 +158,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('isAjax');
         $output = $this->plugin->beforeGenerateXml($this->layoutMock);
-        $this->assertEquals(array(), $output);
+        $this->assertEquals([], $output);
     }
 
     /**
@@ -201,7 +182,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
         $this->layoutMock->expects($this->never())
             ->method('isCacheable');
         $output = $this->plugin->beforeGenerateXml($this->layoutMock);
-        $this->assertEquals(array(), $output);
+        $this->assertEquals([], $output);
     }
 
     /**
@@ -228,7 +209,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->never())
             ->method('getCustomerGroupId');
         $output = $this->plugin->beforeGenerateXml($this->layoutMock);
-        $this->assertEquals(array(), $output);
+        $this->assertEquals([], $output);
     }
 
     /**
@@ -236,7 +217,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGenerateXmlPageCacheEnabled()
     {
-        $expectedResult = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
+        $expectedResult = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->moduleManagerMock
             ->expects($this->once())
             ->method('isEnabled')
@@ -296,7 +277,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGenerateXmlPageCacheDisabled()
     {
-        $expectedResult = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
+        $expectedResult = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->moduleManagerMock
             ->expects($this->once())
             ->method('isEnabled')
@@ -314,7 +295,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGenerateXmlRequestIsAjax()
     {
-        $expectedResult = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
+        $expectedResult = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->moduleManagerMock
             ->expects($this->once())
             ->method('isEnabled')
@@ -339,7 +320,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterGenerateXmlLayoutIsNotCacheable()
     {
-        $expectedResult = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
+        $expectedResult = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->moduleManagerMock
             ->expects($this->once())
             ->method('isEnabled')

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Eav\Model\Resource\Form\Attribute;
 
@@ -59,7 +40,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_entityType;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -74,7 +55,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -84,7 +65,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
@@ -207,9 +188,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $entityType = $this->getEntityType();
         $this->setItemObjectClass($entityType->getAttributeModel());
 
-        $eaColumns = array();
-        $caColumns = array();
-        $saColumns = array();
+        $eaColumns = [];
+        $caColumns = [];
+        $saColumns = [];
 
         $eaDescribe = $connection->describeTable($this->getTable('eav_attribute'));
         unset($eaDescribe['attribute_id']);
@@ -218,7 +199,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         }
 
         $select->join(
-            array('ea' => $this->getTable('eav_attribute')),
+            ['ea' => $this->getTable('eav_attribute')],
             'main_table.attribute_id = ea.attribute_id',
             $eaColumns
         );
@@ -233,7 +214,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             }
 
             $select->join(
-                array('ca' => $this->getTable($additionalTable)),
+                ['ca' => $this->getTable($additionalTable)],
                 'main_table.attribute_id = ca.attribute_id',
                 $caColumns
             );
@@ -268,9 +249,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                 'sa.attribute_id = main_table.attribute_id AND sa.website_id = ?',
                 (int)$store->getWebsiteId()
             );
-            $select->joinLeft(array('sa' => $this->_getEavWebsiteTable()), $joinWebsiteExpression, $saColumns);
+            $select->joinLeft(['sa' => $this->_getEavWebsiteTable()], $joinWebsiteExpression, $saColumns);
         }
-
 
         // add store attribute label
         $storeLabelExpr = $connection->getCheckSql('al.value IS NULL', 'ea.frontend_label', 'al.value');
@@ -279,9 +259,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             (int)$store->getId()
         );
         $select->joinLeft(
-            array('al' => $this->getTable('eav_attribute_label')),
+            ['al' => $this->getTable('eav_attribute_label')],
             $joinExpression,
-            array('store_label' => $storeLabelExpr)
+            ['store_label' => $storeLabelExpr]
         );
 
         // add entity type filter

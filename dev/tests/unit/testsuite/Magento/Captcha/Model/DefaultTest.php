@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Captcha\Model;
 
@@ -29,7 +10,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      * Captcha default config data
      * @var array
      */
-    protected static $_defaultConfig = array(
+    protected static $_defaultConfig = [
         'type' => 'default',
         'enable' => '1',
         'font' => 'linlibertine',
@@ -41,15 +22,15 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         'length' => '4-5',
         'symbols' => 'ABCDEFGHJKMnpqrstuvwxyz23456789',
         'case_sensitive' => '0',
-        'shown_to_logged_in_user' => array('contact_us' => 1),
-        'always_for' => array(
+        'shown_to_logged_in_user' => ['contact_us' => 1],
+        'always_for' => [
             'user_create',
             'user_forgotpassword',
             'guest_checkout',
             'register_during_checkout',
-            'contact_us'
-        )
-    );
+            'contact_us',
+        ],
+    ];
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -60,12 +41,12 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      * path to fonts
      * @var array
      */
-    protected $_fontPath = array(
-        'LinLibertine' => array(
+    protected $_fontPath = [
+        'LinLibertine' => [
             'label' => 'LinLibertine',
-            'path' => 'lib/internal/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf'
-        )
-    );
+            'path' => 'lib/internal/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf',
+        ],
+    ];
 
     /**
      * @var \Magento\Captcha\Model\DefaultModel
@@ -102,8 +83,8 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
 
         $this->_storeManager = $this->getMock(
             'Magento\Store\Model\StoreManager',
-            array('getStore'),
-            array(),
+            ['getStore'],
+            [],
             '',
             false
         );
@@ -123,18 +104,17 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
             'get'
         )->will(
             $this->returnValueMap(
-                array(
+                [
                     'Magento\Captcha\Helper\Data' => $this->_getHelperStub(),
-                    'Magento\Customer\Model\Session' => $this->session
-                )
+                    'Magento\Customer\Model\Session' => $this->session,
+                ]
             )
         );
 
-
         $this->_resLogFactory = $this->getMock(
             'Magento\Captcha\Model\Resource\LogFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
@@ -205,7 +185,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         self::$_defaultConfig['case_sensitive'] = '1';
         $this->assertFalse($this->_object->isCorrect('abcdef5'));
-        $sessionData = array('user_create_word' => array('data' => 'AbCdEf5', 'expires' => time() + 600));
+        $sessionData = ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + 600]];
         $this->_object->getSession()->setData($sessionData);
         self::$_defaultConfig['case_sensitive'] = '0';
         $this->assertTrue($this->_object->isCorrect('abcdef5'));
@@ -246,7 +226,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->_object->getWord(), 'AbCdEf5');
         $this->_object->getSession()->setData(
-            array('user_create_word' => array('data' => 'AbCdEf5', 'expires' => time() - 360))
+            ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() - 360]]
         );
         $this->assertNull($this->_object->getWord());
     }
@@ -261,16 +241,16 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $sessionArgs = $helper->getConstructArguments(
             'Magento\Customer\Model\Session',
-            array('storage' => new \Magento\Framework\Session\Storage())
+            ['storage' => new \Magento\Framework\Session\Storage()]
         );
         $session = $this->getMock(
             'Magento\Customer\Model\Session',
-            array('isLoggedIn', 'getUserCreateWord'),
+            ['isLoggedIn', 'getUserCreateWord'],
             $sessionArgs
         );
         $session->expects($this->any())->method('isLoggedIn')->will($this->returnValue(false));
 
-        $session->setData(array('user_create_word' => array('data' => 'AbCdEf5', 'expires' => time() + 600)));
+        $session->setData(['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + 600]]);
         return $session;
     }
 
@@ -283,7 +263,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         $helper = $this->getMockBuilder(
             'Magento\Captcha\Helper\Data'
         )->disableOriginalConstructor()->setMethods(
-            array('getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl')
+            ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
         )->getMock();
 
         $helper->expects(
@@ -306,7 +286,6 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('http://localhost/pub/media/captcha/base/')
         );
 
-
         return $helper;
     }
 
@@ -318,8 +297,8 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         $resourceModel = $this->getMock(
             'Magento\Captcha\Model\Resource\Log',
-            array('countAttemptsByRemoteAddress', 'countAttemptsByUserLogin', 'logAttempt', '__wakeup'),
-            array(),
+            ['countAttemptsByRemoteAddress', 'countAttemptsByUserLogin', 'logAttempt', '__wakeup'],
+            [],
             '',
             false
         );
@@ -357,7 +336,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getStoreStub()
     {
-        $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
+        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/pub/media/'));
         $store->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
         return $store;
@@ -381,11 +360,11 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
 
     public function isShownToLoggedInUserDataProvider()
     {
-        return array(
-            array(true, 'contact_us'),
-            array(false, 'user_create'),
-            array(false, 'user_forgotpassword'),
-            array(false, 'guest_checkout')
-        );
+        return [
+            [true, 'contact_us'],
+            [false, 'user_create'],
+            [false, 'user_forgotpassword'],
+            [false, 'guest_checkout']
+        ];
     }
 }

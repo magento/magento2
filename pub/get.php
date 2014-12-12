@@ -2,36 +2,17 @@
 /**
  * Public media files entry point
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 use Magento\Framework\App\Cache\Frontend\Factory;
-use Magento\Framework\Module\ModuleList\DeploymentConfig;
 use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\Module\ModuleList\DeploymentConfig;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
 
 $mediaDirectory = null;
-$allowedResources = array();
+$allowedResources = [];
 $configCacheFile = dirname(__DIR__) . '/var/resource_config.json';
 $relativeFilename = null;
 
@@ -71,8 +52,8 @@ if ($mediaDirectory) {
 
     if (is_readable($request->getFilePath())) {
         $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
-            new \Magento\Framework\Controller\Response\Http,
-            new \Magento\Framework\File\Mime
+            new \Magento\Framework\Controller\Response\Http(),
+            new \Magento\Framework\File\Mime()
         );
         $transfer->send($request->getFilePath());
         exit;
@@ -82,7 +63,7 @@ if ($mediaDirectory) {
 $params = $_SERVER;
 if (empty($mediaDirectory)) {
     $params[ObjectManagerFactory::INIT_PARAM_DEPLOYMENT_CONFIG] = [
-        DeploymentConfig::CONFIG_KEY => ['Magento_Core' => 1]
+        DeploymentConfig::CONFIG_KEY => ['Magento_Core' => 1],
     ];
     $params[Factory::PARAM_CACHE_FORCED_OPTIONS] = ['frontend_options' => ['disable_save' => true]];
 }

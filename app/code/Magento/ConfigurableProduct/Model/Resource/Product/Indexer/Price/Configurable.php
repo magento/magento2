@@ -2,26 +2,7 @@
 /**
  * Configurable Products Price Indexer Resource model
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ConfigurableProduct\Model\Resource\Product\Indexer\Price;
 
@@ -139,41 +120,41 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
         $this->_prepareConfigurableOptionPriceTable();
 
         $select = $write->select()->from(
-            array('i' => $this->_getDefaultFinalPriceTable()),
-            array()
+            ['i' => $this->_getDefaultFinalPriceTable()],
+            []
         )->join(
-            array('l' => $this->getTable('catalog_product_super_link')),
+            ['l' => $this->getTable('catalog_product_super_link')],
             'l.parent_id = i.entity_id',
-            array('parent_id', 'product_id')
+            ['parent_id', 'product_id']
         )->columns(
-            array('customer_group_id', 'website_id'),
+            ['customer_group_id', 'website_id'],
             'i'
         )->join(
-            array('a' => $this->getTable('catalog_product_super_attribute')),
+            ['a' => $this->getTable('catalog_product_super_attribute')],
             'l.parent_id = a.product_id',
-            array()
+            []
         )->join(
-            array('cp' => $this->getTable('catalog_product_entity_int')),
+            ['cp' => $this->getTable('catalog_product_entity_int')],
             'l.product_id = cp.entity_id AND cp.attribute_id = a.attribute_id AND cp.store_id = 0',
-            array()
+            []
         )->joinLeft(
-            array('apd' => $this->getTable('catalog_product_super_attribute_pricing')),
+            ['apd' => $this->getTable('catalog_product_super_attribute_pricing')],
             'a.product_super_attribute_id = apd.product_super_attribute_id' .
             ' AND apd.website_id = 0 AND cp.value = apd.value_index',
-            array()
+            []
         )->joinLeft(
-            array('apw' => $this->getTable('catalog_product_super_attribute_pricing')),
+            ['apw' => $this->getTable('catalog_product_super_attribute_pricing')],
             'a.product_super_attribute_id = apw.product_super_attribute_id' .
             ' AND apw.website_id = i.website_id AND cp.value = apw.value_index',
-            array()
+            []
         )->join(
-            array('le' => $this->getTable('catalog_product_entity')),
+            ['le' => $this->getTable('catalog_product_entity')],
             'le.entity_id = l.product_id',
-            array()
+            []
         )->where(
             'le.required_options=0'
         )->group(
-            array('l.parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id')
+            ['l.parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
         );
 
         $priceExpression = $write->getCheckSql('apw.value_id IS NOT NULL', 'apw.pricing_value', 'apd.pricing_value');
@@ -194,15 +175,15 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
         $groupPriceColumn = $write->getCheckSql("MIN(i.group_price) IS NOT NULL", "SUM({$groupPriceExp})", 'NULL');
 
         $select->columns(
-            array('price' => $priceColumn, 'tier_price' => $tierPriceColumn, 'group_price' => $groupPriceColumn)
+            ['price' => $priceColumn, 'tier_price' => $tierPriceColumn, 'group_price' => $groupPriceColumn]
         );
 
         $query = $select->insertFromSelect($coaTable);
         $write->query($query);
 
         $select = $write->select()->from(
-            array($coaTable),
-            array(
+            [$coaTable],
+            [
                 'parent_id',
                 'customer_group_id',
                 'website_id',
@@ -210,23 +191,23 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
                 'MAX(price)',
                 'MIN(tier_price)',
                 'MIN(group_price)'
-            )
+            ]
         )->group(
-            array('parent_id', 'customer_group_id', 'website_id')
+            ['parent_id', 'customer_group_id', 'website_id']
         );
 
         $query = $select->insertFromSelect($copTable);
         $write->query($query);
 
-        $table = array('i' => $this->_getDefaultFinalPriceTable());
+        $table = ['i' => $this->_getDefaultFinalPriceTable()];
         $select = $write->select()->join(
-            array('io' => $copTable),
+            ['io' => $copTable],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
             ' AND i.website_id = io.website_id',
-            array()
+            []
         );
         $select->columns(
-            array(
+            [
                 'min_price' => new \Zend_Db_Expr('i.min_price + io.min_price'),
                 'max_price' => new \Zend_Db_Expr('i.max_price + io.max_price'),
                 'tier_price' => $write->getCheckSql(
@@ -238,8 +219,8 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
                     'i.group_price IS NOT NULL',
                     'i.group_price + io.group_price',
                     'NULL'
-                )
-            )
+                ),
+            ]
         );
 
         $query = $select->crossUpdateFromSelect($table);

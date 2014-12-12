@@ -1,35 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Integration\Service\V1;
 
-use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
+use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
+use Magento\Integration\Helper\Oauth\Data as IntegrationOauthHelper;
+use Magento\Integration\Model\Oauth\Consumer as ConsumerModel;
+use Magento\Integration\Model\Oauth\Consumer\Factory as ConsumerFactory;
 use Magento\Integration\Model\Oauth\Token as OauthTokenModel;
 use Magento\Integration\Model\Oauth\Token\Factory as TokenFactory;
-use Magento\Integration\Helper\Oauth\Data as IntegrationOauthHelper;
-use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
-use Magento\Integration\Model\Oauth\Consumer\Factory as ConsumerFactory;
-use Magento\Integration\Model\Oauth\Consumer as ConsumerModel;
+use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
 
 /**
  * Integration oAuth service.
@@ -40,7 +21,7 @@ use Magento\Integration\Model\Oauth\Consumer as ConsumerModel;
 class Oauth implements OauthInterface
 {
     /**
-     * @var  \Magento\Framework\StoreManagerInterface
+     * @var  \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -82,7 +63,7 @@ class Oauth implements OauthInterface
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param ConsumerFactory $consumerFactory
      * @param TokenFactory $tokenFactory
      * @param IntegrationOauthHelper $dataHelper
@@ -92,7 +73,7 @@ class Oauth implements OauthInterface
      * @param TokenProvider $tokenProvider
      */
     public function __construct(
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         ConsumerFactory $consumerFactory,
         TokenFactory $tokenFactory,
         IntegrationOauthHelper $dataHelper,
@@ -222,16 +203,16 @@ class Oauth implements OauthInterface
             $storeBaseUrl = $this->_storeManager->getStore()->getBaseUrl();
             $this->_httpClient->setUri($endpointUrl);
             $this->_httpClient->setParameterPost(
-                array(
+                [
                     'oauth_consumer_key' => $consumerData['key'],
                     'oauth_consumer_secret' => $consumerData['secret'],
                     'store_base_url' => $storeBaseUrl,
-                    'oauth_verifier' => $verifier->getVerifier()
-                )
+                    'oauth_verifier' => $verifier->getVerifier(),
+                ]
             );
             $maxredirects = $this->_dataHelper->getConsumerPostMaxRedirects();
             $timeout = $this->_dataHelper->getConsumerPostTimeout();
-            $this->_httpClient->setConfig(array('maxredirects' => $maxredirects, 'timeout' => $timeout));
+            $this->_httpClient->setConfig(['maxredirects' => $maxredirects, 'timeout' => $timeout]);
             $this->_httpClient->request(\Magento\Framework\HTTP\ZendClient::POST);
             return $verifier->getVerifier();
         } catch (\Magento\Framework\Model\Exception $exception) {

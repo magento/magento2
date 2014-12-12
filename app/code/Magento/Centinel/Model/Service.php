@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Centinel\Model;
 
@@ -46,14 +27,14 @@ class Service extends \Magento\Framework\Object
      *
      * @var array
      */
-    protected $_cmpiMap = array(
+    protected $_cmpiMap = [
         'lookup_enrolled' => self::CMPI_ENROLLED,
         'lookup_eci_flag' => self::CMPI_ECI,
         'authenticate_pa_res_status' => self::CMPI_PARES,
         'authenticate_cavv' => self::CMPI_CAVV,
         'authenticate_eci_flag' => self::CMPI_ECI,
-        'authenticate_xid' => self::CMPI_XID
-    );
+        'authenticate_xid' => self::CMPI_XID,
+    ];
 
     /**
      * Validation api model factory
@@ -127,7 +108,7 @@ class Service extends \Magento\Framework\Object
         \Magento\Centinel\Model\StateFactory $stateFactory,
         \Magento\Framework\Data\Form\FormKey $formKey,
         $urlPrefix = 'centinel/index/',
-        array $data = array()
+        array $data = []
     ) {
         $this->_config = $config;
         $this->_apiFactory = $apiFactory;
@@ -182,12 +163,12 @@ class Service extends \Magento\Framework\Object
      */
     protected function _getUrl($suffix, $current = false)
     {
-        $params = array(
+        $params = [
             '_secure' => true,
             '_current' => $current,
             'form_key' => $this->formKey->getFormKey(),
-            'isIframe' => true
-        );
+            'isIframe' => true,
+        ];
         return $this->_url->getUrl($this->_urlPrefix . $suffix, $params);
     }
 
@@ -243,7 +224,7 @@ class Service extends \Magento\Framework\Object
      */
     protected function _resetValidationState()
     {
-        $this->_centinelSession->setData(array());
+        $this->_centinelSession->setData([]);
         $this->_validationState = false;
     }
 
@@ -421,12 +402,12 @@ class Service extends \Magento\Framework\Object
         if (!$validationState && $this->shouldAuthenticate()) {
             throw new \Exception('Authentication impossible: validation state is wrong.');
         }
-        $data = array(
+        $data = [
             'acs_url' => $validationState->getLookupAcsUrl(),
             'pa_req' => $validationState->getLookupPayload(),
             'term_url' => $this->_getUrl('authenticationcomplete', true),
-            'md' => $validationState->getLookupTransactionId()
-        );
+            'md' => $validationState->getLookupTransactionId(),
+        ];
         return $data;
     }
 

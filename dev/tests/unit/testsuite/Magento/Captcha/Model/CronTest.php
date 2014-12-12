@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Captcha\Model;
 
@@ -72,11 +53,11 @@ class CronTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', array(), array(), '', false);
-        $this->_adminHelper = $this->getMock('Magento\Captcha\Helper\Adminhtml\Data', array(), array(), '', false);
-        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
-        $this->_directory = $this->getMock('Magento\Framework\Filesystem\Directory\Write', array(), array(), '', false);
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
+        $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
+        $this->_adminHelper = $this->getMock('Magento\Captcha\Helper\Adminhtml\Data', [], [], '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->_directory = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
 
         $this->_filesystem->expects(
             $this->once()
@@ -87,7 +68,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = new \Magento\Captcha\Model\Cron(
-            $this->getMock('Magento\Captcha\Model\Resource\LogFactory', array(), array(), '', false),
+            $this->getMock('Magento\Captcha\Model\Resource\LogFactory', [], [], '', false),
             $this->_helper,
             $this->_adminHelper,
             $this->_filesystem,
@@ -105,7 +86,7 @@ class CronTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getWebsites'
         )->will(
-            $this->returnValue(isset($website) ? array($website) : array())
+            $this->returnValue(isset($website) ? [$website] : [])
         );
         if (isset($website)) {
             $this->_helper->expects(
@@ -138,10 +119,10 @@ class CronTest extends \PHPUnit_Framework_TestCase
         )->method(
             'read'
         )->will(
-            $this->returnValue(array($filename))
+            $this->returnValue([$filename])
         );
         $this->_directory->expects($this->exactly($timesToCall))->method('isFile')->will($this->returnValue($isFile));
-        $this->_directory->expects($this->any())->method('stat')->will($this->returnValue(array('mtime' => $mTime)));
+        $this->_directory->expects($this->any())->method('stat')->will($this->returnValue(['mtime' => $mTime]));
         if ($mustDelete) {
             $this->_directory->expects($this->exactly($timesToCall))->method('delete')->with($filename);
         } else {
@@ -157,20 +138,20 @@ class CronTest extends \PHPUnit_Framework_TestCase
     {
         $website = $this->getMock(
             'Magento\Store\Model\Website',
-            array('__wakeup', 'getDefaultStore'),
-            array(),
+            ['__wakeup', 'getDefaultStore'],
+            [],
             '',
             false
         );
-        $store = $this->getMock('Magento\Store\Model\Store', array('__wakeup'), array(), '', false);
+        $store = $this->getMock('Magento\Store\Model\Store', ['__wakeup'], [], '', false);
         $website->expects($this->any())->method('getDefaultStore')->will($this->returnValue($store));
         $time = time();
-        return array(
-            array(null, true, 'test.png', 50, ($time - 60) / 60, true),
-            array($website, false, 'test.png', 50, ($time - 60) / 60, false),
-            array($website, true, 'test.jpg', 50, ($time - 60) / 60, false),
-            array($website, true, 'test.png', 50, ($time - 20) / 60, false)
-        );
+        return [
+            [null, true, 'test.png', 50, ($time - 60) / 60, true],
+            [$website, false, 'test.png', 50, ($time - 60) / 60, false],
+            [$website, true, 'test.jpg', 50, ($time - 60) / 60, false],
+            [$website, true, 'test.png', 50, ($time - 20) / 60, false]
+        ];
     }
 }
 

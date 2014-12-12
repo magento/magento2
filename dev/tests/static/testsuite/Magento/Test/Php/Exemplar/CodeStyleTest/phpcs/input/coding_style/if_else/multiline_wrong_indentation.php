@@ -1,7 +1,7 @@
 <?php
 if ($a) {
     echo 'a';
-} else if ($b
+} elseif ($b
     && $c
 ) {
     echo 'bc';

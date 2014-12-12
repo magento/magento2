@@ -1,34 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\ConfigurableProduct\Test\Fixture;
 
-use Mtf\System\Config;
-use Mtf\Factory\Factory;
 use Magento\Catalog\Test\Fixture\Product;
 use Magento\Catalog\Test\Fixture\ProductAttribute;
 use Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct as Repository;
+use Mtf\Factory\Factory;
+use Mtf\System\Config;
 
 /**
  * Class ConfigurableProduct
@@ -230,7 +211,7 @@ class ConfigurableProduct extends Product
             'fields' => [
                 'price' => [
                     'value' => '10',
-                    'group' => static::GROUP_PRODUCT_DETAILS
+                    'group' => static::GROUP_PRODUCT_DETAILS,
                 ],
                 'tax_class_id' => [
                     'value' => 'Taxable Goods',
@@ -240,101 +221,101 @@ class ConfigurableProduct extends Product
                 ],
                 'weight' => [
                     'value' => '1',
-                    'group' => static::GROUP_PRODUCT_DETAILS
+                    'group' => static::GROUP_PRODUCT_DETAILS,
                 ],
                 'product_website_1' => [
                     'value' => 'Yes',
                     'input_value' => [1],
                     'group' => static::GROUP_PRODUCT_WEBSITE,
                     'input' => 'checkbox',
-                    'input_name' => 'website_ids'
+                    'input_name' => 'website_ids',
                 ],
                 'configurable_attributes_data' => [
                     'value' => [
                         '0' => [
                             'label' => [
-                                'value' => '%attribute_label_1%'
+                                'value' => '%attribute_label_1%',
                             ],
                             '0' => [
                                 'option_label' => [
-                                    'value' => '%attribute_1_option_label_1%'
+                                    'value' => '%attribute_1_option_label_1%',
                                 ],
                                 'pricing_value' => [
-                                    'value' => '1'
+                                    'value' => '1',
                                 ],
                                 'is_percent' => [
-                                    'value' => 'No'
+                                    'value' => 'No',
                                 ],
                                 'include' => [
-                                    'value' => 'Yes'
+                                    'value' => 'Yes',
                                 ],
                             ],
                             '1' => [
                                 'option_label' => [
-                                    'value' => '%attribute_1_option_label_2%'
+                                    'value' => '%attribute_1_option_label_2%',
                                 ],
                                 'pricing_value' => [
-                                    'value' => '2'
+                                    'value' => '2',
                                 ],
                                 'is_percent' => [
-                                    'value' => 'No'
+                                    'value' => 'No',
                                 ],
                                 'include' => [
-                                    'value' => 'Yes'
+                                    'value' => 'Yes',
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
-                    'group' => static::GROUP
+                    'group' => static::GROUP,
                 ],
                 'variations-matrix' => [
                     'value' => [
                         '0' => [
                             'configurable_attribute' => [
                                 '0' => [
-                                    'attribute_option' => '%attribute_1_option_label_1%'
-                                ]
+                                    'attribute_option' => '%attribute_1_option_label_1%',
+                                ],
                             ],
                             'value' => [
                                 'display' => [
                                     'value' => 'Yes',
-                                    'input' => 'checkbox'
+                                    'input' => 'checkbox',
                                 ],
                                 'name' => [
-                                    'value' => 'Variation 0-%isolation%'
+                                    'value' => 'Variation 0-%isolation%',
                                 ],
                                 'sku' => [
-                                    'value' => 'Variation 0-%isolation%'
+                                    'value' => 'Variation 0-%isolation%',
                                 ],
                                 'qty' => [
-                                    'value' => '100'
-                                ]
-                            ]
+                                    'value' => '100',
+                                ],
+                            ],
                         ],
                         '1' => [
                             'configurable_attribute' => [
                                 '0' => [
-                                    'attribute_option' => '%attribute_1_option_label_2%'
-                                ]
+                                    'attribute_option' => '%attribute_1_option_label_2%',
+                                ],
                             ],
                             'value' => [
                                 'display' => [
                                     'value' => 'Yes',
-                                    'input' => 'checkbox'
+                                    'input' => 'checkbox',
                                 ],
                                 'name' => [
-                                    'value' => 'Variation 1-%isolation%'
+                                    'value' => 'Variation 1-%isolation%',
                                 ],
                                 'sku' => [
-                                    'value' => 'Variation 1-%isolation%'
+                                    'value' => 'Variation 1-%isolation%',
                                 ],
                                 'qty' => [
-                                    'value' => '200'
-                                ]
-                            ]
-                        ]
+                                    'value' => '200',
+                                ],
+                            ],
+                        ],
                     ],
-                    'group' => static::GROUP
+                    'group' => static::GROUP,
                 ],
             ],
             'checkout_data' => [
@@ -342,13 +323,13 @@ class ConfigurableProduct extends Product
                     'configurable_options' => [
                         [
                             'title' => '0',
-                            'value' => '0'
-                        ]
+                            'value' => '0',
+                        ],
                     ],
-                    'qty' => 1
+                    'qty' => 1,
                 ],
-                'special_price' => '10'
-            ]
+                'special_price' => '10',
+            ],
         ];
 
         $this->_data = array_merge_recursive($this->_data, $data);

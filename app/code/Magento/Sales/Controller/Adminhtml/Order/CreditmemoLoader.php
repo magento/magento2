@@ -1,26 +1,7 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
@@ -137,7 +118,7 @@ class CreditmemoLoader extends Object
         if (isset($data['items'])) {
             $qtys = $data['items'];
         } else {
-            $qtys = array();
+            $qtys = [];
         }
         return $qtys;
     }
@@ -210,8 +191,8 @@ class CreditmemoLoader extends Object
 
             $savedData = $this->_getItemData();
 
-            $qtys = array();
-            $backToStock = array();
+            $qtys = [];
+            $backToStock = [];
             foreach ($savedData as $orderItemId => $itemData) {
                 if (isset($itemData['qty'])) {
                     $qtys[$orderItemId] = $itemData['qty'];
@@ -222,7 +203,7 @@ class CreditmemoLoader extends Object
             }
             $data['qtys'] = $qtys;
 
-            $service = $this->orderServiceFactory->create(array('order' => $order));
+            $service = $this->orderServiceFactory->create(['order' => $order]);
             if ($invoice) {
                 $creditmemo = $service->prepareInvoiceCreditmemo($invoice, $data);
             } else {
@@ -251,7 +232,7 @@ class CreditmemoLoader extends Object
 
         $this->eventManager->dispatch(
             'adminhtml_sales_order_creditmemo_register_before',
-            array('creditmemo' => $creditmemo, 'input' => $this->getCreditmemo())
+            ['creditmemo' => $creditmemo, 'input' => $this->getCreditmemo()]
         );
 
         $this->registry->register('current_creditmemo', $creditmemo);

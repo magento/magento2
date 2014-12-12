@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\AdminOrder;
 
@@ -47,8 +28,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Quote\Item\Updater|\PHPUnit_Framework_MockObject_MockObject */
     protected $itemUpdater;
 
-    /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
-    protected $extensibleDataObjectConverterMock;
+    /** @var \Magento\Customer\Model\Customer\Mapper|\PHPUnit_Framework_MockObject_MockObject */
+    protected $customerMapper;
 
     /**
      * @var Product\Quote\Initializer|\PHPUnit_Framework_MockObject_MockObject
@@ -119,7 +100,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->customerGroupServiceMock = $this->getMock('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
 
         $this->itemUpdater = $this->getMock('Magento\Sales\Model\Quote\Item\Updater', [], [], '', false);
 
@@ -128,8 +108,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
-            'Magento\Framework\Api\ExtensibleDataObjectConverter'
+        $this->customerMapper = $this->getMockBuilder(
+            'Magento\Customer\Model\Customer\Mapper'
         )->setMethods(['toFlatArray'])->disableOriginalConstructor()->getMock();
 
         $this->quoteInitializerMock = $this->getMock(
@@ -204,7 +184,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 'customerBuilder' => $this->customerBuilderMock,
                 'groupRepository' => $this->groupRepositoryMock,
                 'quoteItemUpdater' => $this->itemUpdater,
-                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
+                'customerMapper' => $this->customerMapper,
                 'objectFactory' => $this->objectFactory,
                 'accountManagement' => $this->accountManagementMock,
             ]
@@ -222,7 +202,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         foreach ($attributes as $attribute) {
             $attributeMock = $this->getMock(
-                'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata',
+                'Magento\Customer\Api\Data\AttributeMetadataInterface',
                 [],
                 [],
                 '',
@@ -253,10 +233,10 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('prepareRequest')
             ->will($this->returnValue($this->getMock('Magento\Framework\App\RequestInterface')));
 
-        $customerMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', array(), array(), '', false);
-        $this->extensibleDataObjectConverterMock->expects($this->any())->method('toFlatArray')
-            ->will($this->returnValue(array('email' => 'user@example.com', 'group_id' => 1)));
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', array(), array(), '', false);
+        $customerMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
+        $this->customerMapper->expects($this->any())->method('toFlatArray')
+            ->will($this->returnValue(['email' => 'user@example.com', 'group_id' => 1]));
+        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->any())->method('getCustomer')->will($this->returnValue($customerMock));
         $quoteMock->expects($this->once())
             ->method('addData')

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\App;
 
@@ -73,13 +54,13 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
-        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
+        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->_configScopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
         $this->_layoutProcessor = $this->getMock('Magento\Core\Model\Layout\Merge', [], [], '', false);
         $this->_layoutMock->expects($this->any())->method('getUpdate')
             ->will($this->returnValue($this->_layoutProcessor));
-        $this->_actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', array(), array(), '', false);
+        $this->_actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
         $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $pageConfigMock = $this->getMockBuilder('\Magento\Framework\View\Page\Config')->disableOriginalConstructor()
             ->getMock();
@@ -113,11 +94,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->resultPage));
 
-        $this->response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
+        $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
 
         $this->_view = $helper->getObject(
             'Magento\Framework\App\View',
-            array(
+            [
                 'layout' => $this->_layoutMock,
                 'request' => $this->_requestMock,
                 'response' => $this->response,
@@ -125,7 +106,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                 'eventManager' => $this->_eventManagerMock,
                 'actionFlag' => $this->_actionFlagMock,
                 'pageFactory' => $pageFactory
-            )
+            ]
         );
     }
 
@@ -146,7 +127,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadLayoutWithDefaultSetup()
     {
-
         $this->_layoutProcessor->expects($this->at(0))->method('addHandle')->with('default');
         $this->_requestMock->expects(
             $this->any()
@@ -192,7 +172,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testAddPageLayoutHandles()
     {
-        $pageHandles = array('full_action_name', 'full_action_name_key_value');
+        $pageHandles = ['full_action_name', 'full_action_name_key_value'];
         $this->_requestMock->expects($this->once())
             ->method('getFullActionName')
             ->will($this->returnValue('Full_Action_Name'));
@@ -200,27 +180,25 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->_layoutProcessor->expects($this->once())
             ->method('addHandle')
             ->with($pageHandles);
-        $this->_view->addPageLayoutHandles(array('key' => 'value'));
+        $this->_view->addPageLayoutHandles(['key' => 'value']);
     }
 
     public function testGenerateLayoutBlocksWhenFlagIsNotSet()
     {
-
-        $valueMap = array(
-            array('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT, false),
-            array('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT, false)
-        );
+        $valueMap = [
+            ['', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
+            ['', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
+        ];
         $this->_actionFlagMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
         $this->_view->generateLayoutBlocks();
     }
 
     public function testGenerateLayoutBlocksWhenFlagIsSet()
     {
-
-        $valueMap = array(
-            array('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT, true),
-            array('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT, true)
-        );
+        $valueMap = [
+            ['', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
+            ['', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
+        ];
         $this->_actionFlagMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
 
         $this->_eventManagerMock->expects($this->never())->method('dispatch');

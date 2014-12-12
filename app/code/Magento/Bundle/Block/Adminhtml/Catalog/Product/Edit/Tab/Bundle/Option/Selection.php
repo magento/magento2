@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
 
@@ -73,7 +54,7 @@ class Selection extends \Magento\Backend\Block\Widget
         \Magento\Bundle\Model\Source\Option\Selection\Price\Type $priceType,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_catalogData = $catalogData;
         $this->_coreRegistry = $registry;
@@ -89,7 +70,6 @@ class Selection extends \Magento\Backend\Block\Widget
      */
     protected function _construct()
     {
-
         $this->setCanReadPrice(true);
         $this->setCanEditPrice(true);
     }
@@ -124,7 +104,7 @@ class Selection extends \Magento\Backend\Block\Widget
         $this->addChild(
             'selection_delete_button',
             'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Delete'), 'class' => 'delete icon-btn', 'on_click' => 'bSelection.remove(event)')
+            ['label' => __('Delete'), 'class' => 'delete icon-btn', 'on_click' => 'bSelection.remove(event)']
         );
         return parent::_prepareLayout();
     }
@@ -149,10 +129,10 @@ class Selection extends \Magento\Backend\Block\Widget
         $select = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
-            array(
+            [
                 'id' => $this->getFieldId() . '_{{index}}_price_type',
-                'class' => 'select select-product-option-type required-option-select'
-            )
+                'class' => 'select select-product-option-type required-option-select',
+            ]
         )->setName(
             $this->getFieldName() . '[{{parentIndex}}][{{index}}][selection_price_type]'
         )->setOptions(
@@ -174,7 +154,7 @@ class Selection extends \Magento\Backend\Block\Widget
         $select = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
-            array('id' => $this->getFieldId() . '_{{index}}_can_change_qty', 'class' => 'select')
+            ['id' => $this->getFieldId() . '_{{index}}_can_change_qty', 'class' => 'select']
         )->setName(
             $this->getFieldName() . '[{{parentIndex}}][{{index}}][selection_can_change_qty]'
         )->setOptions(

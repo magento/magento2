@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -40,7 +21,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected $_filesystem;
 
     /**
-     * @var \Magento\Theme\Helper\Storage
+     * @var \Magento\Theme\Helper\Storage|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_helperStorage;
 
@@ -64,19 +45,31 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     protected $directoryWrite;
 
+    /**
+     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlEncoder;
+
+    /**
+     * @var \Magento\Framework\Url\DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlDecoder;
+
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
-        $this->_helperStorage = $this->getMock('Magento\Theme\Helper\Storage', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->_helperStorage = $this->getMock('Magento\Theme\Helper\Storage', [], [], '', false);
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_imageFactory = $this->getMock('Magento\Framework\Image\AdapterFactory', array(), array(), '', false);
+        $this->_imageFactory = $this->getMock('Magento\Framework\Image\AdapterFactory', [], [], '', false);
         $this->directoryWrite = $this->getMock(
             'Magento\Framework\Filesystem\Directory\Write',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
+        $this->urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', ['encode'], [], '', false);
+        $this->urlDecoder = $this->getMock('Magento\Framework\Url\DecoderInterface', ['decode'], [], '', false);
 
         $this->_filesystem->expects(
             $this->once()
@@ -90,7 +83,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             $this->_filesystem,
             $this->_helperStorage,
             $this->_objectManager,
-            $this->_imageFactory
+            $this->_imageFactory,
+            $this->urlEncoder,
+            $this->urlDecoder
         );
 
         $this->_storageRoot = '/root';
@@ -113,7 +108,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     {
         $uploader = $this->_prepareUploader();
 
-        $uploader->expects($this->once())->method('save')->will($this->returnValue(array('not_empty')));
+        $uploader->expects($this->once())->method('save')->will($this->returnValue(['not_empty']));
 
         $this->_helperStorage->expects(
             $this->once()
@@ -131,7 +126,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         /** Prepare image */
 
-        $image = $this->getMock('Magento\Framework\Image\Adapter\Gd2', array(), array(), '', false);
+        $image = $this->getMock('Magento\Framework\Image\Adapter\Gd2', [], [], '', false);
 
         $image->expects($this->once())->method('open')->will($this->returnValue(true));
 
@@ -145,14 +140,14 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         /** Prepare session */
 
-        $session = $this->getMock('Magento\Backend\Model\Session', array(), array(), '', false);
+        $session = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
 
         $this->_helperStorage->expects($this->any())->method('getSession')->will($this->returnValue($session));
 
-        $expectedResult = array(
+        $expectedResult = [
             'not_empty',
-            'cookie' => array('name' => null, 'value' => null, 'lifetime' => null, 'path' => null, 'domain' => null)
-        );
+            'cookie' => ['name' => null, 'value' => null, 'lifetime' => null, 'path' => null, 'domain' => null],
+        ];
 
         $this->assertEquals($expectedResult, $this->_storageModel->uploadFile($this->_storageRoot));
     }
@@ -172,7 +167,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     protected function _prepareUploader()
     {
-        $uploader = $this->getMock('Magento\Core\Model\File\Uploader', array(), array(), '', false);
+        $uploader = $this->getMock('Magento\Core\Model\File\Uploader', [], [], '', false);
 
         $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue($uploader));
 
@@ -242,12 +237,12 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_storageRoot)
         );
 
-        $expectedResult = array(
+        $expectedResult = [
             'name' => $newDirectoryName,
             'short_name' => $newDirectoryName,
             'path' => '/' . $newDirectoryName,
-            'id' => $newDirectoryName
-        );
+            'id' => $newDirectoryName,
+        ];
 
         $this->assertEquals(
             $expectedResult,
@@ -302,7 +297,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirsCollection()
     {
-        $dirs = array($this->_storageRoot . '/dir1', $this->_storageRoot . '/dir2');
+        $dirs = [$this->_storageRoot . '/dir1', $this->_storageRoot . '/dir2'];
 
         $this->directoryWrite->expects(
             $this->any()
@@ -363,8 +358,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $this->_helperStorage->expects($this->any())->method('urlEncode')->will($this->returnArgument(0));
 
-
-        $paths = array($this->_storageRoot . '/' . 'font1.ttf', $this->_storageRoot . '/' . 'font2.ttf');
+        $paths = [$this->_storageRoot . '/' . 'font1.ttf', $this->_storageRoot . '/' . 'font2.ttf'];
 
         $this->directoryWrite->expects($this->once())->method('search')->will($this->returnValue($paths));
 
@@ -400,7 +394,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $this->_helperStorage->expects($this->any())->method('urlEncode')->will($this->returnArgument(0));
 
-        $paths = array($this->_storageRoot . '/picture1.jpg');
+        $paths = [$this->_storageRoot . '/picture1.jpg'];
 
         $this->directoryWrite->expects($this->once())->method('search')->will($this->returnValue($paths));
 
@@ -427,12 +421,12 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     public function testTreeArray()
     {
         $currentPath = $this->_storageRoot . '/dir';
-        $dirs = array($currentPath . '/dir_one', $currentPath . '/dir_two');
+        $dirs = [$currentPath . '/dir_one', $currentPath . '/dir_two'];
 
-        $expectedResult = array(
-            array('text' => pathinfo($dirs[0], PATHINFO_BASENAME), 'id' => $dirs[0], 'cls' => 'folder'),
-            array('text' => pathinfo($dirs[1], PATHINFO_BASENAME), 'id' => $dirs[1], 'cls' => 'folder')
-        );
+        $expectedResult = [
+            ['text' => pathinfo($dirs[0], PATHINFO_BASENAME), 'id' => $dirs[0], 'cls' => 'folder'],
+            ['text' => pathinfo($dirs[1], PATHINFO_BASENAME), 'id' => $dirs[1], 'cls' => 'folder'],
+        ];
 
         $this->directoryWrite->expects(
             $this->once()
@@ -447,7 +441,6 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->directoryWrite->expects($this->once())->method('search')->will($this->returnValue($dirs));
 
         $this->directoryWrite->expects($this->any())->method('isDirectory')->will($this->returnValue(true));
-
 
         $this->_helperStorage->expects(
             $this->once()
@@ -478,15 +471,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ->method('getCurrentPath')
             ->will($this->returnValue($this->_storageRoot));
 
-        $this->_helperStorage->expects(
-            $this->atLeastOnce()
-        )->method(
-            'urlDecode'
-        )->with(
-            $image
-        )->will(
-            $this->returnArgument(0)
-        );
+        $this->urlDecoder->expects($this->any())
+            ->method('decode')
+            ->with($image)
+            ->willReturnArgument(0);
 
         $this->directoryWrite->expects(
             $this->at(0)
@@ -554,6 +542,6 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function booleanCasesDataProvider()
     {
-        return array(array(true), array(false));
+        return [[true], [false]];
     }
 }

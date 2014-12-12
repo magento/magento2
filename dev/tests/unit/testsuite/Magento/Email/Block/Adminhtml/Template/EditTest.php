@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Email\Block\Adminhtml\Template;
 
@@ -50,11 +31,11 @@ class EditTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $_fixtureConfigPath = array(
-        array('scope' => 'scope_11', 'scope_id' => 'scope_id_1', 'path' => 'section1/group1/field1'),
-        array('scope' => 'scope_11', 'scope_id' => 'scope_id_1', 'path' => 'section1/group1/group2/field1'),
-        array('scope' => 'scope_11', 'scope_id' => 'scope_id_1', 'path' => 'section1/group1/group2/group3/field1')
-    );
+    protected $_fixtureConfigPath = [
+        ['scope' => 'scope_11', 'scope_id' => 'scope_id_1', 'path' => 'section1/group1/field1'],
+        ['scope' => 'scope_11', 'scope_id' => 'scope_id_1', 'path' => 'section1/group1/group2/field1'],
+        ['scope' => 'scope_11', 'scope_id' => 'scope_id_1', 'path' => 'section1/group1/group2/group3/field1'],
+    ];
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -64,39 +45,39 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false, false);
-        $layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
-        $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false, false);
-        $menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', array(), array(), '', false, false);
+        $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false, false);
+        $layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false, false);
+        $helperMock = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false, false);
+        $menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', [], [], '', false, false);
         $menuMock = $this->getMock(
             'Magento\Backend\Model\Menu',
             [],
             [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
         );
-        $menuItemMock = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false, false);
-        $urlBuilder = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false);
+        $menuItemMock = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false, false);
+        $urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false, false);
         $this->_configStructureMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
-        $this->_emailConfigMock = $this->getMock('Magento\Email\Model\Template\Config', array(), array(), '', false);
+        $this->_emailConfigMock = $this->getMock('Magento\Email\Model\Template\Config', [], [], '', false);
 
         $this->filesystemMock = $this->getMock(
             '\Magento\Framework\Filesystem',
-            array('getFilesystem', '__wakeup', 'getPath', 'getDirectoryRead'),
-            array(),
+            ['getFilesystem', '__wakeup', 'getPath', 'getDirectoryRead'],
+            [],
             '',
             false
         );
 
         $viewFilesystem = $this->getMock(
             '\Magento\Framework\View\Filesystem',
-            array('getTemplateFileName'),
-            array(),
+            ['getTemplateFileName'],
+            [],
             '',
             false
         );
@@ -108,7 +89,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(DirectoryList::ROOT . '/custom/filename.phtml')
         );
 
-        $params = array(
+        $params = [
             'urlBuilder' => $urlBuilder,
             'registry' => $this->_registryMock,
             'layout' => $layoutMock,
@@ -116,8 +97,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
             'configStructure' => $this->_configStructureMock,
             'emailConfig' => $this->_emailConfigMock,
             'filesystem' => $this->filesystemMock,
-            'viewFileSystem' => $viewFilesystem
-        );
+            'viewFileSystem' => $viewFilesystem,
+        ];
         $arguments = $objectManager->getConstructArguments('Magento\Email\Block\Adminhtml\Template\Edit', $params);
 
         $urlBuilder->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
@@ -138,52 +119,52 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $sectionMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Section',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
         $groupMock1 = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Group',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
         $groupMock2 = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Group',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
         $groupMock3 = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Group',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
         $filedMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Field',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
-        $map = array(
-            array(array('section1', 'group1'), $groupMock1),
-            array(array('section1', 'group1', 'group2'), $groupMock2),
-            array(array('section1', 'group1', 'group2', 'group3'), $groupMock3),
-            array(array('section1', 'group1', 'field1'), $filedMock),
-            array(array('section1', 'group1', 'group2', 'field1'), $filedMock),
-            array(array('section1', 'group1', 'group2', 'group3', 'field1'), $filedMock)
-        );
+        $map = [
+            [['section1', 'group1'], $groupMock1],
+            [['section1', 'group1', 'group2'], $groupMock2],
+            [['section1', 'group1', 'group2', 'group3'], $groupMock3],
+            [['section1', 'group1', 'field1'], $filedMock],
+            [['section1', 'group1', 'group2', 'field1'], $filedMock],
+            [['section1', 'group1', 'group2', 'group3', 'field1'], $filedMock],
+        ];
         $sectionMock->expects($this->any())->method('getLabel')->will($this->returnValue('Section_1_Label'));
         $groupMock1->expects($this->any())->method('getLabel')->will($this->returnValue('Group_1_Label'));
         $groupMock2->expects($this->any())->method('getLabel')->will($this->returnValue('Group_2_Label'));
@@ -208,7 +189,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             $this->returnValueMap($map)
         );
 
-        $templateMock = $this->getMock('Magento\Email\Model\BackendTemplate', array(), array(), '', false, false);
+        $templateMock = $this->getMock('Magento\Email\Model\BackendTemplate', [], [], '', false, false);
         $templateMock->expects(
             $this->once()
         )->method(
@@ -228,32 +209,32 @@ class EditTest extends \PHPUnit_Framework_TestCase
         );
 
         $actual = $this->_block->getUsedCurrentlyForPaths(false);
-        $expected = array(
-            array(
-                array('title' => __('Title')),
-                array('title' => __('Title'), 'url' => 'adminhtml/system_config/'),
-                array('title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'),
-                array('title' => 'Group_1_Label'),
-                array('title' => 'Field_1_Label', 'scope' => __('GLOBAL'))
-            ),
-            array(
-                array('title' => __('Title')),
-                array('title' => __('Title'), 'url' => 'adminhtml/system_config/'),
-                array('title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'),
-                array('title' => 'Group_1_Label'),
-                array('title' => 'Group_2_Label'),
-                array('title' => 'Field_1_Label', 'scope' => __('GLOBAL'))
-            ),
-            array(
-                array('title' => __('Title')),
-                array('title' => __('Title'), 'url' => 'adminhtml/system_config/'),
-                array('title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'),
-                array('title' => 'Group_1_Label'),
-                array('title' => 'Group_2_Label'),
-                array('title' => 'Group_3_Label'),
-                array('title' => 'Field_1_Label', 'scope' => __('GLOBAL'))
-            )
-        );
+        $expected = [
+            [
+                ['title' => __('Title')],
+                ['title' => __('Title'), 'url' => 'adminhtml/system_config/'],
+                ['title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'],
+                ['title' => 'Group_1_Label'],
+                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')],
+            ],
+            [
+                ['title' => __('Title')],
+                ['title' => __('Title'), 'url' => 'adminhtml/system_config/'],
+                ['title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'],
+                ['title' => 'Group_1_Label'],
+                ['title' => 'Group_2_Label'],
+                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')]
+            ],
+            [
+                ['title' => __('Title')],
+                ['title' => __('Title'), 'url' => 'adminhtml/system_config/'],
+                ['title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'],
+                ['title' => 'Group_1_Label'],
+                ['title' => 'Group_2_Label'],
+                ['title' => 'Group_3_Label'],
+                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')]
+            ],
+        ];
         $this->assertEquals($expected, $actual);
     }
 
@@ -261,21 +242,20 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $directoryMock = $this->getMock(
             '\Magento\Framework\Filesystem\Directory\Read',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
 
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnValue($directoryMock))
-        ;
+            ->will($this->returnValue($directoryMock));
 
         $this->_emailConfigMock
             ->expects($this->once())
             ->method('getAvailableTemplates')
-            ->will($this->returnValue(array('template_b2', 'template_a', 'template_b1')));
+            ->will($this->returnValue(['template_b2', 'template_a', 'template_b1']));
         $this->_emailConfigMock
             ->expects($this->exactly(3))
             ->method('getTemplateModule')
@@ -288,16 +268,16 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->_block->getData('template_options'));
         $this->_block->setTemplate('my/custom\template.phtml');
         $this->_block->toHtml();
-        $expectedResult = array(
-            '' => array(array('value' => '', 'label' => '', 'group' => '')),
-            'Fixture_ModuleA' => array(
-                array('value' => 'template_a', 'label' => 'Template A', 'group' => 'Fixture_ModuleA')
-            ),
-            'Fixture_ModuleB' => array(
-                array('value' => 'template_b1', 'label' => 'Template B1', 'group' => 'Fixture_ModuleB'),
-                array('value' => 'template_b2', 'label' => 'Template B2', 'group' => 'Fixture_ModuleB')
-            )
-        );
+        $expectedResult = [
+            '' => [['value' => '', 'label' => '', 'group' => '']],
+            'Fixture_ModuleA' => [
+                ['value' => 'template_a', 'label' => 'Template A', 'group' => 'Fixture_ModuleA'],
+            ],
+            'Fixture_ModuleB' => [
+                ['value' => 'template_b1', 'label' => 'Template B1', 'group' => 'Fixture_ModuleB'],
+                ['value' => 'template_b2', 'label' => 'Template B2', 'group' => 'Fixture_ModuleB'],
+            ],
+        ];
         $this->assertEquals(
             $expectedResult,
             $this->_block->getData('template_options'),

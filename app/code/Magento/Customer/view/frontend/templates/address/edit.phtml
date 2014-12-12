@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 ?>
 <?php
@@ -95,10 +76,10 @@
         <div class="field region required">
             <label class="label" for="region_id"><span><?php echo __('State/Province') ?></span></label>
             <div class="control">
-                <select id="region_id" name="region_id" title="<?php echo __('State/Province') ?>" class="validate-select" <?php echo (!$this->getConfig('general/region/display_all')) ? ' disabled="disabled"' :'';?>>
+                <select id="region_id" name="region_id" title="<?php echo __('State/Province') ?>" class="validate-select" <?php echo(!$this->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>>
                     <option value=""><?php echo __('Please select region, state or province') ?></option>
                 </select>
-                <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getRegion()) ?>"  title="<?php echo __('State/Province') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>"<?php echo (!$this->getConfig('general/region/display_all')) ? ' disabled="disabled"' :'';?>/>
+                <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getRegion()) ?>"  title="<?php echo __('State/Province') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>"<?php echo(!$this->getConfig('general/region/display_all')) ? ' disabled="disabled"' : '';?>/>
             </div>
         </div>
         <div class="field zip required">
@@ -114,9 +95,9 @@
             </div>
         </div>
 
-        <?php if($this->isDefaultBilling()): ?>
+        <?php if ($this->isDefaultBilling()): ?>
             <div class="field note default"><?php echo __('Default Billing Address') ?></div>
-        <?php elseif($this->canSetAsDefaultBilling()): ?>
+        <?php elseif ($this->canSetAsDefaultBilling()): ?>
             <div class="field choice set billing">
                 <input type="checkbox" id="primary_billing" name="default_billing" value="1" class="checkbox">
                 <label class="label" for="primary_billing"><span><?php echo __('Use as my default billing address') ?></span></label>
@@ -125,9 +106,9 @@
             <input type="hidden" name="default_billing" value="1" />
         <?php endif; ?>
 
-        <?php if($this->isDefaultShipping()): ?>
+        <?php if ($this->isDefaultShipping()): ?>
             <div class="field note default"><?php echo __('Default Shipping Address') ?></div>
-        <?php elseif($this->canSetAsDefaultShipping()): ?>
+        <?php elseif ($this->canSetAsDefaultShipping()): ?>
             <div class="field choice set shipping">
                 <input type="checkbox" id="primary_shipping" name="default_shipping" value="1" class="checkbox">
                 <label class="label" for="primary_shipping"><span><?php echo __('Use as my default shipping address') ?></span></label>
@@ -156,7 +137,7 @@ require([
         var $form = $('#form-validate');
         $form.validation();
         $('#country').regionUpdater({
-            optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
+            optionalRegionAllowed: <?php echo($this->getConfig('general/region/display_all') ? 'true' : 'false'); ?>,
             regionListId: '#region_id',
             regionInputId: '#region',
             postcodeId: '#zip',

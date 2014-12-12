@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Test\Performance;
 
@@ -84,62 +65,62 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function constructorExceptionDataProvider()
     {
-        return array(
-            'non-existing base dir' => array(
+        return [
+            'non-existing base dir' => [
                 require __DIR__ . '/_files/config_data.php',
                 'non_existing_dir',
                 'Magento\Framework\Exception',
-                "Base directory 'non_existing_dir' does not exist"
-            ),
-            'invalid scenarios format' => array(
+                "Base directory 'non_existing_dir' does not exist",
+            ],
+            'invalid scenarios format' => [
                 require __DIR__ . '/_files/config_data_invalid_scenarios_format.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "'scenario' => 'scenarios' option must be an array"
-            ),
-            'no scenario title' => array(
+                "'scenario' => 'scenarios' option must be an array",
+            ],
+            'no scenario title' => [
                 require __DIR__ . '/_files/config_no_title.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                'Scenario must have a title'
-            ),
-            'bad users scenario argument' => array(
+                'Scenario must have a title',
+            ],
+            'bad users scenario argument' => [
                 require __DIR__ . '/_files/config_bad_users.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "Scenario 'Scenario' must have a positive integer argument 'users'."
-            ),
-            'bad loops scenario argument' => array(
+                "Scenario 'Scenario' must have a positive integer argument 'users'.",
+            ],
+            'bad loops scenario argument' => [
                 require __DIR__ . '/_files/config_bad_loops.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "Scenario 'Scenario' must have a positive integer argument 'loops'."
-            ),
-            'invalid scenario fixtures format' => array(
+                "Scenario 'Scenario' must have a positive integer argument 'loops'.",
+            ],
+            'invalid scenario fixtures format' => [
                 require __DIR__ . '/_files/config_invalid_fixtures_format.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "'fixtures' for scenario 'Scenario' must be represented by an array"
-            ),
-            'no scenario file defined' => array(
+                "'fixtures' for scenario 'Scenario' must be represented by an array",
+            ],
+            'no scenario file defined' => [
                 require __DIR__ . '/_files/config_no_file_defined.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "File is not defined for scenario 'Scenario'"
-            ),
-            'non-existing scenario file' => array(
+                "File is not defined for scenario 'Scenario'",
+            ],
+            'non-existing scenario file' => [
                 require __DIR__ . '/_files/config_non_existing_file.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "File non_existing_file.jmx doesn't exist for scenario 'Scenario'"
-            ),
-            'non-existing scenario fixture' => array(
+                "File non_existing_file.jmx doesn't exist for scenario 'Scenario'",
+            ],
+            'non-existing scenario fixture' => [
                 require __DIR__ . '/_files/config_non_existing_fixture.php',
                 __DIR__ . '/_files',
                 'InvalidArgumentException',
-                "Fixture 'non_existing_fixture.php' doesn't exist"
-            )
-        );
+                "Fixture 'non_existing_fixture.php' doesn't exist",
+            ]
+        ];
     }
 
     public function testGetApplicationBaseDir()
@@ -159,13 +140,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetInstallOptions()
     {
-        $expectedOptions = array(
+        $expectedOptions = [
             'option1' => 'value 1',
             'option2' => 'value 2',
             'backend_frontname' => 'backend',
             'admin_username' => 'admin',
             'admin_password' => 'password1',
-        );
+        ];
         $this->assertEquals($expectedOptions, $this->_object->getInstallOptions());
     }
 
@@ -186,7 +167,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(realpath(__DIR__ . '/_files/scenario.jmx'), $scenario->getFile());
 
         // Assert that default config is applied
-        $expectedArguments = array(
+        $expectedArguments = [
             \Magento\TestFramework\Performance\Scenario::ARG_USERS => 1,
             \Magento\TestFramework\Performance\Scenario::ARG_LOOPS => 1,
             \Magento\TestFramework\Performance\Scenario::ARG_HOST => '127.0.0.1',
@@ -198,28 +179,28 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'arg1' => 'value 1',
             'arg2' => 'overridden value 2',
             'arg3' => 'custom value 3',
-            'jmeter.save.saveservice.output_format' => 'xml'
-        );
+            'jmeter.save.saveservice.output_format' => 'xml',
+        ];
         $this->assertEquals($expectedArguments, $scenario->getArguments());
 
-        $expectedSettings = array(
+        $expectedSettings = [
             'setting1' => 'setting 1',
             'setting2' => 'overridden setting 2',
-            'setting3' => 'setting 3'
-        );
+            'setting3' => 'setting 3',
+        ];
         $this->assertEquals($expectedSettings, $scenario->getSettings());
 
-        $expectedSettings = array(
+        $expectedSettings = [
             'setting1' => 'setting 1',
             'setting2' => 'overridden setting 2',
-            'setting3' => 'setting 3'
-        );
+            'setting3' => 'setting 3',
+        ];
         $this->assertEquals($expectedSettings, $scenario->getSettings());
 
-        $expectedFixtures = array(
+        $expectedFixtures = [
             realpath(__DIR__ . '/_files/fixture.php'),
-            realpath(__DIR__ . '/_files/fixture2.php')
-        );
+            realpath(__DIR__ . '/_files/fixture2.php'),
+        ];
         $this->assertEquals($expectedFixtures, $scenario->getFixtures());
     }
 

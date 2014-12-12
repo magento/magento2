@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Order\Pdf;
 
@@ -29,7 +10,7 @@ namespace Magento\Sales\Model\Order\Pdf;
 class Invoice extends AbstractPdf
 {
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -47,7 +28,7 @@ class Invoice extends AbstractPdf
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
@@ -64,9 +45,9 @@ class Invoice extends AbstractPdf
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        array $data = array()
+        array $data = []
     ) {
         $this->_storeManager = $storeManager;
         $this->_localeResolver = $localeResolver;
@@ -102,21 +83,21 @@ class Invoice extends AbstractPdf
         $page->setFillColor(new \Zend_Pdf_Color_RGB(0, 0, 0));
 
         //columns headers
-        $lines[0][] = array('text' => __('Products'), 'feed' => 35);
+        $lines[0][] = ['text' => __('Products'), 'feed' => 35];
 
-        $lines[0][] = array('text' => __('SKU'), 'feed' => 290, 'align' => 'right');
+        $lines[0][] = ['text' => __('SKU'), 'feed' => 290, 'align' => 'right'];
 
-        $lines[0][] = array('text' => __('Qty'), 'feed' => 435, 'align' => 'right');
+        $lines[0][] = ['text' => __('Qty'), 'feed' => 435, 'align' => 'right'];
 
-        $lines[0][] = array('text' => __('Price'), 'feed' => 360, 'align' => 'right');
+        $lines[0][] = ['text' => __('Price'), 'feed' => 360, 'align' => 'right'];
 
-        $lines[0][] = array('text' => __('Tax'), 'feed' => 495, 'align' => 'right');
+        $lines[0][] = ['text' => __('Tax'), 'feed' => 495, 'align' => 'right'];
 
-        $lines[0][] = array('text' => __('Subtotal'), 'feed' => 565, 'align' => 'right');
+        $lines[0][] = ['text' => __('Subtotal'), 'feed' => 565, 'align' => 'right'];
 
-        $lineBlock = array('lines' => $lines, 'height' => 5);
+        $lineBlock = ['lines' => $lines, 'height' => 5];
 
-        $this->drawLineBlocks($page, array($lineBlock), array('table_header' => true));
+        $this->drawLineBlocks($page, [$lineBlock], ['table_header' => true]);
         $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
         $this->y -= 20;
     }
@@ -127,7 +108,7 @@ class Invoice extends AbstractPdf
      * @param  array $invoices
      * @return \Zend_Pdf
      */
-    public function getPdf($invoices = array())
+    public function getPdf($invoices = [])
     {
         $this->_beforeGetPdf();
         $this->_initRenderer('invoice');
@@ -187,7 +168,7 @@ class Invoice extends AbstractPdf
      * @param  array $settings
      * @return \Zend_Pdf_Page
      */
-    public function newPage(array $settings = array())
+    public function newPage(array $settings = [])
     {
         /* Add new table head */
         $page = $this->_getPdf()->newPage(\Zend_Pdf_Page::SIZE_A4);

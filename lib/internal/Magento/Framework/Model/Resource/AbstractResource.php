@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Model\Resource;
 
@@ -49,7 +30,7 @@ abstract class AbstractResource
      *
      * @var array
      */
-    protected static $_commitCallbacks = array();
+    protected static $_commitCallbacks = [];
 
     /**
      * Resource initialization
@@ -111,7 +92,7 @@ abstract class AbstractResource
             $adapterKey = spl_object_hash($this->_getWriteAdapter());
             if (isset(self::$_commitCallbacks[$adapterKey])) {
                 $callbacks = self::$_commitCallbacks[$adapterKey];
-                self::$_commitCallbacks[$adapterKey] = array();
+                self::$_commitCallbacks[$adapterKey] = [];
                 foreach ($callbacks as $callback) {
                     call_user_func($callback);
                 }
@@ -186,7 +167,7 @@ abstract class AbstractResource
      */
     protected function _prepareDataForTable(\Magento\Framework\Object $object, $table)
     {
-        $data = array();
+        $data = [];
         $fields = $this->_getWriteAdapter()->describeTable($table);
         foreach (array_keys($fields) as $field) {
             if ($object->hasData($field)) {
@@ -197,7 +178,7 @@ abstract class AbstractResource
                     if (null !== $fieldValue) {
                         $fieldValue = $this->_prepareTableValueForSave($fieldValue, $fields[$field]['DATA_TYPE']);
                         $data[$field] = $this->_getWriteAdapter()->prepareColumnValue($fields[$field], $fieldValue);
-                    } else if (!empty($fields[$field]['NULLABLE'])) {
+                    } elseif (!empty($fields[$field]['NULLABLE'])) {
                         $data[$field] = null;
                     }
                 }
@@ -255,7 +236,7 @@ abstract class AbstractResource
         }
         if (empty($columns)) {
             /** In case when fieldset was specified but no columns were matched with it, ID column is returned. */
-            $columns = empty($fieldsetColumns) ? '*' : array($object->getIdFieldName());
+            $columns = empty($fieldsetColumns) ? '*' : [$object->getIdFieldName()];
         }
         return $columns;
     }

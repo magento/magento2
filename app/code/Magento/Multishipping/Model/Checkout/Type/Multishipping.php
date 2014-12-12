@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Multishipping\Model\Checkout\Type;
 
@@ -59,7 +40,7 @@ class Multishipping extends \Magento\Framework\Object
     protected $_session;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -140,7 +121,7 @@ class Multishipping extends \Magento\Framework\Object
      * @param \Magento\Framework\Session\Generic $session
      * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
      * @param \Magento\Sales\Model\Convert\Quote $quote
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
      * @param \Magento\Multishipping\Helper\Data $helper
      * @param OrderSender $orderSender
@@ -160,7 +141,7 @@ class Multishipping extends \Magento\Framework\Object
         \Magento\Framework\Session\Generic $session,
         \Magento\Sales\Model\Quote\AddressFactory $addressFactory,
         \Magento\Sales\Model\Convert\Quote $quote,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification,
         \Magento\Multishipping\Helper\Data $helper,
         OrderSender $orderSender,
@@ -278,7 +259,7 @@ class Multishipping extends \Magento\Framework\Object
                     continue;
                 }
                 if ($item->getQty() > 1) {
-                    for ($i = 0,$n = $item->getQty(); $i < $n; $i++) {
+                    for ($i = 0, $n = $item->getQty(); $i < $n; $i++) {
                         if ($i == 0) {
                             $addressItem = $item;
                         } else {
@@ -638,7 +619,7 @@ class Multishipping extends \Magento\Framework\Object
 
         /** @var $paymentMethod \Magento\Payment\Model\Method\AbstractMethod */
         $paymentMethod = $quote->getPayment()->getMethodInstance();
-        if (!empty($paymentMethod) && !$paymentMethod->isAvailable($quote)) {
+        if (!$paymentMethod->isAvailable($quote)) {
             throw new \Magento\Framework\Model\Exception(__('Please specify a payment method.'));
         }
 

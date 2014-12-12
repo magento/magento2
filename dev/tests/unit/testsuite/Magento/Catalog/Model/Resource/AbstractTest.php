@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -36,13 +17,13 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getAttributes()
     {
-        $attributes = array();
-        $codes = array('entity_type_id', 'attribute_set_id', 'created_at', 'updated_at', 'parent_id', 'increment_id');
+        $attributes = [];
+        $codes = ['entity_type_id', 'attribute_set_id', 'created_at', 'updated_at', 'parent_id', 'increment_id'];
         foreach ($codes as $code) {
             $mock = $this->getMock(
                 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-                array('isInSet', 'getBackend', '__wakeup'),
-                array(),
+                ['isInSet', 'getBackend', '__wakeup'],
+                [],
                 '',
                 false
             );
@@ -62,9 +43,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $code = 'test_attr';
         $set = 10;
 
-        $object = $this->getMock('Magento\Catalog\Model\Product', array('__wakeup'), array(), '', false);
+        $object = $this->getMock('Magento\Catalog\Model\Product', ['__wakeup'], [], '', false);
 
-        $object->setData(array('test_attr' => 'test_attr', 'attribute_set_id' => $set));
+        $object->setData(['test_attr' => 'test_attr', 'attribute_set_id' => $set]);
 
         $entityType = new \Magento\Framework\Object();
         $entityType->setEntityTypeCode('test');
@@ -75,8 +56,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $attribute = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            array('isInSet', 'getBackend', '__wakeup'),
-            array(),
+            ['isInSet', 'getBackend', '__wakeup'],
+            [],
             '',
             false
         );
@@ -98,22 +79,22 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         /** @var $model \Magento\Catalog\Model\Resource\AbstractResource */
         $model = $this->getMock(
             'Magento\Catalog\Model\Resource\AbstractResource',
-            array('getAttributesByCode'),
-            array(
-                $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false, false),
-                $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false, false),
-                $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', array(), array(), '', false, false),
+            ['getAttributesByCode'],
+            [
+                $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false),
+                $this->getMock('Magento\Eav\Model\Config', [], [], '', false, false),
+                $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', [], [], '', false, false),
                 $this->getMock('Magento\Framework\Locale\FormatInterface'),
-                $this->getMock('Magento\Eav\Model\Resource\Helper', array(), array(), '', false, false),
-                $this->getMock('Magento\Framework\Validator\UniversalFactory', array(), array(), '', false, false),
-                $this->getMock('Magento\Framework\StoreManagerInterface', array(), array(), '', false),
-                $this->getMock('Magento\Catalog\Model\Factory', array(), array(), '', false),
-                array()
-            )
+                $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false, false),
+                $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false, false),
+                $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false),
+                $this->getMock('Magento\Catalog\Model\Factory', [], [], '', false),
+                []
+            ]
         );
 
         $model->expects($this->once())->method('getAttributesByCode')->will($this->returnValue($attributes));
 
-        $model->walkAttributes('backend/afterSave', array($object));
+        $model->walkAttributes('backend/afterSave', [$object]);
     }
 }

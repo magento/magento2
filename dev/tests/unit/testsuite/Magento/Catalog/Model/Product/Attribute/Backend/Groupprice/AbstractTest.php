@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend\Groupprice;
 
@@ -39,27 +20,27 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = $this->getMock('Magento\Catalog\Helper\Data', array('isPriceGlobal'), array(), '', false);
+        $this->_helper = $this->getMock('Magento\Catalog\Helper\Data', ['isPriceGlobal'], [], '', false);
         $this->_helper->expects($this->any())->method('isPriceGlobal')->will($this->returnValue(true));
 
-        $currencyFactoryMock = $this->getMock('Magento\Directory\Model\CurrencyFactory', array(), array(), '', false);
-        $storeManagerMock = $this->getMock('Magento\Framework\StoreManagerInterface', array(), array(), '', false);
-        $productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', array(), array(), '', false);
+        $currencyFactoryMock = $this->getMock('Magento\Directory\Model\CurrencyFactory', [], [], '', false);
+        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
         $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $groupManagement = $this->getMock('Magento\Customer\Api\GroupManagementInterface', array(), array(), '', false);
+        $groupManagement = $this->getMock('Magento\Customer\Api\GroupManagementInterface', [], [], '', false);
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Catalog\Model\Product\Attribute\Backend\Groupprice\AbstractGroupprice',
-            array(
+            [
                 'currencyFactory' => $currencyFactoryMock,
                 'storeManager' => $storeManagerMock,
                 'catalogData' => $this->_helper,
                 'config' => $configMock,
                 'catalogProductType' => $productTypeMock,
                 'groupManagement' => $groupManagement
-            )
+            ]
         );
-        $resource = $this->getMock('StdClass', array('getMainTable'));
+        $resource = $this->getMock('StdClass', ['getMainTable']);
         $resource->expects($this->any())->method('getMainTable')->will($this->returnValue('table'));
 
         $this->_model->expects($this->any())->method('_getResource')->will($this->returnValue($resource));
@@ -72,8 +53,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $attribute = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            array('getBackendTable', 'isStatic', 'getAttributeId', 'getName', '__wakeup'),
-            array(),
+            ['getBackendTable', 'isStatic', 'getAttributeId', 'getName', '__wakeup'],
+            [],
             '',
             false
         );
@@ -88,15 +69,15 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model->setAttribute($attribute);
 
         $object = new \Magento\Framework\Object();
-        $object->setGroupPrice(array(array('price_id' => 10)));
+        $object->setGroupPrice([['price_id' => 10]]);
         $object->setId(555);
 
         $this->assertEquals(
-            array(
-                'table' => array(
-                    array('value_id' => $valueId, 'attribute_id' => $attributeId, 'entity_id' => $object->getId())
-                )
-            ),
+            [
+                'table' => [
+                    ['value_id' => $valueId, 'attribute_id' => $attributeId, 'entity_id' => $object->getId()]
+                ]
+            ],
             $this->_model->getAffectedFields($object)
         );
     }

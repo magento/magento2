@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -37,7 +18,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * @var array
      */
-    protected $_renamedImages = array();
+    protected $_renamedImages = [];
 
     /**
      * Resource model
@@ -122,10 +103,10 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     public function afterLoad($object)
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
-        $value = array();
-        $value['images'] = array();
-        $value['values'] = array();
-        $localAttributes = array('label', 'position', 'disabled');
+        $value = [];
+        $value['images'] = [];
+        $value['values'] = [];
+        $localAttributes = ['label', 'position', 'disabled'];
 
         foreach ($this->_getResource()->loadGallery($object, $this) as $image) {
             foreach ($localAttributes as $localAttribute) {
@@ -196,12 +177,12 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if (!is_array($value['images'])) {
-            $value['images'] = array();
+            $value['images'] = [];
         }
 
-        $clearImages = array();
-        $newImages = array();
-        $existImages = array();
+        $clearImages = [];
+        $newImages = [];
+        $existImages = [];
         if ($object->getIsDuplicate() != true) {
             foreach ($value['images'] as &$image) {
                 if (!empty($image['removed'])) {
@@ -218,7 +199,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             }
         } else {
             // For duplicating we need copy original images.
-            $duplicate = array();
+            $duplicate = [];
             foreach ($value['images'] as &$image) {
                 if (empty($image['value_id'])) {
                     continue;
@@ -298,13 +279,13 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         $images = $this->_productFactory->create()->getAssignedImages($object, $storeIds);
 
-        $picturesInOtherStores = array();
+        $picturesInOtherStores = [];
         foreach ($images as $image) {
             $picturesInOtherStores[$image['filepath']] = true;
         }
 
-        $recordsToDelete = array();
-        $filesToDelete = array();
+        $recordsToDelete = [];
+        $filesToDelete = [];
         foreach ($value['images'] as &$image) {
             if (!empty($image['removed'])) {
                 if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
@@ -315,7 +296,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             }
 
             if (empty($image['value_id'])) {
-                $data = array();
+                $data = [];
                 $data['entity_id'] = $object->getId();
                 $data['attribute_id'] = $this->getAttribute()->getId();
                 $data['value'] = $image['file'];
@@ -325,13 +306,14 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             $this->_getResource()->deleteGalleryValueInStore($image['value_id'], $object->getStoreId());
 
             // Add per store labels, position, disabled
-            $data = array();
+            $data = [];
             $data['value_id'] = $image['value_id'];
 
             $data['label'] = isset($image['label']) ? $image['label'] : '';
             $data['position'] = isset($image['position']) ? (int)$image['position'] : 0;
             $data['disabled'] = isset($image['disabled']) ? (int)$image['disabled'] : 0;
             $data['store_id'] = (int)$object->getStoreId();
+            $data['entity_id'] = (int)$object->getId();
 
             $this->_getResource()->insertGalleryValueInStore($data);
         }
@@ -378,7 +360,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         $pathinfo = pathinfo($file);
-        $imgExtensions = array('jpg', 'jpeg', 'gif', 'png');
+        $imgExtensions = ['jpg', 'jpeg', 'gif', 'png'];
         if (!isset($pathinfo['extension']) || !in_array(strtolower($pathinfo['extension']), $imgExtensions)) {
             throw new Exception(__('Please correct the image file type.'));
         }
@@ -415,7 +397,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $mediaGalleryData = $product->getData($attrCode);
         $position = 0;
         if (!is_array($mediaGalleryData)) {
-            $mediaGalleryData = array('images' => array());
+            $mediaGalleryData = ['images' => []];
         }
 
         foreach ($mediaGalleryData['images'] as &$image) {
@@ -425,12 +407,12 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         $position++;
-        $mediaGalleryData['images'][] = array(
+        $mediaGalleryData['images'][] = [
             'file' => $fileName,
             'position' => $position,
             'label' => '',
-            'disabled' => (int)$exclude
-        );
+            'disabled' => (int)$exclude,
+        ];
 
         $product->setData($attrCode, $mediaGalleryData);
 
@@ -459,8 +441,8 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $move = false,
         $exclude = true
     ) {
-        $alreadyAddedFiles = array();
-        $alreadyAddedFilesNames = array();
+        $alreadyAddedFiles = [];
+        $alreadyAddedFilesNames = [];
 
         foreach ($fileAndAttributesArray as $key => $value) {
             $keyInAddedFiles = array_search($value['file'], $alreadyAddedFiles, true);
@@ -477,7 +459,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             }
         }
 
-        return array('alreadyAddedFiles' => $alreadyAddedFiles, 'alreadyAddedFilesNames' => $alreadyAddedFilesNames);
+        return ['alreadyAddedFiles' => $alreadyAddedFiles, 'alreadyAddedFilesNames' => $alreadyAddedFilesNames];
     }
 
     /**
@@ -490,12 +472,12 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function updateImage(\Magento\Catalog\Model\Product $product, $file, $data)
     {
-        $fieldsMap = array(
+        $fieldsMap = [
             'label' => 'label',
             'position' => 'position',
             'disabled' => 'disabled',
-            'exclude' => 'disabled'
-        );
+            'exclude' => 'disabled',
+        ];
 
         $attrCode = $this->getAttribute()->getAttributeCode();
 
@@ -741,7 +723,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         $this->_getResource()->duplicate(
             $this,
-            isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : array(),
+            isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
             $object->getOriginalId(),
             $object->getId()
         );
@@ -784,15 +766,15 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function getAffectedFields($object)
     {
-        $data = array();
+        $data = [];
         $images = (array)$object->getData($this->getAttribute()->getName());
         $tableName = $this->_getResource()->getMainTable();
         foreach ($images['images'] as $value) {
-            $data[$tableName][] = array(
+            $data[$tableName][] = [
                 'attribute_id' => $this->getAttribute()->getAttributeId(),
                 'value_id' => $value['value_id'],
-                'entity_id' => $object->getId()
-            );
+                'entity_id' => $object->getId(),
+            ];
         }
         return $data;
     }

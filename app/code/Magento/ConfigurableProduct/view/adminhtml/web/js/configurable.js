@@ -1,27 +1,12 @@
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 /**************************** CONFIGURABLE PRODUCT **************************/
-define(["prototype"], function(){
+define([
+    'jquery',
+    'mage/translate',
+    'prototype'
+], function(jQuery){
 
 if (typeof Product == 'undefined') {
     window.Product = {};
@@ -30,6 +15,28 @@ if (typeof Product == 'undefined') {
 Product.Config = Class.create();
 Product.Config.prototype = {
     initialize: function(config){
+        // Magic preprocessing
+        // TODO MAGETWO-31539
+        config.taxConfig = {
+            showBothPrices: false,
+            inclTaxTitle: jQuery.mage.__('Incl. Tax')
+        };
+        for (var ii in config.attributes) {
+            if (config.attributes.hasOwnProperty(ii)) {
+                var attribute = config.attributes[ii];
+                for (var jj in attribute.options) {
+                    if (attribute.options.hasOwnProperty(jj)) {
+                        var option = attribute.options[jj];
+                        option.price = +option.prices.finalPrice.amount;
+                        option.inclTaxPrice = +option.prices.finalPrice.amount;
+                        option.exclTaxPrice = +option.prices.basePrice.amount;
+                        config.taxConfig.showBothPrices = config.taxConfig.showBothPrices
+                            || (option.inclTaxPrice !== option.exclTaxPrice);
+                    }
+                }
+            }
+        }
+
         this.config     = config;
         this.taxConfig  = this.config.taxConfig;
         if (config.containerId) {
@@ -40,6 +47,7 @@ Product.Config.prototype = {
         this.state      = new Hash();
         this.priceTemplate = new Template(this.config.template);
         this.prices     = config.prices;
+        this.values     = {};
 
         // Set default values from config
         if (config.defaultValues) {
@@ -51,9 +59,6 @@ Product.Config.prototype = {
         if (separatorIndex != -1) {
             var paramsStr = window.location.href.substr(separatorIndex+1);
             var urlValues = paramsStr.toQueryParams();
-            if (!this.values) {
-                this.values = {};
-            }
             for (var i in urlValues) {
                 this.values[i] = urlValues[i];
             }
@@ -83,7 +88,7 @@ Product.Config.prototype = {
                 element.attributeId = attributeId;
                 this.state[attributeId] = false;
             }
-        }.bind(this))
+        }.bind(this));
 
         // Init settings dropdown
         var childSettings = [];

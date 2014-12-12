@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Eav\Helper;
 
@@ -38,12 +19,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var array
      */
-    protected $_attributesLockedFields = array();
+    protected $_attributesLockedFields = [];
 
     /**
      * @var array
      */
-    protected $_entityTypeFrontendClasses = array();
+    protected $_entityTypeFrontendClasses = [];
 
     /**
      * Core store config
@@ -87,15 +68,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getDefaultFrontendClasses()
     {
-        return array(
-            array('value' => '', 'label' => __('None')),
-            array('value' => 'validate-number', 'label' => __('Decimal Number')),
-            array('value' => 'validate-digits', 'label' => __('Integer Number')),
-            array('value' => 'validate-email', 'label' => __('Email')),
-            array('value' => 'validate-url', 'label' => __('URL')),
-            array('value' => 'validate-alpha', 'label' => __('Letters')),
-            array('value' => 'validate-alphanum', 'label' => __('Letters (a-z, A-Z) or Numbers (0-9)'))
-        );
+        return [
+            ['value' => '', 'label' => __('None')],
+            ['value' => 'validate-number', 'label' => __('Decimal Number')],
+            ['value' => 'validate-digits', 'label' => __('Integer Number')],
+            ['value' => 'validate-email', 'label' => __('Email')],
+            ['value' => 'validate-url', 'label' => __('URL')],
+            ['value' => 'validate-alpha', 'label' => __('Letters')],
+            ['value' => 'validate-alphanum', 'label' => __('Letters (a-z, A-Z) or Numbers (0-9)')]
+        ];
     }
 
     /**
@@ -124,7 +105,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAttributeLockedFields($entityTypeCode)
     {
         if (!$entityTypeCode) {
-            return array();
+            return [];
         }
         if (isset($this->_attributesLockedFields[$entityTypeCode])) {
             return $this->_attributesLockedFields[$entityTypeCode];
@@ -134,7 +115,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $this->_attributesLockedFields[$entityTypeCode] = $attributesLockedFields;
             return $this->_attributesLockedFields[$entityTypeCode];
         }
-        return array();
+        return [];
     }
 
     /**
@@ -162,11 +143,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAttributeMetadata($entityTypeCode, $attributeCode)
     {
         $attribute = $this->_eavConfig->getAttribute($entityTypeCode, $attributeCode);
-        return array(
+        return [
             'entity_type_id' => $attribute->getEntityTypeId(),
             'attribute_id' => $attribute->getAttributeId(),
             'attribute_table' => $attribute->getBackend()->getTable(),
             'backend_type' => $attribute->getBackendType()
-        );
+        ];
     }
 }

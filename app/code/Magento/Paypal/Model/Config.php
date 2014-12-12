@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Paypal\Model;
 
@@ -209,32 +190,32 @@ class Config
      *
      * @var array
      */
-    protected $_buildNotationPPMap = array(
+    protected $_buildNotationPPMap = [
         'paypal_standard' => 'WPS',
         'paypal_express' => 'EC',
         'paypal_direct' => 'DP',
-        'payflow_express' => 'EC'
-    );
+        'payflow_express' => 'EC',
+    ];
 
     /**
      * Style system config map (Express Checkout)
      *
      * @var array
      */
-    protected $_ecStyleConfigMap = array(
+    protected $_ecStyleConfigMap = [
         'page_style' => 'page_style',
         'paypal_hdrimg' => 'hdrimg',
         'paypal_hdrbordercolor' => 'hdrbordercolor',
         'paypal_hdrbackcolor' => 'hdrbackcolor',
-        'paypal_payflowcolor' => 'payflowcolor'
-    );
+        'paypal_payflowcolor' => 'payflowcolor',
+    ];
 
     /**
      * Currency codes supported by PayPal methods
      *
      * @var string[]
      */
-    protected $_supportedCurrencyCodes = array(
+    protected $_supportedCurrencyCodes = [
         'AUD',
         'CAD',
         'CZK',
@@ -254,15 +235,15 @@ class Config
         'CHF',
         'USD',
         'TWD',
-        'THB'
-    );
+        'THB',
+    ];
 
     /**
      * Merchant country supported by PayPal
      *
      * @var string[]
      */
-    protected $_supportedCountryCodes = array(
+    protected $_supportedCountryCodes = [
         'AE',
         'AR',
         'AT',
@@ -328,15 +309,15 @@ class Config
         'UY',
         'VE',
         'VN',
-        'ZA'
-    );
+        'ZA',
+    ];
 
     /**
      * Buyer country supported by PayPal
      *
      * @var string[]
      */
-    protected $_supportedBuyerCountryCodes = array(
+    protected $_supportedBuyerCountryCodes = [
         'AF ',
         'AX ',
         'AL ',
@@ -579,8 +560,8 @@ class Config
         'EH ',
         'YE ',
         'ZM ',
-        'ZW'
-    );
+        'ZW',
+    ];
 
     /**
      * Locale codes supported by misc images (marks, shortcuts etc)
@@ -588,7 +569,7 @@ class Config
      * @var string[]
      * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECButtonIntegration#id089QD0O0TX4__id08AH904I0YK
      */
-    protected $_supportedImageLocales = array(
+    protected $_supportedImageLocales = [
         'de_DE',
         'en_AU',
         'en_GB',
@@ -602,8 +583,8 @@ class Config
         'nl_NL',
         'pl_PL',
         'zh_CN',
-        'zh_XC'
-    );
+        'zh_XC',
+    ];
 
     /**
      * Core data
@@ -620,7 +601,7 @@ class Config
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -637,7 +618,7 @@ class Config
     /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Payment\Model\Source\CctypeFactory $cctypeFactory
      * @param \Magento\Paypal\Model\CertFactory $certFactory
      * @param array $params
@@ -645,10 +626,10 @@ class Config
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Payment\Model\Source\CctypeFactory $cctypeFactory,
         \Magento\Paypal\Model\CertFactory $certFactory,
-        $params = array()
+        $params = []
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_coreData = $coreData;
@@ -896,7 +877,7 @@ class Config
                 self::METHOD_WPS,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT,
-                self::METHOD_WPP_BML
+                self::METHOD_WPP_BML,
             ],
             'US' => [
                 self::METHOD_PAYFLOWADVANCED,
@@ -908,7 +889,7 @@ class Config
                 self::METHOD_WPP_BML,
                 self::METHOD_BILLING_AGREEMENT,
                 self::METHOD_WPP_PE_EXPRESS,
-                self::METHOD_WPP_PE_BML
+                self::METHOD_WPP_PE_BML,
             ],
             'CA' => [
                 self::METHOD_WPP_DIRECT,
@@ -919,7 +900,7 @@ class Config
                 self::METHOD_WPP_BML,
                 self::METHOD_BILLING_AGREEMENT,
                 self::METHOD_WPP_PE_EXPRESS,
-                self::METHOD_WPP_PE_BML
+                self::METHOD_WPP_PE_BML,
             ],
             'GB' => [
                 self::METHOD_WPP_DIRECT,
@@ -927,7 +908,7 @@ class Config
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_WPP_BML,
-                self::METHOD_BILLING_AGREEMENT
+                self::METHOD_BILLING_AGREEMENT,
             ],
             'AU' => [
                 self::METHOD_WPS,
@@ -935,55 +916,55 @@ class Config
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_WPP_BML,
-                self::METHOD_BILLING_AGREEMENT
+                self::METHOD_BILLING_AGREEMENT,
             ],
             'NZ' => [
                 self::METHOD_WPS,
                 self::METHOD_PAYFLOWPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_WPP_BML,
-                self::METHOD_BILLING_AGREEMENT
+                self::METHOD_BILLING_AGREEMENT,
             ],
             'JP' => [
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_WPP_BML,
-                self::METHOD_BILLING_AGREEMENT
+                self::METHOD_BILLING_AGREEMENT,
             ],
             'FR' => [
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_WPP_BML,
-                self::METHOD_BILLING_AGREEMENT
+                self::METHOD_BILLING_AGREEMENT,
             ],
             'IT' => [
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_WPP_BML,
-                self::METHOD_BILLING_AGREEMENT
+                self::METHOD_BILLING_AGREEMENT,
             ],
             'ES' => [
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_WPP_BML,
-                self::METHOD_BILLING_AGREEMENT
+                self::METHOD_BILLING_AGREEMENT,
             ],
             'HK' => [
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_WPP_BML,
-                self::METHOD_BILLING_AGREEMENT
+                self::METHOD_BILLING_AGREEMENT,
             ],
             'DE' => [
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_WPP_BML,
-                self::METHOD_BILLING_AGREEMENT
-            ]
+                self::METHOD_BILLING_AGREEMENT,
+            ],
         ];
         if ($countryCode === null) {
             return $countryMethods;
@@ -999,10 +980,10 @@ class Config
      */
     public function getPayPalBasicStartUrl($token)
     {
-        $params = array(
+        $params = [
             'cmd'   => '_express-checkout',
             'token' => $token,
-        );
+        ];
 
         if ($this->isOrderReviewStepDisabled()) {
             $params['useraction'] = 'commit';
@@ -1033,7 +1014,7 @@ class Config
      */
     public function getExpressCheckoutStartUrl($token)
     {
-        return $this->getPaypalUrl(array('cmd' => '_express-checkout', 'token' => $token));
+        return $this->getPaypalUrl(['cmd' => '_express-checkout', 'token' => $token]);
     }
 
     /**
@@ -1044,7 +1025,7 @@ class Config
      */
     public function getExpressCheckoutOrderUrl($orderId)
     {
-        return $this->getPaypalUrl(array('cmd' => '_express-checkout', 'order_id' => $orderId));
+        return $this->getPaypalUrl(['cmd' => '_express-checkout', 'order_id' => $orderId]);
     }
 
     /**
@@ -1055,7 +1036,7 @@ class Config
      */
     public function getExpressCheckoutEditUrl($token)
     {
-        return $this->getPaypalUrl(array('cmd' => '_express-checkout', 'useraction' => 'continue', 'token' => $token));
+        return $this->getPaypalUrl(['cmd' => '_express-checkout', 'useraction' => 'continue', 'token' => $token]);
     }
 
     /**
@@ -1067,7 +1048,7 @@ class Config
      */
     public function getExpressCheckoutCompleteUrl($token)
     {
-        return $this->getPaypalUrl(array('cmd' => '_complete-express-checkout', 'token' => $token));
+        return $this->getPaypalUrl(['cmd' => '_complete-express-checkout', 'token' => $token]);
     }
 
     /**
@@ -1078,7 +1059,7 @@ class Config
      */
     public function getStartBillingAgreementUrl($token)
     {
-        return $this->getPaypalUrl(array('cmd' => '_customer-billing-agreement', 'token' => $token));
+        return $this->getPaypalUrl(['cmd' => '_customer-billing-agreement', 'token' => $token]);
     }
 
     /**
@@ -1087,7 +1068,7 @@ class Config
      * @param array $params
      * @return string
      */
-    public function getPaypalUrl(array $params = array())
+    public function getPaypalUrl(array $params = [])
     {
         return sprintf(
             'https://www.%spaypal.com/cgi-bin/webscr%s',
@@ -1260,7 +1241,7 @@ class Config
      */
     public function getAdditionalOptionsLogoTypes()
     {
-        return array(
+        return [
             'wePrefer_150x60' => __('We prefer PayPal (150 X 60)'),
             'wePrefer_150x40' => __('We prefer PayPal (150 X 40)'),
             'nowAccepting_150x60' => __('Now accepting PayPal (150 X 60)'),
@@ -1269,7 +1250,7 @@ class Config
             'paymentsBy_150x40' => __('Payments by PayPal (150 X 40)'),
             'shopNowUsing_150x60' => __('Shop now using (150 X 60)'),
             'shopNowUsing_150x40' => __('Shop now using (150 X 40)')
-        );
+        ];
     }
 
     /**
@@ -1319,7 +1300,7 @@ class Config
      */
     public function getExpressCheckoutButtonFlavors()
     {
-        return array(self::EC_FLAVOR_DYNAMIC => __('Dynamic'), self::EC_FLAVOR_STATIC => __('Static'));
+        return [self::EC_FLAVOR_DYNAMIC => __('Dynamic'), self::EC_FLAVOR_STATIC => __('Static')];
     }
 
     /**
@@ -1329,10 +1310,10 @@ class Config
      */
     public function getExpressCheckoutButtonTypes()
     {
-        return array(
+        return [
             self::EC_BUTTON_TYPE_SHORTCUT => __('Shortcut'),
             self::EC_BUTTON_TYPE_MARK => __('Acceptance Mark Image')
-        );
+        ];
     }
 
     /**
@@ -1342,10 +1323,10 @@ class Config
      */
     public function getPaymentActions()
     {
-        $paymentActions = array(
+        $paymentActions = [
             self::PAYMENT_ACTION_AUTH => __('Authorization'),
-            self::PAYMENT_ACTION_SALE => __('Sale')
-        );
+            self::PAYMENT_ACTION_SALE => __('Sale'),
+        ];
         if (!is_null($this->_methodCode) && $this->_methodCode == self::METHOD_WPP_EXPRESS) {
             $paymentActions[self::PAYMENT_ACTION_ORDER] = __('Order');
         }
@@ -1359,11 +1340,11 @@ class Config
      */
     public function getRequireBillingAddressOptions()
     {
-        return array(
+        return [
             self::REQUIRE_BILLING_ADDRESS_ALL => __('Yes'),
             self::REQUIRE_BILLING_ADDRESS_NO => __('No'),
             self::REQUIRE_BILLING_ADDRESS_VIRTUAL => __('For Virtual Quotes Only')
-        );
+        ];
     }
 
     /**
@@ -1391,7 +1372,7 @@ class Config
      */
     public function getAuthorizationAmounts()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -1403,7 +1384,7 @@ class Config
      */
     public function getExpressCheckoutSolutionTypes()
     {
-        return array(self::EC_SOLUTION_TYPE_SOLE => __('Yes'), self::EC_SOLUTION_TYPE_MARK => __('No'));
+        return [self::EC_SOLUTION_TYPE_SOLE => __('Yes'), self::EC_SOLUTION_TYPE_MARK => __('No')];
     }
 
     /**
@@ -1413,11 +1394,11 @@ class Config
      */
     public function getExpressCheckoutBASignupOptions()
     {
-        return array(
+        return [
             self::EC_BA_SIGNUP_AUTO => __('Auto'),
             self::EC_BA_SIGNUP_ASK => __('Ask Customer'),
             self::EC_BA_SIGNUP_NEVER => __('Never')
-        );
+        ];
     }
 
     /**
@@ -1462,7 +1443,7 @@ class Config
      */
     public function getWpsPaymentDeliveryMethods()
     {
-        return array(self::WPS_TRANSPORT_IPN => __('IPN (Instant Payment Notification) Only'));
+        return [self::WPS_TRANSPORT_IPN => __('IPN (Instant Payment Notification) Only')];
     }
 
     /**
@@ -1473,7 +1454,7 @@ class Config
     public function getWppCcTypesAsOptionArray()
     {
         return $this->_cctypeFactory->create()->setAllowedTypes(
-            array('AE', 'VI', 'MC', 'SM', 'SO', 'DI')
+            ['AE', 'VI', 'MC', 'SM', 'SO', 'DI']
         )->toOptionArray();
     }
 
@@ -1485,7 +1466,7 @@ class Config
     public function getWppPeCcTypesAsOptionArray()
     {
         return $this->_cctypeFactory->create()->setAllowedTypes(
-            array('VI', 'MC', 'SM', 'SO', 'OT', 'AE')
+            ['VI', 'MC', 'SM', 'SO', 'OT', 'AE']
         )->toOptionArray();
     }
 
@@ -1496,7 +1477,7 @@ class Config
      */
     public function getPayflowproCcTypesAsOptionArray()
     {
-        return $this->_cctypeFactory->create()->setAllowedTypes(array('AE', 'VI', 'MC', 'JCB', 'DI'))->toOptionArray();
+        return $this->_cctypeFactory->create()->setAllowedTypes(['AE', 'VI', 'MC', 'JCB', 'DI'])->toOptionArray();
     }
 
     /**
@@ -1569,11 +1550,11 @@ class Config
      */
     protected function _getDynamicImageUrl($type, $localeCode, $orderTotal, $pal)
     {
-        $params = array(
+        $params = [
             'cmd' => '_dynamic-image',
             'buttontype' => $type,
-            'locale' => $this->_getSupportedLocaleCode($localeCode)
-        );
+            'locale' => $this->_getSupportedLocaleCode($localeCode),
+        ];
         if ($orderTotal) {
             $params['ordertotal'] = sprintf('%.2F', $orderTotal);
             if ($pal) {
@@ -1708,8 +1689,7 @@ class Config
      */
     protected function _mapBmlFieldset($fieldName)
     {
-        switch ($fieldName)
-        {
+        switch ($fieldName) {
             case 'allow_ba_signup':
                 return "payment/" . self::METHOD_WPP_EXPRESS . "/{$fieldName}";
             default:
@@ -1725,8 +1705,7 @@ class Config
      */
     protected function _mapBmlPayflowFieldset($fieldName)
     {
-        switch ($fieldName)
-        {
+        switch ($fieldName) {
             case 'allow_ba_signup':
                 return "payment/" . self::METHOD_WPP_PE_EXPRESS . "/{$fieldName}";
             default:
@@ -1888,7 +1867,7 @@ class Config
      */
     public function getApiAuthenticationMethods()
     {
-        return array('0' => __('API Signature'), '1' => __('API Certificate'));
+        return ['0' => __('API Signature'), '1' => __('API Certificate')];
     }
 
     /**

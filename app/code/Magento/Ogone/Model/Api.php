@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Ogone\Model;
 
@@ -85,7 +66,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
      * @see Ogone eCommerce Advanced Technical Integration Guide v.5.0
      * @var string[]
      */
-    protected static $_outAllMap = array(
+    protected static $_outAllMap = [
         'ACCEPTURL',
         'ADDMATCH',
         'ADDRMATCH',
@@ -300,10 +281,10 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
         'WBTU_ORDERID',
         'WEIGHTUNIT',
         'WIN3DS',
-        'WITHROOT'
-    );
+        'WITHROOT',
+    ];
 
-    protected static $_outShortMap = array('ORDERID', 'AMOUNT', 'CURRENCY', 'PSPID', 'OPERATION');
+    protected static $_outShortMap = ['ORDERID', 'AMOUNT', 'CURRENCY', 'PSPID', 'OPERATION'];
 
     /**#@-*/
 
@@ -314,7 +295,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
      * @see Ogone eCommerce Advanced Technical Integration Guide v.5.0
      * @var string[]
      */
-    protected static $_inAllMap = array(
+    protected static $_inAllMap = [
         'AAVADDRESS',
         'AAVCHECK',
         'AAVZIP',
@@ -357,10 +338,10 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
         'STATUS',
         'SUBSCRIPTION_ID',
         'TRXDATE',
-        'VC'
-    );
+        'VC',
+    ];
 
-    protected static $_inShortMap = array(
+    protected static $_inShortMap = [
         'ORDERID',
         'CURRENCY',
         'AMOUNT',
@@ -379,8 +360,8 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
         'DCC_VALIDHOURS',
         'DCC_EXCHRATESOURCE',
         'DCC_MARGINPERCENTAGE',
-        'DCC_COMMPERCENTAGE'
-    );
+        'DCC_COMMPERCENTAGE',
+    ];
 
     /**#@-*/
 
@@ -462,7 +443,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -476,7 +457,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Stdlib\String $string
@@ -488,12 +469,12 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Ogone\Model\Config $config,
-        array $data = array()
+        array $data = []
     ) {
         $this->_storeManager = $storeManager;
         $this->_localeResolver = $localeResolver;
@@ -530,7 +511,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getOrderPlaceRedirectUrl()
     {
-        return $this->_urlBuilder->getUrl('ogone/api/placeform', array('_secure' => true));
+        return $this->_urlBuilder->getUrl('ogone/api/placeform', ['_secure' => true]);
     }
 
     /**
@@ -553,12 +534,12 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     {
         if (empty($order)) {
             if (!($order = $this->getOrder())) {
-                return array();
+                return [];
             }
         }
         /** @var \Magento\Sales\Model\Quote\Address $billingAddress */
         $billingAddress = $order->getBillingAddress();
-        $formFields = array();
+        $formFields = [];
         $formFields['PSPID'] = $this->getConfig()->getPSPID();
         $formFields['orderID'] = $order->getIncrementId();
         $formFields['amount'] = round($order->getBaseGrandTotal() * 100);
@@ -622,7 +603,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     public function debugOrder(\Magento\Sales\Model\Order $order)
     {
         if ($this->getDebugFlag()) {
-            $this->debugData(array('request' => $this->getFormFields($order)));
+            $this->debugData(['request' => $this->getFormFields($order)]);
         }
     }
 
@@ -649,7 +630,7 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
         }
 
         // collect non-empty data that maps and sort it alphabetically by key (uppercase)
-        $collected = array();
+        $collected = [];
         foreach ($data as $key => $value) {
             if (null !== $value && '' != $value) {
                 $key = strtoupper($key);
@@ -681,9 +662,9 @@ class Api extends \Magento\Payment\Model\Method\AbstractMethod
     public function getHashingAlgorithms($withLabels = true)
     {
         if ($withLabels) {
-            return array(self::HASH_SHA1 => 'SHA-1', self::HASH_SHA256 => 'SHA-256', self::HASH_SHA512 => 'SHA-512');
+            return [self::HASH_SHA1 => 'SHA-1', self::HASH_SHA256 => 'SHA-256', self::HASH_SHA512 => 'SHA-512'];
         }
-        return array(self::HASH_SHA1, self::HASH_SHA256, self::HASH_SHA512);
+        return [self::HASH_SHA1, self::HASH_SHA256, self::HASH_SHA512];
     }
 
     /**

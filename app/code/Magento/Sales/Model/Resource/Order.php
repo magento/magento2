@@ -1,36 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Resource;
 
-use Magento\Framework\Math\Random;
 use Magento\Framework\App\Resource as AppResource;
-use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Math\Random;
 use Magento\Sales\Model\Increment as SalesIncrement;
 use Magento\Sales\Model\Resource\Entity as SalesResource;
-use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
-use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
 use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
+use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
+use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
 use Magento\Sales\Model\Spi\OrderResourceInterface;
 
 /**
@@ -107,8 +87,8 @@ class Order extends SalesResource implements OrderResourceInterface
     {
         $adapter = $this->getReadConnection();
         $select = $adapter->select()->from(
-            array('o' => $this->getTable('sales_order_item')),
-            array('o.product_type', new \Zend_Db_Expr('COUNT(*)'))
+            ['o' => $this->getTable('sales_order_item')],
+            ['o.product_type', new \Zend_Db_Expr('COUNT(*)')]
         )->joinInner(
             ['p' => $this->getTable('catalog_product_entity')],
             'o.product_id=p.entity_id',
@@ -163,7 +143,7 @@ class Order extends SalesResource implements OrderResourceInterface
             $name = [
                 $store->getWebsite()->getName(),
                 $store->getGroup()->getName(),
-                $store->getName()
+                $store->getName(),
             ];
             $object->setStoreName(implode("\n", $name));
         }

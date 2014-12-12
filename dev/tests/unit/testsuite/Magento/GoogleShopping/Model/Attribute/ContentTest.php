@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\GoogleShopping\Model\Attribute;
 
@@ -35,8 +16,8 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $product = $this->getMock(
             '\Magento\Catalog\Model\Product',
-            array('getDescription', '__wakeup'),
-            array(),
+            ['getDescription', '__wakeup'],
+            [],
             '',
             false
         );
@@ -44,8 +25,8 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $defaultFrontend = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend',
-            array('getValue'),
-            array(),
+            ['getValue'],
+            [],
             '',
             false
         );
@@ -56,8 +37,8 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $attribute = $this->getMock(
             '\Magento\Catalog\Model\Entity\Attribute',
-            array('getFrontend', '__wakeup'),
-            array(),
+            ['getFrontend', '__wakeup'],
+            [],
             '',
             false
         );
@@ -65,8 +46,8 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $productHelper = $this->getMock(
             '\Magento\GoogleShopping\Helper\Product',
-            array('getProductAttribute'),
-            array(),
+            ['getProductAttribute'],
+            [],
             '',
             false
         );
@@ -75,11 +56,10 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             ->with($product, $attributeId)
             ->will($this->returnValue($attribute));
 
-
         $googleShoppingHelper = $this->getMock(
             '\Magento\GoogleShopping\Helper\Data',
-            array('cleanAtomAttribute'),
-            array(),
+            ['cleanAtomAttribute'],
+            [],
             '',
             false
         );
@@ -91,17 +71,17 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $model = (new \Magento\TestFramework\Helper\ObjectManager($this))
             ->getObject(
                 '\Magento\GoogleShopping\Model\Attribute\Content',
-                array('gsProduct' => $productHelper, 'googleShoppingHelper' => $googleShoppingHelper)
+                ['gsProduct' => $productHelper, 'googleShoppingHelper' => $googleShoppingHelper]
             );
 
-        $service = $this->getMock('Zend_Gdata_App', array('newContent', 'setText'), array(), '', false);
+        $service = $this->getMock('Zend_Gdata_App', ['newContent', 'setText'], [], '', false);
         $service->expects($this->once())->method('newContent')->will($this->returnSelf());
         $service->expects($this->once())->method('setText')->with($mapValue)->will($this->returnValue($mapValue));
 
         $entry = $this->getMock(
             '\Magento\Framework\Gdata\Gshopping\Entry',
-            array('getService', 'setContent'),
-            array(),
+            ['getService', 'setContent'],
+            [],
             '',
             false
         );
@@ -110,8 +90,8 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $groupAttributeDescription = $this->getMock(
             '\Magento\GoogleShopping\Model\Attribute\DefaultAttribute',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -127,9 +107,9 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function convertAttributeDataProvider()
     {
-        return array(
-            array(1, 'description', 'short description'),
-            array(null, 'description', 'description'),
-        );
+        return [
+            [1, 'description', 'short description'],
+            [null, 'description', 'description'],
+        ];
     }
 }

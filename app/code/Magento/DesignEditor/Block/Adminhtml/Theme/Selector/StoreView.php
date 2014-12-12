@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector;
 
@@ -61,7 +42,7 @@ class StoreView extends \Magento\Backend\Block\Template
         \Magento\Store\Model\Resource\Website\Collection $websiteCollection,
         \Magento\Theme\Model\Config\Customization $customizationConfig,
         \Magento\Core\Helper\Data $coreHelper,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreHelper = $coreHelper;
         $this->_websiteCollection = $websiteCollection;
@@ -87,7 +68,7 @@ class StoreView extends \Magento\Backend\Block\Template
      */
     public function getWebsiteStructure()
     {
-        $structure = array();
+        $structure = [];
         $website = null;
         $store = null;
         $storeView = null;
@@ -97,10 +78,10 @@ class StoreView extends \Magento\Backend\Block\Template
             $store = $row->getGroupTitle();
             $storeView = $row->getStoreTitle();
             if (!isset($structure[$website])) {
-                $structure[$website] = array();
+                $structure[$website] = [];
             }
             if (!isset($structure[$website][$store])) {
-                $structure[$website][$store] = array();
+                $structure[$website][$store] = [];
             }
             $structure[$website][$store][$storeView] = (int)$row->getStoreId();
         }
@@ -118,15 +99,15 @@ class StoreView extends \Magento\Backend\Block\Template
         /** @var $assignSaveButton \Magento\Backend\Block\Widget\Button */
         $assignSaveButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
         $assignSaveButton->setData(
-            array(
+            [
                 'label' => __('Assign'),
                 'class' => 'action-save primary',
-                'data_attribute' => array(
-                    'mage-init' => array(
-                        'button' => array('event' => 'assign-confirm', 'target' => 'body', 'eventData' => array())
-                    )
-                )
-            )
+                'data_attribute' => [
+                    'mage-init' => [
+                        'button' => ['event' => 'assign-confirm', 'target' => 'body', 'eventData' => []],
+                    ],
+                ],
+            ]
         );
 
         return $assignSaveButton->toHtml();
@@ -151,7 +132,7 @@ class StoreView extends \Magento\Backend\Block\Template
             $this->_customizationConfig->getAssignedThemeCustomizations()
         );
 
-        $storesByThemes = array();
+        $storesByThemes = [];
         foreach ($this->_customizationConfig->getStoresByThemes() as $themeId => $stores) {
             /* NOTE
                We filter out themes not included to $assignedThemeIds array so we only get actually "assigned"
@@ -162,7 +143,7 @@ class StoreView extends \Magento\Backend\Block\Template
                 continue;
             }
 
-            $storesByThemes[$themeId] = array();
+            $storesByThemes[$themeId] = [];
             /** @var $store \Magento\Store\Model\Store */
             foreach ($stores as $store) {
                 $storesByThemes[$themeId][] = (int)$store->getId();
@@ -203,11 +184,11 @@ class StoreView extends \Magento\Backend\Block\Template
      */
     public function getOptionsJson()
     {
-        $options = array();
+        $options = [];
         $options['storesByThemes'] = $this->_getStoresByThemes();
         $options['assignUrl'] = $this->getUrl(
             'adminhtml/*/assignThemeToStore',
-            array('theme_id' => $this->getThemeId())
+            ['theme_id' => $this->getThemeId()]
         );
         $options['afterAssignUrl'] = $this->getUrl('adminhtml/*/index');
         $options['hasMultipleStores'] = $this->_hasMultipleStores();

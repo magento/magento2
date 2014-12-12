@@ -2,34 +2,19 @@
 /**
  * Http request
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\App\Request;
 
-class Http extends \Zend_Controller_Request_Http implements \Magento\Framework\App\RequestInterface
+class Http extends \Zend_Controller_Request_Http implements
+    \Magento\Framework\App\RequestInterface,
+    \Magento\Framework\App\Http\RequestInterface
 {
     const DEFAULT_HTTP_PORT = 80;
 
     const DEFAULT_HTTPS_PORT = 443;
+
+    const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
 
     /**
      * ORIGINAL_PATH_INFO
@@ -57,7 +42,7 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\Framework\A
     /**
      * @var array
      */
-    protected $_routingInfo = array();
+    protected $_routingInfo = [];
 
     /**
      * @var string
@@ -87,7 +72,7 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\Framework\A
      *
      * @var array
      */
-    protected $_beforeForwardInfo = array();
+    protected $_beforeForwardInfo = [];
 
     /**
      * @var \Magento\Framework\App\Route\ConfigInterface
@@ -100,29 +85,37 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\Framework\A
     private $_pathInfoProcessor;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @var \Magento\Framework\Stdlib\Cookie\CookieReaderInterface
      */
-    protected $_cookieManager;
+    protected $cookieReader;
+
+    /**
+     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
+     */
+    protected $_config;
 
     /**
      * @param \Magento\Framework\App\Route\ConfigInterface\Proxy $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
-     * @param string $uri
+     * @param \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader
+     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
+     * @param string|null $uri
      * @param array $directFrontNames
      */
     public function __construct(
         \Magento\Framework\App\Route\ConfigInterface\Proxy $routeConfig,
         PathInfoProcessorInterface $pathInfoProcessor,
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
+        \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader,
+        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         $uri = null,
-        $directFrontNames = array()
+        $directFrontNames = []
     ) {
+        $this->_config = $config;
         $this->_routeConfig = $routeConfig;
         $this->_directFrontNames = $directFrontNames;
         parent::__construct($uri);
         $this->_pathInfoProcessor = $pathInfoProcessor;
-        $this->_cookieManager = $cookieManager;
+        $this->cookieReader = $cookieReader;
     }
 
     /**
@@ -480,13 +473,13 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\Framework\A
     public function initForward()
     {
         if (empty($this->_beforeForwardInfo)) {
-            $this->_beforeForwardInfo = array(
+            $this->_beforeForwardInfo = [
                 'params' => $this->getParams(),
                 'action_name' => $this->getActionName(),
                 'controller_name' => $this->getControllerName(),
                 'module_name' => $this->getModuleName(),
-                'route_name' => $this->getRouteName()
-            );
+                'route_name' => $this->getRouteName(),
+            ];
         }
 
         return $this;
@@ -587,6 +580,27 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\Framework\A
     }
 
     /**
+     * Determines a base URL path from environment
+     *
+     * @param array $server
+     * @return string
+     */
+    public static function getDistroBaseUrlPath($server)
+    {
+        $result = '';
+        if (isset($server['SCRIPT_NAME'])) {
+            $envPath = str_replace('\\', '/', dirname(str_replace('\\', '/', $server['SCRIPT_NAME'])));
+            if ($envPath != '.' && $envPath != '/') {
+                $result = $envPath;
+            }
+        }
+        if (!preg_match('/\/$/', $result)) {
+            $result .= '/';
+        }
+        return $result;
+    }
+
+    /**
      * Retrieve full action name
      *
      * @param string $delimiter
@@ -606,7 +620,7 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\Framework\A
      */
     public function __sleep()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -618,6 +632,52 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\Framework\A
      */
     public function getCookie($name = null, $default = null)
     {
-        return $this->_cookieManager->getCookie($name, $default);
+        return $this->cookieReader->getCookie($name, $default);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return bool
+     */
+    public function isSecure()
+    {
+        if ($this->immediateRequestSecure()) {
+            return true;
+        }
+        // Check if a proxy sent a header indicating an initial secure request
+        $offLoaderHeader = trim(
+            (string)$this->_config->getValue(
+                self::XML_PATH_OFFLOADER_HEADER,
+                \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+            )
+        );
+
+        return $this->initialRequestSecure($offLoaderHeader);
+    }
+
+    /**
+     * Checks if the immediate request is delivered over HTTPS
+     *
+     * @return bool
+     */
+    protected function immediateRequestSecure()
+    {
+        return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
+    }
+
+    /**
+     * In case there is a proxy server, checks if the initial request to the proxy was delivered over HTTPS
+     *
+     * @param string $offLoaderHeader
+     * @return bool
+     */
+    protected function initialRequestSecure($offLoaderHeader)
+    {
+        return !empty($offLoaderHeader) &&
+            (
+                isset($_SERVER[$offLoaderHeader]) && $_SERVER[$offLoaderHeader] === 'https' ||
+                isset($_SERVER['HTTP_' . $offLoaderHeader]) && $_SERVER['HTTP_' . $offLoaderHeader] === 'https'
+            );
     }
 }

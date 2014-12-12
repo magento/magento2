@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\User\Block\User\Edit\Tab;
 
@@ -58,7 +39,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Authorization\Model\Resource\Role\CollectionFactory $userRolesFactory,
         \Magento\Framework\Registry $coreRegistry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_userRolesFactory = $userRolesFactory;
@@ -93,10 +74,10 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
                 $userRoles = 0;
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('role_id', array('in' => $userRoles));
+                $this->getCollection()->addFieldToFilter('role_id', ['in' => $userRoles]);
             } else {
                 if ($userRoles) {
-                    $this->getCollection()->addFieldToFilter('role_id', array('nin' => $userRoles));
+                    $this->getCollection()->addFieldToFilter('role_id', ['nin' => $userRoles]);
                 }
             }
         } else {
@@ -121,10 +102,9 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-
         $this->addColumn(
             'assigned_user_role',
-            array(
+            [
                 'header_css_class' => 'a-center',
                 'header' => __('Assigned'),
                 'type' => 'radio',
@@ -132,10 +112,10 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
                 'values' => $this->getSelectedRoles(),
                 'align' => 'center',
                 'index' => 'role_id'
-            )
+            ]
         );
 
-        $this->addColumn('role_name', array('header' => __('Role'), 'index' => 'role_name'));
+        $this->addColumn('role_name', ['header' => __('Role'), 'index' => 'role_name']);
 
         return parent::_prepareColumns();
     }
@@ -146,7 +126,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
     public function getGridUrl()
     {
         $userPermissions = $this->_coreRegistry->registry('permissions_user');
-        return $this->getUrl('*/*/rolesGrid', array('user_id' => $userPermissions->getUserId()));
+        return $this->getUrl('*/*/rolesGrid', ['user_id' => $userPermissions->getUserId()]);
     }
 
     /**
@@ -169,7 +149,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         }
 
         if ($json) {
-            $jsonRoles = array();
+            $jsonRoles = [];
             foreach ($uRoles as $urid) {
                 $jsonRoles[$urid] = 0;
             }

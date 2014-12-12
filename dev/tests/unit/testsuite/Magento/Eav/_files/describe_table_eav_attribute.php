@@ -1,29 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-return array(
-    'attribute_id' => array(
+return [
+    'attribute_id' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'attribute_id',
@@ -37,9 +18,9 @@ return array(
         'UNSIGNED' => true,
         'PRIMARY' => true,
         'PRIMARY_POSITION' => 1,
-        'IDENTITY' => true
-    ),
-    'entity_type_id' => array(
+        'IDENTITY' => true,
+    ],
+    'entity_type_id' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'entity_type_id',
@@ -53,9 +34,9 @@ return array(
         'UNSIGNED' => true,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'attribute_code' => array(
+        'IDENTITY' => false,
+    ],
+    'attribute_code' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'attribute_code',
@@ -69,9 +50,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'attribute_model' => array(
+        'IDENTITY' => false,
+    ],
+    'attribute_model' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'attribute_model',
@@ -85,9 +66,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'backend_model' => array(
+        'IDENTITY' => false,
+    ],
+    'backend_model' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'backend_model',
@@ -101,9 +82,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'backend_type' => array(
+        'IDENTITY' => false,
+    ],
+    'backend_type' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'backend_type',
@@ -117,9 +98,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'backend_table' => array(
+        'IDENTITY' => false,
+    ],
+    'backend_table' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'backend_table',
@@ -133,9 +114,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'frontend_model' => array(
+        'IDENTITY' => false,
+    ],
+    'frontend_model' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'frontend_model',
@@ -149,9 +130,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'frontend_input' => array(
+        'IDENTITY' => false,
+    ],
+    'frontend_input' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'frontend_input',
@@ -165,9 +146,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'frontend_label' => array(
+        'IDENTITY' => false,
+    ],
+    'frontend_label' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'frontend_label',
@@ -181,9 +162,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'frontend_class' => array(
+        'IDENTITY' => false,
+    ],
+    'frontend_class' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'frontend_class',
@@ -197,9 +178,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'source_model' => array(
+        'IDENTITY' => false,
+    ],
+    'source_model' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'source_model',
@@ -213,9 +194,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'is_required' => array(
+        'IDENTITY' => false,
+    ],
+    'is_required' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'is_required',
@@ -229,9 +210,9 @@ return array(
         'UNSIGNED' => true,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'is_user_defined' => array(
+        'IDENTITY' => false,
+    ],
+    'is_user_defined' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'is_user_defined',
@@ -245,9 +226,9 @@ return array(
         'UNSIGNED' => true,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'default_value' => array(
+        'IDENTITY' => false,
+    ],
+    'default_value' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'default_value',
@@ -261,9 +242,9 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'is_unique' => array(
+        'IDENTITY' => false,
+    ],
+    'is_unique' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'is_unique',
@@ -277,9 +258,9 @@ return array(
         'UNSIGNED' => true,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    ),
-    'note' => array(
+        'IDENTITY' => false,
+    ],
+    'note' => [
         'SCHEMA_NAME' => null,
         'TABLE_NAME' => 'eav_attribute',
         'COLUMN_NAME' => 'note',
@@ -293,6 +274,6 @@ return array(
         'UNSIGNED' => null,
         'PRIMARY' => false,
         'PRIMARY_POSITION' => null,
-        'IDENTITY' => false
-    )
-);
+        'IDENTITY' => false,
+    ]
+];

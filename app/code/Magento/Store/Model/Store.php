@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Store\Model;
 
@@ -83,8 +64,6 @@ class Store extends AbstractModel implements
     const XML_PATH_SECURE_BASE_MEDIA_URL = 'web/secure/base_media_url';
 
     const XML_PATH_UNSECURE_BASE_MEDIA_URL = 'web/unsecure/base_media_url';
-
-    const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
 
     const XML_PATH_PRICE_SCOPE = 'catalog/price/scope';
 
@@ -184,28 +163,28 @@ class Store extends AbstractModel implements
      *
      * @var array
      */
-    protected $_configCacheBaseNodes = array();
+    protected $_configCacheBaseNodes = [];
 
     /**
      * Directory cache
      *
      * @var array
      */
-    protected $_dirCache = array();
+    protected $_dirCache = [];
 
     /**
      * URL cache
      *
      * @var array
      */
-    protected $_urlCache = array();
+    protected $_urlCache = [];
 
     /**
      * Base URL cache
      *
      * @var array
      */
-    protected $_baseUrlCache = array();
+    protected $_baseUrlCache = [];
 
     /**
      * Session entity
@@ -326,7 +305,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -345,11 +324,11 @@ class Store extends AbstractModel implements
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\App\Http\RequestInterface $request,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -359,7 +338,7 @@ class Store extends AbstractModel implements
         $currencyInstalled,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         $isCustomEntryPoint = false,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -386,7 +365,7 @@ class Store extends AbstractModel implements
     public function __sleep()
     {
         $properties = parent::__sleep();
-        $properties = array_diff($properties, array('_coreFileStorageDatabase', '_config'));
+        $properties = array_diff($properties, ['_coreFileStorageDatabase', '_config']);
         return $properties;
     }
 
@@ -528,7 +507,7 @@ class Store extends AbstractModel implements
      * @param   array $params
      * @return  string
      */
-    public function getUrl($route = '', $params = array())
+    public function getUrl($route = '', $params = [])
     {
         /** @var $url \Magento\Framework\UrlInterface */
         $url = $this->_url->setScope($this);
@@ -735,15 +714,7 @@ class Store extends AbstractModel implements
      */
     public function isCurrentlySecure()
     {
-        $standardRule = !empty($_SERVER['HTTPS']) && 'off' != $_SERVER['HTTPS'];
-        $offloaderHeader = trim(
-            (string)$this->_config->getValue(
-                self::XML_PATH_OFFLOADER_HEADER,
-                \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
-            )
-        );
-
-        if (!empty($offloaderHeader) && !empty($_SERVER[$offloaderHeader]) || $standardRule) {
+        if ($this->_request->isSecure()) {
             return true;
         }
 
@@ -1047,7 +1018,7 @@ class Store extends AbstractModel implements
 
         $storeUrl = $this->_storeManager->getStore()->isCurrentlySecure() ? $this->getUrl(
             '',
-            array('_secure' => true)
+            ['_secure' => true]
         ) : $this->getUrl(
             ''
         );
@@ -1058,7 +1029,7 @@ class Store extends AbstractModel implements
 
         $storeParsedUrl = parse_url($storeUrl);
 
-        $storeParsedQuery = array();
+        $storeParsedQuery = [];
         if (isset($storeParsedUrl['query'])) {
             parse_str($storeParsedUrl['query'], $storeParsedQuery);
         }
@@ -1148,9 +1119,9 @@ class Store extends AbstractModel implements
     public function resetConfig()
     {
         $this->_config->reinit();
-        $this->_dirCache = array();
-        $this->_baseUrlCache = array();
-        $this->_urlCache = array();
+        $this->_dirCache = [];
+        $this->_baseUrlCache = [];
+        $this->_urlCache = [];
 
         return $this;
     }
@@ -1194,7 +1165,7 @@ class Store extends AbstractModel implements
      */
     public function getIdentities()
     {
-        return array(self::CACHE_TAG . '_' . $this->getId());
+        return [self::CACHE_TAG . '_' . $this->getId()];
     }
 
     /**

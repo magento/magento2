@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -51,15 +32,15 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factoryMock = $this->getMock('Magento\Framework\Data\Form\Element\Factory', array(), array(), '', false);
+        $this->factoryMock = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
         $this->collectionFactoryMock = $this->getMock(
             'Magento\Framework\Data\Form\Element\CollectionFactory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->escaperMock = $this->getMock('Magento\Framework\Escaper', array(), array(), '', false);
+        $this->escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
         $this->model = new Date(
             $this->factoryMock,
             $this->collectionFactoryMock,
@@ -84,32 +65,31 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetElementHtmlDateFormat($fieldName)
     {
-
         $formMock = $this->getFormMock('once');
         $this->model->setForm($formMock);
 
-        $this->model->setData(array(
+        $this->model->setData([
                 $fieldName => 'yyyy-MM-dd',
                 'name' => 'test_name',
                 'html_id' => 'test_name',
-            ));
+            ]);
         $this->model->getElementHtml();
     }
 
     public function providerGetElementHtmlDateFormat()
     {
-        return array(
-            array('date_format'),
-            array('format'),
-        );
+        return [
+            ['date_format'],
+            ['format'],
+        ];
     }
 
     protected function getFormMock($exactly)
     {
-        $functions = array('getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix');
+        $functions = ['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix'];
         $formMock = $this->getMock('stdClass', $functions);
         foreach ($functions as $method) {
-            switch($exactly) {
+            switch ($exactly) {
                 case 'once':
                     $count = $this->once();
                     break;

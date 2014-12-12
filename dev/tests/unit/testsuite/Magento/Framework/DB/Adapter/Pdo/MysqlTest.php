@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -58,8 +39,8 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         $logger = $this->getMockForAbstractClass('Magento\Framework\DB\LoggerInterface');
         $this->_mockAdapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            array('beginTransaction', 'getTransactionLevel'),
-            array(
+            ['beginTransaction', 'getTransactionLevel'],
+            [
                 'string' => $string,
                 'dateTime' => $dateTime,
                 'logger' => $logger,
@@ -68,7 +49,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
                     'username' => 'user',
                     'password' => 'password',
                 ],
-            ),
+            ],
             '',
             true
         );
@@ -79,7 +60,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 
         $this->_adapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            array(
+            [
                 'getCreateTable',
                 '_connect',
                 '_beginTransaction',
@@ -87,8 +68,8 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
                 '_rollBack',
                 'query',
                 'fetchRow'
-            ),
-            array(
+            ],
+            [
                 'string' => $string,
                 'dateTime' => $dateTime,
                 'logger' => $logger,
@@ -97,7 +78,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
                     'username' => 'not_valid',
                     'password' => 'not_valid',
                 ],
-            ),
+            ],
             '',
             true
         );
@@ -120,7 +101,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     public function testPrepareColumnValueForBigint($value, $expectedResult)
     {
         $result = $this->_adapter->prepareColumnValue(
-            array('DATA_TYPE' => 'bigint'),
+            ['DATA_TYPE' => 'bigint'],
             $value
         );
         $this->assertEquals($expectedResult, $result);
@@ -131,26 +112,26 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function bigintResultProvider()
     {
-        return array(
-            array(1, 1),
-            array(0, 0),
-            array(-1, -1),
-            array(1.0, 1),
-            array(0.0, 0),
-            array(-1.0, -1),
-            array(1e-10, 0),
-            array(7.9, 8),
-            array(PHP_INT_MAX, PHP_INT_MAX),
-            array(2147483647 + 1, '2147483648'),
-            array(9223372036854775807 + 1, '9223372036854775808'),
-            array(9223372036854775807, '9223372036854775807'),
-            array(9223372036854775807.3423424234, '9223372036854775808'),
-            array(2147483647 * pow(10, 10)+12, '21474836470000001024'),
-            array(9223372036854775807 * pow(10, 10)+12, '92233720368547758080000000000'),
-            array((0.099999999999999999999999995+0.2+0.3+0.4+0.5)*10, '15'),
-            array('21474836470000000012', '21474836470000001024'),
-            array(0x5468792130ABCDEF, '6082244480221302255'),
-        );
+        return [
+            [1, 1],
+            [0, 0],
+            [-1, -1],
+            [1.0, 1],
+            [0.0, 0],
+            [-1.0, -1],
+            [1e-10, 0],
+            [7.9, 8],
+            [PHP_INT_MAX, PHP_INT_MAX],
+            [2147483647 + 1, '2147483648'],
+            [9223372036854775807 + 1, '9223372036854775808'],
+            [9223372036854775807, '9223372036854775807'],
+            [9223372036854775807.3423424234, '9223372036854775808'],
+            [2147483647 * pow(10, 10)+12, '21474836470000001024'],
+            [9223372036854775807 * pow(10, 10)+12, '92233720368547758080000000000'],
+            [(0.099999999999999999999999995+0.2+0.3+0.4+0.5)*10, '15'],
+            ['21474836470000000012', '21474836470000001024'],
+            [0x5468792130ABCDEF, '6082244480221302255'],
+        ];
     }
 
     /**
@@ -198,13 +179,13 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public static function ddlSqlQueryProvider()
     {
-        return array(
-            array('CREATE table user sasdasd'),
-            array('ALTER table user'),
-            array('TRUNCATE table user'),
-            array('RENAME table user'),
-            array('DROP table user'),
-        );
+        return [
+            ['CREATE table user sasdasd'],
+            ['ALTER table user'],
+            ['TRUNCATE table user'],
+            ['RENAME table user'],
+            ['DROP table user'],
+        ];
     }
 
     /**
@@ -212,12 +193,12 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public static function sqlQueryProvider()
     {
-        return array(
-            array('SELECT * FROM user'),
-            array('UPDATE user'),
-            array('DELETE from user'),
-            array('INSERT into user'),
-        );
+        return [
+            ['SELECT * FROM user'],
+            ['UPDATE user'],
+            ['DELETE from user'],
+            ['INSERT into user'],
+        ];
     }
 
     /**
@@ -419,18 +400,18 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     public function testInsertOnDuplicateWithQuotedColumnName()
     {
         $table = 'some_table';
-        $data = array(
+        $data = [
             'index' => 'indexValue',
             'row' => 'rowValue',
             'select' => 'selectValue',
             'insert' => 'insertValue',
-        );
-        $fields = array('select', 'insert');
+        ];
+        $fields = ['select', 'insert'];
         $sqlQuery = "INSERT INTO `some_table` (`index`,`row`,`select`,`insert`) VALUES (?, ?, ?, ?) "
             . "ON DUPLICATE KEY UPDATE `select` = VALUES(`select`), `insert` = VALUES(`insert`)";
 
-        $stmtMock = $this->getMock('Zend_Db_Statement_Pdo', array(), array(), '', false);
-        $bind = array('indexValue', 'rowValue', 'selectValue', 'insertValue');
+        $stmtMock = $this->getMock('Zend_Db_Statement_Pdo', [], [], '', false);
+        $bind = ['indexValue', 'rowValue', 'selectValue', 'insertValue'];
         $this->_adapter->expects($this->once())
             ->method('query')
             ->with($sqlQuery, $bind)
@@ -522,7 +503,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     {
         $adapter = $this->getMock(
             '\Magento\Framework\DB\Adapter\Pdo\Mysql',
-            array('tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'), array(), '', false
+            ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'], [], '', false
         );
 
         $adapter->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));
@@ -536,9 +517,9 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function addColumnDataProvider()
     {
-        return array(
-            array(
-                'columnData' => array(
+        return [
+            [
+                'columnData' => [
                     'TYPE'        => 'integer',
                     'IDENTITY'    => true,
                     'UNSIGNED'    => true,
@@ -546,12 +527,11 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
                     'DEFAULT'     => null,
                     'COLUMN_NAME' => 'Some field',
                     'COMMENT'     => 'Some field',
-                    'AFTER'       => 'Previous field'
-                ),
-                'expectedQuery' =>
-                    'ALTER TABLE `tableName` ADD COLUMN `columnName` int UNSIGNED '
+                    'AFTER'       => 'Previous field',
+                ],
+                'expectedQuery' => 'ALTER TABLE `tableName` ADD COLUMN `columnName` int UNSIGNED '
                     . 'NOT NULL default  auto_increment COMMENT Some field AFTER `Previous field` ',
-            )
-        );
+            ]
+        ];
     }
 }

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -35,7 +16,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      * name => id mapper
      * @var array
      */
-    protected $_fields = array();
+    protected $_fields = [];
 
     /**
      * Dependencies mapper (by names)
@@ -48,14 +29,14 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      * )
      * @var array
      */
-    protected $_depends = array();
+    protected $_depends = [];
 
     /**
      * Additional configuration options for the dependencies javascript controller
      *
      * @var array
      */
-    protected $_configOptions = array();
+    protected $_configOptions = [];
 
     /**
      * @var \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory
@@ -77,7 +58,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_fieldFactory = $fieldFactory;
@@ -110,7 +91,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         if (!is_object($refField)) {
             /** @var $refField \Magento\Backend\Model\Config\Structure\Element\Dependency\Field */
             $refField = $this->_fieldFactory->create(
-                array('fieldData' => array('value' => (string)$refField), 'fieldPrefix' => '')
+                ['fieldData' => ['value' => (string)$refField], 'fieldPrefix' => '']
             );
         }
         $this->_depends[$fieldName][$fieldNameFrom] = $refField;
@@ -154,14 +135,14 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      */
     protected function _getDependsJson()
     {
-        $result = array();
+        $result = [];
         foreach ($this->_depends as $to => $row) {
             foreach ($row as $from => $field) {
                 /** @var $field \Magento\Backend\Model\Config\Structure\Element\Dependency\Field */
-                $result[$this->_fields[$to]][$this->_fields[$from]] = array(
+                $result[$this->_fields[$to]][$this->_fields[$from]] = [
                     'values' => $field->getValues(),
-                    'negative' => $field->isNegative()
-                );
+                    'negative' => $field->isNegative(),
+                ];
             }
         }
         return $this->_jsonEncoder->encode($result);

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
@@ -145,7 +126,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
      */
     public function testWrongAttributeCode()
     {
-        $postData = $this->_getAttributeData() + array('attribute_id' => '2', 'attribute_code' => '_()&&&?');
+        $postData = $this->_getAttributeData() + ['attribute_id' => '2', 'attribute_code' => '_()&&&?'];
         $this->getRequest()->setPost($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -170,7 +151,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
      */
     public function testAttributeWithoutEntityTypeId()
     {
-        $postData = $this->_getAttributeData() + array('attribute_id' => '2', 'new_attribute_set_name' => ' ');
+        $postData = $this->_getAttributeData() + ['attribute_id' => '2', 'new_attribute_set_name' => ' '];
         $this->getRequest()->setPost($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
@@ -185,7 +166,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionApplyToDataSystemAttribute()
     {
-        $postData = $this->_getAttributeData() + array('attribute_id' => '2');
+        $postData = $this->_getAttributeData() + ['attribute_id' => '2'];
         $this->getRequest()->setPost($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $model = $this->_objectManager->create('Magento\Catalog\Model\Resource\Eav\Attribute');
@@ -198,7 +179,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionApplyToDataUserDefinedAttribute()
     {
-        $postData = $this->_getAttributeData() + array('attribute_id' => '1');
+        $postData = $this->_getAttributeData() + ['attribute_id' => '1'];
         $this->getRequest()->setPost($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $model */
@@ -212,18 +193,17 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionApplyToData()
     {
-        $postData = $this->_getAttributeData() + array('attribute_id' => '3');
+        $postData = $this->_getAttributeData() + ['attribute_id' => '3'];
         unset($postData['apply_to']);
         $this->getRequest()->setPost($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $model = $this->_objectManager->create('Magento\Catalog\Model\Resource\Eav\Attribute');
         $model->load($postData['attribute_id']);
-        $this->assertEquals(array('simple'), $model->getApplyTo());
+        $this->assertEquals(['simple'], $model->getApplyTo());
     }
 
     /**
      * @magentoDataFixture Magento/Translation/_files/db_translate_admin_store.php
-     * @magentoDataFixture Magento/Backend/controllers/_files/cache/all_types_enabled.php
      * @magentoDataFixture Magento/Catalog/controllers/_files/attribute_user_defined.php
      * @magentoAppIsolation enabled
      */
@@ -233,7 +213,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $string = $this->_objectManager->create('Magento\Translation\Model\Resource\String');
         $this->assertEquals('predefined string translation', $this->_translate('string to translate'));
         $string->saveTranslate('string to translate', 'new string translation');
-        $postData = $this->_getAttributeData() + array('attribute_id' => 1);
+        $postData = $this->_getAttributeData() + ['attribute_id' => 1];
         $this->getRequest()->setPost($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
         $this->assertEquals('new string translation', $this->_translate('string to translate'));
@@ -266,7 +246,7 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
      */
     protected function _getAttributeData()
     {
-        return array(
+        return [
             'is_global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
             'default_value_text' => '0',
             'default_value_yesno' => '0',
@@ -284,8 +264,8 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
             'is_visible_on_front' => '0',
             'used_in_product_listing' => '1',
             'used_for_sort_by' => '0',
-            'apply_to' => array('simple'),
-            'frontend_label' => array(\Magento\Store\Model\Store::DEFAULT_STORE_ID => 'string to translate')
-        );
+            'apply_to' => ['simple'],
+            'frontend_label' => [\Magento\Store\Model\Store::DEFAULT_STORE_ID => 'string to translate']
+        ];
     }
 }

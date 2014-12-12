@@ -1,37 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Ui\Component;
 
 use Magento\Framework\View\Element\Template;
-use Magento\Ui\ContentType\ContentTypeFactory;
-use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Framework\View\Element\UiComponent\ConfigFactory;
-use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
-use Magento\Ui\Component\Filter as FilterView;
-use Magento\Ui\Component\Filter\FilterPool as FilterPoolProvider;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
+use Magento\Framework\View\Element\UiComponent\ConfigFactory;
+use Magento\Framework\View\Element\UiComponent\Context;
+use Magento\Ui\Component\Filter\FilterPool as FilterPoolProvider;
+use Magento\Ui\ContentType\ContentTypeFactory;
 
 /**
  * Class ViewTest
@@ -224,10 +204,10 @@ class FilterPoolTest extends \PHPUnit_Framework_TestCase
             'field-1' => 'value-1',
             'field-2' => 'value-2',
             'field-3' => 'value-3',
-            'field-4' => 'value-4'
+            'field-4' => 'value-4',
         ];
         $meta = [
-            'fields' => $metaData
+            'fields' => $metaData,
         ];
         $filters = $metaData;
 
@@ -288,15 +268,15 @@ class FilterPoolTest extends \PHPUnit_Framework_TestCase
 
         $result = [
             'field-1' => ['filterable' => 1],
-            'field-4' => ['filterable' => 1]
+            'field-4' => ['filterable' => 1],
         ];
         $meta = [
             'fields' => [
                 'field-1' => ['filterable' => true],
                 'field-2' => ['filterable' => false],
                 'field-3' => ['filterable' => false],
-                'field-4' => ['filterable' => true]
-            ]
+                'field-4' => ['filterable' => true],
+            ],
         ];
         /**
          * @var \Magento\Framework\View\Element\UiComponent\ConfigInterface
@@ -354,27 +334,27 @@ class FilterPoolTest extends \PHPUnit_Framework_TestCase
             'field-4' => [
                 'title' => 'title-4',
                 'current_display_value' => 'value-4',
-            ]
+            ],
         ];
         $meta = [
             'fields' => [
                 'field-1' => [
                     'filter_type' => true,
-                    'title' => 'title-1'
+                    'title' => 'title-1',
                 ],
                 'field-2' => [
                     'filter_type' => true,
-                    'title' => 'title-2'
+                    'title' => 'title-2',
                 ],
                 'field-3' => [
                     'filter_type' => true,
-                    'title' => 'title-3'
+                    'title' => 'title-3',
                 ],
                 'field-4' => [
                     'filter_type' => true,
-                    'title' => 'title-4'
-                ]
-            ]
+                    'title' => 'title-4',
+                ],
+            ],
         ];
         $filters = [
             'field-1' => 'value-1',

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Reports\Model\Resource\Product\Index;
 
@@ -72,7 +53,6 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
 
         $rowSet = $select->query()->fetchAll();
         foreach ($rowSet as $row) {
-
             /* We need to determine if there are rows with known
                customer for current product.
                */
@@ -93,20 +73,20 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
                  * If we are here it means that we have two rows: one with known customer, but second just visitor is set
                  * One row should be updated with customer_id, second should be deleted
                  */
-                $adapter->delete($this->getMainTable(), array('index_id = ?' => $row['index_id']));
-                $where = array('index_id = ?' => $idx['index_id']);
-                $data = array(
+                $adapter->delete($this->getMainTable(), ['index_id = ?' => $row['index_id']]);
+                $where = ['index_id = ?' => $idx['index_id']];
+                $data = [
                     'visitor_id' => $object->getVisitorId(),
                     'store_id' => $object->getStoreId(),
-                    'added_at' => $this->dateTime->now()
-                );
+                    'added_at' => $this->dateTime->now(),
+                ];
             } else {
-                $where = array('index_id = ?' => $row['index_id']);
-                $data = array(
+                $where = ['index_id = ?' => $row['index_id']];
+                $data = [
                     'customer_id' => $object->getCustomerId(),
                     'store_id' => $object->getStoreId(),
-                    'added_at' => $this->dateTime->now()
-                );
+                    'added_at' => $this->dateTime->now(),
+                ];
             }
 
             $adapter->update($this->getMainTable(), $data, $where);
@@ -129,8 +109,8 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
             return $this;
         }
 
-        $bind = array('visitor_id' => null);
-        $where = array('customer_id = ?' => (int)$object->getCustomerId());
+        $bind = ['visitor_id' => null];
+        $where = ['customer_id = ?' => (int)$object->getCustomerId()];
         $this->_getWriteAdapter()->update($this->getMainTable(), $bind, $where);
 
         return $this;
@@ -155,7 +135,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
         $data = $this->_prepareDataForSave($object);
         unset($data[$this->getIdFieldName()]);
 
-        $matchFields = array('product_id', 'store_id');
+        $matchFields = ['product_id', 'store_id'];
 
         $this->_resourceHelper->mergeVisitorProductIndex($this->getMainTable(), $data, $matchFields);
 
@@ -174,12 +154,12 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
     {
         while (true) {
             $select = $this->_getReadAdapter()->select()->from(
-                array('main_table' => $this->getMainTable()),
-                array($this->getIdFieldName())
+                ['main_table' => $this->getMainTable()],
+                [$this->getIdFieldName()]
             )->joinLeft(
-                array('visitor_table' => $this->getTable('log_visitor')),
+                ['visitor_table' => $this->getTable('log_visitor')],
                 'main_table.visitor_id = visitor_table.visitor_id',
-                array()
+                []
             )->where(
                 'main_table.visitor_id > ?',
                 0
@@ -211,13 +191,13 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
      */
     public function registerIds(\Magento\Framework\Object $object, $productIds)
     {
-        $row = array(
+        $row = [
             'visitor_id' => $object->getVisitorId(),
             'customer_id' => $object->getCustomerId(),
-            'store_id' => $object->getStoreId()
-        );
+            'store_id' => $object->getStoreId(),
+        ];
         $addedAt = $this->dateTime->toTimestamp(true);
-        $data = array();
+        $data = [];
         foreach ($productIds as $productId) {
             $productId = (int)$productId;
             if ($productId) {
@@ -228,7 +208,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
             $addedAt -= $addedAt > 0 ? 1 : 0;
         }
 
-        $matchFields = array('product_id', 'store_id');
+        $matchFields = ['product_id', 'store_id'];
         foreach ($data as $row) {
             $this->_resourceHelper->mergeVisitorProductIndex($this->getMainTable(), $row, $matchFields);
         }

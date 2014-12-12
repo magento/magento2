@@ -2,26 +2,7 @@
 /**
  * Unit test for \Magento\Backend\Controller\Adminhtml\System\Account controller
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
 
@@ -63,15 +44,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
-            ->disableOriginalConstructor()->setMethods(array('getOriginalPathInfo'))
+            ->disableOriginalConstructor()->setMethods(['getOriginalPathInfo'])
             ->getMock();
         $this->_responseMock = $this->getMockBuilder('Magento\Framework\App\Response\Http')
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->getMock();
         $this->_objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
             ->disableOriginalConstructor()
-            ->setMethods(array('get', 'create'))
+            ->setMethods(['get', 'create'])
             ->getMock();
         $frontControllerMock = $this->getMockBuilder('Magento\Framework\App\FrontController')
             ->disableOriginalConstructor()
@@ -79,40 +60,40 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->_helperMock = $this->getMockBuilder('Magento\Backend\Helper\Data')
             ->disableOriginalConstructor()
-            ->setMethods(array('getUrl'))
+            ->setMethods(['getUrl'])
             ->getMock();
         $this->_messagesMock = $this->getMockBuilder('Magento\Framework\Message\Manager')
             ->disableOriginalConstructor()
-            ->setMethods(array('addSuccess'))
+            ->setMethods(['addSuccess'])
             ->getMockForAbstractClass();
 
         $this->_authSessionMock = $this->getMockBuilder('Magento\Backend\Model\Auth\Session')
             ->disableOriginalConstructor()
-            ->setMethods(array('getUser'))
+            ->setMethods(['getUser'])
             ->getMock();
 
         $this->_userMock = $this->getMockBuilder('Magento\User\Model\User')
             ->disableOriginalConstructor()
             ->setMethods(
-                array('load', 'save', 'sendPasswordResetNotificationEmail', 'verifyIdentity', '__sleep', '__wakeup')
+                ['load', 'save', 'sendPasswordResetNotificationEmail', 'verifyIdentity', '__sleep', '__wakeup']
             )
             ->getMock();
 
         $this->_validatorMock = $this->getMockBuilder('Magento\Framework\Locale\Validator')
             ->disableOriginalConstructor()
-            ->setMethods(array('isValid'))
+            ->setMethods(['isValid'])
             ->getMock();
 
         $this->_managerMock = $this->getMockBuilder('Magento\Backend\Model\Locale\Manager')
             ->disableOriginalConstructor()
-            ->setMethods(array('switchBackendInterfaceLocale'))
+            ->setMethods(['switchBackendInterfaceLocale'])
             ->getMock();
 
         $this->_translatorMock = $this->getMockBuilder('Magento\Framework\TranslateInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $contextMock = $this->getMock('Magento\Backend\App\Action\Context', array(), array(), '', false);
+        $contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->_requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->_responseMock));
         $contextMock->expects($this->any())
@@ -140,7 +121,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($resultRedirect);
 
-        $args = array('context' => $contextMock, 'resultRedirectFactory' => $resultRedirectFactory);
+        $args = ['context' => $contextMock, 'resultRedirectFactory' => $resultRedirectFactory];
 
         $testHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_controller = $testHelper->getObject('Magento\Backend\Controller\Adminhtml\System\Account\Save', $args);
@@ -149,7 +130,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     public function testSaveAction()
     {
         $userId = 1;
-        $requestParams = array(
+        $requestParams = [
             'password' => 'password',
             'password_confirmation' => true,
             'interface_locale' => 'US',
@@ -157,8 +138,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'firstname' => 'Bar',
             'lastname' => 'Dummy',
             'email' => 'test@example.com',
-            \Magento\Backend\Block\System\Account\Edit\Form::IDENTITY_VERIFICATION_PASSWORD_FIELD => 'current_password'
-        );
+            \Magento\Backend\Block\System\Account\Edit\Form::IDENTITY_VERIFICATION_PASSWORD_FIELD => 'current_password',
+        ];
 
         $testedMessage = 'The account has been saved.';
 

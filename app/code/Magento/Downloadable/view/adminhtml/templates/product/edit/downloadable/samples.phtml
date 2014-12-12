@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 ?>
 <?php
@@ -34,9 +15,9 @@ $this->getConfigJson();
     <div class="field">
         <label class="label" for="name"><span><?php echo __('Title')?></span></label>
         <div class="control">
-            <input type="text" class="input-text" name="product[samples_title]" value="<?php echo $this->getSamplesTitle() ?>" <?php echo ($_product->getStoreId() && $this->getUsedDefault())?'disabled="disabled"':'' ?>>
-            <?php if($_product->getStoreId()): ?>
-                <input id="sample_title_default" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $this->getUsedDefault()?'checked="checked"':'' ?> />
+            <input type="text" class="input-text" name="product[samples_title]" value="<?php echo $this->getSamplesTitle() ?>" <?php echo($_product->getStoreId() && $this->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <?php if ($_product->getStoreId()): ?>
+                <input id="sample_title_default" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $this->getUsedDefault() ? 'checked="checked"' : '' ?> />
                 <label class="normal" for="sample_title_default">Use Default Value</label>
             <?php endif; ?>
         </div>
@@ -78,7 +59,7 @@ var sampleTemplate = '<tr>'+
                             '<input type="hidden" class="__delete__" name="downloadable[sample][{{id}}][is_delete]" value="" />'+
                             '<input type="hidden" name="downloadable[sample][{{id}}][sample_id]" value="{{sample_id}}" />'+
                             '<input type="text" class="required-entry input-text" name="downloadable[sample][{{id}}][title]" value="{{title}}" />'+
-                            '<?php echo $_product->getStoreId()?'<br /><input type="checkbox" id="downloadable_sample_{{id}}_title" name="downloadable[sample][{{id}}][use_default_title]" value="1" /><label class="normal" for="downloadable_sample_{{id}}_title">Use Default Value</label>':'' ?>'+
+                            '<?php echo $_product->getStoreId() ? '<br /><input type="checkbox" id="downloadable_sample_{{id}}_title" name="downloadable[sample][{{id}}][use_default_title]" value="1" /><label class="normal" for="downloadable_sample_{{id}}_title">Use Default Value</label>' : '' ?>'+
                         '</td>'+
                         '<td>'+
                             '<div class="files-wide">'+
@@ -261,4 +242,3 @@ if($('add_sample_item')){
 
 });
 </script>
-

@@ -1,26 +1,7 @@
 <?php
 /**
- * Magento
  *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Store\Model\Storage;
 
@@ -68,32 +49,32 @@ class DefaultStorageTest extends \PHPUnit_Framework_TestCase
     {
         $this->_websiteMock = $this->getMock(
             'Magento\Store\Model\Website',
-            array('getCode', 'getId', '__wakeup'),
-            array(),
+            ['getCode', 'getId', '__wakeup'],
+            [],
             '',
             false,
             false
         );
         $this->_groupMock = $this->getMock(
             'Magento\Store\Model\Group',
-            array('getCode', 'getId', '__wakeup'),
-            array(),
+            ['getCode', 'getId', '__wakeup'],
+            [],
             '',
             false,
             false
         );
         $this->_storeFactoryMock = $this->getMock(
             'Magento\Store\Model\StoreFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false,
             false
         );
         $this->_websiteFactoryMock = $this->getMock(
             'Magento\Store\Model\WebsiteFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false,
             false
@@ -107,8 +88,8 @@ class DefaultStorageTest extends \PHPUnit_Framework_TestCase
         );
         $this->_groupFactoryMock = $this->getMock(
             'Magento\Store\Model\GroupFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false,
             false
@@ -122,8 +103,8 @@ class DefaultStorageTest extends \PHPUnit_Framework_TestCase
         );
         $this->_storeMock = $this->getMock(
             'Magento\Store\Model\Store',
-            array('setId', 'setCode', 'getCode', '__sleep', '__wakeup'),
-            array(),
+            ['setId', 'setCode', 'getCode', '__sleep', '__wakeup'],
+            [],
             '',
             false,
             false
@@ -157,7 +138,7 @@ class DefaultStorageTest extends \PHPUnit_Framework_TestCase
     {
         $withDefault = true;
         $codeKey = true;
-        $this->assertEquals(array(), $this->_model->getStores($withDefault, $codeKey));
+        $this->assertEquals([], $this->_model->getStores($withDefault, $codeKey));
     }
 
     public function testGetWebsite()
@@ -190,7 +171,7 @@ class DefaultStorageTest extends \PHPUnit_Framework_TestCase
         $this->_websiteMock->expects($this->never())->method('getCode');
         $this->_websiteMock->expects($this->never())->method('getId');
         $result = $this->_model->getWebsites($withDefault, $codeKey);
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     public function testGetGroup()
@@ -218,7 +199,7 @@ class DefaultStorageTest extends \PHPUnit_Framework_TestCase
         $this->_groupMock->expects($this->never())->method('getCode');
         $this->_groupMock->expects($this->never())->method('getId');
         $result = $this->_model->getGroups($withDefault, $codeKey);
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     public function testGetDefaultStoreView()

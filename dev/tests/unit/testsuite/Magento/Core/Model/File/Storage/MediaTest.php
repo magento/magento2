@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Core\Model\File\Storage;
 
@@ -55,19 +36,19 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_loggerMock = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
+        $this->_loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
         $this->_storageHelperMock = $this->getMock(
             'Magento\Core\Helper\File\Storage\Database',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->_mediaHelperMock = $this->getMock('Magento\Core\Helper\File\Media', array(), array(), '', false);
+        $this->_mediaHelperMock = $this->getMock('Magento\Core\Helper\File\Media', [], [], '', false);
         $this->_fileUtilityMock = $this->getMock(
             'Magento\Core\Model\Resource\File\Storage\File',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -92,9 +73,9 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getStorageData'
         )->will(
-            $this->returnValue(array('files' => array('value1', 'value2')))
+            $this->returnValue(['files' => ['value1', 'value2']])
         );
-        $this->assertEmpty(array_diff($this->_model->collectData(0, 1), array('value1')));
+        $this->assertEmpty(array_diff($this->_model->collectData(0, 1), ['value1']));
     }
 
     public function testCollectDataFailureWrongType()
@@ -104,7 +85,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getStorageData'
         )->will(
-            $this->returnValue(array('files' => array('value1', 'value2')))
+            $this->returnValue(['files' => ['value1', 'value2']])
         );
         $this->assertFalse($this->_model->collectData(0, 1, 'some-wrong-key'));
     }
@@ -116,7 +97,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getStorageData'
         )->will(
-            $this->returnValue(array('files' => array()))
+            $this->returnValue(['files' => []])
         );
         $this->assertFalse($this->_model->collectData(0, 1));
     }

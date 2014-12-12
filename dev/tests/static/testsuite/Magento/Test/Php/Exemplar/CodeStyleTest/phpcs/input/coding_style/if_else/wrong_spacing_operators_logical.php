@@ -1,13 +1,13 @@
 <?php
-if ($a||$b) {
+if ($a || $b) {
     echo 'ab';
 }
 
-if ($a|| $b) {
+if ($a || $b) {
     echo 'ab';
 }
 
-if ($a ||$b) {
+if ($a || $b) {
     echo 'ab';
 }
 

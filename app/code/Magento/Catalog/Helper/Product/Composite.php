@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Helper\Product;
 
@@ -28,9 +9,9 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Helper\Product;
-use Magento\Framework\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Model\Converter;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Registry;
 
 /**
@@ -55,7 +36,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_catalogProduct = null;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -65,23 +46,23 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_view;
 
     /**
-     * @var Converter
-     */
-    protected $_converter;
-
-    /**
      * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Product $catalogProduct
      * @param Registry $coreRegistry
      * @param ViewInterface $view
-     * @param Converter $converter
      * @param ProductRepositoryInterface $productRepository
+     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         Context $context,
@@ -89,15 +70,15 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
         Product $catalogProduct,
         Registry $coreRegistry,
         ViewInterface $view,
-        Converter $converter,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        CustomerRepositoryInterface $customerRepository
     ) {
         $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;
         $this->_catalogProduct = $catalogProduct;
         $this->_view = $view;
-        $this->_converter = $converter;
         $this->productRepository = $productRepository;
+        $this->customerRepository = $customerRepository;
         parent::__construct($context);
     }
 
@@ -191,8 +172,10 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
             // Register customer we're working with
             $customerId = (int)$configureResult->getCurrentCustomerId();
             // TODO: Remove the customer model from the registry once all readers are refactored
-            $customerModel = $this->_converter->loadCustomerModel($customerId);
-            $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER, $customerModel);
+            if ($customerId) {
+                $customerData = $this->customerRepository->getById($customerId);
+                $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER, $customerData);
+            }
             $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
 
             // Prepare buy request values

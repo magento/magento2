@@ -1,11 +1,12 @@
 <?php
 /**
- * Nonce builder factory.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Integration\Model\Oauth\Nonce;
 
+/**
+ * Nonce builder factory.
+ */
 class Factory
 {
     /**
@@ -27,7 +28,7 @@ class Factory
      * @param array $arguments
      * @return \Magento\Integration\Model\Oauth\Nonce
      */
-    public function create($arguments = array())
+    public function create($arguments = [])
     {
         return $this->_objectManager->create('Magento\Integration\Model\Oauth\Nonce', $arguments);
     }

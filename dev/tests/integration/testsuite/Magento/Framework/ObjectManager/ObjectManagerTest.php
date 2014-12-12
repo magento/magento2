@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\ObjectManager;
 
@@ -55,7 +36,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_numerableClasses = array(
+    protected $_numerableClasses = [
         0 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorNoArguments',
         1 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorOneArgument',
         2 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorTwoArguments',
@@ -66,15 +47,15 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         7 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorSevenArguments',
         8 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorEightArguments',
         9 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorNineArguments',
-        10 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorTenArguments'
-    );
+        10 => 'Magento\Framework\ObjectManager\TestAsset\ConstructorTenArguments',
+    ];
 
     /**
      * Names of properties
      *
      * @var array
      */
-    protected $_numerableProperties = array(
+    protected $_numerableProperties = [
         1 => '_one',
         2 => '_two',
         3 => '_three',
@@ -84,8 +65,8 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         7 => '_seven',
         8 => '_eight',
         9 => '_nine',
-        10 => '_ten'
-    );
+        10 => '_ten',
+    ];
 
     public static function setUpBeforeClass()
     {
@@ -94,7 +75,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
         self::$_objectManager = new \Magento\Framework\ObjectManager\ObjectManager($factory, $config);
         self::$_objectManager->configure(
-            array('preferences' => array(self::TEST_INTERFACE => self::TEST_INTERFACE_IMPLEMENTATION))
+            ['preferences' => [self::TEST_INTERFACE => self::TEST_INTERFACE_IMPLEMENTATION]]
         );
         $factory->setObjectManager(self::$_objectManager);
     }
@@ -111,24 +92,24 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function newInstanceDataProvider()
     {
-        $data = array(
-            'basic model' => array(
+        $data = [
+            'basic model' => [
                 '$actualClassName' => self::TEST_CLASS_INJECTION,
-                '$properties' => array('_object' => self::TEST_CLASS)
-            ),
-            'model with interface' => array(
+                '$properties' => ['_object' => self::TEST_CLASS],
+            ],
+            'model with interface' => [
                 '$actualClassName' => self::TEST_CLASS_WITH_INTERFACE,
-                '$properties' => array('_object' => self::TEST_INTERFACE_IMPLEMENTATION)
-            )
-        );
+                '$properties' => ['_object' => self::TEST_INTERFACE_IMPLEMENTATION],
+            ],
+        ];
 
         foreach ($this->_numerableClasses as $number => $className) {
-            $properties = array();
+            $properties = [];
             for ($i = 1; $i <= $number; $i++) {
                 $propertyName = $this->_numerableProperties[$i];
                 $properties[$propertyName] = self::TEST_CLASS;
             }
-            $data[$number . ' arguments'] = array('$actualClassName' => $className, '$properties' => $properties);
+            $data[$number . ' arguments'] = ['$actualClassName' => $className, '$properties' => $properties];
         }
 
         return $data;
@@ -141,7 +122,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider newInstanceDataProvider
      */
-    public function testNewInstance($actualClassName, array $properties = array(), $expectedClassName = null)
+    public function testNewInstance($actualClassName, array $properties = [], $expectedClassName = null)
     {
         if (!$expectedClassName) {
             $expectedClassName = $actualClassName;

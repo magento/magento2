@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
@@ -144,8 +125,8 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             [
                 'table' => [
-                    ['value_id' => $valueId, 'attribute_id' => $attributeId, 'entity_id' => $object->getId()]
-                ]
+                    ['value_id' => $valueId, 'attribute_id' => $attributeId, 'entity_id' => $object->getId()],
+                ],
             ],
             $this->model->getAffectedFields($object)
         );
@@ -202,17 +183,17 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 [
                     'removed' => true,
                     'value_id' => 1,
-                    'file' => 'file/path'
+                    'file' => 'file/path',
                 ],
                 [
                     'removed' => false,
                     'value_id' => 1,
                     'file' => 'file/path2'
-                ]
-            ]
+                ],
+            ],
         ];
         $assignedImages = [
-            ['filepath' => 'path_to_image']
+            ['filepath' => 'path_to_image'],
         ];
 
         $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
@@ -290,19 +271,19 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 [
                     'label' => 'label_1',
                     'position' => 'position_1',
-                    'disabled' => 'true'
+                    'disabled' => 'true',
                 ],
                 [
                     'label' => 'label_2',
                     'position' => 'position_2',
                     'disabled' => 'true'
-                ]
+                ],
             ],
             [
                 [
                     'label' => null,
                     'position' => null,
-                    'disabled' => null
+                    'disabled' => null,
                 ],
                 [
                     'label' => null,
@@ -368,7 +349,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $mediaAttributes = [
             'image' => $attribute,
             'small_image' => $attribute,
-            'thumbnail' => $attribute
+            'thumbnail' => $attribute,
         ];
         $attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($attributeCode));
         $this->dataObject->expects($this->any())->method('getIsDuplicate')->will($this->returnValue(false));
@@ -397,7 +378,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                         'value_id' => '',
                         'label' => 'image 1',
                         'disableed' => '0',
-                        'removed' => ''
+                        'removed' => '',
                     ],
                     'image_2' => [
                         'position' => '1',
@@ -405,7 +386,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                         'value_id' => '',
                         'label' => 'image 2',
                         'disableed' => '0',
-                        'removed' => ''
+                        'removed' => '',
                     ],
                     'image_removed' => [
                         'position' => '1',
@@ -413,9 +394,9 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                         'value_id' => '',
                         'label' => 'image 3',
                         'disableed' => '0',
-                        'removed' => '1'
-                    ]
-                ]
+                        'removed' => '1',
+                    ],
+                ],
             ]
         ];
     }

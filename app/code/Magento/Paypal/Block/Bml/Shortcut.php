@@ -1,27 +1,8 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
- 
+
 namespace Magento\Paypal\Block\Bml;
 
 use Magento\Catalog\Block as CatalogBlock;
@@ -96,8 +77,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * @param string $shortcutTemplate
      * @param array $data
      */
-    public function __construct
-    (
+    public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Math\Random $mathRandom,
@@ -107,7 +87,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $alias,
         $bmlMethodCode,
         $shortcutTemplate,
-        array $data = array()
+        array $data = []
     ) {
         $this->_paymentData = $paymentData;
         $this->_mathRandom = $mathRandom;
@@ -135,7 +115,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
 
         /** @var \Magento\Paypal\Model\Express $method */
         $method = $this->_paymentData->getMethodInstance($this->_bmlMethodCode);
-        if (!$method || !$method->isAvailable()) {
+        if (!$method->isAvailable()) {
             $this->_shouldRender = false;
             return $result;
         }
@@ -147,7 +127,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
                 [
                     'href' => 'https://www.securecheckout.billmelater.com/paycapture-content/'
                     . 'fetch?hash=AU826TU8&content=/bmlweb/ppwpsiw.html',
-                    'src' => 'https://www.paypalobjects.com/webstatic/en_US/btn/btn_bml_text.png'
+                    'src' => 'https://www.paypalobjects.com/webstatic/en_US/btn/btn_bml_text.png',
                 ]
             );
 

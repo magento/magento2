@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\UrlRewrite\Block\Catalog\Product;
 
@@ -50,7 +31,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $block = $layout->createBlock(
             'Magento\UrlRewrite\Block\Catalog\Product\Edit',
             '',
-            array('data' => $blockAttributes)
+            ['data' => $blockAttributes]
         );
 
         $this->_checkSelector($block, $expected);
@@ -369,22 +350,22 @@ class EditTest extends \PHPUnit_Framework_TestCase
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product',
-            array('data' => array('entity_id' => 1, 'name' => 'Test product'))
+            ['data' => ['entity_id' => 1, 'name' => 'Test product']]
         );
         /** @var $category \Magento\Catalog\Model\Category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category',
-            array('data' => array('entity_id' => 1, 'name' => 'Test category'))
+            ['data' => ['entity_id' => 1, 'name' => 'Test category']]
         );
         /** @var $existingUrlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $existingUrlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\UrlRewrite\Model\UrlRewrite',
-            array('data' => array('url_rewrite_id' => 1))
+            ['data' => ['url_rewrite_id' => 1]]
         );
-        return array(
-            array( // Creating URL rewrite when product and category are not selected
-                array('url_rewrite' => $urlRewrite),
-                array(
+        return [
+            [ // Creating URL rewrite when product and category are not selected
+                ['url_rewrite' => $urlRewrite],
+                [
                     'selector' => true,
                     'product_link' => false,
                     'category_link' => false,
@@ -396,13 +377,13 @@ class EditTest extends \PHPUnit_Framework_TestCase
                     'products_grid' => true,
                     'categories_tree' => false,
                     'skip_categories' => false
-                )
-            ),
-            array( // Creating URL rewrite when product selected and category tree active
-                array('product' => $product, 'url_rewrite' => $urlRewrite, 'is_category_mode' => true),
-                array(
+                ],
+            ],
+            [ // Creating URL rewrite when product selected and category tree active
+                ['product' => $product, 'url_rewrite' => $urlRewrite, 'is_category_mode' => true],
+                [
                     'selector' => false,
-                    'product_link' => array('name' => $product->getName()),
+                    'product_link' => ['name' => $product->getName()],
                     'category_link' => false,
                     'back_button' => true,
                     'reset_button' => false,
@@ -412,13 +393,13 @@ class EditTest extends \PHPUnit_Framework_TestCase
                     'products_grid' => false,
                     'categories_tree' => true,
                     'skip_categories' => true
-                )
-            ),
-            array( // Creating URL rewrite when product selected and category tree inactive
-                array('product' => $product, 'url_rewrite' => $urlRewrite),
-                array(
+                ]
+            ],
+            [ // Creating URL rewrite when product selected and category tree inactive
+                ['product' => $product, 'url_rewrite' => $urlRewrite],
+                [
                     'selector' => false,
-                    'product_link' => array('name' => $product->getName()),
+                    'product_link' => ['name' => $product->getName()],
                     'category_link' => false,
                     'back_button' => true,
                     'reset_button' => false,
@@ -428,14 +409,14 @@ class EditTest extends \PHPUnit_Framework_TestCase
                     'products_grid' => false,
                     'categories_tree' => false,
                     'skip_categories' => false
-                )
-            ),
-            array( // Creating URL rewrite when product selected and category selected
-                array('product' => $product, 'category' => $category, 'url_rewrite' => $urlRewrite),
-                array(
+                ]
+            ],
+            [ // Creating URL rewrite when product selected and category selected
+                ['product' => $product, 'category' => $category, 'url_rewrite' => $urlRewrite],
+                [
                     'selector' => false,
-                    'product_link' => array('name' => $product->getName()),
-                    'category_link' => array('name' => $category->getName()),
+                    'product_link' => ['name' => $product->getName()],
+                    'category_link' => ['name' => $category->getName()],
                     'back_button' => true,
                     'reset_button' => false,
                     'delete_button' => false,
@@ -444,14 +425,14 @@ class EditTest extends \PHPUnit_Framework_TestCase
                     'products_grid' => false,
                     'categories_tree' => false,
                     'skip_categories' => false
-                )
-            ),
-            array( // Editing existing URL rewrite with product and category
-                array('product' => $product, 'category' => $category, 'url_rewrite' => $existingUrlRewrite),
-                array(
+                ]
+            ],
+            [ // Editing existing URL rewrite with product and category
+                ['product' => $product, 'category' => $category, 'url_rewrite' => $existingUrlRewrite],
+                [
                     'selector' => false,
-                    'product_link' => array('name' => $product->getName()),
-                    'category_link' => array('name' => $category->getName()),
+                    'product_link' => ['name' => $product->getName()],
+                    'category_link' => ['name' => $category->getName()],
                     'reset_button' => true,
                     'delete_button' => true,
                     'save_button' => true,
@@ -459,8 +440,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
                     'products_grid' => false,
                     'categories_tree' => false,
                     'skip_categories' => false
-                )
-            )
-        );
+                ]
+            ]
+        ];
     }
 }

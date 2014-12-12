@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 ?>
 <?php
@@ -32,17 +13,17 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
 ?>
 <?php echo $this->getChildHtml('item_extra') ?>
 <tbody class="cart item">
-    <tr class="item info item-info">
+    <tr class="item-info">
         <td class="col item">
             <?php if ($this->hasProductUrl()): ?>
                 <a href="<?php echo $this->getProductUrl() ?>"
                    title="<?php echo $this->escapeHtml($this->getProductName()) ?>"
-                   class="product photo product-item-photo">
+                   class="product-item-photo">
             <?php endif; ?>
             <?php echo $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($product, 'cart_page_product_thumbnail')->toHtml(); ?>
             <?php if ($this->hasProductUrl()):?></a><?php endif;?>
-            <div class="product details product-item-details">
-                <strong class="product name product-item-name">
+            <div class="product-item-details">
+                <strong class="product-item-name">
                     <?php if ($this->hasProductUrl()):?>
                         <a href="<?php echo $this->getProductUrl() ?>"><?php echo $this->escapeHtml($this->getProductName()) ?></a>
                     <?php else: ?>
@@ -81,7 +62,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
             <?php $cols = 1; ?>
         </td>
     <?php if ($canApplyMsrp): ?>
-        <td class="col msrp">
+        <td class="col msrp" data-th="<?php echo $this->escapeHtml(__('Price')); ?>">
             <span class="cart-price">
                 <span class="msrp notice"><?php echo __('See price before order confirmation.'); ?></span>
                 <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
@@ -95,15 +76,12 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
             <?php $cols++; ?>
         </td>
     <?php else: ?>
-
         <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price')); ?>">
             <?php echo $this->getUnitPriceHtml($_item); ?>
             <?php $cols++; ?>
         </td>
-
-
     <?php endif; ?>
-        <td class="col qty">
+        <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty')); ?>">
             <div class="control qty">
                 <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" type="number" size="4" title="<?php echo __('Qty') ?>" class="input-text qty" maxlength="12" data-validate="{'required-number':true,'validate-greater-than-zero':true}"/>
             </div>
@@ -119,9 +97,9 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
             <?php $cols++; ?>
         </td>
     </tr>
-    <tr class="item actions">
+    <tr class="item-actions">
         <td colspan="<?php echo $cols;?>">
-            <div class="actions">
+            <div class="actions-toolbar">
                 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllowInCart()) : ?>
                     <?php if ($isVisibleProduct): ?>
                         <a href="#" data-post='<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getMoveFromCartParams($_item->getId()); ?>' class="use-ajax action towishlist">

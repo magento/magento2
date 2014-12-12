@@ -1,30 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Resource\Order\Payment\Transaction;
 
-use Magento\Sales\Model\Resource\Order\Collection\AbstractCollection;
 use Magento\Sales\Api\Data\TransactionSearchResultInterface;
+use Magento\Sales\Model\Resource\Order\Collection\AbstractCollection;
 
 /**
  * Payment transactions collection
@@ -45,21 +26,21 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      *
      * @var string[]
      */
-    protected $_addOrderInformation = array();
+    protected $_addOrderInformation = [];
 
     /**
      * Columns of payment info that should be selected
      *
      * @var array
      */
-    protected $_addPaymentInformation = array();
+    protected $_addPaymentInformation = [];
 
     /**
      * Order Store ids
      *
      * @var int[]
      */
-    protected $_storeIds = array();
+    protected $_storeIds = [];
 
     /**
      * Payment ID filter
@@ -178,7 +159,7 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
     public function addTxnTypeFilter($txnType)
     {
         if (!is_array($txnType)) {
-            $txnType = array($txnType);
+            $txnType = [$txnType];
         }
         $this->_txnTypes = $txnType;
         return $this;
@@ -192,7 +173,7 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
      */
     public function addStoreFilter($storeIds)
     {
-        $storeIds = is_array($storeIds) ? $storeIds : array($storeIds);
+        $storeIds = is_array($storeIds) ? $storeIds : [$storeIds];
         $this->_storeIds = array_merge($this->_storeIds, $storeIds);
         return $this;
     }
@@ -218,18 +199,18 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
         }
         if ($this->_addPaymentInformation) {
             $this->getSelect()->joinInner(
-                array('sop' => $this->getTable('sales_order_payment')),
+                ['sop' => $this->getTable('sales_order_payment')],
                 'main_table.payment_id = sop.entity_id',
                 $this->_addPaymentInformation
             );
         }
         if ($this->_storeIds) {
             $this->getSelect()->where('so.store_id IN(?)', $this->_storeIds);
-            $this->addOrderInformation(array('store_id'));
+            $this->addOrderInformation(['store_id']);
         }
         if ($this->_addOrderInformation) {
             $this->getSelect()->joinInner(
-                array('so' => $this->getTable('sales_order')),
+                ['so' => $this->getTable('sales_order')],
                 'main_table.order_id = so.entity_id',
                 $this->_addOrderInformation
             );

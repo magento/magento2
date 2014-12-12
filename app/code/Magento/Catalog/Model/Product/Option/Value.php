@@ -1,31 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Product\Option;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
-use \Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
@@ -48,7 +29,7 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
     /**
      * @var array
      */
-    protected $_values = array();
+    protected $_values = [];
 
     /**
      * @var Product
@@ -85,7 +66,7 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
         \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $valueCollectionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_valueCollectionFactory = $valueCollectionFactory;
         parent::__construct(
@@ -108,6 +89,7 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
     }
 
     /**
+     * @codeCoverageIgnoreStart
      * @param mixed $value
      * @return $this
      */
@@ -140,7 +122,7 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
      */
     public function unsetValues()
     {
-        $this->_values = array();
+        $this->_values = [];
         return $this;
     }
 
@@ -182,6 +164,7 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
         $this->_product = $product;
         return $this;
     }
+    //@codeCoverageIgnoreEnd
 
     /**
      * @return Product
@@ -321,6 +304,7 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
      * Get option title
      *
      * @return string
+     * @codeCoverageIgnoreStart
      */
     public function getTitle()
     {
@@ -366,4 +350,5 @@ class Value extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data
     {
         return $this->_getData('option_type_id');
     }
+    //@codeCoverageIgnoreEnd
 }

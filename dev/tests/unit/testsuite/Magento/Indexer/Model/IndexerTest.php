@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *   
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Indexer\Model;
 
@@ -59,40 +40,40 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     {
         $this->configMock = $this->getMockForAbstractClass(
             'Magento\Indexer\Model\ConfigInterface',
-            array(),
+            [],
             '',
             false,
             false,
             true,
-            array('getIndexer')
+            ['getIndexer']
         );
         $this->actionFactoryMock = $this->getMock(
             'Magento\Indexer\Model\ActionFactory',
-            array('get'),
-            array(),
+            ['get'],
+            [],
             '',
             false
         );
         $this->viewMock = $this->getMockForAbstractClass(
             'Magento\Framework\Mview\ViewInterface',
-            array(),
+            [],
             '',
             false,
             false,
             true,
-            array('load', 'isEnabled', 'getUpdated', 'getStatus', '__wakeup', 'getId', 'suspend', 'resume')
+            ['load', 'isEnabled', 'getUpdated', 'getStatus', '__wakeup', 'getId', 'suspend', 'resume']
         );
         $this->stateFactoryMock = $this->getMock(
             'Magento\Indexer\Model\Indexer\StateFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
         $this->indexFactoryMock = $this->getMock(
             'Magento\Indexer\Model\Indexer\CollectionFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
@@ -138,8 +119,8 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $indexId = 'indexer_internal_name';
         $stateMock = $this->getMock(
             '\Magento\Indexer\Model\Indexer\State',
-            array('loadByIndexer', 'getId', '__wakeup'),
-            array(),
+            ['loadByIndexer', 'getId', '__wakeup'],
+            [],
             '',
             false
         );
@@ -163,8 +144,8 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
         $stateMock = $this->getMock(
             '\Magento\Indexer\Model\Indexer\State',
-            array('load', 'getId', 'setIndexerId', '__wakeup', 'getUpdated'),
-            array(),
+            ['load', 'getId', 'setIndexerId', '__wakeup', 'getUpdated'],
+            [],
             '',
             false
         );
@@ -181,8 +162,8 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
         $stateMock = $this->getMock(
             '\Magento\Indexer\Model\Indexer\State',
-            array('load', 'getId', 'setIndexerId', '__wakeup', 'getStatus', 'setStatus', 'save'),
-            array(),
+            ['load', 'getId', 'setIndexerId', '__wakeup', 'getStatus', 'setStatus', 'save'],
+            [],
             '',
             false
         );
@@ -200,8 +181,8 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
         $actionMock = $this->getMock(
             'Magento\Indexer\Model\ActionInterface',
-            array('executeFull', 'executeList', 'executeRow'),
-            array(),
+            ['executeFull', 'executeList', 'executeRow'],
+            [],
             '',
             false
         );
@@ -229,8 +210,8 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
         $stateMock = $this->getMock(
             '\Magento\Indexer\Model\Indexer\State',
-            array('load', 'getId', 'setIndexerId', '__wakeup', 'getStatus', 'setStatus', 'save'),
-            array(),
+            ['load', 'getId', 'setIndexerId', '__wakeup', 'getStatus', 'setStatus', 'save'],
+            [],
             '',
             false
         );
@@ -248,8 +229,8 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
         $actionMock = $this->getMock(
             'Magento\Indexer\Model\ActionInterface',
-            array('executeFull', 'executeList', 'executeRow'),
-            array(),
+            ['executeFull', 'executeList', 'executeRow'],
+            [],
             '',
             false
         );
@@ -275,13 +256,13 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
     protected function getIndexerData()
     {
-        return array(
+        return [
             'indexer_id' => 'indexer_internal_name',
             'view_id' => 'view_test',
             'action_class' => 'Some\Class\Name',
             'title' => 'Indexer public name',
             'description' => 'Indexer public description'
-        );
+        ];
     }
 
     /**

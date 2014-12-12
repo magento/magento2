@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Tools\I18n\Dictionary\Options;
 
@@ -63,7 +44,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
                     [
                         'type' => 'php',
                         'paths' => [$sourceFirst . '/app/code/', $sourceFirst . '/app/design/'],
-                        'fileMask' => '/\.(php|phtml)$/'
+                        'fileMask' => '/\.(php|phtml)$/',
                     ],
                     [
                         'type' => 'js',
@@ -71,7 +52,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
                             $sourceFirst . '/app/code/',
                             $sourceFirst . '/app/design/',
                             $sourceFirst . '/lib/web/mage/',
-                            $sourceFirst . '/lib/web/varien/'
+                            $sourceFirst . '/lib/web/varien/',
                         ],
                         'fileMask' => '/\.(js|phtml)$/'
                     ],
@@ -80,15 +61,15 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
                         'paths' => [$sourceFirst . '/app/code/', $sourceFirst . '/app/design/'],
                         'fileMask' => '/\.xml$/'
                     ]
-                ]
+                ],
             ],
             [
                 $sourceSecond,
                 false,
                 [
-                    ['type' => 'php', 'paths' => array($sourceSecond), 'fileMask' => '/\.(php|phtml)$/'],
-                    ['type' => 'js', 'paths' => array($sourceSecond), 'fileMask' => '/\.(js|phtml)$/'],
-                    ['type' => 'xml', 'paths' => array($sourceSecond), 'fileMask' => '/\.xml$/']
+                    ['type' => 'php', 'paths' => [$sourceSecond], 'fileMask' => '/\.(php|phtml)$/'],
+                    ['type' => 'js', 'paths' => [$sourceSecond], 'fileMask' => '/\.(js|phtml)$/'],
+                    ['type' => 'xml', 'paths' => [$sourceSecond], 'fileMask' => '/\.xml$/']
                 ]
             ],
         ];

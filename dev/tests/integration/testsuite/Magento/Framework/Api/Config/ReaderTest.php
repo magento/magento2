@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Api\Config;
 
@@ -61,10 +42,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $fixturePath = realpath(__DIR__ . '/_files') . '/';
-        $this->_fileList = array(
+        $this->_fileList = [
             file_get_contents($fixturePath . 'config_one.xml'),
-            file_get_contents($fixturePath . 'config_two.xml')
-        );
+            file_get_contents($fixturePath . 'config_two.xml'),
+        ];
 
         $this->_fileResolverMock = $this->getMockBuilder('Magento\Framework\App\Arguments\FileResolver\Primary')
             ->disableOriginalConstructor()
@@ -94,13 +75,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $expectedArray = [
             'Magento\Tax\Api\Data\TaxRateInterface' => [],
             'Magento\Catalog\Api\Data\Product' => [
-                'stock_item' => "Magento\CatalogInventory\Api\Data\StockItem"
+                'stock_item' => "Magento\CatalogInventory\Api\Data\StockItem",
             ],
             'Magento\Customer\Api\Data\CustomerInterface' => [
                 'custom_1' => "Magento\Customer\Api\Data\CustomerCustom",
                 'custom_2' => "Magento\CustomerExtra\Api\Data\CustomerCustom22",
-                'custom_3' => "Magento\Customer\Api\Data\CustomerCustom3"
-            ]
+                'custom_3' => "Magento\Customer\Api\Data\CustomerCustom3",
+            ],
         ];
 
         $this->assertEquals($expectedArray, $model->read('global'));

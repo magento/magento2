@@ -1,11 +1,11 @@
 <?php
 if ($a) {
     echo 'a';
-} else if (!$b) {
+} elseif (!$b) {
     echo '!b';
-} else if (~$b) {
+} elseif (~$b) {
     echo '~b';
-} else if ($c || $d) {
+} elseif ($c || $d) {
     echo 'cd';
 } else {
     echo 'e';

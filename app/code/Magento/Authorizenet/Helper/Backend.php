@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Authorizenet\Helper;
 
@@ -30,13 +11,13 @@ class Backend extends Data
 {
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Backend\Model\UrlInterface $backendUrl
     ) {
@@ -51,7 +32,7 @@ class Backend extends Data
      * @param array $params
      * @return string
      */
-    protected function _getUrl($route, $params = array())
+    protected function _getUrl($route, $params = [])
     {
         return $this->_urlBuilder->getUrl($route, $params);
     }
@@ -63,7 +44,7 @@ class Backend extends Data
      */
     public function getPlaceOrderAdminUrl()
     {
-        return $this->_getUrl('adminhtml/authorizenet_directpost_payment/place', array());
+        return $this->_getUrl('adminhtml/authorizenet_directpost_payment/place', []);
     }
 
     /**
@@ -74,7 +55,7 @@ class Backend extends Data
      */
     public function getSuccessOrderUrl($params)
     {
-        $param = array();
+        $param = [];
         $route = 'sales/order/view';
         $order = $this->_orderFactory->create()->loadByIncrementId($params['x_invoice_num']);
         $param['order_id'] = $order->getId();
@@ -100,7 +81,14 @@ class Backend extends Data
      */
     public function getRelyUrl($storeId = null)
     {
-        return $this->_storeManager->getDefaultStoreView()->getBaseUrl(
+        $defaultStore = $this->_storeManager->getDefaultStoreView();
+        if (!$defaultStore) {
+            $allStores = $this->_storeManager->getStores();
+            if (isset($allStores[0])) {
+                $defaultStore = $allStores[0];
+            }
+        }
+        return $defaultStore->getBaseUrl(
             \Magento\Framework\UrlInterface::URL_TYPE_LINK
         ) . 'authorizenet/directpost_payment/backendResponse';
     }

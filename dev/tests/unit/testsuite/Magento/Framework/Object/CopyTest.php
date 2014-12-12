@@ -1,29 +1,9 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\Object;
-
 
 class CopyTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,13 +32,12 @@ class CopyTest extends \PHPUnit_Framework_TestCase
      */
     protected $sourceMock;
 
-
     protected function setUp()
     {
-        $this->fieldsetConfigMock = $this->getMock('Magento\Framework\Object\Copy\Config', array(), array(), '', false);
+        $this->fieldsetConfigMock = $this->getMock('Magento\Framework\Object\Copy\Config', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
-        $this->sourceMock = $this->getMock('Magento\Framework\Object', array(), array(), '', false);
-        $this->targetMock = $this->getMock('Magento\Framework\Object', array(), array(), '', false);
+        $this->sourceMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
+        $this->targetMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
         $this->copy = new \Magento\Framework\Object\Copy(
             $this->eventManagerMock,
             $this->fieldsetConfigMock
@@ -70,7 +49,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
         $this->fieldsetConfigMock->expects($this->never())->method('getFieldset');
         $this->assertEquals(
             null,
-            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', array(), 'target')
+            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', [], 'target')
         );
     }
 
@@ -83,14 +62,14 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(null));
         $this->eventManagerMock->expects($this->never())->method('dispatch');
         $this->assertEquals(
-            array($this->targetMock),
-            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, array($this->targetMock))
+            [$this->targetMock],
+            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, [$this->targetMock])
         );
     }
 
     public function testCopyFieldsetToTargetWhenFieldExists()
     {
-        $fields['code']['node']['aspect'] = array();
+        $fields['code']['node']['aspect'] = [];
         $this->fieldsetConfigMock
             ->expects($this->once())
             ->method('getFieldset')
@@ -98,15 +77,15 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($fields));
 
         $eventName = sprintf('core_copy_fieldset_%s_%s', 'fieldset', 'aspect');
-        $data = array(
-            'target' => array($this->targetMock),
+        $data = [
+            'target' => [$this->targetMock],
             'source' => $this->sourceMock,
-            'root'   => 'global'
-        );
+            'root'   => 'global',
+        ];
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
         $this->assertEquals(
-            array($this->targetMock),
-            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, array($this->targetMock))
+            [$this->targetMock],
+            $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $this->sourceMock, [$this->targetMock])
         );
     }
 
@@ -130,12 +109,12 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->method('setDataUsingMethod')
             ->with('value')
             ->will($this->returnSelf());
-        $eventName = sprintf('core_copy_fieldset_%s_%s', 'fieldset', 'aspect');;
-        $data = array(
+        $eventName = sprintf('core_copy_fieldset_%s_%s', 'fieldset', 'aspect');
+        $data = [
             'target' => $this->targetMock,
             'source' => $this->sourceMock,
-            'root'   => 'global'
-        );
+            'root'   => 'global',
+        ];
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
         $this->assertEquals(
             $this->targetMock,
@@ -146,7 +125,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
     public function testGetCopyFieldsetToTargetWhenTargetIsArray()
     {
         $fields['code']['aspect'] = 'value';
-        $target['code'] = array();
+        $target['code'] = [];
         $this->fieldsetConfigMock
             ->expects($this->once())
             ->method('getFieldset')
@@ -163,15 +142,15 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('setDataUsingMethod');
         $eventName = sprintf('core_copy_fieldset_%s_%s', 'fieldset', 'aspect');
-        $newTarget = array(
-            'code' => array(),
-            'value' => 'value'
-        );
-        $data = array(
+        $newTarget = [
+            'code' => [],
+            'value' => 'value',
+        ];
+        $data = [
             'target' => $newTarget,
             'source' => $this->sourceMock,
-            'root'   => 'global'
-        );
+            'root'   => 'global',
+        ];
         $this->eventManagerMock->expects($this->once())->method('dispatch')->with($eventName, $data);
         $this->assertEquals(
             $newTarget,
@@ -213,15 +192,14 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('value'));
 
         $this->assertEquals(
-            array('value' => 'value'),
+            ['value' => 'value'],
             $this->copy->getDataFromFieldset('fieldset', 'aspect', $this->sourceMock)
         );
     }
 
-
     public function testGetDataFromFieldsetWhenFieldDoesNotExists()
     {
-        $fields['code']['aspect'] = array();
+        $fields['code']['aspect'] = [];
         $this->fieldsetConfigMock
             ->expects($this->once())
             ->method('getFieldset')
@@ -232,7 +210,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->method('getDataUsingMethod');
 
         $this->assertEquals(
-            array(),
+            [],
             $this->copy->getDataFromFieldset('fieldset', 'aspect', $this->sourceMock)
         );
     }

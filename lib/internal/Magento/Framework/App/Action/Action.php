@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\App\Action;
 
@@ -103,7 +84,7 @@ class Action extends AbstractAction
     {
         $this->_request = $request;
         $profilerKey = 'CONTROLLER_ACTION:' . $request->getFullActionName();
-        $eventParameters = array('controller_action' => $this, 'request' => $request);
+        $eventParameters = ['controller_action' => $this, 'request' => $request];
         $this->_eventManager->dispatch('controller_action_predispatch', $eventParameters);
         $this->_eventManager->dispatch('controller_action_predispatch_' . $request->getRouteName(), $eventParameters);
         $this->_eventManager->dispatch(
@@ -174,12 +155,12 @@ class Action extends AbstractAction
      * @param   array $arguments
      * @return  ResponseInterface
      */
-    protected function _redirect($path, $arguments = array())
+    protected function _redirect($path, $arguments = [])
     {
         $this->_redirect->redirect($this->getResponse(), $path, $arguments);
         return $this->getResponse();
     }
-    
+
     /**
      * @return \Magento\Framework\App\ActionFlag
      */

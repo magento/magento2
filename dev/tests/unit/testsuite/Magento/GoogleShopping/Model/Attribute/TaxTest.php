@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\GoogleShopping\Model\Attribute;
 
@@ -30,7 +11,6 @@ namespace Magento\GoogleShopping\Model\Attribute;
  */
 class TaxTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Tax\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
      */
@@ -52,7 +32,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     protected $mockResource;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\GroupManagementInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $groupManagementMock;
 
@@ -109,7 +89,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             'config' => $this->mockConfig,
             'quoteDetailsBuilder' => $this->mockQuoteDetailsBuilder,
             'taxCalculationService' => $this->mockTaxCalculationService,
-            'regionFactory' => $this->mockRegionFactory
+            'regionFactory' => $this->mockRegionFactory,
         ];
         $this->model = $objectManager->getObject('Magento\GoogleShopping\Model\Attribute\Tax', $arguments);
     }
@@ -174,12 +154,12 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     'billing_address'       => [
                         'country_id'  => $targetCountry,
                         'region'      => ['region_id' => $postCode],
-                        'postcode'    => $postCode
+                        'postcode'    => $postCode,
                     ],
                     'shipping_address'      => [
                         'country_id'  => $targetCountry,
                         'region'      => ['region_id' => $postCode],
-                        'postcode'    => $postCode
+                        'postcode'    => $postCode,
                     ],
                     'customer_tax_class_key' => [
                         'type' => 'id',
@@ -196,9 +176,9 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                             'unit_price'        => $price,
                             'quantity'          => 1,
                             'tax_included'      => 1,
-                            'short_description' => $name
-                        ]
-                    ]
+                            'short_description' => $name,
+                        ],
+                    ],
                 ]
             )
             ->will($this->returnSelf());
@@ -293,7 +273,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     'getAdjustments',
                     'getSku',
                     'getPrice',
-                    'getName'
+                    'getName',
                 ]
             )
             ->disableOriginalConstructor()

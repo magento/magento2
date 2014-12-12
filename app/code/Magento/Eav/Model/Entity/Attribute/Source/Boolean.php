@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
@@ -64,10 +45,10 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getAllOptions()
     {
         if (is_null($this->_options)) {
-            $this->_options = array(
-                array('label' => __('Yes'), 'value' => self::VALUE_YES),
-                array('label' => __('No'), 'value' => self::VALUE_NO)
-            );
+            $this->_options = [
+                ['label' => __('Yes'), 'value' => self::VALUE_YES],
+                ['label' => __('No'), 'value' => self::VALUE_NO],
+            ];
         }
         return $this->_options;
     }
@@ -79,7 +60,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getOptionArray()
     {
-        $_options = array();
+        $_options = [];
         foreach ($this->getAllOptions() as $option) {
             $_options[$option['value']] = $option['label'];
         }
@@ -132,10 +113,10 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getFlatIndexes()
     {
-        $indexes = array();
+        $indexes = [];
 
         $index = 'IDX_' . strtoupper($this->getAttribute()->getAttributeCode());
-        $indexes[$index] = array('type' => 'index', 'fields' => array($this->getAttribute()->getAttributeCode()));
+        $indexes[$index] = ['type' => 'index', 'fields' => [$this->getAttribute()->getAttributeCode()]];
 
         return $indexes;
     }
@@ -187,11 +168,11 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $tableName = $attributeCode . '_t';
             $collection->getSelect()
                 ->joinLeft(
-                    array($tableName => $attributeTable),
+                    [$tableName => $attributeTable],
                     "e.entity_id={$tableName}.entity_id"
                     . " AND {$tableName}.attribute_id='{$attributeId}'"
                     . " AND {$tableName}.store_id='0'",
-                    array()
+                    []
                 );
             $valueExpr = $tableName . '.value';
         } else {
@@ -199,18 +180,18 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $valueTable2 = $attributeCode . '_t2';
             $collection->getSelect()
                 ->joinLeft(
-                    array($valueTable1 => $attributeTable),
+                    [$valueTable1 => $attributeTable],
                     "e.entity_id={$valueTable1}.entity_id"
                     . " AND {$valueTable1}.attribute_id='{$attributeId}'"
                     . " AND {$valueTable1}.store_id='0'",
-                    array()
+                    []
                 )
                 ->joinLeft(
-                    array($valueTable2 => $attributeTable),
+                    [$valueTable2 => $attributeTable],
                     "e.entity_id={$valueTable2}.entity_id"
                     . " AND {$valueTable2}.attribute_id='{$attributeId}'"
                     . " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
-                    array()
+                    []
                 );
             $valueExpr = $collection->getConnection()->getCheckSql(
                 $valueTable2 . '.value_id > 0',

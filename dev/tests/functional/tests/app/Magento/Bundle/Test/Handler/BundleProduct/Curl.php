@@ -1,33 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Bundle\Test\Handler\BundleProduct;
 
-use Mtf\System\Config;
-use Mtf\Fixture\FixtureInterface;
-use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
 use Magento\Bundle\Test\Fixture\BundleProduct;
+use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
+use Mtf\Fixture\FixtureInterface;
+use Mtf\System\Config;
 
 /**
  * Create new bundle product via curl.
@@ -52,23 +33,23 @@ class Curl extends ProductCurl implements BundleProductInterface
         $this->mappingData += [
             'selection_can_change_qty' => [
                 'Yes' => 1,
-                'No' => 0
+                'No' => 0,
             ],
             'sku_type' => [
                 'Dynamic' => 0,
-                'Fixed' => 1
+                'Fixed' => 1,
             ],
             'price_type' => [
                 'Dynamic' => 0,
-                'Fixed' => 1
+                'Fixed' => 1,
             ],
             'weight_type' => [
                 'Dynamic' => 0,
-                'Fixed' => 1
+                'Fixed' => 1,
             ],
             'shipment_type' => [
                 'Together' => 0,
-                'Separately' => 1
+                'Separately' => 1,
             ],
             'type' => [
                 'Drop-down' => 'select',
@@ -78,7 +59,7 @@ class Curl extends ProductCurl implements BundleProductInterface
             ],
             'selection_price_type' => [
                 'Fixed' => 0,
-                'Percent' => 1
+                'Percent' => 1,
             ]
         ];
     }

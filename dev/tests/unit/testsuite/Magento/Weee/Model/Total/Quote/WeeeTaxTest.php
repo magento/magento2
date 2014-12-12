@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Weee\Model\Total\Quote;
 
@@ -180,9 +161,9 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                                 $itemData['weee_tax_applied_row_amount_incl_tax'],
                             CTC::KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX =>
                                 $itemData['base_weee_tax_applied_row_amnt_incl_tax'],
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ];
         } else {
             if (isset($addressData[self::KEY_WEEE_TOTALS])) {
@@ -335,7 +316,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 20,
                 'weee_amount' => 0,
                 'base_weee_amount' => 0,
-            ]
+            ],
         ];
 
         $data['price_incl_tax_weee_taxable_unit_not_included_in_subtotal'] = [
@@ -379,7 +360,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 20,
                 'weee_amount' => 18.48,
                 'base_weee_amount' => 18.48,
-            ]
+            ],
         ];
 
         $data['price_excl_tax_weee_taxable_unit_included_in_subtotal'] = [
@@ -423,7 +404,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 21.66,
                 'weee_amount' => 0,
                 'base_weee_amount' => 0,
-            ]
+            ],
         ];
 
         $data['price_incl_tax_weee_non_taxable_unit_included_in_subtotal'] = [
@@ -461,7 +442,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 20,
                 'weee_amount' => 0,
                 'base_weee_amount' => 0,
-            ]
+            ],
         ];
 
         $data['price_excl_tax_weee_non_taxable_unit_include_in_subtotal'] = [
@@ -499,7 +480,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 20,
                 'weee_amount' => 0,
                 'base_weee_amount' => 0,
-            ]
+            ],
         ];
 
         $data['price_incl_tax_weee_taxable_row_include_in_subtotal'] = [
@@ -543,7 +524,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 20,
                 'weee_amount' => 0,
                 'base_weee_amount' => 0,
-            ]
+            ],
         ];
 
         $data['price_excl_tax_weee_taxable_row_include_in_subtotal'] = [
@@ -587,7 +568,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 21.65,
                 'weee_amount' => 0,
                 'base_weee_amount' => 0,
-            ]
+            ],
         ];
 
         $data['price_incl_tax_weee_non_taxable_row_include_in_subtotal'] = [
@@ -625,7 +606,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 20,
                 'weee_amount' => 0,
                 'base_weee_amount' => 0,
-            ]
+            ],
         ];
 
         $data['price_excl_tax_weee_non_taxable_row_not_included_in_subtotal'] = [
@@ -663,7 +644,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 20,
                 'weee_amount' => 20,
                 'base_weee_amount' => 20,
-            ]
+            ],
         ];
 
         return $data;

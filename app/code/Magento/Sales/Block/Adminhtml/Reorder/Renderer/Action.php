@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Block\Adminhtml\Reorder\Renderer;
 
@@ -35,7 +16,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      *
      * @var array
      */
-    protected $_actions = array();
+    protected $_actions = [];
 
     /**
      * Sales reorder
@@ -52,7 +33,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Sales\Helper\Reorder $salesReorder,
-        array $data = array()
+        array $data = []
     ) {
         $this->_salesReorder = $salesReorder;
         parent::__construct($context, $data);
@@ -64,19 +45,19 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      */
     public function render(\Magento\Framework\Object $row)
     {
-        $this->_actions = array();
+        $this->_actions = [];
         if ($this->_salesReorder->canReorder($row)) {
-            $reorderAction = array(
-                '@' => array(
-                    'href' => $this->getUrl('sales/order_create/reorder', array('order_id' => $row->getId()))
-                ),
-                '#' => __('Reorder')
-            );
+            $reorderAction = [
+                '@' => [
+                    'href' => $this->getUrl('sales/order_create/reorder', ['order_id' => $row->getId()]),
+                ],
+                '#' => __('Reorder'),
+            ];
             $this->addToActions($reorderAction);
         }
         $this->_eventManager->dispatch(
             'adminhtml_customer_orders_add_action_renderer',
-            array('renderer' => $this, 'row' => $row)
+            ['renderer' => $this, 'row' => $row]
         );
         return $this->_actionsToHtml();
     }
@@ -98,9 +79,9 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      * @param array $actions
      * @return string
      */
-    protected function _actionsToHtml(array $actions = array())
+    protected function _actionsToHtml(array $actions = [])
     {
-        $html = array();
+        $html = [];
         $attributesObject = new \Magento\Framework\Object();
 
         if (empty($actions)) {

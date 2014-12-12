@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -92,7 +73,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
         \Magento\Catalog\Model\Product\Visibility $visibility,
         \Magento\Framework\Registry $coreRegistry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_linkFactory = $linkFactory;
         $this->_setsFactory = $setsFactory;
@@ -116,7 +97,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultSort('entity_id');
         $this->setUseAjax(true);
         if ($this->getProduct() && $this->getProduct()->getId()) {
-            $this->setDefaultFilter(array('in_products' => 1));
+            $this->setDefaultFilter(['in_products' => 1]);
         }
         if ($this->isReadonly()) {
             $this->setFilterVisibility(false);
@@ -148,10 +129,10 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
                 $productIds = 0;
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('entity_id', array('in' => $productIds));
+                $this->getCollection()->addFieldToFilter('entity_id', ['in' => $productIds]);
             } else {
                 if ($productIds) {
-                    $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $productIds));
+                    $this->getCollection()->addFieldToFilter('entity_id', ['nin' => $productIds]);
                 }
             }
         } else {
@@ -186,9 +167,9 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
         if ($this->isReadonly()) {
             $productIds = $this->_getSelectedProducts();
             if (empty($productIds)) {
-                $productIds = array(0);
+                $productIds = [0];
             }
-            $collection->addFieldToFilter('entity_id', array('in' => $productIds));
+            $collection->addFieldToFilter('entity_id', ['in' => $productIds]);
         }
 
         $this->setCollection($collection);
@@ -205,7 +186,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
         if (!$this->getProduct()->getUpsellReadonly()) {
             $this->addColumn(
                 'in_products',
-                array(
+                [
                     'type' => 'checkbox',
                     'name' => 'in_products',
                     'values' => $this->_getSelectedProducts(),
@@ -213,40 +194,40 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
                     'index' => 'entity_id',
                     'header_css_class' => 'col-select',
                     'column_css_class' => 'col-select'
-                )
+                ]
             );
         }
 
         $this->addColumn(
             'entity_id',
-            array(
+            [
                 'header' => __('ID'),
                 'sortable' => true,
                 'index' => 'entity_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
-            )
+            ]
         );
         $this->addColumn(
             'name',
-            array(
+            [
                 'header' => __('Name'),
                 'index' => 'name',
                 'header_css_class' => 'col-name',
                 'column_css_class' => 'col-name'
-            )
+            ]
         );
 
         $this->addColumn(
             'type',
-            array(
+            [
                 'header' => __('Type'),
                 'index' => 'type_id',
                 'type' => 'options',
                 'options' => $this->_type->getOptionArray(),
                 'header_css_class' => 'col-type',
                 'column_css_class' => 'col-type'
-            )
+            ]
         );
 
         $sets = $this->_setsFactory->create()->setEntityTypeFilter(
@@ -255,53 +236,53 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->addColumn(
             'set_name',
-            array(
+            [
                 'header' => __('Attribute Set'),
                 'index' => 'attribute_set_id',
                 'type' => 'options',
                 'options' => $sets,
                 'header_css_class' => 'col-attr-name',
                 'column_css_class' => 'col-attr-name'
-            )
+            ]
         );
 
         $this->addColumn(
             'status',
-            array(
+            [
                 'header' => __('Status'),
                 'index' => 'status',
                 'type' => 'options',
                 'options' => $this->_status->getOptionArray(),
                 'header_css_class' => 'col-status',
                 'column_css_class' => 'col-status'
-            )
+            ]
         );
 
         $this->addColumn(
             'visibility',
-            array(
+            [
                 'header' => __('Visibility'),
                 'index' => 'visibility',
                 'type' => 'options',
                 'options' => $this->_visibility->getOptionArray(),
                 'header_css_class' => 'col-visibility',
                 'column_css_class' => 'col-visibility'
-            )
+            ]
         );
 
         $this->addColumn(
             'sku',
-            array(
+            [
                 'header' => __('SKU'),
                 'index' => 'sku',
                 'header_css_class' => 'col-sku',
                 'column_css_class' => 'col-sku'
-            )
+            ]
         );
 
         $this->addColumn(
             'price',
-            array(
+            [
                 'header' => __('Price'),
                 'type' => 'currency',
                 'currency_code' => (string)$this->_scopeConfig->getValue(
@@ -311,12 +292,12 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'price',
                 'header_css_class' => 'col-price',
                 'column_css_class' => 'col-price'
-            )
+            ]
         );
 
         $this->addColumn(
             'position',
-            array(
+            [
                 'header' => __('Position'),
                 'name' => 'position',
                 'type' => 'number',
@@ -326,8 +307,8 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
                 'edit_only' => !$this->getProduct()->getId(),
                 'header_css_class' => 'col-position',
                 'column_css_class' => 'col-position',
-                'filter_condition_callback' => array($this, 'filterProductPosition')
-            )
+                'filter_condition_callback' => [$this, 'filterProductPosition']
+            ]
         );
 
         return parent::_prepareColumns();
@@ -346,7 +327,7 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
             'grid_url'
         ) : $this->getUrl(
             'catalog/*/upsellGrid',
-            array('_current' => true)
+            ['_current' => true]
         );
     }
 
@@ -371,9 +352,9 @@ class Upsell extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getSelectedUpsellProducts()
     {
-        $products = array();
+        $products = [];
         foreach ($this->_coreRegistry->registry('current_product')->getUpSellProducts() as $product) {
-            $products[$product->getId()] = array('position' => $product->getPosition());
+            $products[$product->getId()] = ['position' => $product->getPosition()];
         }
         return $products;
     }

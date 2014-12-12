@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Webapi\Model\Config;
 
@@ -82,7 +63,7 @@ class ClassReflector
      */
     public function reflectClassMethods($className, $methods)
     {
-        $data = array();
+        $data = [];
         $classReflection = new \Zend\Server\Reflection\ReflectionClass(new \ReflectionClass($className));
         /** @var $methodReflection ReflectionMethod */
         foreach ($classReflection->getMethods() as $methodReflection) {
@@ -103,29 +84,29 @@ class ClassReflector
      */
     public function extractMethodData(ReflectionMethod $method)
     {
-        $methodData = array('documentation' => $method->getDescription(), 'interface' => array());
+        $methodData = ['documentation' => $method->getDescription(), 'interface' => []];
         $prototypes = $method->getPrototypes();
         /** Take the fullest interface that also includes optional parameters. */
         /** @var \Zend\Server\Reflection\Prototype $prototype */
         $prototype = end($prototypes);
         /** @var \Zend\Server\Reflection\ReflectionParameter $parameter */
         foreach ($prototype->getParameters() as $parameter) {
-            $parameterData = array(
+            $parameterData = [
                 'type' => $this->_typeProcessor->process($parameter->getType()),
                 'required' => !$parameter->isOptional(),
-                'documentation' => $parameter->getDescription()
-            );
+                'documentation' => $parameter->getDescription(),
+            ];
             if ($parameter->isOptional()) {
                 $parameterData['default'] = $parameter->getDefaultValue();
             }
             $methodData['interface']['in']['parameters'][$parameter->getName()] = $parameterData;
         }
         if ($prototype->getReturnType() != 'void' && $prototype->getReturnType() != 'null') {
-            $methodData['interface']['out']['parameters']['result'] = array(
+            $methodData['interface']['out']['parameters']['result'] = [
                 'type' => $this->_typeProcessor->process($prototype->getReturnType()),
                 'documentation' => $prototype->getReturnValue()->getDescription(),
-                'required' => true
-            );
+                'required' => true,
+            ];
         }
 
         return $methodData;

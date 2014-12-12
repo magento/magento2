@@ -1,24 +1,5 @@
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 'use strict';
@@ -63,7 +44,7 @@ angular.module('readiness-check', [])
 
         $scope.items = {
             'php-version': {
-                url:'data/php-version',
+                url:'index.php/environment/php-version',
                 show: function() {
                     $scope.startProgress();
                     $scope.version.visible = true;
@@ -76,7 +57,7 @@ angular.module('readiness-check', [])
                 }
             },
             'php-extensions': {
-                url:'data/php-extensions',
+                url:'index.php/environment/php-extensions',
                 show: function() {
                     $scope.startProgress();
                     $scope.extensions.visible = true;
@@ -89,7 +70,7 @@ angular.module('readiness-check', [])
                 }
             },
             'file-permissions': {
-                url:'data/file-permissions',
+                url:'index.php/environment/file-permissions',
                 show: function() {
                     $scope.startProgress();
                     $scope.permissions.visible = true;

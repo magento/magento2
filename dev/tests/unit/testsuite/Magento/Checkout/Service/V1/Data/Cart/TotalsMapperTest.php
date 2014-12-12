@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Checkout\Service\V1\Data\Cart;
 
@@ -39,13 +20,13 @@ class TotalsMapperTest extends \PHPUnit_Framework_TestCase
     {
         $methods = ['getBaseGrandTotal', 'getGrandTotal', 'getBaseSubtotal', 'getSubtotal','getBaseCurrencyCode',
             'getBaseSubtotalWithDiscount', 'getSubtotalWithDiscount', 'getShippingAddress', '__wakeUp',
-            'getQuoteCurrencyCode'];
+            'getQuoteCurrencyCode', ];
         $quoteMock = $this->getMock('Magento\Sales\Model\Quote', $methods, [], '', false);
         $methods = [
             'getDiscountAmount', 'getBaseDiscountAmount', 'getShippingAmount', 'getBaseShippingAmount',
             'getShippingDiscountAmount', 'getBaseShippingDiscountAmount', 'getTaxAmount', 'getBaseTaxAmount',
             'getShippingTaxAmount', 'getBaseShippingTaxAmount', 'getSubtotalInclTax', 'getBaseSubtotalTotalInclTax',
-            'getShippingInclTax', 'getBaseShippingInclTax', 'getId', '__wakeUp'
+            'getShippingInclTax', 'getBaseShippingInclTax', 'getId', '__wakeUp',
         ];
 
         $shippingAddressMock = $this->getMock('\Magento\Sales\Model\Quote\Address', $methods, [], '', false);
@@ -75,7 +56,7 @@ class TotalsMapperTest extends \PHPUnit_Framework_TestCase
             Totals::SUBTOTAL_INCL_TAX => 153,
             Totals::BASE_SUBTOTAL_INCL_TAX => 153,
             Totals::SHIPPING_INCL_TAX => 21,
-            Totals::BASE_SHIPPING_INCL_TAX => 21
+            Totals::BASE_SHIPPING_INCL_TAX => 21,
         ];
         $expectedQuoteMethods = [
             'getBaseGrandTotal' => 100,
@@ -100,7 +81,7 @@ class TotalsMapperTest extends \PHPUnit_Framework_TestCase
             'getSubtotalInclTax' => 153,
             'getBaseSubtotalTotalInclTax' => 153,
             'getShippingInclTax' => 21,
-            'getBaseShippingInclTax' => 21
+            'getBaseShippingInclTax' => 21,
         ];
 
         $quoteMock->expects($this->atLeastOnce())->method('getBaseCurrencyCode')->will($this->returnValue('EUR'));

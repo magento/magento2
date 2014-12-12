@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data;
 
@@ -33,7 +14,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_model = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false)
+            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
         );
     }
 
@@ -73,7 +54,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function setItemObjectClassDataProvider()
     {
-        return array(array('Magento\Framework\Url'), array('Magento\Framework\Object'));
+        return [['Magento\Framework\Url'], ['Magento\Framework\Object']];
     }
 
     /**
@@ -113,7 +94,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->_model->getFlag('non_existing_flag'));
     }
 
-
     public function testGetCurPage()
     {
         $this->_model->setCurPage(10);
@@ -128,12 +108,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $arrItems = [
             'totalRecords' => 1,
             'items' => [
-                0 => 'value'
-            ]
+                0 => 'value',
+            ],
         ];
         $items = [
             'item_id' => $firstItemMock,
-            0 => $secondItemMock
+            0 => $secondItemMock,
         ];
         $firstItemMock->expects($this->exactly(2))->method('getId')->will($this->returnValue('item_id'));
 

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\Api;
@@ -103,7 +84,6 @@ class ExtensibleObjectBuilder extends AbstractSimpleObjectBuilder implements Bui
         return $this;
     }
 
-
     /**
      * Populates the fields with an existing entity.
      *
@@ -130,11 +110,10 @@ class ExtensibleObjectBuilder extends AbstractSimpleObjectBuilder implements Bui
      */
     public function populateWithArray(array $data)
     {
-        $this->data = array();
+        $this->data = [];
         $this->_setDataValues($data);
         return $this;
     }
-
 
     /**
      * Merge second Data Object data with first Data Object data and create new Data Object object based on merge
@@ -200,19 +179,6 @@ class ExtensibleObjectBuilder extends AbstractSimpleObjectBuilder implements Bui
     }
 
     /**
-     * Set data item value.
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return $this
-     * @deprecated This method should not be used in the client code and will be removed after Service Layer refactoring
-     */
-    public function set($key, $value)
-    {
-        return $this->_set($key, $value);
-    }
-
-    /**
      * Initializes Data Object with the data from array
      *
      * @param array $data
@@ -224,10 +190,10 @@ class ExtensibleObjectBuilder extends AbstractSimpleObjectBuilder implements Bui
         foreach ($data as $key => $value) {
             /* First, verify is there any getter for the key on the Service Data Object */
             $camelCaseKey = \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
-            $possibleMethods = array(
+            $possibleMethods = [
                 'get' . $camelCaseKey,
-                'is' . $camelCaseKey
-            );
+                'is' . $camelCaseKey,
+            ];
             if ($key == AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY
                 && is_array($data[$key])
                 && !empty($data[$key])

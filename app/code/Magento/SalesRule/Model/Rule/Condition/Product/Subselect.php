@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
@@ -33,7 +14,7 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
         \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $ruleConditionProduct, $data);
         $this->setType('Magento\SalesRule\Model\Rule\Condition\Product\Subselect')->setValue(null);
@@ -83,7 +64,7 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      */
     public function loadAttributeOptions()
     {
-        $this->setAttributeOption(array('qty' => __('total quantity'), 'base_row_total' => __('total amount')));
+        $this->setAttributeOption(['qty' => __('total quantity'), 'base_row_total' => __('total amount')]);
         return $this;
     }
 
@@ -105,7 +86,7 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     public function loadOperatorOptions()
     {
         $this->setOperatorOption(
-            array(
+            [
                 '==' => __('is'),
                 '!=' => __('is not'),
                 '>=' => __('equals or greater than'),
@@ -113,8 +94,8 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
                 '>' => __('greater than'),
                 '<' => __('less than'),
                 '()' => __('is one of'),
-                '!()' => __('is not one of')
-            )
+                '!()' => __('is not one of'),
+            ]
         );
         return $this;
     }

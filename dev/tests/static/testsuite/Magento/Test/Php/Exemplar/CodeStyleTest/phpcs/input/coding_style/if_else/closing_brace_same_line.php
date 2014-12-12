@@ -1,3 +1,4 @@
 <?php
 if ($a) {
-    echo 'a';}
+    echo 'a';
+}

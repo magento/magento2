@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model;
 
@@ -45,7 +26,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         if (!self::$_isStubClass) {
-            $this->getMockForAbstractClass('Magento\Catalog\Model\AbstractModel', array(), self::STUB_CLASS, false);
+            $this->getMockForAbstractClass('Magento\Catalog\Model\AbstractModel', [], self::STUB_CLASS, false);
             self::$_isStubClass = true;
         }
 
@@ -70,13 +51,13 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testLockedAttributeApi()
     {
-        $this->assertEquals(array(), $this->_model->getLockedAttributes());
+        $this->assertEquals([], $this->_model->getLockedAttributes());
         $this->assertFalse($this->_model->hasLockedAttributes());
         $this->assertFalse($this->_model->isLockedAttribute('some_code'));
 
         $this->_model->lockAttribute('code');
         $this->assertTrue($this->_model->isLockedAttribute('code'));
-        $this->assertEquals(array('code'), $this->_model->getLockedAttributes());
+        $this->assertEquals(['code'], $this->_model->getLockedAttributes());
         $this->assertTrue($this->_model->hasLockedAttributes());
 
         $this->_model->unlockAttribute('code');
@@ -85,7 +66,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model->lockAttribute('code1');
         $this->_model->lockAttribute('code2');
         $this->_model->unlockAttributes();
-        $this->assertEquals(array(), $this->_model->getLockedAttributes());
+        $this->assertEquals([], $this->_model->getLockedAttributes());
         $this->assertFalse($this->_model->hasLockedAttributes());
     }
 
@@ -93,24 +74,24 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         // locked filter on setting all
         $this->_model->lockAttribute('key1');
-        $this->_model->setData(array('key1' => 'value1', 'key2' => 'value2'));
-        $this->assertEquals(array('key2' => 'value2'), $this->_model->getData());
+        $this->_model->setData(['key1' => 'value1', 'key2' => 'value2']);
+        $this->assertEquals(['key2' => 'value2'], $this->_model->getData());
 
         // locked filter per setting one
         $this->_model->setData('key1', 'value1');
         $this->_model->setData('key3', 'value3');
-        $this->assertEquals(array('key2' => 'value2', 'key3' => 'value3'), $this->_model->getData());
+        $this->assertEquals(['key2' => 'value2', 'key3' => 'value3'], $this->_model->getData());
 
         // set one with read only
         $this->_model->unlockAttributes()->unsetData();
         $this->_model->setIsReadonly(true);
         $this->_model->setData(uniqid(), uniqid());
-        $this->assertEquals(array(), $this->_model->getData());
+        $this->assertEquals([], $this->_model->getData());
     }
 
     public function testUnsetData()
     {
-        $data = array('key1' => 'value1', 'key2' => 'value2');
+        $data = ['key1' => 'value1', 'key2' => 'value2'];
         $this->_model->setData($data);
 
         // unset one locked
@@ -123,7 +104,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         // unset all
         $this->_model->unlockAttributes()->setIsReadonly(false)->unsetData();
-        $this->assertEquals(array(), $this->_model->getData());
+        $this->assertEquals([], $this->_model->getData());
     }
 
     public function testGetResourceCollection()
@@ -155,7 +136,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             $store,
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()
         );
     }
@@ -164,9 +145,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $ids = $this->_model->getWebsiteStoreIds();
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore()->getId();
-        $this->assertEquals(array($storeId => $storeId), $ids);
+        $this->assertEquals([$storeId => $storeId], $ids);
     }
 
     public function testSetGetAttributeDefaultValue()

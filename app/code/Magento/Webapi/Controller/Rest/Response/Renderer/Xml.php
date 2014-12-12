@@ -2,26 +2,7 @@
 /**
  *  XML Renderer allows to format array or object as valid XML document.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Webapi\Controller\Rest\Response\Renderer;
 
@@ -75,7 +56,7 @@ class Xml implements \Magento\Webapi\Controller\Rest\Response\RendererInterface
     {
         $formattedData = $this->_formatData($data, true);
         /** Wrap response in a single node. */
-        $formattedData = array(self::XML_ROOT_NODE => $formattedData);
+        $formattedData = [self::XML_ROOT_NODE => $formattedData];
         $this->_xmlGenerator->setIndexedArrayItemName(self::DEFAULT_ENTITY_ITEM_NAME)->arrayToXml($formattedData);
         return $this->_xmlGenerator->getDom()->saveXML();
     }
@@ -103,7 +84,7 @@ class Xml implements \Magento\Webapi\Controller\Rest\Response\RendererInterface
         }
         $isAssoc = !preg_match('/^\d+$/', implode(array_keys($data), ''));
 
-        $formattedData = array();
+        $formattedData = [];
         foreach ($data as $key => $value) {
             $value = is_array($value) || is_object($value) ? $this->_formatData($value) : $this->_formatValue($value);
             if ($isAssoc) {
@@ -127,7 +108,7 @@ class Xml implements \Magento\Webapi\Controller\Rest\Response\RendererInterface
             /** Without the following transformation boolean values are rendered incorrectly */
             $value = $value ? 'true' : 'false';
         }
-        $replacementMap = array('&' => '&amp;');
+        $replacementMap = ['&' => '&amp;'];
         return str_replace(array_keys($replacementMap), array_values($replacementMap), $value);
     }
 
@@ -141,7 +122,7 @@ class Xml implements \Magento\Webapi\Controller\Rest\Response\RendererInterface
      */
     protected function _prepareKey($key)
     {
-        $replacementMap = array(
+        $replacementMap = [
             '!' => '',
             '"' => '',
             '#' => '',
@@ -171,8 +152,8 @@ class Xml implements \Magento\Webapi\Controller\Rest\Response\RendererInterface
             '}' => '',
             '~' => '',
             ' ' => '_',
-            ':' => '_'
-        );
+            ':' => '_',
+        ];
         $key = str_replace(array_keys($replacementMap), array_values($replacementMap), $key);
         $key = trim($key, '_');
         $prohibitedTagPattern = '/^[0-9,.-]/';

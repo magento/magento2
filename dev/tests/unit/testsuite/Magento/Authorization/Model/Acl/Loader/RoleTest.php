@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Authorization\Model\Acl\Loader;
 
@@ -52,18 +33,18 @@ class RoleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false, false);
+        $this->_resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false);
         $this->_groupFactoryMock = $this->getMock(
             'Magento\Authorization\Model\Acl\Role\GroupFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
         $this->_roleFactoryMock = $this->getMock(
             'Magento\Authorization\Model\Acl\Role\UserFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
@@ -78,11 +59,10 @@ class RoleTest extends \PHPUnit_Framework_TestCase
             $this->returnArgument(1)
         );
 
-
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', array(), array(), '', false);
+        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $selectMock->expects($this->any())->method('from')->will($this->returnValue($selectMock));
 
-        $this->_adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
+        $this->_adapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $this->_adapterMock->expects($this->once())->method('select')->will($this->returnValue($selectMock));
 
         $this->_resourceMock->expects(
@@ -108,16 +88,15 @@ class RoleTest extends \PHPUnit_Framework_TestCase
             'fetchAll'
         )->will(
             $this->returnValue(
-                array(
-                    array('role_id' => 1, 'role_type' => 'G', 'parent_id' => null),
-                    array('role_id' => 2, 'role_type' => 'U', 'parent_id' => 1, 'user_id' => 1)
-                )
+                [
+                    ['role_id' => 1, 'role_type' => 'G', 'parent_id' => null],
+                    ['role_id' => 2, 'role_type' => 'U', 'parent_id' => 1, 'user_id' => 1],
+                ]
             )
         );
 
-
-        $this->_groupFactoryMock->expects($this->once())->method('create')->with(array('roleId' => '1'));
-        $this->_roleFactoryMock->expects($this->once())->method('create')->with(array('roleId' => '2'));
+        $this->_groupFactoryMock->expects($this->once())->method('create')->with(['roleId' => '1']);
+        $this->_roleFactoryMock->expects($this->once())->method('create')->with(['roleId' => '2']);
 
         $aclMock = $this->getMock('Magento\Framework\Acl');
         $aclMock->expects($this->at(0))->method('addRole')->with($this->anything(), null);
@@ -133,7 +112,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
         )->method(
             'fetchAll'
         )->will(
-            $this->returnValue(array(array('role_id' => 1, 'role_type' => 'U', 'parent_id' => 2, 'user_id' => 3)))
+            $this->returnValue([['role_id' => 1, 'role_type' => 'U', 'parent_id' => 2, 'user_id' => 3]])
         );
 
         $this->_roleFactoryMock->expects($this->never())->method('getModelInstance');

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Weee\Model\Total\Creditmemo;
@@ -45,7 +26,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
      * @param \Magento\Weee\Helper\Data $weeeData
      * @param array $data
      */
-    public function __construct(\Magento\Weee\Helper\Data $weeeData, array $data = array())
+    public function __construct(\Magento\Weee\Helper\Data $weeeData, array $data = [])
     {
         $this->_weeeData = $weeeData;
         parent::__construct($data);
@@ -143,7 +124,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
             $totalWeeeAmountInclTax += $weeeAmountInclTax;
             $baseTotalWeeeAmountInclTax += $baseWeeeAmountInclTax;
 
-            $newApplied = array();
+            $newApplied = [];
             $applied = $this->_weeeData->getApplied($orderItem);
             foreach ($applied as $one) {
                 $title = $one['title'];
@@ -160,7 +141,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
             $this->_weeeData->setApplied($item, $newApplied);
 
             // Update order item
-            $newApplied = array();
+            $newApplied = [];
             $applied = $this->_weeeData->getApplied($orderItem);
             foreach ($applied as $one) {
                 if (isset($one[WeeeHelper::KEY_BASE_WEEE_AMOUNT_REFUNDED])) {

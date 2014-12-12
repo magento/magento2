@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Block\System\Config;
 
@@ -78,66 +59,66 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->_systemConfigMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
 
-        $requestMock = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false, false);
-        $requestParams = array(
-            array('website', '', 'website_code'),
-            array('section', '', 'section_code'),
-            array('store', '', 'store_code')
-        );
+        $requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false, false);
+        $requestParams = [
+            ['website', '', 'website_code'],
+            ['section', '', 'section_code'],
+            ['store', '', 'store_code'],
+        ];
         $requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($requestParams));
 
-        $layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
+        $layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false, false);
 
-        $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false);
+        $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false, false);
         $configFactoryMock = $this->getMock(
             'Magento\Backend\Model\Config\Factory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
         $this->_formFactoryMock = $this->getMock(
             'Magento\Framework\Data\FormFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false,
             false
         );
         $this->_fieldsetFactoryMock = $this->getMock(
             'Magento\Backend\Block\System\Config\Form\Fieldset\Factory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
         $this->_fieldFactoryMock = $this->getMock(
             'Magento\Backend\Block\System\Config\Form\Field\Factory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
         $this->_coreConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $this->_backendConfigMock = $this->getMock('Magento\Backend\Model\Config', array(), array(), '', false, false);
+        $this->_backendConfigMock = $this->getMock('Magento\Backend\Model\Config', [], [], '', false, false);
 
         $configFactoryMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
-            array('data' => array('section' => 'section_code', 'website' => 'website_code', 'store' => 'store_code'))
+            ['data' => ['section' => 'section_code', 'website' => 'website_code', 'store' => 'store_code']]
         )->will(
             $this->returnValue($this->_backendConfigMock)
         );
@@ -147,13 +128,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->method(
             'load'
         )->will(
-            $this->returnValue(array('section1/group1/field1' => 'some_value'))
+            $this->returnValue(['section1/group1/field1' => 'some_value'])
         );
 
         $this->_formMock = $this->getMock(
             'Magento\Framework\Data\Form',
-            array('setParent', 'setBaseUrl', 'addFieldset'),
-            array(),
+            ['setParent', 'setBaseUrl', 'addFieldset'],
+            [],
             '',
             false,
             false
@@ -163,14 +144,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $context = $helper->getObject(
             'Magento\Backend\Block\Template\Context',
-            array(
+            [
                 'scopeConfig' => $this->_coreConfigMock,
                 'request' => $requestMock,
                 'urlBuilder' => $this->_urlModelMock
-            )
+            ]
         );
 
-        $data = array(
+        $data = [
             'request' => $requestMock,
             'layout' => $layoutMock,
             'configStructure' => $this->_systemConfigMock,
@@ -178,8 +159,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'formFactory' => $this->_formFactoryMock,
             'fieldsetFactory' => $this->_fieldsetFactoryMock,
             'fieldFactory' => $this->_fieldFactoryMock,
-            'context' => $context
-        );
+            'context' => $context,
+        ];
 
         $this->_object = $helper->getObject('Magento\Backend\Block\System\Config\Form', $data);
         $this->_object->setData('scope_id', 1);
@@ -219,8 +200,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $fieldsetRendererMock = $this->getMock(
             'Magento\Backend\Block\System\Config\Form\Fieldset',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
@@ -235,19 +216,19 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $cloneModelMock = $this->getMock(
             'Magento\Backend\Model\Config',
-            array('getPrefixes'),
-            array(),
+            ['getPrefixes'],
+            [],
             '',
             false,
             false
         );
 
-        $cloneModelMock->expects($this->once())->method('getPrefixes')->will($this->returnValue(array()));
+        $cloneModelMock->expects($this->once())->method('getPrefixes')->will($this->returnValue([]));
 
         $groupMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Group',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
@@ -268,20 +249,20 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->with(
             'store_code'
         )->will(
-            $this->returnValue(array())
+            $this->returnValue([])
         );
 
         $sectionMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Section',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
 
         $sectionMock->expects($this->once())->method('isVisible')->will($this->returnValue(true));
-        $sectionMock->expects($this->once())->method('getChildren')->will($this->returnValue(array($groupMock)));
+        $sectionMock->expects($this->once())->method('getChildren')->will($this->returnValue([$groupMock]));
 
         $this->_systemConfigMock->expects(
             $this->once()
@@ -295,16 +276,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $formFieldsetMock = $this->getMock(
             'Magento\Framework\Data\Form\Element\Fieldset',
-            array(),
-            array(),
+            [],
+            [],
             '', false, false);
 
-        $params = array(
+        $params = [
             'legend' => 'label',
             'comment' => 'comment',
             'expanded' => false,
-            'group' => 'some group data'
-        );
+            'group' => 'some group data',
+        ];
         $this->_formMock->expects(
             $this->once()
         )->method(
@@ -327,24 +308,24 @@ class FormTest extends \PHPUnit_Framework_TestCase
         // Parameters initialization
         $fieldsetMock = $this->getMock(
             'Magento\Framework\Data\Form\Element\Fieldset',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
         $groupMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Group',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
         $sectionMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Section',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
@@ -355,8 +336,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         // Field Renderer Mock configuration
         $fieldRendererMock = $this->getMock(
             'Magento\Backend\Block\System\Config\Form\Field',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
@@ -376,7 +357,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->with(
             'some/config/path',
             false,
-            array('section1/group1/field1' => 'some_value')
+            ['section1/group1/field1' => 'some_value']
         )->will(
             $this->returnValue($backendConfigValue)
         );
@@ -394,8 +375,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         // Field mock configuration
         $fieldMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Element\Field',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
@@ -413,7 +394,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->with(
             $fieldPrefix
         )->will(
-            $this->returnValue(array())
+            $this->returnValue([])
         );
         $fieldMock->expects($this->any())->method('getType')->will($this->returnValue('field'));
         $fieldMock->expects($this->once())->method('getLabel')->will($this->returnValue('label'));
@@ -424,26 +405,25 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $fieldMock->expects($this->once())->method('showInDefault')->will($this->returnValue(false));
         $fieldMock->expects($this->any())->method('showInWebsite')->will($this->returnValue(false));
         $fieldMock->expects($this->once())->method('getData')->will($this->returnValue('fieldData'));
-        $fieldMock->expects($this->any())->method('getRequiredFields')->will($this->returnValue(array()));
-        $fieldMock->expects($this->any())->method('getRequiredGroups')->will($this->returnValue(array()));
+        $fieldMock->expects($this->any())->method('getRequiredFields')->will($this->returnValue([]));
+        $fieldMock->expects($this->any())->method('getRequiredGroups')->will($this->returnValue([]));
 
-
-        $fields = array($fieldMock);
+        $fields = [$fieldMock];
         $groupMock->expects($this->once())->method('getChildren')->will($this->returnValue($fields));
 
         $sectionMock->expects($this->once())->method('getId')->will($this->returnValue('section1'));
 
         $formFieldMock = $this->getMockForAbstractClass(
             'Magento\Framework\Data\Form\Element\AbstractElement',
-            array(),
+            [],
             '',
             false,
             false,
             true,
-            array('setRenderer')
+            ['setRenderer']
         );
 
-        $params = array(
+        $params = [
             'name' => 'groups[group1][fields][fieldPrefixfield1][value]',
             'label' => 'label',
             'comment' => 'comment',
@@ -457,8 +437,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'scope_id' => 1,
             'scope_label' => '[GLOBAL]',
             'can_use_default_value' => false,
-            'can_use_website_value' => false
-        );
+            'can_use_website_value' => false,
+        ];
 
         $formFieldMock->expects($this->once())->method('setRenderer')->with($fieldRendererMock);
 
@@ -484,9 +464,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function initFieldsDataProvider()
     {
-        return array(
-            array(array('section1/group1/field1' => 'some_value'), false, null, false, 'some_value'),
-            array(array(), 'Config Value', 'some/config/path', true, 'Config Value')
-        );
+        return [
+            [['section1/group1/field1' => 'some_value'], false, null, false, 'some_value'],
+            [[], 'Config Value', 'some/config/path', true, 'Config Value']
+        ];
     }
 }

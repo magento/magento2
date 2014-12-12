@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Paypal\Model\Method;
 
@@ -47,17 +28,17 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $paypalConfigMock = $this->getMockBuilder(
             '\Magento\Paypal\Model\Config'
         )->disableOriginalConstructor()->setMethods(
-            array('getConfigValue')
+            ['getConfigValue']
         )->getMock();
         $this->_apiNvpMock = $this->getMockBuilder(
             '\Magento\Paypal\Model\Api\Nvp'
         )->disableOriginalConstructor()->setMethods(
-            array('callDoReferenceTransaction', 'callGetTransactionDetails')
+            ['callDoReferenceTransaction', 'callGetTransactionDetails']
         )->getMock();
         $proMock = $this->getMockBuilder(
             '\Magento\Paypal\Model\Pro'
         )->setMethods(
-            array('getApi', 'setMethod', 'getConfig', 'importPaymentInfo')
+            ['getApi', 'setMethod', 'getConfig', 'importPaymentInfo']
         )->disableOriginalConstructor()->getMock();
         $proMock->expects($this->any())->method('getApi')->will($this->returnValue($this->_apiNvpMock));
         $proMock->expects($this->any())->method('getConfig')->will($this->returnValue($paypalConfigMock));
@@ -65,14 +46,14 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $billingAgreementMock = $this->getMockBuilder(
             '\Magento\Paypal\Model\Billing\Agreement'
         )->disableOriginalConstructor()->setMethods(
-            array('load', '__wakeup')
+            ['load', '__wakeup']
         )->getMock();
         $billingAgreementMock->expects($this->any())->method('load')->will($this->returnValue($billingAgreementMock));
 
         $agreementFactoryMock = $this->getMockBuilder(
             '\Magento\Paypal\Model\Billing\AgreementFactory'
         )->disableOriginalConstructor()->setMethods(
-            array('create')
+            ['create']
         )->getMock();
         $agreementFactoryMock->expects(
             $this->any()
@@ -86,15 +67,15 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $cartFactoryMock = $this->getMockBuilder(
             '\Magento\Paypal\Model\CartFactory'
         )->disableOriginalConstructor()->setMethods(
-            array('create')
+            ['create']
         )->getMock();
         $cartFactoryMock->expects($this->any())->method('create')->will($this->returnValue($cartMock));
 
-        $arguments = array(
+        $arguments = [
             'agreementFactory' => $agreementFactoryMock,
             'cartFactory' => $cartFactoryMock,
-            'data' => array($proMock)
-        );
+            'data' => [$proMock],
+        ];
 
         $this->_model = $this->_helper->getObject('Magento\Paypal\Model\Method\Agreement', $arguments);
     }
@@ -104,12 +85,12 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $payment = $this->getMockBuilder(
             '\Magento\Sales\Model\Order\Payment'
         )->disableOriginalConstructor()->setMethods(
-            array('__wakeup')
+            ['__wakeup']
         )->getMock();
         $order = $this->getMockBuilder(
             'Magento\Sales\Model\Order'
         )->disableOriginalConstructor()->setMethods(
-            array('__wakeup')
+            ['__wakeup']
         )->getMock();
         $order->setBaseCurrencyCode('USD');
         $payment->setOrder($order);

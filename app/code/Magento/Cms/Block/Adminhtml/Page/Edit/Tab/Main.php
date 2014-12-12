@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Edit\Tab;
 
@@ -45,7 +26,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
-        array $data = array()
+        array $data = []
     ) {
         $this->_systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -70,41 +51,40 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             $isElementDisabled = true;
         }
 
-
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
         $form->setHtmlIdPrefix('page_');
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Page Information')));
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Page Information')]);
 
         if ($model->getId()) {
-            $fieldset->addField('page_id', 'hidden', array('name' => 'page_id'));
+            $fieldset->addField('page_id', 'hidden', ['name' => 'page_id']);
         }
 
         $fieldset->addField(
             'title',
             'text',
-            array(
+            [
                 'name' => 'title',
                 'label' => __('Page Title'),
                 'title' => __('Page Title'),
                 'required' => true,
                 'disabled' => $isElementDisabled
-            )
+            ]
         );
 
         $fieldset->addField(
             'identifier',
             'text',
-            array(
+            [
                 'name' => 'identifier',
                 'label' => __('URL Key'),
                 'title' => __('URL Key'),
                 'class' => 'validate-identifier',
                 'note' => __('Relative to Web Site Base URL'),
                 'disabled' => $isElementDisabled
-            )
+            ]
         );
 
         /**
@@ -114,14 +94,14 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             $field = $fieldset->addField(
                 'store_id',
                 'multiselect',
-                array(
+                [
                     'name' => 'stores[]',
                     'label' => __('Store View'),
                     'title' => __('Store View'),
                     'required' => true,
                     'values' => $this->_systemStore->getStoreValuesForForm(false, true),
                     'disabled' => $isElementDisabled
-                )
+                ]
             );
             $renderer = $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
@@ -131,7 +111,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             $fieldset->addField(
                 'store_id',
                 'hidden',
-                array('name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId())
+                ['name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId()]
             );
             $model->setStoreId($this->_storeManager->getStore(true)->getId());
         }
@@ -139,20 +119,20 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $fieldset->addField(
             'is_active',
             'select',
-            array(
+            [
                 'label' => __('Status'),
                 'title' => __('Page Status'),
                 'name' => 'is_active',
                 'required' => true,
                 'options' => $model->getAvailableStatuses(),
                 'disabled' => $isElementDisabled
-            )
+            ]
         );
         if (!$model->getId()) {
             $model->setData('is_active', $isElementDisabled ? '0' : '1');
         }
 
-        $this->_eventManager->dispatch('adminhtml_cms_page_edit_tab_main_prepare_form', array('form' => $form));
+        $this->_eventManager->dispatch('adminhtml_cms_page_edit_tab_main_prepare_form', ['form' => $form]);
 
         $form->setValues($model->getData());
         $this->setForm($form);

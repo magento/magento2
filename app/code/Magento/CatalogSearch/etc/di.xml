@@ -1,33 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider"/>
     <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor" />
-    <preference for="Magento\Framework\Search\Dynamic\Algorithm\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Algorithm\DataProvider" />
+    <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider" />
     <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
@@ -173,13 +154,13 @@
             <argument name="stateKey" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\StateKey</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\CatalogSearch\Model\Layer\Advanced\Context" type="Magento\Catalog\Model\Layer\Context">
+    <type name="Magento\CatalogSearch\Model\Layer\Advanced\Context">
         <arguments>
             <argument name="collectionProvider" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\ItemCollectionProvider</argument>
             <argument name="stateKey" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\StateKey</argument>
             <argument name="collectionFilter" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\CollectionFilter</argument>
         </arguments>
-    </virtualType>
+    </type>
     <type name="Magento\Catalog\Model\Layer\Category">
         <arguments>
             <argument name="context" xsi:type="object">Magento\CatalogSearch\Model\Layer\Category\Context</argument>
@@ -208,11 +189,16 @@
             </argument>
         </arguments>
     </type>
-    <type name="\Magento\Framework\Search\Adapter\Mysql\Mapper">
+    <type name="Magento\Framework\Search\Adapter\Mysql\Mapper">
         <arguments>
             <argument name="indexProviders" xsi:type="array">
-                <item name="catalogsearch_fulltext" xsi:type="object">\Magento\CatalogSearch\Model\Search\IndexBuilder</item>
+                <item name="catalogsearch_fulltext" xsi:type="object">Magento\CatalogSearch\Model\Search\IndexBuilder</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor">
+        <arguments>
+            <argument name="attributePrefix" xsi:type="const">Magento\CatalogSearch\Model\Resource\Engine::ATTRIBUTE_PREFIX</argument>
         </arguments>
     </type>
 </config>

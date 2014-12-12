@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Bundle\Model\Resource\Indexer;
 
@@ -150,12 +131,12 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         $table = $this->_getBundlePriceTable();
 
         $select = $write->select()->from(
-            array('e' => $this->getTable('catalog_product_entity')),
-            array('entity_id')
+            ['e' => $this->getTable('catalog_product_entity')],
+            ['entity_id']
         )->join(
-            array('cg' => $this->getTable('customer_group')),
+            ['cg' => $this->getTable('customer_group')],
             '',
-            array('customer_group_id')
+            ['customer_group_id']
         );
         $this->_addWebsiteJoinToSelect($select, true);
         $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
@@ -163,19 +144,19 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
             'website_id',
             'cw'
         )->join(
-            array('cwd' => $this->_getWebsiteDateTable()),
+            ['cwd' => $this->_getWebsiteDateTable()],
             'cw.website_id = cwd.website_id',
-            array()
+            []
         )->joinLeft(
-            array('tp' => $this->_getTierPriceIndexTable()),
+            ['tp' => $this->_getTierPriceIndexTable()],
             'tp.entity_id = e.entity_id AND tp.website_id = cw.website_id' .
             ' AND tp.customer_group_id = cg.customer_group_id',
-            array()
+            []
         )->joinLeft(
-            array('gp' => $this->_getGroupPriceIndexTable()),
+            ['gp' => $this->_getGroupPriceIndexTable()],
             'gp.entity_id = e.entity_id AND gp.website_id = cw.website_id' .
             ' AND gp.customer_group_id = cg.customer_group_id',
-            array()
+            []
         )->where(
             'e.type_id=?',
             $this->getTypeId()
@@ -184,17 +165,17 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         // add enable products limitation
         $statusCond = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $statusCond, true);
-        if ($this->_coreData->isModuleEnabled('Magento_Tax')) {
+        if ($this->moduleManager->isEnabled('Magento_Tax')) {
             $taxClassId = $this->_addAttributeToSelect($select, 'tax_class_id', 'e.entity_id', 'cs.store_id');
         } else {
             $taxClassId = new \Zend_Db_Expr('0');
         }
 
         if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
-            $select->columns(array('tax_class_id' => new \Zend_Db_Expr('0')));
+            $select->columns(['tax_class_id' => new \Zend_Db_Expr('0')]);
         } else {
             $select->columns(
-                array('tax_class_id' => $write->getCheckSql($taxClassId . ' IS NOT NULL', $taxClassId, 0))
+                ['tax_class_id' => $write->getCheckSql($taxClassId . ' IS NOT NULL', $taxClassId, 0)]
             );
         }
 
@@ -257,7 +238,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         }
 
         $select->columns(
-            array(
+            [
                 'price_type' => new \Zend_Db_Expr($priceType),
                 'special_price' => $specialExpr,
                 'tier_percent' => $tierExpr,
@@ -269,8 +250,8 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'base_tier' => $tierPrice,
                 'group_price' => $groupPrice,
                 'base_group_price' => $groupPrice,
-                'group_price_percent' => new \Zend_Db_Expr('gp.price')
-            )
+                'group_price_percent' => new \Zend_Db_Expr('gp.price'),
+            ]
         );
 
         if (!is_null($entityIds)) {
@@ -282,12 +263,12 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
          */
         $this->_eventManager->dispatch(
             'catalog_product_prepare_index_select',
-            array(
+            [
                 'select' => $select,
                 'entity_field' => new \Zend_Db_Expr('e.entity_id'),
                 'website_field' => new \Zend_Db_Expr('cw.website_id'),
                 'store_field' => new \Zend_Db_Expr('cs.store_id')
-            )
+            ]
         );
 
         $query = $select->insertFromSelect($table);
@@ -312,20 +293,20 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         $this->_prepareBundleOptionTable();
 
         $select = $write->select()->from(
-            array('i' => $this->_getBundleSelectionTable()),
-            array('entity_id', 'customer_group_id', 'website_id', 'option_id')
+            ['i' => $this->_getBundleSelectionTable()],
+            ['entity_id', 'customer_group_id', 'website_id', 'option_id']
         )->group(
-            array('entity_id', 'customer_group_id', 'website_id', 'option_id', 'is_required', 'group_type')
+            ['entity_id', 'customer_group_id', 'website_id', 'option_id', 'is_required', 'group_type']
         )->columns(
-            array(
+            [
                 'min_price' => $write->getCheckSql('i.is_required = 1', 'MIN(i.price)', '0'),
                 'alt_price' => $write->getCheckSql('i.is_required = 0', 'MIN(i.price)', '0'),
                 'max_price' => $write->getCheckSql('i.group_type = 1', 'SUM(i.price)', 'MAX(i.price)'),
                 'tier_price' => $write->getCheckSql('i.is_required = 1', 'MIN(i.tier_price)', '0'),
                 'alt_tier_price' => $write->getCheckSql('i.is_required = 0', 'MIN(i.tier_price)', '0'),
                 'group_price' => $write->getCheckSql('i.is_required = 1', 'MIN(i.group_price)', '0'),
-                'alt_group_price' => $write->getCheckSql('i.is_required = 0', 'MIN(i.group_price)', '0')
-            )
+                'alt_group_price' => $write->getCheckSql('i.is_required = 0', 'MIN(i.group_price)', '0'),
+            ]
         );
 
         $query = $select->insertFromSelect($this->_getBundleOptionTable());
@@ -357,17 +338,17 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         );
 
         $select = $write->select()->from(
-            array('io' => $this->_getBundleOptionTable()),
-            array('entity_id', 'customer_group_id', 'website_id')
+            ['io' => $this->_getBundleOptionTable()],
+            ['entity_id', 'customer_group_id', 'website_id']
         )->join(
-            array('i' => $this->_getBundlePriceTable()),
+            ['i' => $this->_getBundlePriceTable()],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
             ' AND i.website_id = io.website_id',
-            array()
+            []
         )->group(
-            array('io.entity_id', 'io.customer_group_id', 'io.website_id', 'i.tax_class_id', 'i.orig_price', 'i.price')
+            ['io.entity_id', 'io.customer_group_id', 'io.website_id', 'i.tax_class_id', 'i.orig_price', 'i.price']
         )->columns(
-            array(
+            [
                 'i.tax_class_id',
                 'orig_price' => 'i.orig_price',
                 'price' => 'i.price',
@@ -376,8 +357,8 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'tier_price' => $tierPrice,
                 'base_tier' => 'MIN(i.base_tier)',
                 'group_price' => $groupPrice,
-                'base_group_price' => 'MIN(i.base_group_price)'
-            )
+                'base_group_price' => 'MIN(i.base_group_price)',
+            ]
         );
 
         $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable());
@@ -397,7 +378,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         $write = $this->_getWriteAdapter();
 
         if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
-
             $selectionPriceValue = $write->getCheckSql(
                 'bsp.selection_price_value IS NULL',
                 'bs.selection_price_value',
@@ -487,40 +467,40 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         }
 
         $select = $write->select()->from(
-            array('i' => $this->_getBundlePriceTable()),
-            array('entity_id', 'customer_group_id', 'website_id')
+            ['i' => $this->_getBundlePriceTable()],
+            ['entity_id', 'customer_group_id', 'website_id']
         )->join(
-            array('bo' => $this->getTable('catalog_product_bundle_option')),
+            ['bo' => $this->getTable('catalog_product_bundle_option')],
             'bo.parent_id = i.entity_id',
-            array('option_id')
+            ['option_id']
         )->join(
-            array('bs' => $this->getTable('catalog_product_bundle_selection')),
+            ['bs' => $this->getTable('catalog_product_bundle_selection')],
             'bs.option_id = bo.option_id',
-            array('selection_id')
+            ['selection_id']
         )->joinLeft(
-            array('bsp' => $this->getTable('catalog_product_bundle_selection_price')),
+            ['bsp' => $this->getTable('catalog_product_bundle_selection_price')],
             'bs.selection_id = bsp.selection_id AND bsp.website_id = i.website_id',
-            array('')
+            ['']
         )->join(
-            array('idx' => $this->getIdxTable()),
+            ['idx' => $this->getIdxTable()],
             'bs.product_id = idx.entity_id AND i.customer_group_id = idx.customer_group_id' .
             ' AND i.website_id = idx.website_id',
-            array()
+            []
         )->join(
-            array('e' => $this->getTable('catalog_product_entity')),
+            ['e' => $this->getTable('catalog_product_entity')],
             'bs.product_id = e.entity_id AND e.required_options=0',
-            array()
+            []
         )->where(
             'i.price_type=?',
             $priceType
         )->columns(
-            array(
+            [
                 'group_type' => $write->getCheckSql("bo.type = 'select' OR bo.type = 'radio'", '0', '1'),
                 'is_required' => 'bo.required',
                 'price' => $priceExpr,
                 'tier_price' => $tierExpr,
-                'group_price' => $groupExpr
-            )
+                'group_price' => $groupExpr,
+            ]
         );
 
         $query = $select->insertFromSelect($this->_getBundleSelectionTable());
@@ -550,21 +530,21 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
          * Add possibility modify prices from external events
          */
         $select = $this->_getWriteAdapter()->select()->join(
-            array('wd' => $this->_getWebsiteDateTable()),
+            ['wd' => $this->_getWebsiteDateTable()],
             'i.website_id = wd.website_id',
-            array()
+            []
         );
         $this->_eventManager->dispatch(
             'prepare_catalog_product_price_index_table',
-            array(
-                'index_table' => array('i' => $this->_getBundlePriceTable()),
+            [
+                'index_table' => ['i' => $this->_getBundlePriceTable()],
                 'select' => $select,
                 'entity_id' => 'i.entity_id',
                 'customer_group_id' => 'i.customer_group_id',
                 'website_id' => 'i.website_id',
                 'website_date' => 'wd.website_date',
-                'update_fields' => array('price', 'min_price', 'max_price')
-            )
+                'update_fields' => ['price', 'min_price', 'max_price']
+            ]
         );
 
         $this->_calculateBundleOptionPrice();
@@ -587,12 +567,12 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
 
         // remove index by bundle products
         $select = $adapter->select()->from(
-            array('i' => $this->_getTierPriceIndexTable()),
+            ['i' => $this->_getTierPriceIndexTable()],
             null
         )->join(
-            array('e' => $this->getTable('catalog_product_entity')),
+            ['e' => $this->getTable('catalog_product_entity')],
             'i.entity_id=e.entity_id',
-            array()
+            []
         )->where(
             'e.type_id=?',
             $this->getTypeId()
@@ -601,20 +581,20 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         $adapter->query($query);
 
         $select = $adapter->select()->from(
-            array('tp' => $this->getTable('catalog_product_entity_tier_price')),
-            array('entity_id')
+            ['tp' => $this->getTable('catalog_product_entity_tier_price')],
+            ['entity_id']
         )->join(
-            array('e' => $this->getTable('catalog_product_entity')),
+            ['e' => $this->getTable('catalog_product_entity')],
             'tp.entity_id=e.entity_id',
-            array()
+            []
         )->join(
-            array('cg' => $this->getTable('customer_group')),
+            ['cg' => $this->getTable('customer_group')],
             'tp.all_groups = 1 OR (tp.all_groups = 0 AND tp.customer_group_id = cg.customer_group_id)',
-            array('customer_group_id')
+            ['customer_group_id']
         )->join(
-            array('cw' => $this->getTable('store_website')),
+            ['cw' => $this->getTable('store_website')],
             'tp.website_id = 0 OR tp.website_id = cw.website_id',
-            array('website_id')
+            ['website_id']
         )->where(
             'cw.website_id != 0'
         )->where(
@@ -623,7 +603,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         )->columns(
             new \Zend_Db_Expr('MIN(tp.value)')
         )->group(
-            array('tp.entity_id', 'cg.customer_group_id', 'cw.website_id')
+            ['tp.entity_id', 'cg.customer_group_id', 'cw.website_id']
         );
 
         if (!empty($entityIds)) {
@@ -648,12 +628,12 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
 
         // remove index by bundle products
         $select = $adapter->select()->from(
-            array('i' => $this->_getGroupPriceIndexTable()),
+            ['i' => $this->_getGroupPriceIndexTable()],
             null
         )->join(
-            array('e' => $this->getTable('catalog_product_entity')),
+            ['e' => $this->getTable('catalog_product_entity')],
             'i.entity_id=e.entity_id',
-            array()
+            []
         )->where(
             'e.type_id=?',
             $this->getTypeId()
@@ -662,20 +642,20 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         $adapter->query($query);
 
         $select = $adapter->select()->from(
-            array('gp' => $this->getTable('catalog_product_entity_group_price')),
-            array('entity_id')
+            ['gp' => $this->getTable('catalog_product_entity_group_price')],
+            ['entity_id']
         )->join(
-            array('e' => $this->getTable('catalog_product_entity')),
+            ['e' => $this->getTable('catalog_product_entity')],
             'gp.entity_id=e.entity_id',
-            array()
+            []
         )->join(
-            array('cg' => $this->getTable('customer_group')),
+            ['cg' => $this->getTable('customer_group')],
             'gp.all_groups = 1 OR (gp.all_groups = 0 AND gp.customer_group_id = cg.customer_group_id)',
-            array('customer_group_id')
+            ['customer_group_id']
         )->join(
-            array('cw' => $this->getTable('store_website')),
+            ['cw' => $this->getTable('store_website')],
             'gp.website_id = 0 OR gp.website_id = cw.website_id',
-            array('website_id')
+            ['website_id']
         )->where(
             'cw.website_id != 0'
         )->where(
@@ -684,7 +664,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         )->columns(
             new \Zend_Db_Expr('MIN(gp.value)')
         )->group(
-            array('gp.entity_id', 'cg.customer_group_id', 'cw.website_id')
+            ['gp.entity_id', 'cg.customer_group_id', 'cw.website_id']
         );
 
         if (!empty($entityIds)) {

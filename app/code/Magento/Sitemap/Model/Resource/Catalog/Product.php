@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sitemap\Model\Resource\Catalog;
 
@@ -46,7 +27,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @var array
      */
-    protected $_attributesCache = array();
+    protected $_attributesCache = [];
 
     /**
      * @var \Magento\Catalog\Model\Product\Attribute\Backend\Media
@@ -70,7 +51,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_productResource;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -103,7 +84,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Sitemap\Helper\Data $sitemapData
      * @param \Magento\Catalog\Model\Resource\Product $productResource
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute
@@ -114,7 +95,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\App\Resource $resource,
         \Magento\Sitemap\Helper\Data $sitemapData,
         \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaAttribute,
@@ -199,7 +180,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $adapter = $this->getReadConnection();
         $attribute = $this->_getAttribute($attributeCode);
         $this->_select->joinLeft(
-            array('t1_' . $attributeCode => $attribute['table']),
+            ['t1_' . $attributeCode => $attribute['table']],
             'e.entity_id = t1_' . $attributeCode . '.entity_id AND ' . $adapter->quoteInto(
                 ' t1_' . $attributeCode . '.store_id = ?',
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
@@ -207,12 +188,12 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 ' AND t1_' . $attributeCode . '.attribute_id = ?',
                 $attribute['attribute_id']
             ),
-            array()
+            []
         );
 
         if (!$attribute['is_global']) {
             $this->_select->joinLeft(
-                array('t2_' . $attributeCode => $attribute['table']),
+                ['t2_' . $attributeCode => $attribute['table']],
                 $this->_getWriteAdapter()->quoteInto(
                     't1_' .
                     $attributeCode .
@@ -227,7 +208,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     '.store_id = ?',
                     $storeId
                 ),
-                array()
+                []
             );
         }
     }
@@ -243,14 +224,14 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!isset($this->_attributesCache[$attributeCode])) {
             $attribute = $this->_productResource->getAttribute($attributeCode);
 
-            $this->_attributesCache[$attributeCode] = array(
+            $this->_attributesCache[$attributeCode] = [
                 'entity_type_id' => $attribute->getEntityTypeId(),
                 'attribute_id' => $attribute->getId(),
                 'table' => $attribute->getBackend()->getTable(),
                 'is_global' => $attribute->getIsGlobal() ==
                 \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL,
-                'backend_type' => $attribute->getBackendType()
-            );
+                'backend_type' => $attribute->getBackendType(),
+            ];
         }
         return $this->_attributesCache[$attributeCode];
     }
@@ -263,7 +244,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCollection($storeId)
     {
-        $products = array();
+        $products = [];
 
         /* @var $store \Magento\Store\Model\Store */
         $store = $this->_storeManager->getStore($storeId);
@@ -274,12 +255,12 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $adapter = $this->_getWriteAdapter();
 
         $this->_select = $adapter->select()->from(
-            array('e' => $this->getMainTable()),
-            array($this->getIdFieldName(), 'updated_at')
+            ['e' => $this->getMainTable()],
+            [$this->getIdFieldName(), 'updated_at']
         )->joinInner(
-            array('w' => $this->getTable('catalog_product_website')),
+            ['w' => $this->getTable('catalog_product_website')],
             'e.entity_id = w.product_id',
-            array()
+            []
         )->joinLeft(
             ['url_rewrite' => $this->getTable('url_rewrite')],
             'e.entity_id = url_rewrite.entity_id AND url_rewrite.is_autogenerated = 1'
@@ -299,23 +280,23 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_NONE != $imageIncludePolicy) {
             $this->_joinAttribute($store->getId(), 'name');
             $this->_select->columns(
-                array('name' => $this->getReadConnection()->getIfNullSql('t2_name.value', 't1_name.value'))
+                ['name' => $this->getReadConnection()->getIfNullSql('t2_name.value', 't1_name.value')]
             );
 
             if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
                 $this->_joinAttribute($store->getId(), 'thumbnail');
                 $this->_select->columns(
-                    array(
+                    [
                         'thumbnail' => $this->getReadConnection()->getIfNullSql(
                             't2_thumbnail.value',
                             't1_thumbnail.value'
-                        )
-                    )
+                        ),
+                    ]
                 );
             } elseif (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_BASE == $imageIncludePolicy) {
                 $this->_joinAttribute($store->getId(), 'image');
                 $this->_select->columns(
-                    array('image' => $this->getReadConnection()->getIfNullSql('t2_image.value', 't1_image.value'))
+                    ['image' => $this->getReadConnection()->getIfNullSql('t2_image.value', 't1_image.value')]
                 );
             }
         }
@@ -364,18 +345,18 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $imageIncludePolicy = $helper->getProductImageIncludePolicy($storeId);
 
         // Get product images
-        $imagesCollection = array();
+        $imagesCollection = [];
         if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
             $imagesCollection = $this->_getAllProductImages($product, $storeId);
         } elseif (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_BASE == $imageIncludePolicy &&
             $product->getImage() &&
             $product->getImage() != self::NOT_SELECTED_IMAGE
         ) {
-            $imagesCollection = array(
+            $imagesCollection = [
                 new \Magento\Framework\Object(
-                    array('url' => $this->_getMediaConfig()->getBaseMediaUrlAddition() . $product->getImage())
-                )
-            );
+                    ['url' => $this->_getMediaConfig()->getBaseMediaUrlAddition() . $product->getImage()]
+                ),
+            ];
         }
 
         if ($imagesCollection) {
@@ -389,7 +370,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             $product->setImages(
                 new \Magento\Framework\Object(
-                    array('collection' => $imagesCollection, 'title' => $product->getName(), 'thumbnail' => $thumbnail)
+                    ['collection' => $imagesCollection, 'title' => $product->getName(), 'thumbnail' => $thumbnail]
                 )
             );
         }
@@ -407,15 +388,15 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $product->setStoreId($storeId);
         $gallery = $this->_mediaAttribute->loadGallery($product, $this->_getMediaGalleryModel());
 
-        $imagesCollection = array();
+        $imagesCollection = [];
         if ($gallery) {
             $productMediaPath = $this->_getMediaConfig()->getBaseMediaUrlAddition();
             foreach ($gallery as $image) {
                 $imagesCollection[] = new \Magento\Framework\Object(
-                    array(
+                    [
                         'url' => $productMediaPath . $image['file'],
-                        'caption' => $image['label'] ? $image['label'] : $image['label_default']
-                    )
+                        'caption' => $image['label'] ? $image['label'] : $image['label_default'],
+                    ]
                 );
             }
         }

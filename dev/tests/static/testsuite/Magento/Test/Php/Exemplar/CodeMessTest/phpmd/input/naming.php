@@ -15,7 +15,9 @@ class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_naming
     /**
      * Legacy PHP4 style constructor
      */
-    public function Foo() {}
+    public function Foo()
+    {
+    }
 
     public function bar($a1 = 'too short parameter name', $tooLongParameterName2 = '')
     {
@@ -27,7 +29,9 @@ class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_naming
     /**
      * Too short method name
      */
-    protected function _x() {}
+    protected function _x()
+    {
+    }
 
     /**
      * Getter that returns boolean value should be named 'is...()' or 'has...()'

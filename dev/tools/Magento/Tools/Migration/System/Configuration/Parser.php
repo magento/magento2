@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -37,12 +18,12 @@ class Parser
      */
     public function parse(\DOMDocument $dom)
     {
-        $result = array();
+        $result = [];
         if ($dom->hasChildNodes()) {
             foreach ($dom->childNodes as $child) {
                 if (XML_COMMENT_NODE == $child->nodeType) {
                     $result['comment'] = $child->nodeValue;
-                } else if (XML_ELEMENT_NODE == $child->nodeType && 'config' == $child->nodeName) {
+                } elseif (XML_ELEMENT_NODE == $child->nodeType && 'config' == $child->nodeName) {
                     $result = array_merge($result, $this->_parseNode($child));
                 }
             }
@@ -58,7 +39,7 @@ class Parser
      */
     protected function _parseNode(\DOMNode $node)
     {
-        $result = array();
+        $result = [];
         if (false === $node->hasChildNodes()) {
             $result = $this->_getSimpleNodeValue($node);
         } else {
@@ -137,7 +118,7 @@ class Parser
      */
     protected function _getSimpleNodeValue(\DOMNode $node)
     {
-        return trim($node->nodeValue) !== '' ? array($node->nodeName => $node->nodeValue) : array();
+        return trim($node->nodeValue) !== '' ? [$node->nodeName => $node->nodeValue] : [];
     }
 
     /**
@@ -148,8 +129,8 @@ class Parser
      */
     protected function _parseNodeAttributes(\DOMNode $node)
     {
-        $result = array();
-        $attributes = array();
+        $result = [];
+        $attributes = [];
         if ($node->hasAttributes()) {
             foreach ($node->attributes as $oAttrNode) {
                 $attributes[$oAttrNode->nodeName] = $oAttrNode->nodeValue;
@@ -157,7 +138,7 @@ class Parser
         }
 
         if (count($attributes)) {
-            $result = array('@attributes' => $attributes);
+            $result = ['@attributes' => $attributes];
         }
         return $result;
     }

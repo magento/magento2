@@ -2,26 +2,7 @@
 /**
  * REST API request.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Webapi\Controller\Rest;
@@ -56,18 +37,18 @@ class Request extends \Magento\Webapi\Controller\Request
      *
      * @param \Magento\Framework\App\AreaList $areaList
      * @param \Magento\Framework\Config\ScopeInterface $configScope
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
+     * @param \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader
      * @param \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory $deserializerFactory
      * @param null|string $uri
      */
     public function __construct(
         \Magento\Framework\App\AreaList $areaList,
         \Magento\Framework\Config\ScopeInterface $configScope,
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
+        \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader,
         \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory $deserializerFactory,
         $uri = null
     ) {
-        parent::__construct($areaList, $configScope, $cookieManager, $uri);
+        parent::__construct($areaList, $configScope, $cookieReader, $uri);
         $this->_deserializerFactory = $deserializerFactory;
     }
 
@@ -91,8 +72,8 @@ class Request extends \Magento\Webapi\Controller\Request
      */
     public function getAcceptTypes()
     {
-        $qualityToTypes = array();
-        $orderedTypes = array();
+        $qualityToTypes = [];
+        $orderedTypes = [];
 
         foreach (preg_split('/,\s*/', $this->getHeader('Accept')) as $definition) {
             $typeWithQ = explode(';', $definition);
@@ -180,7 +161,7 @@ class Request extends \Magento\Webapi\Controller\Request
      */
     public function getRequestData()
     {
-        $requestBody = array();
+        $requestBody = [];
         $params = $this->getParams();
 
         $httpMethod = $this->getHttpMethod();

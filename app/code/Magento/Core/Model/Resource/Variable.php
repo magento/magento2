@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Core\Model\Resource;
 
@@ -92,20 +73,20 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
              */
             $this->_getWriteAdapter()->delete(
                 $this->getTable('core_variable_value'),
-                array('variable_id = ?' => $object->getId(), 'store_id = ?' => $object->getStoreId())
+                ['variable_id = ?' => $object->getId(), 'store_id = ?' => $object->getStoreId()]
             );
         } else {
-            $data = array(
+            $data = [
                 'variable_id' => $object->getId(),
                 'store_id' => $object->getStoreId(),
                 'plain_value' => $object->getPlainValue(),
-                'html_value' => $object->getHtmlValue()
-            );
+                'html_value' => $object->getHtmlValue(),
+            ];
             $data = $this->_prepareDataForTable(new \Magento\Framework\Object($data), $this->getTable('core_variable_value'));
             $this->_getWriteAdapter()->insertOnDuplicate(
                 $this->getTable('core_variable_value'),
                 $data,
-                array('plain_value', 'html_value')
+                ['plain_value', 'html_value']
             );
         }
         return $this;
@@ -142,20 +123,20 @@ class Variable extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $ifNullHtmlValue = $adapter->getCheckSql('store.html_value IS NULL', 'def.html_value', 'store.html_value');
 
         $select->joinLeft(
-            array('def' => $this->getTable('core_variable_value')),
+            ['def' => $this->getTable('core_variable_value')],
             'def.variable_id = ' . $this->getMainTable() . '.variable_id AND def.store_id = 0',
-            array()
+            []
         )->joinLeft(
-            array('store' => $this->getTable('core_variable_value')),
+            ['store' => $this->getTable('core_variable_value')],
             'store.variable_id = def.variable_id AND store.store_id = ' . $adapter->quote($storeId),
-            array()
+            []
         )->columns(
-            array(
+            [
                 'plain_value' => $ifNullPlainValue,
                 'html_value' => $ifNullHtmlValue,
                 'store_plain_value' => 'store.plain_value',
-                'store_html_value' => 'store.html_value'
-            )
+                'store_html_value' => 'store.html_value',
+            ]
         );
 
         return $this;

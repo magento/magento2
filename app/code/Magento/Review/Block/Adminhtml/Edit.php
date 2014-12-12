@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Review\Block\Adminhtml;
 
@@ -61,7 +42,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Review\Helper\Action\Pager $reviewActionPager,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
         $this->_reviewActionPager = $reviewActionPager;
@@ -92,29 +73,29 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         if ($prevId !== false) {
             $this->addButton(
                 'previous',
-                array(
+                [
                     'label' => __('Previous'),
-                    'onclick' => 'setLocation(\'' . $this->getUrl('review/*/*', array('id' => $prevId)) . '\')'
-                ),
+                    'onclick' => 'setLocation(\'' . $this->getUrl('review/*/*', ['id' => $prevId]) . '\')'
+                ],
                 3,
                 10
             );
 
             $this->addButton(
                 'save_and_previous',
-                array(
+                [
                     'label' => __('Save and Previous'),
                     'class' => 'save',
-                    'data_attribute' => array(
-                        'mage-init' => array(
-                            'button' => array(
+                    'data_attribute' => [
+                        'mage-init' => [
+                            'button' => [
                                 'event' => 'save',
                                 'target' => '#edit_form',
-                                'eventData' => array('action' => array('args' => array('next_item' => $prevId)))
-                            )
-                        )
-                    )
-                ),
+                                'eventData' => ['action' => ['args' => ['next_item' => $prevId]]],
+                            ],
+                        ],
+                    ]
+                ],
                 3,
                 11
             );
@@ -122,29 +103,29 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         if ($nextId !== false) {
             $this->addButton(
                 'save_and_next',
-                array(
+                [
                     'label' => __('Save and Next'),
                     'class' => 'save',
-                    'data_attribute' => array(
-                        'mage-init' => array(
-                            'button' => array(
+                    'data_attribute' => [
+                        'mage-init' => [
+                            'button' => [
                                 'event' => 'save',
                                 'target' => '#edit_form',
-                                'eventData' => array('action' => array('args' => array('next_item' => $nextId)))
-                            )
-                        )
-                    )
-                ),
+                                'eventData' => ['action' => ['args' => ['next_item' => $nextId]]],
+                            ],
+                        ],
+                    ]
+                ],
                 3,
                 100
             );
 
             $this->addButton(
                 'next',
-                array(
+                [
                     'label' => __('Next'),
-                    'onclick' => 'setLocation(\'' . $this->getUrl('review/*/*', array('id' => $nextId)) . '\')'
-                ),
+                    'onclick' => 'setLocation(\'' . $this->getUrl('review/*/*', ['id' => $nextId]) . '\')'
+                ],
                 3,
                 105
             );
@@ -159,7 +140,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 'onclick',
                 'setLocation(\'' . $this->getUrl(
                     'catalog/product/edit',
-                    array('id' => $this->getRequest()->getParam('productId', false))
+                    ['id' => $this->getRequest()->getParam('productId', false)]
                 ) . '\')'
             );
         }
@@ -170,7 +151,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 'onclick',
                 'setLocation(\'' . $this->getUrl(
                     'customer/index/edit',
-                    array('id' => $this->getRequest()->getParam('customerId', false))
+                    ['id' => $this->getRequest()->getParam('customerId', false)]
                 ) . '\')'
             );
         }
@@ -184,7 +165,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                     'Are you sure you want to do this?'
                 ) . '\' ' . '\'' . $this->getUrl(
                     '*/*/delete',
-                    array($this->_objectId => $this->getRequest()->getParam($this->_objectId), 'ret' => 'pending')
+                    [$this->_objectId => $this->getRequest()->getParam($this->_objectId), 'ret' => 'pending']
                 ) . '\'' . ')'
             );
             $this->_coreRegistry->register('ret', 'pending');
@@ -208,7 +189,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                             "' .
             $this->getUrl(
                 'review/*/ratingItems',
-                array('_current' => true)
+                ['_current' => true]
             ) .
             '",
                             {

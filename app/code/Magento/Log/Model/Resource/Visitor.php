@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Log\Model\Resource;
 
@@ -48,20 +29,20 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_date;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\String $string
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\String $string
     ) {
         $this->_date = $date;
@@ -88,13 +69,13 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $visitor)
     {
-        return array(
+        return [
             'visitor_id' => $visitor->getVisitorId(),
             'first_visit_at' => $visitor->getFirstVisitAt(),
             'last_visit_at' => $visitor->getLastVisitAt(),
             'last_url_id' => $visitor->getLastUrlId() ? $visitor->getLastUrlId() : 0,
             'store_id' => $this->_storeManager->getStore()->getId()
-        );
+        ];
     }
 
     /**
@@ -107,10 +88,10 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getWriteAdapter();
         $data = new \Magento\Framework\Object(
-            array(
+            [
                 'url' => $this->string->substr($visitor->getUrl(), 0, 250),
-                'referer' => $this->string->substr($visitor->getHttpReferer(), 0, 250)
-            )
+                'referer' => $this->string->substr($visitor->getHttpReferer(), 0, 250),
+            ]
         );
         $bind = $this->_prepareDataForTable($data, $this->getTable('log_url_info'));
 
@@ -206,15 +187,15 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $language = $this->string->substr($language, 0, 255);
 
         $data = new \Magento\Framework\Object(
-            array(
+            [
                 'visitor_id' => $visitor->getId(),
                 'http_referer' => $referer,
                 'http_user_agent' => $userAgent,
                 'http_accept_charset' => $charset,
                 'http_accept_language' => $language,
                 'server_addr' => $visitor->getServerAddr(),
-                'remote_addr' => $visitor->getRemoteAddr()
-            )
+                'remote_addr' => $visitor->getRemoteAddr(),
+            ]
         );
 
         $bind = $this->_prepareDataForTable($data, $this->getTable('log_visitor_info'));
@@ -234,11 +215,11 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _saveVisitorUrl($visitor)
     {
         $data = new \Magento\Framework\Object(
-            array(
+            [
                 'url_id' => $visitor->getLastUrlId(),
                 'visitor_id' => $visitor->getId(),
-                'visit_time' => $this->_date->gmtDate()
-            )
+                'visit_time' => $this->_date->gmtDate(),
+            ]
         );
         $bind = $this->_prepareDataForTable($data, $this->getTable('log_url'));
 
@@ -258,12 +239,12 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if ($visitor->getDoCustomerLogin()) {
             $data = new \Magento\Framework\Object(
-                array(
+                [
                     'visitor_id' => $visitor->getVisitorId(),
                     'customer_id' => $visitor->getCustomerId(),
                     'login_at' => $this->_date->gmtDate(),
-                    'store_id' => $this->_storeManager->getStore()->getId()
-                )
+                    'store_id' => $this->_storeManager->getStore()->getId(),
+                ]
             );
             $bind = $this->_prepareDataForTable($data, $this->getTable('log_customer'));
 
@@ -274,15 +255,15 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if ($visitor->getDoCustomerLogout() && ($logId = $visitor->getCustomerLogId())) {
             $data = new \Magento\Framework\Object(
-                array(
+                [
                     'logout_at' => $this->_date->gmtDate(),
-                    'store_id' => (int)$this->_storeManager->getStore()->getId()
-                )
+                    'store_id' => (int)$this->_storeManager->getStore()->getId(),
+                ]
             );
 
             $bind = $this->_prepareDataForTable($data, $this->getTable('log_customer'));
 
-            $condition = array('log_id = ?' => (int)$logId);
+            $condition = ['log_id = ?' => (int)$logId];
 
             $adapter->update($this->getTable('log_customer'), $bind, $condition);
 
@@ -305,11 +286,11 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $adapter = $this->_getWriteAdapter();
         if ($visitor->getDoQuoteCreate()) {
             $data = new \Magento\Framework\Object(
-                array(
+                [
                     'quote_id' => (int)$visitor->getQuoteId(),
                     'visitor_id' => (int)$visitor->getId(),
-                    'created_at' => $this->_date->gmtDate()
-                )
+                    'created_at' => $this->_date->gmtDate(),
+                ]
             );
 
             $bind = $this->_prepareDataForTable($data, $this->getTable('log_quote'));
@@ -324,7 +305,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
              * We have delete quote from log because if original quote was
              * deleted and Mysql restarted we will get key duplication error
              */
-            $condition = array('quote_id = ?' => (int)$visitor->getQuoteId());
+            $condition = ['quote_id = ?' => (int)$visitor->getQuoteId()];
 
             $adapter->delete($this->getTable('log_quote'), $condition);
 

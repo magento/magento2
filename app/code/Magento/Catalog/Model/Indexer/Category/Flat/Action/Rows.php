@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 
@@ -35,13 +16,13 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         CategoryRepositoryInterface $categoryRepository
     ) {
@@ -69,7 +50,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @param bool $useTempTable
      * @return Rows
      */
-    public function reindex(array $entityIds = array(), $useTempTable = false)
+    public function reindex(array $entityIds = [], $useTempTable = false)
     {
         $stores = $this->storeManager->getStores();
 
@@ -84,11 +65,10 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
             /** @TODO Do something with chunks */
             $categoriesIdsChunks = array_chunk($entityIds, 500);
             foreach ($categoriesIdsChunks as $categoriesIdsChunk) {
-
                 $categoriesIdsChunk = $this->filterIdsByStore($categoriesIdsChunk, $store);
 
                 $attributesData = $this->getAttributeValues($categoriesIdsChunk, $store->getId());
-                $data = array();
+                $data = [];
                 foreach ($categoriesIdsChunk as $categoryId) {
                     if (!isset($attributesData[$categoryId])) {
                         continue;
@@ -104,13 +84,13 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
                         array_merge(
                             $category->getData(),
                             $attributesData[$categoryId],
-                            array('store_id' => $store->getId())
+                            ['store_id' => $store->getId()]
                         )
                     );
                 }
 
                 foreach ($data as $row) {
-                    $updateFields = array();
+                    $updateFields = [];
                     foreach (array_keys($row) as $key) {
                         $updateFields[$key] = $key;
                     }
@@ -140,11 +120,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
         /** @var \Magento\Framework\DB\Select $select */
         $select = $this->getWriteAdapter()->select()->from(
-            array('cf' => $this->getTableNameByStore($store, $useTempTable))
+            ['cf' => $this->getTableNameByStore($store, $useTempTable)]
         )->joinLeft(
-            array('ce' => $this->getTableName('catalog_category_entity')),
+            ['ce' => $this->getTableName('catalog_category_entity')],
             'cf.path = ce.path',
-            array()
+            []
         )->where(
             "cf.path = {$rootIdExpr} OR cf.path = {$rootCatIdExpr} OR cf.path like {$catIdExpr}"
         )->where(
@@ -172,7 +152,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 
         $select = $this->getReadAdapter()->select()->from(
             $this->getTableName('catalog_category_entity'),
-            array('entity_id')
+            ['entity_id']
         )->where(
             "path = {$rootIdExpr} OR path = {$rootCatIdExpr} OR path like {$catIdExpr}"
         )->where(
@@ -180,7 +160,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
             $ids
         );
 
-        $resultIds = array();
+        $resultIds = [];
         foreach ($this->getReadAdapter()->fetchAll($select) as $category) {
             $resultIds[] = $category['entity_id'];
         }

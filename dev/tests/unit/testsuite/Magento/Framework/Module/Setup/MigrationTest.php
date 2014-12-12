@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -66,22 +47,22 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getModelDependencies($tableRowsCount = 0, $tableData = array(), $aliasesMap = array())
+    protected function _getModelDependencies($tableRowsCount = 0, $tableData = [], $aliasesMap = [])
     {
-        $this->_selectMock = $this->getMock('Magento\Framework\DB\Select', array(), array(), '', false);
+        $this->_selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $this->_selectMock->expects($this->any())->method('from')->will($this->returnSelf());
         $this->_selectMock->expects(
             $this->any()
         )->method(
             'where'
         )->will(
-            $this->returnCallback(array($this, 'whereCallback'))
+            $this->returnCallback([$this, 'whereCallback'])
         );
 
         $adapterMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            array('select', 'update', 'fetchAll', 'fetchOne'),
-            array(),
+            ['select', 'update', 'fetchAll', 'fetchOne'],
+            [],
             '',
             false
         );
@@ -91,21 +72,21 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         )->method(
             'update'
         )->will(
-            $this->returnCallback(array($this, 'updateCallback'))
+            $this->returnCallback([$this, 'updateCallback'])
         );
         $adapterMock->expects($this->any())->method('fetchAll')->will($this->returnValue($tableData));
         $adapterMock->expects($this->any())->method('fetchOne')->will($this->returnValue($tableRowsCount));
 
-        return array(
+        return [
             'resource_config' => 'not_used',
             'connection_config' => 'not_used',
             'module_config' => 'not_used',
             'base_dir' => 'not_used',
             'path_to_map_file' => 'not_used',
             'connection' => $adapterMock,
-            'core_helper' => $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false, false),
+            'core_helper' => $this->getMock('Magento\Core\Helper\Data', [], [], '', false, false),
             'aliases_map' => $aliasesMap
-        );
+        ];
     }
 
     /**
@@ -120,12 +101,12 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         $fields = array_keys($bind);
         $replacements = array_values($bind);
 
-        $this->_actualUpdateResult[] = array(
+        $this->_actualUpdateResult[] = [
             'table' => $table,
             'field' => $fields[0],
             'to' => $replacements[0],
-            'from' => $where
-        );
+            'from' => $where,
+        ];
     }
 
     /**
@@ -137,7 +118,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     public function whereCallback($condition)
     {
         if (null === $this->_actualWhere) {
-            $this->_actualWhere = array();
+            $this->_actualWhere = [];
         }
         if (!empty($condition) && false === strpos(
             $condition,
@@ -158,37 +139,37 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     public function testAppendClassAliasReplace()
     {
         $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
-        $moduleListMock->expects($this->once())->method('getOne')->will($this->returnValue(array()));
+        $moduleListMock->expects($this->once())->method('getOne')->will($this->returnValue([]));
 
-        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
-        $modulesDirMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
+        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $modulesDirMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         $filesystemMock->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($modulesDirMock));
 
-        $contextMock = $this->getMock('Magento\Framework\Module\Setup\Context', array(), array(), '', false);
+        $contextMock = $this->getMock('Magento\Framework\Module\Setup\Context', [], [], '', false);
         $contextMock->expects($this->any())->method('getFilesystem')->will($this->returnValue($filesystemMock));
         $contextMock->expects($this->once())
             ->method('getEventManager')
             ->will(
                 $this->returnValue(
-                    $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false)
+                    $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false)
                 )
             );
         $contextMock->expects($this->once())
             ->method('getResourceModel')
-            ->will($this->returnValue($this->getMock('Magento\Framework\App\Resource', array(), array(), '', false)));
+            ->will($this->returnValue($this->getMock('Magento\Framework\App\Resource', [], [], '', false)));
         $contextMock->expects($this->once())
             ->method('getLogger')
-            ->will($this->returnValue($this->getMock('Magento\Framework\Logger', array(), array(), '', false)));
+            ->will($this->returnValue($this->getMock('Magento\Framework\Logger', [], [], '', false)));
         $contextMock->expects($this->once())
             ->method('getModulesReader')
             ->will(
                 $this->returnValue(
-                    $this->getMock('Magento\Framework\Module\Dir\Reader', array(), array(), '', false)
+                    $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false)
                 )
             );
         $contextMock->expects($this->once())->method('getModuleList')->will($this->returnValue($moduleListMock));
 
-        $migrationData = $this->getMock('Magento\Framework\Module\Setup\MigrationData', array(), array(), '', false);
+        $migrationData = $this->getMock('Magento\Framework\Module\Setup\MigrationData', [], [], '', false);
 
         $setupModel = new \Magento\Framework\Module\Setup\Migration(
             $contextMock,
@@ -203,20 +184,20 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             'fieldName',
             'entityType',
             'fieldContentType',
-            array('pk_field1', 'pk_field2'),
+            ['pk_field1', 'pk_field2'],
             'additionalWhere'
         );
 
-        $expectedRulesList = array(
-            'tableName' => array(
-                'fieldName' => array(
+        $expectedRulesList = [
+            'tableName' => [
+                'fieldName' => [
                     'entity_type' => 'entityType',
                     'content_type' => 'fieldContentType',
-                    'pk_fields' => array('pk_field1', 'pk_field2'),
-                    'additional_where' => 'additionalWhere'
-                )
-            )
-        );
+                    'pk_fields' => ['pk_field1', 'pk_field2'],
+                    'additional_where' => 'additionalWhere',
+                ],
+            ],
+        ];
 
         $this->assertAttributeEquals($expectedRulesList, '_replaceRules', $setupModel);
     }
@@ -224,26 +205,26 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider updateClassAliasesDataProvider
      */
-    public function testDoUpdateClassAliases($replaceRules, $tableData, $expected, $aliasesMap = array())
+    public function testDoUpdateClassAliases($replaceRules, $tableData, $expected, $aliasesMap = [])
     {
         $this->markTestIncomplete('Requires refactoring of class that is tested, covers to many methods');
 
-        $this->_actualUpdateResult = array();
+        $this->_actualUpdateResult = [];
         $tableRowsCount = count($tableData);
 
         $setupModel = new \Magento\Framework\Module\Setup\Migration(
-            $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false, false),
-            $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false),
-            $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
-            $this->getMock('Magento\Framework\Logger', array(), array(), '', false),
-            $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false),
+            $this->getMock('Magento\Framework\Filesystem', [], [], '', false),
+            $this->getMock('Magento\Core\Helper\Data', [], [], '', false),
+            $this->getMock('Magento\Framework\Logger', [], [], '', false),
+            $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false),
             $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
             $this->getMock('Magento\Framework\Module\ModuleListInterface'),
-            $this->getMock('Magento\Framework\Module\Dir\Reader', array(), array(), '', false, false),
-            $this->getMock('Magento\Framework\Module\Resource', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Resource\Theme\CollectionFactory', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Theme\CollectionFactory', array(), array(), '', false),
-            $this->getMock('Magento\Framework\Module\Setup\MigrationFactory', array(), array(), '', false),
+            $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false, false),
+            $this->getMock('Magento\Framework\Module\Resource', [], [], '', false),
+            $this->getMock('Magento\Core\Model\Resource\Theme\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Core\Model\Theme\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Framework\Module\Setup\MigrationFactory', [], [], '', false),
             'core_setup',
             'app/etc/aliases_to_classes_map.json',
             $this->_getModelDependencies($tableRowsCount, $tableData, $aliasesMap)
@@ -252,7 +233,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         $setupModel->setTable('table', 'table');
 
         foreach ($replaceRules as $replaceRule) {
-            call_user_func_array(array($setupModel, 'appendClassAliasReplace'), $replaceRule);
+            call_user_func_array([$setupModel, 'appendClassAliasReplace'], $replaceRule);
         }
 
         $setupModel->doUpdateClassAliases();
@@ -275,14 +256,14 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
      */
     public function updateClassAliasesDataProvider()
     {
-        return array(
+        return [
             'plain text replace model' => include __DIR__ . '/_files/data_content_plain_model.php',
             'plain text replace resource' => include __DIR__ . '/_files/data_content_plain_resource.php',
             'plain text replace with pk field' => include __DIR__ . '/_files/data_content_plain_pk_fields.php',
             'xml replace' => include __DIR__ . '/_files/data_content_xml.php',
             'wiki markup replace' => include __DIR__ . '/_files/data_content_wiki.php',
             'serialized php replace' => include __DIR__ . '/_files/data_content_serialized.php'
-        );
+        ];
     }
 
     /**

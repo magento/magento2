@@ -1,28 +1,8 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Test\Integrity\App\Language;
-
 
 class TranslationFiles extends \PHPUnit_Framework_TestCase
 {
@@ -43,7 +23,7 @@ class TranslationFiles extends \PHPUnit_Framework_TestCase
     public function getLocalePlacePath()
     {
         $pathToSource = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
-        $places = array();
+        $places = [];
         foreach (glob("{$pathToSource}/app/code/*/*", GLOB_ONLYDIR) as $modulePath) {
             $places[basename($modulePath)] = ['placePath' => $modulePath];
         }
@@ -79,7 +59,7 @@ class TranslationFiles extends \PHPUnit_Framework_TestCase
         $missing = array_diff_key($baseLocaleData, $localeData);
         $extra = array_diff_key($localeData, $baseLocaleData);
 
-        $failures = array();
+        $failures = [];
         if (!empty($missing)) {
             $failures['missing'] = array_keys($missing);
         }

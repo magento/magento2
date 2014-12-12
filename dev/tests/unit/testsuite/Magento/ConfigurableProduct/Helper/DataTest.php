@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ConfigurableProduct\Helper;
 
@@ -42,8 +23,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_imageHelperMock = $this->getMock('Magento\Catalog\Helper\Image', array(), array(), '', false);
-        $this->_productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $this->_imageHelperMock = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
+        $this->_productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
 
         $this->_model = new \Magento\ConfigurableProduct\Helper\Data($this->_imageHelperMock);
     }
@@ -51,7 +32,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetAllowAttributes()
     {
         $typeInstanceMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable', array(), array(), '', false
+            'Magento\ConfigurableProduct\Model\Product\Type\Configurable', [], [], '', false
         );
         $typeInstanceMock->expects($this->once())
             ->method('getConfigurableAttributes')
@@ -93,28 +74,28 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function getOptionsDataProvider()
     {
         $currentProductMock = $this->getMock(
-            'Magento\Catalog\Model\Product', array('getTypeInstance', '__wakeup'), array(), '', false
+            'Magento\Catalog\Model\Product', ['getTypeInstance', '__wakeup'], [], '', false
         );
-        $provider = array();
-        $provider[] = array(
-            array('baseImage' => 'http://example.com/base_img_url'),
-            array(
-                'allowed_products' => array(),
+        $provider = [];
+        $provider[] = [
+            ['baseImage' => 'http://example.com/base_img_url'],
+            [
+                'allowed_products' => [],
                 'current_product_mock' => $currentProductMock,
                 'baseImage' => 'http://example.com/base_img_url'
-            )
-        );
+            ],
+        ];
 
         $attributesCount = 3;
-        $attributes = array();
+        $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
             $attribute = $this->getMock(
-                'Magento\Framework\Object', array('getProductAttribute'), array(), '', false
+                'Magento\Framework\Object', ['getProductAttribute'], [], '', false
             );
             $productAttribute = $this->getMock(
                 'Magento\Framework\Object',
-                array('getId', 'getAttributeCode'),
-                array(),
+                ['getId', 'getAttributeCode'],
+                [],
                 '',
                 false
             );
@@ -130,7 +111,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $attributes[] = $attribute;
         }
         $typeInstanceMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable', array(), array(), '', false
+            'Magento\ConfigurableProduct\Model\Product\Type\Configurable', [], [], '', false
         );
         $typeInstanceMock->expects($this->any())
             ->method('getConfigurableAttributes')
@@ -138,14 +119,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $currentProductMock->expects($this->any())
             ->method('getTypeInstance')
             ->will($this->returnValue($typeInstanceMock));
-        $allowedProducts = array();
+        $allowedProducts = [];
         for ($i = 1; $i <= 2; $i++) {
             $productMock = $this->getMock(
-                'Magento\Catalog\Model\Product', array('getData', 'getImage', 'getId', '__wakeup'), array(), '', false
+                'Magento\Catalog\Model\Product', ['getData', 'getImage', 'getId', '__wakeup'], [], '', false
             );
             $productMock->expects($this->any())
                 ->method('getData')
-                ->will($this->returnCallback(array($this, 'getDataCallback')));
+                ->will($this->returnCallback([$this, 'getDataCallback']));
             $productMock->expects($this->any())
                 ->method('getId')
                 ->will($this->returnValue('product_id_' . $i));
@@ -156,36 +137,36 @@ class DataTest extends \PHPUnit_Framework_TestCase
             }
             $allowedProducts[] = $productMock;
         }
-        $provider[] = array(
-            array(
-                'attribute_id_1' => array(
-                    'attribute_code_value_1' => array('product_id_1', 'product_id_2')
-                ),
-                'images' => array(
-                    'attribute_id_1' => array(
-                        'attribute_code_value_1' => array(
+        $provider[] = [
+            [
+                'attribute_id_1' => [
+                    'attribute_code_value_1' => ['product_id_1', 'product_id_2'],
+                ],
+                'images' => [
+                    'attribute_id_1' => [
+                        'attribute_code_value_1' => [
                             'product_id_1' => 'http://example.com/base_img_url',
-                            'product_id_2' => 'http://example.com/base_img_url_2'
-                        )
-                    ),
-                    'attribute_id_2' => array(
-                        'attribute_code_value_2' => array(
+                            'product_id_2' => 'http://example.com/base_img_url_2',
+                        ],
+                    ],
+                    'attribute_id_2' => [
+                        'attribute_code_value_2' => [
                             'product_id_1' => 'http://example.com/base_img_url',
-                            'product_id_2' => 'http://example.com/base_img_url_2'
-                        )
-                    ),
-                ),
-                'attribute_id_2' => array(
-                    'attribute_code_value_2' => array('product_id_1', 'product_id_2')
-                ),
-                'baseImage' => 'http://example.com/base_img_url'
-            ),
-            array(
+                            'product_id_2' => 'http://example.com/base_img_url_2',
+                        ],
+                    ],
+                ],
+                'attribute_id_2' => [
+                    'attribute_code_value_2' => ['product_id_1', 'product_id_2'],
+                ],
+                'baseImage' => 'http://example.com/base_img_url',
+            ],
+            [
                 'allowed_products' => $allowedProducts,
                 'current_product_mock' => $currentProductMock,
                 'baseImage' => 'http://example.com/base_img_url'
-            )
-        );
+            ],
+        ];
         return $provider;
     }
 
@@ -195,7 +176,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function getDataCallback($key)
     {
-        $map = array();
+        $map = [];
         for ($k = 1; $k < 3; $k++) {
             $map['attribute_code_' . $k] = 'attribute_code_value_' . $k;
         }

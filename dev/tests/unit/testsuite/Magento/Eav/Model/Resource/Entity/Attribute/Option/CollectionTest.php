@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Eav\Model\Resource\Entity\Attribute\Option;
 
@@ -56,7 +37,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $coreResourceMock;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -77,47 +58,47 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
+        $this->entityFactoryMock = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $this->loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
         $this->fetchStrategyMock = $this->getMock(
             'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->eventManagerMock = $this->getMock(
             'Magento\Framework\Event\ManagerInterface',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->coreResourceMock = $this->getMock(
             'Magento\Framework\App\Resource',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->storeManagerMock = $this->getMock(
-            'Magento\Framework\StoreManagerInterface',
-            array(),
-            array(),
+            'Magento\Store\Model\StoreManagerInterface',
+            [],
+            [],
             '',
             false
         );
-        $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
+        $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $this->resourceMock = $this->getMockForAbstractClass(
             'Magento\Framework\Model\Resource\Db\AbstractDb',
-            array(),
+            [],
             '',
             false,
             true,
             true,
-            array('__wakeup', 'getReadConnection', 'getMainTable', 'getTable')
+            ['__wakeup', 'getReadConnection', 'getMainTable', 'getTable']
         );
-        $this->selectMock = $this->getMock('Zend_Db_Select', array(), array(), '', false);
+        $this->selectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
 
         $this->coreResourceMock->expects(
             $this->any()
@@ -183,7 +164,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'prepareSqlCondition'
         )->with(
             'main_table.option_id',
-            array('in' => 1)
+            ['in' => 1]
         )->will(
             $this->returnValue('main_table.option_id IN (1)')
         );

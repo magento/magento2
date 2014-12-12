@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -53,7 +34,7 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
         $this->_wysiwygConfig = $wysiwygConfig;
@@ -86,100 +67,100 @@ class Edit extends \Magento\Backend\Block\Widget
         $this->getToolbar()->addChild(
             'back_button',
             'Magento\Backend\Block\Widget\Button',
-            array(
+            [
                 'label' => __('Back'),
                 'onclick' => "window.location.href = '" . $this->getUrl('*/*') . "'",
                 'class' => 'action-back'
-            )
+            ]
         );
 
         $this->getToolbar()->addChild(
             'reset_button',
             'Magento\Backend\Block\Widget\Button',
-            array(
+            [
                 'label' => __('Reset'),
                 'onclick' => 'window.location.href = window.location.href',
                 'class' => 'reset'
-            )
+            ]
         );
 
         if (!$this->isTextType()) {
             $this->getToolbar()->addChild(
                 'to_plain_button',
                 'Magento\Backend\Block\Widget\Button',
-                array(
+                [
                     'label' => __('Convert to Plain Text'),
-                    'data_attribute' => array(
-                        'role' => 'template-strip'
-                    ),
+                    'data_attribute' => [
+                        'role' => 'template-strip',
+                    ],
                     'id' => 'convert_button',
                     'class' => 'convert'
-                )
+                ]
             );
 
             $this->getToolbar()->addChild(
                 'to_html_button',
                 'Magento\Backend\Block\Widget\Button',
-                array(
+                [
                     'label' => __('Return HTML Version'),
-                    'data_attribute' => array(
-                        'role' => 'template-unstrip'
-                    ),
+                    'data_attribute' => [
+                        'role' => 'template-unstrip',
+                    ],
                     'id' => 'convert_button_back',
                     'style' => 'display:none',
                     'class' => 'return'
-                )
+                ]
             );
         }
 
         $this->getToolbar()->addChild(
             'preview_button',
             'Magento\Backend\Block\Widget\Button',
-            array(
+            [
                 'label' => __('Preview Template'),
-                'data_attribute' => array(
-                    'role' => 'template-preview'
-                ),
+                'data_attribute' => [
+                    'role' => 'template-preview',
+                ],
                 'class' => 'preview'
-            )
+            ]
         );
 
         if ($this->getEditMode()) {
             $this->getToolbar()->addChild(
                 'delete_button',
                 'Magento\Backend\Block\Widget\Button',
-                array(
+                [
                     'label' => __('Delete Template'),
-                    'data_attribute' => array(
-                        'role' => 'template-delete'
-                    ),
+                    'data_attribute' => [
+                        'role' => 'template-delete',
+                    ],
                     'class' => 'delete'
-                )
+                ]
             );
 
             $this->getToolbar()->addChild(
                 'save_as_button',
                 'Magento\Backend\Block\Widget\Button',
-                array(
+                [
                     'label' => __('Save As'),
-                    'data_attribute' => array(
-                        'role' => 'template-save-as'
-                    ),
+                    'data_attribute' => [
+                        'role' => 'template-save-as',
+                    ],
                     'class' => 'save-as'
-                )
+                ]
             );
         }
 
         $this->getToolbar()->addChild(
             'save_button',
             'Magento\Backend\Block\Widget\Button',
-            array(
+            [
                 'label' => __('Save Template'),
-                'data_attribute' => array(
-                    'role' => 'template-save'
-                ),
+                'data_attribute' => [
+                    'role' => 'template-save',
+                ],
                 'class' => 'save primary'
-            )
+            ]
         );
 
         return parent::_prepareLayout();
@@ -269,7 +250,7 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getDeleteUrl()
     {
-        return $this->getUrl('*/*/delete', array('id' => $this->getRequest()->getParam('id')));
+        return $this->getUrl('*/*/delete', ['id' => $this->getRequest()->getParam('id')]);
     }
 
     /**

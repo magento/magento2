@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Block\Adminhtml\Group\Edit;
 
@@ -39,7 +20,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxHelper;
-    
+
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
@@ -68,7 +49,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Customer\Api\Data\GroupDataBuilder $groupBuilder,
-        array $data = array()
+        array $data = []
     ) {
         $this->_taxCustomer = $taxCustomer;
         $this->_taxHelper = $taxHelper;
@@ -99,7 +80,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $defaultCustomerTaxClass = $customerGroup->getTaxClassId();
         }
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Group Information')));
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Group Information')]);
 
         $validateClass = sprintf(
             'required-entry validate-length maximum-length-%d',
@@ -108,7 +89,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $name = $fieldset->addField(
             'customer_group_code',
             'text',
-            array(
+            [
                 'name' => 'code',
                 'label' => __('Group Name'),
                 'title' => __('Group Name'),
@@ -118,7 +99,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ),
                 'class' => $validateClass,
                 'required' => true
-            )
+            ]
         );
 
         if ($customerGroup->getId() == 0 && $customerGroup->getCode()) {
@@ -128,19 +109,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'tax_class_id',
             'select',
-            array(
+            [
                 'name' => 'tax_class',
                 'label' => __('Tax Class'),
                 'title' => __('Tax Class'),
                 'class' => 'required-entry',
                 'required' => true,
                 'values' => $this->_taxCustomer->toOptionArray(true),
-            )
+            ]
         );
 
         if (!is_null($customerGroup->getId())) {
             // If edit add id
-            $form->addField('id', 'hidden', array('name' => 'id', 'value' => $customerGroup->getId()));
+            $form->addField('id', 'hidden', ['name' => 'id', 'value' => $customerGroup->getId()]);
         }
 
         if ($this->_backendSession->getCustomerGroupData()) {
@@ -149,11 +130,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         } else {
             // TODO: need to figure out how the DATA can work with forms
             $form->addValues(
-                array(
+                [
                     'id' => $customerGroup->getId(),
                     'customer_group_code' => $customerGroup->getCode(),
-                    'tax_class_id' => $defaultCustomerTaxClass
-                )
+                    'tax_class_id' => $defaultCustomerTaxClass,
+                ]
             );
         }
 

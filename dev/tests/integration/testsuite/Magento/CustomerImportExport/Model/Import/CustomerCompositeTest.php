@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
@@ -64,37 +45,37 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_customerAttributes = array(self::ATTRIBUTE_CODE_FIRST_NAME, self::ATTRIBUTE_CODE_LAST_NAME);
+    protected $_customerAttributes = [self::ATTRIBUTE_CODE_FIRST_NAME, self::ATTRIBUTE_CODE_LAST_NAME];
 
     /**
      * Customers and addresses before import, address ID is postcode
      *
      * @var array
      */
-    protected $_beforeImport = array(
-        'betsyparker@example.com' => array(
-            'addresses' => array('19107', '72701'),
-            'data' => array(self::ATTRIBUTE_CODE_FIRST_NAME => 'Betsy', self::ATTRIBUTE_CODE_LAST_NAME => 'Parker')
-        )
-    );
+    protected $_beforeImport = [
+        'betsyparker@example.com' => [
+            'addresses' => ['19107', '72701'],
+            'data' => [self::ATTRIBUTE_CODE_FIRST_NAME => 'Betsy', self::ATTRIBUTE_CODE_LAST_NAME => 'Parker'],
+        ],
+    ];
 
     /**
      * Customers and addresses after import, address ID is postcode
      *
      * @var array
      */
-    protected $_afterImport = array(
-        'betsyparker@example.com' => array(
-            'addresses' => array('19107', '72701', '19108'),
-            'data' => array(
+    protected $_afterImport = [
+        'betsyparker@example.com' => [
+            'addresses' => ['19107', '72701', '19108'],
+            'data' => [
                 self::ATTRIBUTE_CODE_FIRST_NAME => 'NotBetsy',
-                self::ATTRIBUTE_CODE_LAST_NAME => 'NotParker'
-            )
-        ),
-        'anthonyanealy@magento.com' => array('addresses' => array('72701', '92664')),
-        'loribbanks@magento.com' => array('addresses' => array('98801')),
-        'kellynilson@magento.com' => array('addresses' => array())
-    );
+                self::ATTRIBUTE_CODE_LAST_NAME => 'NotParker',
+            ],
+        ],
+        'anthonyanealy@magento.com' => ['addresses' => ['72701', '92664']],
+        'loribbanks@magento.com' => ['addresses' => ['98801']],
+        'kellynilson@magento.com' => ['addresses' => []],
+    ];
 
     protected function setUp()
     {
@@ -153,12 +134,12 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider importDataDataProvider
      */
-    public function testImportData($behavior, $sourceFile, array $dataBefore, array $dataAfter, array $errors = array())
+    public function testImportData($behavior, $sourceFile, array $dataBefore, array $dataAfter, array $errors = [])
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         // set entity adapter parameters
-        $this->_entityAdapter->setParameters(array('behavior' => $behavior));
+        $this->_entityAdapter->setParameters(['behavior' => $behavior]);
         /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = $this->_objectManager->create('Magento\Framework\Filesystem');
         $rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -196,22 +177,22 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     public function importDataDataProvider()
     {
         $filesDirectory = __DIR__ . '/_files/';
-        $sourceData = array(
-            'delete_behavior' => array(
+        $sourceData = [
+            'delete_behavior' => [
                 '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
                 '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
                 '$dataBefore' => $this->_beforeImport,
-                '$dataAfter' => array()
-            )
-        );
+                '$dataAfter' => [],
+            ],
+        ];
 
-        $sourceData['add_update_behavior'] = array(
+        $sourceData['add_update_behavior'] = [
             '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
             '$sourceFile' => $filesDirectory . self::UPDATE_FILE_NAME,
             '$dataBefore' => $this->_beforeImport,
             '$dataAfter' => $this->_afterImport,
-            '$errors' => array(array(6)) // row #6 has no website
-        );
+            '$errors' => [[6]], // row #6 has no website
+        ];
 
         return $sourceData;
     }

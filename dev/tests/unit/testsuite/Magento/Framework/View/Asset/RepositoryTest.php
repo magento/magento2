@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\View\Asset;
@@ -56,16 +37,34 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $requestMock;
+
     protected function setUp()
     {
         $this->themeList = $this->getMockForAbstractClass('\Magento\Framework\View\Design\Theme\ListInterface');
         $this->source = $this->getMock(
-            'Magento\Framework\View\Asset\Source', array('getFile', 'getContent'), array(), '', false
+            'Magento\Framework\View\Asset\Source',
+            ['getFile', 'getContent'],
+            [],
+            '',
+            false
         );
         $this->baseUrl = $this->getMockForAbstractClass('Magento\Framework\UrlInterface');
         $this->design = $this->getMockForAbstractClass('Magento\Framework\View\DesignInterface');
         $this->theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $this->object = new Repository($this->baseUrl, $this->design, $this->themeList, $this->source);
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->object = new Repository(
+            $this->baseUrl,
+            $this->design,
+            $this->themeList,
+            $this->source,
+            $this->requestMock
+        );
     }
 
     /**
@@ -74,7 +73,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateDesignParamsWrongTheme()
     {
-        $params = array('area' => 'area', 'theme' => 'nonexistent_theme');
+        $params = ['area' => 'area', 'theme' => 'nonexistent_theme'];
         $this->themeList->expects($this->once())
             ->method('getThemeByFullPath')
             ->with('area/nonexistent_theme')
@@ -151,12 +150,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function createSimilarDataProvider()
     {
-        return array(
-            array('test/file.css', '', 'test/file.css', 'css', ''),
-            array('test/file.js', '', 'test/file.js', 'js', ''),
-            array('test/file.css', 'Module_Name', 'test/file.css', 'css', 'Module_Name'),
-            array('Module_Name::test/file.css', 'Module_Two', 'test/file.css', 'css', 'Module_Name'),
-        );
+        return [
+            ['test/file.css', '', 'test/file.css', 'css', ''],
+            ['test/file.js', '', 'test/file.js', 'js', ''],
+            ['test/file.css', 'Module_Name', 'test/file.css', 'css', 'Module_Name'],
+            ['Module_Name::test/file.css', 'Module_Two', 'test/file.css', 'css', 'Module_Name'],
+        ];
     }
 
     /**
@@ -171,10 +170,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->baseUrl->expects($this->once())
             ->method('getBaseUrl')
-            ->will($this->returnValueMap(array(
-                array(array('_type' => 'static'), 'http://example.com/static/'),
-                array(array('_type' => 'media'), 'http://example.com/media/'),
-            )));
+            ->will($this->returnValueMap([
+                [['_type' => 'static'], 'http://example.com/static/'],
+                [['_type' => 'media'], 'http://example.com/media/'],
+            ]));
         $dirType = 'dirType';
         $asset = $this->object->createArbitrary($filePath, $dirPath, $dirType, $baseUrlType);
         $this->assertInstanceOf('\Magento\Framework\View\Asset\File', $asset);
@@ -191,11 +190,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function createArbitraryDataProvider()
     {
-        return array(
-            array('test/example.js', 'dir/path', 'static', 'js', 'http://example.com/static/dir/path/test/example.js'),
-            array('test/example.css', '', 'media', 'css', 'http://example.com/media/test/example.css'),
-            array('img/logo.gif', 'uploaded', 'media', 'gif', 'http://example.com/media/uploaded/img/logo.gif'),
-        );
+        return [
+            ['test/example.js', 'dir/path', 'static', 'js', 'http://example.com/static/dir/path/test/example.js'],
+            ['test/example.css', '', 'media', 'css', 'http://example.com/media/test/example.css'],
+            ['img/logo.gif', 'uploaded', 'media', 'gif', 'http://example.com/media/uploaded/img/logo.gif'],
+        ];
     }
 
     /**
@@ -227,12 +226,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function createRelatedDataProvider()
     {
-        return array(
-            array('test/file.ext', 'rel/file.ext2', '', 'rel/test/file.ext', 'ext', ''),
-            array('test/file.ext', 'rel/file.ext2', 'Module_Name', 'rel/test/file.ext', 'ext', 'Module_Name'),
-            array('Module_One::test/file.ext', 'rel/file.ext2', 'Module_Two', 'test/file.ext', 'ext', 'Module_One'),
-            array('Module_Name::test/file.ext', '', '', 'test/file.ext', 'ext', 'Module_Name'),
-        );
+        return [
+            ['test/file.ext', 'rel/file.ext2', '', 'rel/test/file.ext', 'ext', ''],
+            ['test/file.ext', 'rel/file.ext2', 'Module_Name', 'rel/test/file.ext', 'ext', 'Module_Name'],
+            ['Module_One::test/file.ext', 'rel/file.ext2', 'Module_Two', 'test/file.ext', 'ext', 'Module_One'],
+            ['Module_Name::test/file.ext', '', '', 'test/file.ext', 'ext', 'Module_Name'],
+        ];
     }
 
     public function testCreateRemoteAsset()
@@ -259,11 +258,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetUrlWithParams()
     {
         $defaultTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $defaults = array(
+        $defaults = [
             'area' => 'area',
             'themeModel' => $defaultTheme,
             'locale' => 'locale',
-        );
+        ];
         $this->design->expects($this->atLeastOnce())->method('getDesignParams')->will($this->returnValue($defaults));
         $this->design->expects($this->once())
             ->method('getConfigurationDesignTheme')
@@ -276,22 +275,22 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->baseUrl->expects($this->once())
             ->method('getBaseUrl')
             ->will($this->returnValue('http://example.com/static/'));
-        $params = array(
+        $params = [
             'area' => 'custom_area',
             'locale' => 'en_US',
             'module' => 'This_Shall_Not_Be_Used',
-        );
+        ];
         $result = $this->object->getUrlWithParams('Module_Name::file.ext', $params);
         $this->assertEquals('http://example.com/static/custom_area/custom_theme/en_US/Module_Name/file.ext', $result);
     }
 
     private function mockDesign()
     {
-        $params = array(
+        $params = [
             'area'       => 'area',
             'themeModel' => $this->theme,
             'locale'     => 'locale',
-        );
+        ];
         $this->design->expects($this->atLeastOnce())->method('getDesignParams')->will($this->returnValue($params));
         $this->design->expects($this->any())
             ->method('getConfigurationDesignTheme')
@@ -315,10 +314,10 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExtractModule()
     {
-        $this->assertEquals(array('Module_One', 'File'), Repository::extractModule('Module_One::File'));
-        $this->assertEquals(array('', 'File'), Repository::extractModule('File'));
+        $this->assertEquals(['Module_One', 'File'], Repository::extractModule('Module_One::File'));
+        $this->assertEquals(['', 'File'], Repository::extractModule('File'));
         $this->assertEquals(
-            array('Module_One', 'File::SomethingElse'),
+            ['Module_One', 'File::SomethingElse'],
             Repository::extractModule('Module_One::File::SomethingElse')
         );
     }

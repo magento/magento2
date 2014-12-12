@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Core\Helper;
 
@@ -36,14 +17,13 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->once())->method('getArea')->will($this->returnValue('area'));
         $layoutMergeFactory = $this->_getLayoutMergeFactory($theme, $layoutStr);
         $assetRepo = $this->getMock(
-            'Magento\Framework\View\Asset\Repository', array('createAsset'), array(), '', false
+            'Magento\Framework\View\Asset\Repository', ['createAsset'], [], '', false
         );
         $assetRepo->expects($this->any())
             ->method('createAsset')
-            ->will($this->returnArgument(0))
-        ;
+            ->will($this->returnArgument(0));
         $helper = new \Magento\Core\Helper\Theme(
-            $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false),
             $layoutMergeFactory,
             $assetRepo
         );
@@ -57,16 +37,16 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function getCssAssetsDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 '<block class="Magento\Theme\Block\Html\Head" name="head">
                     <block class="Magento\Theme\Block\Html\Head\Css" name="magento-loader-js">
                         <arguments><argument name="file" xsi:type="string">test1.css</argument></arguments>
                     </block>
                 </block>',
-                array('test1.css' => 'test1.css')
-            ),
-            array(
+                ['test1.css' => 'test1.css'],
+            ],
+            [
                 '<block class="Magento\Theme\Block\Html\Head" name="head">
                     <block class="Magento\Theme\Block\Html\Head\Css" name="magento-loader-js">
                         <arguments>
@@ -74,9 +54,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                         </arguments>
                     </block>
                 </block>',
-                array('Magento_Core::test3.css' => 'Magento_Core::test3.css'),
-            ),
-            array(
+                ['Magento_Core::test3.css' => 'Magento_Core::test3.css'],
+            ],
+            [
                 '<block class="Magento\Theme\Block\Html\Head" name="head">
                     <block class="Magento\Theme\Block\Html\Head\Css" name="magento-loader-js">
                         <arguments><argument name="file" xsi:type="string">test.css</argument></arguments>
@@ -115,13 +95,13 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                         </arguments>
                     </block>
                 </referenceBlock>',
-                array(
+                [
                     'Magento_Core::test.css' => 'Magento_Core::test.css',
                     'test.css' => 'test.css',
                     'testh.css' => 'testh.css',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -146,11 +126,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         /** @var $processorFactory \Magento\Framework\View\Layout\ProcessorFactory */
         $processorFactory = $this->getMock(
-            'Magento\Framework\View\Layout\ProcessorFactory', array('create'), array(), '', false
+            'Magento\Framework\View\Layout\ProcessorFactory', ['create'], [], '', false
         );
         $processorFactory->expects($this->any())
             ->method('create')
-            ->with(array('theme' => $theme))
+            ->with(['theme' => $theme])
             ->will($this->returnValue($layoutProcessor));
 
         return $processorFactory;

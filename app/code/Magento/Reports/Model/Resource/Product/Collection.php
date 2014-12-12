@@ -1,27 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-
 
 /**
  * Products Report collection
@@ -82,7 +62,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -96,7 +76,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param mixed $connection
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -109,7 +89,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -255,12 +235,12 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         if ($this->_selectCountSqlType == self::SELECT_COUNT_SQL_TYPE_CART) {
             $countSelect = clone $this->getSelect();
             $countSelect->reset()->from(
-                array('quote_item_table' => $this->getTable('sales_quote_item')),
-                array('COUNT(DISTINCT quote_item_table.product_id)')
+                ['quote_item_table' => $this->getTable('sales_quote_item')],
+                ['COUNT(DISTINCT quote_item_table.product_id)']
             )->join(
-                array('quote_table' => $this->getTable('sales_quote')),
+                ['quote_table' => $this->getTable('sales_quote')],
                 'quote_table.entity_id = quote_item_table.quote_id AND quote_table.is_active = 1',
-                array()
+                []
             );
             return $countSelect;
         }
@@ -288,18 +268,18 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $countSelect->reset();
 
         $countSelect->from(
-            array('quote_items' => $this->getTable('sales_quote_item')),
+            ['quote_items' => $this->getTable('sales_quote_item')],
             'COUNT(*)'
         )->join(
-            array('quotes' => $this->getTable('sales_quote')),
+            ['quotes' => $this->getTable('sales_quote')],
             'quotes.entity_id = quote_items.quote_id AND quotes.is_active = 1',
-            array()
+            []
         )->where(
             "quote_items.product_id = e.entity_id"
         );
 
         $this->getSelect()->columns(
-            array("carts" => "({$countSelect})")
+            ["carts" => "({$countSelect})"]
         )->group(
             "e.{$this->getProductEntityId()}"
         )->having(
@@ -323,24 +303,24 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $productFieldName = sprintf('e.%s', $this->getProductEntityId());
 
         $this->getSelect()->joinLeft(
-            array('order_items' => $orderItemTableName),
+            ['order_items' => $orderItemTableName],
             "order_items.product_id = {$productFieldName}",
-            array()
+            []
         )->columns(
-            array('orders' => 'COUNT(order_items2.item_id)')
+            ['orders' => 'COUNT(order_items2.item_id)']
         )->group(
             $productFieldName
         );
 
-        $dateFilter = array('order_items2.item_id = order_items.item_id');
+        $dateFilter = ['order_items2.item_id = order_items.item_id'];
         if ($from != '' && $to != '') {
             $dateFilter[] = $this->_prepareBetweenSql('order_items2.created_at', $from, $to);
         }
 
         $this->getSelect()->joinLeft(
-            array('order_items2' => $orderItemTableName),
+            ['order_items2' => $orderItemTableName],
             implode(' AND ', $dateFilter),
-            array()
+            []
         );
 
         return $this;
@@ -359,16 +339,16 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $compositeTypeIds = $this->_productType->getCompositeTypes();
         $orderTableAliasName = $adapter->quoteIdentifier('order');
 
-        $orderJoinCondition = array(
+        $orderJoinCondition = [
             $orderTableAliasName . '.entity_id = order_items.order_id',
-            $adapter->quoteInto("{$orderTableAliasName}.state <> ?", \Magento\Sales\Model\Order::STATE_CANCELED)
-        );
+            $adapter->quoteInto("{$orderTableAliasName}.state <> ?", \Magento\Sales\Model\Order::STATE_CANCELED),
+        ];
 
-        $productJoinCondition = array(
+        $productJoinCondition = [
             $adapter->quoteInto('(e.type_id NOT IN (?))', $compositeTypeIds),
             'e.entity_id = order_items.product_id',
-            $adapter->quoteInto('e.entity_type_id = ?', $this->getProductEntityTypeId())
-        );
+            $adapter->quoteInto('e.entity_type_id = ?', $this->getProductEntityTypeId()),
+        ];
 
         if ($from != '' && $to != '') {
             $fieldName = $orderTableAliasName . '.created_at';
@@ -376,16 +356,16 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         }
 
         $this->getSelect()->reset()->from(
-            array('order_items' => $this->getTable('sales_order_item')),
-            array('ordered_qty' => 'SUM(order_items.qty_ordered)', 'order_items_name' => 'order_items.name')
+            ['order_items' => $this->getTable('sales_order_item')],
+            ['ordered_qty' => 'SUM(order_items.qty_ordered)', 'order_items_name' => 'order_items.name']
         )->joinInner(
-            array('order' => $this->getTable('sales_order')),
+            ['order' => $this->getTable('sales_order')],
             implode(' AND ', $orderJoinCondition),
-            array()
+            []
         )->joinLeft(
-            array('e' => $this->getProductEntityTableName()),
+            ['e' => $this->getProductEntityTableName()],
             implode(' AND ', $productJoinCondition),
-            array(
+            [
                 'entity_id' => 'order_items.product_id',
                 'entity_type_id' => 'e.entity_type_id',
                 'attribute_set_id' => 'e.attribute_set_id',
@@ -395,7 +375,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                 'required_options' => 'e.required_options',
                 'created_at' => 'e.created_at',
                 'updated_at' => 'e.updated_at'
-            )
+            ]
         )->where(
             'parent_item_id IS NULL'
         )->group(
@@ -416,7 +396,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_DESC)
     {
-        if (in_array($attribute, array('carts', 'orders', 'ordered_qty'))) {
+        if (in_array($attribute, ['carts', 'orders', 'ordered_qty'])) {
             $this->getSelect()->order($attribute . ' ' . $dir);
         } else {
             parent::setOrder($attribute, $dir);
@@ -446,10 +426,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         }
 
         $this->getSelect()->reset()->from(
-            array('report_table_views' => $this->getTable('report_event')),
-            array('views' => 'COUNT(report_table_views.event_id)')
+            ['report_table_views' => $this->getTable('report_event')],
+            ['views' => 'COUNT(report_table_views.event_id)']
         )->join(
-            array('e' => $this->getProductEntityTableName()),
+            ['e' => $this->getProductEntityTableName()],
             $this->getConnection()->quoteInto(
                 "e.entity_id = report_table_views.object_id AND e.entity_type_id = ?",
                 $this->getProductEntityTypeId()
@@ -500,10 +480,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     public function addStoreRestrictions($storeIds, $websiteIds)
     {
         if (!is_array($storeIds)) {
-            $storeIds = array($storeIds);
+            $storeIds = [$storeIds];
         }
         if (!is_array($websiteIds)) {
-            $websiteIds = array($websiteIds);
+            $websiteIds = [$websiteIds];
         }
 
         $filters = $this->_productLimitationFilters;

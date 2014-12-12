@@ -1,38 +1,19 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-return array(
-    'renderers' => array(
-        'type_one' => array(
+return [
+    'renderers' => [
+        'type_one' => [
             'product_type_one' => 'Renderer\Type\One\Product\One',
             'product_type_two' => 'Renderer\Type\One\Product\Two',
-        ),
-        'type_two' => array(
+        ],
+        'type_two' => [
             'product_type_three' => 'Renderer\Type\Two\Product\Two',
-        ),
-    ),
-    'totals' => array(
-        'total1' => array(
+        ],
+    ],
+    'totals' => [
+        'total1' => [
             'title' => 'Title1 Modified',
             'source_field' => 'source1',
             'title_source_field' => 'title_source1',
@@ -41,8 +22,8 @@ return array(
             'sort_order' => '1',
             'model' => 'Model1',
             'amount_prefix' => 'prefix1',
-        ),
-        'total2' => array(
+        ],
+        'total2' => [
             'title' => 'Title2',
             'source_field' => 'source2',
             'title_source_field' => 'title_source2',
@@ -51,8 +32,8 @@ return array(
             'sort_order' => '2',
             'model' => 'Model2',
             'amount_prefix' => 'prefix2',
-        ),
-        'total3' => array(
+        ],
+        'total3' => [
             'title' => 'Title3',
             'source_field' => 'source3',
             'title_source_field' => 'title_source3',
@@ -61,6 +42,6 @@ return array(
             'sort_order' => '3',
             'model' => 'Model3',
             'amount_prefix' => 'prefix3',
-        ),
-    ),
-);
+        ],
+    ],
+];

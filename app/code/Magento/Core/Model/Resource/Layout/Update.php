@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Core\Model\Resource\Layout;
 
@@ -66,7 +47,7 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\View\Design\ThemeInterface $theme,
         \Magento\Store\Model\Store $store
     ) {
-        $bind = array('layout_update_handle' => $handle, 'theme_id' => $theme->getId(), 'store_id' => $store->getId());
+        $bind = ['layout_update_handle' => $handle, 'theme_id' => $theme->getId(), 'store_id' => $store->getId()];
         $result = '';
         $readAdapter = $this->_getReadAdapter();
         if ($readAdapter) {
@@ -89,10 +70,10 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
         // 'All Stores'?
 
         $select = $this->_getReadAdapter()->select()->from(
-            array('layout_update' => $this->getMainTable()),
-            array('xml')
+            ['layout_update' => $this->getMainTable()],
+            ['xml']
         )->join(
-            array('link' => $this->getTable('core_layout_link')),
+            ['link' => $this->getTable('core_layout_link')],
             'link.layout_update_id=layout_update.layout_update_id',
             ''
         )->where(
@@ -124,12 +105,12 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (isset($data['store_id']) && isset($data['theme_id'])) {
             $this->_getWriteAdapter()->insertOnDuplicate(
                 $this->getTable('core_layout_link'),
-                array(
+                [
                     'store_id' => $data['store_id'],
                     'theme_id' => $data['theme_id'],
                     'layout_update_id' => $object->getId(),
                     'is_temporary' => (int)$object->getIsTemporary()
-                )
+                ]
             );
         }
         $this->_cache->clean();

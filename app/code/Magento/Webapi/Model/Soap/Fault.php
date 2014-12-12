@@ -2,26 +2,7 @@
 /**
  * Magento-specific SOAP fault.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Webapi\Model\Soap;
 
@@ -65,14 +46,14 @@ class Fault extends \RuntimeException
      *
      * @var array
      */
-    protected $_parameters = array();
+    protected $_parameters = [];
 
     /**
      * Wrapped errors are extracted from exception and can be inserted into 'Detail' node as 'WrappedErrors'.
      *
      * @var array
      */
-    protected $_wrappedErrors = array();
+    protected $_wrappedErrors = [];
 
     /**
      * Fault name is used for details wrapper node name generation.
@@ -86,7 +67,7 @@ class Fault extends \RuntimeException
      *
      * @var array
      */
-    protected $_details = array();
+    protected $_details = [];
 
     /**
      * @var \Magento\Framework\App\RequestInterface
@@ -143,13 +124,13 @@ class Fault extends \RuntimeException
             $traceDetail = $this->getPrevious()->getStackTrace()
                 ? $this->getPrevious()->getStackTrace()
                 : $this->getTraceAsString();
-            $this->addDetails(array(self::NODE_DETAIL_TRACE => "<![CDATA[{$traceDetail}]]>"));
+            $this->addDetails([self::NODE_DETAIL_TRACE => "<![CDATA[{$traceDetail}]]>"]);
         }
         if ($this->getParameters()) {
-            $this->addDetails(array(self::NODE_DETAIL_PARAMETERS => $this->getParameters()));
+            $this->addDetails([self::NODE_DETAIL_PARAMETERS => $this->getParameters()]);
         }
         if ($this->getWrappedErrors()) {
-            $this->addDetails(array(self::NODE_DETAIL_WRAPPED_ERRORS => $this->getWrappedErrors()));
+            $this->addDetails([self::NODE_DETAIL_WRAPPED_ERRORS => $this->getWrappedErrors()]);
         }
 
         return $this->getSoapFaultMessage($this->getMessage(), $this->getSoapCode(), $this->getDetails());

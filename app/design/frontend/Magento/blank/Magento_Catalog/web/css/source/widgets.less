@@ -1,25 +1,5 @@
 // /**
-// //  * Magento
-//  *
-//  * NOTICE OF LICENSE
-//  *
-//  * This source file is subject to the Academic Free License (AFL 3.0)
-//  * that is bundled with this package in the file LICENSE_AFL.txt.
-//  * It is also available through the world-wide-web at this URL:
-//  * http://opensource.org/licenses/afl-3.0.php
-//  * If you did not receive a copy of the license and are unable to
-//  * obtain it through the world-wide-web, please send an email
-//  * to license@magentocommerce.com so we can send you a copy immediately.
-//  *
-//  * DISCLAIMER
-//  *
-//  * Do not edit or add to this file if you wish to upgrade Magento to newer
-//  * versions in the future. If you wish to customize Magento for your
-//  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @category    design
-//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 //  */
 
 //
@@ -72,8 +52,8 @@
 
 .responsive-min-m(@break) when (@break = @screen-s) {
     .block.widget .products-grid .product-item,
-    .layout-1 .block.widget .products-grid .product-item,
-    .layout-3 .block.widget .products-grid .product-item { width: 100%/3 }
+    .page-layout-1column .block.widget .products-grid .product-item,
+    .page-layout-3columns .block.widget .products-grid .product-item { width: 100%/3 }
 }
 
 //
@@ -82,14 +62,14 @@
 
 .responsive-min-l(@break) when (@break = @screen-m) {
     .block.widget .products-grid .product-item{ width: 100%/3 }
-    .layout-1 .block.widget .products-grid .product-item { width: 100%/4 }
-    .layout-3 .block.widget .products-grid .product-item { width: 100%/2 }
+    .page-layout-1column .block.widget .products-grid .product-item { width: 100%/4 }
+    .page-layout-3columns .block.widget .products-grid .product-item { width: 100%/2 }
 }
 
 .responsive-min-l(@break) when (@break = @screen-l) {
     .block.widget .products-grid .product-item { width: 100%/5 }
-    .layout-1 .block.widget .products-grid .product-item { width: 100%/6 }
-    .layout-3 .block.widget .products-grid .product-item { width: 100%/4 }
+    .page-layout-1column .block.widget .products-grid .product-item { width: 100%/6 }
+    .page-layout-3columns .block.widget .products-grid .product-item { width: 100%/4 }
     .block.widget .products-grid .product-items { margin: 0; }
     .block.widget .products-grid .product-item {
         width: 22%;

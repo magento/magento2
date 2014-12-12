@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CatalogInventory\Model\Resource\Stock;
 
@@ -33,7 +14,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Store model manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -51,13 +32,13 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Eav\Model\Config $eavConfig
     ) {
@@ -85,34 +66,38 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param int $status
      * @param float|int $qty
      * @param int|null $websiteId
+     * @param int $stockId
      * @return $this
      */
     public function saveProductStatus(
         $productId,
         $status,
         $qty,
-        $websiteId
+        $websiteId,
+        $stockId = Stock::DEFAULT_STOCK_ID
     ) {
         $adapter = $this->_getWriteAdapter();
         $select = $adapter->select()->from($this->getMainTable())
             ->where('product_id = :product_id')
-            ->where('website_id = :website_id');
-        $bind = array(':product_id' => $productId, ':website_id' => $websiteId);
+            ->where('website_id = :website_id')
+            ->where('stock_id = :stock_id');
+        $bind = [':product_id' => $productId, ':website_id' => $websiteId, ':stock_id' => $stockId];
         $row = $adapter->fetchRow($select, $bind);
         if ($row) {
-            $bind = array('qty' => $qty, 'stock_status' => $status);
-            $where = array(
+            $bind = ['qty' => $qty, 'stock_status' => $status];
+            $where = [
                 $adapter->quoteInto('product_id=?', (int)$row['product_id']),
-                $adapter->quoteInto('website_id=?', (int)$row['website_id'])
-            );
+                $adapter->quoteInto('website_id=?', (int)$row['website_id']),
+            ];
             $adapter->update($this->getMainTable(), $bind, $where);
         } else {
-            $bind = array(
+            $bind = [
                 'product_id' => $productId,
                 'website_id' => $websiteId,
+                'stock_id' => $stockId,
                 'qty' => $qty,
-                'stock_status' => $status
-            );
+                'stock_status' => $status,
+            ];
             $adapter->insert($this->getMainTable(), $bind);
         }
 
@@ -125,17 +110,19 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param int[] $productIds
      * @param int $websiteId
+     * @param int $stockId
      * @return array
      */
-    public function getProductsStockStatuses($productIds, $websiteId)
+    public function getProductsStockStatuses($productIds, $websiteId, $stockId = Stock::DEFAULT_STOCK_ID)
     {
         if (!is_array($productIds)) {
-            $productIds = array($productIds);
+            $productIds = [$productIds];
         }
 
         $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable(), array('product_id', 'stock_status'))
+            ->from($this->getMainTable(), ['product_id', 'stock_status'])
             ->where('product_id IN(?)', $productIds)
+            ->where('stock_id=?', (int) $stockId)
             ->where('website_id=?', (int) $websiteId);
         return $this->_getReadAdapter()->fetchPairs($select);
     }
@@ -162,12 +149,12 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getProductsType($productIds)
     {
         if (!is_array($productIds)) {
-            $productIds = array($productIds);
+            $productIds = [$productIds];
         }
 
         $select = $this->_getReadAdapter()->select()->from(
-            array('e' => $this->getTable('catalog_product_entity')),
-            array('entity_id', 'type_id')
+            ['e' => $this->getTable('catalog_product_entity')],
+            ['entity_id', 'type_id']
         )->where(
             'entity_id IN(?)',
             $productIds
@@ -186,13 +173,13 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getProductCollection($lastEntityId = 0, $limit = 1000)
     {
         $select = $this->_getReadAdapter()->select()->from(
-            array('e' => $this->getTable('catalog_product_entity')),
-            array('entity_id', 'type_id')
+            ['e' => $this->getTable('catalog_product_entity')],
+            ['entity_id', 'type_id']
         )
             ->order('entity_id ASC')
             ->where('entity_id > :entity_id')
             ->limit($limit);
-        return $this->_getReadAdapter()->fetchPairs($select, array(':entity_id' => $lastEntityId));
+        return $this->_getReadAdapter()->fetchPairs($select, [':entity_id' => $lastEntityId]);
     }
 
     /**
@@ -206,9 +193,9 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $websiteId = $website->getId();
         $select->joinLeft(
-            array('stock_status' => $this->getMainTable()),
+            ['stock_status' => $this->getMainTable()],
             'e.entity_id = stock_status.product_id AND stock_status.website_id=' . $websiteId,
-            array('salable' => 'stock_status.stock_status')
+            ['salable' => 'stock_status.stock_status']
         );
 
         return $this;
@@ -229,14 +216,14 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
 
         $joinCondition .= $this->_getReadAdapter()->quoteInto(
-            ' AND stock_status_index.website_id = ?',
-            $websiteId
+            ' AND stock_status_index.stock_id = ?',
+            Stock::DEFAULT_STOCK_ID
         );
 
         $collection->getSelect()->join(
-            array('stock_status_index' => $this->getMainTable()),
+            ['stock_status_index' => $this->getMainTable()],
             $joinCondition,
-            array()
+            []
         )->where(
             'stock_status_index.stock_status=?',
             Stock\Status::STATUS_IN_STOCK
@@ -255,7 +242,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getProductStatus($productIds, $storeId = null)
     {
         if (!is_array($productIds)) {
-            $productIds = array($productIds);
+            $productIds = [$productIds];
         }
 
         $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status');
@@ -264,7 +251,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $adapter = $this->_getReadAdapter();
 
         if ($storeId === null || $storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
-            $select = $adapter->select()->from($attributeTable, array('entity_id', 'value'))
+            $select = $adapter->select()->from($attributeTable, ['entity_id', 'value'])
                 ->where('entity_id IN (?)', $productIds)
                 ->where('attribute_id = ?', $attribute->getAttributeId())
                 ->where('store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
@@ -272,10 +259,10 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $rows = $adapter->fetchPairs($select);
         } else {
             $select = $adapter->select()->from(
-                array('t1' => $attributeTable),
-                array('entity_id' => 't1.entity_id', 'value' => $adapter->getIfNullSql('t2.value', 't1.value'))
+                ['t1' => $attributeTable],
+                ['entity_id' => 't1.entity_id', 'value' => $adapter->getIfNullSql('t2.value', 't1.value')]
             )->joinLeft(
-                array('t2' => $attributeTable),
+                ['t2' => $attributeTable],
                 't1.entity_id = t2.entity_id AND t1.attribute_id = t2.attribute_id AND t2.store_id = ' . (int)$storeId
             )->where(
                 't1.store_id = ?',
@@ -291,7 +278,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $rows = $adapter->fetchPairs($select);
         }
 
-        $statuses = array();
+        $statuses = [];
         foreach ($productIds as $productId) {
             if (isset($rows[$productId])) {
                 $statuses[$productId] = $rows[$productId];

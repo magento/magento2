@@ -2,26 +2,7 @@
 /**
  * Rule for searching php file dependency
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\TestFramework\Dependency;
 
@@ -36,7 +17,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
      *
      * @var array
      */
-    protected $_mapRouters = array();
+    protected $_mapRouters = [];
 
     /**
      * List of layout blocks
@@ -48,17 +29,17 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
      *
      * @var array
      */
-    protected $_mapLayoutBlocks = array();
+    protected $_mapLayoutBlocks = [];
 
     /**
      * Default modules list.
      *
      * @var array
      */
-    protected $_defaultModules = array(
+    protected $_defaultModules = [
         'frontend' => 'Magento\Theme',
-        'adminhtml' => 'Magento\Adminhtml'
-    );
+        'adminhtml' => 'Magento\Adminhtml',
+    ];
 
     /**
      * Constructor
@@ -84,8 +65,8 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
      */
     public function getDependencyInfo($currentModule, $fileType, $file, &$contents)
     {
-        if (!in_array($fileType, array('php', 'template'))) {
-            return array();
+        if (!in_array($fileType, ['php', 'template'])) {
+            return [];
         }
 
         $pattern = '~\b(?<class>(?<module>(' . implode(
@@ -93,7 +74,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
             \Magento\Framework\Test\Utility\Files::init()->getNamespaces()
         ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
 
-        $dependenciesInfo = array();
+        $dependenciesInfo = [];
         if (preg_match_all($pattern, $contents, $matches)) {
             $matches['module'] = array_unique($matches['module']);
             foreach ($matches['module'] as $i => $referenceModule) {
@@ -101,11 +82,11 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
                 if ($currentModule == $referenceModule) {
                     continue;
                 }
-                $dependenciesInfo[] = array(
+                $dependenciesInfo[] = [
                     'module' => $referenceModule,
                     'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                    'source' => trim($matches['class'][$i])
-                );
+                    'source' => trim($matches['class'][$i]),
+                ];
             }
         }
         $result = $this->_caseGetUrl($currentModule, $contents);
@@ -133,7 +114,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
     {
         $pattern = '/[\->:]+(?<source>getUrl\([\'"](?<router>[\w\/*]+)[\'"])/';
 
-        $dependencies = array();
+        $dependencies = [];
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
             return $dependencies;
         }
@@ -144,11 +125,11 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
                 $modules = $this->_mapRouters[$router];
                 if (!in_array($currentModule, $modules)) {
                     foreach ($modules as $module) {
-                        $dependencies[] = array(
+                        $dependencies[] = [
                             'module' => $module,
                             'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                            'source' => $item['source']
-                        );
+                            'source' => $item['source'],
+                        ];
                     }
                 }
             }
@@ -171,22 +152,22 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
 
         $area = $this->_getAreaByFile($file, $fileType);
 
-        $result = array();
+        $result = [];
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
             return $result;
         }
 
         foreach ($matches as $match) {
-            if (in_array($match['block'], array('root', 'content'))) {
+            if (in_array($match['block'], ['root', 'content'])) {
                 continue;
             }
             $check = $this->_checkDependencyLayoutBlock($currentModule, $area, $match['block']);
             $module = isset($check['module']) ? $check['module'] : null;
             if ($module) {
-                $result[$module] = array(
+                $result[$module] = [
                     'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                    'source' => $match['source']
-                );
+                    'source' => $match['source'],
+                ];
             }
         }
         return $this->_getUniqueDependencies($result);
@@ -228,7 +209,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
     {
         if (isset($this->_mapLayoutBlocks[$area][$block]) || is_null($area)) {
             // CASE 1: No dependencies
-            $modules = array();
+            $modules = [];
             if (is_null($area)) {
                 foreach ($this->_mapLayoutBlocks as $blocks) {
                     if (array_key_exists($block, $blocks)) {
@@ -239,20 +220,20 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
                 $modules = $this->_mapLayoutBlocks[$area][$block];
             }
             if (isset($modules[$currentModule])) {
-                return array('module' => null);
+                return ['module' => null];
             }
             // CASE 2: Single dependency
             if (1 == count($modules)) {
-                return array('module' => current($modules));
+                return ['module' => current($modules)];
             }
             // CASE 3: Default module dependency
             $defaultModule = $this->_getDefaultModuleName($area);
             if (isset($modules[$defaultModule])) {
-                return array('module' => $defaultModule);
+                return ['module' => $defaultModule];
             }
         }
         // CASE 4: \Exception - Undefined block
-        return array();
+        return [];
     }
 
     /**
@@ -275,11 +256,11 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
      * @param array $dependencies
      * @return array
      */
-    protected function _getUniqueDependencies($dependencies = array())
+    protected function _getUniqueDependencies($dependencies = [])
     {
-        $result = array();
+        $result = [];
         foreach ($dependencies as $module => $value) {
-            $result[] = array('module' => $module, 'type' => $value['type'], 'source' => $value['source']);
+            $result[] = ['module' => $module, 'type' => $value['type'], 'source' => $value['source']];
         }
         return $result;
     }

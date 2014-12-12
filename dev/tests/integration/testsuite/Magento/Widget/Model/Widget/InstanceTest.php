@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Widget\Model\Widget;
 
@@ -76,10 +57,10 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         ) {
             $element = $config['parameters']['template']['values']['list'];
         }
-        $expected = array(
+        $expected = [
             'value' => 'product/widget/new/content/new_list.phtml',
-            'label' => 'New Products List Template'
-        );
+            'label' => 'New Products List Template',
+        ];
         $this->assertNotNull($element);
         $this->assertEquals($expected, $element);
 
@@ -121,7 +102,24 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateLayoutUpdateXml(\Magento\Widget\Model\Widget\Instance $model)
     {
-        $params = array('display_mode' => 'fixed', 'types' => array('type_1', 'type_2'));
+        $params = [
+            'display_mode' => 'fixed',
+            'types' => ['type_1', 'type_2'],
+            'conditions' => [
+                '1' => [
+                    'type' => 'Magento\CatalogWidget\Model\Rule\Condition\Combine',
+                    'aggregator' => 'all',
+                    'value' => '1',
+                    'new_child' => '',
+                ],
+                '1--1' => [
+                    'type' => 'Magento\CatalogWidget\Model\Rule\Condition\Product',
+                    'attribute' => 'attribute_set_id',
+                    'value' => '4',
+                    'operator' => '==',
+                ],
+            ],
+        ];
         $model->setData('widget_parameters', $params);
         $this->assertEquals('', $model->generateLayoutUpdateXml('content'));
         $model->setId('test_id')->setPackageTheme('Magento/luma');
@@ -133,5 +131,8 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<argument name="value" xsi:type="string">fixed</argument>', $result);
         $this->assertContains('<argument name="name" xsi:type="string">types</argument>', $result);
         $this->assertContains('<argument name="value" xsi:type="string">type_1,type_2</argument>', $result);
+        $this->assertContains('<argument name="name" xsi:type="string">conditions_encoded</argument>', $result);
+        $this->assertContains('s:50:`Magento|CatalogWidget|Model|Rule|Condition|Combine`', $result);
+        $this->assertContains('s:50:`Magento|CatalogWidget|Model|Rule|Condition|Product`', $result);
     }
 }

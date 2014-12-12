@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Block\Dashboard;
 
@@ -40,28 +21,28 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @var array
      */
-    protected $_allSeries = array();
+    protected $_allSeries = [];
 
     /**
      * Axis labels
      *
      * @var array
      */
-    protected $_axisLabels = array();
+    protected $_axisLabels = [];
 
     /**
      * Axis maps
      *
      * @var array
      */
-    protected $_axisMaps = array();
+    protected $_axisMaps = [];
 
     /**
      * Data rows
      *
      * @var array
      */
-    protected $_dataRows = array();
+    protected $_dataRows = [];
 
     /**
      * Simple encoding chars
@@ -134,7 +115,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Dashboard\Data $dashboardData,
         \Magento\Framework\Locale\ListsInterface $localeLists,
-        array $data = array()
+        array $data = []
     ) {
         $this->_dashboardData = $dashboardData;
         $this->_localeLists = $localeLists;
@@ -207,14 +188,14 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      */
     public function getChartUrl($directUrl = true)
     {
-        $params = array(
+        $params = [
             'cht' => 'lc',
             'chf' => 'bg,s,ffffff',
             'chco' => 'ef672f',
             'chls' => '7',
             'chxs' => '0,676056,15,0,l,676056|1,676056,15,0,l,676056',
-            'chm' => 'h,f2ebde,0,0:1:.1,1,-1'
-        );
+            'chm' => 'h,f2ebde,0,0:1:.1,1,-1',
+        ];
 
         $this->_allSeries = $this->getRowsData($this->_dataRows);
 
@@ -237,8 +218,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         $dateStart->setTimezone($timezoneLocal);
         $dateEnd->setTimezone($timezoneLocal);
 
-        $dates = array();
-        $datas = array();
+        $dates = [];
+        $datas = [];
 
         while ($dateStart->compare($dateEnd) < 0) {
             switch ($this->getDataHelper()->getParam('period')) {
@@ -311,8 +292,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         }
 
         // process each string in the array, and find the max length
-        $localmaxvalue = array(0);
-        $localminvalue = array(0);
+        $localmaxvalue = [0];
+        $localminvalue = [0];
         foreach ($this->getAllSeries() as $index => $serie) {
             $localmaxvalue[$index] = max($serie);
             $localminvalue[$index] = min($serie);
@@ -323,7 +304,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         // default values
         $yrange = 0;
-        $yLabels = array();
+        $yLabels = [];
         $miny = 0;
         $maxy = 0;
         $yorigin = 0;
@@ -341,7 +322,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
             $yorigin = 0;
         }
 
-        $chartdata = array();
+        $chartdata = [];
 
         foreach ($this->getAllSeries() as $index => $serie) {
             $thisdataarray = $serie;
@@ -395,7 +376,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         $params['chd'] .= $buffer;
 
-        $valueBuffer = array();
+        $valueBuffer = [];
 
         if (sizeof($this->_axisLabels) > 0) {
             $params['chxt'] = implode(',', array_keys($this->_axisLabels));
@@ -425,7 +406,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
                                 case '2y':
                                     $formats = $this->_localeLists->getTranslationList('datetime');
                                     $format = isset($formats['yyMM']) ? $formats['yyMM'] : 'MM/yyyy';
-                                    $format = str_replace(array("yyyy", "yy", "MM"), array("Y", "y", "m"), $format);
+                                    $format = str_replace(["yyyy", "yy", "MM"], ["Y", "y", "m"], $format);
                                     $this->_axisLabels[$idx][$_index] = date($format, strtotime($_label));
                                     break;
                             }
@@ -448,7 +429,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
 
         // return the encoded data
         if ($directUrl) {
-            $p = array();
+            $p = [];
             foreach ($params as $name => $value) {
                 $p[] = $name . '=' . urlencode($value);
             }
@@ -456,8 +437,8 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
         } else {
             $gaData = urlencode(base64_encode(json_encode($params)));
             $gaHash = $this->_dashboardData->getChartDataHash($gaData);
-            $params = array('ga' => $gaData, 'h' => $gaHash);
-            return $this->getUrl('adminhtml/*/tunnel', array('_query' => $params));
+            $params = ['ga' => $gaData, 'h' => $gaHash];
+            return $this->getUrl('adminhtml/*/tunnel', ['_query' => $params]);
         }
     }
 
@@ -471,7 +452,7 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
     protected function getRowsData($attributes, $single = false)
     {
         $items = $this->getCollection()->getItems();
-        $options = array();
+        $options = [];
         foreach ($items as $item) {
             if ($single) {
                 $options[] = max(0, $item->getData($attributes));

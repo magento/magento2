@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Resource;
 
@@ -80,7 +61,7 @@ class Product extends AbstractResource
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param Category $catalogCategory
@@ -98,14 +79,14 @@ class Product extends AbstractResource
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Factory $modelFactory,
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory,
         Category $catalogCategory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
-        $data = array()
+        $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
@@ -135,7 +116,7 @@ class Product extends AbstractResource
      */
     protected function _getDefaultAttributes()
     {
-        return array('entity_id', 'entity_type_id', 'attribute_set_id', 'type_id', 'created_at', 'updated_at');
+        return ['entity_id', 'entity_type_id', 'attribute_set_id', 'type_id', 'created_at', 'updated_at'];
     }
 
     /**
@@ -175,16 +156,16 @@ class Product extends AbstractResource
     {
         $select = $this->_getWriteAdapter()->select()->from(
             $this->_productWebsiteTable,
-            array('product_id', 'website_id')
+            ['product_id', 'website_id']
         )->where(
             'product_id IN (?)',
             $productIds
         );
-        $productsWebsites = array();
+        $productsWebsites = [];
         foreach ($this->_getWriteAdapter()->fetchAll($select) as $productInfo) {
             $productId = $productInfo['product_id'];
             if (!isset($productsWebsites[$productId])) {
-                $productsWebsites[$productId] = array();
+                $productsWebsites[$productId] = [];
             }
             $productsWebsites[$productId][] = $productInfo['website_id'];
         }
@@ -225,7 +206,7 @@ class Product extends AbstractResource
 
         $select = $adapter->select()->from($this->getEntityTable(), 'entity_id')->where('sku = :sku');
 
-        $bind = array(':sku' => (string)$sku);
+        $bind = [':sku' => (string)$sku];
 
         return $adapter->fetchOne($select, $bind);
     }
@@ -276,7 +257,7 @@ class Product extends AbstractResource
         $result = parent::delete($object);
         $this->eventManager->dispatch(
             'catalog_product_delete_after_done',
-            array('product' => $object)
+            ['product' => $object]
         );
         return $result;
     }
@@ -290,7 +271,7 @@ class Product extends AbstractResource
     protected function _saveWebsiteIds($product)
     {
         $websiteIds = $product->getWebsiteIds();
-        $oldWebsiteIds = array();
+        $oldWebsiteIds = [];
 
         $product->setIsChangedWebsites(false);
 
@@ -302,16 +283,16 @@ class Product extends AbstractResource
         $delete = array_diff($oldWebsiteIds, $websiteIds);
 
         if (!empty($insert)) {
-            $data = array();
+            $data = [];
             foreach ($insert as $websiteId) {
-                $data[] = array('product_id' => (int)$product->getId(), 'website_id' => (int)$websiteId);
+                $data[] = ['product_id' => (int)$product->getId(), 'website_id' => (int)$websiteId];
             }
             $adapter->insertMultiple($this->_productWebsiteTable, $data);
         }
 
         if (!empty($delete)) {
             foreach ($delete as $websiteId) {
-                $condition = array('product_id = ?' => (int)$product->getId(), 'website_id = ?' => (int)$websiteId);
+                $condition = ['product_id = ?' => (int)$product->getId(), 'website_id = ?' => (int)$websiteId];
 
                 $adapter->delete($this->_productWebsiteTable, $condition);
             }
@@ -348,16 +329,16 @@ class Product extends AbstractResource
 
         $write = $this->_getWriteAdapter();
         if (!empty($insert)) {
-            $data = array();
+            $data = [];
             foreach ($insert as $categoryId) {
                 if (empty($categoryId)) {
                     continue;
                 }
-                $data[] = array(
+                $data[] = [
                     'category_id' => (int)$categoryId,
                     'product_id' => (int)$object->getId(),
-                    'position' => 1
-                );
+                    'position' => 1,
+                ];
             }
             if ($data) {
                 $write->insertMultiple($this->_productCategoryTable, $data);
@@ -366,7 +347,7 @@ class Product extends AbstractResource
 
         if (!empty($delete)) {
             foreach ($delete as $categoryId) {
-                $where = array('product_id = ?' => (int)$object->getId(), 'category_id = ?' => (int)$categoryId);
+                $where = ['product_id = ?' => (int)$object->getId(), 'category_id = ?' => (int)$categoryId];
 
                 $write->delete($this->_productCategoryTable, $where);
             }
@@ -415,7 +396,7 @@ class Product extends AbstractResource
         // fetching all parent IDs, including those are higher on the tree
         $select = $this->_getReadAdapter()->select()->distinct()->from(
             $this->getTable('catalog_category_product_index'),
-            array('category_id')
+            ['category_id']
         )->where(
             'product_id = ? AND is_parent = 1',
             (int)$object->getEntityId()
@@ -470,23 +451,23 @@ class Product extends AbstractResource
     public function duplicate($oldId, $newId)
     {
         $adapter = $this->_getWriteAdapter();
-        $eavTables = array('datetime', 'decimal', 'int', 'text', 'varchar');
+        $eavTables = ['datetime', 'decimal', 'int', 'text', 'varchar'];
 
         $adapter = $this->_getWriteAdapter();
 
         // duplicate EAV store values
         foreach ($eavTables as $suffix) {
-            $tableName = $this->getTable(array('catalog_product_entity', $suffix));
+            $tableName = $this->getTable(['catalog_product_entity', $suffix]);
 
             $select = $adapter->select()->from(
                 $tableName,
-                array(
+                [
                     'entity_type_id',
                     'attribute_id',
                     'store_id',
                     'entity_id' => new \Zend_Db_Expr($adapter->quote($newId)),
                     'value'
-                )
+                ]
             )->where(
                 'entity_id = ?',
                 $oldId
@@ -499,7 +480,7 @@ class Product extends AbstractResource
                 $adapter->insertFromSelect(
                     $select,
                     $tableName,
-                    array('entity_type_id', 'attribute_id', 'store_id', 'entity_id', 'value'),
+                    ['entity_type_id', 'attribute_id', 'store_id', 'entity_id', 'value'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
@@ -514,7 +495,7 @@ class Product extends AbstractResource
         $updateCond[] = $adapter->quoteInto('attribute_id = ?', $statusAttributeId);
         $adapter->update(
             $statusAttributeTable,
-            array('value' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED),
+            ['value' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED],
             $updateCond
         );
 
@@ -531,7 +512,7 @@ class Product extends AbstractResource
     {
         $select = $this->_getReadAdapter()->select()->from(
             $this->getTable('catalog_product_entity'),
-            array('entity_id', 'sku')
+            ['entity_id', 'sku']
         )->where(
             'entity_id IN (?)',
             $productIds
@@ -549,13 +530,13 @@ class Product extends AbstractResource
     {
         $select = $this->_getReadAdapter()->select()->from(
             $this->getTable('catalog_product_entity'),
-            array('sku', 'entity_id')
+            ['sku', 'entity_id']
         )->where(
             'sku IN (?)',
             $productSkuList
         );
 
-        $result = array();
+        $result = [];
         foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
             $result[$row['sku']] = $row['entity_id'];
         }
@@ -571,7 +552,7 @@ class Product extends AbstractResource
     public function getProductEntitiesInfo($columns = null)
     {
         if (!empty($columns) && is_string($columns)) {
-            $columns = array($columns);
+            $columns = [$columns];
         }
         if (empty($columns) || !is_array($columns)) {
             $columns = $this->_getDefaultAttributes();
@@ -594,18 +575,18 @@ class Product extends AbstractResource
     public function getAssignedImages($product, $storeIds)
     {
         if (!is_array($storeIds)) {
-            $storeIds = array($storeIds);
+            $storeIds = [$storeIds];
         }
 
         $mainTable = $product->getResource()->getAttribute('image')->getBackend()->getTable();
         $read = $this->_getReadAdapter();
         $select = $read->select()->from(
-            array('images' => $mainTable),
-            array('value as filepath', 'store_id')
+            ['images' => $mainTable],
+            ['value as filepath', 'store_id']
         )->joinLeft(
-            array('attr' => $this->getTable('eav_attribute')),
+            ['attr' => $this->getTable('eav_attribute')],
             'images.attribute_id = attr.attribute_id',
-            array('attribute_code')
+            ['attribute_code']
         )->where(
             'entity_id = ?',
             $product->getId()
@@ -614,7 +595,7 @@ class Product extends AbstractResource
             $storeIds
         )->where(
             'attribute_code IN (?)',
-            array('small_image', 'thumbnail', 'image')
+            ['small_image', 'thumbnail', 'image']
         );
 
         $images = $read->fetchAll($select);

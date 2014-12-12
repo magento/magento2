@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -66,7 +47,7 @@ abstract class AbstractCommand
      * @param array $blackList Files/directories to be excluded from the inspection
      * @return bool
      */
-    public function run(array $whiteList, array $blackList = array())
+    public function run(array $whiteList, array $blackList = [])
     {
         if (file_exists($this->_reportFile)) {
             unlink($this->_reportFile);
@@ -135,7 +116,7 @@ abstract class AbstractCommand
      */
     protected function _execShellCmd($shellCmd)
     {
-        $output = array();
+        $output = [];
         exec($shellCmd . ' 2>&1', $output, $this->_lastExitCode);
         $this->_lastOutput = implode(PHP_EOL, $output);
         return $this->_lastExitCode === 0 ? $this->_lastOutput : false;
@@ -150,9 +131,9 @@ abstract class AbstractCommand
     {
         if ($this->_lastExitCode === null) {
             $this->_lastRunMessage = "Nothing was executed.";
-        } else if (!$this->_lastExitCode) {
+        } elseif (!$this->_lastExitCode) {
             $this->_lastRunMessage = 'Success reported.';
-        } else if (file_exists($this->_reportFile)) {
+        } elseif (file_exists($this->_reportFile)) {
             $this->_lastRunMessage = "See detailed report in '{$this->_reportFile}'.";
         } else {
             $this->_lastRunMessage = 'Command-line tool reports: ' . $this->_lastOutput;

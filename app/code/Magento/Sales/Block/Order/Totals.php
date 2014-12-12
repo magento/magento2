@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Block\Order;
 
@@ -57,7 +38,7 @@ class Totals extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
@@ -127,23 +108,22 @@ class Totals extends \Magento\Framework\View\Element\Template
     {
         $source = $this->getSource();
 
-        $this->_totals = array();
+        $this->_totals = [];
         $this->_totals['subtotal'] = new \Magento\Framework\Object(
-            array('code' => 'subtotal', 'value' => $source->getSubtotal(), 'label' => __('Subtotal'))
+            ['code' => 'subtotal', 'value' => $source->getSubtotal(), 'label' => __('Subtotal')]
         );
-
 
         /**
          * Add shipping
          */
         if (!$source->getIsVirtual() && ((double)$source->getShippingAmount() || $source->getShippingDescription())) {
             $this->_totals['shipping'] = new \Magento\Framework\Object(
-                array(
+                [
                     'code' => 'shipping',
                     'field' => 'shipping_amount',
                     'value' => $this->getSource()->getShippingAmount(),
-                    'label' => __('Shipping & Handling')
-                )
+                    'label' => __('Shipping & Handling'),
+                ]
             );
         }
 
@@ -157,23 +137,23 @@ class Totals extends \Magento\Framework\View\Element\Template
                 $discountLabel = __('Discount');
             }
             $this->_totals['discount'] = new \Magento\Framework\Object(
-                array(
+                [
                     'code' => 'discount',
                     'field' => 'discount_amount',
                     'value' => $source->getDiscountAmount(),
-                    'label' => $discountLabel
-                )
+                    'label' => $discountLabel,
+                ]
             );
         }
 
         $this->_totals['grand_total'] = new \Magento\Framework\Object(
-            array(
+            [
                 'code' => 'grand_total',
                 'field' => 'grand_total',
                 'strong' => true,
                 'value' => $source->getGrandTotal(),
-                'label' => __('Grand Total')
-            )
+                'label' => __('Grand Total'),
+            ]
         );
 
         /**
@@ -181,12 +161,12 @@ class Totals extends \Magento\Framework\View\Element\Template
          */
         if ($this->getOrder()->isCurrencyDifferent()) {
             $this->_totals['base_grandtotal'] = new \Magento\Framework\Object(
-                array(
+                [
                     'code' => 'base_grandtotal',
                     'value' => $this->getOrder()->formatBasePrice($source->getBaseGrandTotal()),
                     'label' => __('Grand Total to be Charged'),
-                    'is_formated' => true
-                )
+                    'is_formated' => true,
+                ]
             );
         }
         return $this;
@@ -202,7 +182,7 @@ class Totals extends \Magento\Framework\View\Element\Template
     public function addTotal(\Magento\Framework\Object $total, $after = null)
     {
         if ($after !== null && $after != 'last' && $after != 'first') {
-            $totals = array();
+            $totals = [];
             $added = false;
             foreach ($this->_totals as $code => $item) {
                 $totals[$code] = $item;
@@ -220,7 +200,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         } elseif ($after == 'last') {
             $this->_totals[$total->getCode()] = $total;
         } elseif ($after == 'first') {
-            $totals = array($total->getCode() => $total);
+            $totals = [$total->getCode() => $total];
             $this->_totals = array_merge($totals, $this->_totals);
         } else {
             $last = array_pop($this->_totals);
@@ -241,11 +221,11 @@ class Totals extends \Magento\Framework\View\Element\Template
     {
         if ($before !== null) {
             if (!is_array($before)) {
-                $before = array($before);
+                $before = [$before];
             }
             foreach ($before as $beforeTotals) {
                 if (isset($this->_totals[$beforeTotals])) {
-                    $totals = array();
+                    $totals = [];
                     foreach ($this->_totals as $code => $item) {
                         if ($code == $beforeTotals) {
                             $totals[$total->getCode()] = $total;
@@ -257,7 +237,7 @@ class Totals extends \Magento\Framework\View\Element\Template
                 }
             }
         }
-        $totals = array();
+        $totals = [];
         $first = array_shift($this->_totals);
         $totals[$first->getCode()] = $first;
         $totals[$total->getCode()] = $total;
@@ -318,7 +298,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      */
     public function getTotals($area = null)
     {
-        $totals = array();
+        $totals = [];
         if ($area === null) {
             $totals = $this->_totals;
         } else {

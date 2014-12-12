@@ -3,32 +3,13 @@
  * Scan javascript files for invocations of mage.__() function, verifies that all the translations
  * were output to the page.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Test\Integrity\Phrase;
 
 use Magento\Tools\I18n\Parser\Adapter;
-use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
 use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer;
+use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
 
 class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 {
@@ -54,8 +35,8 @@ class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 
     public function testGetPhrasesAdminhtml()
     {
-        $unregisteredMessages = array();
-        $untranslated = array();
+        $unregisteredMessages = [];
+        $untranslated = [];
 
         $registeredPhrases = $this->_getRegisteredPhrases();
 
@@ -86,8 +67,8 @@ class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 
     public function testGetPhrasesFrontend()
     {
-        $unregisteredMessages = array();
-        $untranslated = array();
+        $unregisteredMessages = [];
+        $untranslated = [];
 
         $registeredPhrases = $this->_getRegisteredPhrases();
 
@@ -128,7 +109,7 @@ class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 
         $this->_phraseCollector->parse($jsHelperFile);
 
-        $result = array();
+        $result = [];
         foreach ($this->_phraseCollector->getPhrases() as $phrase) {
             $result[] = stripcslashes(trim($phrase['phrase'], "'"));
         }
@@ -143,7 +124,7 @@ class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
      */
     protected function _getJavascriptPhrases($area)
     {
-        $jsPhrases = array();
+        $jsPhrases = [];
         foreach ($this->_utilityFiles->getJsFilesForArea($area) as $file) {
             $this->_parser->parse($file);
             $jsPhrases = array_merge($jsPhrases, $this->_parser->getPhrases());

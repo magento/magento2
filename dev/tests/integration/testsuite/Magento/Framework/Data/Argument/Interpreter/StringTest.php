@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data\Argument\Interpreter;
 
@@ -43,7 +24,7 @@ class StringTest extends \PHPUnit_Framework_TestCase
         )->method(
             'toBoolean'
         )->will(
-            $this->returnValueMap(array(array('true', true), array('false', false)))
+            $this->returnValueMap([['true', true], ['false', false]])
         );
         $this->_model = new String($this->_booleanUtils);
         $translateRenderer = $this->getMockForAbstractClass('Magento\Framework\Phrase\RendererInterface');
@@ -71,15 +52,15 @@ class StringTest extends \PHPUnit_Framework_TestCase
 
     public function evaluateDataProvider()
     {
-        return array(
-            'no value' => array(array(), ''),
-            'with value' => array(array('value' => 'some value'), 'some value'),
-            'translation required' => array(
-                array('value' => 'some value', 'translate' => 'true'),
-                'some value (translated)'
-            ),
-            'translation not required' => array(array('value' => 'some value', 'translate' => 'false'), 'some value')
-        );
+        return [
+            'no value' => [[], ''],
+            'with value' => [['value' => 'some value'], 'some value'],
+            'translation required' => [
+                ['value' => 'some value', 'translate' => 'true'],
+                'some value (translated)',
+            ],
+            'translation not required' => [['value' => 'some value', 'translate' => 'false'], 'some value']
+        ];
     }
 
     /**
@@ -96,6 +77,6 @@ class StringTest extends \PHPUnit_Framework_TestCase
 
     public function evaluateExceptionDataProvider()
     {
-        return array('not a string' => array(array('value' => 123)));
+        return ['not a string' => [['value' => 123]]];
     }
 }

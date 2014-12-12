@@ -2,26 +2,7 @@
 /**
  * Test for \Magento\Integration\Service\V1\Integration
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Integration\Service\V1;
 
@@ -66,7 +47,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->_integrationMock = $this->getMockBuilder(
             'Magento\Integration\Model\Integration'
         )->disableOriginalConstructor()->setMethods(
-            array(
+            [
                 'getData',
                 'getId',
                 'getName',
@@ -76,16 +57,16 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
                 'loadByName',
                 'save',
                 'delete',
-                '__wakeup'
-            )
+                '__wakeup',
+            ]
         )->getMock();
-        $this->_integrationData = array(
+        $this->_integrationData = [
             Integration::ID => self::VALUE_INTEGRATION_ID,
             Integration::NAME => self::VALUE_INTEGRATION_NAME,
             Integration::EMAIL => self::VALUE_INTEGRATION_EMAIL,
             Integration::EMAIL => self::VALUE_INTEGRATION_ENDPOINT,
-            Integration::SETUP_TYPE => self::VALUE_INTEGRATION_SETUP_BACKEND
-        );
+            Integration::SETUP_TYPE => self::VALUE_INTEGRATION_SETUP_BACKEND,
+        ];
         $this->_integrationFactory->expects(
             $this->any()
         )->method(
@@ -116,7 +97,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->_emptyIntegrationMock = $this->getMockBuilder(
             'Magento\Integration\Model\Integration'
         )->disableOriginalConstructor()->setMethods(
-            array(
+            [
                 'getData',
                 'getId',
                 'getName',
@@ -126,8 +107,8 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
                 'loadByName',
                 'save',
                 'delete',
-                '__wakeup'
-            )
+                '__wakeup',
+            ]
         )->getMock();
         $this->_emptyIntegrationMock->expects($this->any())->method('getId')->will($this->returnValue(null));
     }
@@ -247,12 +228,12 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         );
         $this->_integrationMock->expects($this->once())->method('save')->will($this->returnSelf());
         $this->_setValidIntegrationData();
-        $integrationData = array(
+        $integrationData = [
             'integration_id' => self::VALUE_INTEGRATION_ID,
             'name' => self::VALUE_INTEGRATION_ANOTHER_NAME,
             'email' => self::VALUE_INTEGRATION_EMAIL,
-            'endpoint' => self::VALUE_INTEGRATION_ENDPOINT
-        );
+            'endpoint' => self::VALUE_INTEGRATION_ENDPOINT,
+        ];
         $this->_integrationMock->expects($this->any())->method('getData')->will($this->returnValue($integrationData));
 
         $updatedData = $this->_service->update($integrationData)->getData();
@@ -281,12 +262,12 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         );
         $this->_integrationMock->expects($this->never())->method('save')->will($this->returnSelf());
         $this->_setValidIntegrationData();
-        $integrationData = array(
+        $integrationData = [
             'integration_id' => self::VALUE_INTEGRATION_ID,
             'name' => self::VALUE_INTEGRATION_ANOTHER_NAME,
             'email' => self::VALUE_INTEGRATION_EMAIL,
-            'endpoint' => self::VALUE_INTEGRATION_ENDPOINT
-        );
+            'endpoint' => self::VALUE_INTEGRATION_ENDPOINT,
+        ];
         $this->_service->update($integrationData);
     }
 
@@ -498,7 +479,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $integrationMock = $this->getMockBuilder(
             'Magento\Integration\Model\Integration'
         )->disableOriginalConstructor()->setMethods(
-            array(
+            [
                 'getData',
                 'getId',
                 'getName',
@@ -508,8 +489,8 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
                 'loadByName',
                 'save',
                 'delete',
-                '__wakeup'
-            )
+                '__wakeup',
+            ]
         )->getMock();
         $integrationMock->expects($this->any())->method('getId')->will($this->returnValue($integrationId));
         $integrationMock->expects($this->any())->method('getName')->will($this->returnValue($name));

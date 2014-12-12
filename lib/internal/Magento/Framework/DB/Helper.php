@@ -2,26 +2,7 @@
 /**
  * DB helper class for MySql Magento DB Adapter
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\DB;
@@ -39,10 +20,10 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     {
         $selectOrders = $select->getPart(\Zend_Db_Select::ORDER);
         if (!$selectOrders) {
-            return array();
+            return [];
         }
 
-        $orders = array();
+        $orders = [];
         foreach ($selectOrders as $term) {
             if (is_array($term)) {
                 if (!is_numeric($term[0])) {
@@ -99,10 +80,10 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     {
         $selectGroups = $select->getPart(\Zend_Db_Select::GROUP);
         if (!$selectGroups) {
-            return array();
+            return [];
         }
 
-        $groups = array();
+        $groups = [];
         foreach ($selectGroups as $term) {
             $groups[] = $this->_getReadAdapter()->quoteIdentifier($term, true);
         }
@@ -126,10 +107,10 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     {
         $selectHavings = $select->getPart(\Zend_Db_Select::HAVING);
         if (!$selectHavings) {
-            return array();
+            return [];
         }
 
-        $havings = array();
+        $havings = [];
         $columns = $select->getPart(\Zend_Db_Select::COLUMNS);
         foreach ($columns as $columnEntry) {
             $correlationName = (string)$columnEntry[1];
@@ -168,10 +149,10 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @param array $columnList
      * @return string
      */
-    protected function _assembleLimit($query, $limitCount, $limitOffset, $columnList = array())
+    protected function _assembleLimit($query, $limitCount, $limitOffset, $columnList = [])
     {
         if ($limitCount !== null) {
-              $limitCount = intval($limitCount);
+            $limitCount = intval($limitCount);
             if ($limitCount <= 0) {
                 //throw new \Exception("LIMIT argument count={$limitCount} is not valid");
             }
@@ -182,7 +163,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
             }
 
             if ($limitOffset + $limitCount != $limitOffset + 1) {
-                $columns = array();
+                $columns = [];
                 foreach ($columnList as $columnEntry) {
                     $columns[] = $columnEntry[2] ? $columnEntry[2] : $columnEntry[1];
                 }
@@ -209,7 +190,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
 
         $columns          = $select->getPart(\Zend_Db_Select::COLUMNS);
         $tables           = $select->getPart(\Zend_Db_Select::FROM);
-        $preparedColumns  = array();
+        $preparedColumns  = [];
 
         foreach ($columns as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;
@@ -218,7 +199,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
                     if (preg_match('/(^|[^a-zA-Z_])^(SELECT)?(SUM|MIN|MAX|AVG|COUNT)\s*\(/i', $column)) {
                         $column = new \Zend_Db_Expr($column);
                     }
-                    $preparedColumns[strtoupper($alias)] = array(null, $column, $alias);
+                    $preparedColumns[strtoupper($alias)] = [null, $column, $alias];
                 } else {
                     throw new \Zend_Db_Exception("Can't prepare expression without alias");
                 }
@@ -231,11 +212,11 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
                     }
                     $tableColumns = $this->_getReadAdapter()->describeTable($tables[$correlationName]['tableName']);
                     foreach (array_keys($tableColumns) as $col) {
-                        $preparedColumns[strtoupper($col)] = array($correlationName, $col, null);
+                        $preparedColumns[strtoupper($col)] = [$correlationName, $col, null];
                     }
                 } else {
                     $columnKey = is_null($alias) ? $column : $alias;
-                    $preparedColumns[strtoupper($columnKey)] = array($correlationName, $column, $alias);
+                    $preparedColumns[strtoupper($columnKey)] = [$correlationName, $column, $alias];
                 }
             }
         }
@@ -274,7 +255,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
         if ($groupConcatDelimiter) {
             $separator = sprintf(" SEPARATOR '%s'", $groupConcatDelimiter);
         }
-        $select->columns(array($fieldAlias => new \Zend_Db_Expr(sprintf('GROUP_CONCAT(%s%s)', $fieldExpr, $separator))));
+        $select->columns([$fieldAlias => new \Zend_Db_Expr(sprintf('GROUP_CONCAT(%s%s)', $fieldExpr, $separator))]);
         return $select;
     }
 
@@ -302,7 +283,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      *
      * @see escapeLikeValue()
      */
-    public function addLikeEscape($value, $options = array())
+    public function addLikeEscape($value, $options = [])
     {
         $value = $this->escapeLikeValue($value, $options);
         return new \Zend_Db_Expr($this->_getReadAdapter()->quote($value));

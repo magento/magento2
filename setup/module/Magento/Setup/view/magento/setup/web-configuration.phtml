@@ -1,38 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 ?>
 <?php
 $hints = [
-    'address_web' => sprintf(
-        '<div><p>%s</p><p>%s</p><p><a href=\'#\'>%s</a></p></div>',
+    'base_url' => sprintf(
+        '<div><p>%s</p><p>%s</p></div>',
         'Enter the base URL that brings shoppers to your store (Ex. http://example.com/).',
-        'We recommend not using your actual IP address when your store goes live, otherwise all your shoppers will see it.',
-        'Detect IP Address'
+        'Leave empty for automatic detection (not recommended for production environment).'
     ),
     'encrypt_key' => sprintf(
         '<p>%s</p>',
-        'Key to encrypt sensitive data such as passwords and personally identifiable customer informaton in the Magento database. The encryption key is stored in [your Magento install dir]/app/etc/config.php/'
+        'Key to encrypt sensitive data such as passwords and personally identifiable customer informaton in the Magento database. The encryption key is stored in [your Magento install dir]/app/etc/config.php'
     ),
 ];
 ?>
@@ -47,23 +27,25 @@ $hints = [
 </div>
 
 <form novalidate name="webconfig" class="form-horizontal" role="form">
-    <div class="form-group" ng-class="{'has-error': webconfig.web.$invalid && webconfig.submitted}">
-        <label class="col-md-3 control-label">Your Store Address&nbsp;<span class="required">*</span></label>
+    <div class="form-group" ng-class="{'has-error': webconfig.base_url.$invalid && webconfig.submitted}">
+        <label class="col-md-3 control-label">Base URL</label>
         <div class="col-md-4">
-            <input type="text"
-                   name="web"
-                   ng-model="config.address.web"
+            <input type="url"
+                   name="base_url"
+                   ng-model="config.address.base_url"
+                   ng-init="config.address.auto_base_url = '<?php echo $this->autoBaseUrl ?>'; config.address.base_url = config.address.auto_base_url;"
+                   ng-blur="addSlash()"
+                   ng-change="populateHttps()"
                    class="form-control"
-                   ng-focus=""
                    tooltip-placement="right"
-                   tooltip-html-unsafe="<?php echo $hints['address_web']; ?>"
+                   tooltip-html-unsafe="<?php echo $hints['base_url']; ?>"
                    tooltip-trigger="focus"
                    tooltip-append-to-body="true"
-                   required />
+                />
         </div>
-        <div class="col-md-offset-3 col-md-4" ng-show="webconfig.web.$invalid && webconfig.submitted">
+        <div class="col-md-offset-3 col-md-4" ng-show="webconfig.base_url.$invalid && webconfig.submitted">
             <div class="error-container">
-                <span ng-show="webconfig.web.$error.required">Please enter a valid base URL Admin URL path. (ex: http://www.example.com/)</span>
+                <span ng-show="webconfig.base_url.$error.required || webconfig.base_url.$error.url">Please enter a valid Base URL (ex: http://www.example.com/)</span>
             </div>
         </div>
     </div>
@@ -71,7 +53,7 @@ $hints = [
     <div class="form-group" ng-class="{'has-error': webconfig.admin.$invalid && webconfig.submitted}">
         <label class="col-md-3 control-label">Magento Admin Address&nbsp;<span class="required">*</span></label>
         <div class="col-md-4 input-group" style="padding-left: 15px; padding-right: 15px;">
-            <span class="input-group-addon">{{config.address.web}}</span>
+            <span class="input-group-addon">{{config.address.actual_base_url}}</span>
             <input type="text"
                    name="admin"
                    class="form-control"
@@ -80,13 +62,13 @@ $hints = [
         </div>
         <div class="col-md-offset-3 col-md-4" ng-show="webconfig.admin.$invalid && webconfig.submitted">
             <div class="error-container">
-                <span ng-show="webconfig.admin.$error.required">Please enter a valid admin URL path.</span>
+                <span ng-show="webconfig.admin.$error.required">Please enter a valid Admin URL Path.</span>
             </div>
         </div>
     </div>
 
     <div class="collapsed-options">
-        <a href="" class="collapsed-options" ng-click="updateOnExpand(config.advanced)">Advanced Options</a>
+        <a href="#" class="collapsed-options" ng-click="updateOnExpand(config.advanced)">Advanced Options</a>
         <span class="caret"></span>
     </div>
 
@@ -96,13 +78,31 @@ $hints = [
             <div class="col-md-5">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" ng-model="config.https.front">&nbsp;Use HTTPS for Magento Storefront
+                        <input type="checkbox" ng-checked="config.https.front" ng-model="config.https.front">&nbsp;Use HTTPS for Magento Storefront
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" ng-model="config.https.admin">&nbsp;Use HTTPS for Magento Admin
+                        <input type="checkbox" ng-checked="config.https.admin" ng-model="config.https.admin">&nbsp;Use HTTPS for Magento Admin
                     </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" ng-show="showHttpsField()">
+            <label ng-show="config.https.front || config.https.admin" class="col-md-4 col-md-offset-3">Your HTTPS Store address:</label>
+            <div class="col-md-4 col-md-offset-3">
+                <input type="url"
+                       name="https"
+                       ng-model="config.https.text"
+                       ng-if="config.https.front || config.https.admin"
+                       class="form-control"
+                       ng-focus=""
+                       required />
+            </div>
+            <div class="col-md-offset-3 col-md-4" ng-show="webconfig.https.$invalid && webconfig.submitted">
+                <div class="error-container">
+                    <span ng-show="webconfig.https.$error.required || webconfig.https.$error.url">Please enter a valid HTTPS base URL path. (ex: https://www.example.com/)</span>
                 </div>
             </div>
         </div>

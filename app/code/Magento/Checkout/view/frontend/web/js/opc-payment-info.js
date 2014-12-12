@@ -1,26 +1,7 @@
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @category    one page checkout fifth step
  * @package     mage
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
@@ -44,8 +25,7 @@ define([
                     tmpl: '<input id="hidden-free" type="hidden" name="payment[method]" value="free">',
                     selector: '#hidden-free'
                 }
-            },
-            hasRecurringItems: false
+            }
         },
 
         _create: function() {
@@ -64,7 +44,7 @@ define([
                 if ($.isNumeric(checkoutPrice)) {
                     this.checkoutPrice = checkoutPrice;
                 }
-                if (this.checkoutPrice < this.options.minBalance && !this.options.hasRecurringItems) {
+                if (this.checkoutPrice < this.options.minBalance) {
                     this._disablePaymentMethods();
                 } else {
                     this._enablePaymentMethods();
@@ -80,7 +60,7 @@ define([
                     if (data.totalPrice) {
                         data.totalPrice = this.checkoutPrice;
                     }
-                    if (this.checkoutPrice < this.options.minBalance && !this.options.hasRecurringItems) {
+                    if (this.checkoutPrice < this.options.minBalance) {
                         // Add free input field, hide and disable unchecked checkbox payment method and all radio button payment methods
                         this._disablePaymentMethods();
                     } else {
@@ -128,7 +108,7 @@ define([
                 alert($.mage.__("We can't complete your order because you don't have a payment method available."));
                 return false;
             }
-            if (this.checkoutPrice < this.options.minBalance && !this.options.hasRecurringItems) {
+            if (this.checkoutPrice < this.options.minBalances) {
                 return true;
             } else if (methods.filter('input:radio:checked').length) {
                 return true;

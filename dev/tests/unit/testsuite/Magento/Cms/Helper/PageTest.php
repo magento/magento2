@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Cms\Helper;
 
@@ -52,7 +33,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     protected $pageMock;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -155,11 +136,11 @@ class PageTest extends \PHPUnit_Framework_TestCase
                     'getCustomPageLayout',
                     'getCustomLayoutUpdateXml',
                     'getLayoutUpdateXml',
-                    'getContentHeading'
+                    'getContentHeading',
                 ]
             )
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->getMockForAbstractClass();
         $this->localeDateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
             ->getMockForAbstractClass();
@@ -262,7 +243,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $defaultGroup = 'defaultGroup';
         $pageLoadResultCollection = [
             null,
-            $this->pageMock
+            $this->pageMock,
         ];
 
         $this->pageMock->expects($this->any())
@@ -416,7 +397,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'handle' => 'DOES NOT MATTER',
                 'customLayoutUpdateXml' => 'DOES NOT MATTER',
                 'layoutUpdate' => 'DOES NOT MATTER',
-                'expectedResult' => false
+                'expectedResult' => false,
             ],
             'page->load IS SUCCESSFUL BUT internalPageId IS EMPTY' => [
                 'pageId' => 123,
@@ -426,7 +407,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'handle' => 'DOES NOT MATTER',
                 'customLayoutUpdateXml' => 'DOES NOT MATTER',
                 'layoutUpdate' => 'DOES NOT MATTER',
-                'expectedResult' => false
+                'expectedResult' => false,
             ],
             'getPageLayout() AND getLayoutUpdateXml() ARE USED' => [
                 'pageId' => 123,
@@ -436,7 +417,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'handle' => 'pageLayout',
                 'customLayoutUpdateXml' => '',
                 'layoutUpdate' => 'layoutUpdateXml',
-                'expectedResult' => true
+                'expectedResult' => true,
             ],
             'getCustomPageLayout() AND getCustomLayoutUpdateXml() ARE USED' => [
                 'pageId' => 123,
@@ -446,7 +427,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'handle' => 'customPageLayout',
                 'customLayoutUpdateXml' => 'customLayoutUpdateXml',
                 'layoutUpdate' => 'customLayoutUpdateXml',
-                'expectedResult' => true
+                'expectedResult' => true,
             ]
         ];
     }
@@ -471,7 +452,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $url = '/some/url';
         $pageLoadResultCollection = [
             null,
-            $this->pageMock
+            $this->pageMock,
         ];
 
         $this->pageFactoryMock->expects($this->any())
@@ -512,19 +493,19 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'pageId' => 123,
                 'internalPageId' => 234,
                 'pageLoadResultIndex' => 0,
-                'expectedResult' => null
+                'expectedResult' => null,
             ],
             'page->load() IS SUCCESSFUL BUT internalId IS EMPTY' => [
                 'pageId' => 123,
                 'internalPageId' => null,
                 'pageLoadResultIndex' => 1,
-                'expectedResult' => null
+                'expectedResult' => null,
             ],
             'SUCCESS' => [
                 'pageId' => 123,
                 'internalPageId' => 234,
                 'pageLoadResultIndex' => 1,
-                'expectedResult' => '/some/url'
+                'expectedResult' => '/some/url',
             ]
         ];
     }

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\PageCache\Model\Layout;
 
@@ -49,15 +30,15 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->layoutMock = $this->getMockForAbstractClass(
             'Magento\Framework\View\Layout',
-            array(),
+            [],
             '',
             false,
             true,
             true,
-            array('isCacheable', 'getAllBlocks')
+            ['isCacheable', 'getAllBlocks']
         );
-        $this->responseMock = $this->getMock('\Magento\Framework\App\Response\Http', array(), array(), '', false);
-        $this->configMock = $this->getMock('Magento\PageCache\Model\Config', array(), array(), '', false);
+        $this->responseMock = $this->getMock('\Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->configMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
 
         $this->model = new \Magento\PageCache\Model\Layout\LayoutPlugin(
             $this->responseMock,
@@ -90,12 +71,12 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
 
     public function afterGenerateXmlDataProvider()
     {
-        return array(
-            'Full_cache state is true, Layout is cache-able' => array(true, true),
-            'Full_cache state is true, Layout is not cache-able' => array(true, false),
-            'Full_cache state is false, Layout is not cache-able' => array(false, false),
-            'Full_cache state is false, Layout is cache-able' => array(false, true)
-        );
+        return [
+            'Full_cache state is true, Layout is cache-able' => [true, true],
+            'Full_cache state is true, Layout is not cache-able' => [true, false],
+            'Full_cache state is false, Layout is not cache-able' => [false, false],
+            'Full_cache state is false, Layout is cache-able' => [false, true]
+        ];
     }
 
     /**
@@ -110,10 +91,10 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
     {
         $html = 'html';
         $this->configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($cacheState));
-        $blockStub = $this->getMock('Magento\PageCache\Block\Controller\StubBlock', null, array(), '', false);
+        $blockStub = $this->getMock('Magento\PageCache\Block\Controller\StubBlock', null, [], '', false);
         $blockStub->setTtl($ttl);
         $this->layoutMock->expects($this->once())->method('isCacheable')->will($this->returnValue($layoutIsCacheable));
-        $this->layoutMock->expects($this->any())->method('getAllBlocks')->will($this->returnValue(array($blockStub)));
+        $this->layoutMock->expects($this->any())->method('getAllBlocks')->will($this->returnValue([$blockStub]));
 
         $this->configMock->expects($this->any())->method('getType')->will($this->returnValue($configCacheType));
 
@@ -129,39 +110,39 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
     public function afterGetOutputDataProvider()
     {
         $tags = 'identity1,identity2';
-        return array(
-            'Cacheable layout, Full_cache state is true' => array(true, true, $tags, null, 0),
-            'Non-cacheable layout' => array(true, false, null, null, 0),
-            'Cacheable layout with Varnish' => array(true, true, $tags, \Magento\PageCache\Model\Config::VARNISH, 0),
-            'Cacheable layout with Varnish, Full_cache state is false' => array(
+        return [
+            'Cacheable layout, Full_cache state is true' => [true, true, $tags, null, 0],
+            'Non-cacheable layout' => [true, false, null, null, 0],
+            'Cacheable layout with Varnish' => [true, true, $tags, \Magento\PageCache\Model\Config::VARNISH, 0],
+            'Cacheable layout with Varnish, Full_cache state is false' => [
                 false,
                 true,
                 $tags,
                 \Magento\PageCache\Model\Config::VARNISH,
-                0
-            ),
-            'Cacheable layout with Varnish and esi' => array(
+                0,
+            ],
+            'Cacheable layout with Varnish and esi' => [
                 true,
                 true,
                 null,
                 \Magento\PageCache\Model\Config::VARNISH,
-                100
-            ),
-            'Cacheable layout with Builtin' => array(true, true, $tags, \Magento\PageCache\Model\Config::BUILT_IN, 0),
-            'Cacheable layout with Builtin, Full_cache state is false' => array(
+                100,
+            ],
+            'Cacheable layout with Builtin' => [true, true, $tags, \Magento\PageCache\Model\Config::BUILT_IN, 0],
+            'Cacheable layout with Builtin, Full_cache state is false' => [
                 false,
                 true,
                 $tags,
                 \Magento\PageCache\Model\Config::BUILT_IN,
-                0
-            ),
-            'Cacheable layout with Builtin and esi' => array(
+                0,
+            ],
+            'Cacheable layout with Builtin and esi' => [
                 true,
                 false,
                 $tags,
                 \Magento\PageCache\Model\Config::BUILT_IN,
-                100
-            )
-        );
+                100,
+            ]
+        ];
     }
 }

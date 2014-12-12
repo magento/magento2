@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 ?>
 <div class="page-create-order">
@@ -28,13 +9,13 @@
         order.setCurrencySymbol('<?php echo $this->getCurrencySymbol($this->getCurrentCurrencyCode()) ?>')
     });
 </script>
-    <?php if($this->getCustomerId()): ?>
+    <?php if ($this->getCustomerId()): ?>
     <div class="order-sidebar">
         <div class="store-switcher order-currency">
             <label for="currency_switcher"><?php echo __('Order Currency:') ?></label>
             <select id="currency_switcher" name="order[currency]" onchange="order.setCurrencyId(this.value); order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));">
                 <?php foreach ($this->getAvailableCurrencies() as $_code): ?>
-                    <option value="<?php echo $_code ?>"<?php if($_code==$this->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?> symbol="<?php echo $this->getCurrencySymbol($_code) ?>">
+                    <option value="<?php echo $_code ?>"<?php if ($_code == $this->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?> symbol="<?php echo $this->getCurrencySymbol($_code) ?>">
                         <?php echo $this->getCurrencyName($_code) ?>
                     </option>
                 <?php endforeach; ?>
@@ -45,7 +26,7 @@
         </div>
     </div>
     <?php endif; ?>
-    <div class="order-details<?php if($this->getCustomerId()): ?> order-details-existing-customer<?php endif; ?>">
+    <div class="order-details<?php if ($this->getCustomerId()): ?> order-details-existing-customer<?php endif; ?>">
         <div class="order-details-inner">
             <div id="order-additional_area" style="display:none" class="fieldset-wrapper order-additional-area"><?php echo $this->getChildHtml('additional_area') ?></div>
             <div id="order-search" style="display:none" class="fieldset-wrapper order-search-items"><?php echo $this->getChildHtml('search') ?></div>
@@ -71,7 +52,7 @@
                 </div>
             </div>
 
-            <?php if($this->getChildBlock('card_validation')): ?>
+            <?php if ($this->getChildBlock('card_validation')): ?>
                 <div class="order-card-validation" id="order-card_validation">
                     <?php echo $this->getChildHtml('card_validation') ?>
                 </div>

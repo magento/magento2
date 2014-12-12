@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Core\Model\Theme;
 
@@ -49,7 +30,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
      *
      * @var array
      */
-    protected $_targetDirs = array();
+    protected $_targetDirs = [];
 
     /**
      * @var \Magento\Framework\Config\ThemeFactory $themeConfigFactory
@@ -79,7 +60,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
      */
     public function addDefaultPattern($area = \Magento\Framework\App\Area::AREA_FRONTEND)
     {
-        $this->addTargetPattern(implode('/', array($area, '{*/*,*/}', 'theme.xml')));
+        $this->addTargetPattern(implode('/', [$area, '{*/*,*/}', 'theme.xml']));
         return $this;
     }
 
@@ -105,7 +86,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
      */
     public function clearTargetPatterns()
     {
-        $this->_targetDirs = array();
+        $this->_targetDirs = [];
         return $this;
     }
 
@@ -137,7 +118,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
             return $this;
         }
 
-        $pathsToThemeConfig = array();
+        $pathsToThemeConfig = [];
         foreach ($this->getTargetPatterns() as $directoryPath) {
             $themeConfigs = $this->_directory->search($directoryPath);
             foreach ($themeConfigs as &$relPathToTheme) {
@@ -203,7 +184,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
         $fullPath = trim(substr($themeDirectory, strlen($this->_directory->getAbsolutePath())), '/');
         $pathPieces = explode('/', $fullPath);
         $area = array_shift($pathPieces);
-        return array('area' => $area, 'theme_path_pieces' => $pathPieces);
+        return ['area' => $area, 'theme_path_pieces' => $pathPieces];
     }
 
     /**
@@ -214,7 +195,6 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
      */
     public function _prepareConfigurationData($configPath)
     {
-
         $themeConfig = $this->_getConfigModel($configPath);
         $pathData = $this->_preparePathData($configPath);
         $media = $themeConfig->getMedia();
@@ -230,7 +210,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
         $themeCode = implode(ThemeInterface::CODE_SEPARATOR, $pathData['theme_path_pieces']);
         $parentPath = $parentPathPieces ? implode(ThemeInterface::PATH_SEPARATOR, $parentPathPieces) : null;
 
-        return array(
+        return [
             'parent_id' => null,
             'type' => ThemeInterface::TYPE_PHYSICAL,
             'area' => $pathData['area'],
@@ -240,7 +220,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
             'theme_title' => $themeConfig->getThemeTitle(),
             'preview_image' => $media['preview_image'] ? $media['preview_image'] : null,
             'parent_theme_path' => $parentPath
-        );
+        ];
     }
 
     /**
@@ -250,7 +230,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
      */
     protected function _renderFilters()
     {
-        $filters = $this->getFilter(array());
+        $filters = $this->getFilter([]);
         /** @var $theme ThemeInterface */
         foreach ($this->getItems() as $itemKey => $theme) {
             $removeItem = false;
@@ -273,7 +253,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
      */
     protected function _clearFilters()
     {
-        $this->_filters = array();
+        $this->_filters = [];
         return $this;
     }
 
@@ -318,7 +298,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
      */
     public function toOptionArray($addEmptyField = false)
     {
-        $optionArray = $addEmptyField ? array('' => '') : array();
+        $optionArray = $addEmptyField ? ['' => ''] : [];
         return $optionArray + $this->_toOptionArray('theme_id', 'theme_title');
     }
 

@@ -1,32 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\AdminOrder;
 
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Sales\Model\Quote\Item;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
+use Magento\Sales\Model\Quote\Item;
 
 /**
  * Order create model
@@ -205,9 +185,9 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     /**
      * Constructor
      *
-     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @var \Magento\Customer\Model\Customer\Mapper
      */
-    protected $extensibleDataObjectConverter;
+    protected $customerMapper;
 
     /**
      * @var \Magento\Sales\Model\QuoteRepository
@@ -237,7 +217,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param array $data
      */
     public function __construct(
@@ -263,8 +243,8 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        array $data = array()
+        \Magento\Customer\Model\Customer\Mapper $customerMapper,
+        array $data = []
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -288,7 +268,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $this->objectFactory = $objectFactory;
         $this->quoteRepository = $quoteRepository;
         $this->accountManagement = $accountManagement;
-        $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->customerMapper = $customerMapper;
 
         parent::__construct($data);
     }
@@ -378,7 +358,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
             $this->quoteRepository->save($this->getCustomerCart());
         }
         $this->setRecollect(true);
-        
+
         return $this;
     }
 
@@ -491,7 +471,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $quote->getShippingAddress()->setShippingDescription($order->getShippingDescription());
 
         $paymentData = $order->getPayment()->getData();
-        unset($paymentData['cc_type'], $paymentData['cc_last4']);
+        unset($paymentData['cc_type'], $paymentData['cc_last_4']);
         unset($paymentData['cc_exp_month'], $paymentData['cc_exp_year']);
         $quote->getPayment()->addData($paymentData);
 
@@ -1251,7 +1231,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $customerForm = $this->_metadataFormFactory->create(
             \Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
             'adminhtml_checkout',
-            $this->extensibleDataObjectConverter->toFlatArray($customer),
+            $this->customerMapper->toFlatArray($customer),
             false,
             CustomerForm::DONT_IGNORE_INVISIBLE
         );
@@ -1538,7 +1518,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $this->getQuote()->updateCustomerData($customer);
         $data = [];
 
-        $customerData = $this->extensibleDataObjectConverter->toFlatArray($customer);
+        $customerData = $this->customerMapper->toFlatArray($customer);
         foreach ($form->getAttributes() as $attribute) {
             $code = sprintf('customer_%s', $attribute->getAttributeCode());
             $data[$code] = isset($customerData[$attribute->getAttributeCode()])
@@ -1704,7 +1684,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         }
         $this->getQuote()->updateCustomerData($this->getQuote()->getCustomer());
 
-        $customerData = $this->extensibleDataObjectConverter->toFlatArray(
+        $customerData = $this->customerMapper->toFlatArray(
             $this->customerBuilder->populate($this->getQuote()->getCustomer())->setAddresses([])->create()
         );
         foreach ($this->_createCustomerForm($this->getQuote()->getCustomer())->getUserAttributes() as $attribute) {
@@ -1886,17 +1866,13 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
             $this->_errors[] = __('A payment method must be specified.');
         } else {
             $method = $this->getQuote()->getPayment()->getMethodInstance();
-            if (!$method) {
-                $this->_errors[] = __('This payment method instance is not available.');
+            if (!$method->isAvailable($this->getQuote())) {
+                $this->_errors[] = __('This payment method is not available.');
             } else {
-                if (!$method->isAvailable($this->getQuote())) {
-                    $this->_errors[] = __('This payment method is not available.');
-                } else {
-                    try {
-                        $method->validate();
-                    } catch (\Magento\Framework\Model\Exception $e) {
-                        $this->_errors[] = $e->getMessage();
-                    }
+                try {
+                    $method->validate();
+                } catch (\Magento\Framework\Model\Exception $e) {
+                    $this->_errors[] = $e->getMessage();
                 }
             }
         }
@@ -1919,7 +1895,6 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     {
         $email = $this->getData('account/email');
         if (empty($email)) {
-
             $host = $this->_scopeConfig->getValue(
                 self::XML_PATH_DEFAULT_EMAIL_DOMAIN,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE

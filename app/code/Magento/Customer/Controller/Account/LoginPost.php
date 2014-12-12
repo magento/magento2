@@ -1,35 +1,16 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Core\Helper\Data as CoreHelper;
+use Magento\Framework\Url\DecoderInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
@@ -49,8 +30,8 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;
 
-    /** @var CoreHelper */
-    protected $coreHelperData;
+    /** @var DecoderInterface */
+    protected $urlDecoder;
 
     /** @var CustomerUrl */
     protected $customerUrl;
@@ -64,7 +45,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
-     * @param CoreHelper $coreHelperData
+     * @param DecoderInterface $urlDecoder
      * @param CustomerUrl $customerHelperData
      * @param FormKeyValidator $formKeyValidator
      *
@@ -76,14 +57,14 @@ class LoginPost extends \Magento\Customer\Controller\Account
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $customerAccountManagement,
-        CoreHelper $coreHelperData,
+        DecoderInterface $urlDecoder,
         CustomerUrl $customerHelperData,
         FormKeyValidator $formKeyValidator
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->customerAccountManagement = $customerAccountManagement;
-        $this->coreHelperData = $coreHelperData;
+        $this->urlDecoder = $urlDecoder;
         $this->customerUrl = $customerHelperData;
         $this->formKeyValidator = $formKeyValidator;
         parent::__construct($context, $customerSession);
@@ -118,7 +99,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
                 ) {
                     $referer = $this->getRequest()->getParam(CustomerUrl::REFERER_QUERY_PARAM_NAME);
                     if ($referer) {
-                        $referer = $this->coreHelperData->urlDecode($referer);
+                        $referer = $this->urlDecoder->decode($referer);
                         if ($this->_url->isOwnOriginUrl()) {
                             $this->_getSession()->setBeforeAuthUrl($referer);
                         }

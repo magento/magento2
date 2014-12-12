@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -54,10 +35,10 @@ class Testsuite
     /**
      * @var array
      */
-    protected $_warmUpArguments = array(
+    protected $_warmUpArguments = [
         \Magento\TestFramework\Performance\Scenario::ARG_USERS => 1,
-        \Magento\TestFramework\Performance\Scenario::ARG_LOOPS => 2
-    );
+        \Magento\TestFramework\Performance\Scenario::ARG_LOOPS => 2,
+    ];
 
     /**
      * @var callable
@@ -74,7 +55,7 @@ class Testsuite
      *
      * @var array
      */
-    protected $_reportFiles = array();
+    protected $_reportFiles = [];
 
     /**
      * Constructor
@@ -98,7 +79,7 @@ class Testsuite
      */
     public function run()
     {
-        $this->_reportFiles = array();
+        $this->_reportFiles = [];
         $scenarios = $this->_getOptimizedScenarioList();
         foreach ($scenarios as $scenario) {
             /** @var $scenario \Magento\TestFramework\Performance\Scenario */
@@ -223,14 +204,14 @@ class Testsuite
     {
         $optimizer = new \Magento\TestFramework\Performance\Testsuite\Optimizer();
         $scenarios = $this->_config->getScenarios();
-        $fixtureSets = array();
+        $fixtureSets = [];
         foreach ($scenarios as $scenario) {
             /** @var $scenario \Magento\TestFramework\Performance\Scenario */
             $fixtureSets[] = $scenario->getFixtures();
         }
         $keys = $optimizer->optimizeFixtureSets($fixtureSets);
 
-        $result = array();
+        $result = [];
         foreach ($keys as $key) {
             $result[] = $scenarios[$key];
         }

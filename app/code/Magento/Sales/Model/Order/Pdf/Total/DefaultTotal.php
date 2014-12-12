@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Order\Pdf\Total;
 
@@ -57,7 +38,7 @@ class DefaultTotal extends \Magento\Framework\Object
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $ordersFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_taxHelper = $taxHelper;
         $this->_taxCalculation = $taxCalculation;
@@ -92,8 +73,8 @@ class DefaultTotal extends \Magento\Framework\Object
         }
 
         $fontSize = $this->getFontSize() ? $this->getFontSize() : 7;
-        $total = array('amount' => $amount, 'label' => $label, 'font_size' => $fontSize);
-        return array($total);
+        $total = ['amount' => $amount, 'label' => $label, 'font_size' => $fontSize];
+        return [$total];
     }
 
     /**
@@ -124,7 +105,7 @@ class DefaultTotal extends \Magento\Framework\Object
             $orders = $this->_taxOrdersFactory->create();
             $rates = $orders->loadByOrder($this->getOrder())->toArray();
             $fullInfo = $this->_taxCalculation->reproduceProcess($rates['items']);
-            $tax_info = array();
+            $tax_info = [];
 
             if ($fullInfo) {
                 foreach ($fullInfo as $info) {
@@ -137,11 +118,11 @@ class DefaultTotal extends \Magento\Framework\Object
                     foreach ($info['rates'] as $rate) {
                         $percent = $rate['percent'] ? ' (' . $rate['percent'] . '%)' : '';
 
-                        $tax_info[] = array(
+                        $tax_info[] = [
                             'amount' => $this->getAmountPrefix() . $this->getOrder()->formatPriceTxt($_amount),
                             'label' => __($rate['title']) . $percent . ':',
-                            'font_size' => $fontSize
-                        );
+                            'font_size' => $fontSize,
+                        ];
                     }
                 }
             }

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\SalesRule\Block\Rss;
 
@@ -32,7 +13,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -58,7 +39,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\SalesRule\Model\Rss\Discounts $rssModel,
         \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
-        array $data = array()
+        array $data = []
     ) {
         $this->storeManager = $context->getStoreManager();
         $this->rssModel = $rssModel;
@@ -86,11 +67,11 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
         $websiteId = $storeModel->getWebsiteId();
         $customerGroupId = $this->getCustomerGroupId();
         $url = $this->_urlBuilder->getUrl('');
-        $newUrl = $this->rssUrlBuilder->getUrl(array(
+        $newUrl = $this->rssUrlBuilder->getUrl([
             'type' => 'discounts',
             'store_id' => $storeId,
-            'cid' => $customerGroupId
-        ));
+            'cid' => $customerGroupId,
+        ]);
         $title = __('%1 - Discounts and Coupons', $storeModel->getName());
         $lang = $this->_scopeConfig->getValue(
             'general/locale/code',
@@ -98,17 +79,16 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
             $storeModel
         );
 
-        $data = array(
+        $data = [
             'title' => $title,
             'description' => $title,
             'link' => $newUrl,
             'charset' => 'UTF-8',
-            'language' => $lang
-        );
+            'language' => $lang,
+        ];
 
         /** @var $rule \Magento\SalesRule\Model\Rule */
         foreach ($this->rssModel->getDiscountCollection($websiteId, $customerGroupId) as $rule) {
-
             $toDate = $rule->getToDate()
                 ? '<br/>Discount End Date: ' . $this->formatDate($rule->getToDate(), 'medium')
                 : '';
@@ -122,7 +102,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
                 $couponCode
             );
 
-            $data['entries'][] = array('title' => $rule->getName(), 'description' => $description, 'link' => $url);
+            $data['entries'][] = ['title' => $rule->getName(), 'description' => $description, 'link' => $url];
         }
 
         return $data;
@@ -178,14 +158,14 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
      */
     public function getFeeds()
     {
-        $data = array();
+        $data = [];
         if ($this->isAllowed()) {
-            $url = $this->rssUrlBuilder->getUrl(array(
+            $url = $this->rssUrlBuilder->getUrl([
                     'type' => 'discounts',
                     'store_id' => $this->getStoreId(),
-                    'cid' => $this->getCustomerGroupId()
-            ));
-            $data = array('label' => __('Coupons/Discounts'), 'link' => $url);
+                    'cid' => $this->getCustomerGroupId(),
+            ]);
+            $data = ['label' => __('Coupons/Discounts'), 'link' => $url];
         }
         return $data;
     }

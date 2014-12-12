@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -82,21 +63,21 @@ class Region extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $condition = $adapter->quoteInto('lrn.locale = ?', $locale);
         $select->joinLeft(
-            array('lrn' => $this->_regionNameTable),
+            ['lrn' => $this->_regionNameTable],
             "{$regionField} = lrn.region_id AND {$condition}",
-            array()
+            []
         );
 
         if ($locale != $systemLocale) {
             $nameExpr = $adapter->getCheckSql('lrn.region_id is null', 'srn.name', 'lrn.name');
             $condition = $adapter->quoteInto('srn.locale = ?', $systemLocale);
             $select->joinLeft(
-                array('srn' => $this->_regionNameTable),
+                ['srn' => $this->_regionNameTable],
                 "{$regionField} = srn.region_id AND {$condition}",
-                array('name' => $nameExpr)
+                ['name' => $nameExpr]
             );
         } else {
-            $select->columns(array('name'), 'lrn');
+            $select->columns(['name'], 'lrn');
         }
 
         return $select;
@@ -117,11 +98,11 @@ class Region extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $locale = $this->_localeResolver->getLocaleCode();
         $joinCondition = $adapter->quoteInto('rname.region_id = region.region_id AND rname.locale = ?', $locale);
         $select = $adapter->select()->from(
-            array('region' => $this->getMainTable())
+            ['region' => $this->getMainTable()]
         )->joinLeft(
-            array('rname' => $this->_regionNameTable),
+            ['rname' => $this->_regionNameTable],
             $joinCondition,
-            array('name')
+            ['name']
         )->where(
             'region.country_id = ?',
             $countryId

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Model;
 
@@ -66,7 +47,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_dataFactoryMock;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -79,22 +60,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_eventManagerMock = $this->getMock(
             'Magento\Framework\Event\ManagerInterface',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->_structureReaderMock = $this->getMock(
             'Magento\Backend\Model\Config\Structure\Reader',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->_configStructure = $this->getMock(
             'Magento\Backend\Model\Config\Structure',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -109,28 +90,28 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_transFactoryMock = $this->getMock(
             'Magento\Framework\DB\TransactionFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
         $this->_appConfigMock = $this->getMock('Magento\Framework\App\Config\ReinitableConfigInterface');
         $this->_configLoaderMock = $this->getMock(
             'Magento\Backend\Model\Config\Loader',
-            array('getConfigByPath'),
-            array(),
+            ['getConfigByPath'],
+            [],
             '',
             false
         );
         $this->_dataFactoryMock = $this->getMock(
             'Magento\Framework\App\Config\ValueFactory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
 
-        $this->_storeManager = $this->getMockForAbstractClass('Magento\Framework\StoreManagerInterface');
+        $this->_storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
 
         $this->_model = new \Magento\Backend\Model\Config(
             $this->_appConfigMock,
@@ -163,11 +144,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveToCheckAdminSystemConfigChangedSectionEvent()
     {
-        $transactionMock = $this->getMock('Magento\Framework\DB\Transaction', array(), array(), '', false);
+        $transactionMock = $this->getMock('Magento\Framework\DB\Transaction', [], [], '', false);
 
         $this->_transFactoryMock->expects($this->any())->method('create')->will($this->returnValue($transactionMock));
 
-        $this->_configLoaderMock->expects($this->any())->method('getConfigByPath')->will($this->returnValue(array()));
+        $this->_configLoaderMock->expects($this->any())->method('getConfigByPath')->will($this->returnValue([]));
 
         $this->_eventManagerMock->expects(
             $this->at(0)
@@ -187,17 +168,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->arrayHasKey('store')
         );
 
-        $this->_model->setGroups(array('1' => array('data')));
+        $this->_model->setGroups(['1' => ['data']]);
         $this->_model->save();
     }
 
     public function testSaveToCheckScopeDataSet()
     {
-        $transactionMock = $this->getMock('Magento\Framework\DB\Transaction', array(), array(), '', false);
+        $transactionMock = $this->getMock('Magento\Framework\DB\Transaction', [], [], '', false);
 
         $this->_transFactoryMock->expects($this->any())->method('create')->will($this->returnValue($transactionMock));
 
-        $this->_configLoaderMock->expects($this->any())->method('getConfigByPath')->will($this->returnValue(array()));
+        $this->_configLoaderMock->expects($this->any())->method('getConfigByPath')->will($this->returnValue([]));
 
         $this->_eventManagerMock->expects(
             $this->at(0)
@@ -217,9 +198,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->arrayHasKey('store')
         );
 
-        $group = $this->getMock('Magento\Backend\Model\Config\Structure\Element\Group', array(), array(), '', false);
+        $group = $this->getMock('Magento\Backend\Model\Config\Structure\Element\Group', [], [], '', false);
 
-        $field = $this->getMock('Magento\Backend\Model\Config\Structure\Element\Field', array(), array(), '', false);
+        $field = $this->getMock('Magento\Backend\Model\Config\Structure\Element\Field', [], [], '', false);
 
         $this->_configStructure->expects(
             $this->at(0)
@@ -241,20 +222,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($field)
         );
 
-        $website = $this->getMock('Magento\Store\Model\Website', array(), array(), '', false);
+        $website = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
         $website->expects($this->any())->method('getCode')->will($this->returnValue('website_code'));
         $this->_storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($website));
-        $this->_storeManager->expects($this->any())->method('getWebsites')->will($this->returnValue(array($website)));
+        $this->_storeManager->expects($this->any())->method('getWebsites')->will($this->returnValue([$website]));
         $this->_storeManager->expects($this->any())->method('isSingleStoreMode')->will($this->returnValue(true));
 
         $this->_model->setWebsite('website');
 
-        $this->_model->setGroups(array('1' => array('fields' => array('key' => array('data')))));
+        $this->_model->setGroups(['1' => ['fields' => ['key' => ['data']]]]);
 
         $backendModel = $this->getMock(
             'Magento\Framework\App\Config\Value',
-            array('setPath', 'addData', '__sleep', '__wakeup'),
-            array(),
+            ['setPath', 'addData', '__sleep', '__wakeup'],
+            [],
             '',
             false
         );
@@ -263,16 +244,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->method(
             'addData'
         )->with(
-            array(
+            [
                 'field' => 'key',
-                'groups' => array(1 => array('fields' => array('key' => array('data')))),
+                'groups' => [1 => ['fields' => ['key' => ['data']]]],
                 'group_id' => null,
                 'scope' => 'websites',
                 'scope_id' => 0,
                 'scope_code' => 'website_code',
                 'field_config' => null,
-                'fieldset_data' => array('key' => null)
-            )
+                'fieldset_data' => ['key' => null],
+            ]
         );
         $backendModel->expects(
             $this->once()
@@ -339,7 +320,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'depth 2' => ['section/group', "Your configuration depth is 2 for path 'section/group'"],
             'depth 1' => ['section', "Your configuration depth is 1 for path 'section'"],
             'depth 4' => ['section/group/field/sub-field', "Your configuration depth is 4 for path"
-            . " 'section/group/field/sub-field'"],
+            . " 'section/group/field/sub-field'", ],
         ];
     }
 }

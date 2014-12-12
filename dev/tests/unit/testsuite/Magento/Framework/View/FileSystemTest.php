@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -61,20 +42,20 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fileResolution = $this->getMock('Magento\Framework\View\Design\FileResolution\Fallback\File', array(),
-            array(), '', false
+        $this->_fileResolution = $this->getMock('Magento\Framework\View\Design\FileResolution\Fallback\File', [],
+            [], '', false
         );
         $this->_templateFileResolution = $this->getMock(
-            'Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile', array(), array(), '', false
+            'Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile', [], [], '', false
         );
         $this->_localeFileResolution = $this->getMock(
-            'Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile', array(), array(), '', false
+            'Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile', [], [], '', false
         );
         $this->_staticFileResolution = $this->getMock(
-            'Magento\Framework\View\Design\FileResolution\Fallback\StaticFile', array(), array(), '', false
+            'Magento\Framework\View\Design\FileResolution\Fallback\StaticFile', [], [], '', false
         );
         $this->_assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository',
-            array('extractScope', 'updateDesignParams', 'createAsset'), array(), '', false
+            ['extractScope', 'updateDesignParams', 'createAsset'], [], '', false
         );
 
         $this->_model = new \Magento\Framework\View\FileSystem(
@@ -88,14 +69,14 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFilename()
     {
-        $params = array(
+        $params = [
             'area' => 'some_area',
             'themeModel' => $this->getMock(
-                    'Magento\Framework\View\Design\ThemeInterface', array(), array(), '', false, false
+                    'Magento\Framework\View\Design\ThemeInterface', [], [], '', false, false
                 ),
-            'module' => 'Some_Module'   //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
+            'module' => 'Some_Module',   //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
                                         // but PHPUnit has troubles with passing arguments by reference
-        );
+        ];
         $file = 'Some_Module::some_file.ext';
         $expected = 'path/to/some_file.ext';
 
@@ -115,14 +96,14 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTemplateFileName()
     {
-        $params = array(
+        $params = [
             'area'       => 'some_area',
             'themeModel' => $this->getMock(
-                    'Magento\Framework\View\Design\ThemeInterface', array(), array(), '', false, false
+                    'Magento\Framework\View\Design\ThemeInterface', [], [], '', false, false
                 ),
-            'module'     => 'Some_Module'   //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
-                                            // but PHPUnit has troubles with passing arguments by reference
-        );
+            'module'     => 'Some_Module', //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
+                                           // but PHPUnit has troubles with passing arguments by reference
+        ];
         $file = 'Some_Module::some_file.ext';
         $expected = 'path/to/some_file.ext';
 
@@ -142,18 +123,18 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLocaleFileName()
     {
-        $params = array(
+        $params = [
             'area' => 'some_area',
             'themeModel' => $this->getMock(
                 'Magento\Framework\View\Design\ThemeInterface',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false,
                 false
             ),
-            'locale' => 'some_locale'
-        );
+            'locale' => 'some_locale',
+        ];
         $file = 'some_file.ext';
         $expected = 'path/to/some_file.ext';
 
@@ -168,19 +149,19 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetViewFile()
     {
-        $params = array(
+        $params = [
             'area' => 'some_area',
             'themeModel' => $this->getMock(
                 'Magento\Framework\View\Design\ThemeInterface',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false,
                 false
             ),
             'locale' => 'some_locale',
-            'module' => 'Some_Module'
-        );
+            'module' => 'Some_Module',
+        ];
         $file = 'Some_Module::some_file.ext';
         $expected = 'path/to/some_file.ext';
 
@@ -209,12 +190,12 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
      */
     public function normalizePathDataProvider()
     {
-        return array(
-            'standard path' => array('/dir/somedir/somefile.ext', '/dir/somedir/somefile.ext'),
-            'one dot path' => array('/dir/somedir/./somefile.ext', '/dir/somedir/somefile.ext'),
-            'two dots path' => array('/dir/somedir/../somefile.ext', '/dir/somefile.ext'),
-            'two times two dots path' => array('/dir/../somedir/../somefile.ext', '/somefile.ext')
-        );
+        return [
+            'standard path' => ['/dir/somedir/somefile.ext', '/dir/somedir/somefile.ext'],
+            'one dot path' => ['/dir/somedir/./somefile.ext', '/dir/somedir/somefile.ext'],
+            'two dots path' => ['/dir/somedir/../somefile.ext', '/dir/somefile.ext'],
+            'two times two dots path' => ['/dir/../somedir/../somefile.ext', '/somefile.ext']
+        ];
     }
 
     /**
@@ -234,32 +215,32 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
      */
     public function offsetPathDataProvider()
     {
-        return array(
-            'local path' => array(
+        return [
+            'local path' => [
                 '/some/directory/two/another/file.ext',
                 '/some/directory/one/file.ext',
-                '../two/another'
-            ),
-            'local path reverted' => array(
+                '../two/another',
+            ],
+            'local path reverted' => [
                 '/some/directory/one/file.ext',
                 '/some/directory/two/another/file.ext',
-                '../../one'
-            ),
-            'url' => array(
+                '../../one',
+            ],
+            'url' => [
                 'http://example.com/images/logo.gif',
                 'http://example.com/themes/demo/css/styles.css',
-                '../../../images'
-            ),
-            'same path' => array(
+                '../../../images',
+            ],
+            'same path' => [
                 '/some/directory/file.ext',
                 '/some/directory/file1.ext',
-                '.'
-            ),
-            'non-normalized' => array(
+                '.',
+            ],
+            'non-normalized' => [
                 '/some/directory/../one/file.ext',
                 '/some/directory/./two/another/file.ext',
-                '../../../one'
-            ),
-        );
+                '../../../one',
+            ],
+        ];
     }
 }

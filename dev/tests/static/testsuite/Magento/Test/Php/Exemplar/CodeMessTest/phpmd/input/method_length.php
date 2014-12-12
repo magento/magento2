@@ -7,7 +7,7 @@ class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_method_length
      */
     public function bar() // 001
     { // 002
-        return array( // 003
+        return [ // 003
             '004',
             '005',
             '006',
@@ -103,6 +103,6 @@ class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_method_length
             '096',
             '097',
             '098',
-        ); // 099
+        ]; // 099
     } // 100
 }

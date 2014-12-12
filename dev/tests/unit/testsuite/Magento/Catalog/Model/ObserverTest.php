@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Catalog\Model;
@@ -54,7 +35,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_categoryFlatState;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -76,7 +57,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_storeManager = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
+        $this->_storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -134,7 +115,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->_catalogCategory->expects($this->once())
             ->method('getStoreCategories')
-            ->will($this->returnValue(array($this->_category)));
+            ->will($this->returnValue([$this->_category]));
         $this->_catalogCategory->expects($this->once())
             ->method('getCategoryUrl')
             ->will($this->returnValue('url'));
@@ -170,7 +151,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->_category->expects($this->once())
             ->method('getChildren')
-            ->will($this->returnValue(array($this->_childrenCategory)));
+            ->will($this->returnValue([$this->_childrenCategory]));
 
         $this->_observer->addCatalogToTopmenuItems($observer);
     }
@@ -181,7 +162,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->_category->expects($this->once())
             ->method('getChildrenNodes')
-            ->will($this->returnValue(array($this->_childrenCategory)));
+            ->will($this->returnValue([$this->_childrenCategory]));
 
         $this->_category->expects($this->once())
             ->method('getUseFlatResource')

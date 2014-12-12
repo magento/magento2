@@ -2,26 +2,7 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Factory
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Profiler\Driver;
 
@@ -82,21 +63,21 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $defaultDriverClass = $this->getMockClass(
             'Magento\Framework\Profiler\DriverInterface',
-            array(),
-            array(),
+            [],
+            [],
             'Magento_Framework_Profiler_Driver_Test_Default'
         );
         $testDriverClass = $this->getMockClass(
             'Magento\Framework\Profiler\DriverInterface',
-            array(),
-            array(),
+            [],
+            [],
             'Magento_Framework_Profiler_Driver_Test_Test'
         );
-        return array(
-            'Prefix and concrete type' => array(array('type' => 'test'), $testDriverClass),
-            'Prefix and default type' => array(array(), $defaultDriverClass),
-            'Concrete class' => array(array('type' => $testDriverClass), $testDriverClass)
-        );
+        return [
+            'Prefix and concrete type' => [['type' => 'test'], $testDriverClass],
+            'Prefix and default type' => [[], $defaultDriverClass],
+            'Concrete class' => [['type' => $testDriverClass], $testDriverClass]
+        ];
     }
 
     public function testCreateUndefinedClass()
@@ -105,7 +86,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'InvalidArgumentException',
             'Cannot create profiler driver, class "Magento_Framework_Profiler_Driver_Test_Baz" doesn\'t exist.'
         );
-        $this->_factory->create(array('type' => 'baz'));
+        $this->_factory->create(['type' => 'baz']);
     }
 
     /**
@@ -114,6 +95,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateInvalidClass()
     {
-        $this->_factory->create(array('type' => 'stdClass'));
+        $this->_factory->create(['type' => 'stdClass']);
     }
 }

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Weee\Model;
 
@@ -46,8 +27,6 @@ class Config
 
     // misc
     const XML_PATH_FPT_INCLUDE_IN_SUBTOTAL = 'tax/weee/include_in_subtotal';
-
-    const XML_PATH_FPT_DISCOUNTED = 'tax/weee/discount';
 
     const XML_PATH_FPT_TAXABLE = 'tax/weee/apply_vat';
 
@@ -131,22 +110,6 @@ class Config
     }
 
     /**
-     * Check if weee amount includes tax already
-     * Returns true if weee is taxable and catalog price includes tax
-     *
-     * @param   null|string|bool|int|Store $store
-     * @return  bool
-     */
-    public function isTaxIncluded($store = null)
-    {
-        $isFPTTaxable = $this->isTaxable($store);
-
-        $isCatalogPriceIncludeTax = $this->taxHelper->priceIncludesTax($store);
-
-        return $isFPTTaxable && $isCatalogPriceIncludeTax;
-    }
-
-    /**
      * Check if weee tax amount should be included to subtotal
      *
      * @param   null|string|bool|int|Store $store
@@ -156,21 +119,6 @@ class Config
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_FPT_INCLUDE_IN_SUBTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store
-        );
-    }
-
-    /**
-     * Check if weee tax amount should be discounted
-     *
-     * @param   null|string|bool|int|Store $store
-     * @return  bool
-     */
-    public function isDiscounted($store = null)
-    {
-        return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_FPT_DISCOUNTED,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );

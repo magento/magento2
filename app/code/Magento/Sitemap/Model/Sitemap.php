@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sitemap\Model;
 
@@ -65,7 +46,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      *
      * @var array
      */
-    protected $_sitemapItems = array();
+    protected $_sitemapItems = [];
 
     /**
      * Current sitemap increment
@@ -79,7 +60,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      *
      * @var array
      */
-    protected $_tags = array();
+    protected $_tags = [];
 
     /**
      * Number of lines in sitemap
@@ -100,7 +81,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      *
      * @var array
      */
-    private $_crlf = array("win" => "\r\n", "unix" => "\n", "mac" => "\r");
+    private $_crlf = ["win" => "\r\n", "unix" => "\n", "mac" => "\r"];
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\Write
@@ -145,7 +126,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     protected $_dateModel;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -169,7 +150,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory
      * @param \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $modelDate
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -186,12 +167,12 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         \Magento\Sitemap\Model\Resource\Catalog\ProductFactory $productFactory,
         \Magento\Sitemap\Model\Resource\Cms\PageFactory $cmsFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $modelDate,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
@@ -243,47 +224,47 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         $storeId = $this->getStoreId();
 
         $this->_sitemapItems[] = new \Magento\Framework\Object(
-            array(
+            [
                 'changefreq' => $helper->getCategoryChangefreq($storeId),
                 'priority' => $helper->getCategoryPriority($storeId),
-                'collection' => $this->_categoryFactory->create()->getCollection($storeId)
-            )
+                'collection' => $this->_categoryFactory->create()->getCollection($storeId),
+            ]
         );
 
         $this->_sitemapItems[] = new \Magento\Framework\Object(
-            array(
+            [
                 'changefreq' => $helper->getProductChangefreq($storeId),
                 'priority' => $helper->getProductPriority($storeId),
-                'collection' => $this->_productFactory->create()->getCollection($storeId)
-            )
+                'collection' => $this->_productFactory->create()->getCollection($storeId),
+            ]
         );
 
         $this->_sitemapItems[] = new \Magento\Framework\Object(
-            array(
+            [
                 'changefreq' => $helper->getPageChangefreq($storeId),
                 'priority' => $helper->getPagePriority($storeId),
-                'collection' => $this->_cmsFactory->create()->getCollection($storeId)
-            )
+                'collection' => $this->_cmsFactory->create()->getCollection($storeId),
+            ]
         );
 
-        $this->_tags = array(
-            self::TYPE_INDEX => array(
+        $this->_tags = [
+            self::TYPE_INDEX => [
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
                 PHP_EOL .
                 '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' .
                 PHP_EOL,
-                self::CLOSE_TAG_KEY => '</sitemapindex>'
-            ),
-            self::TYPE_URL => array(
+                self::CLOSE_TAG_KEY => '</sitemapindex>',
+            ],
+            self::TYPE_URL => [
                 self::OPEN_TAG_KEY => '<?xml version="1.0" encoding="UTF-8"?>' .
                 PHP_EOL .
                 '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' .
                 ' xmlns:content="http://www.google.com/schemas/sitemap-content/1.0"' .
                 ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">' .
                 PHP_EOL,
-                self::CLOSE_TAG_KEY => '</urlset>'
-            )
-        );
+                self::CLOSE_TAG_KEY => '</urlset>',
+            ],
+        ];
     }
 
     /**

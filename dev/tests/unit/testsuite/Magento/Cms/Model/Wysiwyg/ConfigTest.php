@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Cms\Model\Wysiwyg;
 
@@ -90,7 +71,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->windowSize = [
             'width' => 1200,
-            'height' => 800
+            'height' => 800,
         ];
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -119,11 +100,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetConfig($data, $isAuthorizationAllowed, $expectedResults)
     {
         $wysiwygPluginSettings = [
-            'wysiwygPluginSettings' => 'wysiwyg is here'
+            'wysiwygPluginSettings' => 'wysiwyg is here',
         ];
 
         $pluginSettings = [
-            'pluginSettings' => 'plugins are here'
+            'pluginSettings' => 'plugins are here',
         ];
 
         $this->backendUrlMock->expects($this->atLeastOnce())
@@ -162,19 +143,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'add_variables IS FALSE, add_widgets IS FALSE, isAuthorizationAllowed IS FALSE' => [
                 'data' => [
                     'add_variables' => false,
-                    'add_widgets' => false
+                    'add_widgets' => false,
                 ],
                 'isAuthorizationAllowed' => false,
-                'expectedResults' => [null, null, null]
+                'expectedResults' => [null, null, null],
             ],
             'add_variables IS TRUE, add_widgets IS TRUE, isAuthorizationAllowed IS TRUE' => [
                 'data' => [
                     'someData' => 'important data',
                     'add_variables' => true,
-                    'add_widgets' => true
+                    'add_widgets' => true,
                 ],
                 'isAuthorizationAllowed' => true,
-                'expectedResults' => ['important data', 'wysiwyg is here', 'plugins are here']
+                'expectedResults' => ['important data', 'wysiwyg is here', 'plugins are here'],
             ]
         ];
     }

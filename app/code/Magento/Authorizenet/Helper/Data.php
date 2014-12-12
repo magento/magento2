@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Authorizenet\Helper;
 
@@ -29,7 +10,7 @@ namespace Magento\Authorizenet\Helper;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper implements HelperInterface
 {
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -40,12 +21,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Helpe
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\OrderFactory $orderFactory
     ) {
         parent::__construct($context);
@@ -60,7 +41,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Helpe
      * @param   array $params
      * @return  string
      */
-    protected function _getUrl($route, $params = array())
+    protected function _getUrl($route, $params = [])
     {
         $params['_type'] = \Magento\Framework\UrlInterface::URL_TYPE_LINK;
         if (isset($params['is_secure'])) {
@@ -79,7 +60,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Helpe
      */
     public function getSaveOrderUrlParams($controller)
     {
-        $route = array();
+        $route = [];
         switch ($controller) {
             case 'onepage':
                 $route['action'] = 'saveOrder';
@@ -140,7 +121,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Helpe
      */
     public function getSuccessOrderUrl($params)
     {
-        $param = array();
+        $param = [];
         switch ($params['controller_action_name']) {
             case 'onepage':
                 $route = 'checkout/onepage/success';
@@ -190,7 +171,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Helpe
 
     /**
      * Return message for gateway transaction request
-     * 
+     *
      * @param \Magento\Payment\Model\Info $payment
      * @param string $requestType
      * @param string $lastTransactionId

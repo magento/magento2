@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Product\Type;
 
@@ -70,7 +51,7 @@ abstract class AbstractType
      *
      * @var array
      */
-    protected $_fileQueue = array();
+    protected $_fileQueue = [];
 
     const CALCULATE_CHILD = 0;
 
@@ -246,7 +227,7 @@ abstract class AbstractType
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -257,7 +238,7 @@ abstract class AbstractType
      */
     public function getParentIdsByChild($childId)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -304,7 +285,7 @@ abstract class AbstractType
     {
         $cacheKey = '_cache_editable_attributes';
         if (!$product->hasData($cacheKey)) {
-            $editableAttributes = array();
+            $editableAttributes = [];
             foreach ($this->getSetAttributes($product) as $attributeCode => $attribute) {
                 $editableAttributes[$attributeCode] = $attribute;
             }
@@ -398,7 +379,7 @@ abstract class AbstractType
 
                     $buyRequest->setData(
                         'super_product_config',
-                        array('product_type' => $productType, 'product_id' => $superProduct->getId())
+                        ['product_type' => $productType, 'product_id' => $superProduct->getId()]
                     );
                 }
             }
@@ -423,7 +404,7 @@ abstract class AbstractType
         }
         $product->setQty($buyRequest->getQty());
 
-        return array($product);
+        return [$product];
     }
 
     /**
@@ -577,7 +558,7 @@ abstract class AbstractType
     protected function _prepareOptions(\Magento\Framework\Object $buyRequest, $product, $processMode)
     {
         $transport = new \StdClass();
-        $transport->options = array();
+        $transport->options = [];
         foreach ($product->getOptions() as $option) {
             /* @var $option \Magento\Catalog\Model\Product\Option */
             $group = $option->groupFactory($option->getType())
@@ -596,7 +577,7 @@ abstract class AbstractType
         $eventName = sprintf('catalog_product_type_prepare_%s_options', $processMode);
         $this->_eventManager->dispatch(
             $eventName,
-            array('transport' => $transport, 'buy_request' => $buyRequest, 'product' => $product)
+            ['transport' => $transport, 'buy_request' => $buyRequest, 'product' => $product]
         );
         return $transport->options;
     }
@@ -634,7 +615,7 @@ abstract class AbstractType
      */
     public function getOrderOptions($product)
     {
-        $optionArr = array();
+        $optionArr = [];
         $info = $product->getCustomOption('info_buyRequest');
         if ($info) {
             $optionArr['info_buyRequest'] = unserialize($info->getValue());
@@ -652,26 +633,26 @@ abstract class AbstractType
                         ->setProduct($product)
                         ->setConfigurationItemOption($confItemOption);
 
-                    $optionArr['options'][] = array(
+                    $optionArr['options'][] = [
                         'label' => $option->getTitle(),
                         'value' => $group->getFormattedOptionValue($confItemOption->getValue()),
                         'print_value' => $group->getPrintableOptionValue($confItemOption->getValue()),
                         'option_id' => $option->getId(),
                         'option_type' => $option->getType(),
                         'option_value' => $confItemOption->getValue(),
-                        'custom_view' => $group->isCustomizedView()
-                    );
+                        'custom_view' => $group->isCustomizedView(),
+                    ];
                 }
             }
         }
 
         $productTypeConfig = $product->getCustomOption('product_type');
         if ($productTypeConfig) {
-            $optionArr['super_product_config'] = array(
+            $optionArr['super_product_config'] = [
                 'product_code' => $productTypeConfig->getCode(),
                 'product_type' => $productTypeConfig->getValue(),
-                'product_id' => $productTypeConfig->getProductId()
-            );
+                'product_id' => $productTypeConfig->getProductId(),
+            ];
         }
 
         return $optionArr;
@@ -792,7 +773,6 @@ abstract class AbstractType
             foreach (explode(',', $optionIds->getValue()) as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
-
                     $confItemOption = $product->getCustomOption(self::OPTION_PREFIX . $optionId);
 
                     $group = $option->groupFactory($option->getType())
@@ -965,7 +945,7 @@ abstract class AbstractType
      */
     public function getSearchableData($product)
     {
-        $searchData = array();
+        $searchData = [];
         if ($product->getHasOptions()) {
             $searchData = $this->_catalogProductOption->getSearchableData($product->getId(), $product->getStoreId());
         }
@@ -983,9 +963,9 @@ abstract class AbstractType
     public function getProductsToPurchaseByReqGroups($product)
     {
         if ($this->isComposite($product)) {
-            return array();
+            return [];
         }
-        return array(array($product));
+        return [[$product]];
     }
 
     /**
@@ -997,7 +977,7 @@ abstract class AbstractType
      */
     public function processBuyRequest($product, $buyRequest)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -1009,7 +989,7 @@ abstract class AbstractType
      */
     public function checkProductConfiguration($product, $buyRequest)
     {
-        $errors = array();
+        $errors = [];
 
         try {
             /**
@@ -1061,7 +1041,7 @@ abstract class AbstractType
      */
     public function getIdentities(\Magento\Catalog\Model\Product $product)
     {
-        return array();
+        return [];
     }
 
     /**

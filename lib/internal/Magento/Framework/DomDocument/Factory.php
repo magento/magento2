@@ -1,11 +1,12 @@
 <?php
 /**
- * DOM document factory.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\DomDocument;
 
+/**
+ * DOM document factory
+ */
 class Factory
 {
     /**
@@ -28,6 +29,6 @@ class Factory
      */
     public function createDomDocument()
     {
-        return $this->_objectManager->create('DOMDocument', array());
+        return $this->_objectManager->create('DOMDocument', []);
     }
 }

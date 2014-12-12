@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\View\Layout\Argument\Interpreter;
 
@@ -43,16 +24,16 @@ class NamedParamsTest extends \PHPUnit_Framework_TestCase
 
     public function testEvaluate()
     {
-        $input = array(
-            'param' => array('param1' => array('value' => 'value 1'), 'param2' => array('value' => 'value 2'))
-        );
+        $input = [
+            'param' => ['param1' => ['value' => 'value 1'], 'param2' => ['value' => 'value 2']],
+        ];
 
         $this->_interpreter->expects(
             $this->at(0)
         )->method(
             'evaluate'
         )->with(
-            array('value' => 'value 1')
+            ['value' => 'value 1']
         )->will(
             $this->returnValue('value 1 (evaluated)')
         );
@@ -61,11 +42,11 @@ class NamedParamsTest extends \PHPUnit_Framework_TestCase
         )->method(
             'evaluate'
         )->with(
-            array('value' => 'value 2')
+            ['value' => 'value 2']
         )->will(
             $this->returnValue('value 2 (evaluated)')
         );
-        $expected = array('param1' => 'value 1 (evaluated)', 'param2' => 'value 2 (evaluated)');
+        $expected = ['param1' => 'value 1 (evaluated)', 'param2' => 'value 2 (evaluated)'];
 
         $actual = $this->_model->evaluate($input);
         $this->assertSame($expected, $actual);
@@ -82,15 +63,15 @@ class NamedParamsTest extends \PHPUnit_Framework_TestCase
 
     public function evaluateWrongParamDataProvider()
     {
-        return array(
-            'root param is non-array' => array(
-                array('param' => 'non-array'),
-                'Layout argument parameters are expected to be an array'
-            ),
-            'individual param is non-array' => array(
-                array('param' => array('sub-param' => 'non-array')),
-                'Parameter data of layout argument is expected to be an array'
-            )
-        );
+        return [
+            'root param is non-array' => [
+                ['param' => 'non-array'],
+                'Layout argument parameters are expected to be an array',
+            ],
+            'individual param is non-array' => [
+                ['param' => ['sub-param' => 'non-array']],
+                'Parameter data of layout argument is expected to be an array',
+            ]
+        ];
     }
 }

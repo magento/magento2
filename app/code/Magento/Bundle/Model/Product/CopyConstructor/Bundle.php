@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Bundle\Model\Product\CopyConstructor;
 
@@ -47,20 +28,20 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
         );
         $optionCollection->appendSelections($selectionCollection);
 
-        $optionRawData = array();
-        $selectionRawData = array();
+        $optionRawData = [];
+        $selectionRawData = [];
 
         $i = 0;
         foreach ($optionCollection as $option) {
-            $optionRawData[$i] = array(
+            $optionRawData[$i] = [
                 'required' => $option->getData('required'),
                 'position' => $option->getData('position'),
                 'type' => $option->getData('type'),
                 'title' => $option->getData('title') ? $option->getData('title') : $option->getData('default_title'),
-                'delete' => ''
-            );
+                'delete' => '',
+            ];
             foreach ($option->getSelections() as $selection) {
-                $selectionRawData[$i][] = array(
+                $selectionRawData[$i][] = [
                     'product_id' => $selection->getProductId(),
                     'position' => $selection->getPosition(),
                     'is_default' => $selection->getIsDefault(),
@@ -68,8 +49,8 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
                     'selection_price_value' => $selection->getSelectionPriceValue(),
                     'selection_qty' => $selection->getSelectionQty(),
                     'selection_can_change_qty' => $selection->getSelectionCanChangeQty(),
-                    'delete' => ''
-                );
+                    'delete' => '',
+                ];
             }
             $i++;
         }

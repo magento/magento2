@@ -1,3 +1,164 @@
+0.1.0-alpha108
+=============
+* Service Contracts:
+    * Implemented Bundle Product API
+    * Replaced Address Converted model with Address Mapper
+    * Refactored Customer web service routes and API functional tests to use latest service layer
+    * Implemented Configurable Product Module API
+    * Removed obsolete namespace Magento\Catalog\Service
+* Price calculation logic:
+    * Removed complex JS price calculation on the frontend
+* Fixed bugs:
+    * Fixed an issue where the path parameter routes were incorrectly matched in the REST web services
+    * Fixed an issue where $0.00 was shown as a configurable product price if variation did not add anything to product price
+    * Fixed an issue where the fatal error occurred when a user with read-only permissions for cart price rules attempted to open an existing cart price rule
+    * Fixed an issue where the 'An order with subscription items was registered.' message was displayed in an order if it has been placed using an online payment method
+    * Fixed an issue where the 'Warning: Division by zero' message was displayed when an invoice was opened for an order placed using an online payment method
+    * Fixed an issue where creating simple product through using API service led to an exception on the frontend
+    * Fixed an issue where it was impossible to perform advanced search for price range of 0 to 0
+    * Fixed an issue with the broken Search Terms Report page
+    * Fixed an issue with the broken Search Terms page
+    * Fixed an issue with a notice appearing in the Advanced Search when searching by a custom multiselect attribute
+    * Fixed an issue where Search did not work if word-request contained a hyphen
+    * Fixed an issue where searching by a title of bundle option returned empty result
+    * Fixed an issue where Maximum Query Length was not applied to Quick Search
+    * Fixed an issue where searching by product name did not return suggested search terms
+    * Fixed an issue with an incorrect dependency of the MySQL search adapter on CatalogSearch
+    * Fixed an issue with incorrect dependency of the Search library on the MySQL adapter
+    * Fixed an issue where Advanced Search always returned empty result for multiselect product attributes
+    * Fixed an issue where an admin user was redirected to the 404 page after deleting search terms through using mass action
+    * Fixed an issue where a product page was frozen when a configurable attribute was added to a current product template during saving a configurable product
+    * Fixed an issue where it was impossible to place an order with downloadable product that contained a link
+    * Fixed an issue where only parent category was displayed in layered navigation on the Search results page
+    * Fixed an issue where the Price attribute was incorrectly displayed in layered navigation if searching by this attribute
+    * Fixed an issue where importing configurable products set them out of stock
+    * Fixed an issue where drop-down lists were closing by themselves in Internet Explorer 9
+    * Fixed an issue where it was impossible to place an order using PayPal Payment Pro and 3D Secure
+    * Fixed an issue where bundle items were always marked as 'User Defined'
+    * Fixed an issue where view management selectors did not work in categories on the frontend
+    * Fixed an issue where the 'Base' image label was not applied to a first product image uploaded
+    * Fixed an issue where editing a product led to data loss and broken media links
+    * Fixed an issue where attributes could not be deleted from the Google Content Attributes page
+    * Fixed an issue where a product was unassigned from a category after it was edited by an admin user with read/edit permissions for product price only
+    * Fixed an issue where the fatal error occurred on the RSS page for new products and special products
+    * Fixed an issue where the fatal error occurred when adding a new Customer Address Attribute
+    * Fixed an issue where it was impossible to install Magento when specific time zones were set
+    * Fixed an issue where compiler.php failed not handle inheritance from virtual classes
+    * Fixed an issue where some locales were absent in the 'Interface Locales' drop-down in the backend
+    * Fixed an issue where the Offloader header did not work in the backend
+    * Fixed an issue where autoloader failed to load custom classes
+    * Fixed an issue where products did not disappear from the shopping cart after checkout
+    * Fixed an issue where changing quantity of a product in the shopping cart removed product from cart
+    * Fixed an issue where the Persistent Shopping Cart functionality was not available if Luma theme was applied
+    * Fixed an issue where the category tree was broken if editing a category name in specific cases
+    * Fixed an issue where 'Price as Configured' value was not updated for a bundle product after changing the value of the 'Price View' field
+    * Fixed an issue where the final product price was displayed incorrectly in a category and a product page if price display setting was set to exclude FPT, FPT description, and final price
+    * Fixed an issue where product price range was displayed incorrectly for bundle products
+    * Fixed an issue where the HTTP 500 error occurred on the Share Wishlist page
+    * Fixed an issue with the incorrect order of dispatching event adminhtml_cms_page_edit_tab_content_prepare_form and setting form values in the backend
+    * Fixed an issue where breadcrumbs were not displaying the fullpath
+    * Fixed an issue where only two of four widgets added to a CMS page were displayed
+    * Fixed an issue where it was impossible to save locale for an admin account after changing it
+    * Fixed an issue where icons were not loaded on a non-secure pages if secure URLs were used in the frontend
+    * Fixed an issue where overriding layouts did not work after renaming a theme
+    * Fixed an issue where the Permissions tree was not displayed when activating an integration
+    * Fixed an issue with duplicated and corrupted page layouts
+    * Fixed an issue where the 'Number of Products per Page' option did not work for widgets of the 'List' type
+    * Fixed an issue where HTTP and HTTPS pages shared cache content
+    * Fixed an issue where the 'Use Billing Address' checkbox did not affect did not affect the checkout experience
+    * Fixed an issue where it was impossible to create shipping labels
+    * Fixed an issue where the 'Payment Method' section was empty in billing agreements in the frontend if a billing agreement was created during the checkout
+    * Fixed an issue with Catalog Rule Product indexer invalidating the price index
+    * Fixed an issue where one of the price range fields was corrupted in the Advanced Search page
+    * Fixed an issue where a base product image that was smaller than the gallery image container was scaled up to fill the container on the View Product page in the frontend
+    * Fixed the layout issue on the Contact Us page
+    * Fixed an issue where search queries were not submitted when a search suggestion was clicked
+    * Fixed an issue where page footer overlapped products in categories in Internet Explorer 11
+    * Fixed UI issues in the Luma theme
+    * Fixed an issue when the fatal error occurred if a category was moved to another category that already contained category with the same URL key
+    * Fixed an issue where incorrect products were displayed on the Reviews tab for a configurable product
+    * Fixed an issue where fatal errors occurred when calling id() on a null store object
+    * Fixed an issue where navigation through the tabs on the Dashboard did not work properly
+    * Fixed an issue where prices for bundle products were incorrect on the category view and search view pages
+    * Fixed an issue where custom Customer attributes and Customer Address attributes were not displayed on the 'Create/Edit Customer' page in thebackend
+    * Fixed an issue where there were no validation for whether an option of a bundle product was created through the API
+    * Fixed an issue where bundle products created through using the API were not appearing in the frontend
+    * Fixed an issue where entity ID was missing for product thumbnail labels values
+    * Fixed an issue with the bad return from the Indexer launch() method
+    * Fixed an issue where an attempt to select product SKU in a shopping cart price rule redirected to the Dashboard
+    * Fixed an issue where the Search Terms Reports and Search Terms list did not work
+    * Fixed an issue where an error occurred when configuring Google API
+    * Fixed an issue where it was impossible to add a configurable product variation to an order in the backend
+    * Fixed an issue where there were no confirmation on deleting CMS pages/Blocks
+    * Fixed an issue with incorrect behavior of validation in the Quick Search field in the frontend
+    * Fixed an issue where it was impossible to select a row in the grid of CMS pages and CMS Blocks
+    * Fixed an issue where validation for minimum and maximum field value length was not performed for Customer attributes and Customer Address attributes when creating or editing a customer in the backend
+    * Fixed an issue with broken 'validate-digits-range' validation
+    * Fixed an issue where it was impossible to delete product templates
+    * Fixed an issue where products were not shown on a second website
+    * Fixed an issue where customer group was empty when adding group price during creating a product
+    * Fixed an issue with incorrect interval in LN for small values
+    * Fixed an issue where product attribute of the Price type was not displayed in layered navigation
+    * Fixed an issue with testCreateCustomer failing in parallel run
+    * Fixed an issue with the value of the 'Bill to Name' field always displayed instead of the value of the 'Ship to Name' in all order-related grids
+    * Fixed an issue where an error occurred when submitting an order int he backend when shipping and billing addresses were different
+    * Fixed an issue where the navigation menu was absent on product pages with Varnish used
+    * Fixed an issue where the underscore character was incorrectly handled when used with digits
+    * Fixed an issue where it was impossible to localize comments in the 'Max Emails Allowed to be Sent' and 'Email Text Length Limit' fields in the Wishlist configuration
+    * Fixed an issue where there were a logical error in joining the same table two times with different aliases
+* Sample data:
+    * Created Luma Sample Data script
+* GitHub requests:
+    * [#775](https://github.com/magento/magento2/issues/775) -- Can't save changes in configuration in Configuration->Advanced->System
+    * [#716](https://github.com/magento/magento2/issues/716) -- Wrong mimetype returned by getMimeType from Magento library
+    * [#681](https://github.com/magento/magento2/issues/681) -- Magento\Framework\Xml\Parser class issues
+    * [#758](https://github.com/magento/magento2/issues/758) -- Coding standards: arrays
+    * [#169](https://github.com/magento/magento2/issues/169) -- DDL cache should be tagged
+    * [#738](https://github.com/magento/magento2/issues/738) -- pub/setup missing in 0.1.0-alpha103
+* Various improvements:
+    * Removed obsolete code from the Tax and Weee modules
+    * Merged the AdminNotification, Integration, Authorization, and WebAPI SQL scripts
+    * Removed the Customer Converter model and Address Converter model
+    * Created AJAX Authentication Endpoint for the frontend
+    * Removed Customer\Service\V1 service implementation in favor of the Customer\Api service implementation
+    * Removed the Recurring Billing functionality
+    * Added the 'suggest' node to composer.json files to mark modules that are optional
+    * Consolidated SQL install and data scripts for the rest of the modules
+    * Added static test verifying that README.md file exist in modules
+    * Removed obsolete code
+    * Removed license notices in files
+    * Eliminated invalid dependencies of the CatalogRule module
+    * Removed @deprecated methods from the code base
+    * Added test enforcing @covers annotation refers to only existing classes and methods
+    * Added the PHP Coding Standards Fixer configuration file to the project root
+    * Added Git hook to automatically correct coding style before actual push
+    * Added the ability to enforce no error log messages during tests execution
+    * Removed API interfaces from the Cms module
+    * Updated jQuery used to version 1.11
+    * Added wildcard prefix for all search words in search requests for Match query
+    * Renamed frontend properties for some of the product attributes
+    * Fixed the Magento\Centinel\CreateOrderTest integration test
+    * Improved invoking for functional tests
+    * Refactored StoreManagerInterface to avoid violating the modularity principle
+    * Improved the logic in the isSubtotal method in Magento\Reports\Model\Resource\Report\Collection\AbstractCollection
+* Framework improvements:
+    * Added a copy of dependencies for Magento components to the root composer.json file
+* Setup Tool improvements:
+    * Moved dependencies from setup/composer.json to the root composer.json and removed the former one
+    * Removed dependencies on unnecessary ZF2 libraries
+    * Removed dependency on exec() calls
+    * Removed tool dev/shell/run_data_fixtures.php in favor of Setup Toolphp setup/index.php install-data
+    * Removed tool dev/shell/user_config_data.php in favor of Setup Tool php setup/index.php install-user-configuration
+    * Added validation of the required information on each installation step in the Setup tool:
+        * Web UI:
+            * Removed the 'Test Connection' button in web setup UI; checking connection to the database server is now performed when the 'Next' button is clicked
+            * Added validation of URL format
+            * Added automatic adding of the trailing slash to the base URL field if a user did not provide one
+            * Added validation of admin user password
+            * Added validation of HTTPS configuration
+        * CLI:
+            * Added validation of CLI to display missing/extra parameters and missing/unnecessary parameter values
+
 0.1.0-alpha107
 =============
 * Various improvements:

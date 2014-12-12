@@ -1,4 +1,4 @@
 <?php
-if ($a){
+if ($a) {
     echo 'a';
 }

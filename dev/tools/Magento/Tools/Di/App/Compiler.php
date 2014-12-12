@@ -1,34 +1,16 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Tools\Di\App;
 
 use Magento\Framework\App;
-use Magento\Tools\Di\Definition\Collection as DefinitionsCollection;
-use Magento\Tools\Di\Compiler\Config;
-use Magento\Tools\Di\Code\Reader\ClassesScanner;
+use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Tools\Di\Code\Generator\InterceptionConfigurationBuilder;
+use Magento\Tools\Di\Code\Reader\ClassesScanner;
+use Magento\Tools\Di\Compiler\Config;
+use Magento\Tools\Di\Definition\Collection as DefinitionsCollection;
 
 /**
  * Class Compiler
@@ -92,7 +74,7 @@ class Compiler implements \Magento\Framework\AppInterface
     public function launch()
     {
         $paths = ['app/code', 'lib/internal/Magento/Framework', 'var/generation'];
-        $definitionsCollection = new DefinitionsCollection;
+        $definitionsCollection = new DefinitionsCollection();
         foreach ($paths as $path) {
             $definitionsCollection->addCollection($this->getDefinitionsCollection(BP . '/' . $path));
         }
@@ -143,7 +125,7 @@ class Compiler implements \Magento\Framework\AppInterface
      */
     protected function getDefinitionsCollection($path)
     {
-        $definitions = new DefinitionsCollection;
+        $definitions = new DefinitionsCollection();
         foreach ($this->classesScanner->getList($path) as $className => $constructorArguments) {
             $definitions->addDefinition($className, $constructorArguments);
         }
@@ -163,10 +145,9 @@ class Compiler implements \Magento\Framework\AppInterface
         );
         $generator = new \Magento\Tools\Di\Code\Generator(
             $generatorIo,
-            array(
-                \Magento\Framework\Interception\Code\Generator\Interceptor::ENTITY_TYPE =>
-                    'Magento\Tools\Di\Code\Generator\Interceptor',
-            )
+            [
+                Interceptor::ENTITY_TYPE => 'Magento\Tools\Di\Code\Generator\Interceptor',
+            ]
         );
         $configuration = $this->interceptionConfigurationBuilder->getInterceptionConfiguration(get_declared_classes());
         $generator->generateList($configuration);

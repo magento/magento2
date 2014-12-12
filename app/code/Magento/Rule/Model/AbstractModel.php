@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -106,7 +87,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_formFactory = $formFactory;
         $this->_localeDate = $localeDate;
@@ -299,10 +280,10 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     {
         $arr = $this->_convertFlatToRecursive($data);
         if (isset($arr['conditions'])) {
-            $this->getConditions()->setConditions(array())->loadArray($arr['conditions'][1]);
+            $this->getConditions()->setConditions([])->loadArray($arr['conditions'][1]);
         }
         if (isset($arr['actions'])) {
-            $this->getActions()->setActions(array())->loadArray($arr['actions'][1], 'actions');
+            $this->getActions()->setActions([])->loadArray($arr['actions'][1], 'actions');
         }
 
         return $this;
@@ -318,17 +299,17 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      */
     protected function _convertFlatToRecursive(array $data)
     {
-        $arr = array();
+        $arr = [];
         foreach ($data as $key => $value) {
             if (($key === 'conditions' || $key === 'actions') && is_array($value)) {
                 foreach ($value as $id => $data) {
                     $path = explode('--', $id);
-                    $node =& $arr;
-                    for ($i = 0,$l = sizeof($path); $i < $l; $i++) {
+                    $node = & $arr;
+                    for ($i = 0, $l = sizeof($path); $i < $l; $i++) {
                         if (!isset($node[$key][$path[$i]])) {
-                            $node[$key][$path[$i]] = array();
+                            $node[$key][$path[$i]] = [];
                         }
-                        $node =& $node[$key][$path[$i]];
+                        $node = & $node[$key][$path[$i]];
                     }
                     foreach ($data as $k => $v) {
                         $node[$k] = $v;
@@ -338,7 +319,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
                 /**
                  * Convert dates into \Zend_Date
                  */
-                if (in_array($key, array('from_date', 'to_date')) && $value) {
+                if (in_array($key, ['from_date', 'to_date']) && $value) {
                     $value = $this->_localeDate->date(
                         $value,
                         \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
@@ -372,7 +353,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      */
     public function validateData(\Magento\Framework\Object $object)
     {
-        $result = array();
+        $result = [];
         $fromDate = $toDate = null;
 
         if ($object->hasFromDate() && $object->hasToDate()) {
@@ -461,51 +442,5 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
             $this->setData('website_ids', (array)$websiteIds);
         }
         return $this->_getData('website_ids');
-    }
-
-    /**
-     * @param string $format
-     * @return string
-     *
-     * @deprecated since 1.7.0.0
-     */
-    public function asString($format = '')
-    {
-        return '';
-    }
-
-    /**
-     * @return string
-     *
-     * @deprecated since 1.7.0.0
-     */
-    public function asHtml()
-    {
-        return '';
-    }
-
-    /**
-     * Returns rule as an array for admin interface
-     *
-     * @param array $arrAttributes
-     * @return array
-     *
-     * @deprecated since 1.7.0.0
-     */
-    public function asArray(array $arrAttributes = array())
-    {
-        return array();
-    }
-
-    /**
-     * Combine website ids to string
-     *
-     * @return $this
-     *
-     * @deprecated since 1.7.0.0
-     */
-    protected function _prepareWebsiteIds()
-    {
-        return $this;
     }
 }

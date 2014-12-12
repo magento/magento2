@@ -1,26 +1,7 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\PageCache\Model\Observer;
 
@@ -42,12 +23,12 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
     {
         $this->_configMock = $this->getMock(
             'Magento\PageCache\Model\Config',
-            array('getType', 'isEnabled'),
-            array(),
+            ['getType', 'isEnabled'],
+            [],
             '',
             false
         );
-        $this->_cacheMock = $this->getMock('Magento\Framework\App\PageCache\Cache', array('clean'), array(), '', false);
+        $this->_cacheMock = $this->getMock('Magento\Framework\App\PageCache\Cache', ['clean'], [], '', false);
 
         $this->_model = new \Magento\PageCache\Model\Observer\FlushCacheByTags(
             $this->_configMock,
@@ -68,10 +49,10 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
         $observedObject = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
 
         if ($cacheState) {
-            $tags = array('cache_1', 'cache_group');
-            $expectedTags = array('cache_1', 'cache_group', 'cache');
+            $tags = ['cache_1', 'cache_group'];
+            $expectedTags = ['cache_1', 'cache_group', 'cache'];
 
-            $eventMock = $this->getMock('Magento\Framework\Event', array('getObject'), array(), '', false);
+            $eventMock = $this->getMock('Magento\Framework\Event', ['getObject'], [], '', false);
             $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($observedObject));
             $observerObject->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
             $this->_configMock->expects(
@@ -91,9 +72,9 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
 
     public function flushCacheByTagsDataProvider()
     {
-        return array(
-            'full_page cache type is enabled' => array(true),
-            'full_page cache type is disabled' => array(false)
-        );
+        return [
+            'full_page cache type is enabled' => [true],
+            'full_page cache type is disabled' => [false]
+        ];
     }
 }

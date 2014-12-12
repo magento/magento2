@@ -1,37 +1,18 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Wishlist\Model;
 
+use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Logger;
+use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\UrlInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
-use Magento\Checkout\Helper\Cart as CartHelper;
-use Magento\Framework\Message\ManagerInterface as MessageManager;
 
 class ItemCarrier
 {
@@ -124,10 +105,10 @@ class ItemCarrier
     {
         $isOwner = $wishlist->isOwner($this->customerSession->getCustomerId());
 
-        $messages = array();
-        $addedItems = array();
-        $notSalable = array();
-        $hasOptions = array();
+        $messages = [];
+        $addedItems = [];
+        $notSalable = [];
+        $hasOptions = [];
 
         $cart = $this->cart;
         $collection = $wishlist->getItemCollection()->setVisibilityFilter();
@@ -172,7 +153,7 @@ class ItemCarrier
         if ($isOwner) {
             $indexUrl = $this->helper->getListUrl($wishlist->getId());
         } else {
-            $indexUrl = $this->urlBuilder->getUrl('wishlist/shared', array('code' => $wishlist->getSharingCode()));
+            $indexUrl = $this->urlBuilder->getUrl('wishlist/shared', ['code' => $wishlist->getSharingCode()]);
         }
         if ($this->cartHelper->getShouldRedirectToCart()) {
             $redirectUrl = $this->cartHelper->getCartUrl();
@@ -183,7 +164,7 @@ class ItemCarrier
         }
 
         if ($notSalable) {
-            $products = array();
+            $products = [];
             foreach ($notSalable as $item) {
                 $products[] = '"' . $item->getProduct()->getName() . '"';
             }
@@ -194,7 +175,7 @@ class ItemCarrier
         }
 
         if ($hasOptions) {
-            $products = array();
+            $products = [];
             foreach ($hasOptions as $item) {
                 $products[] = '"' . $item->getProduct()->getName() . '"';
             }
@@ -229,7 +210,7 @@ class ItemCarrier
                 $redirectUrl = $indexUrl;
             }
 
-            $products = array();
+            $products = [];
             foreach ($addedItems as $product) {
                 $products[] = '"' . $product->getName() . '"';
             }

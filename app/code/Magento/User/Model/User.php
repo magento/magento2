@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\User\Model;
 
@@ -138,7 +119,7 @@ class User extends AbstractModel implements StorageInterface
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -154,7 +135,7 @@ class User extends AbstractModel implements StorageInterface
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -169,10 +150,10 @@ class User extends AbstractModel implements StorageInterface
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_encryptor = $encryptor;
         $this->dateTime = $dateTime;
@@ -203,7 +184,7 @@ class User extends AbstractModel implements StorageInterface
         $properties = parent::__sleep();
         return array_diff(
             $properties,
-            array(
+            [
                 '_eventManager',
                 '_userData',
                 '_config',
@@ -213,7 +194,7 @@ class User extends AbstractModel implements StorageInterface
                 '_transportBuilder',
                 '_storeManager',
                 '_validatorBeforeSave'
-            )
+            ]
         );
     }
 
@@ -232,7 +213,7 @@ class User extends AbstractModel implements StorageInterface
         $this->_roleFactory = $objectManager->get('Magento\Authorization\Model\RoleFactory');
         $this->_encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
         $this->_transportBuilder = $objectManager->get('Magento\Framework\Mail\Template\TransportBuilder');
-        $this->_storeManager = $objectManager->get('Magento\Framework\StoreManagerInterface');
+        $this->_storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
     }
 
     /**
@@ -242,13 +223,13 @@ class User extends AbstractModel implements StorageInterface
      */
     public function beforeSave()
     {
-        $data = array(
+        $data = [
             'firstname' => $this->getFirstname(),
             'lastname' => $this->getLastname(),
             'email' => $this->getEmail(),
             'modified' => $this->dateTime->now(),
-            'extra' => serialize($this->getExtra())
-        );
+            'extra' => serialize($this->getExtra()),
+        ];
 
         if ($this->getId() > 0) {
             $data['user_id'] = $this->getId();
@@ -328,7 +309,7 @@ class User extends AbstractModel implements StorageInterface
      */
     public function validate()
     {
-        $errors = array();
+        $errors = [];
         if (!\Zend_Validate::is(trim($this->getUsername()), 'NotEmpty')) {
             $errors[] = __('The user name cannot be empty.');
         }
@@ -362,7 +343,7 @@ class User extends AbstractModel implements StorageInterface
         $passwordNotEmpty = new \Zend_Validate_NotEmpty();
         $passwordNotEmpty->setMessage(__('Password is required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
         $minPassLength = self::MIN_PASSWORD_LENGTH;
-        $passwordLength = new \Zend_Validate_StringLength(array('min' => $minPassLength, 'encoding' => 'UTF-8'));
+        $passwordLength = new \Zend_Validate_StringLength(['min' => $minPassLength, 'encoding' => 'UTF-8']);
         $passwordLength->setMessage(
             __('Your password must be at least %1 characters.', $minPassLength),
             \Zend_Validate_StringLength::TOO_SHORT
@@ -479,9 +460,9 @@ class User extends AbstractModel implements StorageInterface
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE)
         )->setTemplateOptions(
-            array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 0)
+            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 0]
         )->setTemplateVars(
-            array('user' => $this, 'store' => $this->_storeManager->getStore(0))
+            ['user' => $this, 'store' => $this->_storeManager->getStore(0)]
         )->setFrom(
             $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
         )->addTo(
@@ -505,9 +486,9 @@ class User extends AbstractModel implements StorageInterface
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE)
         )->setTemplateOptions(
-            array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 0)
+            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 0]
         )->setTemplateVars(
-            array('user' => $this, 'store' => $this->_storeManager->getStore(0))
+            ['user' => $this, 'store' => $this->_storeManager->getStore(0)]
         )->setFrom(
             $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
         )->addTo(
@@ -568,7 +549,7 @@ class User extends AbstractModel implements StorageInterface
         try {
             $this->_eventManager->dispatch(
                 'admin_user_authenticate_before',
-                array('username' => $username, 'user' => $this)
+                ['username' => $username, 'user' => $this]
             );
             $this->loadByUsername($username);
             $sensitive = $config ? $username == $this->getUsername() : true;
@@ -578,7 +559,7 @@ class User extends AbstractModel implements StorageInterface
 
             $this->_eventManager->dispatch(
                 'admin_user_authenticate_after',
-                array('username' => $username, 'password' => $password, 'user' => $this, 'result' => $result)
+                ['username' => $username, 'password' => $password, 'user' => $this, 'result' => $result]
             );
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->unsetData();

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Newsletter\Model;
 
@@ -70,7 +51,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     /**
      * Store manager to emulate design
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -112,7 +93,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Newsletter\Model\Template\Filter $filter
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -125,13 +106,13 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\Filter $filter,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
         $this->_storeManager = $storeManager;
@@ -160,20 +141,20 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function validate()
     {
-        $validators = array(
-            'template_code' => array(\Zend_Filter_Input::ALLOW_EMPTY => false),
+        $validators = [
+            'template_code' => [\Zend_Filter_Input::ALLOW_EMPTY => false],
             'template_type' => 'Int',
             'template_sender_email' => 'EmailAddress',
-            'template_sender_name' => array(\Zend_Filter_Input::ALLOW_EMPTY => false)
-        );
-        $data = array();
+            'template_sender_name' => [\Zend_Filter_Input::ALLOW_EMPTY => false],
+        ];
+        $data = [];
         foreach (array_keys($validators) as $validateField) {
             $data[$validateField] = $this->getDataUsingMethod($validateField);
         }
 
-        $validateInput = new \Zend_Filter_Input(array(), $validators, $data);
+        $validateInput = new \Zend_Filter_Input([], $validators, $data);
         if (!$validateInput->isValid()) {
-            $errorMessages = array();
+            $errorMessages = [];
             foreach ($validateInput->getMessages() as $messages) {
                 if (is_array($messages)) {
                     foreach ($messages as $message) {
@@ -252,7 +233,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param bool $usePreprocess
      * @return string
      */
-    public function getProcessedTemplate(array $variables = array(), $usePreprocess = false)
+    public function getProcessedTemplate(array $variables = [], $usePreprocess = false)
     {
         if (!$this->_preprocessFlag) {
             $variables['this'] = $this;
@@ -264,7 +245,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
             $this->_filter->setStoreId($this->_request->getParam('store_id'));
         }
 
-        $this->_filter->setIncludeProcessor(array($this, 'getInclude'))->setVariables($variables);
+        $this->_filter->setIncludeProcessor([$this, 'getInclude'])->setVariables($variables);
 
         if ($usePreprocess && $this->isPreprocessed()) {
             return $this->_filter->filter($this->getPreparedTemplateText(true));
@@ -317,7 +298,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         if (!$this->_preprocessFlag) {
             $variables['this'] = $this;
         }
-        return $this->_filterManager->template($this->getTemplateSubject(), array('variables' => $variables));
+        return $this->_filterManager->template($this->getTemplateSubject(), ['variables' => $variables]);
     }
 
     /**

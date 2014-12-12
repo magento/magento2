@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -73,7 +54,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Review\Helper\Data $reviewData,
-        array $data = array()
+        array $data = []
     ) {
         $this->_reviewData = $reviewData;
         $this->customerRepository = $customerRepository;
@@ -94,45 +75,45 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            array(
-                'data' => array(
+            [
+                'data' => [
                     'id' => 'edit_form',
                     'action' => $this->getUrl(
                         'review/*/save',
-                        array(
+                        [
                             'id' => $this->getRequest()->getParam('id'),
                             'ret' => $this->_coreRegistry->registry('ret')
-                        )
+                        ]
                     ),
-                    'method' => 'post'
-                )
-            )
+                    'method' => 'post',
+                ],
+            ]
         );
 
         $fieldset = $form->addFieldset(
             'review_details',
-            array('legend' => __('Review Details'), 'class' => 'fieldset-wide')
+            ['legend' => __('Review Details'), 'class' => 'fieldset-wide']
         );
 
         $fieldset->addField(
             'product_name',
             'note',
-            array(
+            [
                 'label' => __('Product'),
                 'text' => '<a href="' . $this->getUrl(
                     'catalog/product/edit',
-                    array('id' => $product->getId())
+                    ['id' => $product->getId()]
                 ) . '" onclick="this.target=\'blank\'">' . $this->escapeHtml(
                     $product->getName()
                 ) . '</a>'
-            )
+            ]
         );
 
         try {
             $customer = $this->customerRepository->getById($review->getCustomerId());
             $customerText = __(
                 '<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
-                $this->getUrl('customer/index/edit', array('id' => $customer->getId(), 'active_tab'=>'review')),
+                $this->getUrl('customer/index/edit', ['id' => $customer->getId(), 'active_tab' => 'review']),
                 $this->escapeHtml($customer->getFirstname()),
                 $this->escapeHtml($customer->getLastname()),
                 $this->escapeHtml($customer->getEmail())
@@ -142,38 +123,38 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 ? __('Administrator') : __('Guest');
         }
 
-        $fieldset->addField('customer', 'note', array('label' => __('Posted By'), 'text' => $customerText));
+        $fieldset->addField('customer', 'note', ['label' => __('Posted By'), 'text' => $customerText]);
 
         $fieldset->addField(
             'summary_rating',
             'note',
-            array(
+            [
                 'label' => __('Summary Rating'),
                 'text' => $this->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Rating\Summary')->toHtml()
-            )
+            ]
         );
 
         $fieldset->addField(
             'detailed_rating',
             'note',
-            array(
+            [
                 'label' => __('Detailed Rating'),
                 'required' => true,
                 'text' => '<div id="rating_detail">' . $this->getLayout()->createBlock(
                     'Magento\Review\Block\Adminhtml\Rating\Detailed'
                 )->toHtml() . '</div>'
-            )
+            ]
         );
 
         $fieldset->addField(
             'status_id',
             'select',
-            array(
+            [
                 'label' => __('Status'),
                 'required' => true,
                 'name' => 'status_id',
                 'values' => $this->_reviewData->getReviewStatusesOptionArray()
-            )
+            ]
         );
 
         /**
@@ -183,12 +164,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $field = $fieldset->addField(
                 'select_stores',
                 'multiselect',
-                array(
+                [
                     'label' => __('Visible In'),
                     'required' => true,
                     'name' => 'stores[]',
                     'values' => $this->_systemStore->getStoreValuesForForm()
-                )
+                ]
             );
             $renderer = $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element'
@@ -199,7 +180,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $fieldset->addField(
                 'select_stores',
                 'hidden',
-                array('name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId())
+                ['name' => 'stores[]', 'value' => $this->_storeManager->getStore(true)->getId()]
             );
             $review->setSelectStores($this->_storeManager->getStore(true)->getId());
         }
@@ -207,19 +188,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'nickname',
             'text',
-            array('label' => __('Nickname'), 'required' => true, 'name' => 'nickname')
+            ['label' => __('Nickname'), 'required' => true, 'name' => 'nickname']
         );
 
         $fieldset->addField(
             'title',
             'text',
-            array('label' => __('Summary of Review'), 'required' => true, 'name' => 'title')
+            ['label' => __('Summary of Review'), 'required' => true, 'name' => 'title']
         );
 
         $fieldset->addField(
             'detail',
             'textarea',
-            array('label' => __('Review'), 'required' => true, 'name' => 'detail', 'style' => 'height:24em;')
+            ['label' => __('Review'), 'required' => true, 'name' => 'detail', 'style' => 'height:24em;']
         );
 
         $form->setUseContainer(true);

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Catalog\Block\Product\ProductList;
@@ -42,9 +23,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Catalog\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $helper;
+    protected $urlEncoder;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -74,14 +55,14 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
     {
         $this->model = $this->getMock(
             'Magento\Catalog\Model\Product\ProductList\Toolbar',
-            array(
+            [
                 'getDirection',
                 'getOrder',
                 'getMode',
                 'getLimit',
                 'getCurrentPage'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
@@ -100,17 +81,18 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->urlBuilder = $this->getMock('Magento\Framework\Url', ['getUrl'], [], '', false);
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $scopeConfig = array(
-            array(\Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY, null, 'name'),
-            array(\Magento\Catalog\Helper\Product\ProductList::XML_PATH_LIST_MODE, null, 'grid-list'),
-            array('catalog/frontend/list_per_page_values', null, '10,20,30'),
-            array('catalog/frontend/grid_per_page_values', null, '10,20,30'),
-            array('catalog/frontend/list_allow_all', null, false)
-        );
+        $scopeConfig = [
+            [\Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY, null, 'name'],
+            [\Magento\Catalog\Helper\Product\ProductList::XML_PATH_LIST_MODE, null, 'grid-list'],
+            ['catalog/frontend/list_per_page_values', null, '10,20,30'],
+            ['catalog/frontend/grid_per_page_values', null, '10,20,30'],
+            ['catalog/frontend/list_allow_all', null, false]
+        ];
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
@@ -118,19 +100,19 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
 
         $this->catalogConfig = $this->getMock(
             'Magento\Catalog\Model\Config',
-            array('getAttributeUsedForSortByArray'),
-            array(),
+            ['getAttributeUsedForSortByArray'],
+            [],
             '',
             false
         );
         $this->catalogConfig->expects($this->any())
             ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue(array('name' => array(), 'price' => array())));
+            ->will($this->returnValue(['name' => [], 'price' => []]));
 
         $context = $this->getMock(
             'Magento\Framework\View\Element\Template\Context',
-            array('getUrlBuilder', 'getScopeConfig', 'getLayout'),
-            array(),
+            ['getUrlBuilder', 'getScopeConfig', 'getLayout'],
+            [],
             '',
             false
         );
@@ -143,27 +125,28 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())
             ->method('getlayout')
             ->will($this->returnValue($this->layout));
-        $this->productListHelper = $this->getMock('Magento\Catalog\Helper\Product\ProductList',
-            array(),
-            array(),
+        $this->productListHelper = $this->getMock(
+            'Magento\Catalog\Helper\Product\ProductList',
+            [],
+            [],
             '',
             false
         );
         $this->productListHelper->expects($this->any())
             ->method('getAvailableViewMode')
-            ->will($this->returnValue(array('list' => 'List')));
+            ->will($this->returnValue(['list' => 'List']));
 
-        $this->helper = $this->getMock('Magento\Catalog\Helper\Data', array('urlEncode'), array(), '', false);
+        $this->urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', ['encode'], [], '', false);
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(
             'Magento\Catalog\Block\Product\ProductList\Toolbar',
-            array(
+            [
                 'context' => $context,
                 'catalogConfig' => $this->catalogConfig,
                 'toolbarModel' => $this->model,
-                'helper' => $this->helper,
+                'urlEncoder' => $this->urlEncoder,
                 'productListHelper' => $this->productListHelper
-            )
+            ]
         );
     }
 
@@ -190,8 +173,8 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->will($this->returnValue($url));
-        $this->helper->expects($this->once())
-            ->method('urlEncode')
+        $this->urlEncoder->expects($this->once())
+            ->method('encode')
             ->with($url)
             ->will($this->returnValue($encodedUrl));
         $this->assertEquals($encodedUrl, $this->block->getPagerEncodedUrl());
@@ -243,7 +226,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($limit));
         $this->productListHelper->expects($this->once())
             ->method('getAvailableLimit')
-            ->will($this->returnValue(array(10 => 10, 20 => 20)));
+            ->will($this->returnValue([10 => 10, 20 => 20]));
         $this->productListHelper->expects($this->once())
             ->method('getDefaultLimitPerPageValue')
             ->with($this->equalTo('list'))
@@ -264,7 +247,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->pagerBlock));
         $this->productListHelper->expects($this->exactly(2))
             ->method('getAvailableLimit')
-            ->will($this->returnValue(array(10 => 10, 20 => 20)));
+            ->will($this->returnValue([10 => 10, 20 => 20]));
         $this->model->expects($this->once())
             ->method('getLimit')
             ->will($this->returnValue($limit));

@@ -1,29 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Block\Rss\Product;
 
-use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class NewProductsTest
@@ -62,7 +43,7 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -110,10 +91,10 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
 
     public function isAllowedDataProvider()
     {
-        return array(
-            array(1, true),
-            array(0, false)
-        );
+        return [
+            [1, true],
+            [0, false]
+        ];
     }
     /**
      * @dataProvider isAllowedDataProvider
@@ -134,7 +115,7 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
             'getProductUrl',
             'getDescription',
             'getName',
-            '__wakeup'
+            '__wakeup',
         ];
         $item = $this->getMock('\Magento\Catalog\Model\Product', $methods, [], '', false);
         $item->expects($this->once())->method('setAllowedInRss')->with(true);
@@ -152,7 +133,7 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
     public function testGetRssData()
     {
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
-            ->with(array('type' => 'new_products', 'store_id' => 1))
+            ->with(['type' => 'new_products', 'store_id' => 1])
             ->will($this->returnValue('http://magento.com/rss/feed/index/type/new_products/store_id/1'));
         $item = $this->getItemMock();
         $this->newProducts->expects($this->once())->method('getProductsCollection')
@@ -161,19 +142,19 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->imageHelper->expects($this->once())->method('resize')->with(75, 75)
             ->will($this->returnValue('image_link'));
-        $data = array(
+        $data = [
             'title' => 'New Products from Store 1',
             'description' => 'New Products from Store 1',
             'link' => 'http://magento.com/rss/feed/index/type/new_products/store_id/1',
             'charset' => 'UTF-8',
             'language' => null,
-            'entries' => array(
-                array(
+            'entries' => [
+                [
                     'title' => 'Product Name',
                     'link' => 'http://magento.com/product-name.html',
-                )
-            )
-        );
+                ],
+            ],
+        ];
         $rssData = $this->block->getRssData();
         $description = $rssData['entries'][0]['description'];
         unset($rssData['entries'][0]['description']);
@@ -191,14 +172,14 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
     public function testGetFeeds()
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')->will($this->returnValue(true));
-        $rssUrl ='http://magento.com/rss/feed/index/type/new_products/store_id/1';
+        $rssUrl = 'http://magento.com/rss/feed/index/type/new_products/store_id/1';
         $this->rssUrlBuilder->expects($this->once())->method('getUrl')
-            ->with(array('type' => 'new_products'))
+            ->with(['type' => 'new_products'])
             ->will($this->returnValue($rssUrl));
-        $expected = array(
+        $expected = [
             'label' => 'New Products',
-            'link' => $rssUrl
-        );
+            'link' => $rssUrl,
+        ];
         $this->assertEquals($expected, $this->block->getFeeds());
     }
 }

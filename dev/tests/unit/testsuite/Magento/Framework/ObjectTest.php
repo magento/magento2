@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -60,9 +41,9 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $object = new \Magento\Framework\Object();
-        $this->assertEquals(array(), $object->getData());
+        $this->assertEquals([], $object->getData());
 
-        $data = array('test' => 'test');
+        $data = ['test' => 'test'];
         $object = new \Magento\Framework\Object($data);
         $this->assertEquals($data, $object->getData());
     }
@@ -88,18 +69,18 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->_object->setData('key', 'value');
         $this->assertTrue($this->_object->hasDataChanges(), 'Data changed');
 
-        $object = new \Magento\Framework\Object(array('key' => 'value'));
+        $object = new \Magento\Framework\Object(['key' => 'value']);
         $object->setData('key', 'value');
         $this->assertFalse($object->hasDataChanges(), 'Data not changed');
 
-        $object->setData(array('key' => 'value'));
+        $object->setData(['key' => 'value']);
         $this->assertFalse($object->hasDataChanges(), 'Data not changed (array)');
 
         $object = new \Magento\Framework\Object();
         $object->unsetData();
         $this->assertFalse($object->hasDataChanges(), 'Unset data');
 
-        $object = new \Magento\Framework\Object(array('key' => null));
+        $object = new \Magento\Framework\Object(['key' => null]);
         $object->setData('key', null);
         $this->assertFalse($object->hasDataChanges(), 'Null data');
     }
@@ -125,14 +106,14 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddData()
     {
-        $this->_object->addData(array('test' => 'value'));
+        $this->_object->addData(['test' => 'value']);
         $this->assertEquals('value', $this->_object->getData('test'));
 
-        $this->_object->addData(array('test' => 'value1'));
+        $this->_object->addData(['test' => 'value1']);
         $this->assertEquals('value1', $this->_object->getData('test'));
 
-        $this->_object->addData(array('test2' => 'value2'));
-        $this->assertEquals(array('test' => 'value1', 'test2' => 'value2'), $this->_object->getData());
+        $this->_object->addData(['test2' => 'value2']);
+        $this->assertEquals(['test' => 'value1', 'test2' => 'value2'], $this->_object->getData());
     }
 
     /**
@@ -140,7 +121,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetData()
     {
-        $data = array('key1' => 'value1', 'key2' => 'value2', 'key3' => 3);
+        $data = ['key1' => 'value1', 'key2' => 'value2', 'key3' => 3];
         $this->_object->setData($data);
         $this->assertEquals($data, $this->_object->getData());
 
@@ -158,20 +139,20 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnsetData()
     {
-        $data = array('key1' => 'value1', 'key2' => 'value2', 'key3' => 3, 'key4' => 4);
+        $data = ['key1' => 'value1', 'key2' => 'value2', 'key3' => 3, 'key4' => 4];
         $this->_object->setData($data);
 
         $this->_object->unsetData('key1');
         unset($data['key1']);
         $this->assertEquals($data, $this->_object->getData());
 
-        $this->_object->unsetData(array('key2', 'key3'));
+        $this->_object->unsetData(['key2', 'key3']);
         unset($data['key2']);
         unset($data['key3']);
         $this->assertEquals($data, $this->_object->getData());
 
         $this->_object->unsetData();
-        $this->assertEquals(array(), $this->_object->getData());
+        $this->assertEquals([], $this->_object->getData());
     }
 
     /**
@@ -179,16 +160,16 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetData()
     {
-        $data = array(
+        $data = [
             'key1' => 'value1',
-            'key2' => array(
+            'key2' => [
                 'subkey2.1' => 'value2.1',
                 'subkey2.2' => 'multiline
 string',
-                'subkey2.3' => new \Magento\Framework\Object(array('test_key' => 'test_value'))
-            ),
-            'key3' => 5
-        );
+                'subkey2.3' => new \Magento\Framework\Object(['test_key' => 'test_value']),
+            ],
+            'key3' => 5,
+        ];
         $this->_object->setData($data);
 
         $this->assertEquals($data, $this->_object->getData());
@@ -203,15 +184,15 @@ string',
     public function testGetDataByPath()
     {
         $this->_object->setData(
-            array(
+            [
                 'key1' => 'value1',
-                'key2' => array(
+                'key2' => [
                     'subkey2.1' => 'value2.1',
                     'subkey2.2' => 'multiline
 string',
-                    'subkey2.3' => new \Magento\Framework\Object(array('test_key' => 'test_value'))
-                )
-            )
+                    'subkey2.3' => new \Magento\Framework\Object(['test_key' => 'test_value']),
+                ],
+            ]
         );
         $this->assertEquals('value1', $this->_object->getDataByPath('key1'));
         $this->assertEquals('value2.1', $this->_object->getDataByPath('key2/subkey2.1'));
@@ -222,7 +203,7 @@ string',
 
     public function testGetDataByKey()
     {
-        $this->_object->setData(array('key' => 'value'));
+        $this->_object->setData(['key' => 'value']);
         $this->assertEquals('value', $this->_object->getDataByKey('key'));
         $this->assertNull($this->_object->getDataByKey('empty'));
     }
@@ -232,7 +213,7 @@ string',
      */
     public function testSetGetDataUsingMethod()
     {
-        $mock = $this->getMock('Magento\Framework\Object', array('setTestData', 'getTestData'));
+        $mock = $this->getMock('Magento\Framework\Object', ['setTestData', 'getTestData']);
         $mock->expects($this->once())->method('setTestData')->with($this->equalTo('data'));
         $mock->expects($this->once())->method('getTestData');
 
@@ -245,7 +226,7 @@ string',
      */
     public function testGetDataSetDefault()
     {
-        $this->_object->setData(array('key1' => 'value1', 'key2' => null));
+        $this->_object->setData(['key1' => 'value1', 'key2' => null]);
         $this->assertEquals('value1', $this->_object->getDataSetDefault('key1', 'default'));
         $this->assertEquals(null, $this->_object->getDataSetDefault('key2', 'default'));
         $this->assertEquals('default', $this->_object->getDataSetDefault('key3', 'default'));
@@ -267,11 +248,11 @@ string',
      */
     public function testToArray()
     {
-        $this->assertEquals(array(), $this->_object->toArray());
-        $this->assertEquals(array('key' => null), $this->_object->toArray(array('key')));
-        $this->_object->setData(array('key1' => 'value1', 'key2' => 'value2'));
-        $this->assertEquals(array('key1' => 'value1'), $this->_object->toArray(array('key1')));
-        $this->assertEquals(array('key2' => 'value2'), $this->_object->convertToArray(array('key2')));
+        $this->assertEquals([], $this->_object->toArray());
+        $this->assertEquals(['key' => null], $this->_object->toArray(['key']));
+        $this->_object->setData(['key1' => 'value1', 'key2' => 'value2']);
+        $this->assertEquals(['key1' => 'value1'], $this->_object->toArray(['key1']));
+        $this->assertEquals(['key2' => 'value2'], $this->_object->convertToArray(['key2']));
     }
 
     /**
@@ -279,7 +260,7 @@ string',
      */
     public function testToXml()
     {
-        $this->_object->setData(array('key1' => 'value1', 'key2' => 'value2'));
+        $this->_object->setData(['key1' => 'value1', 'key2' => 'value2']);
         $xml = '<item>
 <key1><![CDATA[value1]]></key1>
 <key2><![CDATA[value2]]></key2>
@@ -291,19 +272,19 @@ string',
 <key2><![CDATA[value2]]></key2>
 </item>
 ';
-        $this->assertEquals($xml, $this->_object->toXml(array('key2')));
+        $this->assertEquals($xml, $this->_object->toXml(['key2']));
 
         $xml = '<my_item>
 <key1><![CDATA[value1]]></key1>
 <key2><![CDATA[value2]]></key2>
 </my_item>
 ';
-        $this->assertEquals($xml, $this->_object->toXml(array(), 'my_item'));
+        $this->assertEquals($xml, $this->_object->toXml([], 'my_item'));
 
         $xml = '<key1><![CDATA[value1]]></key1>
 <key2><![CDATA[value2]]></key2>
 ';
-        $this->assertEquals($xml, $this->_object->toXml(array(), false));
+        $this->assertEquals($xml, $this->_object->toXml([], false));
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <item>
@@ -311,7 +292,7 @@ string',
 <key2><![CDATA[value2]]></key2>
 </item>
 ';
-        $this->assertEquals($xml, $this->_object->toXml(array(), 'item', true));
+        $this->assertEquals($xml, $this->_object->toXml([], 'item', true));
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <item>
@@ -319,7 +300,7 @@ string',
 <key2>value2</key2>
 </item>
 ';
-        $this->assertEquals($xml, $this->_object->convertToXml(array(), 'item', true, false));
+        $this->assertEquals($xml, $this->_object->convertToXml([], 'item', true, false));
     }
 
     /**
@@ -327,10 +308,10 @@ string',
      */
     public function testToJson()
     {
-        $this->_object->setData(array('key1' => 'value1', 'key2' => 'value2'));
+        $this->_object->setData(['key1' => 'value1', 'key2' => 'value2']);
         $this->assertEquals('{"key1":"value1","key2":"value2"}', $this->_object->toJson());
-        $this->assertEquals('{"key1":"value1"}', $this->_object->toJson(array('key1')));
-        $this->assertEquals('{"key1":"value1","key":null}', $this->_object->convertToJson(array('key1', 'key')));
+        $this->assertEquals('{"key1":"value1"}', $this->_object->toJson(['key1']));
+        $this->assertEquals('{"key1":"value1","key":null}', $this->_object->convertToJson(['key1', 'key']));
     }
 
     /**
@@ -338,7 +319,7 @@ string',
      */
     public function testToString()
     {
-        $this->_object->setData(array('key1' => 'value1', 'key2' => 'value2'));
+        $this->_object->setData(['key1' => 'value1', 'key2' => 'value2']);
         $this->assertEquals('value1, value2', $this->_object->toString());
         $this->assertEquals('test value1 with value2', $this->_object->toString('test {{key1}} with {{key2}}'));
     }
@@ -350,7 +331,7 @@ string',
      */
     public function testCall()
     {
-        $this->_object->setData(array('key' => 'value'));
+        $this->_object->setData(['key' => 'value']);
         $this->_object->setTest('test');
         $this->assertEquals('test', $this->_object->getData('test'));
 
@@ -390,11 +371,11 @@ string',
      */
     public function testSerialize()
     {
-        $this->_object->setData(array('key1' => 'value1', 'key2' => 'value2'));
+        $this->_object->setData(['key1' => 'value1', 'key2' => 'value2']);
         $this->assertEquals('key1="value1" key2="value2"', $this->_object->serialize());
         $this->assertEquals(
             'key1:\'value1\'_key2:\'value2\'',
-            $this->_object->serialize(array('key', 'key1', 'key2'), ':', '_', '\'')
+            $this->_object->serialize(['key', 'key1', 'key2'], ':', '_', '\'')
         );
     }
 
@@ -403,7 +384,7 @@ string',
      */
     public function testOrigData()
     {
-        $data = array('key1' => 'value1', 'key2' => 'value2');
+        $data = ['key1' => 'value1', 'key2' => 'value2'];
         $this->_object->setData($data);
         $this->_object->setOrigData();
         $this->_object->setData('key1', 'test');
@@ -429,7 +410,7 @@ string',
      */
     public function testDebug()
     {
-        $data = array('key1' => 'value1', 'key2' => array('test'), 'key3' => $this->_object);
+        $data = ['key1' => 'value1', 'key2' => ['test'], 'key3' => $this->_object];
         $this->_object->setData($data);
 
         $debug = $data;
@@ -451,5 +432,31 @@ string',
         $this->assertNull($this->_object->offsetGet('key2'));
         $this->_object->offsetUnset('key1');
         $this->assertFalse($this->_object->offsetExists('key1'));
+    }
+
+    /**
+     * Tests _underscore method directly
+     *
+     * @dataProvider underscoreDataProvider
+     */
+    public function testUnderscore($input, $expectedOutput)
+    {
+        $refObject = new \ReflectionObject($this->_object);
+        $refMethod = $refObject->getMethod('_underscore');
+        $refMethod->setAccessible(true);
+        $output = $refMethod->invoke($this->_object, $input);
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function underscoreDataProvider()
+    {
+        return [
+            'Test 1' => ['Stone1Color', 'stone_1_color'],
+            'Test 2' => ['StoneColor', 'stone_color'],
+            'Test 3' => ['StoneToXML', 'stone_to_xml'],
+            'Test 4' => ['1StoneColor', '1_stone_color'],
+            'Test 5' => ['getCcLast4', 'get_cc_last_4'],
+            'Test 6' => ['99Bottles', '99_bottles']
+        ];
     }
 }

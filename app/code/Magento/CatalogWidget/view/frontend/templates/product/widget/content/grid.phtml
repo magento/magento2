@@ -1,0 +1,125 @@
+<?php
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+?>
+<?php
+/**
+ * Template for displaying products list widget
+ *
+ * @var $this \Magento\CatalogWidget\Block\Product\ProductsList
+ */
+?>
+<?php if ($exist = ($this->getProductCollection() && $this->getProductCollection()->getSize())):?>
+<?php
+    $type = 'widget-product-grid';
+
+    $mode = 'grid';
+
+    $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+    $image = 'new_products_content_widget_grid';
+    $title = $this->getTitle() ? __($this->getTitle()) : '';
+    $items = $this->getProductCollection()->getItems();
+
+    $showWishlist = true;
+    $showCompare = true;
+    $showCart = true;
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::DEFAULT_VIEW;
+    $description = false;
+?>
+    <div class="block widget block-products-list <?php echo $mode; ?>">
+        <?php if ($title):?>
+        <div class="block-title">
+            <strong><?php echo $title; ?></strong>
+        </div>
+        <?php endif ?>
+        <div class="block-content">
+            <?php echo '<!-- ' . $image . '-->' ?>
+            <div class="products-<?php echo $mode; ?> <?php echo $mode; ?>">
+                <ol class="product-items <?php echo $type; ?>">
+                    <?php $iterator = 1; ?>
+                    <?php foreach ($items as $_item): ?>
+                        <?php echo($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
+                        <div class="product-item-info">
+                            <a href="<?php echo $this->getProductUrl($_item) ?>" class="product-item-photo">
+                                <?php echo $imageBlock->init($_item, $image)->toHtml() ?>
+                            </a>
+                            <div class="product-item-details">
+                                <strong class="product-item-name">
+                                    <a title="<?php echo $this->escapeHtml($_item->getName()) ?>"
+                                       href="<?php echo $this->getProductUrl($_item) ?>"
+                                       class="product-item-link">
+                                        <?php echo $this->escapeHtml($_item->getName()) ?>
+                                    </a>
+                                </strong>
+                                <?php
+                                echo $this->getProductPriceHtml($_item, $type);
+                                ?>
+
+                                <?php if ($templateType): ?>
+                                    <?php echo $this->getReviewsSummaryHtml($_item, $templateType) ?>
+                                <?php endif; ?>
+
+                                <?php if ($showWishlist || $showCompare || $showCart): ?>
+                                    <div class="product-item-actions">
+                                        <?php if ($showCart): ?>
+                                            <div class="actions-primary">
+                                                <?php if ($_item->isSaleable()): ?>
+                                                    <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)): ?>
+                                                        <button class="action tocart primary"
+                                                                data-mage-init='{"redirectUrl":{"url":"<?php echo $this->getAddToCartUrl($_item) ?>"}}'
+                                                                type="button" title="<?php echo __('Add to Cart') ?>">
+                                                            <span><?php echo __('Add to Cart') ?></span>
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <?php
+                                                            $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
+                                                            $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_item), ['product' => $_item->getEntityId()])
+                                                        ?>
+                                                        <button class="action tocart primary"
+                                                                data-post='<?php echo $postData; ?>'
+                                                                type="button" title="<?php echo __('Add to Cart') ?>">
+                                                            <span><?php echo __('Add to Cart') ?></span>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                <?php else: ?>
+                                                    <?php if ($_item->getIsSalable()): ?>
+                                                        <div class="stock available"><span><?php echo __('In stock') ?></span></div>
+                                                    <?php else: ?>
+                                                        <div class="stock unavailable"><span><?php echo __('Out of stock') ?></span></div>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endif; ?>
+                                        <?php if ($showWishlist || $showCompare): ?>
+                                            <div class="actions-secondary" data-role="add-to-links">
+                                                <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow() && $showWishlist): ?>
+                                                    <a href="#"
+                                                       data-post='<?php echo $this->getAddToWishlistParams($_item); ?>'
+                                                       class="action towishlist" data-action="add-to-wishlist"
+                                                       title="<?php echo __('Add to Wishlist') ?>">
+                                                        <span><?php echo __('Add to Wishlist') ?></span>
+                                                    </a>
+                                                <?php endif; ?>
+                                                <?php if ($this->getAddToCompareUrl() && $showCompare): ?>
+                                                    <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
+                                                    <a href="#" class="action tocompare"
+                                                       data-post='<?php echo $compareHelper->getPostDataParams($_item);?>'
+                                                       title="<?php echo __('Add to Compare') ?>">
+                                                        <span><?php echo __('Add to Compare') ?></span>
+                                                    </a>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <?php echo($iterator == count($items)+1) ? '</li>' : '' ?>
+                    <?php endforeach ?>
+                </ol>
+            </div>
+            <?php echo $this->getPagerHtml() ?>
+        </div>
+    </div>
+<?php endif;?>

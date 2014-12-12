@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CatalogInventory\Model\Stock;
 
@@ -61,7 +42,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $customerSession;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -112,7 +93,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $store = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
         $store->expects($this->any())->method('getId')->willReturn($this->storeId);
-        $this->storeManager = $this->getMockForAbstractClass('Magento\Framework\StoreManagerInterface', ['getStore']);
+        $this->storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface', ['getStore']);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->stockConfiguration = $this->getMock(
@@ -261,7 +242,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'use_config_max_sale_qty' => true,
                     'max_sale_qty' => 5.,
                 ],
-                5.
+                5.,
             ],
             [
                 [
@@ -296,7 +277,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->item, $this->item->setCustomerGroupId($setValue));
         $this->assertSame($setValue, $property->getValue($this->item));
         $this->assertSame($setValue, $this->item->getCustomerGroupId());
-
     }
 
     /**
@@ -338,7 +318,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'use_config_min_sale_qty' => true,
                     'min_sale_qty' => 5.,
                 ],
-                5.
+                5.,
             ],
             'object value' => [
                 [
@@ -346,7 +326,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'use_config_min_sale_qty' => false,
                     'min_sale_qty' => 3.,
                 ],
-                3.
+                3.,
             ],
             'null value' => [
                 [
@@ -354,7 +334,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'use_config_min_sale_qty' => false,
                     'min_sale_qty' => null,
                 ],
-                0.0
+                0.0,
             ],
         ];
     }

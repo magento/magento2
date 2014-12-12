@@ -1,28 +1,9 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-return array(
-    'data' => array(
+return [
+    'data' => [
         'shipper_contact_person_name' => 'testO',
         'shipper_contact_person_first_name' => 'test ',
         'shipper_contact_person_last_name' => 'O',
@@ -55,9 +36,9 @@ return array(
         'base_currency_code' => 'USD',
         'store_id' => '1',
         'reference_data' => '#100000001 P',
-        'packages' => array(
-            1 => array(
-                'params' => array(
+        'packages' => [
+            1 => [
+                'params' => [
                     'container' => '',
                     'weight' => 5,
                     'custom_value' => '',
@@ -68,21 +49,21 @@ return array(
                     'dimension_units' => 'INCH',
                     'content_type' => '',
                     'content_type_other' => '',
-                    'delivery_confirmation' => 'True'
-                ),
-                'items' => array(
-                    '2' => array(
+                    'delivery_confirmation' => 'True',
+                ],
+                'items' => [
+                    '2' => [
                         'qty' => '1',
                         'customs_value' => '5',
                         'price' => '5.0000',
                         'name' => 'prod1',
                         'weight' => '5.0000',
                         'product_id' => '1',
-                        'order_item_id' => 2
-                    )
-                )
-            )
-        ),
-        'order_shipment' => null
-    )
-);
+                        'order_item_id' => 2,
+                    ],
+                ],
+            ],
+        ],
+        'order_shipment' => null,
+    ]
+];

@@ -1,33 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Ui\Component\Control;
 
-use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Ui\Component\Control\ItemFactory;
-use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\Object;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\UiComponent\Context;
+use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\LayoutInterface;
 
 class ActionPoolTest extends \PHPUnit_Framework_TestCase
@@ -120,7 +100,7 @@ class ActionPoolTest extends \PHPUnit_Framework_TestCase
         $this->items[$this->key]->expects($this->any())->method('setData')->with($data)->willReturnSelf();
 
         $this->contextMock->expects($this->any())->method('getPageLayout')->willReturn($this->layoutMock);
-        $toolbarContainerMock =$this->getMock(
+        $toolbarContainerMock = $this->getMock(
             'Magento\Backend\Block\Widget\Button\Toolbar\Container',
             [],
             [],
@@ -135,7 +115,7 @@ class ActionPoolTest extends \PHPUnit_Framework_TestCase
                 [
                     'data' => [
                         'button_item' => $this->items[$this->key],
-                        'context' => $this->uiComponentInterfaceMock
+                        'context' => $this->uiComponentInterfaceMock,
                     ]
                 ]
             )

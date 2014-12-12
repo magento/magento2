@@ -1,31 +1,12 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor;
 
-use Magento\Store\Model\Store;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Store\Model\Store;
 
 class AssignThemeToStore extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor
 {
@@ -44,12 +25,12 @@ class AssignThemeToStore extends \Magento\DesignEditor\Controller\Adminhtml\Syst
         $defaultStore = -1;
         $emptyStores = -2;
         if ($stores == $defaultStore) {
-            /** @var \Magento\Framework\StoreManagerInterface $storeManager */
-            $storeManager = $this->_objectManager->get('Magento\Framework\StoreManagerInterface');
+            /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+            $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
             $ids = array_keys($storeManager->getStores());
-            $stores = array(array_shift($ids));
+            $stores = [array_shift($ids)];
         } elseif ($stores == $emptyStores) {
-            $stores = array();
+            $stores = [];
         }
 
         if (!is_array($stores)) {
@@ -94,10 +75,10 @@ class AssignThemeToStore extends \Magento\DesignEditor\Controller\Adminhtml\Syst
             if ($reportToSession) {
                 $this->messageManager->addSuccess($successMessage);
             }
-            $response = array('message' => $successMessage, 'themeId' => $themeCustomization->getId());
+            $response = ['message' => $successMessage, 'themeId' => $themeCustomization->getId()];
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
-            $response = array('error' => true, 'message' => __('This theme is not assigned.'));
+            $response = ['error' => true, 'message' => __('This theme is not assigned.')];
         }
         $this->getResponse()->representJson($coreHelper->jsonEncode($response));
     }

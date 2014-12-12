@@ -1,26 +1,7 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
@@ -38,12 +19,12 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
                 $this->_eventManager->dispatch(
                     'adminhtml_controller_catalogrule_prepare_save',
-                    array('request' => $this->getRequest())
+                    ['request' => $this->getRequest()]
                 );
                 $data = $this->getRequest()->getPost();
                 $inputFilter = new \Zend_Filter_Input(
-                    array('from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter),
-                    array(),
+                    ['from_date' => $this->_dateFilter, 'to_date' => $this->_dateFilter],
+                    [],
                     $data
                 );
                 $data = $inputFilter->getUnescaped();
@@ -61,7 +42,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                         $this->messageManager->addError($errorMessage);
                     }
                     $this->_getSession()->setPageData($data);
-                    $this->_redirect('catalog_rule/*/edit', array('id' => $model->getId()));
+                    $this->_redirect('catalog_rule/*/edit', ['id' => $model->getId()]);
                     return;
                 }
 
@@ -82,7 +63,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 } else {
                     $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()->setState(1)->save();
                     if ($this->getRequest()->getParam('back')) {
-                        $this->_redirect('catalog_rule/*/edit', array('id' => $model->getId()));
+                        $this->_redirect('catalog_rule/*/edit', ['id' => $model->getId()]);
                         return;
                     }
                     $this->_redirect('catalog_rule/*/');
@@ -96,7 +77,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 );
                 $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setPageData($data);
-                $this->_redirect('catalog_rule/*/edit', array('id' => $this->getRequest()->getParam('rule_id')));
+                $this->_redirect('catalog_rule/*/edit', ['id' => $this->getRequest()->getParam('rule_id')]);
                 return;
             }
         }

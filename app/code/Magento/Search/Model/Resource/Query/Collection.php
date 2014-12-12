@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Search\Model\Resource\Query;
 
@@ -41,7 +22,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Store manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -57,7 +38,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Search\Model\Resource\Helper $resourceHelper
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
@@ -67,7 +48,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Search\Model\Resource\Helper $resourceHelper,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
@@ -126,11 +107,11 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         )->distinct(
             true
         )->from(
-            array('main_table' => $this->getTable('search_query')),
-            array('query' => $ifSynonymFor, 'num_results')
+            ['main_table' => $this->getTable('search_query')],
+            ['query' => $ifSynonymFor, 'num_results']
         )->where(
             'num_results > 0 AND display_in_terms = 1 AND query_text LIKE ?',
-            $this->_resourceHelper->addLikeEscape($query, array('position' => 'start'))
+            $this->_resourceHelper->addLikeEscape($query, ['position' => 'start'])
         )->order(
             'popularity ' . \Magento\Framework\DB\Select::SQL_DESC
         );
@@ -163,8 +144,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         )->distinct(
             true
         )->from(
-            array('main_table' => $this->getTable('search_query')),
-            array('name' => $ifSynonymFor, 'num_results', 'popularity', 'query_id')
+            ['main_table' => $this->getTable('search_query')],
+            ['name' => $ifSynonymFor, 'num_results', 'popularity', 'query_id']
         );
         if ($storeIds) {
             $this->addStoreFilter($storeIds);
@@ -174,7 +155,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             $this->getSelect()->where('num_results > 0');
         }
 
-        $this->getSelect()->order(array('popularity desc', 'name'));
+        $this->getSelect()->order(['popularity desc', 'name']);
 
         return $this;
     }
@@ -199,7 +180,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function addStoreFilter($storeIds)
     {
         if (!is_array($storeIds)) {
-            $storeIds = array($storeIds);
+            $storeIds = [$storeIds];
         }
         $this->getSelect()->where('main_table.store_id IN (?)', $storeIds);
         return $this;

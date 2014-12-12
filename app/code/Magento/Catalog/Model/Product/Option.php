@@ -1,36 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Resource\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
-use Magento\Framework\Model\Exception;
-use Magento\Framework\Model\AbstractModel;
-use \Magento\Framework\Model\AbstractExtensibleModel;
-use \Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
 use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Exception;
 
 /**
  * Catalog product option model
@@ -79,12 +60,12 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
     /**
      * @var array
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * @var array
      */
-    protected $_values = array();
+    protected $_values = [];
 
     /**
      * Catalog product option value
@@ -134,7 +115,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
         Option\Validator\Pool $validatorPool,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_productOptionValue = $productOptionValue;
         $this->_optionFactory = $optionFactory;
@@ -256,7 +237,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     public function unsetOptions()
     {
-        $this->_options = array();
+        $this->_options = [];
         return $this;
     }
 
@@ -293,7 +274,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
         if (is_null($type)) {
             $type = $this->getType();
         }
-        $optionGroupsToTypes = array(
+        $optionGroupsToTypes = [
             self::OPTION_TYPE_FIELD => self::OPTION_GROUP_TEXT,
             self::OPTION_TYPE_AREA => self::OPTION_GROUP_TEXT,
             self::OPTION_TYPE_FILE => self::OPTION_GROUP_FILE,
@@ -303,8 +284,8 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
             self::OPTION_TYPE_MULTIPLE => self::OPTION_GROUP_SELECT,
             self::OPTION_TYPE_DATE => self::OPTION_GROUP_DATE,
             self::OPTION_TYPE_DATE_TIME => self::OPTION_GROUP_DATE,
-            self::OPTION_TYPE_TIME => self::OPTION_GROUP_DATE
-        );
+            self::OPTION_TYPE_TIME => self::OPTION_GROUP_DATE,
+        ];
 
         return isset($optionGroupsToTypes[$type]) ? $optionGroupsToTypes[$type] : '';
     }
@@ -371,7 +352,6 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
                      * need to remove all data of previous group
                      */
                     if ($this->getGroupByType($previousType) != $this->getGroupByType($this->getData('type'))) {
-
                         switch ($this->getGroupByType($previousType)) {
                             case self::OPTION_GROUP_SELECT:
                                 $this->unsetData('values');
@@ -558,8 +538,8 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      */
     protected function _clearData()
     {
-        $this->_data = array();
-        $this->_values = array();
+        $this->_data = [];
+        $this->_values = [];
         return $this;
     }
 
@@ -604,12 +584,12 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      * Get option id
      *
      * @return int|null
+     * @codeCoverageIgnoreStart
      */
     public function getOptionId()
     {
         return $this->_getData('option_id');
     }
-
 
     /**
      * Get option title
@@ -702,4 +682,5 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
     {
         return $this->getData('image_size_y');
     }
+    //@codeCoverageIgnoreEnd
 }

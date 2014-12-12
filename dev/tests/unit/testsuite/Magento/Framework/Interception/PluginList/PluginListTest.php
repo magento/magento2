@@ -1,28 +1,8 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Framework\Interception\PluginList;
-
 
 require_once __DIR__ . '/../Custom/Module/Model/Item.php';
 require_once __DIR__ . '/../Custom/Module/Model/Item/Enhanced.php';
@@ -56,7 +36,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
-        $readerMock = $this->getMock('\Magento\Framework\ObjectManager\Config\Reader\Dom', array(), array(), '', false);
+        $readerMock = $this->getMock('\Magento\Framework\ObjectManager\Config\Reader\Dom', [], [], '', false);
         $readerMock->expects($this->any())->method('read')->will($this->returnValueMap($readerMap));
 
         $this->_configScopeMock = $this->getMock('\Magento\Framework\Config\ScopeInterface');
@@ -87,7 +67,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             new \Magento\Framework\Interception\Definition\Runtime(),
             $this->_objectManagerMock,
             $definitions,
-            array('global'),
+            ['global'],
             'interception'
         );
     }
@@ -140,53 +120,53 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
      */
     public function getPluginsDataProvider()
     {
-        return array(
-            array(
-                array(4 => array('simple_plugin')),
+        return [
+            [
+                [4 => ['simple_plugin']],
                 'Magento\Framework\Interception\Custom\Module\Model\Item',
                 'getName',
-                'global'
-            ),
-            array(
+                'global',
+            ],
+            [
                 // advanced plugin has lower sort order
-                array(2 => 'advanced_plugin', 4 => array('advanced_plugin')),
+                [2 => 'advanced_plugin', 4 => ['advanced_plugin']],
                 'Magento\Framework\Interception\Custom\Module\Model\Item',
                 'getName',
                 'backend'
-            ),
-            array(
+            ],
+            [
                 // advanced plugin has lower sort order
-                array(4 => array('simple_plugin')),
+                [4 => ['simple_plugin']],
                 'Magento\Framework\Interception\Custom\Module\Model\Item',
                 'getName',
                 'backend',
                 'advanced_plugin'
-            ),
+            ],
             // simple plugin is disabled in configuration for
             // \Magento\Framework\Interception\Custom\Module\Model\Item in frontend
-            array(null, 'Magento\Framework\Interception\Custom\Module\Model\Item', 'getName', 'frontend'),
+            [null, 'Magento\Framework\Interception\Custom\Module\Model\Item', 'getName', 'frontend'],
             // test plugin inheritance
-            array(
-                array(4 => array('simple_plugin')),
+            [
+                [4 => ['simple_plugin']],
                 'Magento\Framework\Interception\Custom\Module\Model\Item\Enhanced',
                 'getName',
                 'global'
-            ),
-            array(
+            ],
+            [
                 // simple plugin is disabled in configuration for parent
-                array(2 => 'advanced_plugin', 4 => array('advanced_plugin')),
+                [2 => 'advanced_plugin', 4 => ['advanced_plugin']],
                 'Magento\Framework\Interception\Custom\Module\Model\Item\Enhanced',
                 'getName',
                 'frontend'
-            ),
-            array(null, 'Magento\Framework\Interception\Custom\Module\Model\ItemContainer', 'getName', 'global'),
-            array(
-                array(4 => array('simple_plugin')),
+            ],
+            [null, 'Magento\Framework\Interception\Custom\Module\Model\ItemContainer', 'getName', 'global'],
+            [
+                [4 => ['simple_plugin']],
                 'Magento\Framework\Interception\Custom\Module\Model\ItemContainer',
                 'getName',
                 'backend'
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -213,7 +193,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             ->method('getCurrentScope')
             ->will($this->returnValue('scope'));
 
-        $data = array(array('key'), array('key'), array('key'));
+        $data = [['key'], ['key'], ['key']];
 
         $this->_cacheMock->expects($this->once())
             ->method('load')

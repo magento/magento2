@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Paypal\Model;
@@ -36,7 +17,6 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->info = $this->objectManagerHelper->getObject(
             'Magento\Paypal\Model\Info'
@@ -187,7 +167,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
                 [
                     Info::PAYPAL_PAYER_EMAIL => Info::PAYPAL_PAYER_EMAIL,
                     Info::BUYER_TAX_ID => Info::BUYER_TAX_ID,
-                    Info::BUYER_TAX_ID_TYPE => Info::BUYER_TAX_ID_TYPE_CNPJ
+                    Info::BUYER_TAX_ID_TYPE => Info::BUYER_TAX_ID_TYPE_CNPJ,
                 ],
                 [
                     Info::PAYPAL_PAYER_EMAIL => [
@@ -202,13 +182,13 @@ class InfoTest extends \PHPUnit_Framework_TestCase
                         'label' => 'Buyer\'s Tax ID Type',
                         'value' => 'CNPJ',
                     ]
-                ]
+                ],
             ],
             [
                 [
                     Info::PAYPAL_PAYER_EMAIL => Info::PAYPAL_PAYER_EMAIL,
                     Info::BUYER_TAX_ID => Info::BUYER_TAX_ID,
-                    Info::BUYER_TAX_ID_TYPE => Info::BUYER_TAX_ID_TYPE
+                    Info::BUYER_TAX_ID_TYPE => Info::BUYER_TAX_ID_TYPE,
                 ],
                 [
                     Info::PAYPAL_PAYER_EMAIL => [
@@ -243,14 +223,14 @@ class InfoTest extends \PHPUnit_Framework_TestCase
                     Info::FRAUD_FILTERS => Info::PAYPAL_FRAUD_FILTERS,
                     Info::CORRELATION_ID => Info::PAYPAL_CORRELATION_ID,
                     Info::AVS_CODE => Info::PAYPAL_AVS_CODE,
-                    Info::CVV2_MATCH => Info::PAYPAL_CVV2_MATCH,
+                    Info::CVV_2_MATCH => Info::PAYPAL_CVV_2_MATCH,
                     Info::CENTINEL_VPAS => Info::CENTINEL_VPAS,
                     Info::CENTINEL_ECI => Info::CENTINEL_ECI,
                     Info::BUYER_TAX_ID => Info::BUYER_TAX_ID,
                     Info::BUYER_TAX_ID_TYPE => Info::BUYER_TAX_ID_TYPE,
                     Info::PAYMENT_STATUS => Info::PAYMENT_STATUS_GLOBAL,
                     Info::PENDING_REASON => Info::PENDING_REASON_GLOBAL,
-                    Info::IS_FRAUD => Info::IS_FRAUD_GLOBAL
+                    Info::IS_FRAUD => Info::IS_FRAUD_GLOBAL,
                 ],
                 [
                     Info::PAYPAL_PAYER_ID => Info::PAYPAL_PAYER_ID,
@@ -262,7 +242,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
                     Info::PAYPAL_FRAUD_FILTERS => Info::PAYPAL_FRAUD_FILTERS,
                     Info::PAYPAL_CORRELATION_ID => Info::PAYPAL_CORRELATION_ID,
                     Info::PAYPAL_AVS_CODE => Info::PAYPAL_AVS_CODE,
-                    Info::PAYPAL_CVV2_MATCH => Info::PAYPAL_CVV2_MATCH,
+                    Info::PAYPAL_CVV_2_MATCH => Info::PAYPAL_CVV_2_MATCH,
                     Info::CENTINEL_VPAS => Info::CENTINEL_VPAS,
                     Info::CENTINEL_ECI => Info::CENTINEL_ECI,
                     Info::BUYER_TAX_ID => Info::BUYER_TAX_ID,
@@ -270,9 +250,8 @@ class InfoTest extends \PHPUnit_Framework_TestCase
                     Info::PAYMENT_STATUS_GLOBAL => Info::PAYMENT_STATUS_GLOBAL,
                     Info::PENDING_REASON_GLOBAL => Info::PENDING_REASON_GLOBAL,
                     Info::IS_FRAUD_GLOBAL => Info::IS_FRAUD_GLOBAL
-                ]
+                ],
             ]
         ];
     }
-
 }

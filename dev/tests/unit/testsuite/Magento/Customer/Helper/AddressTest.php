@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Customer\Helper;
@@ -38,7 +19,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $blockFactory;
 
-    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -62,7 +43,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Element\BlockFactory'
         )->disableOriginalConstructor()->getMock();
         $this->storeManager = $this->getMockBuilder(
-            'Magento\Framework\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->disableOriginalConstructor()->getMock();
         $this->scopeConfig = $this->getMockBuilder(
             'Magento\Framework\App\Config\ScopeConfigInterface'
@@ -113,19 +94,19 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function providerGetStreetLines()
     {
-        return array(
-            array(-1, 2),
-            array(0, 2),
-            array(1, 1),
-            array(2, 2),
-            array(3, 3),
-            array(4, 4),
-            array(5, 5),
-            array(10, 10),
-            array(15, 15),
-            array(20, 20),
-            array(21, 20),
-        );
+        return [
+            [-1, 2],
+            [0, 2],
+            [1, 1],
+            [2, 2],
+            [3, 3],
+            [4, 4],
+            [5, 5],
+            [10, 10],
+            [15, 15],
+            [20, 20],
+            [21, 20],
+        ];
     }
 
     /**
@@ -156,17 +137,17 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $blockFactory->expects($this->once())
             ->method('createBlock')
-            ->with('some_test_block', array())
+            ->with('some_test_block', [])
             ->will($this->returnValue($blockMock));
-        return array(
-            array('some_test_block', $blockFactory, $blockMock),
-            array($blockMock, $blockFactory, $blockMock),
-        );
+        return [
+            ['some_test_block', $blockFactory, $blockMock],
+            [$blockMock, $blockFactory, $blockMock],
+        ];
     }
 
     public function testGetConfigCanShowConfig()
     {
-        $result = array('key1' => 'value1', 'key2' => 'value2');
+        $result = ['key1' => 'value1', 'key2' => 'value2'];
         $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
         $store->expects($this->any())
             ->method('getWebsiteId')
@@ -213,10 +194,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getAttributeValidationClassDataProvider()
     {
-        return array(
-            array('attr_code', 'Attribute_Class', '', 'Attribute_Class'),
-            array('firstname', 'Attribute_Class', 'Attribute2_Class', 'Attribute2_Class'),
-        );
+        return [
+            ['attr_code', 'Attribute_Class', '', 'Attribute_Class'],
+            ['firstname', 'Attribute_Class', 'Attribute2_Class', 'Attribute2_Class'],
+        ];
     }
 
     /**
@@ -232,10 +213,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getConvertStreetLinesDataProvider()
     {
-        return array(
-            array(array('street1', 'street2', 'street3', 'street4'), 3, array('street1 street2', 'street3', 'street4')),
-            array(array('street1', 'street2', 'street3', 'street4'), 2, array('street1 street2', 'street3 street4')),
-        );
+        return [
+            [['street1', 'street2', 'street3', 'street4'], 3, ['street1 street2', 'street3', 'street4']],
+            [['street1', 'street2', 'street3', 'street4'], 2, ['street1 street2', 'street3 street4']],
+        ];
     }
 
     /**
@@ -261,11 +242,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function getVatValidationEnabledDataProvider()
     {
-        return array(
-            array(0, true),
-            array(1, false),
-            array(2, true),
-        );
+        return [
+            [0, true],
+            [1, false],
+            [2, true],
+        ];
     }
 
     /**
@@ -291,11 +272,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function getValidateOnEachTransactionDataProvider()
     {
-        return array(
-            array(0, true),
-            array(1, false),
-            array(2, true),
-        );
+        return [
+            [0, true],
+            [1, false],
+            [2, true],
+        ];
     }
 
     /**
@@ -321,11 +302,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function getTaxCalculationAddressTypeDataProvider()
     {
-        return array(
-            array(0, 'address_type_store_0'),
-            array(1, 'address_type_store_1'),
-            array(2, 'address_type_store_2'),
-        );
+        return [
+            [0, 'address_type_store_0'],
+            [1, 'address_type_store_1'],
+            [2, 'address_type_store_2'],
+        ];
     }
 
     public function testIsDisableAutoGroupAssignDefaultValue()
@@ -363,7 +344,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getFormatByCode')
             ->with($code)
             ->will($this->returnValue(
-                new \Magento\Framework\Object(!is_null($result)?array('renderer' => $result):array())
+                new \Magento\Framework\Object(!is_null($result) ? ['renderer' => $result] : [])
             ));
         $this->assertEquals($result, $this->helper->getFormatTypeRenderer($code));
     }
@@ -372,10 +353,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $renderer = $this->getMockBuilder('Magento\Customer\Block\Address\Renderer\RendererInterface')
             ->disableOriginalConstructor()->getMock();
-        return array(
-            array('valid_code', $renderer),
-            array('invalid_code', null)
-        );
+        return [
+            ['valid_code', $renderer],
+            ['invalid_code', null]
+        ];
     }
 
     /**
@@ -390,13 +371,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()->getMock();
             $renderer->expects($this->once())
                 ->method('getFormatArray')
-                ->will($this->returnValue(array('key' => 'value')));
+                ->will($this->returnValue(['key' => 'value']));
         }
         $this->addressConfig->expects($this->once())
             ->method('getFormatByCode')
             ->with($code)
             ->will($this->returnValue(
-                new \Magento\Framework\Object(!empty($result)?array('renderer' => $renderer):array())
+                new \Magento\Framework\Object(!empty($result) ? ['renderer' => $renderer] : [])
             ));
 
         $this->assertEquals($result, $this->helper->getFormat($code));
@@ -404,9 +385,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function getFormatDataProvider()
     {
-        return array(
-            array('valid_code', array('key' => 'value')),
-            array('invalid_code', '')
-        );
+        return [
+            ['valid_code', ['key' => 'value']],
+            ['invalid_code', '']
+        ];
     }
 }

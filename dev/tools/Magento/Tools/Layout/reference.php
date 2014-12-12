@@ -1,42 +1,23 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 require __DIR__ . '/../../../bootstrap.php';
 $rootDir = realpath(__DIR__ . '/../../../../../');
-use Magento\Tools\Layout\Reference\Processor;
 use Magento\Tools\Layout\Formatter;
+use Magento\Tools\Layout\Reference\Processor;
 
 try {
     $opt = new \Zend_Console_Getopt(
-        array(
+        [
             'dir=s' => "Directory to process(optional, default {$rootDir})",
             'file|f=s' => 'File to process(optional)',
             'overwrite|o' => 'Overwrite file',
             'collect|c' => 'Collect names for a dictionary',
             'process|p' => 'Process references using dictionary',
             'dictionary|d=s' => 'Dictionary file (required)',
-            'processor=s' => 'Processor file (optional)'
-        )
+            'processor=s' => 'Processor file (optional)',
+        ]
     );
     $opt->parse();
 
@@ -60,9 +41,9 @@ try {
 
     $processor = new Processor(new Formatter(), realpath($opt->dictionary));
 
-    $layouts = array();
+    $layouts = [];
     if (!empty($opt->file) && file_exists($opt->file)) {
-        $layouts = array(realpath($opt->file));
+        $layouts = [realpath($opt->file)];
     } else {
         $layouts = $processor->getLayoutFiles($rootDir);
     }

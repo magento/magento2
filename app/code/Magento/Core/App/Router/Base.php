@@ -2,26 +2,7 @@
 /**
  * Base router
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Core\App\Router;
 
@@ -42,19 +23,19 @@ class Base implements \Magento\Framework\App\RouterInterface
     /**
      * @var array
      */
-    protected $_modules = array();
+    protected $_modules = [];
 
     /**
      * @var array
      */
-    protected $_dispatchData = array();
+    protected $_dispatchData = [];
 
     /**
      * List of required request parameters
      * Order sensitive
      * @var string[]
      */
-    protected $_requiredParams = array('moduleFrontName', 'actionPath', 'actionName');
+    protected $_requiredParams = ['moduleFrontName', 'actionPath', 'actionName'];
 
     /**
      * @var \Magento\Framework\App\Route\ConfigInterface
@@ -81,7 +62,7 @@ class Base implements \Magento\Framework\App\RouterInterface
     protected $_url;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -129,7 +110,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Framework\StoreManagerInterface|\Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface|\Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
@@ -143,7 +124,7 @@ class Base implements \Magento\Framework\App\RouterInterface
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
@@ -182,7 +163,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     protected function parseRequest(\Magento\Framework\App\RequestInterface $request)
     {
-        $output = array();
+        $output = [];
 
         $path = trim($request->getPathInfo(), '/');
 
@@ -191,7 +172,7 @@ class Base implements \Magento\Framework\App\RouterInterface
             $output[$paramName] = array_shift($params);
         }
 
-        for ($i = 0,$l = sizeof($params); $i < $l; $i += 2) {
+        for ($i = 0, $l = sizeof($params); $i < $l; $i += 2) {
             $output['variables'][$params[$i]] = isset($params[$i + 1]) ? urldecode($params[$i + 1]) : '';
         }
         return $output;
@@ -263,7 +244,7 @@ class Base implements \Magento\Framework\App\RouterInterface
         }
 
         // instantiate action class
-        return $this->actionFactory->create($actionClassName, array('request' => $request));
+        return $this->actionFactory->create($actionClassName, ['request' => $request]);
     }
 
     /**
@@ -310,7 +291,7 @@ class Base implements \Magento\Framework\App\RouterInterface
                 continue;
             }
 
-            $actionInstance = $this->actionFactory->create($actionClassName, array('request' => $request));
+            $actionInstance = $this->actionFactory->create($actionClassName, ['request' => $request]);
             break;
         }
 
@@ -353,7 +334,7 @@ class Base implements \Magento\Framework\App\RouterInterface
     public function getActionClassName($module, $actionPath)
     {
         $prefix = $this->pathPrefix ? 'Controller\\' . $this->pathPrefix  : 'Controller';
-        return $this->nameBuilder->buildClassName(array($module, $prefix, $actionPath));
+        return $this->nameBuilder->buildClassName([$module, $prefix, $actionPath]);
     }
 
     /**

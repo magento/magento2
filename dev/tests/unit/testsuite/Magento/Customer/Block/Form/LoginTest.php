@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Block\Form;
 
@@ -55,27 +36,27 @@ class LoginTest extends \PHPUnit_Framework_TestCase
         $this->customerUrl = $this->getMockBuilder(
             'Magento\Customer\Model\Url'
         )->disableOriginalConstructor()->setMethods(
-            array('getRegisterUrl')
+            ['getRegisterUrl']
         )->getMock();
         $this->checkoutData = $this->getMockBuilder(
             'Magento\Checkout\Helper\Data'
         )->disableOriginalConstructor()->setMethods(
-            array('isContextCheckout')
+            ['isContextCheckout']
         )->getMock();
         $this->coreUrl = $this->getMockBuilder(
             'Magento\Core\Helper\Url'
         )->disableOriginalConstructor()->setMethods(
-            array('addRequestParam')
+            ['addRequestParam']
         )->getMock();
 
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->block = $this->objectManager->getObject(
             'Magento\Customer\Block\Form\Login',
-            array(
+            [
                 'customerUrl' => $this->customerUrl,
                 'checkoutData' => $this->checkoutData,
                 'coreUrl' => $this->coreUrl
-            )
+            ]
         );
     }
 
@@ -94,7 +75,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             'addRequestParam'
         )->with(
             $expectedUrl,
-            array('context' => 'checkout')
+            ['context' => 'checkout']
         )->will(
             $this->returnValue($expectedUrl)
         );
@@ -113,7 +94,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             'addRequestParam'
         )->with(
             $expectedUrl,
-            array('context' => 'checkout')
+            ['context' => 'checkout']
         )->will(
             $this->returnValue($expectedUrl)
         );

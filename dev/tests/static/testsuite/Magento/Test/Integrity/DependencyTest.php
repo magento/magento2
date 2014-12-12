@@ -2,26 +2,7 @@
 /**
  * Scan source code for incorrect or undeclared modules dependencies
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  *
  */
 namespace Magento\Test\Integrity;
@@ -198,7 +179,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 self::$_mapRouters,
                 self::$_mapLayoutBlocks,
                 self::$_mapLayoutHandles
-            )
+            ),
         ];
     }
 
@@ -347,15 +328,9 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     public function collectRedundant()
     {
         foreach (array_keys(self::$_mapDependencies) as $module) {
-            // Override 'soft' dependencies with 'hard'
-            $soft = $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND);
-            $hard = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND);
-            $this->_setDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND, array_diff($soft, $hard));
-            foreach ($this->_getTypes() as $type) {
-                $declared = $this->_getDependencies($module, $type, self::MAP_TYPE_DECLARED);
-                $found = $this->_getDependencies($module, $type, self::MAP_TYPE_FOUND);
-                $this->_setDependencies($module, $type, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
-            }
+            $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
+            $found = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND);
+            $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
         }
     }
 
@@ -369,17 +344,16 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $output = [];
         foreach (array_keys(self::$_mapDependencies) as $module) {
             $result = [];
-            foreach ($this->_getTypes() as $type) {
-                $redundant = $this->_getDependencies($module, $type, self::MAP_TYPE_REDUNDANT);
-                if (count($redundant)) {
-                    $result[] = sprintf(
-                        "\r\nModule %s: %s [%s]",
-                        $module,
-                        $type,
-                        implode(', ', array_values($redundant))
-                    );
-                }
+            $redundant = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT);
+            if (count($redundant)) {
+                $result[] = sprintf(
+                    "\r\nModule %s: %s [%s]",
+                    $module,
+                    self::TYPE_HARD,
+                    implode(', ', array_values($redundant))
+                );
             }
+
             if (count($result)) {
                 $output[] = implode(', ', $result);
             }
@@ -521,7 +495,6 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 if (!empty(self::$_listRoutesXml[$module])) {
                     foreach (self::$_listRoutesXml[$module] as $configFile) {
                         self::updateRoutersMap($module, $configFile);
-
                     }
                 }
             }
@@ -645,7 +618,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         }
         return $jsonName;
     }
-    
+
     /**
      * Initialise map of dependencies
      *
@@ -657,6 +630,10 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $jsonFiles = \Magento\Framework\Test\Utility\Files::init()->getComposerFiles('code/Magento/*/', false);
         foreach ($jsonFiles as $file) {
             $contents = file_get_contents($file);
+            $decodedJson = json_decode($contents);
+            if (null == $decodedJson) {
+                throw new \Exception("Invalid Json: $file");
+            }
             $json = new \Magento\Framework\Config\Composer\Package(json_decode($contents));
             $moduleName = self::convertModuleName($json->get('name'));
             self::$_mapDependencies[$moduleName] = @(self::$_mapDependencies[$moduleName] ?: []);
@@ -666,11 +643,11 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     self::$_mapDependencies[$moduleName][$type] = [
                         self::MAP_TYPE_DECLARED  => [],
                         self::MAP_TYPE_FOUND     => [],
-                        self::MAP_TYPE_REDUNDANT => []
+                        self::MAP_TYPE_REDUNDANT => [],
                     ];
                 }
             }
-            
+
             $require = $json->get('require');
             if (isset($require) && !empty($require)) {
                 foreach ($require as $requiredModule => $version) {

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Downloadable\Model\Sales\Order\Pdf\Items;
 
@@ -43,58 +24,58 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $arguments = array(
-            'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false),
+        $arguments = [
+            'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             'orderItemCollectionFactory' => $this->getMock(
                 'Magento\Sales\Model\Resource\Order\Item\CollectionFactory',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             ),
             'serviceOrderFactory' => $this->getMock(
                 'Magento\Sales\Model\Service\OrderFactory',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             ),
             'currencyFactory' => $this->getMock(
                 'Magento\Directory\Model\CurrencyFactory',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             ),
             'orderHistoryFactory' => $this->getMock(
                 'Magento\Sales\Model\Order\Status\HistoryFactory',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             ),
             'orderTaxCollectionFactory' => $this->getMock(
                 'Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
-            )
-        );
+            ),
+        ];
         $orderConstructorArgs = $objectManager->getConstructArguments('Magento\Sales\Model\Order', $arguments);
-        $this->_order = $this->getMock('Magento\Sales\Model\Order', array('formatPriceTxt'), $orderConstructorArgs);
+        $this->_order = $this->getMock('Magento\Sales\Model\Order', ['formatPriceTxt'], $orderConstructorArgs);
         $this->_order->expects(
             $this->any()
         )->method(
             'formatPriceTxt'
         )->will(
-            $this->returnCallback(array($this, 'formatPrice'))
+            $this->returnCallback([$this, 'formatPrice'])
         );
 
         $this->_pdf = $this->getMock(
             'Magento\Sales\Model\Order\Pdf\AbstractPdf',
-            array('drawLineBlocks', 'getPdf'),
-            array(),
+            ['drawLineBlocks', 'getPdf'],
+            [],
             '',
             false,
             false
@@ -102,8 +83,8 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
 
         $filterManager = $this->getMock(
             'Magento\Framework\Filter\FilterManager',
-            array('stripTags'),
-            array(),
+            ['stripTags'],
+            [],
             '',
             false
         );
@@ -111,12 +92,12 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
 
         $modelConstructorArgs = $objectManager->getConstructArguments(
             'Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo',
-            array('string' => new \Magento\Framework\Stdlib\String(), 'filterManager' => $filterManager)
+            ['string' => new \Magento\Framework\Stdlib\String(), 'filterManager' => $filterManager]
         );
 
         $this->_model = $this->getMock(
             'Magento\Downloadable\Model\Sales\Order\Pdf\Items\Creditmemo',
-            array('getLinks', 'getLinksTitle'),
+            ['getLinks', 'getLinksTitle'],
             $modelConstructorArgs
         );
 
@@ -145,32 +126,32 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
 
     public function testDraw()
     {
-        $expectedPageSettings = array('table_header' => true);
+        $expectedPageSettings = ['table_header' => true];
         $expectedPdfPage = new \Zend_Pdf_Page('a4');
-        $expectedPdfData = array(
-            array(
-                'lines' => array(
-                    array(
-                        array('text' => array('Downloadable Documentation'), 'feed' => 35),
-                        array('text' => array('downloadable-docu', 'mentation'), 'feed' => 255, 'align' => 'right'),
-                        array('text' => '$20.00', 'feed' => 330, 'font' => 'bold', 'align' => 'right'),
-                        array('text' => '$-5.00', 'feed' => 380, 'font' => 'bold', 'align' => 'right'),
-                        array('text' => '1', 'feed' => 445, 'font' => 'bold', 'align' => 'right'),
-                        array('text' => '$2.00', 'feed' => 495, 'font' => 'bold', 'align' => 'right'),
-                        array('text' => '$17.00', 'feed' => 565, 'font' => 'bold', 'align' => 'right')
-                    ),
-                    array(array('text' => array('Test Custom Option'), 'font' => 'italic', 'feed' => 35)),
-                    array(array('text' => array('test value'), 'feed' => 40)),
-                    array(array('text' => array('Download Links'), 'font' => 'italic', 'feed' => 35)),
-                    array(array('text' => array('Magento User Guide'), 'feed' => 40))
-                ),
-                'height' => 20
-            )
-        );
+        $expectedPdfData = [
+            [
+                'lines' => [
+                    [
+                        ['text' => ['Downloadable Documentation'], 'feed' => 35],
+                        ['text' => ['downloadable-docu', 'mentation'], 'feed' => 255, 'align' => 'right'],
+                        ['text' => '$20.00', 'feed' => 330, 'font' => 'bold', 'align' => 'right'],
+                        ['text' => '$-5.00', 'feed' => 380, 'font' => 'bold', 'align' => 'right'],
+                        ['text' => '1', 'feed' => 445, 'font' => 'bold', 'align' => 'right'],
+                        ['text' => '$2.00', 'feed' => 495, 'font' => 'bold', 'align' => 'right'],
+                        ['text' => '$17.00', 'feed' => 565, 'font' => 'bold', 'align' => 'right'],
+                    ],
+                    [['text' => ['Test Custom Option'], 'font' => 'italic', 'feed' => 35]],
+                    [['text' => ['test value'], 'feed' => 40]],
+                    [['text' => ['Download Links'], 'font' => 'italic', 'feed' => 35]],
+                    [['text' => ['Magento User Guide'], 'feed' => 40]],
+                ],
+                'height' => 20,
+            ],
+        ];
 
         $this->_model->setItem(
             new \Magento\Framework\Object(
-                array(
+                [
                     'name' => 'Downloadable Documentation',
                     'sku' => 'downloadable-documentation',
                     'row_total' => 20.00,
@@ -179,13 +160,13 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
                     'tax_amount' => 2.00,
                     'hidden_tax_amount' => 0.00,
                     'order_item' => new \Magento\Framework\Object(
-                        array(
-                            'product_options' => array(
-                                'options' => array(array('label' => 'Test Custom Option', 'value' => 'test value'))
-                            )
-                        )
-                    )
-                )
+                        [
+                            'product_options' => [
+                                'options' => [['label' => 'Test Custom Option', 'value' => 'test value']],
+                            ],
+                        ]
+                    ),
+                ]
             )
         );
         $this->_model->expects($this->any())->method('getLinksTitle')->will($this->returnValue('Download Links'));
@@ -196,9 +177,9 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 new \Magento\Framework\Object(
-                    array('purchased_items' => array(
-                        new \Magento\Framework\Object(array('link_title' => 'Magento User Guide')))
-                    )
+                    ['purchased_items' => [
+                        new \Magento\Framework\Object(['link_title' => 'Magento User Guide']), ],
+                    ]
                 )
             )
         );

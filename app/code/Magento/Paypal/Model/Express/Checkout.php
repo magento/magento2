@@ -1,34 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Paypal\Model\Express;
 
-use Magento\Customer\Model\AccountManagement;
-use Magento\Sales\Model\Quote\Address;
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
+use Magento\Customer\Model\AccountManagement;
 use Magento\Paypal\Model\Config as PaypalConfig;
-use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Paypal\Model\Express\Checkout\Quote as PaypalQuote;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\Quote\Address;
 
 /**
  * Wrapper that performs Paypal Express and Checkout communication
@@ -124,7 +105,7 @@ class Checkout
      *
      * @var array
      */
-    protected $_giropayUrls = array();
+    protected $_giropayUrls = [];
 
     /**
      * Create Billing Agreement flag
@@ -203,7 +184,7 @@ class Checkout
     protected $_paypalInfo;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -298,7 +279,7 @@ class Checkout
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Paypal\Model\Info $paypalInfo
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $coreUrl
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
      * @param \Magento\Framework\Logger\AdapterFactory $logFactory
@@ -327,7 +308,7 @@ class Checkout
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Paypal\Model\Info $paypalInfo,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $coreUrl,
         \Magento\Paypal\Model\CartFactory $cartFactory,
         \Magento\Framework\Logger\AdapterFactory $logFactory,
@@ -344,7 +325,7 @@ class Checkout
         PaypalQuote $paypalQuote,
         OrderSender $orderSender,
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
-        $params = array()
+        $params = []
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_taxData = $taxData;
@@ -432,7 +413,7 @@ class Checkout
      */
     public function prepareGiropayUrls($successUrl, $cancelUrl, $pendingUrl)
     {
-        $this->_giropayUrls = array($successUrl, $cancelUrl, $pendingUrl);
+        $this->_giropayUrls = [$successUrl, $cancelUrl, $pendingUrl];
         return $this;
     }
 
@@ -526,8 +507,7 @@ class Checkout
             ->setReturnUrl($returnUrl)
             ->setCancelUrl($cancelUrl)
             ->setSolutionType($solutionType)
-            ->setPaymentAction($this->_config->getConfigValue('paymentAction'))
-        ;
+            ->setPaymentAction($this->_config->getConfigValue('paymentAction'));
         if ($this->_giropayUrls) {
             list($successUrl, $cancelUrl, $pendingUrl) = $this->_giropayUrls;
             $this->_api->addData(
@@ -573,7 +553,7 @@ class Checkout
 
         // add line items
         /** @var $cart \Magento\Payment\Model\Cart */
-        $cart = $this->_cartFactory->create(array('salesModel' => $this->_quote));
+        $cart = $this->_cartFactory->create(['salesModel' => $this->_quote]);
         $this->_api->setPaypalCart($cart)
             ->setIsLineItemsEnabled($this->_config->getConfigValue('lineItemsEnabled'));
 
@@ -748,8 +728,8 @@ class Checkout
     public function getShippingOptionsCallbackResponse(array $request)
     {
         // prepare debug data
-        $logger = $this->_logFactory->create(array('fileName' => 'payment_' . $this->_methodType . '.log'));
-        $debugData = array('request' => $request, 'response' => array());
+        $logger = $this->_logFactory->create(['fileName' => 'payment_' . $this->_methodType . '.log']);
+        $debugData = ['request' => $request, 'response' => []];
 
         try {
             // obtain addresses
@@ -758,7 +738,7 @@ class Checkout
             $quoteAddress = $this->_quote->getShippingAddress();
 
             // compare addresses, calculate shipping rates and prepare response
-            $options = array();
+            $options = [];
             if ($address && $quoteAddress && !$this->_quote->getIsVirtual()) {
                 foreach ($address->getExportedKeys() as $key) {
                     $quoteAddress->setDataUsingMethod($key, $address->getData($key));
@@ -826,7 +806,7 @@ class Checkout
 
         $this->_ignoreAddressValidation();
         $this->_quote->collectTotals();
-        $parameters = array('quote' => $this->_quote);
+        $parameters = ['quote' => $this->_quote];
         $service = $this->_serviceQuoteFactory->create($parameters);
         $service->submitAllWithDataObject();
         $this->quoteRepository->save($this->_quote);
@@ -1022,7 +1002,7 @@ class Checkout
      */
     protected function _prepareShippingOptions(Address $address, $mayReturnEmpty = false, $calculateTax = false)
     {
-        $options = array();
+        $options = [];
         $i = 0;
         $iMin = false;
         $min = false;
@@ -1080,7 +1060,7 @@ class Checkout
 
         // Magento will transfer only first 10 cheapest shipping options if there are more than 10 available.
         if (count($options) > 10) {
-            usort($options, array(get_class($this), 'cmpShippingOptions'));
+            usort($options, [get_class($this), 'cmpShippingOptions']);
             array_splice($options, 10);
             // User selected option will be always included in options list
             if (!is_null($userSelectedOption) && !in_array($userSelectedOption, $options)) {

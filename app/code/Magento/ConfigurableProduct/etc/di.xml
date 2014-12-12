@@ -1,35 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\ConfigurableProduct\Service\V1\Product\Option\WriteServiceInterface" type="Magento\ConfigurableProduct\Service\V1\Product\Option\WriteService" />
-    <preference for="Magento\ConfigurableProduct\Service\V1\Product\Link\ReadServiceInterface" type="Magento\ConfigurableProduct\Service\V1\Product\Link\ReadService" />
-    <preference for="Magento\ConfigurableProduct\Service\V1\Product\Link\WriteServiceInterface" type="Magento\ConfigurableProduct\Service\V1\Product\Link\WriteService" />
-    <preference for="Magento\ConfigurableProduct\Service\V1\ReadServiceInterface" type="Magento\ConfigurableProduct\Service\V1\ReadService" />
-    <preference for="Magento\ConfigurableProduct\Service\V1\Product\Option\ReadServiceInterface" type="Magento\ConfigurableProduct\Service\V1\Product\Option\ReadService" />
-    <preference for="Magento\ConfigurableProduct\Service\V1\Product\Option\Type\ReadServiceInterface" type="Magento\ConfigurableProduct\Service\V1\Product\Option\Type\ReadService" />
+    <preference for="Magento\ConfigurableProduct\Api\OptionTypesListInterface" type="Magento\ConfigurableProduct\Model\OptionTypesList" />
+    <preference for="Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface" type="Magento\ConfigurableProduct\Model\ConfigurableProductManagement" />
+    <preference for="Magento\ConfigurableProduct\Api\LinkManagementInterface" type="Magento\ConfigurableProduct\Model\LinkManagement" />
+    <preference for="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" type="Magento\ConfigurableProduct\Model\OptionRepository" />
+    <preference for="Magento\ConfigurableProduct\Api\Data\OptionInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute" />
+    <preference for="Magento\ConfigurableProduct\Api\Data\OptionValueInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue" />
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
     </type>

@@ -1,4 +1,5 @@
 <?php
 function testFunc()
-{ echo 'Hello!';
+{
+    echo 'Hello!';
 }

@@ -1,10 +1,10 @@
 <?php
 namespace Magento\Sniffs\Annotations;
 
-use PHP_CodeSniffer_Sniff;
-use PHP_CodeSniffer_File;
 use PHP_CodeSniffer_CommentParser_FunctionCommentParser;
 use PHP_CodeSniffer_CommentParser_ParserException;
+use PHP_CodeSniffer_File;
+use PHP_CodeSniffer_Sniff;
 use PHP_CodeSniffer_Tokens;
 
 include_once 'Helper.php';
@@ -72,7 +72,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
      */
     public function register()
     {
-        return array(T_FUNCTION);
+        return [T_FUNCTION];
     }
 
     /**
@@ -94,7 +94,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
 
         $tokens = $phpcsFile->getTokens();
 
-        $find = array(T_COMMENT, T_DOC_COMMENT, T_CLASS, T_FUNCTION, T_OPEN_TAG);
+        $find = [T_COMMENT, T_DOC_COMMENT, T_CLASS, T_FUNCTION, T_OPEN_TAG];
 
         $commentEnd = $phpcsFile->findPrevious($find, $stackPtr - 1);
 
@@ -112,16 +112,16 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
             // only thing on the line, assume we found nothing.
             $prevContent = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, $commentEnd);
             if ($tokens[$commentEnd]['line'] === $tokens[$commentEnd]['line']) {
-                $this->helper->addMessage($stackPtr, Helper::MISSING, array('function'));
+                $this->helper->addMessage($stackPtr, Helper::MISSING, ['function']);
             } else {
-                $this->helper->addMessage($stackPtr, Helper::WRONG_STYLE, array('function'));
+                $this->helper->addMessage($stackPtr, Helper::WRONG_STYLE, ['function']);
             }
             return;
         } elseif ($code !== T_DOC_COMMENT) {
-            $this->helper->addMessage($stackPtr, Helper::MISSING, array('function'));
+            $this->helper->addMessage($stackPtr, Helper::MISSING, ['function']);
             return;
         } elseif (trim($tokens[$commentEnd]['content']) !== '*/') {
-            $this->helper->addMessage($commentEnd, Helper::WRONG_END, array(trim($tokens[$commentEnd]['content'])));
+            $this->helper->addMessage($commentEnd, Helper::WRONG_END, [trim($tokens[$commentEnd]['content'])]);
             return;
         }
 
@@ -134,7 +134,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
         $ignore[] = T_FINAL;
         $prevToken = $phpcsFile->findPrevious($ignore, $stackPtr - 1, null, true);
         if ($prevToken !== $commentEnd) {
-            $this->helper->addMessage($stackPtr, Helper::MISSING, array('function'));
+            $this->helper->addMessage($stackPtr, Helper::MISSING, ['function']);
             return;
         }
 
@@ -158,13 +158,13 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
             $this->commentParser->parse();
         } catch (PHP_CodeSniffer_CommentParser_ParserException $e) {
             $line = $e->getLineWithinComment() + $commentStart;
-            $this->helper->addMessage($line, Helper::FAILED_PARSE, array($e->getMessage()));
+            $this->helper->addMessage($line, Helper::FAILED_PARSE, [$e->getMessage()]);
             return;
         }
 
         $comment = $this->commentParser->getComment();
         if (is_null($comment) === true) {
-            $this->helper->addMessage($commentStart, Helper::EMPTY_DOC, array('Function'));
+            $this->helper->addMessage($commentStart, Helper::EMPTY_DOC, ['Function']);
             return;
         }
 
@@ -191,7 +191,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
         // Check for a comment description.
         $short = $comment->getShortComment();
         if (trim($short) === '') {
-            $this->helper->addMessage($commentStart, Helper::MISSING_SHORT, array('function'));
+            $this->helper->addMessage($commentStart, Helper::MISSING_SHORT, ['function']);
             return;
         }
 
@@ -199,7 +199,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
         $newlineCount = 0;
         $newlineSpan = strspn($short, $phpcsFile->eolChar);
         if ($short !== '' && $newlineSpan > 0) {
-            $this->helper->addMessage($commentStart + 1, Helper::SPACING_BEFORE_SHORT, array('function'));
+            $this->helper->addMessage($commentStart + 1, Helper::SPACING_BEFORE_SHORT, ['function']);
         }
 
         $newlineCount = substr_count($short, $phpcsFile->eolChar) + 1;
@@ -213,13 +213,13 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
                 $this->helper->addMessage(
                     $commentStart + $newlineCount + 1,
                     Helper::SPACING_BETWEEN,
-                    array('function')
+                    ['function']
                 );
             }
             $newlineCount += $newlineBetween;
             $testLong = trim($long);
             if (preg_match('|\p{Lu}|u', $testLong[0]) === 0) {
-                $this->helper->addMessage($commentStart + $newlineCount, Helper::LONG_NOT_CAPITAL, array('Function'));
+                $this->helper->addMessage($commentStart + $newlineCount, Helper::LONG_NOT_CAPITAL, ['Function']);
             }
         }
 
@@ -235,7 +235,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
                 $this->helper->addMessage(
                     $commentStart + $newlineCount,
                     Helper::SPACING_BEFORE_TAGS,
-                    array('function')
+                    ['function']
                 );
                 $short = rtrim($short, $phpcsFile->eolChar . ' ');
             }
@@ -245,15 +245,15 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
         $testShort = trim($short);
         $lastChar = $testShort[strlen($testShort) - 1];
         if (substr_count($testShort, $phpcsFile->eolChar) !== 0) {
-            $this->helper->addMessage($commentStart + 1, Helper::SHORT_SINGLE_LINE, array('Function'));
+            $this->helper->addMessage($commentStart + 1, Helper::SHORT_SINGLE_LINE, ['Function']);
         }
 
         if (preg_match('|\p{Lu}|u', $testShort[0]) === 0) {
-            $this->helper->addMessage($commentStart + 1, Helper::SHORT_NOT_CAPITAL, array('Function'));
+            $this->helper->addMessage($commentStart + 1, Helper::SHORT_NOT_CAPITAL, ['Function']);
         }
 
         if ($lastChar !== '.') {
-            $this->helper->addMessage($commentStart + 1, Helper::SHORT_FULL_STOP, array('Function'));
+            $this->helper->addMessage($commentStart + 1, Helper::SHORT_FULL_STOP, ['Function']);
         }
 
         // Check for unknown/deprecated tags.
@@ -273,7 +273,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
             $words[$lastPos - 2]
         ) === ''
         ) {
-            $this->helper->addMessage($commentEnd, Helper::SPACING_AFTER, array('function'));
+            $this->helper->addMessage($commentEnd, Helper::SPACING_AFTER, ['function']);
         }
     }
 
@@ -302,7 +302,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
 
                 $content = $see->getContent();
                 if (empty($content) === true) {
-                    $this->helper->addMessage($errorPos, Helper::EMPTY_SEE, array('function'));
+                    $this->helper->addMessage($errorPos, Helper::EMPTY_SEE, ['function']);
                     continue;
                 }
             }
@@ -357,7 +357,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
                     $content = $parts[0];
                     // Check return type (can be multiple, separated by '|').
                     $typeNames = explode('|', $content);
-                    $suggestedNames = array();
+                    $suggestedNames = [];
                     foreach ($typeNames as $i => $typeName) {
                         $suggestedName = $this->helper->suggestType($typeName);
                         if (in_array($suggestedName, $suggestedNames) === false) {
@@ -367,11 +367,11 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
 
                     $suggestedType = implode('|', $suggestedNames);
                     if ($content !== $suggestedType) {
-                        $data = array($content);
+                        $data = [$content];
                         $this->helper->addMessage($errorPos, Helper::INVALID_RETURN, $data);
                     } elseif ($this->helper->isAmbiguous($typeName, $matches)) {
                         // Warn about ambiguous types ie array or mixed
-                        $data = array($matches[1], '@return');
+                        $data = [$matches[1], '@return'];
                         $this->helper->addMessage($errorPos, Helper::AMBIGUOUS_TYPE, $data);
                     }
 
@@ -438,7 +438,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
 
                     $spacing = substr_count($return->getWhitespaceBeforeValue(), ' ');
                     if ($spacing !== 1) {
-                        $data = array($spacing);
+                        $data = [$spacing];
                         $this->helper->addMessage($errorPos, Helper::RETURN_INDENT, $data);
                     }
                 }
@@ -514,7 +514,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
     {
         $realParams = $this->helper->getCurrentFile()->getMethodParameters($this->_functionToken);
         $params = $this->commentParser->getParams();
-        $foundParams = array();
+        $foundParams = [];
 
         if (empty($params) === false) {
             $subStrCount = substr_count(
@@ -539,7 +539,6 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
             $longestVar = 0;
 
             foreach ($params as $param) {
-
                 $paramComment = trim($param->getComment());
                 $errorPos = $param->getLine() + $commentStart;
 
@@ -574,11 +573,11 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
                 foreach ($typeNames as $typeName) {
                     $suggestedName = $this->helper->suggestType($typeName);
                     if ($typeName !== $suggestedName) {
-                        $data = array($suggestedName, $typeName, $paramName, $pos);
+                        $data = [$suggestedName, $typeName, $paramName, $pos];
                         $this->helper->addMessage($errorPos, Helper::INCORRECT_PARAM_VAR_NAME, $data);
                     } elseif ($this->helper->isAmbiguous($typeName, $matches)) {
                         // Warn about ambiguous types ie array or mixed
-                        $data = array($matches[1], $paramName, ' at position ' . $pos . ' is NOT recommended');
+                        $data = [$matches[1], $paramName, ' at position ' . $pos . ' is NOT recommended'];
                         $this->helper->addMessage($commentEnd + 2, Helper::AMBIGUOUS_TYPE, $data);
                     } elseif (count($typeNames) === 1) {
                         // Check type hint for array and custom type.
@@ -596,16 +595,16 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
                         if ($suggestedTypeHint !== '' && isset($realParams[$pos - 1]) === true) {
                             $typeHint = $realParams[$pos - 1]['type_hint'];
                             if ($typeHint === '') {
-                                $data = array($suggestedTypeHint, $paramName, $pos);
+                                $data = [$suggestedTypeHint, $paramName, $pos];
                                 $this->helper->addMessage($commentEnd + 2, Helper::TYPE_HINT_MISSING, $data);
                             } elseif ($typeHint !== $suggestedTypeHint) {
-                                $data = array($suggestedTypeHint, $typeHint, $paramName, $pos);
+                                $data = [$suggestedTypeHint, $typeHint, $paramName, $pos];
                                 $this->helper->addMessage($commentEnd + 2, Helper::INCORRECT_TYPE_HINT, $data);
                             }
                         } elseif ($suggestedTypeHint === '' && isset($realParams[$pos - 1]) === true) {
                             $typeHint = $realParams[$pos - 1]['type_hint'];
                             if ($typeHint !== '') {
-                                $data = array($typeHint, $paramName, $pos);
+                                $data = [$typeHint, $paramName, $pos];
                                 $this->helper->addMessage($commentEnd + 2, Helper::INVALID_TYPE_HINT, $data);
                             }
                         }
@@ -625,7 +624,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
 
                     if ($realName !== $paramName) {
                         $code = Helper::PARAM_NAME_NO_MATCH;
-                        $data = array($paramName, $realName, $pos);
+                        $data = [$paramName, $realName, $pos];
 
                         if (strtolower($paramName) === strtolower($realName)) {
                             $code = Helper::PARAM_NAME_NO_CASE_MATCH;
@@ -635,19 +634,19 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
                     }
                 } elseif (substr($paramName, -4) !== ',...') {
                     // We must have an extra parameter comment.
-                    $this->helper->addMessage($errorPos, Helper::EXTRA_PARAM_COMMENT, array($pos));
+                    $this->helper->addMessage($errorPos, Helper::EXTRA_PARAM_COMMENT, [$pos]);
                 }
 
                 if ($param->getVarName() === '') {
-                    $this->helper->addMessage($errorPos, Helper::MISSING_PARAM_NAME, array($pos));
+                    $this->helper->addMessage($errorPos, Helper::MISSING_PARAM_NAME, [$pos]);
                 }
 
                 if ($param->getType() === '') {
-                    $this->helper->addMessage($errorPos, Helper::MISSING_PARAM_TYPE, array($pos));
+                    $this->helper->addMessage($errorPos, Helper::MISSING_PARAM_TYPE, [$pos]);
                 }
 
                 if ($paramComment === '') {
-                    $data = array($paramName, $pos);
+                    $data = [$paramName, $pos];
                     $this->helper->addMessage($errorPos, Helper::MISSING_PARAM_COMMENT, $data);
                 } else {
                     // Param comments must start with a capital letter and
@@ -674,7 +673,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
             }
         }
 
-        $realNames = array();
+        $realNames = [];
         foreach ($realParams as $realParam) {
             $realNames[] = $realParam['name'];
         }
@@ -688,7 +687,7 @@ class RequireAnnotatedMethodsSniff implements PHP_CodeSniffer_Sniff
                 $errorPos = $commentStart;
             }
 
-            $data = array($neededParam);
+            $data = [$neededParam];
             $this->helper->addMessage($errorPos, Helper::MISSING_PARAM_TAG, $data);
         }
     }

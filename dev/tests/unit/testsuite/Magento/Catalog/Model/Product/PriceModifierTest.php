@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Catalog\Model\Product;
@@ -44,37 +25,37 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $prices = array();
+    protected $prices = [];
 
     protected function setUp()
     {
         $this->productMock =
             $this->getMock('Magento\Catalog\Model\Product',
-                array('getData', 'setData', '__wakeup'), array(), '', false);
+                ['getData', 'setData', '__wakeup'], [], '', false);
         $this->productRepositoryMock = $this->getMock(
             '\Magento\Catalog\Model\ProductRepository',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->priceModifier = new \Magento\Catalog\Model\Product\PriceModifier(
             $this->productRepositoryMock
         );
-        $this->prices = array(
-            0 => array(
+        $this->prices = [
+            0 => [
                 'all_groups' => 0,
                 'cust_group' => 1,
                 'price_qty' => 15,
-                'website_id' => 1
-            ),
-            1 => array(
+                'website_id' => 1,
+            ],
+            1 => [
                 'all_groups' => 1,
                 'cust_group' => 0,
                 'price_qty' => 10,
-                'website_id' => 1
-            )
-        );
+                'website_id' => 1,
+            ],
+        ];
     }
 
     public function testSuccessfullyRemoveGroupPriceSpecifiedForOneGroup()
@@ -84,7 +65,7 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with('group_price')
             ->will($this->returnValue($this->prices));
-        $expectedPrices = array(1 => $this->prices[1]);
+        $expectedPrices = [1 => $this->prices[1]];
         $this->productMock->expects($this->once())->method('setData')->with('group_price', $expectedPrices);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);
         $this->priceModifier->removeGroupPrice($this->productMock, 1, 1);
@@ -100,7 +81,7 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getData')
             ->with('group_price')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
         $this->productMock->expects($this->never())->method('setData');
         $this->productRepositoryMock->expects($this->never())->method('save');
         $this->priceModifier->removeGroupPrice($this->productMock, 1, 1);
@@ -132,7 +113,7 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getData')
             ->with('tier_price')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
         $this->productMock->expects($this->never())->method('setData');
         $this->productRepositoryMock->expects($this->never())->method('save');
         $this->priceModifier->removeTierPrice($this->productMock, 1, 3, 1);
@@ -161,7 +142,7 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with('tier_price')
             ->will($this->returnValue($this->prices));
-        $expectedPrices = array($this->prices[0]);
+        $expectedPrices = [$this->prices[0]];
         $this->productMock->expects($this->once())->method('setData')->with('tier_price', $expectedPrices);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);
         $this->priceModifier->removeTierPrice($this->productMock, 'all', 10, 1);
@@ -174,7 +155,7 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with('tier_price')
             ->will($this->returnValue($this->prices));
-        $expectedPrices = array(1 => $this->prices[1]);
+        $expectedPrices = [1 => $this->prices[1]];
         $this->productMock->expects($this->once())->method('setData')->with('tier_price', $expectedPrices);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->productMock);
         $this->priceModifier->removeTierPrice($this->productMock, 1, 15, 1);

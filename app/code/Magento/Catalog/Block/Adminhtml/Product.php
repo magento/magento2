@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -56,7 +37,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Catalog\Model\Product\TypeFactory $typeFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_productFactory = $productFactory;
         $this->_typeFactory = $typeFactory;
@@ -71,14 +52,14 @@ class Product extends \Magento\Backend\Block\Widget\Container
      */
     protected function _prepareLayout()
     {
-        $addButtonProps = array(
+        $addButtonProps = [
             'id' => 'add_new_product',
             'label' => __('Add Product'),
             'class' => 'add',
             'button_class' => '',
             'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
-            'options' => $this->_getAddProductButtonOptions()
-        );
+            'options' => $this->_getAddProductButtonOptions(),
+        ];
         $this->buttonList->add('add_new', $addButtonProps);
 
         $this->setChild(
@@ -95,7 +76,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
      */
     protected function _getAddProductButtonOptions()
     {
-        $splitButtonOptions = array();
+        $splitButtonOptions = [];
         $types = $this->_typeFactory->create()->getTypes();
         uasort(
             $types,
@@ -105,11 +86,11 @@ class Product extends \Magento\Backend\Block\Widget\Container
         );
 
         foreach ($types as $typeId => $type) {
-            $splitButtonOptions[$typeId] = array(
+            $splitButtonOptions[$typeId] = [
                 'label' => __($type['label']),
                 'onclick' => "setLocation('" . $this->_getProductCreateUrl($typeId) . "')",
-                'default' => \Magento\Catalog\Model\Product\Type::DEFAULT_TYPE == $typeId
-            );
+                'default' => \Magento\Catalog\Model\Product\Type::DEFAULT_TYPE == $typeId,
+            ];
         }
 
         return $splitButtonOptions;
@@ -125,7 +106,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
     {
         return $this->getUrl(
             'catalog/*/new',
-            array('set' => $this->_productFactory->create()->getDefaultAttributeSetId(), 'type' => $type)
+            ['set' => $this->_productFactory->create()->getDefaultAttributeSetId(), 'type' => $type]
         );
     }
 

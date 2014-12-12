@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data\Form\Element;
 
@@ -42,7 +23,7 @@ class Select extends AbstractElement
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        $data = array()
+        $data = []
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('select');
@@ -74,13 +55,13 @@ class Select extends AbstractElement
 
         $value = $this->getValue();
         if (!is_array($value)) {
-            $value = array($value);
+            $value = [$value];
         }
 
         if ($values = $this->getValues()) {
             foreach ($values as $key => $option) {
                 if (!is_array($option)) {
-                    $html .= $this->_optionToHtml(array('value' => $key, 'label' => $option), $value);
+                    $html .= $this->_optionToHtml(['value' => $key, 'label' => $option], $value);
                 } elseif (is_array($option['value'])) {
                     $html .= '<optgroup label="' . $option['label'] . '">' . "\n";
                     foreach ($option['value'] as $groupItem) {
@@ -143,12 +124,12 @@ class Select extends AbstractElement
         if (empty($values)) {
             $options = $this->getOptions();
             if (is_array($options)) {
-                $values = array();
+                $values = [];
                 foreach ($options as $value => $label) {
-                    $values[] = array('value' => $value, 'label' => $label);
+                    $values[] = ['value' => $value, 'label' => $label];
                 }
             } elseif (is_string($options)) {
-                $values = array(array('value' => $options, 'label' => $options));
+                $values = [['value' => $options, 'label' => $options]];
             }
             $this->setValues($values);
         }
@@ -161,7 +142,7 @@ class Select extends AbstractElement
      */
     public function getHtmlAttributes()
     {
-        return array(
+        return [
             'title',
             'class',
             'style',
@@ -171,6 +152,6 @@ class Select extends AbstractElement
             'readonly',
             'tabindex',
             'data-form-part'
-        );
+        ];
     }
 }

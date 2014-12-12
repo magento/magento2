@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 
@@ -38,9 +19,9 @@ class Stock extends Extended
     /**
      * Catalog data
      *
-     * @var \Magento\Catalog\Helper\Data
+     * @var \Magento\Framework\Module\Manager
      */
-    protected $_catalogData = null;
+    protected $moduleManager;
 
     /**
      * @var \Magento\ProductAlert\Model\StockFactory
@@ -51,18 +32,18 @@ class Stock extends Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ProductAlert\Model\StockFactory $stockFactory
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\ProductAlert\Model\StockFactory $stockFactory,
-        \Magento\Catalog\Helper\Data $catalogData,
-        array $data = array()
+        \Magento\Framework\Module\Manager $moduleManager,
+        array $data = []
     ) {
         $this->_stockFactory = $stockFactory;
-        $this->_catalogData = $catalogData;
+        $this->moduleManager = $moduleManager;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -91,7 +72,7 @@ class Stock extends Extended
         if ($store = $this->getRequest()->getParam('store')) {
             $websiteId = $this->_storeManager->getStore($store)->getWebsiteId();
         }
-        if ($this->_catalogData->isModuleEnabled('Magento_ProductAlert')) {
+        if ($this->moduleManager->isEnabled('Magento_ProductAlert')) {
             $collection = $this->_stockFactory->create()->getCustomerCollection()->join($productId, $websiteId);
             $this->setCollection($collection);
         }
@@ -103,20 +84,20 @@ class Stock extends Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('firstname', array('header' => __('First Name'), 'index' => 'firstname'));
+        $this->addColumn('firstname', ['header' => __('First Name'), 'index' => 'firstname']);
 
-        $this->addColumn('lastname', array('header' => __('Last Name'), 'index' => 'lastname'));
+        $this->addColumn('lastname', ['header' => __('Last Name'), 'index' => 'lastname']);
 
-        $this->addColumn('email', array('header' => __('Email'), 'index' => 'email'));
+        $this->addColumn('email', ['header' => __('Email'), 'index' => 'email']);
 
-        $this->addColumn('add_date', array('header' => __('Subscribe Date'), 'index' => 'add_date', 'type' => 'date'));
+        $this->addColumn('add_date', ['header' => __('Subscribe Date'), 'index' => 'add_date', 'type' => 'date']);
 
         $this->addColumn(
             'send_date',
-            array('header' => __('Last Notified'), 'index' => 'send_date', 'type' => 'date')
+            ['header' => __('Last Notified'), 'index' => 'send_date', 'type' => 'date']
         );
 
-        $this->addColumn('send_count', array('header' => __('Send Count'), 'index' => 'send_count'));
+        $this->addColumn('send_count', ['header' => __('Send Count'), 'index' => 'send_count']);
 
         return parent::_prepareColumns();
     }
@@ -131,6 +112,6 @@ class Stock extends Extended
         if ($storeId) {
             $storeId = $this->_storeManager->getStore($storeId)->getId();
         }
-        return $this->getUrl('catalog/product/alertsStockGrid', array('id' => $productId, 'store' => $storeId));
+        return $this->getUrl('catalog/product/alertsStockGrid', ['id' => $productId, 'store' => $storeId]);
     }
 }

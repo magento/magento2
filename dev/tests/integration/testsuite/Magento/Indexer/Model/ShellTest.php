@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Indexer\Model;
 
@@ -35,7 +16,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     {
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Indexer\Model\Shell',
-            array('entryPoint' => $entryPoint)
+            ['entryPoint' => $entryPoint]
         );
     }
 
@@ -71,7 +52,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     public function testRunIndexList()
     {
         $model = $this->getModel('testme.php');
-        $model->setRawArgs(array('testme.php', '--', 'status'));
+        $model->setRawArgs(['testme.php', '--', 'status']);
         $result = $this->runModel($model);
 
         $this->assertNotContains('testme.php', $result);
@@ -96,7 +77,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     public function testHasErrors($param, $expectedHasErrors)
     {
         $model = $this->getModel('testme.php');
-        $model->setRawArgs(array('testme.php', '--', $param));
+        $model->setRawArgs(['testme.php', '--', $param]);
         $this->runModel($model);
 
         $this->assertEquals($expectedHasErrors, $model->hasErrors());
@@ -107,9 +88,9 @@ class ShellTest extends \PHPUnit_Framework_TestCase
      */
     public function hasErrorsDataProvider()
     {
-        return array(
-            'execution without issues' => array('info', false),
-            'issue with wrong index' => array('--reindex=wrong_index_code', true)
-        );
+        return [
+            'execution without issues' => ['info', false],
+            'issue with wrong index' => ['--reindex=wrong_index_code', true]
+        ];
     }
 }

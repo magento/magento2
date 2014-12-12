@@ -1,20 +1,36 @@
 <?php
 
-class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling {}
+class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling
+{
+}
 
-class Foo02 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling {}
+class Foo02 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling
+{
+}
 
-class Foo03 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling {}
+class Foo03 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling
+{
+}
 
-class Foo04 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling {}
+class Foo04 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling
+{
+}
 
-class Foo05 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling {}
+class Foo05 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling
+{
+}
 
-class Foo06 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling {}
+class Foo06 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling
+{
+}
 
-class Foo07 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling {}
+class Foo07 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling
+{
+}
 
-class Foo08 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling {}
+class Foo08 extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling
+{
+}
 
 class Foo extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling
 {
@@ -56,7 +72,7 @@ class Foo extends Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_coupling
 
     public function getNewFoo08()
     {
-        return new Foo08; // coupling = 7
+        return new Foo08(); // coupling = 7
     }
 
     public function getNewStdClass()

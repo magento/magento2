@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\View\Asset;
 
@@ -67,12 +48,12 @@ class MergedTest extends \PHPUnit_Framework_TestCase
         $this->_assetJsTwo->expects($this->any())->method('getPath')
             ->will($this->returnValue('script_two.js'));
 
-        $this->_logger = $this->getMock('Magento\Framework\Logger', array('logException'), array(), '', false);
+        $this->_logger = $this->getMock('Magento\Framework\Logger', ['logException'], [], '', false);
 
         $this->_mergeStrategy = $this->getMock('Magento\Framework\View\Asset\MergeStrategyInterface');
 
         $this->_assetRepo = $this->getMock(
-            '\Magento\Framework\View\Asset\Repository', array(), array(), '', false
+            '\Magento\Framework\View\Asset\Repository', [], [], '', false
         );
     }
 
@@ -82,7 +63,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorNothingToMerge()
     {
-        new \Magento\Framework\View\Asset\Merged($this->_logger, $this->_mergeStrategy, $this->_assetRepo, array());
+        new \Magento\Framework\View\Asset\Merged($this->_logger, $this->_mergeStrategy, $this->_assetRepo, []);
     }
 
     /**
@@ -96,7 +77,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             $this->_logger,
             $this->_mergeStrategy,
             $this->_assetRepo,
-            array($this->_assetJsOne, $assetUrl)
+            [$this->_assetJsOne, $assetUrl]
         );
     }
 
@@ -112,13 +93,13 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             $this->_logger,
             $this->_mergeStrategy,
             $this->_assetRepo,
-            array($this->_assetJsOne, $assetCss)
+            [$this->_assetJsOne, $assetCss]
         );
     }
 
     public function testIteratorInterfaceMerge()
     {
-        $assets = array($this->_assetJsOne, $this->_assetJsTwo);
+        $assets = [$this->_assetJsOne, $this->_assetJsTwo];
         $this->_logger->expects($this->never())->method('logException');
         $merged = new \Magento\Framework\View\Asset\Merged(
             $this->_logger,
@@ -126,14 +107,14 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             $this->_assetRepo,
             $assets
         );
-        $mergedAsset = $this->getMock('Magento\Framework\View\Asset\File', array(), array(), '', false);
+        $mergedAsset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->_mergeStrategy
             ->expects($this->once())
             ->method('merge')
             ->with($assets, $mergedAsset)
             ->will($this->returnValue(null));
         $this->_assetRepo->expects($this->once())->method('createArbitrary')->will($this->returnValue($mergedAsset));
-        $expectedResult = array($mergedAsset);
+        $expectedResult = [$mergedAsset];
 
         $this->_assertIteratorEquals($expectedResult, $merged);
         $this->_assertIteratorEquals($expectedResult, $merged); // ensure merging happens only once
@@ -151,12 +132,12 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             $this->_logger,
             $this->_mergeStrategy,
             $this->_assetRepo,
-            array($this->_assetJsOne, $this->_assetJsTwo, $assetBroken)
+            [$this->_assetJsOne, $this->_assetJsTwo, $assetBroken]
         );
 
         $this->_logger->expects($this->once())->method('logException')->with($this->identicalTo($mergeError));
 
-        $expectedResult = array($this->_assetJsOne, $this->_assetJsTwo, $assetBroken);
+        $expectedResult = [$this->_assetJsOne, $this->_assetJsTwo, $assetBroken];
         $this->_assertIteratorEquals($expectedResult, $merged);
         $this->_assertIteratorEquals($expectedResult, $merged); // ensure merging attempt happens only once
     }
@@ -169,7 +150,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
      */
     protected function _assertIteratorEquals(array $expectedItems, \Iterator $actual)
     {
-        $actualItems = array();
+        $actualItems = [];
         foreach ($actual as $actualItem) {
             $actualItems[] = $actualItem;
         }

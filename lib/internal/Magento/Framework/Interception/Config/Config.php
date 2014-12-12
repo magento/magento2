@@ -2,26 +2,7 @@
 /**
  * Interception config. Responsible for providing list of plugins configured for instance
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Framework\Interception\Config;
 
@@ -74,14 +55,14 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      *
      * @var array
      */
-    protected $_intercepted = array();
+    protected $_intercepted = [];
 
     /**
      * List of class types that can not be pluginized
      *
      * @var array
      */
-    protected $_serviceClassTypes = array('Proxy', 'Interceptor');
+    protected $_serviceClassTypes = ['Proxy', 'Interceptor'];
 
     /**
      * @var \Magento\Framework\Config\ScopeListInterface
@@ -129,7 +110,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      */
     protected function initialize()
     {
-        $config = array();
+        $config = [];
         foreach ($this->_scopeList->getAllScopes() as $scope) {
             $config = array_replace_recursive($config, $this->_reader->read($scope));
         }

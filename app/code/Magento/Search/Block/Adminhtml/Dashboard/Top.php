@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Search\Block\Adminhtml\Dashboard;
 
@@ -58,7 +39,7 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Search\Model\Resource\Query\CollectionFactory $queriesFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_moduleManager = $moduleManager;
         $this->_queriesFactory = $queriesFactory;
@@ -83,9 +64,9 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
 
         if ($this->getRequest()->getParam('store')) {
             $storeIds = $this->getRequest()->getParam('store');
-        } else if ($this->getRequest()->getParam('website')) {
+        } elseif ($this->getRequest()->getParam('website')) {
             $storeIds = $this->_storeManager->getWebsite($this->getRequest()->getParam('website'))->getStoreIds();
-        } else if ($this->getRequest()->getParam('group')) {
+        } elseif ($this->getRequest()->getParam('group')) {
             $storeIds = $this->_storeManager->getGroup($this->getRequest()->getParam('group'))->getStoreIds();
         } else {
             $storeIds = '';
@@ -105,22 +86,22 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
     {
         $this->addColumn(
             'search_query',
-            array(
+            [
                 'header' => __('Search Term'),
                 'sortable' => false,
                 'index' => 'name',
                 'renderer' => 'Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery'
-            )
+            ]
         );
 
         $this->addColumn(
             'num_results',
-            array('header' => __('Results'), 'sortable' => false, 'index' => 'num_results', 'type' => 'number')
+            ['header' => __('Results'), 'sortable' => false, 'index' => 'num_results', 'type' => 'number']
         );
 
         $this->addColumn(
             'popularity',
-            array('header' => __('Uses'), 'sortable' => false, 'index' => 'popularity', 'type' => 'number')
+            ['header' => __('Uses'), 'sortable' => false, 'index' => 'popularity', 'type' => 'number']
         );
 
         $this->setFilterVisibility(false);
@@ -134,6 +115,6 @@ class Top extends \Magento\Backend\Block\Dashboard\Grid
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('search/term/edit', array('id' => $row->getId()));
+        return $this->getUrl('search/term/edit', ['id' => $row->getId()]);
     }
 }

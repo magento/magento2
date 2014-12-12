@@ -1,29 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Rss;
 
-use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class NewOrderTest
@@ -84,19 +65,19 @@ class NewOrderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $feedData = array(
+    protected $feedData = [
         'title' => 'New Orders',
         'link' => 'http://magento.com/backend/rss/feed/index/type/new_order',
         'description' => 'New Orders',
         'charset' => 'UTF-8',
-        'entries' => array(
-            array(
+        'entries' => [
+            [
                 'title' => 'Order #100000001 created at 2014-09-10 17:39:50',
                 'link' => 'http://magento.com/sales/order/view/order_id/1',
-                'description' => 'Order Description'
-            )
-        )
-    );
+                'description' => 'Order Description',
+            ],
+        ],
+    ];
 
     protected function setUp()
     {
@@ -108,7 +89,7 @@ class NewOrderTest extends \PHPUnit_Framework_TestCase
         $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->layout = $this->getMock('Magento\Framework\View\LayoutInterface');
         $this->rssUrlBuilderInterface = $this->getMockBuilder('Magento\Framework\App\Rss\UrlBuilderInterface')
-            ->setMethods(array('getUrl'))
+            ->setMethods(['getUrl'])
             ->disableOriginalConstructor()->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -136,7 +117,7 @@ class NewOrderTest extends \PHPUnit_Framework_TestCase
         $this->dateTime->expects($this->once())->method('formatDate')->will($this->returnValue(date('Y-m-d H:i:s')));
 
         $this->rssUrlBuilderInterface->expects($this->once())->method('getUrl')
-            ->with(array('_secure' => true, '_nosecret' => true, 'type' => 'new_order'))
+            ->with(['_secure' => true, '_nosecret' => true, 'type' => 'new_order'])
             ->will($this->returnValue('http://magento.com/backend/rss/feed/index/type/new_order'));
 
         $this->timezoneInterface->expects($this->once())->method('formatDate')

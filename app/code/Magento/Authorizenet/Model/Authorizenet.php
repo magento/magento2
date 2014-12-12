@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Authorizenet\Model;
 
@@ -154,14 +135,14 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
     /**
      * @var string[]
      */
-    protected $_allowCurrencyCode = array('USD');
+    protected $_allowCurrencyCode = ['USD'];
 
     /**
      * Fields that should be replaced in debug with '***'
      *
      * @var string[]
      */
-    protected $_debugReplacePrivateDataKeys = array(
+    protected $_debugReplacePrivateDataKeys = [
         'x_login',
         'x_tran_key',
         'x_card_num',
@@ -172,8 +153,8 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
         'x_bank_acct_num',
         'x_bank_acct_type',
         'x_bank_acct_name',
-        'x_echeck_type'
-    );
+        'x_echeck_type',
+    ];
 
     /**
      * Key for storing fraud transaction flag in additional information of payment model
@@ -216,7 +197,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      *
      * @var string[]
      */
-    protected $_partialAuthorizationChecksumDataKeys = array(
+    protected $_partialAuthorizationChecksumDataKeys = [
         'x_version',
         'x_test_request',
         'x_login',
@@ -251,18 +232,18 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
         'x_ship_to_country',
         'x_po_num',
         'x_tax',
-        'x_freight'
-    );
+        'x_freight',
+    ];
 
     /**
      * Centinel cardinal fields map
      *
      * @var string[]
      */
-    protected $_centinelFieldMap = array(
+    protected $_centinelFieldMap = [
         'centinel_cavv' => 'x_cardholder_authentication_value',
-        'centinel_eci' => 'x_authentication_indicator'
-    );
+        'centinel_eci' => 'x_authentication_indicator',
+    ];
 
     /**
      * @var \Magento\Authorizenet\Model\Authorizenet\Cards
@@ -345,7 +326,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Authorizenet\Helper\Data $authorizenetData,
-        array $data = array()
+        array $data = []
     ) {
         $this->_cardsFactory = $cardsFactory;
         $this->_requestFactory = $requestFactory;
@@ -534,7 +515,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
         $this->_initCardsStorage($payment);
         if ($this->_isPreauthorizeCapture($payment)) {
             $this->_preauthorizeCapture($payment, $amount);
-        } else if ($this->isPartialAuthorization($payment)) {
+        } elseif ($this->isPartialAuthorization($payment)) {
             $this->_partialAuthorization($payment, $amount, self::REQUEST_TYPE_AUTH_CAPTURE);
         } else {
             $this->_place($payment, $amount, self::REQUEST_TYPE_AUTH_CAPTURE);
@@ -553,7 +534,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
     {
         $cardsStorage = $this->getCardsStorage($payment);
 
-        $messages = array();
+        $messages = [];
         $isSuccessful = false;
         $isFiled = false;
         foreach ($cardsStorage->getCards() as $card) {
@@ -607,7 +588,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
             throw new \Magento\Framework\Model\Exception(__('This is an invalid amount for refund.'));
         }
 
-        $messages = array();
+        $messages = [];
         $isSuccessful = false;
         $isFiled = false;
         foreach ($cardsStorage->getCards() as $card) {
@@ -711,8 +692,8 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                     $payment,
                     $card->getLastTransId(),
                     $newTransactionType,
-                    array('is_transaction_closed' => 0),
-                    array($this->_realTransactionIdKey => $card->getLastTransId()),
+                    ['is_transaction_closed' => 0],
+                    [$this->_realTransactionIdKey => $card->getLastTransId()],
                     $this->_authorizenetData->getTransactionMessage(
                         $payment,
                         $requestType,
@@ -735,11 +716,11 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                         $payment,
                         $card->getLastTransId(),
                         $newTransactionType,
-                        array('is_transaction_closed' => 0),
-                        array(
+                        ['is_transaction_closed' => 0],
+                        [
                             $this->_realTransactionIdKey => $card->getLastTransId(),
                             $this->_isTransactionFraud => true
-                        ),
+                        ],
                         $this->_authorizenetData->getTransactionMessage(
                             $payment,
                             $requestType,
@@ -832,8 +813,8 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                 $payment,
                 $card->getLastTransId(),
                 $newTransactionType,
-                array('is_transaction_closed' => 0),
-                array($this->_realTransactionIdKey => $card->getLastTransId()),
+                ['is_transaction_closed' => 0],
+                [$this->_realTransactionIdKey => $card->getLastTransId()],
                 $this->_authorizenetData->getTransactionMessage(
                     $payment,
                     $requestType,
@@ -892,7 +873,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
             throw new \Magento\Framework\Model\Exception(__('This is an invalid amount for capture.'));
         }
 
-        $messages = array();
+        $messages = [];
         $isSuccessful = false;
         $isFiled = false;
         foreach ($cardsStorage->getCards() as $card) {
@@ -957,8 +938,8 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                         $payment,
                         $captureTransactionId,
                         \Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE,
-                        array('is_transaction_closed' => 0, 'parent_transaction_id' => $authTransactionId),
-                        array($this->_realTransactionIdKey => $result->getTransactionId()),
+                        ['is_transaction_closed' => 0, 'parent_transaction_id' => $authTransactionId],
+                        [$this->_realTransactionIdKey => $result->getTransactionId()],
                         $this->_authorizenetData->getTransactionMessage(
                             $payment,
                             self::REQUEST_TYPE_PRIOR_AUTH_CAPTURE,
@@ -1020,12 +1001,12 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                         $payment,
                         $voidTransactionId,
                         \Magento\Sales\Model\Order\Payment\Transaction::TYPE_VOID,
-                        array(
+                        [
                             'is_transaction_closed' => 1,
                             'should_close_parent_transaction' => 1,
                             'parent_transaction_id' => $authTransactionId
-                        ),
-                        array($this->_realTransactionIdKey => $result->getTransactionId()),
+                        ],
+                        [$this->_realTransactionIdKey => $result->getTransactionId()],
                         $this->_authorizenetData->getTransactionMessage(
                             $payment,
                             self::REQUEST_TYPE_VOID,
@@ -1048,12 +1029,12 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                         $payment,
                         $voidTransactionId,
                         \Magento\Sales\Model\Order\Payment\Transaction::TYPE_VOID,
-                        array(
+                        [
                             'is_transaction_closed' => 1,
                             'should_close_parent_transaction' => 1,
                             'parent_transaction_id' => $authTransactionId
-                        ),
-                        array(),
+                        ],
+                        [],
                         $this->_authorizenetData->getTransactionMessage(
                             $payment,
                             self::REQUEST_TYPE_VOID,
@@ -1139,12 +1120,12 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                         $payment,
                         $refundTransactionId,
                         \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND,
-                        array(
+                        [
                             'is_transaction_closed' => 1,
                             'should_close_parent_transaction' => $shouldCloseCaptureTransaction,
                             'parent_transaction_id' => $captureTransactionId
-                        ),
-                        array($this->_realTransactionIdKey => $result->getTransactionId()),
+                        ],
+                        [$this->_realTransactionIdKey => $result->getTransactionId()],
                         $this->_authorizenetData->getTransactionMessage(
                             $payment,
                             self::REQUEST_TYPE_CREDIT,
@@ -1426,7 +1407,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
         }
 
         if ($this->getIsCentinelValidationEnabled()) {
-            $params = $this->getCentinelValidator()->exportCmpiData(array());
+            $params = $this->getCentinelValidator()->exportCmpiData([]);
             $request = \Magento\Framework\Object\Mapper::accumulateByMap($params, $request, $this->_centinelFieldMap);
         }
 
@@ -1520,7 +1501,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      */
     protected function _postRequest(\Magento\Framework\Object $request)
     {
-        $debugData = array('request' => $request->getData());
+        $debugData = ['request' => $request->getData()];
 
         $result = $this->_resultFactory->create();
 
@@ -1528,7 +1509,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
         $uri = $this->getConfigData('cgi_url');
         $client->setUri($uri ? $uri : self::CGI_URL);
-        $client->setConfig(array('maxredirects' => 0, 'timeout' => 30));
+        $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
         foreach ($request->getData() as $key => $value) {
             $request->setData($key, str_replace(self::RESPONSE_DELIM_CHAR, '', $value));
         }
@@ -1711,8 +1692,8 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
         \Magento\Sales\Model\Order\Payment $payment,
         $transactionId,
         $transactionType,
-        array $transactionDetails = array(),
-        array $transactionAdditionalInfo = array(),
+        array $transactionDetails = [],
+        array $transactionAdditionalInfo = [],
         $message = false
     ) {
         $payment->setTransactionId($transactionId);
@@ -1803,9 +1784,9 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param array $checkSumDataKeys
      * @return string
      */
-    protected function _generateChecksum(\Magento\Framework\Object $object, $checkSumDataKeys = array())
+    protected function _generateChecksum(\Magento\Framework\Object $object, $checkSumDataKeys = [])
     {
-        $data = array();
+        $data = [];
         foreach ($checkSumDataKeys as $dataKey) {
             $data[] = $dataKey;
             $data[] = $object->getData($dataKey);
@@ -1838,12 +1819,12 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
         $client = new \Magento\Framework\HTTP\ZendClient();
         $uri = $this->getConfigData('cgi_url_td');
         $client->setUri($uri ? $uri : self::CGI_URL_TD);
-        $client->setConfig(array('timeout' => 45));
-        $client->setHeaders(array('Content-Type: text/xml'));
+        $client->setConfig(['timeout' => 45]);
+        $client->setHeaders(['Content-Type: text/xml']);
         $client->setMethod(\Zend_Http_Client::POST);
         $client->setRawData($requestBody);
 
-        $debugData = array('request' => $requestBody);
+        $debugData = ['request' => $requestBody];
 
         try {
             $responseBody = $client->request()->getBody();

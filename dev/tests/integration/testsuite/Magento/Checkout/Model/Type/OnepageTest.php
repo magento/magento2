@@ -1,23 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Checkout\Model\Type;
 
@@ -68,7 +51,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             'country_id' => 'US',
             'telephone' => '(512) 999-9999',
             'fax' => '',
-            'save_in_address_book' => 1
+            'save_in_address_book' => 1,
         ];
         $this->_model->saveShipping($data, 1);
 
@@ -110,7 +93,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             'country_id' => 'US',
             'telephone' => '(512) 999-9999',
             'fax' => '',
-            'save_in_address_book' => 1
+            'save_in_address_book' => 1,
         ];
         $this->_model->saveShipping($data, null);
 
@@ -199,11 +182,11 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $emailFromFixture = 'customer@example.com';
         /** @var $customerSession \Magento\Customer\Model\Session*/
         $customerSession = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session');
-        /** @var $customerService \Magento\Customer\Service\V1\CustomerAccountServiceInterface */
-        $customerService = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
+        $customerRepository = Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Api\CustomerRepositoryInterface'
         );
-        $customerData = $customerService->getCustomer($customerIdFromFixture);
+        $customerData = $customerRepository->getById($customerIdFromFixture);
         $customerSession->setCustomerDataObject($customerData);
         $this->_model = Bootstrap::getObjectManager()->create(
             'Magento\Checkout\Model\Type\Onepage',
@@ -267,7 +250,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             'region' => 'Alabama',
             'telephone' => '(323) 255-5861',
             'customer_id' => null,
-            'customer_address_id' => null
+            'customer_address_id' => null,
         ];
 
         foreach ($quoteAddressFieldsToCheck as $field => $value) {
@@ -292,7 +275,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $quoteFieldsToCheck = [
             'customer_firstname' => 'John',
             'customer_lastname' => 'Smith',
-            'customer_email' => 'John.Smith@example.com'
+            'customer_email' => 'John.Smith@example.com',
         ];
         foreach ($quoteFieldsToCheck as $field => $value) {
             $this->assertEquals($value, $quote->getData($field), "{$field} value is set to quote incorrectly.");
@@ -355,7 +338,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             'region' => 'Alabama',
             'telephone' => '(323) 255-5861',
             'customer_id' => null,
-            'customer_address_id' => null
+            'customer_address_id' => null,
         ];
 
         foreach ($quoteAddressFieldsToCheck as $field => $value) {
@@ -376,7 +359,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $quoteFieldsToCheck = [
             'customer_firstname' => 'John',
             'customer_lastname' => 'Smith',
-            'customer_email' => 'John.Smith@example.com'
+            'customer_email' => 'John.Smith@example.com',
         ];
         foreach ($quoteFieldsToCheck as $field => $value) {
             $this->assertEquals($value, $quote->getData($field), "{$field} value is set to quote incorrectly.");
@@ -404,7 +387,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
         $validationErrors = [
             '"First Name" is a required value.',
-            '"First Name" length must be equal or greater than 1 characters.'
+            '"First Name" length must be equal or greater than 1 characters.',
         ];
         $this->assertEquals(
             ['error' => 1, 'message' => $validationErrors],

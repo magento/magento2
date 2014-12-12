@@ -1,4 +1,5 @@
 #!/bin/sh
+# @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 # location of the php binary
 if [ ! "$1" = "" ] ; then
 CRONSCRIPT=$1

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Core\Model\View;
 
@@ -85,13 +66,13 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     protected function _emulateFixtureTheme($themePath = 'Test/default')
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            array(
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => array(
-                    DirectoryList::THEMES => array(
-                        'path' => realpath(__DIR__ . '/../_files/design')
-                    )
-                )
-            )
+            [
+                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
+                    DirectoryList::THEMES => [
+                        'path' => realpath(__DIR__ . '/../_files/design'),
+                    ],
+                ],
+            ]
         );
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -127,18 +108,18 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $themes = array('frontend' => 'test_f', 'adminhtml' => 'test_a');
-        $design = $objectManager->create('Magento\Core\Model\View\Design', array('themes' => $themes));
+        $themes = ['frontend' => 'test_f', 'adminhtml' => 'test_a'];
+        $design = $objectManager->create('Magento\Core\Model\View\Design', ['themes' => $themes]);
         $objectManager->addSharedInstance($design, 'Magento\Core\Model\View\Design');
 
         $model = $objectManager->get('Magento\Core\Model\View\Design');
 
         $this->assertEquals('test_f', $model->getConfigurationDesignTheme());
         $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend'));
-        $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend', array('store' => 0)));
-        $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend', array('store' => null)));
+        $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend', ['store' => 0]));
+        $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend', ['store' => null]));
         $this->assertEquals('test_a', $model->getConfigurationDesignTheme('adminhtml'));
-        $this->assertEquals('test_a', $model->getConfigurationDesignTheme('adminhtml', array('store' => uniqid())));
+        $this->assertEquals('test_a', $model->getConfigurationDesignTheme('adminhtml', ['store' => uniqid()]));
     }
 
     /**
@@ -149,15 +130,15 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     public function testGetConfigurationDesignThemeStore()
     {
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->getStore()->getId();
         $this->assertEquals('one', $this->_model->getConfigurationDesignTheme());
-        $this->assertEquals('one', $this->_model->getConfigurationDesignTheme(null, array('store' => $storeId)));
-        $this->assertEquals('one', $this->_model->getConfigurationDesignTheme('frontend', array('store' => $storeId)));
-        $this->assertEquals('two', $this->_model->getConfigurationDesignTheme(null, array('store' => 'fixturestore')));
+        $this->assertEquals('one', $this->_model->getConfigurationDesignTheme(null, ['store' => $storeId]));
+        $this->assertEquals('one', $this->_model->getConfigurationDesignTheme('frontend', ['store' => $storeId]));
+        $this->assertEquals('two', $this->_model->getConfigurationDesignTheme(null, ['store' => 'fixturestore']));
         $this->assertEquals(
             'two',
-            $this->_model->getConfigurationDesignTheme('frontend', array('store' => 'fixturestore'))
+            $this->_model->getConfigurationDesignTheme('frontend', ['store' => 'fixturestore'])
         );
     }
 
@@ -176,12 +157,12 @@ class DesignTest extends \PHPUnit_Framework_TestCase
      */
     public function getFilenameDataProvider()
     {
-        return array(
-            array('theme_file.txt', array('module' => 'Magento_Catalog')),
-            array('Magento_Catalog::theme_file.txt', array()),
-            array('Magento_Catalog::theme_file_with_2_dots..txt', array()),
-            array('Magento_Catalog::theme_file.txt', array('module' => 'Overridden_Module'))
-        );
+        return [
+            ['theme_file.txt', ['module' => 'Magento_Catalog']],
+            ['Magento_Catalog::theme_file.txt', []],
+            ['Magento_Catalog::theme_file_with_2_dots..txt', []],
+            ['Magento_Catalog::theme_file.txt', ['module' => 'Overridden_Module']]
+        ];
     }
 
     /**
@@ -192,7 +173,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $this->_emulateFixtureTheme();
         $config = $this->_viewConfig->getViewConfig();
         $this->assertInstanceOf('Magento\Framework\Config\View', $config);
-        $this->assertEquals(array('var1' => 'value1', 'var2' => 'value2'), $config->getVars('Namespace_Module'));
+        $this->assertEquals(['var1' => 'value1', 'var2' => 'value2'], $config->getVars('Namespace_Module'));
     }
 
     /**
@@ -220,7 +201,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
             $config = $this->_viewConfig->getViewConfig();
             $this->assertInstanceOf('Magento\Framework\Config\View', $config);
-            $this->assertEquals(array('customVar' => 'custom value'), $config->getVars('Namespace_Module'));
+            $this->assertEquals(['customVar' => 'custom value'], $config->getVars('Namespace_Module'));
         } catch (\Exception $e) {
             $directory->delete($relativePath);
             throw $e;

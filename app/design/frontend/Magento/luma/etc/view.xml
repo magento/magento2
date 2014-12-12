@@ -1,26 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
@@ -45,14 +26,14 @@
         <var name="customer_account_product_review_page:height">285</var>
 
         <var name="category_page_list:type">small_image</var>
-        <var name="category_page_list:width">250</var>
+        <var name="category_page_list:width">240</var>
         <var name="category_page_list:ratio">0.8</var>
-        <var name="category_page_list:height">310</var>
+        <var name="category_page_list:height">300</var>
 
         <var name="category_page_grid:type">small_image</var>
-        <var name="category_page_grid:width">250</var>
+        <var name="category_page_grid:width">240</var>
         <var name="category_page_grid:ratio">0.8</var>
-        <var name="category_page_grid:height">310</var>
+        <var name="category_page_grid:height">300</var>
 
         <var name="category_page_grid-1:type">small_image</var>
         <var name="category_page_grid-1:width">240</var>
@@ -100,9 +81,9 @@
         <var name="new_products_content_widget_list:height">340</var>
 
         <var name="new_products_content_widget_grid:type">small_image</var>
-        <var name="new_products_content_widget_grid:width">250</var>
+        <var name="new_products_content_widget_grid:width">240</var>
         <var name="new_products_content_widget_grid:ratio">0.8</var>
-        <var name="new_products_content_widget_grid:height">310</var>
+        <var name="new_products_content_widget_grid:height">300</var>
 
         <var name="recently_compared_products_images_names_widget:type">thumbnail</var>
         <var name="recently_compared_products_images_names_widget:width">75</var>
@@ -130,9 +111,9 @@
         <var name="bundled_product_customization_page:height">140</var>
 
         <var name="recently_compared_products_grid_content_widget:type">small_image</var>
-        <var name="recently_compared_products_grid_content_widget:width">250</var>
+        <var name="recently_compared_products_grid_content_widget:width">240</var>
         <var name="recently_compared_products_grid_content_widget:ratio">0.8</var>
-        <var name="recently_compared_products_grid_content_widget:height">310</var>
+        <var name="recently_compared_products_grid_content_widget:height">300</var>
 
         <var name="recently_compared_products_list_content_widget:type">small_image</var>
         <var name="recently_compared_products_list_content_widget:width">270</var>
@@ -140,9 +121,9 @@
         <var name="recently_compared_products_list_content_widget:height">340</var>
 
         <var name="recently_viewed_products_grid_content_widget:type">small_image</var>
-        <var name="recently_viewed_products_grid_content_widget:width">250</var>
+        <var name="recently_viewed_products_grid_content_widget:width">240</var>
         <var name="recently_viewed_products_grid_content_widget:ratio">0.8</var>
-        <var name="recently_viewed_products_grid_content_widget:height">310</var>
+        <var name="recently_viewed_products_grid_content_widget:height">300</var>
 
         <var name="recently_viewed_products_list_content_widget:type">small_image</var>
         <var name="recently_viewed_products_list_content_widget:width">270</var>
@@ -155,9 +136,9 @@
         <var name="customer_shared_wishlist:height">113</var>
 
         <var name="wishlist_thumbnail:type">small_image</var>
-        <var name="wishlist_thumbnail:width">250</var>
+        <var name="wishlist_thumbnail:width">240</var>
         <var name="wishlist_thumbnail:ratio">0.8</var>
-        <var name="wishlist_thumbnail:height">310</var>
+        <var name="wishlist_thumbnail:height">300</var>
 
         <var name="wishlist_sidebar_block:type">thumbnail</var>
         <var name="wishlist_sidebar_block:width">75</var>

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -46,20 +27,20 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
+        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false, false);
         $this->_blockMock = $this->getMock(
             'Magento\Framework\View\Element\Template',
-            array('setColumn', 'getHtml'),
-            array(),
+            ['setColumn', 'getHtml'],
+            [],
             '',
             false,
             false
         );
 
-        $arguments = array(
+        $arguments = [
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false)
-        );
+            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false),
+        ];
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\Column', $arguments);
         $this->_block->setId('id');
@@ -111,7 +92,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
     public function getSortableDataProvider()
     {
-        return array('zero' => array('0'), 'false' => array(false), 'null' => array(null));
+        return ['zero' => ['0'], 'false' => [false], 'null' => [null]];
     }
 
     /**
@@ -386,11 +367,11 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
      */
     public function testColumnIsGrouped($groupedData, $expected)
     {
-        $arguments = array(
+        $arguments = [
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false),
-            'data' => $groupedData
-        );
+            'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', [], [], '', false),
+            'data' => $groupedData,
+        ];
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\Column', $arguments);
@@ -399,6 +380,6 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
     public function columnGroupedDataProvider()
     {
-        return array(array(array(), false), array(array('grouped' => 0), false), array(array('grouped' => 1), true));
+        return [[[], false], [['grouped' => 0], false], [['grouped' => 1], true]];
     }
 }

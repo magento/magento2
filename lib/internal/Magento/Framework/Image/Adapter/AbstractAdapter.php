@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Image\Adapter;
 
@@ -281,26 +262,39 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, array $data = array())
+    public function __construct(\Magento\Framework\Filesystem $filesystem, array $data = [])
     {
         $this->_filesystem = $filesystem;
         $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
     }
 
     /**
-     * Assign image width, height, fileType and fileMimeType to object properties
-     * using getimagesize function
+     * Assign image width, height, fileMimeType to object properties
+     *
+     * @return string|null
+     */
+    public function getMimeType()
+    {
+        if ($this->_fileMimeType) {
+            return $this->_fileMimeType;
+        } else {
+            $this->_fileMimeType = image_type_to_mime_type($this->getImageType());
+            return $this->_fileMimeType;
+        }
+    }
+
+    /**
+     * Assign image width, height, fileType to object properties using getimagesize function
      *
      * @return int|null
      */
-    public function getMimeType()
+    public function getImageType()
     {
         if ($this->_fileType) {
             return $this->_fileType;
         } else {
-            list($this->_imageSrcWidth, $this->_imageSrcHeight, $this->_fileType, ) = getimagesize($this->_fileName);
-            $this->_fileMimeType = image_type_to_mime_type($this->_fileType);
-            return $this->_fileMimeType;
+            list($this->_imageSrcWidth, $this->_imageSrcHeight, $this->_fileType) = getimagesize($this->_fileName);
+            return $this->_fileType;
         }
     }
 
@@ -311,7 +305,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function getOriginalWidth()
     {
-        $this->getMimeType();
+        $this->getImageType();
         return $this->_imageSrcWidth;
     }
 
@@ -322,7 +316,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function getOriginalHeight()
     {
-        $this->getMimeType();
+        $this->getImageType();
         return $this->_imageSrcHeight;
     }
 
@@ -564,12 +558,12 @@ abstract class AbstractAdapter implements AdapterInterface
             $dstX = 0;
         }
 
-        return array(
-            'src' => array('x' => $srcX, 'y' => $srcY),
-            'dst' => array('x' => $dstX, 'y' => $dstY, 'width' => $dstWidth, 'height' => $dstHeight),
+        return [
+            'src' => ['x' => $srcX, 'y' => $srcY],
+            'dst' => ['x' => $dstX, 'y' => $dstY, 'width' => $dstWidth, 'height' => $dstHeight],
             // size for new image
-            'frame' => array('width' => $frameWidth, 'height' => $frameHeight)
-        );
+            'frame' => ['width' => $frameWidth, 'height' => $frameHeight]
+        ];
     }
 
     /**
@@ -598,7 +592,7 @@ abstract class AbstractAdapter implements AdapterInterface
                 $dstWidth = round($dstHeight / $this->_imageSrcHeight * $this->_imageSrcWidth);
             }
         }
-        return array($dstWidth, $dstHeight);
+        return [$dstWidth, $dstHeight];
     }
 
     /**
@@ -647,7 +641,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function getSupportedFormats()
     {
-        return array('gif', 'jpeg', 'jpg', 'png');
+        return ['gif', 'jpeg', 'jpg', 'png'];
     }
 
     /**
@@ -718,6 +712,6 @@ abstract class AbstractAdapter implements AdapterInterface
         $this->checkDependencies();
         $this->open($filePath);
 
-        return $this->getMimeType() !== null;
+        return $this->getImageType() !== null;
     }
 }

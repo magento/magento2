@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Helper;
 
@@ -65,7 +46,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         // watermark fixture
         mkdir(
             $fixtureMediaDir . '/watermark/stores/' . $objectManager->get(
-                'Magento\Framework\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             0777,
             true
@@ -73,18 +54,18 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         copy(
             "{$fixtureDir}/watermark.jpg",
             $fixtureMediaDir . '/watermark/stores/' . $objectManager->get(
-                'Magento\Framework\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId() . '/watermark.jpg'
         );
 
         // sample product with images
         self::$_product = $objectManager->create('Magento\Catalog\Model\Product');
         self::$_product->addData(
-            array(
+            [
                 'image' => '/m/a/magento_image.jpg',
                 'small_image' => '/m/a/magento_small_image.jpg',
-                'thumbnail' => '/m/a/magento_thumbnail.jpg'
-            )
+                'thumbnail' => '/m/a/magento_thumbnail.jpg',
+            ]
         );
 
         // sample image cached URL
@@ -130,11 +111,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public function initDataProvider()
     {
-        return array(
-            array('image', '/m/a/magento_image.jpg'),
-            array('small_image', '/m/a/magento_small_image.jpg'),
-            array('thumbnail', '/m/a/magento_thumbnail.jpg')
-        );
+        return [
+            ['image', '/m/a/magento_image.jpg'],
+            ['small_image', '/m/a/magento_small_image.jpg'],
+            ['thumbnail', '/m/a/magento_thumbnail.jpg']
+        ];
     }
 
     public function testResize()
@@ -173,7 +154,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
     public function testBackgroundColor()
     {
-        $rgbArray = (string)$this->_init()->backgroundColor(array(100, 100, 100));
+        $rgbArray = (string)$this->_init()->backgroundColor([100, 100, 100]);
         $rgbArgs = (string)$this->_init()->backgroundColor(100, 100, 100);
         $this->assertEquals($rgbArgs, $rgbArray);
         $this->assertNotEquals($rgbArray, self::$_sampleCachedUrl);
@@ -237,7 +218,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(272, $this->_init()->getOriginalWidth());
         $this->assertEquals(261, $this->_init()->getOriginalHeight());
-        $this->assertEquals(array(272, 261), $this->_init()->getOriginalSizeArray());
+        $this->assertEquals([272, 261], $this->_init()->getOriginalSizeArray());
     }
 
     /**

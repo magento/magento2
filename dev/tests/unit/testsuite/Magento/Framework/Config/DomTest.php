@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Config;
 
@@ -48,53 +29,53 @@ class DomTest extends \PHPUnit_Framework_TestCase
     public function mergeDataProvider()
     {
         // note differences of XML declaration in fixture files: sometimes encoding is specified, sometimes isn't
-        return array(
-            array(
+        return [
+            [
                 'ids.xml',
                 'ids_new.xml',
-                array(
+                [
                     '/root/node/subnode' => 'id',
                     '/root/other_node' => 'id',
                     '/root/other_node/child' => 'identifier'
-                ),
+                ],
                 null,
-                'ids_merged.xml'
-            ),
-            array('no_ids.xml', 'no_ids_new.xml', array(), null, 'no_ids_merged.xml'),
-            array('ambiguous_one.xml', 'ambiguous_new_two.xml', array(), null, 'ambiguous_merged.xml'),
-            array('namespaced.xml', 'namespaced_new.xml', array('/root/node' => 'id'), null, 'namespaced_merged.xml'),
-            array('override_node.xml', 'override_node_new.xml', array(), null, 'override_node_merged.xml'),
-            array('override_node_new.xml', 'override_node.xml', array(), null, 'override_node_merged.xml'),
-            array('text_node.xml', 'text_node_new.xml', array(), null, 'text_node_merged.xml'),
-            array(
+                'ids_merged.xml',
+            ],
+            ['no_ids.xml', 'no_ids_new.xml', [], null, 'no_ids_merged.xml'],
+            ['ambiguous_one.xml', 'ambiguous_new_two.xml', [], null, 'ambiguous_merged.xml'],
+            ['namespaced.xml', 'namespaced_new.xml', ['/root/node' => 'id'], null, 'namespaced_merged.xml'],
+            ['override_node.xml', 'override_node_new.xml', [], null, 'override_node_merged.xml'],
+            ['override_node_new.xml', 'override_node.xml', [], null, 'override_node_merged.xml'],
+            ['text_node.xml', 'text_node_new.xml', [], null, 'text_node_merged.xml'],
+            [
                 'recursive.xml',
                 'recursive_new.xml',
-                array('/root/(node|another_node)(/param)?' => 'name', '/root/node/param(/complex/item)+' => 'key'),
+                ['/root/(node|another_node)(/param)?' => 'name', '/root/node/param(/complex/item)+' => 'key'],
                 null,
                 'recursive_merged.xml'
-            ),
-            array(
+            ],
+            [
                 'recursive_deep.xml',
                 'recursive_deep_new.xml',
-                array('/root(/node)+' => 'name'),
+                ['/root(/node)+' => 'name'],
                 null,
                 'recursive_deep_merged.xml'
-            ),
-            array(
+            ],
+            [
                 'types.xml',
                 'types_new.xml',
-                array('/root/item' => 'id', '/root/item/subitem' => 'id'),
+                ['/root/item' => 'id', '/root/item/subitem' => 'id'],
                 'xsi:type',
                 'types_merged.xml'
-            ),
-            array(
+            ],
+            [
                 'attributes.xml',
                 'attributes_new.xml',
-                array('/root/item' => 'id', '/root/item/subitem' => 'id'),
+                ['/root/item' => 'id', '/root/item/subitem' => 'id'],
                 'xsi:type',
                 'attributes_merged.xml'
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -127,23 +108,23 @@ class DomTest extends \PHPUnit_Framework_TestCase
      */
     public function validateDataProvider()
     {
-        return array(
-            'valid' => array('<root><node id="id1"/><node id="id2"/></root>', array()),
-            'invalid' => array(
+        return [
+            'valid' => ['<root><node id="id1"/><node id="id2"/></root>', []],
+            'invalid' => [
                 '<root><node id="id1"/><unknown_node/></root>',
-                array("Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n")
-            )
-        );
+                ["Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n"],
+            ]
+        ];
     }
 
     public function testValidateCustomErrorFormat()
     {
         $xml = '<root><unknown_node/></root>';
         $errorFormat = 'Error: `%message%`';
-        $expectedErrors = array(
-            "Error: `Element 'unknown_node': This element is not expected. Expected is ( node ).`"
-        );
-        $dom = new \Magento\Framework\Config\Dom($xml, array(), null, null, $errorFormat);
+        $expectedErrors = [
+            "Error: `Element 'unknown_node': This element is not expected. Expected is ( node ).`",
+        ];
+        $dom = new \Magento\Framework\Config\Dom($xml, [], null, null, $errorFormat);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
         $this->assertFalse($actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);
@@ -157,7 +138,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     {
         $xml = '<root><unknown_node/></root>';
         $errorFormat = '%message%,%unknown%';
-        $dom = new \Magento\Framework\Config\Dom($xml, array(), null, null, $errorFormat);
+        $dom = new \Magento\Framework\Config\Dom($xml, [], null, null, $errorFormat);
         $dom->validate(__DIR__ . '/_files/sample.xsd');
     }
 
@@ -166,11 +147,11 @@ class DomTest extends \PHPUnit_Framework_TestCase
         $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
         $dom = new \Magento\Framework\Config\Dom($xml);
-        $domMock = $this->getMock('DOMDocument', array('schemaValidate'), array());
+        $domMock = $this->getMock('DOMDocument', ['schemaValidate'], []);
         $domMock->expects($this->once())
             ->method('schemaValidate')
             ->with($schemaFile)
             ->will($this->returnValue(false));
-        $this->assertEquals(array('Unknown validation error'), $dom->validateDomDocument($domMock, $schemaFile));
+        $this->assertEquals(['Unknown validation error'], $dom->validateDomDocument($domMock, $schemaFile));
     }
 }

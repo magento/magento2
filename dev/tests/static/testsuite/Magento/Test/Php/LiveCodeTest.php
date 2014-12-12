@@ -1,35 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Test\Php;
 
-use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
-use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
-use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
-use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
 use Magento\Framework\Test\Utility;
+use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
+use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
+use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
+use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
 use PHP_PMD_TextUI_Command;
 use PHPUnit_Framework_TestCase;
+use Magento\Framework\Test\Utility\Files;
 
 /**
  * Set of tests for static code analysis, e.g. code style, code complexity, copy paste detecting, etc.
@@ -49,12 +31,12 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected static $whiteList = array();
+    protected static $whiteList = [];
 
     /**
      * @var array
      */
-    protected static $blackList = array();
+    protected static $blackList = [];
 
     /**
      * Setup basics for all tests
@@ -104,7 +86,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('PHP Code Sniffer Build Too Old.');
         }
         self::setupFileLists('phpcs');
-        $result = $codeSniffer->run(self::$whiteList, self::$blackList, array('php'));
+        $result = $codeSniffer->run(self::$whiteList, self::$blackList, ['php']);
         $this->assertFileExists(
             $reportFile,
             'Expected ' . $reportFile . ' to be created by phpcs run with PSR2 standard'
@@ -130,7 +112,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
         self::setupFileLists();
-        $result = $codeSniffer->run(self::$whiteList, self::$blackList, array('php', 'phtml'));
+        $result = $codeSniffer->run(self::$whiteList, self::$blackList, ['php', 'phtml']);
         $this->assertEquals(
             0,
             $result,
@@ -161,7 +143,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $severity = 0; // Change to 5 to see the warnings
         $this->assertEquals(
             0,
-            $result = $codeSniffer->run(self::$whiteList, self::$blackList, array('php'), $severity),
+            $result = $codeSniffer->run(self::$whiteList, self::$blackList, ['php'], $severity),
             "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
         );
     }
@@ -206,9 +188,9 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public function whiteListDataProvider()
     {
-        $whiteList = array();
+        $whiteList = [];
         $testCodePattern = '~' . self::$pathToSource . '/dev/~';
-        $nonTestCode = array();
+        $nonTestCode = [];
 
         self::setupFileLists();
 
@@ -216,10 +198,10 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             if (!preg_match($testCodePattern, $path)) {
                 $nonTestCode[] = $path;
             } else {
-                $whiteList[] = array(array($path));
+                $whiteList[] = [[$path]];
             }
         }
-        $whiteList[] = array($nonTestCode);
+        $whiteList[] = [$nonTestCode];
 
         return $whiteList;
     }
@@ -239,14 +221,118 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         }
 
         self::setupFileLists();
-        $blackList = array();
+        $blackList = [];
         foreach (glob(__DIR__ . '/_files/phpcpd/blacklist/*.txt') as $list) {
             $blackList = array_merge($blackList, file($list, FILE_IGNORE_NEW_LINES));
         }
 
         $this->assertTrue(
-            $copyPasteDetector->run(array(), $blackList),
+            $copyPasteDetector->run([], $blackList),
             "PHP Copy/Paste Detector has found error(s): See detailed report in {$reportFile}"
         );
+    }
+
+    public function testDeadCode()
+    {
+        if (!class_exists('SebastianBergmann\PHPDCD\Analyser')) {
+            $this->markTestSkipped('PHP Dead Code Detector is not available.');
+        }
+        $analyser = new \SebastianBergmann\PHPDCD\Analyser();
+        $declared = [];
+        $called = [];
+        foreach (Files::init()->getPhpFiles() as $file) {
+            $file = array_pop($file);
+            $analyser->analyseFile($file);
+            foreach ($analyser->getFunctionDeclarations() as $function => $declaration) {
+                $declaration = $declaration; //avoid "unused local variable" error and non-effective array_keys call
+                if (strpos($function, '::') === false) {
+                    $method = $function;
+                } else {
+                    list($class, $method) = explode('::', $function);
+                }
+                $declared[$method] = $function;
+            }
+            foreach ($analyser->getFunctionCalls() as $function => $usages) {
+                $usages = $usages; //avoid "unused local variable" error and non-effective array_keys call
+                if (strpos($function, '::') === false) {
+                    $method = $function;
+                } else {
+                    list($class, $method) = explode('::', $function);
+                }
+                $called[$method] = 1;
+            }
+        }
+
+        foreach ($called as $method => $value) {
+            $value = $value; //avoid "unused local variable" error and non-effective array_keys call
+            unset($declared[$method]);
+        }
+        $declared = $this->filterUsedObserverMethods($declared);
+        $declared = $this->filterUsedPersistentObserverMethods($declared);
+        $declared = $this->filterUsedCrontabObserverMethods($declared);
+        if ($declared) {
+            $this->fail('Dead code detected:' . PHP_EOL . implode(PHP_EOL, $declared));
+        }
+    }
+
+    /**
+     * @param string[] $methods
+     * @return string[]
+     * @throws \Exception
+     */
+    private function filterUsedObserverMethods($methods)
+    {
+        foreach (Files::init()->getConfigFiles('{*/events.xml,events.xml}') as $file) {
+            $file = array_pop($file);
+
+            $doc = new \DOMDocument();
+            $doc->load($file);
+            foreach ($doc->getElementsByTagName('observer') as $observer) {
+                /** @var \DOMElement $observer */
+                $method = $observer->getAttribute('method');
+                unset($methods[$method]);
+            }
+        }
+        return $methods;
+    }
+
+    /**
+     * @param string[] $methods
+     * @return string[]
+     * @throws \Exception
+     */
+    private function filterUsedPersistentObserverMethods($methods)
+    {
+        foreach (Files::init()->getConfigFiles('{*/persistent.xml,persistent.xml}') as $file) {
+            $file = array_pop($file);
+
+            $doc = new \DOMDocument();
+            $doc->load($file);
+            foreach ($doc->getElementsByTagName('method') as $method) {
+                /** @var \DOMElement $method */
+                unset($methods[$method->textContent]);
+            }
+        }
+        return $methods;
+    }
+
+    /**
+     * @param string[] $methods
+     * @return string[]
+     * @throws \Exception
+     */
+    private function filterUsedCrontabObserverMethods($methods)
+    {
+        foreach (Files::init()->getConfigFiles('{*/crontab.xml,crontab.xml}') as $file) {
+            $file = array_pop($file);
+
+            $doc = new \DOMDocument();
+            $doc->load($file);
+            foreach ($doc->getElementsByTagName('job') as $job) {
+                /** @var \DOMElement $job */
+                unset($methods[$job->getAttribute('method')]);
+            }
+        }
+        return $methods;
     }
 }

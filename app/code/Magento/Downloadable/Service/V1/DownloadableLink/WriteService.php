@@ -1,38 +1,19 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Downloadable\Service\V1\DownloadableLink;
 
-use \Magento\Downloadable\Service\V1\Data\FileContentUploaderInterface;
-use \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkContent;
-use \Magento\Catalog\Api\ProductRepositoryInterface;
-use \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkContentValidator;
-use \Magento\Downloadable\Model\Link;
-use \Magento\Framework\Exception\InputException;
-use \Magento\Framework\Json\EncoderInterface;
-use \Magento\Downloadable\Model\LinkFactory;
-use \Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Downloadable\Model\Link;
+use Magento\Downloadable\Model\LinkFactory;
+use Magento\Downloadable\Service\V1\Data\FileContentUploaderInterface;
+use Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkContent;
+use Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkContentValidator;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Json\EncoderInterface;
 
 class WriteService implements WriteServiceInterface
 {
@@ -95,7 +76,7 @@ class WriteService implements WriteServiceInterface
             throw new InputException('Provided link information is invalid.');
         }
 
-        if (!in_array($linkContent->getLinkType(), array('url', 'file'))) {
+        if (!in_array($linkContent->getLinkType(), ['url', 'file'])) {
             throw new InputException('Invalid link type.');
         }
         $title = $linkContent->getTitle();
@@ -103,7 +84,7 @@ class WriteService implements WriteServiceInterface
             throw new InputException('Link title cannot be empty.');
         }
 
-        $linkData = array(
+        $linkData = [
             'link_id' => 0,
             'is_delete' => 0,
             'type' => $linkContent->getLinkType(),
@@ -111,28 +92,28 @@ class WriteService implements WriteServiceInterface
             'title' => $linkContent->getTitle(),
             'price' => $linkContent->getPrice(),
             'number_of_downloads' => $linkContent->getNumberOfDownloads(),
-            'is_shareable' => $linkContent->isShareable()
-        );
+            'is_shareable' => $linkContent->isShareable(),
+        ];
 
         if ($linkContent->getLinkType() == 'file') {
-            $linkData['file'] = $this->jsonEncoder->encode(array(
-                $this->fileContentUploader->upload($linkContent->getLinkFile(), 'link_file')
-            ));
+            $linkData['file'] = $this->jsonEncoder->encode([
+                $this->fileContentUploader->upload($linkContent->getLinkFile(), 'link_file'),
+            ]);
         } else {
             $linkData['link_url'] = $linkContent->getLinkUrl();
         }
 
         if ($linkContent->getSampleType() == 'file') {
             $linkData['sample']['type'] = 'file';
-            $linkData['sample']['file'] = $this->jsonEncoder->encode(array(
-                $this->fileContentUploader->upload($linkContent->getSampleFile(), 'link_sample_file')
-            ));
+            $linkData['sample']['file'] = $this->jsonEncoder->encode([
+                $this->fileContentUploader->upload($linkContent->getSampleFile(), 'link_sample_file'),
+            ]);
         } elseif ($linkContent->getSampleType() == 'url') {
             $linkData['sample']['type'] = 'url';
             $linkData['sample']['url'] = $linkContent->getSampleUrl();
         }
 
-        $downloadableData = array('link' => array($linkData));
+        $downloadableData = ['link' => [$linkData]];
         $product->setDownloadableData($downloadableData);
         if ($isGlobalScopeContent) {
             $product->setStoreId(0);

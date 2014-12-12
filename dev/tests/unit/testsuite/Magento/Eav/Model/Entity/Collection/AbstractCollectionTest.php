@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Eav\Model\Entity\Collection;
 
@@ -77,49 +58,49 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->coreEntityFactoryMock = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
+        $this->coreEntityFactoryMock = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $this->loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
         $this->fetchStrategyMock = $this->getMock(
             'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->eventManagerMock = $this->getMock(
             'Magento\Framework\Event\ManagerInterface',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->configMock = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
+        $this->configMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->coreResourceMock = $this->getMock(
             'Magento\Framework\App\Resource',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->resourceHelperMock = $this->getMock('Magento\Eav\Model\Resource\Helper', array(), array(), '', false);
+        $this->resourceHelperMock = $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false);
         $this->validatorFactoryMock = $this->getMock(
             'Magento\Framework\Validator\UniversalFactory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->entityFactoryMock = $this->getMock('Magento\Eav\Model\EntityFactory', array(), array(), '', false);
+        $this->entityFactoryMock = $this->getMock('Magento\Eav\Model\EntityFactory', [], [], '', false);
         /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
-        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
+        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         /** @var $selectMock \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject */
-        $selectMock = $this->getMock('Zend_Db_Select', array(), array(), '', false);
+        $selectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
         $this->coreEntityFactoryMock->expects(
             $this->any()
         )->method(
             'create'
         )->will(
-            $this->returnCallback(array($this, 'getMagentoObject'))
+            $this->returnCallback([$this, 'getMagentoObject'])
         );
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
 
@@ -130,9 +111,9 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($connectionMock)
         );
-        $entityMock = $this->getMock('Magento\Eav\Model\Entity\AbstractEntity', array(), array(), '', false);
+        $entityMock = $this->getMock('Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
         $entityMock->expects($this->once())->method('getReadConnection')->will($this->returnValue($connectionMock));
-        $entityMock->expects($this->once())->method('getDefaultAttributes')->will($this->returnValue(array()));
+        $entityMock->expects($this->once())->method('getDefaultAttributes')->will($this->returnValue([]));
 
         $this->validatorFactoryMock->expects(
             $this->once()
@@ -208,11 +189,11 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function getItemsDataProvider()
     {
-        return array(
-            array('values' => array(array('id' => 1)), 'count' => 1),
-            array('values' => array(array('id' => 1), array('id' => 2)), 'count' => 2),
-            array('values' => array(array('id' => 2), array('id' => 3)), 'count' => 2)
-        );
+        return [
+            ['values' => [['id' => 1]], 'count' => 1],
+            ['values' => [['id' => 1], ['id' => 2]], 'count' => 2],
+            ['values' => [['id' => 2], ['id' => 3]], 'count' => 2]
+        ];
     }
 
     public function getMagentoObject()

@@ -1,36 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @spi
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Catalog\Test\Handler\Curl;
 
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Handler\Curl;
+use Mtf\System\Config;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
-use Mtf\System\Config;
 
 /**
  * Class CreateCategory.
@@ -48,7 +29,7 @@ class CreateCategory extends Curl
      */
     protected function _prepareData(array $fields, $prefix = null)
     {
-        $data = array();
+        $data = [];
         foreach ($fields as $key => $values) {
             $value = $this->_getValue($values);
             //do not add this data if value does not exist
@@ -89,7 +70,7 @@ class CreateCategory extends Curl
      */
     protected function _getUrl(array $config, $parentCategory)
     {
-        $requestParams = isset($config['request_params']) ? $config['request_params'] : array();
+        $requestParams = isset($config['request_params']) ? $config['request_params'] : [];
         $params = '';
         foreach ($requestParams as $key => $value) {
             $params .= $key . '/' . $value . '/';
@@ -114,7 +95,7 @@ class CreateCategory extends Curl
         $params = $this->_prepareData($fixture->getData('fields'), $prefix);
 
         $curl = new BackendDecorator(new CurlTransport(), new Config());
-        $curl->write(CurlInterface::POST, $url, '1.0', array(), $params);
+        $curl->write(CurlInterface::POST, $url, '1.0', [], $params);
         $response = $curl->read();
         $curl->close();
 

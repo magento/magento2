@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Framework\App\Config;
 
@@ -61,12 +42,12 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
         $this->_cache = $this->getMock('\Magento\Framework\Cache\FrontendInterface');
         $this->_object = $helper->getObject(
             '\Magento\Framework\App\Config\ScopePool',
-            array(
+            [
                 'readerPool' => $this->_readerPool,
                 'dataFactory' => $this->_dataFactory,
                 'cache' => $this->_cache,
                 'cacheId' => 'test_cache_id'
-            )
+            ]
         );
     }
 
@@ -103,7 +84,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
             )->with(
                 serialize($data),
                 $cacheKey,
-                array(\Magento\Framework\App\Config\ScopePool::CACHE_TAG)
+                [\Magento\Framework\App\Config\ScopePool::CACHE_TAG]
             );
         }
 
@@ -115,7 +96,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            array('data' => $data)
+            ['data' => $data]
         )->will(
             $this->returnValue($configData)
         );
@@ -135,11 +116,11 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
     {
         $baseScope = $this->getMockForAbstractClass('Magento\Framework\App\ScopeInterface');
         $baseScope->expects($this->any())->method('getCode')->will($this->returnValue('testScope'));
-        return array(
-            array('scopeType1', 'testScope', array('key' => 'value'), null),
-            array('scopeType2', 'testScope', array('key' => 'value'), serialize(array('key' => 'value'))),
-            array('scopeType1', $baseScope, array('key' => 'value'), null)
-        );
+        return [
+            ['scopeType1', 'testScope', ['key' => 'value'], null],
+            ['scopeType2', 'testScope', ['key' => 'value'], serialize(['key' => 'value'])],
+            ['scopeType1', $baseScope, ['key' => 'value'], null]
+        ];
     }
 
     public function testClean()
@@ -150,7 +131,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
             'clean'
         )->with(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-            array(\Magento\Framework\App\Config\ScopePool::CACHE_TAG)
+            [\Magento\Framework\App\Config\ScopePool::CACHE_TAG]
         );
         $this->_object->clean('testScope');
     }

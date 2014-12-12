@@ -1,32 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Email\Model;
 
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filter\Template as FilterTemplate;
-use Magento\Framework\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Template model
@@ -109,7 +90,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      *
      * @var array
      */
-    protected $_bcc = array();
+    protected $_bcc = [];
 
     /**
      * Return path
@@ -128,7 +109,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     /**
      * @var array
      */
-    protected $_vars = array();
+    protected $_vars = [];
 
     /**
      * @var \Exception|null
@@ -176,7 +157,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
@@ -199,7 +180,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
-        array $data = array()
+        array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_filesystem = $filesystem;
@@ -255,7 +236,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     {
         return $this->_assetRepo->getUrlWithParams(
             'Magento_Email::logo_email.gif',
-            array('area' => \Magento\Framework\App\Area::AREA_FRONTEND)
+            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND]
         );
     }
 
@@ -419,7 +400,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * @return string
      * @throws \Magento\Framework\Mail\Exception
      */
-    public function getProcessedTemplate(array $variables = array())
+    public function getProcessedTemplate(array $variables = [])
     {
         $processor = $this->getTemplateFilter();
         $processor->setUseSessionInUrl(false)->setPlainTemplateMode($this->isPlain());
@@ -439,7 +420,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
             $variables['logo_alt'] = $this->_getLogoAlt($processor->getStoreId());
         }
 
-        $processor->setIncludeProcessor(array($this, 'getInclude'))->setVariables($variables);
+        $processor->setIncludeProcessor([$this, 'getInclude'])->setVariables($variables);
 
         $this->_applyDesignConfig();
         $storeId = $this->getDesignConfig()->getStore();
@@ -567,7 +548,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      */
     protected function _parseVariablesString($variablesString)
     {
-        $variables = array();
+        $variables = [];
         if ($variablesString && is_string($variablesString)) {
             $variablesString = str_replace("\n", '', $variablesString);
             $variables = \Zend_Json::decode($variablesString);
@@ -583,14 +564,14 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      */
     public function getVariablesOptionArray($withGroup = false)
     {
-        $optionArray = array();
+        $optionArray = [];
         $variables = $this->_parseVariablesString($this->getData('orig_template_variables'));
         if ($variables) {
             foreach ($variables as $value => $label) {
-                $optionArray[] = array('value' => '{{' . $value . '}}', 'label' => __('%1', $label));
+                $optionArray[] = ['value' => '{{' . $value . '}}', 'label' => __('%1', $label)];
             }
             if ($withGroup) {
-                $optionArray = array('label' => __('Template Variables'), 'value' => $optionArray);
+                $optionArray = ['label' => __('Template Variables'), 'value' => $optionArray];
             }
         }
         return $optionArray;

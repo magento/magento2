@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -59,7 +40,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\Registry $coreRegistry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_productFactory = $productFactory;
         $this->_coreRegistry = $coreRegistry;
@@ -98,9 +79,9 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
                 $productIds = 0;
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('entity_id', array('in' => $productIds));
+                $this->getCollection()->addFieldToFilter('entity_id', ['in' => $productIds]);
             } elseif (!empty($productIds)) {
-                $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $productIds));
+                $this->getCollection()->addFieldToFilter('entity_id', ['nin' => $productIds]);
             }
         } else {
             parent::_addColumnFilterToCollection($column);
@@ -114,7 +95,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareCollection()
     {
         if ($this->getCategory()->getId()) {
-            $this->setDefaultFilter(array('in_category' => 1));
+            $this->setDefaultFilter(['in_category' => 1]);
         }
         $collection = $this->_productFactory->create()->getCollection()->addAttributeToSelect(
             'name'
@@ -139,7 +120,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             if (empty($productIds)) {
                 $productIds = 0;
             }
-            $this->getCollection()->addFieldToFilter('entity_id', array('in' => $productIds));
+            $this->getCollection()->addFieldToFilter('entity_id', ['in' => $productIds]);
         }
 
         return parent::_prepareCollection();
@@ -153,31 +134,31 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         if (!$this->getCategory()->getProductsReadonly()) {
             $this->addColumn(
                 'in_category',
-                array(
+                [
                     'type' => 'checkbox',
                     'name' => 'in_category',
                     'values' => $this->_getSelectedProducts(),
                     'index' => 'entity_id',
                     'header_css_class' => 'col-select col-massaction',
                     'column_css_class' => 'col-select col-massaction'
-                )
+                ]
             );
         }
         $this->addColumn(
             'entity_id',
-            array(
+            [
                 'header' => __('ID'),
                 'sortable' => true,
                 'index' => 'entity_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
-            )
+            ]
         );
-        $this->addColumn('name', array('header' => __('Name'), 'index' => 'name'));
-        $this->addColumn('sku', array('header' => __('SKU'), 'index' => 'sku'));
+        $this->addColumn('name', ['header' => __('Name'), 'index' => 'name']);
+        $this->addColumn('sku', ['header' => __('SKU'), 'index' => 'sku']);
         $this->addColumn(
             'price',
-            array(
+            [
                 'header' => __('Price'),
                 'type' => 'currency',
                 'currency_code' => (string)$this->_scopeConfig->getValue(
@@ -185,16 +166,16 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 ),
                 'index' => 'price'
-            )
+            ]
         );
         $this->addColumn(
             'position',
-            array(
+            [
                 'header' => __('Position'),
                 'type' => 'number',
                 'index' => 'position',
                 'editable' => !$this->getCategory()->getProductsReadonly()
-            )
+            ]
         );
 
         return parent::_prepareColumns();
@@ -205,7 +186,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('catalog/*/grid', array('_current' => true));
+        return $this->getUrl('catalog/*/grid', ['_current' => true]);
     }
 
     /**

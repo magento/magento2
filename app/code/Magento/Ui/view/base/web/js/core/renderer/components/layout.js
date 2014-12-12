@@ -1,24 +1,5 @@
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 define([
     'underscore',
@@ -68,6 +49,36 @@ define([
 
     function additional(node){
         return _.pick(node, 'name', 'index', 'dataScope');
+    }
+
+    function loadDeps(node){
+        var loaded = $.Deferred();
+
+        registry.get(node.deps, function(){
+            loaded.resolve(node);
+        });
+
+        return loaded.promise();
+    }
+
+    function loadSource(node){
+        var loaded = $.Deferred(),
+            source = node.component;
+
+        require([source], function(constr){
+            loaded.resolve(node, constr);
+        });
+
+        return loaded.promise();
+    }
+
+    function initComponent(node, constr){
+        var component = new constr(
+            node.config,
+            additional(node)
+        );
+
+        registry.set(node.name, component);
     }
 
     function Layout(nodes, types){
@@ -133,22 +144,13 @@ define([
         },
 
         initComponent: function(node){
-            var source = node.component,
-                component;
-
-            if(source){
-
-                registry.get(node.deps, function(){
-
-                    require([source], function(constr){
-
-                        registry.set(node.name, new constr(
-                            node.config,
-                            additional(node)
-                        ));
-                    });
-                });
+            if(!node.component){
+                return this;
             }
+
+            loadDeps(node)
+                .then(loadSource)
+                .done(initComponent);
 
             return this;
         }

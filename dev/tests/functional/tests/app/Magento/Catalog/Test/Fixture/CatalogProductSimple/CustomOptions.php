@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
@@ -174,10 +155,10 @@ class CustomOptions implements FixtureInterface
                             'title' => '30 bucks',
                             'price' => 30,
                             'price_type' => 'Fixed',
-                            'sku' => 'sku_drop_down_row_1'
-                        ]
-                    ]
-                ]
+                            'sku' => 'sku_drop_down_row_1',
+                        ],
+                    ],
+                ],
             ],
             'drop_down_with_one_option_percent_price' => [
                 [
@@ -189,10 +170,10 @@ class CustomOptions implements FixtureInterface
                             'title' => '40 bucks',
                             'price' => 40,
                             'price_type' => 'Percent',
-                            'sku' => 'sku_drop_down_row_1'
-                        ]
-                    ]
-                ]
+                            'sku' => 'sku_drop_down_row_1',
+                        ],
+                    ],
+                ],
             ],
             'options-suite' => [
                 [
@@ -204,9 +185,9 @@ class CustomOptions implements FixtureInterface
                             'price' => 120.03,
                             'price_type' => 'Fixed',
                             'sku' => 'sku1_%isolation%',
-                            'max_characters' => 45
-                        ]
-                    ]
+                            'max_characters' => 45,
+                        ],
+                    ],
                 ],
                 [
                     'title' => 'Test2 option %isolation%',
@@ -217,8 +198,8 @@ class CustomOptions implements FixtureInterface
                             'price' => 120.03,
                             'price_type' => 'Fixed',
                             'sku' => 'sku1_%isolation%',
-                            'max_characters' => 45
-                        ]
+                            'max_characters' => 45,
+                        ],
                     ]
                 ],
                 [
@@ -230,14 +211,14 @@ class CustomOptions implements FixtureInterface
                             'title' => 'Test1 %isolation%',
                             'price' => 110.01,
                             'price_type' => 'Percent',
-                            'sku' => 'sku2_%isolation%'
+                            'sku' => 'sku2_%isolation%',
                         ],
                         [
                             'title' => 'Test2 %isolation%',
                             'price' => 210.02,
                             'price_type' => 'Fixed',
                             'sku' => 'sku3_%isolation%'
-                        ]
+                        ],
                     ]
                 ],
                 [
@@ -249,16 +230,16 @@ class CustomOptions implements FixtureInterface
                             'title' => 'Test1 %isolation%',
                             'price' => 10.01,
                             'price_type' => 'Percent',
-                            'sku' => 'sku2_%isolation%'
+                            'sku' => 'sku2_%isolation%',
                         ],
                         [
                             'title' => 'Test2 %isolation%',
                             'price' => 20.02,
                             'price_type' => 'Fixed',
                             'sku' => 'sku3_%isolation%'
-                        ]
+                        ],
                     ]
-                ]
+                ],
             ],
             'default' => [
                 [
@@ -270,9 +251,9 @@ class CustomOptions implements FixtureInterface
                             'title' => '10 percent',
                             'price' => 10,
                             'price_type' => 'Percent',
-                            'sku' => 'sku_drop_down_row_1'
-                        ]
-                    ]
+                            'sku' => 'sku_drop_down_row_1',
+                        ],
+                    ],
                 ],
                 [
                     'title' => 'custom option drop down2 %isolation%',
@@ -283,10 +264,10 @@ class CustomOptions implements FixtureInterface
                             'title' => '20 percent',
                             'price' => 20,
                             'price_type' => 'Percent',
-                            'sku' => 'sku_drop_down_row_2'
-                        ]
+                            'sku' => 'sku_drop_down_row_2',
+                        ],
                     ]
-                ]
+                ],
             ],
             'two_options' => [
                 [
@@ -298,15 +279,15 @@ class CustomOptions implements FixtureInterface
                             'title' => '10 percent',
                             'price' => 10,
                             'price_type' => 'Percent',
-                            'sku' => 'sku_drop_down_row_1'
+                            'sku' => 'sku_drop_down_row_1',
                         ],
                         [
                             'title' => '20 percent',
                             'price' => 20,
                             'price_type' => 'Percent',
                             'sku' => 'sku_drop_down_row_2'
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 [
                     'title' => 'custom option field %isolation%',
@@ -317,10 +298,10 @@ class CustomOptions implements FixtureInterface
                             'price' => 10,
                             'price_type' => 'Fixed',
                             'sku' => 'sku_field_option_%isolation%',
-                            'max_characters' => 1024
-                        ]
+                            'max_characters' => 1024,
+                        ],
                     ]
-                ]
+                ],
             ],
             'all_types' => [
                 [
@@ -332,9 +313,9 @@ class CustomOptions implements FixtureInterface
                             'price' => 10,
                             'price_type' => 'Fixed',
                             'sku' => 'sku_field_option_%isolation%',
-                            'max_characters' => 1024
-                        ]
-                    ]
+                            'max_characters' => 1024,
+                        ],
+                    ],
                 ],
                 [
                     'title' => 'custom option Area %isolation%',
@@ -345,8 +326,8 @@ class CustomOptions implements FixtureInterface
                             'price' => 10,
                             'price_type' => 'Fixed',
                             'sku' => 'sku_area_row_%isolation%',
-                            'max_characters' => '10'
-                        ]
+                            'max_characters' => '10',
+                        ],
                     ]
                 ],
                 [
@@ -360,8 +341,8 @@ class CustomOptions implements FixtureInterface
                             'sku' => 'sku_file_row_%isolation%',
                             'file_extension' => 'jpg',
                             'image_size_x' => '100',
-                            'image_size_y' => '100'
-                        ]
+                            'image_size_y' => '100',
+                        ],
                     ]
                 ],
                 [
@@ -373,7 +354,7 @@ class CustomOptions implements FixtureInterface
                             'title' => '10 percent',
                             'price' => 10,
                             'price_type' => 'Percent',
-                            'sku' => 'sku_drop_down_row_1_%isolation%'
+                            'sku' => 'sku_drop_down_row_1_%isolation%',
                         ],
                         [
                             'title' => '20 percent',
@@ -386,7 +367,7 @@ class CustomOptions implements FixtureInterface
                             'price' => 30,
                             'price_type' => 'Fixed',
                             'sku' => 'sku_drop_down_row_3_%isolation%'
-                        ]
+                        ],
                     ]
                 ],
                 [
@@ -398,8 +379,8 @@ class CustomOptions implements FixtureInterface
                             'title' => '20 fixed',
                             'price' => 20,
                             'price_type' => 'Fixed',
-                            'sku' => 'sku_radio_buttons_row%isolation%'
-                        ]
+                            'sku' => 'sku_radio_buttons_row%isolation%',
+                        ],
                     ]
                 ],
                 [
@@ -411,8 +392,8 @@ class CustomOptions implements FixtureInterface
                             'title' => '20 fixed',
                             'price' => 20,
                             'price_type' => 'Fixed',
-                            'sku' => 'sku_checkbox_row%isolation%'
-                        ]
+                            'sku' => 'sku_checkbox_row%isolation%',
+                        ],
                     ]
                 ],
                 [
@@ -424,8 +405,8 @@ class CustomOptions implements FixtureInterface
                             'title' => '20 fixed',
                             'price' => 20,
                             'price_type' => 'Fixed',
-                            'sku' => 'sku_multiple_select_row%isolation%'
-                        ]
+                            'sku' => 'sku_multiple_select_row%isolation%',
+                        ],
                     ]
                 ],
                 [
@@ -436,8 +417,8 @@ class CustomOptions implements FixtureInterface
                         [
                             'price' => 20,
                             'price_type' => 'Fixed',
-                            'sku' => 'sku_date_row%isolation%'
-                        ]
+                            'sku' => 'sku_date_row%isolation%',
+                        ],
                     ]
                 ],
                 [
@@ -448,8 +429,8 @@ class CustomOptions implements FixtureInterface
                         [
                             'price' => 20,
                             'price_type' => 'Fixed',
-                            'sku' => 'sku_date_and_time_row%isolation%'
-                        ]
+                            'sku' => 'sku_date_and_time_row%isolation%',
+                        ],
                     ]
                 ],
                 [
@@ -460,11 +441,11 @@ class CustomOptions implements FixtureInterface
                         [
                             'price' => 20,
                             'price_type' => 'Fixed',
-                            'sku' => 'sku_time_row%isolation%'
-                        ]
+                            'sku' => 'sku_time_row%isolation%',
+                        ],
                     ]
-                ]
-            ]
+                ],
+            ],
         ];
         if (!isset($presets[$name])) {
             return null;

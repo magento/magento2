@@ -1,39 +1,20 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Bundle\Pricing\Adjustment;
 
-use Magento\Catalog\Model\Product;
-use Magento\Framework\Pricing\Object\SaleableInterface;
-use Magento\Framework\Pricing\Amount\AmountFactory;
-use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
-use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
+use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
+use Magento\Framework\Pricing\Amount\AmountFactory;
+use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Store\Model\Store;
+use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
@@ -115,7 +96,6 @@ class Calculator implements BundleCalculatorInterface
     {
         return $this->getOptionsAmount($saleableItem, $exclude, true, $amount, true);
     }
-
 
     /**
      * Get amount for current product which is included price of existing options with maximal price
@@ -213,9 +193,11 @@ class Calculator implements BundleCalculatorInterface
             $selectionPriceList = $this->createSelectionPriceList($option, $bundleProduct, $useRegularPrice);
             $selectionPriceList = $this->processOptions($option, $selectionPriceList, $searchMin);
 
-            $lastValue = end($selectionPriceList)->getAmount()->getValue();
+            $lastSelectionPrice = end($selectionPriceList);
+            $lastValue = $lastSelectionPrice->getAmount()->getValue() * $lastSelectionPrice->getQuantity();
             if ($shouldFindMinOption
-                && (!$currentPrice || $lastValue < $currentPrice->getAmount()->getValue())
+                && (!$currentPrice ||
+                    $lastValue < ($currentPrice->getAmount()->getValue() * $currentPrice->getQuantity()))
             ) {
                 $currentPrice = end($selectionPriceList);
             } elseif (!$shouldFindMinOption) {
@@ -299,7 +281,7 @@ class Calculator implements BundleCalculatorInterface
         $fullAmount = $basePriceValue;
         /** @var $option \Magento\Bundle\Model\Option */
         foreach ($selectionPriceList as $selectionPrice) {
-            $fullAmount += $selectionPrice->getValue();
+            $fullAmount += ($selectionPrice->getValue() * $selectionPrice->getQuantity());
         }
         return $this->calculator->getAmount($fullAmount, $bundleProduct, $exclude);
     }
@@ -317,29 +299,39 @@ class Calculator implements BundleCalculatorInterface
     {
         $fullAmount = 0.;
         $adjustments = [];
-        $amountList = [$this->calculator->getAmount($basePriceValue, $bundleProduct, $exclude)];
-        /** @var $option \Magento\Bundle\Model\Option */
+        $i = 0;
+
+        $amountList[$i]['amount'] = $this->calculator->getAmount($basePriceValue, $bundleProduct, $exclude);
+        $amountList[$i]['quantity'] = 1;
+
         foreach ($selectionPriceList as $selectionPrice) {
-            $amountList[] = $selectionPrice->getAmount();
+            ++$i;
+            $amountList[$i]['amount'] = $selectionPrice->getAmount();
+            // always honor the quantity given
+            $amountList[$i]['quantity'] = $selectionPrice->getQuantity();
         }
+
         /** @var  Store $store */
         $store = $bundleProduct->getStore();
         $roundingMethod = $this->taxHelper->getCalculationAgorithm($store);
-        /** @var \Magento\Framework\Pricing\Amount\AmountInterface $itemAmount */
-        foreach ($amountList as $itemAmount) {
+        foreach ($amountList as $amountInfo) {
+            /** @var \Magento\Framework\Pricing\Amount\AmountInterface $itemAmount */
+            $itemAmount = $amountInfo['amount'];
+            $qty = $amountInfo['quantity'];
+
             if ($roundingMethod != TaxCalculationInterface::CALC_TOTAL_BASE) {
                 //We need to round the individual selection first
-                $fullAmount += $this->priceCurrency->round($itemAmount->getValue());
+                $fullAmount += ($this->priceCurrency->round($itemAmount->getValue()) * $qty);
                 foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
-                    $adjustment = $this->priceCurrency->round($adjustment);
+                    $adjustment = $this->priceCurrency->round($adjustment) * $qty;
                     $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
                 }
             } else {
-                $fullAmount += $itemAmount->getValue();
+                $fullAmount += ($itemAmount->getValue() * $qty);
                 foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
+                    $adjustment = $adjustment * $qty;
                     $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
                 }
-
             }
         }
         if ($exclude && isset($adjustments[$exclude])) {
@@ -394,18 +386,23 @@ class Calculator implements BundleCalculatorInterface
     {
         $result = [];
         foreach ($selectionPriceList as $current) {
-            $currentValue = $current->getAmount()->getValue();
+            $qty = $current->getQuantity();
+            $currentValue = $current->getAmount()->getValue() * $qty;
             if (empty($result)) {
                 $result = [$current];
-            } elseif ($searchMin && end($result)->getAmount()->getValue() > $currentValue) {
-                $result = [$current];
-            } elseif (!$searchMin && $option->isMultiSelection()) {
-                $result[] = $current;
-            } elseif (!$searchMin
-                && !$option->isMultiSelection()
-                && end($result)->getAmount()->getValue() < $currentValue
-            ) {
-                $result = [$current];
+            } else {
+                $lastSelectionPrice = end($result);
+                $lastValue = $lastSelectionPrice->getAmount()->getValue() * $lastSelectionPrice->getQuantity();
+                if ($searchMin && $lastValue > $currentValue) {
+                    $result = [$current];
+                } elseif (!$searchMin && $option->isMultiSelection()) {
+                    $result[] = $current;
+                } elseif (!$searchMin
+                    && !$option->isMultiSelection()
+                    && $lastValue < $currentValue
+                ) {
+                    $result = [$current];
+                }
             }
         }
         return $result;

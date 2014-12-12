@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\View\Layout;
 
@@ -36,43 +17,43 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $_scheduledData = array();
+    protected $_scheduledData = [];
 
     protected function setUp()
     {
-        $this->_scheduledData = array(
-            'scheduledStructure' => array(
-                'element1' => array('data', 'of', 'element', '1'),
-                'element2' => array('data', 'of', 'element', '2'),
-                'element3' => array('data', 'of', 'element', '3'),
-                'element4' => array('data', 'of', 'element', '4'),
-                'element5' => array('data', 'of', 'element', '5')
-            ),
-            'scheduledElements' => array(
-                'element1' => array('data', 'of', 'element', '1'),
-                'element2' => array('data', 'of', 'element', '2'),
-                'element3' => array('data', 'of', 'element', '3'),
-                'element4' => array('data', 'of', 'element', '4'),
-                'element5' => array('data', 'of', 'element', '5')
-            ),
-            'scheduledMoves' => array(
-                'element1' => array('data', 'of', 'element', 'to', 'move', '1'),
-                'element4' => array('data', 'of', 'element', 'to', 'move', '4'),
-                'element6' => array('data', 'of', 'element', 'to', 'move', '6')
-            ),
-            'scheduledRemoves' => array(
-                'element2' => array('data', 'of', 'element', 'to', 'remove', '2'),
-                'element3' => array('data', 'of', 'element', 'to', 'remove', '3'),
-                'element6' => array('data', 'of', 'element', 'to', 'remove', '6'),
-                'element7' => array('data', 'of', 'element', 'to', 'remove', '7')
-            ),
-            'scheduledPaths' => array(
+        $this->_scheduledData = [
+            'scheduledStructure' => [
+                'element1' => ['data', 'of', 'element', '1'],
+                'element2' => ['data', 'of', 'element', '2'],
+                'element3' => ['data', 'of', 'element', '3'],
+                'element4' => ['data', 'of', 'element', '4'],
+                'element5' => ['data', 'of', 'element', '5'],
+            ],
+            'scheduledElements' => [
+                'element1' => ['data', 'of', 'element', '1'],
+                'element2' => ['data', 'of', 'element', '2'],
+                'element3' => ['data', 'of', 'element', '3'],
+                'element4' => ['data', 'of', 'element', '4'],
+                'element5' => ['data', 'of', 'element', '5'],
+            ],
+            'scheduledMoves' => [
+                'element1' => ['data', 'of', 'element', 'to', 'move', '1'],
+                'element4' => ['data', 'of', 'element', 'to', 'move', '4'],
+                'element6' => ['data', 'of', 'element', 'to', 'move', '6'],
+            ],
+            'scheduledRemoves' => [
+                'element2' => ['data', 'of', 'element', 'to', 'remove', '2'],
+                'element3' => ['data', 'of', 'element', 'to', 'remove', '3'],
+                'element6' => ['data', 'of', 'element', 'to', 'remove', '6'],
+                'element7' => ['data', 'of', 'element', 'to', 'remove', '7'],
+            ],
+            'scheduledPaths' => [
                 'path1' => 'path 1',
                 'path2' => 'path 2',
                 'path3' => 'path 3',
-                'path4' => 'path 4'
-            )
-        );
+                'path4' => 'path 4',
+            ],
+        ];
         $this->_model = new \Magento\Framework\View\Layout\ScheduledStructure($this->_scheduledData);
     }
 
@@ -84,7 +65,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         /**
          * Only elements that are present in elements list and specified in list to move can be moved
          */
-        $expected = array('element1', 'element4');
+        $expected = ['element1', 'element4'];
         $this->assertEquals($expected, $this->_model->getListToMove());
     }
 
@@ -96,7 +77,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         /**
          * Only elements that are present in elements list and specified in list to remove can be removed
          */
-        $expected = array('element2', 'element3');
+        $expected = ['element2', 'element3'];
         $this->assertEquals($expected, $this->_model->getListToRemove());
     }
 
@@ -116,7 +97,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $expected = $this->_scheduledData['scheduledElements']['element2'];
         $this->assertEquals($expected, $this->_model->getElement('element2'));
 
-        $default = array('some', 'default', 'value');
+        $default = ['some', 'default', 'value'];
         $this->assertEquals($default, $this->_model->getElement('not_existing_element', $default));
     }
 
@@ -135,7 +116,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetElement()
     {
-        $data = array('some', 'new', 'data');
+        $data = ['some', 'new', 'data'];
 
         /** Test add new element */
         $this->assertFalse($this->_model->hasElement('new_element'));
@@ -176,7 +157,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
             $this->_scheduledData['scheduledMoves']['element1'],
             $this->_model->getElementToMove('element1')
         );
-        $default = array('some', 'data');
+        $default = ['some', 'data'];
         $this->assertEquals($default, $this->_model->getElementToMove('not_existing_element', $default));
     }
 
@@ -185,7 +166,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetElementToMove()
     {
-        $data = array('some', 'new', 'data', 'element', 'to', 'move');
+        $data = ['some', 'new', 'data', 'element', 'to', 'move'];
 
         /** Test add new element */
         $this->assertFalse($this->_model->hasElement('new_element'));
@@ -234,7 +215,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
         $expected = $this->_scheduledData['scheduledStructure']['element2'];
         $this->assertEquals($expected, $this->_model->getStructureElement('element2'));
 
-        $default = array('some', 'default', 'value');
+        $default = ['some', 'default', 'value'];
         $this->assertEquals($default, $this->_model->getStructureElement('not_existing_element', $default));
     }
 
@@ -262,7 +243,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetStructureElement()
     {
-        $data = array('some', 'new', 'data', 'structure', 'element');
+        $data = ['some', 'new', 'data', 'structure', 'element'];
 
         /** Test add new structure element */
         $this->assertFalse($this->_model->hasStructureElement('new_element'));
@@ -299,7 +280,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
     public function testGetPath()
     {
         $this->assertEquals($this->_scheduledData['scheduledPaths']['path1'], $this->_model->getPath('path1'));
-        $default = array('some', 'data');
+        $default = ['some', 'data'];
         $this->assertEquals($default, $this->_model->getPath('not_existing_element', $default));
     }
 
@@ -317,7 +298,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetPathElement()
     {
-        $data = array('some', 'new', 'data', 'path');
+        $data = ['some', 'new', 'data', 'path'];
 
         /** Test add new structure element */
         $this->assertFalse($this->_model->hasPath('new_element'));

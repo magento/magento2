@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -61,13 +42,13 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_gridMock = $this->getMock('Magento\Backend\Block\Widget\Grid', array('getId'), array(), '', false);
+        $this->_gridMock = $this->getMock('Magento\Backend\Block\Widget\Grid', ['getId'], [], '', false);
         $this->_gridMock->expects($this->any())->method('getId')->will($this->returnValue('test_grid'));
 
         $this->_layoutMock = $this->getMock(
             'Magento\Framework\View\Layout',
-            array('getParentName', 'getBlock', 'helper'),
-            array(),
+            ['getParentName', 'getBlock', 'helper'],
+            [],
             '',
             false,
             false
@@ -92,16 +73,16 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_gridMock)
         );
 
-        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
+        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
 
-        $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false);
+        $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
 
-        $arguments = array(
+        $arguments = [
             'layout' => $this->_layoutMock,
             'request' => $this->_requestMock,
             'urlBuilder' => $this->_urlModelMock,
-            'data' => array('massaction_id_field' => 'test_id', 'massaction_id_filter' => 'test_id')
-        );
+            'data' => ['massaction_id_field' => 'test_id', 'massaction_id_filter' => 'test_id'],
+        ];
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\Massaction', $arguments);
@@ -140,7 +121,6 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testItemsProcessing($itemId, $item, $expectedItem)
     {
-
         $this->_urlModelMock->expects(
             $this->any()
         )->method(
@@ -149,10 +129,10 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('http://localhost/index.php')
         );
 
-        $urlReturnValueMap = array(
-            array('*/*/test1', array(), 'http://localhost/index.php/backend/admin/test/test1'),
-            array('*/*/test2', array(), 'http://localhost/index.php/backend/admin/test/test2')
-        );
+        $urlReturnValueMap = [
+            ['*/*/test1', [], 'http://localhost/index.php/backend/admin/test/test1'],
+            ['*/*/test2', [], 'http://localhost/index.php/backend/admin/test/test2'],
+        ];
         $this->_urlModelMock->expects($this->any())->method('getUrl')->will($this->returnValueMap($urlReturnValueMap));
 
         $this->_block->addItem($itemId, $item);
@@ -169,30 +149,30 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
 
     public function itemsDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'test_id1',
-                array("label" => "Test Item One", "url" => "*/*/test1"),
+                ["label" => "Test Item One", "url" => "*/*/test1"],
                 new \Magento\Framework\Object(
-                    array(
+                    [
                         "label" => "Test Item One",
                         "url" => "http://localhost/index.php/backend/admin/test/test1",
-                        "id" => 'test_id1'
-                    )
-                )
-            ),
-            array(
+                        "id" => 'test_id1',
+                    ]
+                ),
+            ],
+            [
                 'test_id2',
-                new \Magento\Framework\Object(array("label" => "Test Item Two", "url" => "*/*/test2")),
+                new \Magento\Framework\Object(["label" => "Test Item Two", "url" => "*/*/test2"]),
                 new \Magento\Framework\Object(
-                    array(
+                    [
                         "label" => "Test Item Two",
                         "url" => "http://localhost/index.php/backend/admin/test/test2",
-                        "id" => 'test_id2'
-                    )
+                        "id" => 'test_id2',
+                    ]
                 )
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -219,10 +199,10 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
 
     public function selectedDataProvider()
     {
-        return array(
-            array('', '', array()),
-            array('test_id1,test_id2', 'test_id1,test_id2', array('test_id1', 'test_id2'))
-        );
+        return [
+            ['', '', []],
+            ['test_id1,test_id2', 'test_id1,test_id2', ['test_id1', 'test_id2']]
+        ];
     }
 
     public function testUseSelectAll()

@@ -1,31 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Block\Order\Item\Renderer;
 
-use Magento\Sales\Model\Order\Item as OrderItem;
-use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
+use Magento\Sales\Model\Order\Item as OrderItem;
 
 /**
  * Order item render block
@@ -54,7 +35,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->string = $string;
         $this->_productOptionFactory = $productOptionFactory;
@@ -106,7 +87,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      */
     public function getItemOptions()
     {
-        $result = array();
+        $result = [];
         $options = $this->getOrderItem()->getProductOptions();
         if ($options) {
             if (isset($options['options'])) {
@@ -144,7 +125,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      */
     public function getFormatedOptionValue($optionValue)
     {
-        $optionInfo = array();
+        $optionInfo = [];
 
         // define input data format
         if (is_array($optionValue)) {
@@ -160,11 +141,11 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
 
         // render customized option view
         if (isset($optionInfo['custom_view']) && $optionInfo['custom_view']) {
-            $_default = array('value' => $optionValue);
+            $_default = ['value' => $optionValue];
             if (isset($optionInfo['option_type'])) {
                 try {
                     $group = $this->_productOptionFactory->create()->groupFactory($optionInfo['option_type']);
-                    return array('value' => $group->getCustomizedView($optionInfo));
+                    return ['value' => $group->getCustomizedView($optionInfo)];
                 } catch (\Exception $e) {
                     return $_default;
                 }
@@ -173,22 +154,22 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
         }
 
         // truncate standard view
-        $result = array();
+        $result = [];
         if (is_array($optionValue)) {
             $truncatedValue = implode("\n", $optionValue);
             $truncatedValue = nl2br($truncatedValue);
-            return array('value' => $truncatedValue);
+            return ['value' => $truncatedValue];
         } else {
-            $truncatedValue = $this->filterManager->truncate($optionValue, array('length' => 55, 'etc' => ''));
+            $truncatedValue = $this->filterManager->truncate($optionValue, ['length' => 55, 'etc' => '']);
             $truncatedValue = nl2br($truncatedValue);
         }
 
-        $result = array('value' => $truncatedValue);
+        $result = ['value' => $truncatedValue];
 
         if ($this->string->strlen($optionValue) > 55) {
             $result['value'] = $result['value'] . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
             $optionValue = nl2br($optionValue);
-            $result = array_merge($result, array('full_view' => $optionValue));
+            $result = array_merge($result, ['full_view' => $optionValue]);
         }
 
         return $result;

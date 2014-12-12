@@ -2,26 +2,7 @@
 /**
  * Represents a Field Element on the UI that can be configured via xml.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Model\Config\Structure\Element;
 
@@ -67,7 +48,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
     protected $_blockFactory;
 
     /**
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\BackendFactory $backendFactory
      * @param \Magento\Backend\Model\Config\SourceFactory $sourceFactory
      * @param \Magento\Backend\Model\Config\CommentFactory $commentFactory
@@ -75,7 +56,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
      */
     public function __construct(
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\BackendFactory $backendFactory,
         \Magento\Backend\Model\Config\SourceFactory $sourceFactory,
         \Magento\Backend\Model\Config\CommentFactory $commentFactory,
@@ -172,7 +153,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
      */
     protected function _getRequiredElements($fieldPrefix = '', $elementType = 'group')
     {
-        $elements = array();
+        $elements = [];
         if (isset($this->_data['requires'][$elementType])) {
             if (isset($this->_data['requires'][$elementType]['id'])) {
                 $elements[] = $this->_getPath($this->_data['requires'][$elementType]['id'], $fieldPrefix);
@@ -306,7 +287,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
      */
     public function populateInput($formField)
     {
-        $originalData = array();
+        $originalData = [];
         foreach ($this->_data as $key => $value) {
             if (!is_array($value)) {
                 $originalData[$key] = $value;
@@ -376,12 +357,12 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
             $sourceModel = $this->_data['source_model'];
             $optionArray = $this->_getOptionsFromSourceModel($sourceModel);
             return $optionArray;
-        } else if (isset($this->_data['options']) && isset($this->_data['options']['option'])) {
+        } elseif (isset($this->_data['options']) && isset($this->_data['options']['option'])) {
             $options = $this->_data['options']['option'];
             $options = $this->_getStaticOptions($options);
             return $options;
         }
-        return array();
+        return [];
     }
 
     /**
@@ -446,12 +427,12 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
             if ($this->getType() == 'multiselect') {
                 $optionArray = $sourceModel->{$method}();
             } else {
-                $optionArray = array();
+                $optionArray = [];
                 foreach ($sourceModel->{$method}() as $key => $value) {
                     if (is_array($value)) {
                         $optionArray[] = $value;
                     } else {
-                        $optionArray[] = array('label' => $value, 'value' => $key);
+                        $optionArray[] = ['label' => $value, 'value' => $key];
                     }
                 }
             }
@@ -470,7 +451,7 @@ class Field extends \Magento\Backend\Model\Config\Structure\AbstractElement
      */
     public function getDependencies($fieldPrefix, $storeCode)
     {
-        $dependencies = array();
+        $dependencies = [];
         if (false == isset($this->_data['depends']['fields'])) {
             return $dependencies;
         }

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ProductAlert\Model;
 
@@ -62,14 +43,14 @@ class Email extends \Magento\Framework\Model\AbstractModel
      *
      * @var array
      */
-    protected $_priceProducts = array();
+    protected $_priceProducts = [];
 
     /**
      * Product collection which of back in stock
      *
      * @var array
      */
-    protected $_stockProducts = array();
+    protected $_stockProducts = [];
 
     /**
      * Price block
@@ -100,7 +81,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -129,7 +110,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\ProductAlert\Helper\Data $productAlertData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Helper\View $customerHelper
      * @param \Magento\Core\Model\App\Emulation $appEmulation
@@ -143,14 +124,14 @@ class Email extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\ProductAlert\Helper\Data $productAlertData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Helper\View $customerHelper,
         \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_productAlertData = $productAlertData;
         $this->_scopeConfig = $scopeConfig;
@@ -239,8 +220,8 @@ class Email extends \Magento\Framework\Model\AbstractModel
     public function clean()
     {
         $this->_customer = null;
-        $this->_priceProducts = array();
-        $this->_stockProducts = array();
+        $this->_priceProducts = [];
+        $this->_stockProducts = [];
 
         return $this;
     }
@@ -370,19 +351,19 @@ class Email extends \Magento\Framework\Model\AbstractModel
 
         $alertGrid = $this->_appState->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_FRONTEND,
-            array($block, 'toHtml')
+            [$block, 'toHtml']
         );
         $this->_appEmulation->stopEnvironmentEmulation();
 
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $templateId
         )->setTemplateOptions(
-            array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
+            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
-            array(
+            [
                 'customerName' => $this->_customerHelper->getCustomerName($this->_customer),
-                'alertGrid' => $alertGrid
-            )
+                'alertGrid' => $alertGrid,
+            ]
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_IDENTITY,

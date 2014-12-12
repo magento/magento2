@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\ImportExport\Model\Export\Config;
 
@@ -34,7 +15,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $output = array('entities' => array(), 'fileFormats' => array());
+        $output = ['entities' => [], 'fileFormats' => []];
         /** @var \DOMNodeList $entities */
         $entities = $source->getElementsByTagName('entity');
         /** @var \DOMNode $entityConfig */
@@ -45,13 +26,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $model = $attributes->getNamedItem('model')->nodeValue;
             $entityAttributeFilterType = $attributes->getNamedItem('entityAttributeFilterType')->nodeValue;
 
-            $output['entities'][$name] = array(
+            $output['entities'][$name] = [
                 'name' => $name,
                 'label' => $label,
                 'model' => $model,
                 'types' => [],
-                'entityAttributeFilterType' => $entityAttributeFilterType
-            );
+                'entityAttributeFilterType' => $entityAttributeFilterType,
+            ];
         }
 
         /** @var \DOMNodeList $entityTypes */
@@ -64,7 +45,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $entity = $attributes->getNamedItem('entity')->nodeValue;
 
             if (isset($output['entities'][$entity])) {
-                $output['entities'][$entity]['types'][$name] = array('name' => $name, 'model' => $model);
+                $output['entities'][$entity]['types'][$name] = ['name' => $name, 'model' => $model];
             }
         }
 
@@ -77,7 +58,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $model = $attributes->getNamedItem('model')->nodeValue;
             $label = $attributes->getNamedItem('label')->nodeValue;
 
-            $output['fileFormats'][$name] = array('name' => $name, 'model' => $model, 'label' => $label);
+            $output['fileFormats'][$name] = ['name' => $name, 'model' => $model, 'label' => $label];
         }
         return $output;
     }

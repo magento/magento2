@@ -1,28 +1,8 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Tools\Migration\Acl;
-
 
 require_once realpath(__DIR__ . '/../../../../../../../') . '/tools/Magento/Tools/Migration/Acl/Generator.php';
 require_once realpath(__DIR__ . '/../../../../../../../') . '/tools/Magento/Tools/Migration/Acl/FileManager.php';
@@ -47,7 +27,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_adminhtmlFiles = array();
+    protected $_adminhtmlFiles = [];
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -70,12 +50,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $prefix = $this->_fixturePath . '/app/code/';
         $suffix = '/etc/adminhtml.xml';
 
-        $this->_adminhtmlFiles = array(
+        $this->_adminhtmlFiles = [
             $prefix . 'local/Namespace/Module' . $suffix,
             $prefix . 'community/Namespace/Module' . $suffix,
             $prefix . 'core/ANamespace/Module' . $suffix,
-            $prefix . 'core/BNamespace/Module' . $suffix
-        );
+            $prefix . 'core/BNamespace/Module' . $suffix,
+        ];
 
         $this->_model->setAdminhtmlFiles($this->_adminhtmlFiles);
 
@@ -98,16 +78,16 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function getModuleNameDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'filePath' => '/app/code/core/ANamespace/ModuleOne/etc/adminhtml.xml',
-                'moduleName' => 'ANamespace_ModuleOne'
-            ),
-            array(
+                'moduleName' => 'ANamespace_ModuleOne',
+            ],
+            [
                 'filePath' => '/app/code/core/BNamespace/ModuleOne/etc/adminhtml.xml',
                 'moduleName' => 'BNamespace_ModuleOne'
-            )
-        );
+            ]
+        ];
     }
 
     public function testIsForwardedNode()
@@ -118,7 +98,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testIsMetaNode()
     {
-        $metaNodes = array('meta_one' => 'MetaOne', 'meta_two' => 'MetaTwo');
+        $metaNodes = ['meta_one' => 'MetaOne', 'meta_two' => 'MetaTwo'];
         $this->_model->setMetaNodeNames($metaNodes);
         $this->assertEquals($metaNodes, $this->_model->getMetaNodeNames());
 
@@ -150,10 +130,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function getEtcPatternDataProvider()
     {
-        return array(
-            array('expectedPath' => '/app/code/*/*/*/etc/', 'codePool' => '*', 'namespace' => '*'),
-            array('expectedPath' => '/app/code/core/Magento/*/etc/', 'codePool' => 'core', 'namespace' => 'Magento')
-        );
+        return [
+            ['expectedPath' => '/app/code/*/*/*/etc/', 'codePool' => '*', 'namespace' => '*'],
+            ['expectedPath' => '/app/code/core/Magento/*/etc/', 'codePool' => 'core', 'namespace' => 'Magento']
+        ];
     }
 
     public function testCreateNode()
@@ -173,7 +153,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMetaInfo()
     {
-        $metaNodeName = array('sort_order' => 'test_SortOrder', 'title' => 'test_Title');
+        $metaNodeName = ['sort_order' => 'test_SortOrder', 'title' => 'test_Title'];
         $this->_model->setMetaNodeNames($metaNodeName);
 
         $dom = new \DOMDocument();
@@ -191,7 +171,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(100, $parent->getAttribute('test_SortOrder'), 'Incorrect set of sort order');
         $this->assertEquals('TestTitle', $parent->getAttribute('test_Title'), 'Incorrect set of title');
-        $maps = array('root' => 'Module_Name::root_id');
+        $maps = ['root' => 'Module_Name::root_id'];
         $this->assertEquals($maps, $this->_model->getAclResourceMaps()); //test setting of id maps
     }
 
@@ -287,12 +267,12 @@ TEMPLATE;
         $dom->load($fileActual);
         $rootNode = $dom->getElementsByTagName('resources')->item(0);
 
-        $aclResourcesMaps = array(
+        $aclResourcesMaps = [
             '/admin' => 'Map_Module::admin',
             '/admin/customer/manage' => 'Map_Module::manage',
             '/admin/system' => 'Map_Module::system',
-            '/admin/system/config' => 'Map_Module::config'
-        );
+            '/admin/system/config' => 'Map_Module::config',
+        ];
 
         $this->_model->setAclResourceMaps($aclResourcesMaps);
         $this->_model->updateChildAclNodes($rootNode);

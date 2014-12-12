@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\TestFramework\Listener;
 
@@ -43,7 +24,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit_Framework
     /**
      * @var array
      */
-    protected $tests = array();
+    protected $tests = [];
 
     /**
      * @var integer
@@ -211,7 +192,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit_Framework
                 $this->startClass($class);
 
                 $this->testClass = $class;
-                $this->tests = array();
+                $this->tests = [];
             }
             $this->write('.');
             $this->currentTestMethodPrettified = $this->prettifier->prettifyTestMethod($test->getName(false));
@@ -230,7 +211,7 @@ class ExtededTestdox extends \PHPUnit_Util_Printer implements \PHPUnit_Framework
     {
         if ($test instanceof $this->testTypeOfInterest) {
             if (!isset($this->tests[$this->currentTestMethodPrettified])) {
-                $this->tests[$this->currentTestMethodPrettified] = array('success' => 0, 'failure' => 0, 'time' => 0);
+                $this->tests[$this->currentTestMethodPrettified] = ['success' => 0, 'failure' => 0, 'time' => 0];
             }
 
             if ($this->testStatus == \PHPUnit_Runner_BaseTestRunner::STATUS_PASSED) {

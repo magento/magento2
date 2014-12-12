@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Block\Widget;
 
@@ -39,12 +20,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         )->createBlock(
             'Magento\Backend\Block\Widget\Container',
             '',
-            array(
-                'data' => array(
+            [
+                'data' => [
                     \Magento\Backend\Block\Widget\Container::PARAM_CONTROLLER => 'one',
-                    \Magento\Backend\Block\Widget\Container::PARAM_HEADER_TEXT => 'two'
-                )
-            )
+                    \Magento\Backend\Block\Widget\Container::PARAM_HEADER_TEXT => 'two',
+                ]
+            ]
         );
         $this->assertStringEndsWith('one', $block->getHeaderCssClass());
         $this->assertContains('two', $block->getHeaderText());
@@ -55,7 +36,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetButtonsHtml()
     {
-        $titles = array(1 => 'Title 1', 'Title 2', 'Title 3');
+        $titles = [1 => 'Title 1', 'Title 2', 'Title 3'];
         $block = $this->_buildBlock($titles);
         $html = $block->getButtonsHtml('header');
 
@@ -70,8 +51,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateButton()
     {
-        $originalTitles = array(1 => 'Title 1', 'Title 2', 'Title 3');
-        $newTitles = array(1 => 'Button A', 'Button B', 'Button C');
+        $originalTitles = [1 => 'Title 1', 'Title 2', 'Title 3'];
+        $newTitles = [1 => 'Button A', 'Button B', 'Button C'];
 
         $block = $this->_buildBlock($originalTitles);
         foreach ($newTitles as $id => $newTitle) {
@@ -99,7 +80,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         /** @var $block \Magento\Backend\Block\Widget\Container */
         $block = $layout->createBlock('Magento\Backend\Block\Widget\Container', $blockName);
         foreach ($titles as $id => $title) {
-            $block->addButton($id, array('title' => $title), 0, 0, 'header');
+            $block->addButton($id, ['title' => $title], 0, 0, 'header');
         }
         $block->setLayout($layout);
         return $block;

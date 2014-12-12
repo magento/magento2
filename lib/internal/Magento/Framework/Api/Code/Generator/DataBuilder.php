@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\Api\Code\Generator;
@@ -29,7 +10,6 @@ use Magento\Framework\Code\Generator\EntityAbstract;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\ObjectManager\ConfigInterface as ObjectManagerConfig;
 use Zend\Code\Reflection\ClassReflection;
-use Magento\Framework\Filesystem\FileResolver;
 
 /**
  * Class Builder
@@ -126,14 +106,14 @@ class DataBuilder extends EntityAbstract
                         'name' => 'modelClassInterface',
                         'type' => 'string',
                         'defaultValue' => $this->_getNullDefaultValue()
-                    ]
+                    ],
                 ],
                 'docblock' => [
                     'shortDescription' => 'Initialize the builder',
                     'tags' => [
                         [
                             'name' => 'param',
-                            'description' => '\Magento\Framework\Api\ObjectFactory $objectFactory'
+                            'description' => '\Magento\Framework\Api\ObjectFactory $objectFactory',
                         ],
                         [
                             'name' => 'param',
@@ -162,12 +142,12 @@ class DataBuilder extends EntityAbstract
                         [
                             'name' => 'param',
                             'description' => 'string|null $modelClassInterface'
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
             'body' => "parent::__construct(\$objectFactory, \$metadataService, \$attributeValueBuilder, "
                 . "\$objectProcessor, \$typeProcessor, \$dataBuilderFactory, \$objectManagerConfig, "
-                . "'{$this->_getSourceClassName()}');"
+                . "'{$this->_getSourceClassName()}');",
         ];
         return $constructorDefinition;
     }
@@ -206,7 +186,7 @@ class DataBuilder extends EntityAbstract
         $isGetter = substr($method->getName(), 0, 3) == 'get' || substr($method->getName(), 0, 2) == 'is';
         $isSuitableMethodType = !($method->isConstructor() || $method->isFinal()
             || $method->isStatic() || $method->isDestructor());
-        $isMagicMethod = in_array($method->getName(), array('__sleep', '__wakeup', '__clone'));
+        $isMagicMethod = in_array($method->getName(), ['__sleep', '__wakeup', '__clone']);
         $isPartOfExtensibleInterface = in_array($method->getName(), $this->getExtensibleInterfaceMethods());
         return $isGetter && $isSuitableMethodType && !$isMagicMethod && !$isPartOfExtensibleInterface;
     }
@@ -232,7 +212,7 @@ class DataBuilder extends EntityAbstract
         $methodInfo = [
             'name' => 'set' . $propertyName,
             'parameters' => [
-                ['name' => lcfirst($propertyName)]
+                ['name' => lcfirst($propertyName)],
             ],
             'body' => "\$this->_set('{$fieldName}', \$" . lcfirst($propertyName) . ");"
                 . PHP_EOL . "return \$this;",
@@ -240,8 +220,8 @@ class DataBuilder extends EntityAbstract
                 'tags' => [
                     ['name' => 'param', 'description' => $returnType['type'] . " \$" . lcfirst($propertyName)],
                     ['name' => 'return', 'description' => '$this'],
-                ]
-            ]
+                ],
+            ],
         ];
         return $methodInfo;
     }

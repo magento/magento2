@@ -1,36 +1,40 @@
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 /*jshint browser:true jquery:true*/
 define([
     "jquery",
+    "underscore",
+    "handlebars",
     "jquery/ui",
-    "jquery/jquery.parsequery"
-], function($){
+    "jquery/jquery.parsequery",
+    "Magento_Catalog/js/price-box"
+], function($, _){
+
+    function getPrices(elems){
+        var prices = {};
+
+        elems.forEach(function(elem){
+            var selected    = elem.options[elem.selectedIndex],
+                config      = selected && selected.config;
+
+            prices[elem.attributeId] = config ? 
+                _.clone(config.prices) :
+                {};
+        });
+
+        return prices;
+    }
 
     $.widget('mage.configurable', {
         options: {
             superSelector: '.super-attribute-select',
+            priceHolderSelector: '.price-box',
             state: {},
+            optionTemplate: '{{label}}' +
+                            '{{#if finalPrice.value}}' +
+                                ' {{finalPrice.formatted}}' +
+                            '{{/if}}',
             mediaGallerySelector: '[data-role=media-gallery]'
         },
 
@@ -59,10 +63,16 @@ define([
          * @private
          */
         _initializeOptions: function() {
-            this.options.taxConfig = this.options.spConfig.taxConfig;
+            var priceBoxOptions = $(this.options.priceHolderSelector).priceBox('option');
+            if(priceBoxOptions.priceConfig && priceBoxOptions.priceConfig.optionTemplate) {
+                this.options.optionTemplate = priceBoxOptions.priceConfig.optionTemplate;
+            }
+            this.options.optionTemplate = Handlebars.compile(this.options.optionTemplate);
+
             this.options.settings = (this.options.spConfig.containerId) ?
                 $(this.options.spConfig.containerId).find(this.options.superSelector) :
                 $(this.options.superSelector);
+
             this.options.values = this.options.spConfig.defaultValues || {};
             this.options.parentImage = $('[data-role=base-image-container] img').attr('src');
         },
@@ -142,19 +152,25 @@ define([
          * @private
          */
         _setChildSettings: function() {
-            var childSettings = [];
-            for (var j = this.options.settings.length - 1; j >= 0; j--) {
-                var prevSetting = this.options.settings[j - 1] ? this.options.settings[j - 1] : false,
-                    nextSetting = this.options.settings[j + 1] ? this.options.settings[j + 1] : false;
-                if (j === 0) {
-                    this._fillSelect(this.options.settings[j]);
-                } else {
-                    this.options.settings[j].disabled = true;
-                }
-                this.options.settings[j].childSettings = childSettings.slice(0);
-                this.options.settings[j].prevSetting = prevSetting;
-                this.options.settings[j].nextSetting = nextSetting;
-                childSettings.push(this.options.settings[j]);
+            var childSettings   = [],
+                settings        = this.options.settings,
+                index           = settings.length,
+                option;
+
+            while (index--) {
+                option = settings[index];
+                
+                !index ?
+                    this._fillSelect(option) :
+                    (option.disabled = true);
+                
+                _.extend(option, {
+                    childSettings:  childSettings.slice(),
+                    prevSetting:    settings[index - 1],
+                    nextSetting:    settings[index + 1]
+                });
+
+                childSettings.push(option);
             }
         },
 
@@ -264,16 +280,12 @@ define([
             if (!(element && element.options[element.selectedIndex])) {
                 return false;
             }
-            var selectedPrice = 0,
-                selOption = element.options[element.selectedIndex];
+            var selOption = element.options[element.selectedIndex];
 
-            if ('config' in selOption && selOption.config && !this.options.spConfig.stablePrices) {
-                selectedPrice = parseFloat(selOption.config.price);
-            }
             for (var i = 0; i < element.options.length; i++) {
                 if (element.options[i].config) {
                     element.options[i].text =
-                        this._getOptionLabel(element.options[i].config, element.options[i].config.price - selectedPrice);
+                        this._getOptionLabel(element.options[i].config, selOption.config);
                 }
             }
         },
@@ -330,9 +342,9 @@ define([
                     }
                     if (allowedProducts.length > 0) {
                         options[i].allowedProducts = allowedProducts;
-                        element.options[index] = new Option(this._getOptionLabel(options[i], options[i].price), options[i].id);
+                        element.options[index] = new Option(this._getOptionLabel(options[i]), options[i].id);
                         if (typeof options[i].price !== 'undefined') {
-                            element.options[index].setAttribute('price', options[i].price);
+                            element.options[index].setAttribute('price', options[i].prices);
                         }
                         element.options[index].config = options[i];
                         index++;
@@ -346,33 +358,35 @@ define([
          * label or value and the option's price.
          * @private
          * @param option A single choice among a group of choices for a configurable option.
-         * @param price The price associated with the option choice.
+         * @param selOption Current selected option.
          * @return {String} The option label with option value and price (e.g. Black +1.99)
          */
-        _getOptionLabel: function(option, price) {
-            price = parseFloat(price);
-            //todo: use taxes from php config
-            /*
-            if (this.options.taxConfig.includeTax) {
-                tax = price / (100 + this.options.taxConfig.defaultTax) * this.options.taxConfig.defaultTax;
-                excludeTax = price - tax;
-                includeTax = excl * (1 + (this.options.taxConfig.currentTax / 100));
-            } else {
-                tax = price * (this.options.taxConfig.currentTax / 100);
-                excludeTax = price;
-                includeTax = excl + tax;
+        _getOptionLabel: function(option, selOption) {
+            var parsePrice  = this._parsePrice.bind(this, option, selOption),
+                data;
+
+            data = _.map(option.prices, parsePrice);
+            data = _.indexBy(data, 'name');
+
+            data.label = option.label;
+
+            return this.options.optionTemplate(data);
+        },
+
+        _parsePrice: function(option, selOption, price, name){
+            var selected = 0;
+
+            if (!this.options.spConfig.stablePrices && selOption) {
+                selected = parseFloat(selOption.prices[name].amount);
             }
-            */
-            var includeTax = option.inclTaxPrice;
-            var excludeTax = option.exclTaxPrice;
-            price = (this.options.taxConfig.showIncludeTax || this.options.taxConfig.showBothPrices) ? includeTax : excludeTax;
-            var str = option.label;
-            if (price) {
-                str = (this.options.taxConfig.showBothPrices) ?
-                    str += ' ' + this._formatPrice(excludeTax, true) + ' (' + this._formatPrice(price, true) + ' ' + this.options.taxConfig.inclTaxTitle + ')' :
-                    str += ' ' + this._formatPrice(price, true);
-            }
-            return str;
+
+            price = parseFloat(price.amount - selected);
+
+            return {
+                value:      price,
+                name:       name,
+                formatted:  this._formatPrice(price, true)
+            };
         },
 
         /**
@@ -432,32 +446,12 @@ define([
          * @return {Number} The price of the configurable product including selected options.
          */
         _reloadPrice: function() {
-            if (this.options.spConfig.disablePriceReload) {
-                return true;
-            }
-            var price = 0,
-                oldPrice = 0,
-                    inclTaxPrice = 0,
-                        exclTaxPrice = 0;
-            for (var i = this.options.settings.length - 1; i >= 0; i--) {
-                var selected = this.options.settings[i].options[this.options.settings[i].selectedIndex];
-                if (selected && selected.config) {
-                    price += parseFloat(selected.config.price);
-                    oldPrice += parseFloat(selected.config.oldPrice);
-                    inclTaxPrice += parseFloat(selected.config.inclTaxPrice);
-                    exclTaxPrice += parseFloat(selected.config.exclTaxPrice);
-                }
-            }
-            this.element.trigger('changePrice', {
-                'config': 'config',
-                'price': {
-                    'price': price,
-                    'oldPrice': oldPrice,
-                    'inclTaxPrice': inclTaxPrice,
-                    'exclTaxPrice': exclTaxPrice
-                }
-            }).trigger('reloadPrice');
-            return price;
+            var options     = this.options,
+                settings    = _.toArray(options.settings),
+                prices      = getPrices(settings);
+
+            $(options.priceHolderSelector)
+                .trigger('updatePrice', prices);
         }
     });
     

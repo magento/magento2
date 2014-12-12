@@ -5,7 +5,6 @@ do_something(function ($argument) {
     }
 });
 
-$greet = function ($name)
-{
+$greet = function ($name) {
     echo "Hello, {$name}!";
 };

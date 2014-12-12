@@ -1,34 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\System\Config;
-use Mtf\Handler\HandlerFactory;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\InjectableFixture;
+use Mtf\Handler\HandlerFactory;
 use Mtf\Repository\RepositoryFactory;
+use Mtf\System\Config;
 use Mtf\System\Event\EventManagerInterface;
 
 /**
@@ -104,7 +85,7 @@ class CatalogProductVirtual extends InjectableFixture
             'qty' => 10.0000,
             'is_in_stock' => 'In Stock',
         ],
-        'is_virtual' => 'Yes'
+        'is_virtual' => 'Yes',
     ];
 
     protected $is_virtual = [
@@ -236,14 +217,6 @@ class CatalogProductVirtual extends InjectableFixture
         'is_required' => '0',
         'default_value' => '',
         'input' => 'text',
-    ];
-
-    protected $is_recurring = [
-        'attribute_code' => 'is_recurring',
-        'backend_type' => 'int',
-        'is_required' => '0',
-        'default_value' => '',
-        'input' => 'select',
     ];
 
     protected $manufacturer = [
@@ -379,14 +352,6 @@ class CatalogProductVirtual extends InjectableFixture
         'default_value' => 'In Stock',
         'input' => 'select',
         'group' => 'product-details',
-    ];
-
-    protected $recurring_profile = [
-        'attribute_code' => 'recurring_profile',
-        'backend_type' => 'text',
-        'is_required' => '0',
-        'default_value' => '',
-        'input' => 'text',
     ];
 
     protected $required_options = [
@@ -663,11 +628,6 @@ class CatalogProductVirtual extends InjectableFixture
         return $this->getData('image_label');
     }
 
-    public function getIsRecurring()
-    {
-        return $this->getData('is_recurring');
-    }
-
     public function getManufacturer()
     {
         return $this->getData('manufacturer');
@@ -746,11 +706,6 @@ class CatalogProductVirtual extends InjectableFixture
     public function getQuantityAndStockStatus()
     {
         return $this->getData('quantity_and_stock_status');
-    }
-
-    public function getRecurringProfile()
-    {
-        return $this->getData('recurring_profile');
     }
 
     public function getRequiredOptions()

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data;
 
@@ -47,7 +28,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @var \Magento\Framework\Object[]
      */
-    protected $_items = array();
+    protected $_items = [];
 
     /**
      * Item object class name
@@ -61,14 +42,14 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @var array
      */
-    protected $_orders = array();
+    protected $_orders = [];
 
     /**
      * Filters configuration
      *
      * @var \Magento\Framework\Object[]
      */
-    protected $_filters = array();
+    protected $_filters = [];
 
     /**
      * Filter rendered flag
@@ -112,7 +93,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @var array
      */
-    protected $_flags = array();
+    protected $_flags = [];
 
     /**
      * @var EntityFactoryInterface
@@ -211,7 +192,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
                 return $this->_filters;
             }
             // non-empty array: collect all filters that match specified field names
-            $result = array();
+            $result = [];
             foreach ($this->_filters as $filter) {
                 if (in_array($filter['field'], $field)) {
                     $result[] = $filter;
@@ -362,7 +343,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     {
         $this->load();
 
-        $col = array();
+        $col = [];
         foreach ($this->getItems() as $item) {
             $col[] = $item->getData($colName);
         }
@@ -380,7 +361,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     {
         $this->load();
 
-        $res = array();
+        $res = [];
         foreach ($this as $item) {
             if ($item->getData($column) == $value) {
                 $res[] = $item;
@@ -462,7 +443,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function getAllIds()
     {
-        $ids = array();
+        $ids = [];
         foreach ($this->getItems() as $item) {
             $ids[] = $this->_getItemId($item);
         }
@@ -490,7 +471,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function removeAllItems()
     {
-        $this->_items = array();
+        $this->_items = [];
         return $this;
     }
 
@@ -502,7 +483,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     public function clear()
     {
         $this->_setIsLoaded(false);
-        $this->_items = array();
+        $this->_items = [];
         return $this;
     }
 
@@ -517,13 +498,13 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @internal param string $method
      * @return array
      */
-    public function walk($callback, array $args = array())
+    public function walk($callback, array $args = [])
     {
-        $results = array();
+        $results = [];
         $useItemCallback = is_string($callback) && strpos($callback, '::') === false;
         foreach ($this->getItems() as $id => $item) {
             if ($useItemCallback) {
-                $cb = array($item, $callback);
+                $cb = [$item, $callback];
             } else {
                 $cb = $callback;
                 array_unshift($args, $item);
@@ -538,7 +519,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param array $args
      * @return void
      */
-    public function each($objMethod, $args = array())
+    public function each($objMethod, $args = [])
     {
         foreach ($args->_items as $k => $item) {
             $args->_items[$k] = call_user_func($objMethod, $item);
@@ -734,12 +715,12 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param array $arrRequiredFields
      * @return array
      */
-    public function toArray($arrRequiredFields = array())
+    public function toArray($arrRequiredFields = [])
     {
-        $arrItems = array();
+        $arrItems = [];
         $arrItems['totalRecords'] = $this->getSize();
 
-        $arrItems['items'] = array();
+        $arrItems['items'] = [];
         foreach ($this as $item) {
             $arrItems['items'][] = $item->toArray($arrRequiredFields);
         }
@@ -762,9 +743,9 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * @param array $additional
      * @return array
      */
-    protected function _toOptionArray($valueField = 'id', $labelField = 'name', $additional = array())
+    protected function _toOptionArray($valueField = 'id', $labelField = 'name', $additional = [])
     {
-        $res = array();
+        $res = [];
         $additional['value'] = $valueField;
         $additional['label'] = $labelField;
 
@@ -805,7 +786,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     protected function _toOptionHash($valueField = 'id', $labelField = 'name')
     {
-        $res = array();
+        $res = [];
         foreach ($this as $item) {
             $res[$item->getData($valueField)] = $item->getData($labelField);
         }

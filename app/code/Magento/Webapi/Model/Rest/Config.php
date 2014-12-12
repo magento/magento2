@@ -1,31 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Webapi\Model\Rest;
 
 use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Webapi\Model\Config\Converter;
 use Magento\Webapi\Model\Config as ModelConfig;
+use Magento\Webapi\Model\Config\Converter;
 
 /**
  * Webapi Config Model for Rest.
@@ -74,7 +55,7 @@ class Config
      * @param array $routeData Expected format:
      *  <pre>array(
      *      'routePath' => '/categories/:categoryId',
-     *      'class' => 'Magento\Catalog\Service\CategoryService',
+     *      'class' => 'Magento\Catalog\Api\CategoryRepositoryInterface',
      *      'serviceMethod' => 'item'
      *      'secure' => true
      *  );</pre>
@@ -105,7 +86,7 @@ class Config
     protected function _formatRoutePath($routePath)
     {
         $routePathParts = explode('/', $routePath);
-        $pathParts = array();
+        $pathParts = [];
         foreach ($routePathParts as $pathPart) {
             $pathParts[] = substr($pathPart, 0, 1) === ":" ? $pathPart : strtolower($pathPart);
         }
@@ -127,20 +108,33 @@ class Config
     }
 
     /**
-     * TODO: Refactor $this->_config->getServices() to return array with baseUrl as the key since its unique and
-     *       needs to be used directly instead of looping each key
      * Generate the list of available REST routes. Current HTTP method is taken into account.
      *
      * @param \Magento\Webapi\Controller\Rest\Request $request
-     * @return Route[]
+     * @return Route[] matched routes
      * @throws \Magento\Webapi\Exception
      */
     public function getRestRoutes(\Magento\Webapi\Controller\Rest\Request $request)
     {
-        $serviceBaseUrl = $this->_getServiceBaseUrl($request);
         $requestHttpMethod = $request->getHttpMethod();
-        $routes = array();
         $servicesRoutes = $this->_config->getServices()[Converter::KEY_ROUTES];
+        $routes = [];
+        // Return the route on exact match
+        if (isset($servicesRoutes[$request->getPathInfo()][$requestHttpMethod])) {
+            $methodInfo = $servicesRoutes[$request->getPathInfo()][$requestHttpMethod];
+            $routes[] = $this->_createRoute(
+                [
+                    self::KEY_ROUTE_PATH => $request->getPathInfo(),
+                    self::KEY_CLASS => $methodInfo[Converter::KEY_SERVICE][Converter::KEY_SERVICE_CLASS],
+                    self::KEY_METHOD => $methodInfo[Converter::KEY_SERVICE][Converter::KEY_SERVICE_METHOD],
+                    self::KEY_IS_SECURE => $methodInfo[Converter::KEY_SECURE],
+                    self::KEY_ACL_RESOURCES => array_keys($methodInfo[Converter::KEY_ACL_RESOURCES]),
+                    self::KEY_PARAMETERS => $methodInfo[Converter::KEY_DATA_PARAMETERS],
+                ]
+            );
+            return $routes;
+        }
+        $serviceBaseUrl = $this->_getServiceBaseUrl($request);
         ksort($servicesRoutes, SORT_STRING);
         foreach ($servicesRoutes as $url => $httpMethods) {
             // skip if baseurl is not null and does not match

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data\Form\Element;
 
@@ -42,7 +23,7 @@ class Editor extends Textarea
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        $data = array()
+        $data = []
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
 
@@ -85,21 +66,11 @@ class Editor extends Textarea
             </script>';
 
         if ($this->isEnabled()) {
-            // add Firebug notice translations
-            $warn = 'Firebug is known to make the WYSIWYG editor slow unless it is turned off or configured properly.';
-            $this->getConfig()->addData(
-                array(
-                    'firebug_warning_title' => $this->translate('Warning'),
-                    'firebug_warning_text' => $this->translate($warn),
-                    'firebug_warning_anchor' => $this->translate('Hide')
-                )
-            );
-
-            $translatedString = array(
+            $translatedString = [
                 'Insert Image...' => $this->translate('Insert Image...'),
                 'Insert Media...' => $this->translate('Insert Media...'),
-                'Insert File...' => $this->translate('Insert File...')
-            );
+                'Insert File...' => $this->translate('Insert File...'),
+            ];
 
             $jsSetupObject = 'wysiwyg' . $this->getHtmlId();
 
@@ -170,22 +141,10 @@ class Editor extends Textarea
                 $jsSetupObject .
                 '));
                     varienGlobalEvents.attachEventHandler("formSubmit", editorFormValidationHandler);
-                    varienGlobalEvents.attachEventHandler("tinymceBeforeSetContent", ' .
-                $jsSetupObject .
-                '.beforeSetContent.bind(' .
-                $jsSetupObject .
-                '));
-                    varienGlobalEvents.attachEventHandler("tinymceSaveContent", ' .
-                $jsSetupObject .
-                '.saveContent.bind(' .
-                $jsSetupObject .
-                '));
                     varienGlobalEvents.clearEventHandlers("open_browser_callback");
                     varienGlobalEvents.attachEventHandler("open_browser_callback", ' .
                 $jsSetupObject .
-                '.openFileBrowser.bind(' .
-                $jsSetupObject .
-                '));
+                '.openFileBrowser);
                 //]]>
                 });
                 </script>';
@@ -243,12 +202,12 @@ class Editor extends Textarea
     protected function _getToggleButtonHtml($visible = true)
     {
         $html = $this->_getButtonHtml(
-            array(
+            [
                 'title' => $this->translate('Show / Hide Editor'),
                 'class' => 'action-show-hide',
                 'style' => $visible ? '' : 'display:none',
-                'id' => 'toggle' . $this->getHtmlId()
-            )
+                'id' => 'toggle' . $this->getHtmlId(),
+            ]
         );
         return $html;
     }
@@ -266,21 +225,21 @@ class Editor extends Textarea
         // Button to widget insertion window
         if ($this->getConfig('add_widgets')) {
             $buttonsHtml .= $this->_getButtonHtml(
-                array(
+                [
                     'title' => $this->translate('Insert Widget...'),
                     'onclick' => "widgetTools.openDialog('" . $this->getConfig(
                         'widget_window_url'
                     ) . "widget_target_id/" . $this->getHtmlId() . "')",
                     'class' => 'action-add-widget plugin',
-                    'style' => $visible ? '' : 'display:none'
-                )
+                    'style' => $visible ? '' : 'display:none',
+                ]
             );
         }
 
         // Button to media images insertion window
         if ($this->getConfig('add_images')) {
             $buttonsHtml .= $this->_getButtonHtml(
-                array(
+                [
                     'title' => $this->translate('Insert Image...'),
                     'onclick' => "MediabrowserUtility.openDialog('" . $this->getConfig(
                         'files_browser_window_url'
@@ -290,8 +249,8 @@ class Editor extends Textarea
                         'store_id'
                     ) . '/' : '') . "')",
                     'class' => 'action-add-image plugin',
-                    'style' => $visible ? '' : 'display:none'
-                )
+                    'style' => $visible ? '' : 'display:none',
+                ]
             );
         }
 
@@ -303,7 +262,7 @@ class Editor extends Textarea
                     if (isset($buttonOptions['style'])) {
                         $configStyle = $buttonOptions['style'];
                     }
-                    $buttonOptions = array_merge($buttonOptions, array('style' => 'display:none;' . $configStyle));
+                    $buttonOptions = array_merge($buttonOptions, ['style' => 'display:none;' . $configStyle]);
                 }
                 $buttonsHtml .= $this->_getButtonHtml($buttonOptions);
             }
@@ -320,7 +279,7 @@ class Editor extends Textarea
      */
     protected function _prepareButtonOptions($options)
     {
-        $buttonOptions = array();
+        $buttonOptions = [];
         $buttonOptions['class'] = 'plugin';
         foreach ($options as $name => $value) {
             $buttonOptions[$name] = $value;
@@ -352,7 +311,7 @@ class Editor extends Textarea
      */
     protected function _prepareOptions($options)
     {
-        $preparedOptions = array();
+        $preparedOptions = [];
         foreach ($options as $name => $value) {
             if (is_array($value) && isset($value['search']) && isset($value['subject'])) {
                 $subject = $value['subject'];

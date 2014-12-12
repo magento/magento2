@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Sales\Helper;
@@ -44,7 +25,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $scopeConfigInterfaceMock;
 
-    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerInterfaceMock;
 
     /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
@@ -58,7 +39,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $cookieManagerMock;
-    
+
     /** @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $cookieMetadataFactoryMock;
 
@@ -75,7 +56,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     {
         $this->appContextHelperMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->scopeConfigInterfaceMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->storeManagerInterfaceMock = $this->getMock('Magento\Framework\StoreManagerInterface');
+        $this->storeManagerInterfaceMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->registryMock = $this->getMock('Magento\Framework\Registry');
         $this->sessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
@@ -119,7 +100,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
             'oar_type' => 'email',
             'oar_billing_lastname' => 'oar_billing_lastname',
             'oar_email' => 'oar_email',
-            'oar_zip' => 'oar_zip'
+            'oar_zip' => 'oar_zip',
 
         ];
         $incrementId = $post['oar_order_id'];

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
@@ -44,7 +25,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      *
      * @var array
      */
-    protected $_items = array();
+    protected $_items = [];
 
     /**
      * @var string
@@ -59,7 +40,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        array $data = array()
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         parent::__construct($context, $data);
@@ -145,7 +126,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     public function getItemsJson()
     {
-        $result = array();
+        $result = [];
         foreach ($this->getItems() as $itemId => $item) {
             $result[$itemId] = $item->toArray();
         }
@@ -239,7 +220,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
             $selected = explode(',', $selected);
             return $selected;
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -266,8 +247,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
             ($this->getUseAjax() ? "{$this->getJsObjectName()}.setUseAjax(true);" : '') .
             ($this->getUseSelectAll() ? "{$this->getJsObjectName()}.setUseSelectAll(true);" : '') .
             "{$this->getJsObjectName()}.errorText = '{$this->getErrorText()}';" . "\n" .
-            "window.{$this->getJsObjectName()} = {$this->getJsObjectName()};"
-            ;
+            "window.{$this->getJsObjectName()} = {$this->getJsObjectName()};";
     }
 
     /**
@@ -343,15 +323,15 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
         $massactionColumn = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Grid\Column'
         )->setData(
-            array(
+            [
                 'index' => $this->getMassactionIdField(),
                 'filter_index' => $this->getMassactionIdFilter(),
                 'type' => 'massaction',
                 'name' => $this->getFormFieldName(),
                 'is_system' => true,
                 'header_css_class' => 'col-select',
-                'column_css_class' => 'col-select'
-            )
+                'column_css_class' => 'col-select',
+            ]
         );
 
         if ($this->getNoFilterMassactionColumn()) {

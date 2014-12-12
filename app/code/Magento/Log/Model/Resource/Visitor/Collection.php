@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Log\Model\Resource\Visitor;
 
@@ -98,13 +79,13 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @var array
      */
-    protected $_fieldMap = array(
+    protected $_fieldMap = [
         'customer_firstname' => 'customer_firstname_table.value',
         'customer_lastname' => 'customer_lastname_table.value',
         'customer_email' => 'customer_email_table.email',
         'customer_id' => 'customer_table.customer_id',
-        'url' => 'url_info_table.url'
-    );
+        'url' => 'url_info_table.url',
+    ];
 
     /**
      * Collection resource initialization
@@ -148,9 +129,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         if ($fieldName == 'type' && is_array($condition) && isset($condition['eq'])) {
             $fieldName = 'customer_id';
             if ($condition['eq'] === \Magento\Customer\Model\Visitor::VISITOR_TYPE_VISITOR) {
-                $condition = array('null' => 1);
+                $condition = ['null' => 1];
             } else {
-                $condition = array('moreq' => 1);
+                $condition = ['moreq' => 1];
             }
         }
         return parent::addFieldToFilter($this->_getFieldMap($fieldName), $condition);
@@ -183,7 +164,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         if ($this->isLoaded()) {
             return $this;
         }
-        $this->_eventManager->dispatch('log_visitor_collection_load_before', array('collection' => $this));
+        $this->_eventManager->dispatch('log_visitor_collection_load_before', ['collection' => $this]);
         return parent::load($printQuery, $logQuery);
     }
 

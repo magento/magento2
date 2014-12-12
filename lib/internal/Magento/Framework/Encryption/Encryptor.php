@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Encryption;
 
@@ -31,9 +12,27 @@ use Magento\Framework\App\DeploymentConfig;
 class Encryptor implements EncryptorInterface
 {
     /**
-     * Crypt key
+     * Array key of encryption key in deployment config
      */
     const PARAM_CRYPT_KEY = 'crypt/key';
+
+    /**#@+
+     * Hash and Cipher versions
+     */
+    const HASH_VERSION_MD5 = 0;
+
+    const HASH_VERSION_SHA256 = 1;
+
+    const HASH_VERSION_LATEST = 1;
+
+    const CIPHER_BLOWFISH = 0;
+
+    const CIPHER_RIJNDAEL_128 = 1;
+
+    const CIPHER_RIJNDAEL_256 = 2;
+
+    const CIPHER_LATEST = 2;
+    /**#@-*/
 
     /**
      * Default length of salt in bytes
@@ -41,40 +40,63 @@ class Encryptor implements EncryptorInterface
     const DEFAULT_SALT_LENGTH = 32;
 
     /**
+     * Indicate cipher
+     *
+     * @var int
+     */
+    protected $cipher = self::CIPHER_LATEST;
+
+    /**
+     * Version of encryption key
+     *
+     * @var int
+     */
+    protected $keyVersion;
+
+    /**
+     * Array of encryption keys
+     *
+     * @var string[]
+     */
+    protected $keys = [];
+
+    /**
      * @var \Magento\Framework\Math\Random
      */
-    protected $_randomGenerator;
-
-    /**
-     * Cryptographic key
-     *
-     * @var string
-     */
-    protected $_cryptKey;
-
-    /**
-     * @var \Magento\Framework\Encryption\CryptFactory
-     */
-    protected $_cryptFactory;
-
-    /**
-     * @var \Magento\Framework\Encryption\Crypt
-     */
-    protected $_crypt;
+    protected $randomGenerator;
 
     /**
      * @param \Magento\Framework\Math\Random $randomGenerator
-     * @param \Magento\Framework\Encryption\CryptFactory $cryptFactory
      * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         \Magento\Framework\Math\Random $randomGenerator,
-        \Magento\Framework\Encryption\CryptFactory $cryptFactory,
         DeploymentConfig $deploymentConfig
     ) {
-        $this->_randomGenerator = $randomGenerator;
-        $this->_cryptFactory = $cryptFactory;
-        $this->_cryptKey = $deploymentConfig->get(self::PARAM_CRYPT_KEY);
+        $this->randomGenerator = $randomGenerator;
+        // load all possible keys
+        $this->keys = preg_split('/\s+/s', trim($deploymentConfig->get(self::PARAM_CRYPT_KEY)));
+        $this->keyVersion = count($this->keys) - 1;
+    }
+
+    /**
+     * Check whether specified cipher version is supported
+     *
+     * Returns matched supported version or throws exception
+     *
+     * @param int $version
+     * @return int
+     * @throws \Exception
+     */
+    public function validateCipher($version)
+    {
+        $types = [self::CIPHER_BLOWFISH, self::CIPHER_RIJNDAEL_128, self::CIPHER_RIJNDAEL_256];
+
+        $version = (int)$version;
+        if (!in_array($version, $types, true)) {
+            throw new \Exception(__('Not supported cipher version'));
+        }
+        return $version;
     }
 
     /**
@@ -99,7 +121,7 @@ class Encryptor implements EncryptorInterface
             $salt = self::DEFAULT_SALT_LENGTH;
         }
         if (is_integer($salt)) {
-            $salt = $this->_randomGenerator->getRandomString($salt);
+            $salt = $this->randomGenerator->getRandomString($salt);
         }
         return $this->hash($salt . $password) . ':' . $salt;
     }
@@ -108,11 +130,15 @@ class Encryptor implements EncryptorInterface
      * Hash a string
      *
      * @param string $data
+     * @param int $version
      * @return string
      */
-    public function hash($data)
+    public function hash($data, $version = self::HASH_VERSION_LATEST)
     {
-        return md5($data);
+        if (self::HASH_VERSION_MD5 === $version) {
+            return md5($data);
+        }
+        return hash('sha256', $data);
     }
 
     /**
@@ -120,50 +146,110 @@ class Encryptor implements EncryptorInterface
      *
      * @param string $password
      * @param string $hash
-     * @throws \InvalidArgumentException
      * @return bool
      */
     public function validateHash($password, $hash)
     {
-        $hashArr = explode(':', $hash);
-        switch (count($hashArr)) {
-            case 1:
-                return $this->hash($password) === $hash;
-            case 2:
-                return $this->hash($hashArr[1] . $password) === $hashArr[0];
-            default:
-                break;
-        }
-        throw new \InvalidArgumentException('Invalid hash.');
+        return $this->validateHashByVersion(
+            $password,
+            $hash,
+            self::HASH_VERSION_SHA256
+        ) || $this->validateHashByVersion(
+            $password,
+            $hash,
+            self::HASH_VERSION_MD5
+        );
     }
 
     /**
-     * Encrypt a string
+     * Validate hash by specified version
+     *
+     * @param string $password
+     * @param string $hash
+     * @param int $version
+     * @return bool
+     */
+    public function validateHashByVersion($password, $hash, $version = self::HASH_VERSION_LATEST)
+    {
+        // look for salt
+        $hashArr = explode(':', $hash, 2);
+        if (1 === count($hashArr)) {
+            return $this->hash($password, $version) === $hash;
+        }
+        list($hash, $salt) = $hashArr;
+        return $this->hash($salt . $password, $version) === $hash;
+    }
+
+    /**
+     * Prepend key and cipher versions to encrypted data after encrypting
      *
      * @param string $data
      * @return string
      */
     public function encrypt($data)
     {
-        if (empty($this->_cryptKey)) {
+        $crypt = $this->getCrypt();
+        if (null === $crypt) {
             return $data;
         }
-        return base64_encode($this->_getCrypt()->encrypt((string)$data));
+        return $this->keyVersion . ':' . $this->cipher . ':' . (MCRYPT_MODE_CBC ===
+        $crypt->getMode() ? $crypt->getInitVector() . ':' : '') . base64_encode(
+            $crypt->encrypt((string)$data)
+        );
     }
 
     /**
-     * Decrypt a string
+     * Look for key and crypt versions in encrypted data before decrypting
+     *
+     * Unsupported/unspecified key version silently fallback to the oldest we have
+     * Unsupported cipher versions eventually throw exception
+     * Unspecified cipher version fallback to the oldest we support
      *
      * @param string $data
      * @return string
      */
     public function decrypt($data)
     {
-        if (empty($this->_cryptKey)) {
-            return $data;
-        }
+        if ($data) {
+            $parts = explode(':', $data, 4);
+            $partsCount = count($parts);
 
-        return trim($this->_getCrypt()->decrypt(base64_decode((string)$data)));
+            $initVector = false;
+            // specified key, specified crypt, specified iv
+            if (4 === $partsCount) {
+                list($keyVersion, $cryptVersion, $iv, $data) = $parts;
+                $initVector = $iv ? $iv : false;
+                $keyVersion = (int)$keyVersion;
+                $cryptVersion = self::CIPHER_RIJNDAEL_256;
+                // specified key, specified crypt
+            } elseif (3 === $partsCount) {
+                list($keyVersion, $cryptVersion, $data) = $parts;
+                $keyVersion = (int)$keyVersion;
+                $cryptVersion = (int)$cryptVersion;
+                // no key version = oldest key, specified crypt
+            } elseif (2 === $partsCount) {
+                list($cryptVersion, $data) = $parts;
+                $keyVersion = 0;
+                $cryptVersion = (int)$cryptVersion;
+                // no key version = oldest key, no crypt version = oldest crypt
+            } elseif (1 === $partsCount) {
+                $keyVersion = 0;
+                $cryptVersion = self::CIPHER_BLOWFISH;
+                // not supported format
+            } else {
+                return '';
+            }
+            // no key for decryption
+            if (!isset($this->keys[$keyVersion])) {
+                return '';
+            }
+            $crypt = $this->getCrypt($this->keys[$keyVersion], $cryptVersion, $initVector);
+            if (null === $crypt) {
+                return '';
+            }
+            return trim($crypt->decrypt(base64_decode((string)$data)));
+        }
+        return '';
     }
 
     /**
@@ -171,27 +257,80 @@ class Encryptor implements EncryptorInterface
      *
      * @param string|null $key NULL value means usage of the default key specified on constructor
      * @return \Magento\Framework\Encryption\Crypt
+     * @throws \Exception
      */
     public function validateKey($key)
     {
-        return $this->_getCrypt($key);
+        if (preg_match('/\s/s', $key)) {
+            throw new \Exception(__('The encryption key format is invalid.'));
+        }
+        return $this->getCrypt($key);
     }
 
     /**
-     * Instantiate crypt model
+     * Attempt to append new key & version
      *
-     * @param string|null $key NULL value means usage of the default key specified on constructor
-     * @return \Magento\Framework\Encryption\Crypt
+     * @param string $key
+     * @return $this
      */
-    protected function _getCrypt($key = null)
+    public function setNewKey($key)
     {
-        if ($key === null) {
-            if (!$this->_crypt) {
-                $this->_crypt = $this->_cryptFactory->create(array('key' => $this->_cryptKey));
-            }
-            return $this->_crypt;
-        } else {
-            return $this->_cryptFactory->create(array('key' => $key));
+        $this->validateKey($key);
+        $this->keys[] = $key;
+        $this->keyVersion += 1;
+        return $this;
+    }
+
+    /**
+     * Export current keys as string
+     *
+     * @return string
+     */
+    public function exportKeys()
+    {
+        return implode("\n", $this->keys);
+    }
+
+    /**
+     * Initialize crypt module if needed
+     *
+     * By default initializes with latest key and crypt versions
+     *
+     * @param string $key
+     * @param int $cipherVersion
+     * @param bool $initVector
+     * @return Crypt|null
+     */
+    protected function getCrypt($key = null, $cipherVersion = null, $initVector = true)
+    {
+        if (null === $key && null === $cipherVersion) {
+            $cipherVersion = self::CIPHER_RIJNDAEL_256;
         }
+
+        if (null === $key) {
+            $key = $this->keys[$this->keyVersion];
+        }
+
+        if (!$key) {
+            return null;
+        }
+
+        if (null === $cipherVersion) {
+            $cipherVersion = $this->cipher;
+        }
+        $cipherVersion = $this->validateCipher($cipherVersion);
+
+        if ($cipherVersion === self::CIPHER_RIJNDAEL_128) {
+            $cipher = MCRYPT_RIJNDAEL_128;
+            $mode = MCRYPT_MODE_ECB;
+        } elseif ($cipherVersion === self::CIPHER_RIJNDAEL_256) {
+            $cipher = MCRYPT_RIJNDAEL_256;
+            $mode = MCRYPT_MODE_CBC;
+        } else {
+            $cipher = MCRYPT_BLOWFISH;
+            $mode = MCRYPT_MODE_ECB;
+        }
+
+        return new Crypt($key, $cipher, $mode, $initVector);
     }
 }

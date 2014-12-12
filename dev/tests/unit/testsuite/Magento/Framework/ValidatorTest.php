@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework;
@@ -65,7 +46,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $value,
         $validators,
         $expectedResult,
-        $expectedMessages = array(),
+        $expectedMessages = [],
         $breakChainOnFailure = false
     ) {
         foreach ($validators as $validator) {
@@ -83,7 +64,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function isValidDataProvider()
     {
-        $result = array();
+        $result = [];
         $value = 'test';
 
         // Case 1. Validators fails without breaking chain
@@ -94,7 +75,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getMessages'
         )->will(
-            $this->returnValue(array('foo' => array('Foo message 1'), 'bar' => array('Foo message 2')))
+            $this->returnValue(['foo' => ['Foo message 1'], 'bar' => ['Foo message 2']])
         );
 
         $validatorB = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
@@ -104,15 +85,15 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getMessages'
         )->will(
-            $this->returnValue(array('foo' => array('Bar message 1'), 'bar' => array('Bar message 2')))
+            $this->returnValue(['foo' => ['Bar message 1'], 'bar' => ['Bar message 2']])
         );
 
-        $result[] = array(
+        $result[] = [
             $value,
-            array($validatorA, $validatorB),
+            [$validatorA, $validatorB],
             false,
-            array('foo' => array('Foo message 1', 'Bar message 1'), 'bar' => array('Foo message 2', 'Bar message 2'))
-        );
+            ['foo' => ['Foo message 1', 'Bar message 1'], 'bar' => ['Foo message 2', 'Bar message 2']],
+        ];
 
         // Case 2. Validators fails with breaking chain
         $validatorA = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
@@ -122,13 +103,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getMessages'
         )->will(
-            $this->returnValue(array('field' => 'Error message'))
+            $this->returnValue(['field' => 'Error message'])
         );
 
         $validatorB = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
         $validatorB->expects($this->never())->method('isValid');
 
-        $result[] = array($value, array($validatorA, $validatorB), false, array('field' => 'Error message'), true);
+        $result[] = [$value, [$validatorA, $validatorB], false, ['field' => 'Error message'], true];
 
         // Case 3. Validators succeed
         $validatorA = $this->getMock('Magento\Framework\Validator\ValidatorInterface');
@@ -139,7 +120,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $validatorB->expects($this->once())->method('isValid')->with($value)->will($this->returnValue(true));
         $validatorB->expects($this->never())->method('getMessages');
 
-        $result[] = array($value, array($validatorA, $validatorB), true);
+        $result[] = [$value, [$validatorA, $validatorB], true];
 
         return $result;
     }
@@ -159,10 +140,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->_validator->addValidator($classConstraint);
         $this->_validator->addValidator($propertyValidator);
-        $expected = array(
-            array('instance' => $classConstraint, 'breakChainOnFailure' => false),
-            array('instance' => $propertyValidator, 'breakChainOnFailure' => false)
-        );
+        $expected = [
+            ['instance' => $classConstraint, 'breakChainOnFailure' => false],
+            ['instance' => $propertyValidator, 'breakChainOnFailure' => false],
+        ];
         $this->assertAttributeEquals($expected, '_validators', $this->_validator);
         $this->assertEquals($translator, $fooValidator->getTranslator(), 'Translator was not set');
     }

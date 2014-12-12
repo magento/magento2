@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Multishipping\Helper;
 
@@ -65,19 +46,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->contextMock = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
+        $this->contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', array(), array(), '', false);
-        $this->quoteMock = $this->getMock('\Magento\Sales\Model\Quote', array(), array(), '', false);
+        $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
+        $this->quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->helper = $objectManager->getObject(
             'Magento\Multishipping\Helper\Data',
-            array(
+            [
                 'context' => $this->contextMock,
                 'scopeConfig' => $this->scopeConfigMock,
                 'checkoutSession' => $this->checkoutSessionMock
-            )
+            ]
         );
     }
 
@@ -189,16 +170,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function isMultishippingCheckoutAvailableDataProvider()
     {
-        return array(
-            array(true, false, true, null, null, null, null, null, null),
-            array(false, false, false, null, null, null, null, null, null),
-            array(false, true, true, true, null, null, null, null, null),
-            array(false, true, true, false, false, null, null, null, null),
-            array(true, true, true, false, true, 2, 1, 3, null),
-            array(false, true, true, false, true, 1, 2, null, null),
-            array(false, true, true, false, true, 2, 1, 1, null),
-            array(true, true, true, false, true, 2, 1, 3, false),
-            array(false, true, true, false, true, 2, 1, 3, true)
-        );
+        return [
+            [true, false, true, null, null, null, null, null, null],
+            [false, false, false, null, null, null, null, null, null],
+            [false, true, true, true, null, null, null, null, null],
+            [false, true, true, false, false, null, null, null, null],
+            [true, true, true, false, true, 2, 1, 3, null],
+            [false, true, true, false, true, 1, 2, null, null],
+            [false, true, true, false, true, 2, 1, 1, null],
+            [true, true, true, false, true, 2, 1, 3, false],
+            [false, true, true, false, true, 2, 1, 3, true]
+        ];
     }
 }

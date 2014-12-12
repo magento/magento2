@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\TestFramework\Dependency;
 
@@ -27,7 +8,7 @@ class LayoutRuleTest extends \PHPUnit_Framework_TestCase
 {
     public function testNonLayoutGetDependencyInfo()
     {
-        $model = new LayoutRule(array(), array(), array());
+        $model = new LayoutRule([], [], []);
         $content = 'any content';
         $this->assertEmpty($model->getDependencyInfo('any', 'not layout', 'any', $content));
     }
@@ -39,93 +20,93 @@ class LayoutRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDependencyInfo($contents, array $expected)
     {
-        $model = new LayoutRule(array(), array(), array());
+        $model = new LayoutRule([], [], []);
         $this->assertEquals($expected, $model->getDependencyInfo('Magento\SomeModule', 'layout', 'any', $contents));
     }
 
     public function getDependencyInfoDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 '<element module="Magento\AnotherModule"/>',
-                array(
-                    array(
+                [
+                    [
                         'module' => 'Magento\AnotherModule',
                         'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                        'source' => '<element module="Magento\AnotherModule"/>'
-                    )
-                )
-            ),
-            array('<element module="Magento\SomeModule"/>', array()),
-            array(
+                        'source' => '<element module="Magento\AnotherModule"/>',
+                    ]
+                ],
+            ],
+            ['<element module="Magento\SomeModule"/>', []],
+            [
                 '<block class="Magento\AnotherModule\Several\Chunks"/>',
-                array(
-                    array(
+                [
+                    [
                         'module' => 'Magento\AnotherModule',
                         'type' => \Magento\Test\Integrity\DependencyTest::TYPE_HARD,
-                        'source' => '<block class="Magento\AnotherModule\Several\Chunks"/>'
-                    )
-                )
-            ),
-            array('<block class="Magento\SomeModule\Several\Chunks"/>', array()),
-            array(
+                        'source' => '<block class="Magento\AnotherModule\Several\Chunks"/>',
+                    ]
+                ]
+            ],
+            ['<block class="Magento\SomeModule\Several\Chunks"/>', []],
+            [
                 '<any>
                     <extra></extra><block template="Magento_AnotherModule::template/path.phtml"/>
                 </any>',
-                array(
-                    array(
+                [
+                    [
                         'module' => 'Magento\AnotherModule',
                         'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                        'source' => '<block template="Magento_AnotherModule::template/path.phtml"/>'
-                    )
-                )
-            ),
-            array('<block template="Magento_SomeModule::template/path.phtml"/>', array()),
-            array(
+                        'source' => '<block template="Magento_AnotherModule::template/path.phtml"/>',
+                    ]
+                ]
+            ],
+            ['<block template="Magento_SomeModule::template/path.phtml"/>', []],
+            [
                 '<block>Magento\AnotherModule\Several\Chunks</block>',
-                array(
-                    array(
+                [
+                    [
                         'module' => 'Magento\AnotherModule',
                         'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                        'source' => '<block>Magento\AnotherModule\Several\Chunks</block>'
-                    )
-                )
-            ),
-            array('<block>Magento\SomeModule\Several\Chunks</block>', array()),
-            array(
+                        'source' => '<block>Magento\AnotherModule\Several\Chunks</block>',
+                    ]
+                ]
+            ],
+            ['<block>Magento\SomeModule\Several\Chunks</block>', []],
+            [
                 '<template>Magento_AnotherModule::template/path.phtml</template>',
-                array(
-                    array(
+                [
+                    [
                         'module' => 'Magento\AnotherModule',
                         'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                        'source' => '<template>Magento_AnotherModule::template/path.phtml</template>'
-                    )
-                )
-            ),
-            array('<template>Magento_SomeModule::template/path.phtml</template>', array()),
-            array(
+                        'source' => '<template>Magento_AnotherModule::template/path.phtml</template>',
+                    ]
+                ]
+            ],
+            ['<template>Magento_SomeModule::template/path.phtml</template>', []],
+            [
                 '<file>Magento_AnotherModule::file/path.txt</file>',
-                array(
-                    array(
+                [
+                    [
                         'module' => 'Magento\AnotherModule',
                         'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                        'source' => '<file>Magento_AnotherModule::file/path.txt</file>'
-                    )
-                )
-            ),
-            array('<file>Magento_SomeModule::file/path.txt</file>', array()),
-            array(
+                        'source' => '<file>Magento_AnotherModule::file/path.txt</file>',
+                    ]
+                ]
+            ],
+            ['<file>Magento_SomeModule::file/path.txt</file>', []],
+            [
                 '<any helper="Magento\AnotherModule\Several\Chunks::text"/>',
-                array(
-                    array(
+                [
+                    [
                         'module' => 'Magento\AnotherModule',
                         'type' => \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                        'source' => '<any helper="Magento\AnotherModule\Several\Chunks::text"/>'
-                    )
-                )
-            ),
-            array('<any helper="Magento\SomeModule\Several\Chunks::text"/>', array())
-        );
+                        'source' => '<any helper="Magento\AnotherModule\Several\Chunks::text"/>',
+                    ]
+                ]
+            ],
+            ['<any helper="Magento\SomeModule\Several\Chunks::text"/>', []]
+        ];
     }
 
     /**
@@ -135,10 +116,10 @@ class LayoutRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdatesRouterGetDependencyInfo($contents, $type)
     {
-        $model = new LayoutRule(array('router_name' => array('Magento\RouterModule')), array(), array());
-        $this->assertEquals(array(), $model->getDependencyInfo('Magento\RouterModule', 'layout', 'any', $contents));
+        $model = new LayoutRule(['router_name' => ['Magento\RouterModule']], [], []);
+        $this->assertEquals([], $model->getDependencyInfo('Magento\RouterModule', 'layout', 'any', $contents));
         $this->assertEquals(
-            array(array('module' => 'Magento\RouterModule', 'type' => $type, 'source' => 'router_name_action')),
+            [['module' => 'Magento\RouterModule', 'type' => $type, 'source' => 'router_name_action']],
             $model->getDependencyInfo('Magento\AnotherModule', 'layout', 'any', $contents)
         );
     }
@@ -152,79 +133,79 @@ class LayoutRuleTest extends \PHPUnit_Framework_TestCase
     public function testLayoutGetDependencyInfo($contents, $type, $isHandle)
     {
         // test one module
-        $data = array(
-            'frontend' => array('any_handle_name' => array('Magento\AnyHandleModule' => 'Magento\AnyHandleModule')),
-            'default' => array('singlechunk' => array('Magento\DefaultHandleModule' => 'Magento\DefaultHandleModule'))
-        );
-        $model = $isHandle ? new LayoutRule(array(), array(), $data) : new LayoutRule(array(), $data, array());
+        $data = [
+            'frontend' => ['any_handle_name' => ['Magento\AnyHandleModule' => 'Magento\AnyHandleModule']],
+            'default' => ['singlechunk' => ['Magento\DefaultHandleModule' => 'Magento\DefaultHandleModule']],
+        ];
+        $model = $isHandle ? new LayoutRule([], [], $data) : new LayoutRule([], $data, []);
         $this->assertEquals(
-            array(),
+            [],
             $model->getDependencyInfo('Magento\AnyHandleModule', 'layout', 'path/frontend/file.txt', $contents)
         );
         $this->assertEquals(
-            array(),
+            [],
             $model->getDependencyInfo('Magento\DefaultHandleModule', 'layout', 'any', $contents)
         );
         $this->assertEquals(
-            array(array('module' => 'Magento\DefaultHandleModule', 'type' => $type, 'source' => 'singlechunk')),
+            [['module' => 'Magento\DefaultHandleModule', 'type' => $type, 'source' => 'singlechunk']],
             $model->getDependencyInfo('any', 'layout', 'any', $contents)
         );
         $this->assertEquals(
-            array(array('module' => 'Magento\AnyHandleModule', 'type' => $type, 'source' => 'any_handle_name')),
+            [['module' => 'Magento\AnyHandleModule', 'type' => $type, 'source' => 'any_handle_name']],
             $model->getDependencyInfo('any', 'layout', 'path/frontend/file.txt', $contents)
         );
         // test several modules
-        $data = array(
-            'frontend' => array(
-                'any_handle_name' => array(
+        $data = [
+            'frontend' => [
+                'any_handle_name' => [
                     'Magento\Theme' => 'Magento\Theme',
-                    'Magento\HandleModule' => 'Magento\HandleModule'
-                )
-            )
-        );
-        $model = $isHandle ? new LayoutRule(array(), array(), $data) : new LayoutRule(array(), $data, array());
+                    'Magento\HandleModule' => 'Magento\HandleModule',
+                ],
+            ],
+        ];
+        $model = $isHandle ? new LayoutRule([], [], $data) : new LayoutRule([], $data, []);
         $this->assertEquals(
-            array(array('module' => 'Magento\Theme', 'type' => $type, 'source' => 'any_handle_name')),
+            [['module' => 'Magento\Theme', 'type' => $type, 'source' => 'any_handle_name']],
             $model->getDependencyInfo('any', 'layout', 'path/frontend/file.txt', $contents)
         );
         $this->assertEquals(
-            array(),
+            [],
             $model->getDependencyInfo('Magento\HandleModule', 'layout', 'path/frontend/file.txt', $contents)
         );
     }
 
     public function layoutGetDependencyInfoDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->_getLayoutFileContent('layout_handle.xml'),
                 \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                true
-            ),
-            array(
+                true,
+            ],
+            [
                 $this->_getLayoutFileContent('layout_handle_parent.xml'),
                 \Magento\Test\Integrity\DependencyTest::TYPE_HARD,
                 true
-            ),
-            array(
+            ],
+            [
                 $this->_getLayoutFileContent('layout_handle_update.xml'),
                 \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
                 true
-            )
-        );
+            ]
+        ];
     }
 
     public function layoutGetDependencyInfoWithReferenceDataProvider()
     {
         return array_merge(
             $this->layoutGetDependencyInfoDataProvider(),
-            array(
-                array(
+            [
+                [
                     $this->_getLayoutFileContent('layout_reference.xml'),
                     \Magento\Test\Integrity\DependencyTest::TYPE_SOFT,
-                    false
-                )
-            )
+                    false,
+                ]
+            ]
         );
     }
 

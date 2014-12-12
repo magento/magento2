@@ -1,29 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Rss;
 
-use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class OrderStatusTest
@@ -83,24 +64,24 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $feedData = array(
+    protected $feedData = [
         'title' => 'Order # 100000001 Notification(s)',
         'link' => 'http://magento.com/sales/order/view/order_id/1',
         'description' => 'Order # 100000001 Notification(s)',
         'charset' => 'UTF-8',
-        'entries' => array(
-            array(
+        'entries' => [
+            [
                 'title' => 'Details for Order #100000001',
                 'link' => 'http://magento.com/sales/order/view/order_id/1',
-                'description' => '<p>Notified Date: <br/>Comment: Some comment<br/></p>'
-            ),
-            array(
+                'description' => '<p>Notified Date: <br/>Comment: Some comment<br/></p>',
+            ],
+            [
                 'title' => 'Order #100000001 created at ',
                 'link' => 'http://magento.com/sales/order/view/order_id/1',
                 'description' => '<p>Current Status: Pending<br/>Total: 15.00<br/></p>'
-            ),
-        )
-    );
+            ],
+        ],
+    ];
 
     protected function setUp()
     {
@@ -108,7 +89,7 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
         $this->urlInterface = $this->getMock('Magento\Framework\UrlInterface');
         $this->requestInterface = $this->getMock('Magento\Framework\App\RequestInterface');
         $this->orderStatusFactory = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Rss\OrderStatusFactory')
-            ->setMethods(array('create'))
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->timezoneInterface = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
@@ -125,7 +106,7 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
                 'load',
                 'getStatusLabel',
                 'formatPrice',
-                'getGrandTotal'
+                'getGrandTotal',
             ])->disableOriginalConstructor()->getMock();
         $this->order->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->order->expects($this->any())->method('getIncrementId')->will($this->returnValue('100000001'));
@@ -159,16 +140,16 @@ class OrderStatusTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getAllCommentCollection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $comment = array(
+        $comment = [
             'entity_type_code' => 'order',
             'increment_id' => '100000001',
             'created_at' => '2014-10-09 18:25:50',
-            'comment' => 'Some comment'
-        );
-        $resource->expects($this->once())->method('getAllCommentCollection')->will($this->returnValue(array($comment)));
+            'comment' => 'Some comment',
+        ];
+        $resource->expects($this->once())->method('getAllCommentCollection')->will($this->returnValue([$comment]));
         $this->orderStatusFactory->expects($this->once())->method('create')->will($this->returnValue($resource));
         $this->urlInterface->expects($this->any())->method('getUrl')
-            ->with('sales/order/view', array('order_id' => 1))
+            ->with('sales/order/view', ['order_id' => 1])
             ->will($this->returnValue('http://magento.com/sales/order/view/order_id/1'));
 
         $this->assertEquals($this->feedData, $this->model->getRssData());

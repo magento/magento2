@@ -1,30 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Captcha\Helper;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
 /**
  * Captcha image model
@@ -60,7 +41,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * List uses Models of Captcha
      * @var array
      */
-    protected $_captcha = array();
+    protected $_captcha = [];
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -73,7 +54,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -84,14 +65,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param Filesystem $filesystem
      * @param \Magento\Captcha\Model\CaptchaFactory $factory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         Filesystem $filesystem,
         \Magento\Captcha\Model\CaptchaFactory $factory
@@ -151,14 +132,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getFonts()
     {
         $fontsConfig = $this->_config->getValue(\Magento\Captcha\Helper\Data::XML_PATH_CAPTCHA_FONTS, 'default');
-        $fonts = array();
+        $fonts = [];
         if ($fontsConfig) {
             $libDir = $this->_filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL);
             foreach ($fontsConfig as $fontName => $fontConfig) {
-                $fonts[$fontName] = array(
+                $fonts[$fontName] = [
                     'label' => $fontConfig['label'],
-                    'path' => $libDir->getAbsolutePath($fontConfig['path'])
-                );
+                    'path' => $libDir->getAbsolutePath($fontConfig['path']),
+                ];
             }
         }
         return $fonts;

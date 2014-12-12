@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CatalogSearch\Model;
 
@@ -37,7 +18,7 @@ use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\Exception;
 use Magento\Framework\Registry;
-use Magento\Framework\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
@@ -68,7 +49,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      *
      * @var array
      */
-    protected $_searchCriterias = array();
+    protected $_searchCriterias = [];
 
     /**
      * Current search engine
@@ -108,7 +89,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -137,7 +118,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param EngineProvider $engineProvider
      * @param CurrencyFactory $currencyFactory
      * @param ProductFactory $productFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -150,7 +131,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         CurrencyFactory $currencyFactory,
         ProductFactory $productFactory,
         StoreManagerInterface $storeManager,
-        array $data = array()
+        array $data = []
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
@@ -179,7 +160,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     {
         $attributes = $this->getAttributes();
         $hasConditions = false;
-        $allConditions = array();
+        $allConditions = [];
 
         foreach ($attributes as $attribute) {
             /* @var $attribute Attribute */
@@ -192,13 +173,17 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             if ($attribute->getAttributeCode() == 'price') {
                 $rate = 1;
                 $store = $this->_storeManager->getStore();
-                $curency = $store->getCurrentCurrencyCode();
-                if ($curency != $store->getBaseCurrencyCode()) {
-                    $rate = $store->getBaseCurrency()->getRate($curency);
+                $currency = $store->getCurrentCurrencyCode();
+                if ($currency != $store->getBaseCurrencyCode()) {
+                    $rate = $store->getBaseCurrency()->getRate($currency);
                 }
 
-                $value['from'] = isset($value['from']) ? (float)$value['from'] / $rate : '';
-                $value['to'] = isset($value['to']) ? (float)$value['to'] / $rate : '';
+                $value['from'] = (isset($value['from']) && is_numeric($value['from']))
+                    ? (float)$value['from'] / $rate
+                    : '';
+                $value['to'] = (isset($value['to']) && is_numeric($value['to']))
+                    ? (float)$value['to'] / $rate
+                    : '';
             }
             $condition = $this->_getResource()->prepareCondition(
                 $attribute,
@@ -208,7 +193,6 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             if ($condition === false) {
                 continue;
             }
-
 
             $table = $attribute->getBackend()->getTable();
             if ($attribute->getBackendType() == 'static') {
@@ -231,7 +215,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve array of attributes used in advanced search
      *
-     * @return array
+     * @return array|\Magento\Catalog\Model\Resource\Product\Attribute\Collection
      */
     public function getAttributes()
     {
@@ -310,8 +294,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);
-                        $from = $currencyModel->format($value['from'], array(), false);
-                        $to = $currencyModel->format($value['to'], array(), false);
+                        $from = $currencyModel->format($value['from'], [], false);
+                        $to = $currencyModel->format($value['to'], [], false);
                     } else {
                         $currencyModel = null;
                     }
@@ -358,7 +342,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 : __('No');
         }
         if (!empty($value)) {
-            $this->_searchCriterias[] = array('name' => $name, 'value' => $value);
+            $this->_searchCriterias[] = ['name' => $name, 'value' => $value];
         }
         return $this;
     }

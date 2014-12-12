@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Payment\Model;
 
@@ -67,21 +48,21 @@ class Cart
      *
      * @var array
      */
-    protected $_customItems = array();
+    protected $_customItems = [];
 
     /**
      * Items imported from sales model
      *
      * @var array
      */
-    protected $_salesModelItems = array();
+    protected $_salesModelItems = [];
 
     /**
      * Flags that indicates whether discount, shopping and taxes should be transferred as cart item
      *
      * @var array
      */
-    protected $_transferFlags = array();
+    protected $_transferFlags = [];
 
     /**
      * Flags which indicates whether items data is outdated and has to be recollected
@@ -302,12 +283,12 @@ class Cart
 
         $this->_itemsCollectingRequired = false;
 
-        $this->_salesModelItems = array();
-        $this->_customItems = array();
+        $this->_salesModelItems = [];
+        $this->_customItems = [];
 
         $this->_resetAmounts();
 
-        $this->_eventManager->dispatch('payment_cart_collect_items_and_amounts', array('cart' => $this));
+        $this->_eventManager->dispatch('payment_cart_collect_items_and_amounts', ['cart' => $this]);
 
         $this->_importItemsFromSalesModel();
         $this->_calculateCustomItemsSubtotal();
@@ -320,7 +301,7 @@ class Cart
      */
     protected function _importItemsFromSalesModel()
     {
-        $this->_salesModelItems = array();
+        $this->_salesModelItems = [];
 
         foreach ($this->_salesModel->getAllItems() as $item) {
             if ($item->getParentItem()) {
@@ -416,7 +397,7 @@ class Cart
      */
     protected function _createItemFromData($name, $qty, $amount, $identifier = null)
     {
-        $item = new \Magento\Framework\Object(array('name' => $name, 'qty' => $qty, 'amount' => (double)$amount));
+        $item = new \Magento\Framework\Object(['name' => $name, 'qty' => $qty, 'amount' => (double)$amount]);
 
         if ($identifier) {
             $item->setData('id', $identifier);
@@ -432,11 +413,11 @@ class Cart
      */
     protected function _resetAmounts()
     {
-        $this->_amounts = array(
+        $this->_amounts = [
             self::AMOUNT_DISCOUNT => 0,
             self::AMOUNT_SHIPPING => 0,
             self::AMOUNT_SUBTOTAL => 0,
-            self::AMOUNT_TAX => 0
-        );
+            self::AMOUNT_TAX => 0,
+        ];
     }
 }

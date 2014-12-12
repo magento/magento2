@@ -1,27 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Store\Model;
+
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -35,7 +18,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Http\RequestInterface
      */
     protected $requestMock;
 
@@ -52,7 +35,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->requestMock = $this->getMock('\Magento\Framework\App\RequestInterface', [
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [
             'getRequestString',
             'getModuleName',
             'setModuleName',
@@ -62,6 +45,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'getQuery',
             'getCookie',
             'getDistroBaseUrl',
+            'isSecure',
         ], [], '', false);
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactoryMock = $this->getMock(
@@ -124,7 +108,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWebsite($websiteId, $website)
     {
-        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
             ->method('getWebsite')
             ->with($websiteId)
@@ -160,7 +144,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('test/route'), $this->equalTo($params))
             ->will($this->returnValue('http://test/url'));
 
-        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($defaultStore));
@@ -347,7 +331,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $urlMock->expects($this->any())->method('getUrl')
             ->will($this->returnValue($url));
 
-        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($defaultStore));
@@ -408,7 +392,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
         $currencyFactory = $this->getMock(
             '\Magento\Directory\Model\CurrencyFactory',
-            ['create', 'load']
+            ['create'],
+            [],
+            '',
+            false
         );
         $currencyFactory->expects($this->any())->method('create')->will($this->returnValue($currency));
 
@@ -520,5 +507,64 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
             ]);
         $model->deleteCookie();
+    }
+
+    /**
+     * @dataProvider isCurrentlySecureDataProvider
+     *
+     * @param bool $expected
+     * @param array $serverValues
+     * @param string|null $secureBaseUrl
+     */
+    public function testIsCurrentlySecure(
+        $expected,
+        $serverValues,
+        $requestSecure = false,
+        $secureBaseUrl = 'https://example.com:443'
+    ) {
+        /* @var ReinitableConfigInterface|PHPUnit_Framework_MockObject_MockObject $configMock */
+        $configMock = $this->getMockForAbstractClass('\Magento\Framework\App\Config\ReinitableConfigInterface');
+        $configMock->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValueMap([
+                        [
+                            Store::XML_PATH_SECURE_BASE_URL,
+                            ScopeInterface::SCOPE_STORE,
+                            null,
+                            $secureBaseUrl
+                        ],
+                    ]));
+
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn($requestSecure);
+
+        /** @var \Magento\Store\Model\Store $model */
+        $model = $this->objectManagerHelper->getObject(
+            'Magento\Store\Model\Store',
+            ['config' => $configMock, 'request' => $this->requestMock]
+        );
+
+        $server = $_SERVER;
+        foreach ($serverValues as $key => $value) {
+            $_SERVER[$key] = $value;
+        }
+
+        if ($expected) {
+            $this->assertTrue($model->isCurrentlySecure(), "Was expecting this test to show as secure, but it wasn't");
+        } else {
+            $this->assertFalse($model->isCurrentlySecure(), "Was expecting this test to show as not secure!");
+        }
+        $_SERVER = $server;
+    }
+
+    public function isCurrentlySecureDataProvider()
+    {
+        return [
+            'secure request, no server setting' => [true, [], true],
+            'unsecure request, using registered port' => [true, ['SERVER_PORT' => 443]],
+            'unsecure request, no secure base url registered' => [false, ['SERVER_PORT' => 443], false, null],
+            'unsecure request, not using registered port' => [false, ['SERVER_PORT' => 80]],
+        ];
     }
 }

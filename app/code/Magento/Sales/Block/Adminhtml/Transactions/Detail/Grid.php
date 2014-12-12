@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Block\Adminhtml\Transactions\Detail;
 
@@ -56,7 +37,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Framework\Data\CollectionFactory $collectionFactory,
         \Magento\Framework\Registry $coreRegistry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_coreRegistry = $coreRegistry;
@@ -84,7 +65,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $collection = $this->_collectionFactory->create();
         foreach ($this->getTransactionAdditionalInfo() as $key => $value) {
-            $data = new \Magento\Framework\Object(array('key' => $key, 'value' => $value));
+            $data = new \Magento\Framework\Object(['key' => $key, 'value' => $value]);
             $collection->addItem($data);
         }
 
@@ -101,19 +82,19 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $this->addColumn(
             'key',
-            array(
+            [
                 'header' => __('Key'),
                 'index' => 'key',
                 'sortable' => false,
                 'type' => 'text',
                 'header_css_class' => 'col-key',
                 'column_css_class' => 'col-key'
-            )
+            ]
         );
 
         $this->addColumn(
             'value',
-            array(
+            [
                 'header' => __('Value'),
                 'index' => 'value',
                 'sortable' => false,
@@ -121,7 +102,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'escape' => true,
                 'header_css_class' => 'col-value',
                 'column_css_class' => 'col-value'
-            )
+            ]
         );
 
         return parent::_prepareColumns();
@@ -139,6 +120,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         )->getAdditionalInformation(
             \Magento\Sales\Model\Order\Payment\Transaction::RAW_DETAILS
         );
-        return is_array($info) ? $info : array();
+        return is_array($info) ? $info : [];
     }
 }

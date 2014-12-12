@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Shipping\Model\Rate;
 
@@ -30,7 +11,7 @@ class Result
      *
      * @var array
      */
-    protected $_rates = array();
+    protected $_rates = [];
 
     /**
      * Shipping errors
@@ -40,14 +21,14 @@ class Result
     protected $_error = null;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Framework\StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
     }
@@ -59,7 +40,7 @@ class Result
      */
     public function reset()
     {
-        $this->_rates = array();
+        $this->_rates = [];
         return $this;
     }
 
@@ -135,7 +116,7 @@ class Result
      */
     public function getRatesByCarrier($carrier)
     {
-        $result = array();
+        $result = [];
         foreach ($this->_rates as $rate) {
             if ($rate->getCarrier() === $carrier) {
                 $result[] = $rate;
@@ -165,15 +146,15 @@ class Result
         } else {
             $currencyFilter = new \Magento\Framework\Filter\Sprintf('%s', 2);
         }
-        $rates = array();
+        $rates = [];
         $allRates = $this->getAllRates();
         foreach ($allRates as $rate) {
             $rates[$rate->getCarrier()]['title'] = $rate->getCarrierTitle();
-            $rates[$rate->getCarrier()]['methods'][$rate->getMethod()] = array(
+            $rates[$rate->getCarrier()]['methods'][$rate->getMethod()] = [
                 'title' => $rate->getMethodTitle(),
                 'price' => $rate->getPrice(),
-                'price_formatted' => $currencyFilter->filter($rate->getPrice())
-            );
+                'price_formatted' => $currencyFilter->filter($rate->getPrice()),
+            ];
         }
         return $rates;
     }

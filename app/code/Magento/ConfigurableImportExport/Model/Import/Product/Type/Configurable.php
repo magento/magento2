@@ -2,26 +2,7 @@
 /**
  * Import entity configurable product type model
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
@@ -43,25 +24,25 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @var array
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Attribute with this code is not super',
         self::ERROR_INVALID_PRICE_CORRECTION => 'Super attribute price correction value is invalid',
         self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value',
-        self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute'
-    );
+        self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
+    ];
 
     /**
      * Column names that holds values with particular meaning.
      *
      * @var string[]
      */
-    protected $_specialAttributes = array(
+    protected $_specialAttributes = [
         '_super_products_sku',
         '_super_attribute_code',
         '_super_attribute_option',
         '_super_attribute_price_corr',
-        '_super_attribute_price_website'
-    );
+        '_super_attribute_price_website',
+    ];
 
     /**
      * Reference array of existing product-attribute to product super attribute ID.
@@ -73,7 +54,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @var array
      */
-    protected $_productSuperAttrs = array();
+    protected $_productSuperAttrs = [];
 
     /**
      * Array of SKU to array of super attribute values for all products.
@@ -92,7 +73,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @var array
      */
-    protected $_skuSuperAttributeValues = array();
+    protected $_skuSuperAttributeValues = [];
 
     /**
      * Array of SKU to array of super attributes data for validation new associated products.
@@ -111,14 +92,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @var array
      */
-    protected $_skuSuperData = array();
+    protected $_skuSuperData = [];
 
     /**
      * Super attributes codes in a form of code => TRUE array pairs.
      *
      * @var array
      */
-    protected $_superAttributes = array();
+    protected $_superAttributes = [];
 
     /**
      * All super attributes values combinations for each attribute set.
@@ -276,7 +257,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if ($this->_superAttributes) {
             $attrSetIdToName = $this->_entityModel->getAttrSetIdToName();
 
-            $productIds = array();
+            $productIds = [];
             foreach ($bunch as $rowData) {
                 if (!empty($rowData['_super_products_sku'])) {
                     if (isset($newSku[$rowData['_super_products_sku']])) {
@@ -292,7 +273,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $this->_productTypesConfig->getComposableTypes()
             )->addFieldToFilter(
                 'entity_id',
-                array('in' => $productIds)
+                ['in' => $productIds]
             )->addAttributeToSelect(
                 array_keys($this->_superAttributes)
             ) as $product) {
@@ -320,16 +301,16 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $mainTable = $this->_resource->getTableName('catalog_product_super_attribute');
             $priceTable = $this->_resource->getTableName('catalog_product_super_attribute_pricing');
             $select = $connection->select()->from(
-                array('m' => $mainTable),
-                array('product_id', 'attribute_id', 'product_super_attribute_id')
+                ['m' => $mainTable],
+                ['product_id', 'attribute_id', 'product_super_attribute_id']
             )->joinLeft(
-                array('p' => $priceTable),
+                ['p' => $priceTable],
                 $connection->quoteIdentifier(
                     'p.product_super_attribute_id'
                 ) . ' = ' . $connection->quoteIdentifier(
                     'm.product_super_attribute_id'
                 ),
-                array('value_index')
+                ['value_index']
             );
 
             foreach ($connection->fetchAll($select) as $row) {
@@ -355,7 +336,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function _processSuperData(array $superData, array &$superAttributes)
     {
         if ($superData) {
-            $usedCombs = array();
+            $usedCombs = [];
             // is associated products applicable?
             foreach (array_keys($superData['assoc_ids']) as $assocId) {
                 if (!isset($this->_skuSuperAttributeValues[$superData['attr_set_code']][$assocId])) {
@@ -363,7 +344,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 }
                 if ($superData['used_attributes']) {
                     $skuSuperValues = $this->_skuSuperAttributeValues[$superData['attr_set_code']][$assocId];
-                    $usedCombParts = array();
+                    $usedCombParts = [];
 
                     foreach ($superData['used_attributes'] as $usedAttrId => $usedValues) {
                         if (empty($skuSuperValues[$usedAttrId]) || !isset($usedValues[$skuSuperValues[$usedAttrId]])) {
@@ -381,14 +362,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     }
                     $usedCombs[$comb] = true;
                 }
-                $superAttributes['super_link'][] = array(
+                $superAttributes['super_link'][] = [
                     'product_id' => $assocId,
-                    'parent_id' => $superData['product_id']
-                );
-                $superAttributes['relation'][] = array(
                     'parent_id' => $superData['product_id'],
-                    'child_id' => $assocId
-                );
+                ];
+                $superAttributes['relation'][] = [
+                    'parent_id' => $superData['product_id'],
+                    'child_id' => $assocId,
+                ];
             }
             // clean up unused values pricing
             foreach ($superData['used_attributes'] as $usedAttrId => $usedValues) {
@@ -425,7 +406,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $relationTable = $this->_resource->getTableName('catalog_product_relation');
         $newSku = $this->_entityModel->getNewSku();
         $oldSku = $this->_entityModel->getOldSku();
-        $productSuperData = array();
+        $productSuperData = [];
         $productData = null;
         $nextAttrId = $this->_resourceHelper->getNextAutoincrement($mainTable);
 
@@ -434,13 +415,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
 
         while ($bunch = $this->_entityModel->getNextBunch()) {
-            $superAttributes = array(
-                'attributes' => array(),
-                'labels' => array(),
-                'pricing' => array(),
-                'super_link' => array(),
-                'relation' => array()
-            );
+            $superAttributes = [
+                'attributes' => [],
+                'labels' => [],
+                'pricing' => [],
+                'super_link' => [],
+                'relation' => [],
+            ];
 
             $this->_loadSkuSuperAttributeValues($bunch, $newSku, $oldSku);
 
@@ -461,13 +442,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
                     $this->_processSuperData($productSuperData, $superAttributes);
 
-                    $productSuperData = array(
+                    $productSuperData = [
                         'product_id' => $productId,
                         'attr_set_code' => $productData['attr_set_code'],
-                        'used_attributes' => empty($this->_skuSuperData[$productId]) ? array() : $this
+                        'used_attributes' => empty($this->_skuSuperData[$productId]) ? [] : $this
                             ->_skuSuperData[$productId],
-                        'assoc_ids' => array()
-                    );
+                        'assoc_ids' => [],
+                    ];
                 } elseif (null === $productData) {
                     continue;
                 }
@@ -487,16 +468,16 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $productSuperAttrId = $this->_getSuperAttributeId($productId, $attrParams['id']);
                 } elseif (!isset($superAttributes['attributes'][$productId][$attrParams['id']])) {
                     $productSuperAttrId = $nextAttrId++;
-                    $superAttributes['attributes'][$productId][$attrParams['id']] = array(
+                    $superAttributes['attributes'][$productId][$attrParams['id']] = [
                         'product_super_attribute_id' => $productSuperAttrId,
-                        'position' => 0
-                    );
-                    $superAttributes['labels'][] = array(
+                        'position' => 0,
+                    ];
+                    $superAttributes['labels'][] = [
                         'product_super_attribute_id' => $productSuperAttrId,
                         'store_id' => 0,
                         'use_default' => 1,
-                        'value' => $attrParams['frontend_label']
-                    );
+                        'value' => $attrParams['frontend_label'],
+                    ];
                 }
                 if (isset($rowData['_super_attribute_option']) && strlen($rowData['_super_attribute_option'])) {
                     $optionId = $attrParams['options'][strtolower($rowData['_super_attribute_option'])];
@@ -505,13 +486,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                         $productSuperData['used_attributes'][$attrParams['id']][$optionId] = false;
                     }
                     if (!empty($rowData['_super_attribute_price_corr'])) {
-                        $superAttributes['pricing'][] = array(
+                        $superAttributes['pricing'][] = [
                             'product_super_attribute_id' => $productSuperAttrId,
                             'value_index' => $optionId,
                             'is_percent' => '%' == substr($rowData['_super_attribute_price_corr'], -1),
                             'pricing_value' => (double)rtrim($rowData['_super_attribute_price_corr'], '%'),
-                            'website_id' => 0
-                        );
+                            'website_id' => 0,
+                        ];
                     }
                 }
             }
@@ -527,7 +508,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $connection->delete($linkTable, "parent_id {$quoted}");
                 $connection->delete($relationTable, "parent_id {$quoted}");
             }
-            $mainData = array();
+            $mainData = [];
 
             foreach ($superAttributes['attributes'] as $productId => $attributesData) {
                 foreach ($attributesData as $attrId => $row) {
@@ -546,7 +527,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $connection->insertOnDuplicate(
                     $priceTable,
                     $superAttributes['pricing'],
-                    array('is_percent', 'pricing_value')
+                    ['is_percent', 'pricing_value']
                 );
             }
             if ($superAttributes['super_link']) {

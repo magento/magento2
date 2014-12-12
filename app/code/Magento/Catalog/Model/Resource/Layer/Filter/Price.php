@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Resource\Layer\Filter;
 
@@ -51,7 +32,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
     private $session;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
@@ -60,14 +41,14 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Customer\Model\Session $session
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Customer\Model\Session $session,
-        \Magento\Framework\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->layer = $layerResolver->get();
         $this->session = $session;
@@ -97,7 +78,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $countExpr = new \Zend_Db_Expr('COUNT(*)');
         $rangeExpr = new \Zend_Db_Expr("FLOOR(({$priceExpression}) / {$range}) + 1");
 
-        $select->columns(array('range' => $rangeExpr, 'count' => $countExpr));
+        $select->columns(['range' => $rangeExpr, 'count' => $countExpr]);
         $select->group($rangeExpr)->order("({$rangeExpr}) ASC");
 
         return $this->_getReadAdapter()->fetchPairs($select);
@@ -182,14 +163,14 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return null;
         }
         $adapter = $this->_getReadAdapter();
-        $oldAlias = array(
+        $oldAlias = [
             \Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS . '.',
-            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS) . '.'
-        );
-        $newAlias = array(
+            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::INDEX_TABLE_ALIAS) . '.',
+        ];
+        $newAlias = [
             \Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS . '.',
-            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS) . '.'
-        );
+            $adapter->quoteIdentifier(\Magento\Catalog\Model\Resource\Product\Collection::MAIN_TABLE_ALIAS) . '.',
+        ];
         return str_replace($oldAlias, $newAlias, $conditionString);
     }
 
@@ -283,7 +264,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $select = $this->_getSelect();
         $priceExpression = $this->_getPriceExpression($select);
-        $select->columns(array('min_price_expr' => $this->_getFullPriceExpression($select)));
+        $select->columns(['min_price_expr' => $this->_getFullPriceExpression($select)]);
         if (!is_null($lowerPrice)) {
             $select->where("{$priceExpression} >= " . $this->_getComparingValue($lowerPrice));
         }
@@ -324,7 +305,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         $pricesSelect->columns(
-            array('min_price_expr' => $this->_getFullPriceExpression($pricesSelect))
+            ['min_price_expr' => $this->_getFullPriceExpression($pricesSelect)]
         )->where(
             "{$priceExpression} >= " . $this->_getComparingValue($price)
         );
