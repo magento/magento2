@@ -17,7 +17,6 @@ app/code/Magento/User/view
 app/code/Magento/Webapi/view
 app/code/Magento/GroupedProduct/view
 app/code/Magento/Rss/view
-app/code/Magento/RecurringPayment/view
 app/code/Magento/UrlRewrite/view
 dev/tests/integration/framework/Magento/TestFramework/Db/Mysql.php
 dev/tests/integration/framework/Magento/TestFramework/Db/Adapter/Mysql.php
@@ -112,11 +111,8 @@ lib/internal/Magento/Framework/Image.php
 lib/internal/Magento/Framework/Io
 lib/internal/Magento/Framework/Object
 lib/internal/Magento/Framework/Object.php
-lib/internal/Magento/Framework/Pear
-lib/internal/Magento/Framework/Pear.php
 lib/internal/Magento/Framework/Simplexml
 lib/internal/Magento/Framework/System
 lib/internal/Magento/Framework/Util.php
 lib/internal/Magento/Framework/Xml
 vendor
-setup/vendor

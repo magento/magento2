@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Model;
 
@@ -95,51 +76,51 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         /** @var $encryptor \Magento\Framework\Encryption\EncryptorInterface */
         $encryptor = $objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
 
-        return array(
-            array(
+        return [
+            [
                 '',
                 '',
                 '',
-                $encryptor->getHash('default_router' . 'default_controller' . 'default_action' . 'salt')
-            ),
-            array('', '', 'action', $encryptor->getHash('default_router' . 'default_controller' . 'action' . 'salt')),
-            array(
+                $encryptor->getHash('default_router' . 'default_controller' . 'default_action' . 'salt'),
+            ],
+            ['', '', 'action', $encryptor->getHash('default_router' . 'default_controller' . 'action' . 'salt')],
+            [
                 '',
                 'controller',
                 '',
                 $encryptor->getHash('default_router' . 'controller' . 'default_action' . 'salt')
-            ),
-            array(
+            ],
+            [
                 '',
                 'controller',
                 'action',
                 $encryptor->getHash('default_router' . 'controller' . 'action' . 'salt')
-            ),
-            array(
+            ],
+            [
                 'adminhtml',
                 '',
                 '',
                 $encryptor->getHash('adminhtml' . 'default_controller' . 'default_action' . 'salt')
-            ),
-            array(
+            ],
+            [
                 'adminhtml',
                 '',
                 'action',
                 $encryptor->getHash('adminhtml' . 'default_controller' . 'action' . 'salt')
-            ),
-            array(
+            ],
+            [
                 'adminhtml',
                 'controller',
                 '',
                 $encryptor->getHash('adminhtml' . 'controller' . 'default_action' . 'salt')
-            ),
-            array(
+            ],
+            [
                 'adminhtml',
                 'controller',
                 'action',
                 $encryptor->getHash('adminhtml' . 'controller' . 'action' . 'salt')
-            )
-        );
+            ]
+        ];
     }
 
     /**

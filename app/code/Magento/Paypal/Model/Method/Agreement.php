@@ -1,31 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Paypal\Model\Method;
 
-use Magento\Store\Model\Store;
 use Magento\Payment\Model\Info;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Store\Model\Store;
 
 /**
  * Paypal Billing Agreement method
@@ -118,7 +99,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
     protected $_pro;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -138,7 +119,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Paypal\Model\ProFactory $proFactory
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
@@ -152,11 +133,11 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Paypal\Model\ProFactory $proFactory,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Paypal\Model\CartFactory $cartFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_storeManager = $storeManager;
         $this->_urlBuilder = $urlBuilder;
@@ -226,12 +207,12 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
     {
         $api = $this->_pro->getApi()->setToken($agreement->getToken());
         $api->callGetBillingAgreementCustomerDetails();
-        $responseData = array(
+        $responseData = [
             'token' => $api->getData('token'),
             'email' => $api->getData('email'),
             'payer_id' => $api->getData('payer_id'),
-            'payer_status' => $api->getData('payer_status')
-        );
+            'payer_status' => $api->getData('payer_status'),
+        ];
         $agreement->addData($responseData);
         return $responseData;
     }
@@ -406,7 +387,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
             )
         );
 
-        $cart = $this->_cartFactory->create(array('salesModel' => $order));
+        $cart = $this->_cartFactory->create(['salesModel' => $order]);
 
         $proConfig = $this->_pro->getConfig();
         $api = $this->_pro->getApi()->setReferenceId(

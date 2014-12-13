@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export;
 
@@ -56,7 +37,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
-        array $data = array()
+        array $data = []
     ) {
         $this->_importExportData = $importExportData;
         parent::__construct($context, $backendHelper, $data);
@@ -91,15 +72,15 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _getDateFromToHtmlWithValue(Attribute $attribute, $value)
     {
-        $arguments = array(
+        $arguments = [
             'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
             'id' => $this->getFilterElementId($attribute->getAttributeCode()),
             'class' => 'input-text input-text-range-date',
             'date_format' => $this->_localeDate->getDateFormat(
                 \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
             ),
-            'image' => $this->getViewFileUrl('images/grid-cal.gif')
-        );
+            'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+        ];
         /** @var $selectBlock \Magento\Framework\View\Element\Html\Date */
         $dateBlock = $this->_layout->createBlock(
             'Magento\Framework\View\Element\Html\Date',
@@ -166,12 +147,12 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             }
         }
         if ($size = count($options)) {
-            $arguments = array(
+            $arguments = [
                 'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
                 'id' => $this->getFilterElementId($attribute->getAttributeCode()),
                 'class' => 'multiselect multiselect-export-filter',
-                'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size))
-            );
+                'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size)),
+            ];
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->createBlock(
                 'Magento\Framework\View\Element\Html\Select',
@@ -232,10 +213,10 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _getSelectHtmlWithValue(Attribute $attribute, $value)
     {
         if ($attribute->getFilterOptions()) {
-            $options = array();
+            $options = [];
 
             foreach ($attribute->getFilterOptions() as $value => $label) {
-                $options[] = array('value' => $value, 'label' => $label);
+                $options[] = ['value' => $value, 'label' => $label];
             }
         } else {
             $options = $attribute->getSource()->getAllOptions(false);
@@ -247,13 +228,13 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             if ('' === $firstOption['value']) {
                 $options[key($options)]['label'] = '';
             } else {
-                array_unshift($options, array('value' => '', 'label' => ''));
+                array_unshift($options, ['value' => '', 'label' => '']);
             }
-            $arguments = array(
+            $arguments = [
                 'name' => $this->getFilterElementName($attribute->getAttributeCode()),
                 'id' => $this->getFilterElementId($attribute->getAttributeCode()),
-                'class' => 'select select-export-filter'
-            );
+                'class' => 'select select-export-filter',
+            ];
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->createBlock(
                 'Magento\Framework\View\Element\Html\Select',
@@ -277,7 +258,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->addColumn(
             'skip',
-            array(
+            [
                 'header' => __('Exclude'),
                 'type' => 'checkbox',
                 'name' => 'skip',
@@ -287,35 +268,35 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'attribute_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
-            )
+            ]
         );
         $this->addColumn(
             'frontend_label',
-            array(
+            [
                 'header' => __('Attribute Label'),
                 'index' => 'frontend_label',
                 'sortable' => false,
                 'header_css_class' => 'col-label',
                 'column_css_class' => 'col-label'
-            )
+            ]
         );
         $this->addColumn(
             'attribute_code',
-            array(
+            [
                 'header' => __('Attribute Code'),
                 'index' => 'attribute_code',
                 'header_css_class' => 'col-code',
                 'column_css_class' => 'col-code'
-            )
+            ]
         );
         $this->addColumn(
             'filter',
-            array(
+            [
                 'header' => __('Filter'),
                 'sortable' => false,
                 'filter' => false,
-                'frame_callback' => array($this, 'decorateFilter')
-            )
+                'frame_callback' => [$this, 'decorateFilter']
+            ]
         );
 
         if ($this->hasOperation()) {

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -53,7 +34,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Core\Model\VariableFactory $variableFactory,
         \Magento\Email\Model\Source\Variables $variables,
-        array $data = array()
+        array $data = []
     ) {
         $this->_variableFactory = $variableFactory;
         $this->_variables = $variables;
@@ -88,7 +69,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $fieldset = $form->addFieldset(
             'base_fieldset',
-            array('legend' => __('Template Information'), 'class' => 'fieldset-wide')
+            ['legend' => __('Template Information'), 'class' => 'fieldset-wide']
         );
 
         $templateId = $this->getEmailTemplate()->getId();
@@ -96,7 +77,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $fieldset->addField(
                 'used_currently_for',
                 'label',
-                array(
+                [
                     'label' => __('Used Currently For'),
                     'container_id' => 'used_currently_for',
                     'after_element_html' => '<script type="text/javascript">' .
@@ -104,7 +85,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'used_currently_for' .
                     '\').hide(); ' : '') .
                     '</script>'
-                )
+                ]
             );
         }
 
@@ -112,7 +93,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $fieldset->addField(
                 'used_default_for',
                 'label',
-                array(
+                [
                     'label' => __('Used as Default For'),
                     'container_id' => 'used_default_for',
                     'after_element_html' => '<script type="text/javascript">' .
@@ -120,63 +101,63 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'used_default_for' .
                     '\').hide(); ' : '') .
                     '</script>'
-                )
+                ]
             );
         }
 
         $fieldset->addField(
             'template_code',
             'text',
-            array('name' => 'template_code', 'label' => __('Template Name'), 'required' => true)
+            ['name' => 'template_code', 'label' => __('Template Name'), 'required' => true]
         );
         $fieldset->addField(
             'template_subject',
             'text',
-            array('name' => 'template_subject', 'label' => __('Template Subject'), 'required' => true)
+            ['name' => 'template_subject', 'label' => __('Template Subject'), 'required' => true]
         );
-        $fieldset->addField('orig_template_variables', 'hidden', array('name' => 'orig_template_variables'));
+        $fieldset->addField('orig_template_variables', 'hidden', ['name' => 'orig_template_variables']);
         $fieldset->addField(
             'variables',
             'hidden',
-            array('name' => 'variables', 'value' => \Zend_Json::encode($this->getVariables()))
+            ['name' => 'variables', 'value' => \Zend_Json::encode($this->getVariables())]
         );
-        $fieldset->addField('template_variables', 'hidden', array('name' => 'template_variables'));
+        $fieldset->addField('template_variables', 'hidden', ['name' => 'template_variables']);
 
         $insertVariableButton = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button',
             '',
-            array(
-                'data' => array(
+            [
+                'data' => [
                     'type' => 'button',
                     'label' => __('Insert Variable...'),
-                    'onclick' => 'templateControl.openVariableChooser();return false;'
-                )
-            )
+                    'onclick' => 'templateControl.openVariableChooser();return false;',
+                ]
+            ]
         );
 
-        $fieldset->addField('insert_variable', 'note', array('text' => $insertVariableButton->toHtml()));
+        $fieldset->addField('insert_variable', 'note', ['text' => $insertVariableButton->toHtml()]);
 
         $fieldset->addField(
             'template_text',
             'textarea',
-            array(
+            [
                 'name' => 'template_text',
                 'label' => __('Template Content'),
                 'title' => __('Template Content'),
                 'required' => true,
                 'style' => 'height:24em;'
-            )
+            ]
         );
 
         if (!$this->getEmailTemplate()->isPlain()) {
             $fieldset->addField(
                 'template_styles',
                 'textarea',
-                array(
+                [
                     'name' => 'template_styles',
                     'label' => __('Template Styles'),
                     'container_id' => 'field_template_styles'
-                )
+                ]
             );
         }
 
@@ -211,7 +192,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getVariables()
     {
-        $variables = array();
+        $variables = [];
         $variables[] = $this->_variables->toOptionArray(true);
         $customVariables = $this->_variableFactory->create()->getVariablesOptionArray(true);
         if ($customVariables) {

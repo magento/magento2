@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model;
 
@@ -149,22 +130,22 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     public function getObsoleteGettersDataProvider()
     {
-        return array(
-            array('calculated_final_price', 'getCalculatedFinalPrice'),
-            array('minimal_price', 'getMinimalPrice'),
-            array('special_price', 'getSpecialPrice'),
-            array('special_from_date', 'getSpecialFromDate'),
-            array('special_to_date', 'getSpecialToDate'),
-            array('request_path', 'getRequestPath'),
-            array('gift_message_available', 'getGiftMessageAvailable'),
-        );
+        return [
+            ['calculated_final_price', 'getCalculatedFinalPrice'],
+            ['minimal_price', 'getMinimalPrice'],
+            ['special_price', 'getSpecialPrice'],
+            ['special_from_date', 'getSpecialFromDate'],
+            ['special_to_date', 'getSpecialToDate'],
+            ['request_path', 'getRequestPath'],
+            ['gift_message_available', 'getGiftMessageAvailable'],
+        ];
     }
 
     public function testGetMediaAttributes()
     {
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product',
-            array('data' => array('media_attributes' => 'test'))
+            ['data' => ['media_attributes' => 'test']]
         );
         $this->assertEquals('test', $model->getMediaAttributes());
 
@@ -181,7 +162,7 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
         $this->assertEmpty($model->getMediaGalleryImages());
 
-        $this->_model->setMediaGallery(array('images' => array(array('file' => 'magento_image.jpg'))));
+        $this->_model->setMediaGallery(['images' => [['file' => 'magento_image.jpg']]]);
         $images = $this->_model->getMediaGalleryImages();
         $this->assertInstanceOf('Magento\Framework\Data\Collection', $images);
         foreach ($images as $image) {
@@ -213,9 +194,9 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomDesignDate()
     {
-        $this->assertEquals(array('from' => null, 'to' => null), $this->_model->getCustomDesignDate());
+        $this->assertEquals(['from' => null, 'to' => null], $this->_model->getCustomDesignDate());
         $this->_model->setCustomDesignFrom(1)->setCustomDesignTo(2);
-        $this->assertEquals(array('from' => 1, 'to' => 2), $this->_model->getCustomDesignDate());
+        $this->assertEquals(['from' => 1, 'to' => 2], $this->_model->getCustomDesignDate());
     }
 
     /**

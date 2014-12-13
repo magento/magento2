@@ -1,29 +1,9 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Tools\I18n\Dictionary;
 
-use Magento\Tools\I18n\Dictionary\Phrase;
 
 class PhraseTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,26 +25,26 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderPhraseCreation()
     {
-        return array(
-            array(array('phrase', 'translation'), 'getPhrase', 'phrase'),
-            array(array('phrase', 'translation'), 'getTranslation', 'translation'),
-            array(array('phrase', 'translation', 'context_type'), 'getContextType', 'context_type'),
-            array(
-                array('phrase', 'translation', 'context_type', 'context_value'),
+        return [
+            [['phrase', 'translation'], 'getPhrase', 'phrase'],
+            [['phrase', 'translation'], 'getTranslation', 'translation'],
+            [['phrase', 'translation', 'context_type'], 'getContextType', 'context_type'],
+            [
+                ['phrase', 'translation', 'context_type', 'context_value'],
                 'getContextValue',
-                array('context_value')
-            ),
-            array(
-                array('phrase', 'translation', 'context_type', array('context_value1', 'context_value2')),
+                ['context_value']
+            ],
+            [
+                ['phrase', 'translation', 'context_type', ['context_value1', 'context_value2']],
                 'getContextValue',
-                array('context_value1', 'context_value2')
-            ),
-            array(
-                array('phrase', 'translation', 'context_type', 'context_value1,context_value2'),
+                ['context_value1', 'context_value2']
+            ],
+            [
+                ['phrase', 'translation', 'context_type', 'context_value1,context_value2'],
                 'getContextValue',
-                array('context_value1', 'context_value2')
-            )
-        );
+                ['context_value1', 'context_value2']
+            ]
+        ];
     }
 
     /**
@@ -85,11 +65,11 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderWrongParametersWhilePhraseCreation()
     {
-        return array(
-            array(array(null, 'translation'), 'Missed phrase'),
-            array(array('phrase', null), 'Missed translation'),
-            array(array('phrase', 'translation', null, new \stdClass()), 'Wrong context type')
-        );
+        return [
+            [[null, 'translation'], 'Missed phrase'],
+            [['phrase', null], 'Missed translation'],
+            [['phrase', 'translation', null, new \stdClass()], 'Wrong context type']
+        ];
     }
 
     /**
@@ -111,12 +91,12 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderAccessorMethods()
     {
-        return array(
-            array('value1', 'setPhrase', 'getPhrase'),
-            array('value1', 'setTranslation', 'getTranslation'),
-            array('value1', 'setContextType', 'getContextType'),
-            array(array('value1'), 'setContextValue', 'getContextValue')
-        );
+        return [
+            ['value1', 'setPhrase', 'getPhrase'],
+            ['value1', 'setTranslation', 'getTranslation'],
+            ['value1', 'setContextType', 'getContextType'],
+            [['value1'], 'setContextValue', 'getContextValue']
+        ];
     }
 
     public function testAddContextValue()
@@ -125,7 +105,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $phrase->addContextValue('context_value2');
         $phrase->addContextValue('context_value3');
 
-        $this->assertEquals(array('context_value1', 'context_value2', 'context_value3'), $phrase->getContextValue());
+        $this->assertEquals(['context_value1', 'context_value2', 'context_value3'], $phrase->getContextValue());
     }
 
     public function testContextValueDuplicationResolving()
@@ -134,7 +114,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $phrase->addContextValue('context_value1');
         $phrase->addContextValue('context_value1');
 
-        $this->assertEquals(array('context_value1'), $phrase->getContextValue());
+        $this->assertEquals(['context_value1'], $phrase->getContextValue());
     }
 
     /**
@@ -153,7 +133,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $phrase->addContextValue('context_value2');
         $phrase->setContextValue(null);
 
-        $this->assertEquals(array(), $phrase->getContextValue());
+        $this->assertEquals([], $phrase->getContextValue());
     }
 
     public function testGetContextValueAsString()

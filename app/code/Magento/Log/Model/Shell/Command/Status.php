@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Log\Model\Shell\Command;
 
@@ -35,7 +16,7 @@ class Status implements \Magento\Log\Model\Shell\CommandInterface
      *
      * @var array
      */
-    protected $_output = array();
+    protected $_output = [];
 
     /**
      * @param \Magento\Log\Model\Resource\ShellFactory $resourceFactory
@@ -76,9 +57,9 @@ class Status implements \Magento\Log\Model\Shell\CommandInterface
     {
         if ($number < 1000) {
             return $number;
-        } else if ($number >= 1000 && $number < 1000000) {
+        } elseif ($number >= 1000 && $number < 1000000) {
             return sprintf('%.2fK', $number / 1000);
-        } else if ($number >= 1000000 && $number < 1000000000) {
+        } elseif ($number >= 1000000 && $number < 1000000000) {
             return sprintf('%.2fM', $number / 1000000);
         } else {
             return sprintf('%.2fB', $number / 1000000000);
@@ -124,7 +105,6 @@ class Status implements \Magento\Log\Model\Shell\CommandInterface
         /** @var $resource \Magento\Log\Model\Resource\Shell */
         $resource = $this->_resourceFactory->create();
         $tables = $resource->getTablesInfo();
-
 
         $this->_addRowDelimiter();
         $line = sprintf('%-35s|', 'Table Name');

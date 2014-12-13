@@ -1,9 +1,6 @@
 <?php
 /**
- * {licence_notice}
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Framework\View\Element\Template;
 
@@ -54,7 +51,7 @@ class Context extends \Magento\Framework\View\Element\Context
     /**
      * Store manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -86,7 +83,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Page\Config $pageConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -114,7 +111,7 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\View\TemplateEnginePool $enginePool,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Page\Config $pageConfig
     ) {
         parent::__construct(
@@ -200,7 +197,7 @@ class Context extends \Magento\Framework\View\Element\Context
     /**
      * Get store manager
      *
-     * @return \Magento\Framework\StoreManagerInterface
+     * @return \Magento\Store\Model\StoreManagerInterface
      */
     public function getStoreManager()
     {

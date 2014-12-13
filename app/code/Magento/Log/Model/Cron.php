@@ -1,27 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-
 
 /**
  * Log Cron Model
@@ -45,7 +25,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
      *
      * @var array
      */
-    protected $_errors = array();
+    protected $_errors = [];
 
     /**
      * Core store config
@@ -55,7 +35,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -79,7 +59,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Log\Model\Log $log
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -91,12 +71,12 @@ class Cron extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Log\Model\Log $log,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_transportBuilder = $transportBuilder;
         $this->_log = $log;
@@ -131,12 +111,12 @@ class Cron extends \Magento\Framework\Model\AbstractModel
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
         )->setTemplateOptions(
-            array(
+            [
                 'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => $this->_storeManager->getStore()->getId()
-            )
+                'store' => $this->_storeManager->getStore()->getId(),
+            ]
         )->setTemplateVars(
-            array('warnings' => join("\n", $this->_errors))
+            ['warnings' => join("\n", $this->_errors)]
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_LOG_CLEAN_IDENTITY,
@@ -171,7 +151,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
             return $this;
         }
 
-        $this->_errors = array();
+        $this->_errors = [];
 
         try {
             $this->_log->clean();

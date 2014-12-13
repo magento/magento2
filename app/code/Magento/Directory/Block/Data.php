@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -70,7 +51,7 @@ class Data extends \Magento\Framework\View\Element\Template
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_coreData = $coreData;
@@ -111,7 +92,7 @@ class Data extends \Magento\Framework\View\Element\Template
      */
     public function getCountryHtmlSelect($defValue = null, $name = 'country_id', $id = 'country', $title = 'Country')
     {
-        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, array('group' => 'TEST', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         if (is_null($defValue)) {
             $defValue = $this->getCountryId();
         }
@@ -162,7 +143,7 @@ class Data extends \Magento\Framework\View\Element\Template
      */
     public function getRegionHtmlSelect()
     {
-        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, array('group' => 'TEST', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         $cacheKey = 'DIRECTORY_REGION_SELECT_STORE' . $this->_storeManager->getStore()->getId();
         $cache = $this->_configCacheType->load($cacheKey);
         if ($cache) {
@@ -186,7 +167,7 @@ class Data extends \Magento\Framework\View\Element\Template
         )->setOptions(
             $options
         )->getHtml();
-        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, array('group' => 'TEST', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         return $html;
     }
 
@@ -207,23 +188,23 @@ class Data extends \Magento\Framework\View\Element\Template
      */
     public function getRegionsJs()
     {
-        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, array('group' => 'TEST', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         $regionsJs = $this->getData('regions_js');
         if (!$regionsJs) {
-            $countryIds = array();
+            $countryIds = [];
             foreach ($this->getCountryCollection() as $country) {
                 $countryIds[] = $country->getCountryId();
             }
             $collection = $this->_regionCollectionFactory->create()->addCountryFilter($countryIds)->load();
-            $regions = array();
+            $regions = [];
             foreach ($collection as $region) {
                 if (!$region->getRegionId()) {
                     continue;
                 }
-                $regions[$region->getCountryId()][$region->getRegionId()] = array(
+                $regions[$region->getCountryId()][$region->getRegionId()] = [
                     'code' => $region->getCode(),
-                    'name' => $region->getName()
-                );
+                    'name' => $region->getName(),
+                ];
             }
             $regionsJs = $this->_jsonEncoder->encode($regions);
         }

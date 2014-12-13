@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\App;
 
@@ -45,7 +26,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      *
      * @var array
      */
-    protected $_publicActions = array();
+    protected $_publicActions = [];
 
     /**
      * Namespace for session.
@@ -225,7 +206,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
             if (!$this->_auth->isLoggedIn()) {
                 return $this->_redirect('*/auth/login');
             }
-            $this->_view->loadLayout(array('default', 'adminhtml_denied'), true, true, false);
+            $this->_view->loadLayout(['default', 'adminhtml_denied'], true, true, false);
             $this->_view->renderLayout();
             $this->_request->setDispatched(true);
             return $this->_response;
@@ -284,7 +265,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
                     $this->_objectManager->get(
                         'Magento\Core\Helper\Data'
                     )->jsonEncode(
-                        array('error' => true, 'message' => $_keyErrorMsg)
+                        ['error' => true, 'message' => $_keyErrorMsg]
                     )
                 );
             } else {
@@ -319,11 +300,12 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Set redirect into response
      *
      * @deprecated
+     * @TODO MAGETWO-28356: Refactor controller actions to new ResultInterface
      * @param   string $path
      * @param   array $arguments
      * @return \Magento\Framework\App\ResponseInterface
      */
-    protected function _redirect($path, $arguments = array())
+    protected function _redirect($path, $arguments = [])
     {
         $this->_getSession()->setIsUrlNotice($this->_actionFlag->get('', self::FLAG_IS_URLS_CHECKED));
         $this->getResponse()->setRedirect($this->getUrl($path, $arguments));
@@ -334,6 +316,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Forward to action
      *
      * @deprecated
+     * @TODO MAGETWO-28356: Refactor controller actions to new ResultInterface
      * @param string $action
      * @param string|null $controller
      * @param string|null $module
@@ -353,7 +336,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * @param   array $params
      * @return  string
      */
-    public function getUrl($route = '', $params = array())
+    public function getUrl($route = '', $params = [])
     {
         return $this->_helper->getUrl($route, $params);
     }

@@ -2,26 +2,7 @@
 /**
  * Theme file uploader service
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Theme\Model\Uploader;
 
@@ -83,7 +64,7 @@ class Service
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\File\Size $fileSize,
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
-        array $uploadLimits = array()
+        array $uploadLimits = []
     ) {
         $this->_tmpDirectory = $filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
         $this->_fileSize = $fileSize;
@@ -106,8 +87,8 @@ class Service
     public function uploadCssFile($file)
     {
         /** @var $fileUploader \Magento\Core\Model\File\Uploader */
-        $fileUploader = $this->_uploaderFactory->create(array('fileId' => $file));
-        $fileUploader->setAllowedExtensions(array('css'));
+        $fileUploader = $this->_uploaderFactory->create(['fileId' => $file]);
+        $fileUploader->setAllowedExtensions(['css']);
         $fileUploader->setAllowRenameFiles(true);
         $fileUploader->setAllowCreateFolders(true);
 
@@ -119,7 +100,7 @@ class Service
         }
 
         $file = $fileUploader->validateFile();
-        return array('filename' => $file['name'], 'content' => $this->getFileContent($file['tmp_name']));
+        return ['filename' => $file['name'], 'content' => $this->getFileContent($file['tmp_name'])];
     }
 
     /**
@@ -132,8 +113,8 @@ class Service
     public function uploadJsFile($file)
     {
         /** @var $fileUploader \Magento\Core\Model\File\Uploader */
-        $fileUploader = $this->_uploaderFactory->create(array('fileId' => $file));
-        $fileUploader->setAllowedExtensions(array('js'));
+        $fileUploader = $this->_uploaderFactory->create(['fileId' => $file]);
+        $fileUploader->setAllowedExtensions(['js']);
         $fileUploader->setAllowRenameFiles(true);
         $fileUploader->setAllowCreateFolders(true);
 
@@ -145,7 +126,7 @@ class Service
         }
 
         $file = $fileUploader->validateFile();
-        return array('filename' => $file['name'], 'content' => $this->getFileContent($file['tmp_name']));
+        return ['filename' => $file['name'], 'content' => $this->getFileContent($file['tmp_name'])];
     }
 
     /**

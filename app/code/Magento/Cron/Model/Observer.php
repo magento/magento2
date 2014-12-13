@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -153,11 +134,11 @@ class Observer
             ) {
                 $this->_shell->execute(
                     '%s -f %s -- --group=%s',
-                    array(
+                    [
                         PHP_BINARY,
                         BP . '/' . DirectoryList::PUB . '/cron.php',
                         $groupId
-                    )
+                    ]
                 );
                 continue;
             }
@@ -217,7 +198,7 @@ class Observer
             throw new \Exception('No callbacks found');
         }
         $model = $this->_objectManager->create($jobConfig['instance']);
-        $callback = array($model, $jobConfig['method']);
+        $callback = [$model, $jobConfig['method']];
         if (!is_callable($callback)) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
             throw new \Exception(
@@ -227,7 +208,7 @@ class Observer
 
         $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', time()))->save();
 
-        call_user_func_array($callback, array($schedule));
+        call_user_func_array($callback, [$schedule]);
 
         $schedule->setStatus(Schedule::STATUS_SUCCESS)->setFinishedAt(strftime('%Y-%m-%d %H:%M:%S', time()));
     }
@@ -270,7 +251,7 @@ class Observer
         }
 
         $schedules = $this->_getPendingSchedules();
-        $exists = array();
+        $exists = [];
         /** @var Schedule $schedule */
         foreach ($schedules as $schedule) {
             $exists[$schedule->getJobCode() . '/' . $schedule->getScheduledAt()] = 1;
@@ -285,7 +266,7 @@ class Observer
         /**
          * save time schedules generation was ran with no expiration
          */
-        $this->_cache->save(time(), self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . $groupId, array('crontab'), null);
+        $this->_cache->save(time(), self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . $groupId, ['crontab'], null);
 
         return $this;
     }
@@ -303,7 +284,7 @@ class Observer
         foreach ($jobs as $jobCode => $jobConfig) {
             $cronExpression = null;
             if (isset($jobConfig['config_path'])) {
-                $cronExpression = $this->getConfigSchedule($jobConfig) ? : null;
+                $cronExpression = $this->getConfigSchedule($jobConfig) ?: null;
             }
 
             if (!$cronExpression) {
@@ -345,7 +326,7 @@ class Observer
          */
         $history = $this->_scheduleFactory->create()->getCollection()->addFieldToFilter(
             'status',
-            array('in' => array(Schedule::STATUS_SUCCESS, Schedule::STATUS_MISSED, Schedule::STATUS_ERROR))
+            ['in' => [Schedule::STATUS_SUCCESS, Schedule::STATUS_MISSED, Schedule::STATUS_ERROR]]
         )->load();
 
         $historySuccess = (int)$this->_scopeConfig->getValue(
@@ -356,11 +337,11 @@ class Observer
             'system/cron/' . $groupId . '/' . self::XML_PATH_HISTORY_FAILURE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        $historyLifetimes = array(
+        $historyLifetimes = [
             Schedule::STATUS_SUCCESS => $historySuccess * self::SECONDS_IN_MINUTE,
             Schedule::STATUS_MISSED => $historyFailure * self::SECONDS_IN_MINUTE,
-            Schedule::STATUS_ERROR => $historyFailure * self::SECONDS_IN_MINUTE
-        );
+            Schedule::STATUS_ERROR => $historyFailure * self::SECONDS_IN_MINUTE,
+        ];
 
         $now = time();
         /** @var Schedule $record */
@@ -371,7 +352,7 @@ class Observer
         }
 
         // save time history cleanup was ran with no expiration
-        $this->_cache->save(time(), self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId, array('crontab'), null);
+        $this->_cache->save(time(), self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId, ['crontab'], null);
 
         return $this;
     }

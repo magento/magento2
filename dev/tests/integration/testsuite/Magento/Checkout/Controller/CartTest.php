@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -36,14 +17,15 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfigureActionWithSimpleProduct()
     {
-        $this->markTestIncomplete('MAGETWO-30916');
         /** @var $session \Magento\Checkout\Model\Session  */
         $session = $this->_objectManager->create('Magento\Checkout\Model\Session');
 
         $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), 1);
         $this->assertNotNull($quoteItem, 'Cannot get quote item for simple product');
 
-        $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
+        $this->dispatch(
+            'checkout/cart/configure/id/' . $quoteItem->getId() . '/product_id/' . $quoteItem->getProduct()->getId()
+        );
         $response = $this->getResponse();
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
@@ -63,14 +45,15 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfigureActionWithSimpleProductAndCustomOption()
     {
-        $this->markTestIncomplete('MAGETWO-30916');
         /** @var $session \Magento\Checkout\Model\Session  */
         $session = $this->_objectManager->create('Magento\Checkout\Model\Session');
 
         $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), 1);
         $this->assertNotNull($quoteItem, 'Cannot get quote item for simple product with custom option');
 
-        $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
+        $this->dispatch(
+            'checkout/cart/configure/id/' . $quoteItem->getId() . '/product_id/' . $quoteItem->getProduct()->getId()
+        );
         $response = $this->getResponse();
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
@@ -97,14 +80,15 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfigureActionWithBundleProduct()
     {
-        $this->markTestIncomplete('MAGETWO-30916');
         /** @var $session \Magento\Checkout\Model\Session  */
         $session = $this->_objectManager->create('Magento\Checkout\Model\Session');
 
         $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), 3);
         $this->assertNotNull($quoteItem, 'Cannot get quote item for bundle product');
 
-        $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
+        $this->dispatch(
+            'checkout/cart/configure/id/' . $quoteItem->getId() . '/product_id/' . $quoteItem->getProduct()->getId()
+        );
         $response = $this->getResponse();
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
@@ -124,14 +108,15 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfigureActionWithDownloadableProduct()
     {
-        $this->markTestIncomplete('MAGETWO-30916');
         /** @var $session \Magento\Checkout\Model\Session  */
         $session = $this->_objectManager->create('Magento\Checkout\Model\Session');
 
         $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), 1);
         $this->assertNotNull($quoteItem, 'Cannot get quote item for downloadable product');
 
-        $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
+        $this->dispatch(
+            'checkout/cart/configure/id/' . $quoteItem->getId() . '/product_id/' . $quoteItem->getProduct()->getId()
+        );
         $response = $this->getResponse();
 
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
@@ -169,11 +154,11 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
-        $postData = array(
-            'cart' => array($quoteItem->getId() => array('qty' => $updatedQuantity)),
+        $postData = [
+            'cart' => [$quoteItem->getId() => ['qty' => $updatedQuantity]],
             'update_cart_action' => 'update_qty',
-            'form_key' => $formKey->getFormKey()
-        );
+            'form_key' => $formKey->getFormKey(),
+        ];
         $this->getRequest()->setPost($postData);
         /** @var $customerSession \Magento\Customer\Model\Session */
         $customerSession = $this->_objectManager->create('Magento\Customer\Model\Session');

@@ -1,3 +1,4 @@
+# @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 reopen_browser_on: testCase # test|testCase
 backend_user_credentials:
     login: 'admin'

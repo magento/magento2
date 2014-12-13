@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Review\Controller\Adminhtml\Product;
@@ -133,7 +114,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareMockObjects()
     {
-        $requestMethods = array(
+        $requestMethods = [
             'getPost',
             'getModuleName',
             'setModuleName',
@@ -141,52 +122,52 @@ class PostTest extends \PHPUnit_Framework_TestCase
             'setActionName',
             'getParam',
             'getCookie'
-        );
-        $this->_registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
+        ];
+        $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->_requestMock = $this->getMock(
             '\Magento\Framework\App\RequestInterface', $requestMethods
         );
         $this->_responseMock = $this->getMock(
-            '\Magento\Framework\App\ResponseInterface', array('setRedirect', 'sendResponse')
+            '\Magento\Framework\App\ResponseInterface', ['setRedirect', 'sendResponse']
         );
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_messageManagerMock = $this->getMock('\Magento\Framework\Message\Manager', array(), array(), '', false);
-        $this->_storeManagerInterfaceMock = $this->getMockForAbstractClass('Magento\Framework\StoreManagerInterface');
+        $this->_messageManagerMock = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
+        $this->_storeManagerInterfaceMock = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $this->_storeModelMock = $this->getMock(
-            'Magento\Store\Model\Store', array('__wakeup', 'getId'), array(), '', false
+            'Magento\Store\Model\Store', ['__wakeup', 'getId'], [], '', false
         );
         $this->_reviewModelMock = $this->getMock(
             'Magento\Review\Model\Review',
-            array('__wakeup', 'create', 'save', 'getId', 'getResource', 'aggregate'),
-            array(),
+            ['__wakeup', 'create', 'save', 'getId', 'getResource', 'aggregate'],
+            [],
             '',
             false
         );
 
         $this->_reviewFactoryMock = $this->getMock(
             'Magento\Review\Model\ReviewFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
 
         $this->_ratingModelMock = $this->getMock(
             'Magento\Review\Model\Rating',
-            array('__wakeup', 'setRatingId', 'setReviewId', 'addOptionVote'),
-            array(),
+            ['__wakeup', 'setRatingId', 'setReviewId', 'addOptionVote'],
+            [],
             '',
             false);
 
         $this->_ratingFactoryMock = $this->getMock(
             'Magento\Review\Model\RatingFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
 
-        $this->_helperMock = $this->getMock('\Magento\Backend\Helper\Data', array(), array(), '', false);
+        $this->_helperMock = $this->getMock('\Magento\Backend\Helper\Data', [], [], '', false);
     }
 
     /**
@@ -197,11 +178,11 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock->expects($this->at(0))->method('getParam')
             ->will($this->returnValue(1));
         $this->_requestMock->expects($this->at(2))->method('getParam')
-            ->will($this->returnValue(array('1' => '1')));
+            ->will($this->returnValue(['1' => '1']));
         $this->_requestMock->expects($this->once())->method('getPost')
-            ->will($this->returnValue(array('status_id' => 1)));
+            ->will($this->returnValue(['status_id' => 1]));
         $this->_objectManagerMock->expects($this->at(0))->method('get')
-            ->with('Magento\Framework\StoreManagerInterface')
+            ->with('Magento\Store\Model\StoreManagerInterface')
             ->will($this->returnValue($this->_storeManagerInterfaceMock));
         $this->_reviewFactoryMock->expects($this->once())->method('create')
             ->will($this->returnValue($this->_reviewModelMock));

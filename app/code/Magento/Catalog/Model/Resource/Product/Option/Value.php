@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Resource\Product\Option;
 
@@ -33,7 +14,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -56,13 +37,13 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
         $this->_currencyFactory = $currencyFactory;
@@ -125,21 +106,21 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             if ($optionTypeId) {
                 if ($object->getStoreId() == '0') {
-                    $bind = array('price' => $price, 'price_type' => $priceType);
-                    $where = array(
+                    $bind = ['price' => $price, 'price_type' => $priceType];
+                    $where = [
                         'option_type_id = ?' => $optionTypeId,
-                        'store_id = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                    );
+                        'store_id = ?' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                    ];
 
                     $this->_getWriteAdapter()->update($priceTable, $bind, $where);
                 }
             } else {
-                $bind = array(
+                $bind = [
                     'option_type_id' => (int)$object->getId(),
                     'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                     'price' => $price,
-                    'price_type' => $priceType
-                );
+                    'price_type' => $priceType,
+                ];
                 $this->_getWriteAdapter()->insert($priceTable, $bind);
             }
         }
@@ -154,7 +135,6 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             && $object->getPrice()
             && $object->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID
         ) {
-
             $baseCurrency = $this->_config->getValue(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
                 'default'
@@ -190,17 +170,17 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     $optionTypeId = $this->_getReadAdapter()->fetchOne($select);
 
                     if ($optionTypeId) {
-                        $bind = array('price' => $newPrice, 'price_type' => $priceType);
-                        $where = array('option_type_id = ?' => (int)$optionTypeId, 'store_id = ?' => (int)$storeId);
+                        $bind = ['price' => $newPrice, 'price_type' => $priceType];
+                        $where = ['option_type_id = ?' => (int)$optionTypeId, 'store_id = ?' => (int)$storeId];
 
                         $this->_getWriteAdapter()->update($priceTable, $bind, $where);
                     } else {
-                        $bind = array(
+                        $bind = [
                             'option_type_id' => (int)$object->getId(),
                             'store_id' => (int)$storeId,
                             'price' => $newPrice,
-                            'price_type' => $priceType
-                        );
+                            'price_type' => $priceType,
+                        ];
 
                         $this->_getWriteAdapter()->insert($priceTable, $bind);
                     }
@@ -213,10 +193,10 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ) {
                 $storeIds = $this->_storeManager->getStore($object->getStoreId())->getWebsite()->getStoreIds();
                 foreach ($storeIds as $storeId) {
-                    $where = array(
+                    $where = [
                         'option_type_id = ?' => (int)$object->getId(),
                         'store_id = ?' => $storeId,
-                    );
+                    ];
                     $this->_getWriteAdapter()->delete($priceTable, $where);
                 }
             }
@@ -235,7 +215,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $titleTable = $this->getTable('catalog_product_option_type_title');
             $select = $this->_getReadAdapter()->select()->from(
                 $titleTable,
-                array('option_type_id')
+                ['option_type_id']
             )->where(
                 'option_type_id = ?',
                 (int)$object->getId()
@@ -248,11 +228,11 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             if ($object->getTitle()) {
                 if ($existInCurrentStore) {
                     if ($storeId == $object->getStoreId()) {
-                        $where = array(
+                        $where = [
                             'option_type_id = ?' => (int)$optionTypeId,
                             'store_id = ?' => $storeId,
-                        );
-                        $bind = array('title' => $object->getTitle());
+                        ];
+                        $bind = ['title' => $object->getTitle()];
                         $this->_getWriteAdapter()->update($titleTable, $bind, $where);
                     }
                 } else {
@@ -265,11 +245,11 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     if (($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInDefaultStore)
                         || ($storeId != \Magento\Store\Model\Store::DEFAULT_STORE_ID && !$existInCurrentStore)
                     ) {
-                        $bind = array(
+                        $bind = [
                             'option_type_id' => (int)$object->getId(),
                             'store_id' => $storeId,
-                            'title' => $object->getTitle()
-                        );
+                            'title' => $object->getTitle(),
+                        ];
                         $this->_getWriteAdapter()->insert($titleTable, $bind);
                     }
                 }
@@ -278,10 +258,10 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     && $optionTypeId
                     && $object->getStoreId() > \Magento\Store\Model\Store::DEFAULT_STORE_ID
                 ) {
-                    $where = array(
+                    $where = [
                         'option_type_id = ?' => (int)$optionTypeId,
                         'store_id = ?' => $storeId,
-                    );
+                    ];
                     $this->_getWriteAdapter()->delete($titleTable, $where);
                 }
             }
@@ -301,7 +281,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $readAdapter = $this->_getReadAdapter();
         $select = $readAdapter->select()->from(
             $tableName,
-            array('option_type_id')
+            ['option_type_id']
         )->where(
             'option_type_id = ?',
             $optionId
@@ -311,7 +291,6 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
         return $readAdapter->fetchOne($select);
     }
-
 
     /**
      * Delete values by option id
@@ -334,7 +313,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $this->deleteValues($optionType['option_type_id']);
         }
 
-        $this->_getWriteAdapter()->delete($this->getMainTable(), array('option_id = ?' => $optionId));
+        $this->_getWriteAdapter()->delete($this->getMainTable(), ['option_id = ?' => $optionId]);
 
         return $this;
     }
@@ -347,7 +326,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteValues($optionTypeId)
     {
-        $condition = array('option_type_id = ?' => $optionTypeId);
+        $condition = ['option_type_id = ?' => $optionTypeId];
 
         $this->_getWriteAdapter()->delete($this->getTable('catalog_product_option_type_price'), $condition);
 
@@ -369,7 +348,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = $readAdapter->select()->from($this->getMainTable())->where('option_id = ?', $oldOptionId);
         $valueData = $readAdapter->fetchAll($select);
 
-        $valueCond = array();
+        $valueCond = [];
 
         foreach ($valueData as $data) {
             $optionTypeId = $data[$this->getIdFieldName()];
@@ -385,11 +364,11 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
         foreach ($valueCond as $oldTypeId => $newTypeId) {
             // price
             $priceTable = $this->getTable('catalog_product_option_type_price');
-            $columns = array(new \Zend_Db_Expr($newTypeId), 'store_id', 'price', 'price_type');
+            $columns = [new \Zend_Db_Expr($newTypeId), 'store_id', 'price', 'price_type'];
 
             $select = $readAdapter->select()->from(
                 $priceTable,
-                array()
+                []
             )->where(
                 'option_type_id = ?',
                 $oldTypeId
@@ -399,17 +378,17 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $insertSelect = $writeAdapter->insertFromSelect(
                 $select,
                 $priceTable,
-                array('option_type_id', 'store_id', 'price', 'price_type')
+                ['option_type_id', 'store_id', 'price', 'price_type']
             );
             $writeAdapter->query($insertSelect);
 
             // title
             $titleTable = $this->getTable('catalog_product_option_type_title');
-            $columns = array(new \Zend_Db_Expr($newTypeId), 'store_id', 'title');
+            $columns = [new \Zend_Db_Expr($newTypeId), 'store_id', 'title'];
 
             $select = $this->_getReadAdapter()->select()->from(
                 $titleTable,
-                array()
+                []
             )->where(
                 'option_type_id = ?',
                 $oldTypeId
@@ -419,7 +398,7 @@ class Value extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $insertSelect = $writeAdapter->insertFromSelect(
                 $select,
                 $titleTable,
-                array('option_type_id', 'store_id', 'title')
+                ['option_type_id', 'store_id', 'title']
             );
             $writeAdapter->query($insertSelect);
         }

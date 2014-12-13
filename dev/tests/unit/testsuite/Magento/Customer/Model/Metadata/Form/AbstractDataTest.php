@@ -2,26 +2,7 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\AbstractData
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
@@ -111,12 +92,12 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
 
     public function trueFalseDataProvider()
     {
-        return array(array(true), array(false));
+        return [[true], [false]];
     }
 
     public function testGetSetExtractedData()
     {
-        $data = array('KEY' => 'VALUE');
+        $data = ['KEY' => 'VALUE'];
         $this->assertSame($this->_model, $this->_model->setExtractedData($data));
         $this->assertSame($data, $this->_model->getExtractedData());
         $this->assertSame('VALUE', $this->_model->getExtractedData('KEY'));
@@ -139,13 +120,13 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
 
     public function applyInputFilterProvider()
     {
-        return array(
-            array(false, false, false),
-            array(true, true, false),
-            array('string', 'string', false),
-            array('2014/01/23', '2014-01-23', 'date'),
-            array('<tag>internal text</tag>', 'internal text', 'striptags')
-        );
+        return [
+            [false, false, false],
+            [true, true, false],
+            ['string', 'string', false],
+            ['2014/01/23', '2014-01-23', 'date'],
+            ['<tag>internal text</tag>', 'internal text', 'striptags']
+        ];
     }
 
     /**
@@ -177,7 +158,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
 
     public function dateFilterFormatProvider()
     {
-        return array(array(null, 'Whatever I put'), array(false, self::MODEL), array('something else', self::MODEL));
+        return [[null, 'Whatever I put'], [false, self::MODEL], ['something else', self::MODEL]];
     }
 
     /**
@@ -201,13 +182,13 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
      */
     public function applyOutputFilterDataProvider()
     {
-        return array(
-            array(false, false, false),
-            array(true, true, false),
-            array('string', 'string', false),
-            array('2014/01/23', '2014-01-23', 'date'),
-            array('internal text', 'internal text', 'striptags')
-        );
+        return [
+            [false, false, false],
+            [true, true, false],
+            ['string', 'string', false],
+            ['2014/01/23', '2014-01-23', 'date'],
+            ['internal text', 'internal text', 'striptags']
+        ];
     }
 
     /**
@@ -237,9 +218,9 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
             'getValidationRules'
         )->will(
             $this->returnValue(
-                array(
-                    $validationRule
-                )
+                [
+                    $validationRule,
+                ]
             )
         );
 
@@ -248,52 +229,50 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
 
     public function validateInputRuleDataProvider()
     {
-        return array(
-            array(null, null, null, true),
-            array('value', null, null, true),
-            array(
+        return [
+            [null, null, null, true],
+            ['value', null, null, true],
+            [
                 '!@#$',
                 'mylabel',
                 'alphanumeric',
-                array(
+                [
                     \Zend_Validate_Alnum::NOT_ALNUM => '"mylabel" contains non-alphabetic or non-numeric characters.'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 '!@#$',
                 'mylabel',
                 'numeric',
-                array(\Zend_Validate_Digits::NOT_DIGITS => '"mylabel" contains non-numeric characters.')
-            ),
-            array(
+                [\Zend_Validate_Digits::NOT_DIGITS => '"mylabel" contains non-numeric characters.']
+            ],
+            [
                 '1234',
                 'mylabel',
                 'alpha',
-                array(\Zend_Validate_Alpha::NOT_ALPHA => '"mylabel" contains non-alphabetic characters.')
-            ),
-            array(
+                [\Zend_Validate_Alpha::NOT_ALPHA => '"mylabel" contains non-alphabetic characters.']
+            ],
+            [
                 '!@#$',
                 'mylabel',
                 'email',
-                array(
+                [
                     // @codingStandardsIgnoreStart
                     \Zend_Validate_EmailAddress::INVALID_HOSTNAME => '"mylabel" is not a valid hostname.',
-                    \Zend_Validate_Hostname::INVALID_HOSTNAME =>
-                        "'#\$' does not match the expected structure for a DNS hostname",
-                    \Zend_Validate_Hostname::INVALID_LOCAL_NAME =>
-                        "'#\$' does not appear to be a valid local network name."
+                    \Zend_Validate_Hostname::INVALID_HOSTNAME => "'#\$' does not match the expected structure for a DNS hostname",
+                    \Zend_Validate_Hostname::INVALID_LOCAL_NAME => "'#\$' does not appear to be a valid local network name."
                     // @codingStandardsIgnoreEnd
-                )
-            ),
-            array('1234', 'mylabel', 'url', array('"mylabel" is not a valid URL.')),
-            array('http://.com', 'mylabel', 'url', array('"mylabel" is not a valid URL.')),
-            array(
+                ]
+            ],
+            ['1234', 'mylabel', 'url', ['"mylabel" is not a valid URL.']],
+            ['http://.com', 'mylabel', 'url', ['"mylabel" is not a valid URL.']],
+            [
                 '1234',
                 'mylabel',
                 'date',
-                array(\Zend_Validate_Date::INVALID_DATE => '"mylabel" is not a valid date.')
-            )
-        );
+                [\Zend_Validate_Date::INVALID_DATE => '"mylabel" is not a valid date.']
+            ]
+        ];
     }
 
     /**
@@ -358,7 +337,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         )->with(
             'REQUEST_SCOPE'
         )->will(
-            $this->returnValue(array('ATTR_CODE' => $expectedValue))
+            $this->returnValue(['ATTR_CODE' => $expectedValue])
         );
         $requestMockTwo->expects(
             $this->at(1)
@@ -367,7 +346,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         )->with(
             'REQUEST_SCOPE'
         )->will(
-            $this->returnValue(array())
+            $this->returnValue([])
         );
 
         $requestMockThree = $this->getMockBuilder(
@@ -378,13 +357,13 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getParams'
         )->will(
-            $this->returnValue(array('REQUEST' => array('SCOPE' => array('ATTR_CODE' => $expectedValue))))
+            $this->returnValue(['REQUEST' => ['SCOPE' => ['ATTR_CODE' => $expectedValue]]])
         );
-        return array(
-            array($requestMockOne, 'ATTR_CODE', false, false, $expectedValue),
-            array($requestMockTwo, 'ATTR_CODE', 'REQUEST_SCOPE', false, $expectedValue),
-            array($requestMockTwo, 'ATTR_CODE', 'REQUEST_SCOPE', false, false),
-            array($requestMockThree, 'ATTR_CODE', 'REQUEST/SCOPE', false, $expectedValue)
-        );
+        return [
+            [$requestMockOne, 'ATTR_CODE', false, false, $expectedValue],
+            [$requestMockTwo, 'ATTR_CODE', 'REQUEST_SCOPE', false, $expectedValue],
+            [$requestMockTwo, 'ATTR_CODE', 'REQUEST_SCOPE', false, false],
+            [$requestMockThree, 'ATTR_CODE', 'REQUEST/SCOPE', false, $expectedValue]
+        ];
     }
 }

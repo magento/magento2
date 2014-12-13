@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data\Argument\Interpreter;
 
@@ -45,7 +26,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $this->_interpreterOne = $this->getMock('Magento\Framework\Data\Argument\InterpreterInterface');
         $this->_interpreterTwo = $this->getMock('Magento\Framework\Data\Argument\InterpreterInterface');
         $this->_model = new Composite(
-            array('one' => $this->_interpreterOne, 'two' => $this->_interpreterTwo),
+            ['one' => $this->_interpreterOne, 'two' => $this->_interpreterTwo],
             'interpreter'
         );
     }
@@ -56,10 +37,10 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructWrongInterpreter()
     {
-        $interpreters = array(
+        $interpreters = [
             'correct' => $this->getMock('Magento\Framework\Data\Argument\InterpreterInterface'),
-            'wrong' => $this->getMock('Magento\Framework\ObjectManagerInterface')
-        );
+            'wrong' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
+        ];
         new Composite($interpreters, 'interpreter');
     }
 
@@ -77,26 +58,26 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
     public function evaluateWrongDiscriminatorDataProvider()
     {
-        return array(
-            'no discriminator' => array(array(), 'Value for key "interpreter" is missing in the argument data'),
-            'nonexistent interpreter ' => array(
-                array('interpreter' => 'nonexistent'),
-                "Argument interpreter named 'nonexistent' has not been defined"
-            )
-        );
+        return [
+            'no discriminator' => [[], 'Value for key "interpreter" is missing in the argument data'],
+            'nonexistent interpreter ' => [
+                ['interpreter' => 'nonexistent'],
+                "Argument interpreter named 'nonexistent' has not been defined",
+            ]
+        ];
     }
 
     public function testEvaluate()
     {
-        $input = array('interpreter' => 'one', 'value' => 'test');
-        $expected = array('value' => 'test (updated)');
+        $input = ['interpreter' => 'one', 'value' => 'test'];
+        $expected = ['value' => 'test (updated)'];
 
         $this->_interpreterOne->expects(
             $this->once()
         )->method(
             'evaluate'
         )->with(
-            array('value' => 'test')
+            ['value' => 'test']
         )->will(
             $this->returnValue($expected)
         );
@@ -105,10 +86,10 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
     public function testAddInterpreter()
     {
-        $input = array('interpreter' => 'new', 'value' => 'test');
+        $input = ['interpreter' => 'new', 'value' => 'test'];
         $newInterpreter = $this->getMock('Magento\Framework\Data\Argument\InterpreterInterface');
         $this->_model->addInterpreter('new', $newInterpreter);
-        $newInterpreter->expects($this->once())->method('evaluate')->with(array('value' => 'test'));
+        $newInterpreter->expects($this->once())->method('evaluate')->with(['value' => 'test']);
         $this->_model->evaluate($input);
     }
 

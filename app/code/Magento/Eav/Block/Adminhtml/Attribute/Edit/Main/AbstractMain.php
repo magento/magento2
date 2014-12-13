@@ -1,27 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-
 
 /**
  * Product attribute add/edit form main tab
@@ -81,7 +61,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Model\Config\Source\YesnoFactory $yesnoFactory,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory $inputTypeFactory,
         \Magento\Eav\Model\Entity\Attribute\Config $attributeConfig,
-        array $data = array()
+        array $data = []
     ) {
         $this->_eavData = $eavData;
         $this->_yesnoFactory = $yesnoFactory;
@@ -126,13 +106,13 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
+            ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Attribute Properties')));
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Attribute Properties')]);
 
         if ($attributeObject->getAttributeId()) {
-            $fieldset->addField('attribute_id', 'hidden', array('name' => 'attribute_id'));
+            $fieldset->addField('attribute_id', 'hidden', ['name' => 'attribute_id']);
         }
 
         $this->_addElementTypes($fieldset);
@@ -143,15 +123,14 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'attribute_label',
             'text',
-            array(
+            [
                 'name' => 'frontend_label[0]',
                 'label' => __('Attribute Label'),
                 'title' => __('Attribute Label'),
                 'required' => true,
                 'value' => is_array($labels) ? $labels[0] : $labels
-            )
+            ]
         );
-
 
         $validateClass = sprintf(
             'validate-code validate-length maximum-length-%d',
@@ -160,7 +139,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'attribute_code',
             'text',
-            array(
+            [
                 'name' => 'attribute_code',
                 'label' => __('Attribute Code'),
                 'title' => __('Attribute Code'),
@@ -170,101 +149,101 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
                 ),
                 'class' => $validateClass,
                 'required' => true
-            )
+            ]
         );
 
         $fieldset->addField(
             'frontend_input',
             'select',
-            array(
+            [
                 'name' => 'frontend_input',
                 'label' => __('Catalog Input Type for Store Owner'),
                 'title' => __('Catalog Input Type for Store Owner'),
                 'value' => 'text',
                 'values' => $this->_inputTypeFactory->create()->toOptionArray()
-            )
+            ]
         );
 
         $fieldset->addField(
             'is_required',
             'select',
-            array(
+            [
                 'name' => 'is_required',
                 'label' => __('Values Required'),
                 'title' => __('Values Required'),
                 'values' => $yesno
-            )
+            ]
         );
 
         $fieldset->addField(
             'default_value_text',
             'text',
-            array(
+            [
                 'name' => 'default_value_text',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'value' => $attributeObject->getDefaultValue()
-            )
+            ]
         );
 
         $fieldset->addField(
             'default_value_yesno',
             'select',
-            array(
+            [
                 'name' => 'default_value_yesno',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'values' => $yesno,
                 'value' => $attributeObject->getDefaultValue()
-            )
+            ]
         );
 
         $dateFormat = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
         $fieldset->addField(
             'default_value_date',
             'date',
-            array(
+            [
                 'name' => 'default_value_date',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'image' => $this->getViewFileUrl('images/grid-cal.gif'),
                 'value' => $attributeObject->getDefaultValue(),
                 'date_format' => $dateFormat
-            )
+            ]
         );
 
         $fieldset->addField(
             'default_value_textarea',
             'textarea',
-            array(
+            [
                 'name' => 'default_value_textarea',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'value' => $attributeObject->getDefaultValue()
-            )
+            ]
         );
 
         $fieldset->addField(
             'is_unique',
             'select',
-            array(
+            [
                 'name' => 'is_unique',
                 'label' => __('Unique Value'),
                 'title' => __('Unique Value (not shared with other products)'),
                 'note' => __('Not shared with other products'),
                 'values' => $yesno
-            )
+            ]
         );
 
         $fieldset->addField(
             'frontend_class',
             'select',
-            array(
+            [
                 'name' => 'frontend_class',
                 'label' => __('Input Validation for Store Owner'),
                 'title' => __('Input Validation for Store Owner'),
                 'values' => $this->_eavData->getFrontendClasses($attributeObject->getEntityType()->getEntityTypeCode())
-            )
+            ]
         );
 
         if ($attributeObject->getId()) {
@@ -289,7 +268,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $this->_eventManager->dispatch(
             'adminhtml_block_eav_attribute_edit_form_init',
-            array('form' => $this->getForm())
+            ['form' => $this->getForm()]
         );
         $this->getForm()->addValues($this->getAttributeObject()->getData());
         return parent::_initFormValues();

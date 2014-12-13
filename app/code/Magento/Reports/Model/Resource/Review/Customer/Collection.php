@@ -1,27 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-
 
 /**
  * Report Customers Review collection
@@ -44,7 +24,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
@@ -56,7 +36,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
@@ -101,7 +81,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
         /** @var $lastnameAttr \Magento\Eav\Model\Entity\Attribute */
         $lastnameAttr = $this->_customerResource->getAttribute('lastname');
 
-        $firstnameCondition = array('table_customer_firstname.entity_id = detail.customer_id');
+        $firstnameCondition = ['table_customer_firstname.entity_id = detail.customer_id'];
 
         if ($firstnameAttr->getBackend()->isStatic()) {
             $firstnameField = 'firstname';
@@ -114,13 +94,12 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
         }
 
         $this->getSelect()->joinInner(
-            array('table_customer_firstname' => $firstnameAttr->getBackend()->getTable()),
+            ['table_customer_firstname' => $firstnameAttr->getBackend()->getTable()],
             implode(' AND ', $firstnameCondition),
-            array()
+            []
         );
 
-
-        $lastnameCondition = array('table_customer_lastname.entity_id = detail.customer_id');
+        $lastnameCondition = ['table_customer_lastname.entity_id = detail.customer_id'];
         if ($lastnameAttr->getBackend()->isStatic()) {
             $lastnameField = 'lastname';
         } else {
@@ -133,21 +112,21 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
 
         //Prepare fullname field result
         $customerFullname = $adapter->getConcatSql(
-            array("table_customer_firstname.{$firstnameField}", "table_customer_lastname.{$lastnameField}"),
+            ["table_customer_firstname.{$firstnameField}", "table_customer_lastname.{$lastnameField}"],
             ' '
         );
         $this->getSelect()->reset(
             \Zend_Db_Select::COLUMNS
         )->joinInner(
-            array('table_customer_lastname' => $lastnameAttr->getBackend()->getTable()),
+            ['table_customer_lastname' => $lastnameAttr->getBackend()->getTable()],
             implode(' AND ', $lastnameCondition),
-            array()
+            []
         )->columns(
-            array(
+            [
                 'customer_id' => 'detail.customer_id',
                 'customer_name' => $customerFullname,
-                'review_cnt' => 'COUNT(main_table.review_id)'
-            )
+                'review_cnt' => 'COUNT(main_table.review_id)',
+            ]
         )->group(
             'detail.customer_id'
         );

@@ -1,27 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-
 
 /**
  * Product Low Stock Report Collection
@@ -71,7 +51,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -101,7 +81,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -196,9 +176,9 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
             return $this;
         }
 
-        $this->_joinFields[$alias] = array('table' => $this->_getInventoryItemTableAlias(), 'field' => $field);
+        $this->_joinFields[$alias] = ['table' => $this->_getInventoryItemTableAlias(), 'field' => $field];
 
-        $this->getSelect()->columns(array($alias => $field), $this->_getInventoryItemTableAlias());
+        $this->getSelect()->columns([$alias => $field], $this->_getInventoryItemTableAlias());
         return $this;
     }
 
@@ -219,26 +199,26 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * @param array $fields
      * @return $this
      */
-    public function joinInventoryItem($fields = array())
+    public function joinInventoryItem($fields = [])
     {
         if (!$this->_inventoryItemJoined) {
             $this->getSelect()->join(
-                array($this->_getInventoryItemTableAlias() => $this->_getInventoryItemTable()),
+                [$this->_getInventoryItemTableAlias() => $this->_getInventoryItemTable()],
                 sprintf(
                     'e.%s = %s.product_id',
                     $this->getEntity()->getEntityIdField(),
                     $this->_getInventoryItemTableAlias()
                 ),
-                array()
+                []
             );
             $this->_inventoryItemJoined = true;
         }
 
         if (!is_array($fields)) {
             if (empty($fields)) {
-                $fields = array();
+                $fields = [];
             } else {
-                $fields = array($fields);
+                $fields = [$fields];
             }
         }
 
@@ -304,7 +284,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      */
     public function useNotifyStockQtyFilter($storeId = null)
     {
-        $this->joinInventoryItem(array('qty'));
+        $this->joinInventoryItem(['qty']);
         $notifyStockExpr = $this->getConnection()->getCheckSql(
             $this->_getInventoryItemField('use_config_notify_stock_qty') . ' = 1',
             (int)$this->stockConfiguration->getNotifyStockQty($storeId),

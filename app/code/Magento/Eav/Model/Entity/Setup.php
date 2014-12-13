@@ -2,26 +2,7 @@
 /**
  * EAV Entity Setup Model
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Eav\Model\Entity;
 
@@ -76,7 +57,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
      *
      * @var array
      */
-    public $defaultGroupIdAssociations = array('General' => 1);
+    public $defaultGroupIdAssociations = ['General' => 1];
 
     /**
      * Default attribute group name
@@ -107,7 +88,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
      */
     public function cleanCache()
     {
-        $this->_cache->clean(array(\Magento\Eav\Model\Cache\Type::CACHE_TAG));
+        $this->_cache->clean([\Magento\Eav\Model\Cache\Type::CACHE_TAG]);
         return $this;
     }
 
@@ -163,7 +144,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
      */
     public function addEntityType($code, array $params)
     {
-        $data = array(
+        $data = [
             'entity_type_code' => $code,
             'entity_model' => $params['entity_model'],
             'attribute_model' => $this->_getValue($params, 'attribute_model'),
@@ -175,8 +156,8 @@ class Setup extends \Magento\Framework\Module\DataSetup
             'increment_pad_length' => $this->_getValue($params, 'increment_pad_length', 8),
             'increment_pad_char' => $this->_getValue($params, 'increment_pad_char', 0),
             'additional_attribute_table' => $this->_getValue($params, 'additional_attribute_table'),
-            'entity_attribute_collection' => $this->_getValue($params, 'entity_attribute_collection')
-        );
+            'entity_attribute_collection' => $this->_getValue($params, 'entity_attribute_collection'),
+        ];
 
         if ($this->getEntityType($code, 'entity_type_id')) {
             $this->updateEntityType($code, $data);
@@ -274,7 +255,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     public function getAttributeSetSortOrder($entityTypeId, $sortOrder = null)
     {
         if (!is_numeric($sortOrder)) {
-            $bind = array('entity_type_id' => $this->getEntityTypeId($entityTypeId));
+            $bind = ['entity_type_id' => $this->getEntityTypeId($entityTypeId)];
             $select = $this->_connection->select()->from(
                 $this->getTable('eav_attribute_set'),
                 'MAX(sort_order)'
@@ -298,11 +279,11 @@ class Setup extends \Magento\Framework\Module\DataSetup
      */
     public function addAttributeSet($entityTypeId, $name, $sortOrder = null)
     {
-        $data = array(
+        $data = [
             'entity_type_id' => $this->getEntityTypeId($entityTypeId),
             'attribute_set_name' => $name,
-            'sort_order' => $this->getAttributeSetSortOrder($entityTypeId, $sortOrder)
-        );
+            'sort_order' => $this->getAttributeSetSortOrder($entityTypeId, $sortOrder),
+        ];
 
         $setId = $this->getAttributeSet($entityTypeId, $name, 'attribute_set_id');
         if ($setId) {
@@ -417,7 +398,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     {
         $select = $this->_connection->select()->from($this->getTable('eav_attribute_set'), 'attribute_set_id');
 
-        $bind = array();
+        $bind = [];
         if ($entityTypeId !== null) {
             $bind['entity_type_id'] = $this->getEntityTypeId($entityTypeId);
             $select->where('entity_type_id = :entity_type_id');
@@ -434,7 +415,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
      */
     public function getDefaultAttributeSetId($entityType)
     {
-        $bind = array('entity_type' => $entityType);
+        $bind = ['entity_type' => $entityType];
         if (is_numeric($entityType)) {
             $where = 'entity_type_id = :entity_type';
         } else {
@@ -463,7 +444,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     public function getAttributeGroupSortOrder($entityTypeId, $setId, $sortOrder = null)
     {
         if (!is_numeric($sortOrder)) {
-            $bind = array('attribute_set_id' => $this->getAttributeSetId($entityTypeId, $setId));
+            $bind = ['attribute_set_id' => $this->getAttributeSetId($entityTypeId, $setId)];
             $select = $this->_connection->select()->from(
                 $this->getTable('eav_attribute_group'),
                 'MAX(sort_order)'
@@ -489,7 +470,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     public function addAttributeGroup($entityTypeId, $setId, $name, $sortOrder = null)
     {
         $setId = $this->getAttributeSetId($entityTypeId, $setId);
-        $data = array('attribute_set_id' => $setId, 'attribute_group_name' => $name);
+        $data = ['attribute_set_id' => $setId, 'attribute_group_name' => $name];
 
         if (isset($this->defaultGroupIdAssociations[$name])) {
             $data['default_id'] = $this->defaultGroupIdAssociations[$name];
@@ -625,14 +606,14 @@ class Setup extends \Magento\Framework\Module\DataSetup
         if (!is_numeric($attributeSetId)) {
             $attributeSetId = $this->getDefaultAttributeSetId($entityType);
         }
-        $bind = array('attribute_set_id' => $attributeSetId);
+        $bind = ['attribute_set_id' => $attributeSetId];
         $select = $this->getConnection()->select()->from(
             $this->getTable('eav_attribute_group'),
             'attribute_group_id'
         )->where(
             'attribute_set_id = :attribute_set_id'
         )->order(
-            array('default_id ' . \Magento\Framework\DB\Select::SQL_DESC, 'sort_order')
+            ['default_id ' . \Magento\Framework\DB\Select::SQL_DESC, 'sort_order']
         )->limit(
             1
         );
@@ -653,7 +634,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     {
         $select = $this->_connection->select()->from(
             $this->getTable('eav_entity_attribute'),
-            array('count' => 'COUNT(*)')
+            ['count' => 'COUNT(*)']
         )->where(
             'attribute_group_id = ?',
             $this->getAttributeGroupId($entityTypeId, $setId, $groupId)
@@ -702,7 +683,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         ) && !\Zend_Validate::is(
             $data['attribute_code'],
             'StringLength',
-            array('max' => $attributeCodeMaxLength)
+            ['max' => $attributeCodeMaxLength]
         )
         ) {
             throw new \Magento\Eav\Exception(
@@ -728,7 +709,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         $entityTypeId = $this->getEntityTypeId($entityTypeId);
 
         $data = array_replace(
-            array('entity_type_id' => $entityTypeId, 'attribute_code' => $code),
+            ['entity_type_id' => $entityTypeId, 'attribute_code' => $code],
             $this->attributeMapper->map($attr, $entityTypeId)
         );
 
@@ -748,7 +729,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
             )->where(
                 'entity_type_id = :entity_type_id'
             );
-            $sets = $this->_connection->fetchAll($select, array('entity_type_id' => $entityTypeId));
+            $sets = $this->_connection->fetchAll($select, ['entity_type_id' => $entityTypeId]);
             foreach ($sets as $set) {
                 if (!empty($attr['group'])) {
                     $this->addAttributeGroup($entityTypeId, $set['attribute_set_id'], $attr['group']);
@@ -797,45 +778,45 @@ class Setup extends \Magento\Framework\Module\DataSetup
                 $intOptionId = (int)$optionId;
                 if (!empty($option['delete'][$optionId])) {
                     if ($intOptionId) {
-                        $condition = array('option_id =?' => $intOptionId);
+                        $condition = ['option_id =?' => $intOptionId];
                         $this->_connection->delete($optionTable, $condition);
                     }
                     continue;
                 }
 
                 if (!$intOptionId) {
-                    $data = array(
+                    $data = [
                         'attribute_id' => $option['attribute_id'],
-                        'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0
-                    );
+                        'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0,
+                    ];
                     $this->_connection->insert($optionTable, $data);
                     $intOptionId = $this->_connection->lastInsertId($optionTable);
                 } else {
-                    $data = array(
-                        'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0
-                    );
-                    $this->_connection->update($optionTable, $data, array('option_id=?' => $intOptionId));
+                    $data = [
+                        'sort_order' => isset($option['order'][$optionId]) ? $option['order'][$optionId] : 0,
+                    ];
+                    $this->_connection->update($optionTable, $data, ['option_id=?' => $intOptionId]);
                 }
 
                 // Default value
                 if (!isset($values[0])) {
                     throw new \Magento\Framework\Model\Exception(__('Default option value is not defined'));
                 }
-                $condition = array('option_id =?' => $intOptionId);
+                $condition = ['option_id =?' => $intOptionId];
                 $this->_connection->delete($optionValueTable, $condition);
                 foreach ($values as $storeId => $value) {
-                    $data = array('option_id' => $intOptionId, 'store_id' => $storeId, 'value' => $value);
+                    $data = ['option_id' => $intOptionId, 'store_id' => $storeId, 'value' => $value];
                     $this->_connection->insert($optionValueTable, $data);
                 }
             }
-        } else if (isset($option['values'])) {
+        } elseif (isset($option['values'])) {
             foreach ($option['values'] as $sortOrder => $label) {
                 // add option
-                $data = array('attribute_id' => $option['attribute_id'], 'sort_order' => $sortOrder);
+                $data = ['attribute_id' => $option['attribute_id'], 'sort_order' => $sortOrder];
                 $this->_connection->insert($optionTable, $data);
                 $intOptionId = $this->_connection->lastInsertId($optionTable);
 
-                $data = array('option_id' => $intOptionId, 'store_id' => 0, 'value' => $label);
+                $data = ['option_id' => $intOptionId, 'store_id' => 0, 'value' => $label];
                 $this->_connection->insert($optionValueTable, $data);
             }
         }
@@ -882,7 +863,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
 
         $attributeFields = $this->_getAttributeTableFields();
         if (is_array($field)) {
-            $bind = array();
+            $bind = [];
             foreach ($field as $k => $v) {
                 if (isset($attributeFields[$k])) {
                     $bind[$k] = $this->getConnection()->prepareColumnValue($attributeFields[$k], $v);
@@ -930,7 +911,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         if ($additionalTable && $additionalTableExists) {
             $attributeFields = $this->getConnection()->describeTable($this->getTable($additionalTable));
             if (is_array($field)) {
-                $bind = array();
+                $bind = [];
                 foreach ($field as $k => $v) {
                     if (isset($attributeFields[$k])) {
                         $bind[$k] = $this->getConnection()->prepareColumnValue($attributeFields[$k], $v);
@@ -977,11 +958,11 @@ class Setup extends \Magento\Framework\Module\DataSetup
         $mainTable = $this->getTable('eav_attribute');
         if (empty($this->_setupCache[$mainTable][$entityTypeId][$id])) {
             $additionalTable = $this->getTable($additionalTable);
-            $bind = array('id' => $id, 'entity_type_id' => $entityTypeId);
+            $bind = ['id' => $id, 'entity_type_id' => $entityTypeId];
             $select = $this->_connection->select()->from(
-                array('main' => $mainTable)
+                ['main' => $mainTable]
             )->join(
-                array('additional' => $additionalTable),
+                ['additional' => $additionalTable],
                 'main.attribute_id = additional.attribute_id'
             )->where(
                 "main.{$idField} = :id"
@@ -1036,14 +1017,14 @@ class Setup extends \Magento\Framework\Module\DataSetup
         $entityKeyName = is_numeric($entityTypeId) ? 'entity_type_id' : 'entity_type_code';
         $attributeKeyName = is_numeric($id) ? 'attribute_id' : 'attribute_code';
 
-        $bind = array('id' => $id, 'entity_type_id' => $entityTypeId);
+        $bind = ['id' => $id, 'entity_type_id' => $entityTypeId];
         $select = $this->getConnection()->select()->from(
-            array('entity_type' => $this->getTable('eav_entity_type')),
-            array('entity_table')
+            ['entity_type' => $this->getTable('eav_entity_type')],
+            ['entity_table']
         )->join(
-            array('attribute' => $this->getTable('eav_attribute')),
+            ['attribute' => $this->getTable('eav_attribute')],
             'attribute.entity_type_id = entity_type.entity_type_id',
-            array('backend_type')
+            ['backend_type']
         )->where(
             "entity_type.{$entityKeyName} = :entity_type_id"
         )->where(
@@ -1096,7 +1077,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     public function getAttributeSortOrder($entityTypeId, $setId, $groupId, $sortOrder = null)
     {
         if (!is_numeric($sortOrder)) {
-            $bind = array('attribute_group_id' => $this->getAttributeGroupId($entityTypeId, $setId, $groupId));
+            $bind = ['attribute_group_id' => $this->getAttributeGroupId($entityTypeId, $setId, $groupId)];
             $select = $this->_connection->select()->from(
                 $this->getTable('eav_entity_attribute'),
                 'MAX(sort_order)'
@@ -1128,7 +1109,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         $attributeId = $this->getAttributeId($entityTypeId, $attributeId);
         $table = $this->getTable('eav_entity_attribute');
 
-        $bind = array('attribute_set_id' => $setId, 'attribute_id' => $attributeId);
+        $bind = ['attribute_set_id' => $setId, 'attribute_id' => $attributeId];
         $select = $this->_connection->select()->from(
             $table
         )->where(
@@ -1140,18 +1121,18 @@ class Setup extends \Magento\Framework\Module\DataSetup
 
         if ($result) {
             if ($result['attribute_group_id'] != $groupId) {
-                $where = array('entity_attribute_id =?' => $result['entity_attribute_id']);
-                $data = array('attribute_group_id' => $groupId);
+                $where = ['entity_attribute_id =?' => $result['entity_attribute_id']];
+                $data = ['attribute_group_id' => $groupId];
                 $this->_connection->update($table, $data, $where);
             }
         } else {
-            $data = array(
+            $data = [
                 'entity_type_id' => $entityTypeId,
                 'attribute_set_id' => $setId,
                 'attribute_group_id' => $groupId,
                 'attribute_id' => $attributeId,
-                'sort_order' => $this->getAttributeSortOrder($entityTypeId, $setId, $groupId, $sortOrder)
-            );
+                'sort_order' => $this->getAttributeSortOrder($entityTypeId, $setId, $groupId, $sortOrder),
+            ];
 
             $this->_connection->insert($table, $data);
         }
@@ -1176,14 +1157,14 @@ class Setup extends \Magento\Framework\Module\DataSetup
         $groupId = $this->getAttributeGroupId($entityType, $setId, $groupId);
         $attributeId = $this->getAttributeId($entityType, $attributeId);
 
-        $data = array(
+        $data = [
             'entity_type_id' => $entityType,
             'attribute_set_id' => $setId,
             'attribute_group_id' => $groupId,
-            'attribute_id' => $attributeId
-        );
+            'attribute_id' => $attributeId,
+        ];
 
-        $bind = array('entity_type_id' => $entityType, 'attribute_set_id' => $setId, 'attribute_id' => $attributeId);
+        $bind = ['entity_type_id' => $entityType, 'attribute_set_id' => $setId, 'attribute_id' => $attributeId];
         $select = $this->getConnection()->select()->from(
             $this->getTable('eav_entity_attribute')
         )->where(
@@ -1308,7 +1289,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
      */
     protected function _insertAttribute(array $data)
     {
-        $bind = array();
+        $bind = [];
 
         $fields = $this->_getAttributeTableFields();
 
@@ -1325,7 +1306,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         $attributeId = $this->getConnection()->lastInsertId($this->getTable('eav_attribute'));
         $this->_insertAttributeAdditionalData(
             $data['entity_type_id'],
-            array_merge(array('attribute_id' => $attributeId), $data)
+            array_merge(['attribute_id' => $attributeId], $data)
         );
 
         return $this;
@@ -1346,7 +1327,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
         }
         $additionalTableExists = $this->getConnection()->isTableExists($this->getTable($additionalTable));
         if ($additionalTable && $additionalTableExists) {
-            $bind = array();
+            $bind = [];
             $fields = $this->getConnection()->describeTable($this->getTable($additionalTable));
             foreach ($data as $k => $v) {
                 if (isset($fields[$k])) {

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -53,20 +34,20 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
         $pageCount = 3;
 
         /** @var $callbackMock \PHPUnit_Framework_MockObject_MockObject */
-        $callbackMock = $this->getMock('stdClass', array('callback'));
+        $callbackMock = $this->getMock('stdClass', ['callback']);
 
         $fetchStrategy = $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
 
-        $select = $this->getMock('Zend_Db_Select', array(), array(), '', false);
+        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
 
-        $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', array(), array(), '', false);
-        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
+        $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
 
         /** @var $collectionMock \Magento\Framework\Data\Collection\Db|PHPUnit_Framework_MockObject_MockObject */
         $collectionMock = $this->getMock(
             'Magento\Framework\Data\Collection\Db',
-            array('clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'),
-            array($entityFactory, $logger, $fetchStrategy)
+            ['clear', 'setPageSize', 'setCurPage', 'count', 'getLastPageNumber', 'getSelect'],
+            [$entityFactory, $logger, $fetchStrategy]
         );
 
         $collectionMock->expects($this->any())->method('getSelect')->will($this->returnValue($select));
@@ -90,13 +71,13 @@ class CollectionByPagesIteratorTest extends \PHPUnit_Framework_TestCase
         for ($pageNumber = 1; $pageNumber <= $pageCount; $pageNumber++) {
             for ($rowNumber = 1; $rowNumber <= $pageSize; $rowNumber++) {
                 $itemId = ($pageNumber - 1) * $pageSize + $rowNumber;
-                $item = new \Magento\Framework\Object(array('id' => $itemId));
+                $item = new \Magento\Framework\Object(['id' => $itemId]);
                 $collectionMock->addItem($item);
 
                 $callbackMock->expects($this->at($itemId - 1))->method('callback')->with($item);
             }
         }
 
-        $this->_resourceModel->iterate($collectionMock, $pageSize, array(array($callbackMock, 'callback')));
+        $this->_resourceModel->iterate($collectionMock, $pageSize, [[$callbackMock, 'callback']]);
     }
 }

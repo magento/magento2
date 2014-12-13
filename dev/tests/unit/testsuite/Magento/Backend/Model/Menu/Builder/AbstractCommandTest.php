@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Model\Menu\Builder;
 
@@ -34,7 +15,7 @@ class AbstractCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Backend\Model\Menu\Builder\AbstractCommand',
-            array(array('id' => 'item'))
+            [['id' => 'item']]
         );
     }
 
@@ -50,13 +31,13 @@ class AbstractCommandTest extends \PHPUnit_Framework_TestCase
     {
         $command1 = $this->getMock(
             'Magento\Backend\Model\Menu\Builder\Command\Update',
-            array(),
-            array(array('id' => 1))
+            [],
+            [['id' => 1]]
         );
         $command2 = $this->getMock(
             'Magento\Backend\Model\Menu\Builder\Command\Remove',
-            array(),
-            array(array('id' => 1))
+            [],
+            [['id' => 1]]
         );
         $command1->expects($this->once())->method('chain')->with($this->equalTo($command2));
 
@@ -66,7 +47,7 @@ class AbstractCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteCallsNextCommandInChain()
     {
-        $itemParams = array();
+        $itemParams = [];
         $this->_model->expects(
             $this->once()
         )->method(
@@ -79,8 +60,8 @@ class AbstractCommandTest extends \PHPUnit_Framework_TestCase
 
         $command1 = $this->getMock(
             'Magento\Backend\Model\Menu\Builder\Command\Update',
-            array(),
-            array(array('id' => 1))
+            [],
+            [['id' => 1]]
         );
         $command1->expects(
             $this->once()

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Cms\Model\Resource;
 
@@ -43,7 +24,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -57,13 +38,13 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
         parent::__construct($resource);
@@ -90,7 +71,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
     {
-        $condition = array('page_id = ?' => (int)$object->getId());
+        $condition = ['page_id = ?' => (int)$object->getId()];
 
         $this->_getWriteAdapter()->delete($this->getTable('cms_page_store'), $condition);
 
@@ -112,7 +93,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
          * If they are empty we need to convert them into DB
          * type NULL so in DB they will be empty and not some default value
          */
-        foreach (array('custom_theme_from', 'custom_theme_to') as $field) {
+        foreach (['custom_theme_from', 'custom_theme_to'] as $field) {
             $value = !$object->getData($field) ? null : $object->getData($field);
             $object->setData($field, $this->dateTime->formatDate($value));
         }
@@ -152,16 +133,16 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $delete = array_diff($oldStores, $newStores);
 
         if ($delete) {
-            $where = array('page_id = ?' => (int)$object->getId(), 'store_id IN (?)' => $delete);
+            $where = ['page_id = ?' => (int)$object->getId(), 'store_id IN (?)' => $delete];
 
             $this->_getWriteAdapter()->delete($table, $where);
         }
 
         if ($insert) {
-            $data = array();
+            $data = [];
 
             foreach ($insert as $storeId) {
-                $data[] = array('page_id' => (int)$object->getId(), 'store_id' => (int)$storeId);
+                $data[] = ['page_id' => (int)$object->getId(), 'store_id' => (int)$storeId];
             }
 
             $this->_getWriteAdapter()->insertMultiple($table, $data);
@@ -217,11 +198,11 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = parent::_getLoadSelect($field, $value, $object);
 
         if ($object->getStoreId()) {
-            $storeIds = array(\Magento\Store\Model\Store::DEFAULT_STORE_ID, (int)$object->getStoreId());
+            $storeIds = [\Magento\Store\Model\Store::DEFAULT_STORE_ID, (int)$object->getStoreId()];
             $select->join(
-                array('cms_page_store' => $this->getTable('cms_page_store')),
+                ['cms_page_store' => $this->getTable('cms_page_store')],
                 $this->getMainTable() . '.page_id = cms_page_store.page_id',
-                array()
+                []
             )->where(
                 'is_active = ?',
                 1
@@ -249,11 +230,11 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _getLoadByIdentifierSelect($identifier, $store, $isActive = null)
     {
         $select = $this->_getReadAdapter()->select()->from(
-            array('cp' => $this->getMainTable())
+            ['cp' => $this->getMainTable()]
         )->join(
-            array('cps' => $this->getTable('cms_page_store')),
+            ['cps' => $this->getTable('cms_page_store')],
             'cp.page_id = cps.page_id',
-            array()
+            []
         )->where(
             'cp.identifier = ?',
             $identifier
@@ -301,7 +282,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function checkIdentifier($identifier, $storeId)
     {
-        $stores = array(\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId);
+        $stores = [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $storeId];
         $select = $this->_getLoadByIdentifierSelect($identifier, $stores, 1);
         $select->reset(\Zend_Db_Select::COLUMNS)->columns('cp.page_id')->order('cps.store_id DESC')->limit(1);
 
@@ -316,7 +297,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCmsPageTitleByIdentifier($identifier)
     {
-        $stores = array(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
+        $stores = [\Magento\Store\Model\Store::DEFAULT_STORE_ID];
         if ($this->_store) {
             $stores[] = (int)$this->getStore()->getId();
         }
@@ -339,7 +320,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $select = $adapter->select()->from($this->getMainTable(), 'title')->where('page_id = :page_id');
 
-        $binds = array('page_id' => (int)$id);
+        $binds = ['page_id' => (int)$id];
 
         return $adapter->fetchOne($select, $binds);
     }
@@ -356,7 +337,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $select = $adapter->select()->from($this->getMainTable(), 'identifier')->where('page_id = :page_id');
 
-        $binds = array('page_id' => (int)$id);
+        $binds = ['page_id' => (int)$id];
 
         return $adapter->fetchOne($select, $binds);
     }

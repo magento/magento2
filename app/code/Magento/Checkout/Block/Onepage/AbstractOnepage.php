@@ -1,33 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Checkout\Block\Onepage;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Config as AddressConfig;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Directory\Model\Resource\Country\Collection;
 use Magento\Directory\Model\Resource\Region\Collection as RegionCollection;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Quote;
 
 /**
@@ -103,7 +84,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Customer\Model\Address\Mapper
      */
-    protected $dataObjectConverter;
+    protected $addressMapper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -116,7 +97,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      * @param CustomerRepositoryInterface $customerRepository
      * @param AddressConfig $addressConfig
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Customer\Model\Address\Mapper $dataObjectConverter
+     * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param array $data
      */
     public function __construct(
@@ -130,10 +111,9 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
         CustomerRepositoryInterface $customerRepository,
         AddressConfig $addressConfig,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Customer\Model\Address\Mapper $dataObjectConverter,
-        array $data = array()
+        \Magento\Customer\Model\Address\Mapper $addressMapper,
+        array $data = []
     ) {
-        $this->dataObjectConverter = $dataObjectConverter;
         $this->_coreData = $coreData;
         $this->_configCacheType = $configCacheType;
         $this->_customerSession = $customerSession;
@@ -145,6 +125,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
         $this->_isScopePrivate = true;
         $this->customerRepository = $customerRepository;
         $this->_addressConfig = $addressConfig;
+        $this->addressMapper = $addressMapper;
     }
 
     /**
@@ -245,7 +226,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     public function getAddressesHtmlSelect($type)
     {
         if ($this->isCustomerLoggedIn()) {
-            $options = array();
+            $options = [];
 
             try {
                 $addresses = $this->_getCustomer()->getAddresses();
@@ -254,7 +235,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
             }
 
             foreach ($addresses as $address) {
-                $builtOutputAddressData = $this->dataObjectConverter->toFlatArray($address);
+                $builtOutputAddressData = $this->addressMapper->toFlatArray($address);
                 $label = $this->_addressConfig
                     ->getFormatByCode(AddressConfig::DEFAULT_ADDRESS_FORMAT)
                     ->getRenderer()
@@ -278,10 +259,8 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 
             $select = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select')
                 ->setName($type . '_address_id')
-                ->setId($type . '-address-select')
+                ->setId($type . ':address-select')
                 ->setClass('address-select')
-                //->setExtraParams('onchange="'.$type.'.newAddress(!this.value)"')
-                // temp disable inline javascript, need to clean this later
                 ->setValue($addressId)
                 ->setOptions($options);
 
@@ -370,7 +349,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      */
     protected function _getStepCodes()
     {
-        return array('login', 'billing', 'shipping', 'shipping_method', 'payment', 'review');
+        return ['login', 'billing', 'shipping', 'shipping_method', 'payment', 'review'];
     }
 
     /**

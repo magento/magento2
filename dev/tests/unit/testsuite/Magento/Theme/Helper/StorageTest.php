@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -83,31 +64,31 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customizationPath = '/' . implode('/', array('var', 'theme'));
+        $this->customizationPath = '/' . implode('/', ['var', 'theme']);
 
-        $this->request = $this->getMock('\Magento\Framework\App\Request\Http', array(), array(), '', false);
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
-        $this->session = $this->getMock('Magento\Backend\Model\Session', array(), array(), '', false);
-        $this->contextHelper = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
+        $this->request = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->session = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
+        $this->contextHelper = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->directoryWrite = $this->getMock(
             'Magento\Framework\Filesystem\Directory\Write',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->themeFactory = $this->getMock(
             'Magento\Framework\View\Design\Theme\FlyweightFactory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
+        $this->theme = $this->getMock('Magento\Core\Model\Theme', [], [], '', false);
         $this->customization = $this->getMock(
             'Magento\Framework\View\Design\Theme\Customization',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -171,10 +152,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     public function testGetThumbnailDirectory()
     {
-        $imagePath = implode('/', array('root', 'image', 'image_name.jpg'));
+        $imagePath = implode('/', ['root', 'image', 'image_name.jpg']);
         $thumbnailDir = implode(
             '/',
-            array('root', 'image', \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY)
+            ['root', 'image', \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY]
         );
 
         $this->assertEquals($thumbnailDir, $this->helper->getThumbnailDirectory($imagePath));
@@ -185,11 +166,11 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $image = 'image_name.jpg';
         $thumbnailPath = '/' . implode(
             '/',
-            array(
+            [
                 \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
                 \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY,
                 $image
-            )
+            ]
         );
 
         $this->customization->expects(
@@ -235,11 +216,11 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('node')
         );
 
-        $expectedResult = array(
+        $expectedResult = [
             \Magento\Theme\Helper\Storage::PARAM_THEME_ID => 6,
             \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
-            \Magento\Theme\Helper\Storage::PARAM_NODE => 'node'
-        );
+            \Magento\Theme\Helper\Storage::PARAM_NODE => 'node',
+        ];
         $this->assertEquals($expectedResult, $this->helper->getRequestParams());
     }
 
@@ -265,11 +246,10 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(\Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE)
         );
 
-
         $fontTypes = $this->helper->getAllowedExtensionsByType();
-        $this->assertEquals(array('ttf', 'otf', 'eot', 'svg', 'woff'), $fontTypes);
+        $this->assertEquals(['ttf', 'otf', 'eot', 'svg', 'woff'], $fontTypes);
 
         $imagesTypes = $this->helper->getAllowedExtensionsByType();
-        $this->assertEquals(array('jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'), $imagesTypes);
+        $this->assertEquals(['jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp'], $imagesTypes);
     }
 }

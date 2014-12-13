@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\HTTP;
 
@@ -33,11 +14,11 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCredentials($server, $expectedLogin, $expectedPass)
     {
-        $request = $this->getMock('\Magento\Framework\App\Request\Http', array(), array(), '', false);
+        $request = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
         $request->expects($this->once())->method('getServer')->will($this->returnValue($server));
-        $response = $this->getMock('\Magento\Framework\App\Response\Http', array(), array(), '', false);
+        $response = $this->getMock('\Magento\Framework\App\Response\Http', [], [], '', false);
         $authentication = new \Magento\Framework\HTTP\Authentication($request, $response);
-        $this->assertSame(array($expectedLogin, $expectedPass), $authentication->getCredentials());
+        $this->assertSame([$expectedLogin, $expectedPass], $authentication->getCredentials());
     }
 
     /**
@@ -53,35 +34,35 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $anotherPassword = 'another_password';
         $anotherHeader = 'Basic YW5vdGhlcl9sb2dpbjphbm90aGVyX3Bhc3N3b3Jk';
 
-        return array(
-            array(array(), '', ''),
-            array(array('REDIRECT_HTTP_AUTHORIZATION' => $header), $login, $password),
-            array(array('HTTP_AUTHORIZATION' => $header), $login, $password),
-            array(array('Authorization' => $header), $login, $password),
-            array(
-                array(
+        return [
+            [[], '', ''],
+            [['REDIRECT_HTTP_AUTHORIZATION' => $header], $login, $password],
+            [['HTTP_AUTHORIZATION' => $header], $login, $password],
+            [['Authorization' => $header], $login, $password],
+            [
+                [
                     'REDIRECT_HTTP_AUTHORIZATION' => $header,
                     'PHP_AUTH_USER' => $anotherLogin,
-                    'PHP_AUTH_PW' => $anotherPassword
-                ),
+                    'PHP_AUTH_PW' => $anotherPassword,
+                ],
                 $anotherLogin,
                 $anotherPassword
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'REDIRECT_HTTP_AUTHORIZATION' => $header,
                     'PHP_AUTH_USER' => $anotherLogin,
-                    'PHP_AUTH_PW' => $anotherPassword
-                ),
+                    'PHP_AUTH_PW' => $anotherPassword,
+                ],
                 $anotherLogin,
                 $anotherPassword
-            ),
-            array(
-                array('REDIRECT_HTTP_AUTHORIZATION' => $header, 'HTTP_AUTHORIZATION' => $anotherHeader),
+            ],
+            [
+                ['REDIRECT_HTTP_AUTHORIZATION' => $header, 'HTTP_AUTHORIZATION' => $anotherHeader],
                 $anotherLogin,
                 $anotherPassword
-            )
-        );
+            ]
+        ];
     }
 
     public function testSetAuthenticationFailed()

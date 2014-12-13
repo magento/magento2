@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
@@ -115,12 +96,12 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testNotLoggedLoginActionWithRedirect()
     {
         $this->getRequest()->setPost(
-            array(
-                'login' => array(
+            [
+                'login' => [
                     'username' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-                    'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-                )
-            )
+                    'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+                ],
+            ]
         );
 
         $this->dispatch('backend/admin/index/index');
@@ -164,12 +145,12 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_login();
         $this->dispatch('backend/admin/auth/deniedJson');
-        $data = array(
+        $data = [
             'ajaxExpired' => 1,
             'ajaxRedirect' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 'Magento\Backend\Helper\Data'
-            )->getHomePageUrl()
-        );
+            )->getHomePageUrl(),
+        ];
         $expected = json_encode($data);
         $this->assertEquals($expected, $this->getResponse()->getBody());
         $this->_logout();
@@ -209,31 +190,31 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public function incorrectLoginDataProvider()
     {
-        return array(
-            'login dummy user' => array(
-                array(
-                    'login' => array(
+        return [
+            'login dummy user' => [
+                [
+                    'login' => [
                         'username' => 'test1',
-                        'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-                    )
-                )
-            ),
-            'login without role' => array(
-                array(
-                    'login' => array(
+                        'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+                    ],
+                ],
+            ],
+            'login without role' => [
+                [
+                    'login' => [
                         'username' => 'test2',
-                        'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-                    )
-                )
-            ),
-            'login not active user' => array(
-                array(
-                    'login' => array(
+                        'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+                    ],
+                ],
+            ],
+            'login not active user' => [
+                [
+                    'login' => [
                         'username' => 'test3',
-                        'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-                    )
-                )
-            )
-        );
+                        'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+                    ],
+                ],
+            ]
+        ];
     }
 }

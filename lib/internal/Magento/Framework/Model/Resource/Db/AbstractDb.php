@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\Model\Resource\Db;
@@ -50,7 +31,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @var array
      */
-    protected $_connections = array();
+    protected $_connections = [];
 
     /**
      * Resource model name that contains entities (names of tables)
@@ -64,7 +45,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @var array
      */
-    protected $_tables = array();
+    protected $_tables = [];
 
     /**
      * Main table name
@@ -130,7 +111,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @var array
      */
-    protected $_serializableFields = array();
+    protected $_serializableFields = [];
 
     /**
      * Class constructor
@@ -151,7 +132,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     public function __sleep()
     {
         $properties = array_keys(get_object_vars($this));
-        $properties = array_diff($properties, array('_resources', '_connections'));
+        $properties = array_diff($properties, ['_resources', '_connections']);
         return $properties;
     }
 
@@ -192,17 +173,17 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             foreach ($connections as $key => $value) {
                 $this->_connections[$key] = $this->_resources->getConnection($value);
             }
-        } else if (is_string($connections)) {
+        } elseif (is_string($connections)) {
             $this->_resourcePrefix = $connections;
         }
 
         if (is_null($tables) && is_string($connections)) {
             $this->_resourceModel = $this->_resourcePrefix;
-        } else if (is_array($tables)) {
+        } elseif (is_array($tables)) {
             foreach ($tables as $key => $value) {
                 $this->_tables[$key] = $this->_resources->getTableName($value);
             }
-        } else if (is_string($tables)) {
+        } elseif (is_string($tables)) {
             $this->_resourceModel = $tables;
         }
         return $this;
@@ -418,7 +399,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                     } else {
                         $select = $this->_getWriteAdapter()->select()->from(
                             $this->getMainTable(),
-                            array($this->getIdFieldName())
+                            [$this->getIdFieldName()]
                         )->where(
                             $condition
                         );
@@ -454,7 +435,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
 
                 $object->afterSave();
             }
-            $this->addCommitCallback(array($object, 'afterCommitCallback'))->commit();
+            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
         } catch (\Exception $e) {
             $this->rollBack();
@@ -517,7 +498,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      */
     public function resetUniqueField()
     {
-        $this->_uniqueFields = array();
+        $this->_uniqueFields = [];
         return $this;
     }
 
@@ -542,7 +523,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      */
     protected function _initUniqueFields()
     {
-        $this->_uniqueFields = array();
+        $this->_uniqueFields = [];
         return $this;
     }
 
@@ -614,11 +595,11 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      */
     protected function _checkUnique(\Magento\Framework\Model\AbstractModel $object)
     {
-        $existent = array();
+        $existent = [];
         $fields = $this->getUniqueFields();
         if (!empty($fields)) {
             if (!is_array($fields)) {
-                $this->_uniqueFields = array(array('field' => $fields, 'title' => $fields));
+                $this->_uniqueFields = [['field' => $fields, 'title' => $fields]];
             }
 
             $data = new \Magento\Framework\Object($this->_prepareDataForSave($object));

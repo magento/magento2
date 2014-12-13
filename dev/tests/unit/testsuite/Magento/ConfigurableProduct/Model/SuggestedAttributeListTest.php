@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ConfigurableProduct\Model;
 
@@ -59,19 +40,19 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $this->attributeFactoryMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
-            array('create')
+            ['create'], [], '', false
         );
         $this->resourceHelperMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Helper',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->collectionMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\Attribute\Collection',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -81,7 +62,7 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
             'addLikeEscape'
         )->with(
             $this->labelPart,
-            array('position' => 'any')
+            ['position' => 'any']
         )->will(
             $this->returnValue($this->labelPart)
         );
@@ -92,13 +73,13 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->collectionMock)
         );
-        $valueMap = array(
-            array('frontend_input', 'select', $this->collectionMock),
-            array('frontend_label', array('like' => $this->labelPart), $this->collectionMock),
-            array('is_configurable', array(array('eq' => 1), array('null' => true)), $this->collectionMock),
-            array('is_user_defined', 1, $this->collectionMock),
-            array('is_global', \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL, $this->collectionMock)
-        );
+        $valueMap = [
+            ['frontend_input', 'select', $this->collectionMock],
+            ['frontend_label', ['like' => $this->labelPart], $this->collectionMock],
+            ['is_configurable', [['eq' => 1], ['null' => true]], $this->collectionMock],
+            ['is_user_defined', 1, $this->collectionMock],
+            ['is_global', \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL, $this->collectionMock],
+        ];
         $this->collectionMock->expects(
             $this->any()
         )->method(
@@ -106,11 +87,11 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap($valueMap)
         );
-        $methods = array('getId', 'getFrontendLabel', 'getAttributeCode', 'getSource', '__wakeup', 'getApplyTo');
+        $methods = ['getId', 'getFrontendLabel', 'getAttributeCode', 'getSource', '__wakeup', 'getApplyTo'];
         $this->attributeMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Eav\Attribute',
             $methods,
-            array(),
+            [],
             '',
             false
         );
@@ -119,7 +100,7 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getItems'
         )->will(
-            $this->returnValue(array('id' => $this->attributeMock))
+            $this->returnValue(['id' => $this->attributeMock])
         );
         $this->suggestedListModel = new \Magento\ConfigurableProduct\Model\SuggestedAttributeList(
             $this->attributeFactoryMock,
@@ -131,12 +112,12 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $source = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $result['id'] = array('id' => 'id', 'label' => 'label', 'code' => 'code', 'options' => 'options');
+        $result['id'] = ['id' => 'id', 'label' => 'label', 'code' => 'code', 'options' => 'options'];
         $this->attributeMock->expects($this->any())->method('getApplyTo')->will($this->returnValue(false));
         $this->attributeMock->expects($this->once())->method('getId')->will($this->returnValue('id'));
         $this->attributeMock->expects($this->once())->method('getFrontendLabel')->will($this->returnValue('label'));
@@ -148,11 +129,11 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSuggestedAttributesIfTheyNotApplicable()
     {
-        $this->attributeMock->expects($this->any())->method('getApplyTo')->will($this->returnValue(array('simple')));
+        $this->attributeMock->expects($this->any())->method('getApplyTo')->will($this->returnValue(['simple']));
         $this->attributeMock->expects($this->never())->method('getId');
         $this->attributeMock->expects($this->never())->method('getFrontendLabel');
         $this->attributeMock->expects($this->never())->method('getAttributeCode');
         $this->attributeMock->expects($this->never())->method('getSource');
-        $this->assertEquals(array(), $this->suggestedListModel->getSuggestedAttributes($this->labelPart));
+        $this->assertEquals([], $this->suggestedListModel->getSuggestedAttributes($this->labelPart));
     }
 }

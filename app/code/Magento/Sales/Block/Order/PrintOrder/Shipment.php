@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Block\Order\PrintOrder;
 
@@ -35,7 +16,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      *
      * @var array
      */
-    protected $_tracks = array();
+    protected $_tracks = [];
 
     /**
      * Order shipments collection
@@ -66,7 +47,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentHelper,
-        array $data = array()
+        array $data = []
     ) {
         $this->_paymentHelper = $paymentHelper;
         $this->_coreRegistry = $registry;
@@ -89,7 +70,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
 
         $shipment = $this->_coreRegistry->registry('current_shipment');
         if ($shipment) {
-            $this->_shipmentsCollection = array($shipment);
+            $this->_shipmentsCollection = [$shipment];
         } else {
             $this->_shipmentsCollection = $this->getOrder()->getShipmentsCollection();
         }
@@ -176,7 +157,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getShipmentTracks($shipment)
     {
-        $tracks = array();
+        $tracks = [];
         if (!empty($this->_tracks[$shipment->getId()])) {
             $tracks = $this->_tracks[$shipment->getId()];
         }
@@ -221,7 +202,7 @@ class Shipment extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getShipmentItems($shipment)
     {
-        $res = array();
+        $res = [];
         foreach ($shipment->getItemsCollection() as $item) {
             if (!$item->getOrderItem()->getParentItem()) {
                 $res[] = $item;

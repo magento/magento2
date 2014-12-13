@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\Stdlib\Cookie;
@@ -40,8 +21,14 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
 
     private $defaultScopeParams;
 
+    private $requestMock;
+
     public function setUp()
     {
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Http\RequestInterface')
+            ->disableOriginalConstructor()->getMock();
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')->willReturn(true);
         $this->objectManager = new ObjectManager($this);
         $cookieMetadataFactory = $this
             ->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory')
@@ -56,7 +43,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
             ->method('createCookieMetadata')
             ->will($this->returnCallback([$this, 'createCookieMetadata']));
         $this->defaultScopeParams = [
-            'cookieMetadataFactory' => $cookieMetadataFactory
+            'cookieMetadataFactory' => $cookieMetadataFactory,
         ];
     }
 
@@ -110,7 +97,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
             [
                 'sensitiveCookieMetadata' => $sensitive,
                 'publicCookieMetadata' => null,
-                'deleteCookieMetadata' => null
+                'deleteCookieMetadata' => null,
             ]
         );
 
@@ -143,7 +130,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
             [
                 'sensitiveCookieMetadata' => null,
                 'publicCookieMetadata' => $public,
-                'deleteCookieMetadata' => null
+                'deleteCookieMetadata' => null,
             ]
         );
 
@@ -172,7 +159,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
             [
                 'sensitiveCookieMetadata' => null,
                 'publicCookieMetadata' => null,
-                'deleteCookieMetadata' => $cookieMetadata
+                'deleteCookieMetadata' => $cookieMetadata,
             ]
         );
 
@@ -197,7 +184,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
             [
                 'sensitiveCookieMetadata' => $sensitive,
                 'publicCookieMetadata' => null,
-                'deleteCookieMetadata' => null
+                'deleteCookieMetadata' => null,
             ]
         );
         $override = $this->createSensitiveMetadata($overrideValues);
@@ -239,7 +226,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
             [
                 'sensitiveCookieMetadata' => null,
                 'publicCookieMetadata' => $public,
-                'cookieMetadata' => null
+                'cookieMetadata' => null,
             ]
         );
         $override = $this->createPublicMetadata($overrideValues);
@@ -264,7 +251,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
             [
                 'sensitiveCookieMetadata' => null,
                 'publicCookieMetadata' => null,
-                'deleteCookieMetadata' => $cookieMeta
+                'deleteCookieMetadata' => $cookieMeta,
             ]
         );
         $override = $this->createCookieMetadata($overrideValues);
@@ -305,7 +292,7 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
     {
         return $this->objectManager->getObject(
             'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
-            ['metadata' => $metadata]
+            ['metadata' => $metadata, 'request' => $this->requestMock]
         );
     }
 
@@ -336,4 +323,4 @@ class CookieScopeTest extends \PHPUnit_Framework_TestCase
             ['metadata' => $metadata]
         );
     }
-} 
+}

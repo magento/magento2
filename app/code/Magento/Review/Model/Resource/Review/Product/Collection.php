@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Review\Model\Resource\Review\Product;
 
@@ -37,7 +18,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @var array
      */
-    protected $_entitiesAlias = array();
+    protected $_entitiesAlias = [];
 
     /**
      * Review store table
@@ -58,7 +39,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @var array
      */
-    protected $_storesIds = array();
+    protected $_storesIds = [];
 
     /**
      * Rating model
@@ -84,7 +65,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -97,7 +78,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory
      * @param mixed $connection
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -110,7 +91,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -190,7 +171,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         parent::addStoreFilter($storeId);
 
         if (!is_array($storeId)) {
-            $storeId = array($storeId);
+            $storeId = [$storeId];
         }
 
         if (!empty($this->_storesIds)) {
@@ -215,7 +196,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         }
 
         if (!is_array($storeId)) {
-            $storeId = array($storeId);
+            $storeId = [$storeId];
         }
 
         if (!empty($this->_storesIds)) {
@@ -246,19 +227,19 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         }
 
         if (is_array($storesIds) && !empty($storesIds)) {
-            $inCond = $adapter->prepareSqlCondition('store.store_id', array('in' => $storesIds));
+            $inCond = $adapter->prepareSqlCondition('store.store_id', ['in' => $storesIds]);
             $select->join(
-                array('store' => $this->_reviewStoreTable),
+                ['store' => $this->_reviewStoreTable],
                 'rt.review_id=store.review_id AND ' . $inCond,
-                array()
+                []
             )->group(
                 'rt.review_id'
             );
         } else {
             $select->join(
-                array('store' => $this->_reviewStoreTable),
+                ['store' => $this->_reviewStoreTable],
                 $adapter->quoteInto('rt.review_id=store.review_id AND store.store_id = ?', (int)$storesIds),
-                array()
+                []
             );
         }
 
@@ -370,13 +351,13 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $this->addAttributeToSelect('name')->addAttributeToSelect('sku');
 
         $this->getSelect()->join(
-            array('rt' => $reviewTable),
+            ['rt' => $reviewTable],
             'rt.entity_pk_value = e.entity_id',
-            array('rt.review_id', 'review_created_at' => 'rt.created_at', 'rt.entity_pk_value', 'rt.status_id')
+            ['rt.review_id', 'review_created_at' => 'rt.created_at', 'rt.entity_pk_value', 'rt.status_id']
         )->join(
-            array('rdt' => $reviewDetailTable),
+            ['rdt' => $reviewDetailTable],
             'rdt.review_id = rt.review_id',
-            array('rdt.title', 'rdt.nickname', 'rdt.detail', 'rdt.customer_id', 'rdt.store_id')
+            ['rdt.title', 'rdt.nickname', 'rdt.detail', 'rdt.customer_id', 'rdt.store_id']
         );
         return $this;
     }
@@ -484,24 +465,24 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                 break;
             case 'type':
                 if ($condition == 1) {
-                    $conditionParts = array(
-                        $this->_getConditionSql('rdt.customer_id', array('is' => new \Zend_Db_Expr('NULL'))),
+                    $conditionParts = [
+                        $this->_getConditionSql('rdt.customer_id', ['is' => new \Zend_Db_Expr('NULL')]),
                         $this->_getConditionSql(
                             'rdt.store_id',
-                            array('eq' => \Magento\Store\Model\Store::DEFAULT_STORE_ID)
-                        )
-                    );
+                            ['eq' => \Magento\Store\Model\Store::DEFAULT_STORE_ID]
+                        ),
+                    ];
                     $conditionSql = implode(' AND ', $conditionParts);
                 } elseif ($condition == 2) {
-                    $conditionSql = $this->_getConditionSql('rdt.customer_id', array('gt' => 0));
+                    $conditionSql = $this->_getConditionSql('rdt.customer_id', ['gt' => 0]);
                 } else {
-                    $conditionParts = array(
-                        $this->_getConditionSql('rdt.customer_id', array('is' => new \Zend_Db_Expr('NULL'))),
+                    $conditionParts = [
+                        $this->_getConditionSql('rdt.customer_id', ['is' => new \Zend_Db_Expr('NULL')]),
                         $this->_getConditionSql(
                             'rdt.store_id',
-                            array('neq' => \Magento\Store\Model\Store::DEFAULT_STORE_ID)
-                        )
-                    );
+                            ['neq' => \Magento\Store\Model\Store::DEFAULT_STORE_ID]
+                        ),
+                    ];
                     $conditionSql = implode(' AND ', $conditionParts);
                 }
                 $this->getSelect()->where($conditionSql);
@@ -522,7 +503,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function getColumnValues($colName)
     {
-        $col = array();
+        $col = [];
         foreach ($this->getItems() as $item) {
             $col[] = $item->getData($colName);
         }
@@ -553,10 +534,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $adapter = $this->getConnection();
         //$this->_getConditionSql('rdt.customer_id', array('null' => null));
         $reviewsIds = $this->getColumnValues('review_id');
-        $storesToReviews = array();
+        $storesToReviews = [];
         if (count($reviewsIds) > 0) {
-            $reviewIdCondition = $this->_getConditionSql('review_id', array('in' => $reviewsIds));
-            $storeIdCondition = $this->_getConditionSql('store_id', array('gt' => 0));
+            $reviewIdCondition = $this->_getConditionSql('review_id', ['in' => $reviewsIds]);
+            $storeIdCondition = $this->_getConditionSql('store_id', ['gt' => 0]);
             $select = $adapter->select()->from(
                 $this->_reviewStoreTable
             )->where(
@@ -567,7 +548,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             $result = $adapter->fetchAll($select);
             foreach ($result as $row) {
                 if (!isset($storesToReviews[$row['review_id']])) {
-                    $storesToReviews[$row['review_id']] = array();
+                    $storesToReviews[$row['review_id']] = [];
                 }
                 $storesToReviews[$row['review_id']][] = $row['store_id'];
             }
@@ -577,7 +558,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             if (isset($storesToReviews[$item->getReviewId()])) {
                 $item->setData('stores', $storesToReviews[$item->getReviewId()]);
             } else {
-                $item->setData('stores', array());
+                $item->setData('stores', []);
             }
         }
     }

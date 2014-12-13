@@ -1,32 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Integration\Model\Oauth;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Oauth\Exception as OauthException;
 use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
 use Magento\Integration\Model\Resource\Oauth\Token\Collection as TokenCollection;
-use Magento\Framework\Oauth\Exception as OauthException;
 
 /**
  * oAuth token model
@@ -130,7 +111,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
         OauthHelper $oauthHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_keyLengthFactory = $keyLengthFactory;
@@ -176,18 +157,18 @@ class Token extends \Magento\Framework\Model\AbstractModel
     public function createVerifierToken($consumerId)
     {
         $tokenData = $this->getResource()->selectTokenByType($consumerId, self::TYPE_VERIFIER);
-        $this->setData($tokenData ? $tokenData : array());
+        $this->setData($tokenData ? $tokenData : []);
         if (!$this->getId()) {
             $this->setData(
-                array(
+                [
                     'consumer_id' => $consumerId,
                     'type' => self::TYPE_VERIFIER,
                     'token' => $this->_oauthHelper->generateToken(),
                     'secret' => $this->_oauthHelper->generateTokenSecret(),
                     'verifier' => $this->_oauthHelper->generateVerifier(),
                     'callback_url' => OauthHelper::CALLBACK_ESTABLISHED,
-                    'user_type' => UserContextInterface::USER_TYPE_INTEGRATION //As of now only integrations use Oauth
-                )
+                    'user_type' => UserContextInterface::USER_TYPE_INTEGRATION, //As of now only integrations use Oauth
+                ]
             );
             $this->validate();
             $this->save();
@@ -244,13 +225,13 @@ class Token extends \Magento\Framework\Model\AbstractModel
     {
         $callbackUrl = !empty($callbackUrl) ? $callbackUrl : OauthHelper::CALLBACK_ESTABLISHED;
         $this->setData(
-            array(
+            [
                 'entity_id' => $entityId,
                 'type' => self::TYPE_REQUEST,
                 'token' => $this->_oauthHelper->generateToken(),
                 'secret' => $this->_oauthHelper->generateTokenSecret(),
-                'callback_url' => $callbackUrl
-            )
+                'callback_url' => $callbackUrl,
+            ]
         );
         $this->validate();
         $this->save();
@@ -267,7 +248,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      */
     public function toString($format = '')
     {
-        return http_build_query(array('oauth_token' => $this->getToken(), 'oauth_token_secret' => $this->getSecret()));
+        return http_build_query(['oauth_token' => $this->getToken(), 'oauth_token_secret' => $this->getSecret()]);
     }
 
     /**

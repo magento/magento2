@@ -1,27 +1,8 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @category    Magento
  * @package     Magento_Sales
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
 
@@ -70,7 +51,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Sales\Helper\Reorder $reorderHelper,
-        array $data = array()
+        array $data = []
     ) {
         $this->_reorderHelper = $reorderHelper;
         $this->_coreRegistry = $registry;
@@ -108,14 +89,14 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
             $this->buttonList->add(
                 'order_edit',
-                array(
+                [
                     'label' => __('Edit'),
                     'class' => 'edit primary',
                     'onclick' => $onclickJs,
-                    'data_attribute' => array(
-                        'mage-init' => '{"orderEditDialog":{}}'
-                    )
-                )
+                    'data_attribute' => [
+                        'mage-init' => '{"orderEditDialog":{}}',
+                    ]
+                ]
             );
         }
 
@@ -123,11 +104,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             $message = __('Are you sure you want to cancel this order?');
             $this->buttonList->add(
                 'order_cancel',
-                array(
+                [
                     'label' => __('Cancel'),
                     'class' => 'cancel',
                     'onclick' => 'deleteConfirm(\'' . $message . '\', \'' . $this->getCancelUrl() . '\')'
-                )
+                ]
             );
         }
 
@@ -135,11 +116,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             $message = __('Are you sure you want to send an order email to customer?');
             $this->addButton(
                 'send_notification',
-                array(
+                [
                     'label' => __('Send Email'),
                     'class' => 'send-email',
                     'onclick' => "confirmSetLocation('{$message}', '{$this->getEmailUrl()}')"
-                )
+                ]
             );
         }
 
@@ -154,7 +135,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             }
             $this->buttonList->add(
                 'order_creditmemo',
-                array('label' => __('Credit Memo'), 'onclick' => $onClick, 'class' => 'credit-memo')
+                ['label' => __('Credit Memo'), 'onclick' => $onClick, 'class' => 'credit-memo']
             );
         }
 
@@ -163,32 +144,32 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             $message = __('Are you sure you want to void the payment?');
             $this->addButton(
                 'void_payment',
-                array(
+                [
                     'label' => __('Void'),
                     'onclick' => "confirmSetLocation('{$message}', '{$this->getVoidPaymentUrl()}')"
-                )
+                ]
             );
         }
 
         if ($this->_isAllowedAction('Magento_Sales::hold') && $order->canHold()) {
             $this->buttonList->add(
                 'order_hold',
-                array(
+                [
                     'label' => __('Hold'),
                     'class' => __('hold'),
                     'onclick' => 'setLocation(\'' . $this->getHoldUrl() . '\')'
-                )
+                ]
             );
         }
 
         if ($this->_isAllowedAction('Magento_Sales::unhold') && $order->canUnhold()) {
             $this->buttonList->add(
                 'order_unhold',
-                array(
+                [
                     'label' => __('Unhold'),
                     'class' => __('unhold'),
                     'onclick' => 'setLocation(\'' . $this->getUnholdUrl() . '\')'
-                )
+                ]
             );
         }
 
@@ -197,27 +178,27 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 $message = __('Are you sure you want to accept this payment?');
                 $this->buttonList->add(
                     'accept_payment',
-                    array(
+                    [
                         'label' => __('Accept Payment'),
                         'onclick' => "confirmSetLocation('{$message}', '{$this->getReviewPaymentUrl('accept')}')"
-                    )
+                    ]
                 );
                 $message = __('Are you sure you want to deny this payment?');
                 $this->buttonList->add(
                     'deny_payment',
-                    array(
+                    [
                         'label' => __('Deny Payment'),
                         'onclick' => "confirmSetLocation('{$message}', '{$this->getReviewPaymentUrl('deny')}')"
-                    )
+                    ]
                 );
             }
             if ($order->canFetchPaymentReviewUpdate()) {
                 $this->buttonList->add(
                     'get_review_payment_update',
-                    array(
+                    [
                         'label' => __('Get Payment Update'),
                         'onclick' => 'setLocation(\'' . $this->getReviewPaymentUrl('update') . '\')'
-                    )
+                    ]
                 );
             }
         }
@@ -226,11 +207,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             $_label = $order->getForcedShipmentWithInvoice() ? __('Invoice and Ship') : __('Invoice');
             $this->buttonList->add(
                 'order_invoice',
-                array(
+                [
                     'label' => $_label,
                     'onclick' => 'setLocation(\'' . $this->getInvoiceUrl() . '\')',
                     'class' => 'invoice'
-                )
+                ]
             );
         }
 
@@ -240,11 +221,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         ) {
             $this->buttonList->add(
                 'order_ship',
-                array(
+                [
                     'label' => __('Ship'),
                     'onclick' => 'setLocation(\'' . $this->getShipUrl() . '\')',
                     'class' => 'ship'
-                )
+                ]
             );
         }
 
@@ -256,11 +237,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         ) {
             $this->buttonList->add(
                 'order_reorder',
-                array(
+                [
                     'label' => __('Reorder'),
                     'onclick' => 'setLocation(\'' . $this->getReorderUrl() . '\')',
                     'class' => 'reorder'
-                )
+                ]
             );
         }
     }
@@ -313,7 +294,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * @param array $params2
      * @return string
      */
-    public function getUrl($params = '', $params2 = array())
+    public function getUrl($params = '', $params2 = [])
     {
         $params2['order_id'] = $this->getOrderId();
         return parent::getUrl($params, $params2);
@@ -462,7 +443,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getReviewPaymentUrl($action)
     {
-        return $this->getUrl('sales/*/reviewPayment', array('action' => $action));
+        return $this->getUrl('sales/*/reviewPayment', ['action' => $action]);
     }
 
     /**

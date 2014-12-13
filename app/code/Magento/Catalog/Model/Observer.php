@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model;
 
@@ -54,7 +35,7 @@ class Observer
     /**
      * Store manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -82,7 +63,7 @@ class Observer
     /**
      * @param \Magento\Catalog\Model\Resource\Category $categoryResource
      * @param \Magento\Catalog\Model\Resource\Product $catalogProduct
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -92,7 +73,7 @@ class Observer
     public function __construct(
         \Magento\Catalog\Model\Resource\Category $categoryResource,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -155,12 +136,12 @@ class Observer
             $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG . '_' . $category->getId());
 
             $tree = $parentCategoryNode->getTree();
-            $categoryData = array(
+            $categoryData = [
                 'name' => $category->getName(),
                 'id' => $nodeId,
                 'url' => $this->_catalogCategory->getCategoryUrl($category),
-                'is_active' => $this->_isActiveMenuCategory($category)
-            );
+                'is_active' => $this->_isActiveMenuCategory($category),
+            ];
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
 

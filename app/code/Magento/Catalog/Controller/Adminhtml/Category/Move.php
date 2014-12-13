@@ -1,48 +1,45 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 class Move extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var \Magento\Framework\Controller\Result\JSONFactory
      */
-    protected $resultRawFactory;
+    protected $resultJsonFactory;
+
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
+     * @var \Magento\Framework\Logger $logger
+     */
+    protected $logger;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory,
+     * @param \Magento\Framework\Logger $logger,
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\Logger $logger
     ) {
         parent::__construct($context, $resultRedirectFactory);
-        $this->resultRawFactory = $resultRawFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->layoutFactory = $layoutFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -52,12 +49,6 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
-        $resultRaw = $this->resultRawFactory->create();
-        $category = $this->_initCategory();
-        if (!$category) {
-            return $resultRaw->setContents(__('There was a category move error.'));
-        }
         /**
          * New parent category identifier
          */
@@ -67,15 +58,38 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
          */
         $prevNodeId = $this->getRequest()->getPost('aid', false);
 
+        /** @var $block \Magento\Framework\View\Element\Messages */
+        $block = $this->layoutFactory->create()->getMessagesBlock();
+        $error = false;
+
         try {
+            $category = $this->_initCategory();
+            if ($category === false) {
+                throw new \Exception(__('Category is not available for requested store.'));
+            }
             $category->move($parentNodeId, $prevNodeId);
-            $resultRaw->setContents('SUCCESS');
         } catch (\Magento\Framework\Model\Exception $e) {
-            $resultRaw->setContents($e->getMessage());
+            $error = true;
+            $this->messageManager->addError(__('There was a category move error.'));
+        } catch (\Magento\UrlRewrite\Model\Storage\DuplicateEntryException $e) {
+            $error = true;
+            $this->messageManager->addError(__('There was a category move error. %1', $e->getMessage()));
         } catch (\Exception $e) {
-            $resultRaw->setContents(__('There was a category move error %1', $e));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $error = true;
+            $this->messageManager->addError(__('There was a category move error.'));
+            $this->logger->logException($e);
         }
-        return $resultRaw;
+
+        if (!$error) {
+            $this->messageManager->addSuccess(__('You moved the category'));
+        }
+
+        $block->setMessages($this->messageManager->getMessages(true));
+        $resultJson = $this->resultJsonFactory->create();
+
+        return $resultJson->setData([
+            'messages' => $block->getGroupedHtml(),
+            'error' => $error
+        ]);
     }
 }

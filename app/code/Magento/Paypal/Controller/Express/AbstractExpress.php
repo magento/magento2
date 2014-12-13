@@ -1,30 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Paypal\Controller\Express;
 
-use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Checkout\Controller\Express\RedirectLoginInterface;
+use Magento\Framework\App\Action\Action as AppAction;
 
 /**
  * Abstract Express Checkout Controller
@@ -41,7 +22,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
      *
      * @var array
      */
-    protected $_checkoutTypes = array();
+    protected $_checkoutTypes = [];
 
     /**
      * @var \Magento\Paypal\Model\Config
@@ -137,7 +118,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
         $this->_urlHelper = $urlHelper;
         $this->_customerUrl = $customerUrl;
         parent::__construct($context);
-        $parameters = array('params' => array($this->_configMethod));
+        $parameters = ['params' => [$this->_configMethod]];
         $this->_config = $this->_objectManager->create($this->_configType, $parameters);
     }
 
@@ -155,12 +136,12 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
             throw new \Magento\Framework\Model\Exception(__('We can\'t initialize Express Checkout.'));
         }
         if (!isset($this->_checkoutTypes[$this->_checkoutType])) {
-            $parameters = array(
-                'params' => array(
+            $parameters = [
+                'params' => [
                     'quote' => $quote,
                     'config' => $this->_config,
-                ),
-            );
+                ],
+            ];
             $this->_checkoutTypes[$this->_checkoutType] = $this->_checkoutFactory
                 ->create($this->_checkoutType, $parameters);
         }
@@ -248,7 +229,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
      */
     public function getActionFlagList()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -269,7 +250,6 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
         return 'start';
     }
 
-
     /**
      * Redirect to login page
      *
@@ -280,7 +260,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
         $this->_actionFlag->set('', 'no-dispatch', true);
         $this->_customerSession->setBeforeAuthUrl($this->_redirect->getRefererUrl());
         $this->getResponse()->setRedirect(
-            $this->_urlHelper->addRequestParam($this->_customerUrl->getLoginUrl(), array('context' => 'checkout'))
+            $this->_urlHelper->addRequestParam($this->_customerUrl->getLoginUrl(), ['context' => 'checkout'])
         );
     }
 }

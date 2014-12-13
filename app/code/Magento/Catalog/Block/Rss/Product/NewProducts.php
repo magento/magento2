@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Block\Rss\Product;
 
@@ -47,7 +28,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -63,7 +44,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Catalog\Model\Rss\Product\NewProducts $rssModel,
         \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
-        array $data = array()
+        array $data = []
     ) {
         $this->imageHelper = $imageHelper;
         $this->rssModel = $rssModel;
@@ -95,37 +76,37 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
     public function getRssData()
     {
         $storeModel = $this->storeManager->getStore($this->getStoreId());
-        $newUrl = $this->rssUrlBuilder->getUrl(array('store_id' => $this->getStoreId(), 'type' => 'new_products'));
+        $newUrl = $this->rssUrlBuilder->getUrl(['store_id' => $this->getStoreId(), 'type' => 'new_products']);
         $title = __('New Products from %1', $storeModel->getFrontendName());
         $lang = $this->_scopeConfig->getValue(
             'general/locale/code',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeModel
         );
-        $data = array(
+        $data = [
             'title' => $title,
             'description' => $title,
             'link' => $newUrl,
             'charset' => 'UTF-8',
-            'language' => $lang
-        );
+            'language' => $lang,
+        ];
 
         foreach ($this->rssModel->getProductsCollection($this->getStoreId()) as $item) {
             /** @var $item \Magento\Catalog\Model\Product */
             $item->setAllowedInRss(true);
             $item->setAllowedPriceInRss(true);
 
-            $this->_eventManager->dispatch('rss_catalog_new_xml_callback', array(
+            $this->_eventManager->dispatch('rss_catalog_new_xml_callback', [
                 'row' => $item->getData(),
                 'product' => $item
-            ));
+            ]);
 
             if (!$item->getAllowedInRss()) {
                 continue;
             }
 
             $allowedPriceInRss = $item->getAllowedPriceInRss();
-            $description ='
+            $description = '
                 <table><tr>
                 <td><a href="%s"><img src="%s" border="0" align="left" height="75" width="75"></a></td>
                 <td style="text-decoration:none;">%s %s</td>
@@ -139,11 +120,11 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
                 $allowedPriceInRss ? $this->renderPriceHtml($item) : ''
             );
 
-            $data['entries'][] = array(
+            $data['entries'][] = [
                 'title' => $item->getName(),
                 'link' => $item->getProductUrl(),
-                'description' => $description
-            );
+                'description' => $description,
+            ];
         }
 
         return $data;
@@ -175,7 +156,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
             $priceRender = $this->getLayout()->createBlock(
                 'Magento\Framework\Pricing\Render',
                 'product.price.render.default',
-                array('data' => array('price_render_handle' => 'catalog_product_prices'))
+                ['data' => ['price_render_handle' => 'catalog_product_prices']]
             );
         }
         $price = '';
@@ -183,11 +164,11 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
             $price = $priceRender->render(
                 \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
                 $product,
-                array(
+                [
                     'display_minimal_price'  => true,
                     'use_link_for_as_low_as' => true,
                     'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
-                )
+                ]
             );
         }
 
@@ -207,10 +188,10 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
      */
     public function getFeeds()
     {
-        $data = array();
+        $data = [];
         if ($this->isAllowed()) {
-            $url = $this->rssUrlBuilder->getUrl(array('type' => 'new_products'));
-            $data = array('label' => __('New Products'), 'link' => $url);
+            $url = $this->rssUrlBuilder->getUrl(['type' => 'new_products']);
+            $data = ['label' => __('New Products'), 'link' => $url];
         }
 
         return $data;

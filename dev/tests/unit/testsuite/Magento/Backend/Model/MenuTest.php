@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Model;
 
@@ -38,27 +19,27 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Backend\Model\Menu\Item[]
      */
-    protected $_items = array();
+    protected $_items = [];
 
     protected function setUp()
     {
-        $this->_items['item1'] = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false);
+        $this->_items['item1'] = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
         $this->_items['item1']->expects($this->any())->method('getId')->will($this->returnValue('item1'));
 
-        $this->_items['item2'] = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false);
+        $this->_items['item2'] = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
         $this->_items['item2']->expects($this->any())->method('getId')->will($this->returnValue('item2'));
 
-        $this->_items['item3'] = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false);
+        $this->_items['item3'] = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
         $this->_items['item3']->expects($this->any())->method('getId')->will($this->returnValue('item3'));
 
-        $this->_logger = $this->getMock('Magento\Framework\Logger', array('log'), array(), '', false);
+        $this->_logger = $this->getMock('Magento\Framework\Logger', ['log'], [], '', false);
 
         $this->_model = new \Magento\Backend\Model\Menu($this->_logger);
     }
 
     public function testAdd()
     {
-        $item = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false);
+        $item = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
         $this->_model->add($item);
         $this->assertCount(1, $this->_model);
         $this->assertEquals($item, $this->_model[0]);
@@ -79,7 +60,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testAddToItem()
     {
-        $subMenu = $this->getMock('Magento\Backend\Model\Menu', array(), array($this->_logger));
+        $subMenu = $this->getMock('Magento\Backend\Model\Menu', [], [$this->_logger]);
         $subMenu->expects($this->once())->method("add")->with($this->_items['item2']);
 
         $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
@@ -90,9 +71,9 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testAddWithSortIndexThatAlreadyExistsAddsItemOnNextAvailableIndex()
     {
-        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false));
-        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false));
-        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false));
+        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
+        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
+        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
 
         $this->_model->add($this->_items['item1'], null, 2);
         $this->assertCount(4, $this->_model);
@@ -106,12 +87,12 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_model->add($this->_items['item3'], null, 15);
 
         $this->assertCount(3, $this->_model);
-        $itemsOrdered = array();
+        $itemsOrdered = [];
         foreach ($this->_model as $item) {
             /** @var $item \Magento\Backend\Model\Menu\Item */
             $itemsOrdered[] = $item->getId();
         }
-        $this->assertEquals(array('item1', 'item3', 'item2'), $itemsOrdered);
+        $this->assertEquals(['item1', 'item3', 'item2'], $itemsOrdered);
     }
 
     public function testGet()
@@ -278,7 +259,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFirstAvailableReturnsLeafNode()
     {
-        $item = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false);
+        $item = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
         $item->expects($this->never())->method('getFirstAvailable');
         $this->_model->add($item);
 
@@ -308,19 +289,19 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleIterationsWorkProperly()
     {
-        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false));
-        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false));
+        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
+        $this->_model->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
 
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2']);
 
-        $items = array();
+        $items = [];
         /** @var $item \Magento\Backend\Model\Menu\Item */
         foreach ($this->_model as $item) {
             $items[] = $item->getId();
         }
 
-        $items2 = array();
+        $items2 = [];
         foreach ($this->_model as $item) {
             $items2[] = $item->getId();
         }
@@ -336,12 +317,12 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);
 
-        $expected = array(
-            'item1' => array('item1', 'item2', 'item3'),
-            'item2' => array('item1', 'item2', 'item3'),
-            'item3' => array('item1', 'item2', 'item3')
-        );
-        $actual = array();
+        $expected = [
+            'item1' => ['item1', 'item2', 'item3'],
+            'item2' => ['item1', 'item2', 'item3'],
+            'item3' => ['item1', 'item2', 'item3'],
+        ];
+        $actual = [];
         foreach ($this->_model as $valLoop1) {
             $keyLevel1 = $valLoop1->getId();
             foreach ($this->_model as $valLoop2) {

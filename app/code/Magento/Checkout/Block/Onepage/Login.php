@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Checkout\Block\Onepage;
 
@@ -65,6 +46,7 @@ class Login extends AbstractOnepage
      * @param CustomerRepositoryInterface $customerRepository
      * @param AddressConfig $addressConfig
      * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param \Magento\Checkout\Helper\Data $checkoutData
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Customer\Model\Url $customerUrl
@@ -83,12 +65,12 @@ class Login extends AbstractOnepage
         CustomerRepositoryInterface $customerRepository,
         AddressConfig $addressConfig,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Customer\Model\Address\Mapper $dataObjectConverter,
+        \Magento\Customer\Model\Address\Mapper $addressMapper,
         \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Customer\Model\Registration $registration,
-        array $data = array()
+        array $data = []
     ) {
         $this->registration = $registration;
         $this->customerUrl = $customerUrl;
@@ -105,7 +87,7 @@ class Login extends AbstractOnepage
             $customerRepository,
             $addressConfig,
             $httpContext,
-            $dataObjectConverter,
+            $addressMapper,
             $data
         );
         $this->_isScopePrivate = true;
@@ -117,7 +99,7 @@ class Login extends AbstractOnepage
     protected function _construct()
     {
         if (!$this->isCustomerLoggedIn()) {
-            $this->getCheckout()->setStepData('login', array('label' => __('Checkout Method'), 'allow' => true));
+            $this->getCheckout()->setStepData('login', ['label' => __('Checkout Method'), 'allow' => true]);
         }
         parent::_construct();
     }
@@ -165,7 +147,7 @@ class Login extends AbstractOnepage
      */
     public function getPostAction()
     {
-        return $this->getUrl('customer/account/loginPost', array('_secure' => true));
+        return $this->getUrl('customer/account/loginPost', ['_secure' => true]);
     }
 
     /**

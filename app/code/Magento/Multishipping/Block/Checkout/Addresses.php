@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Multishipping\Block\Checkout;
 
@@ -54,7 +35,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @var \Magento\Customer\Model\Address\Mapper
      */
-    protected $mapper;
+    protected $addressMapper;
 
     /**
      * Constructor
@@ -64,7 +45,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param AddressConfig $addressConfig
-     * @param \Magento\Customer\Model\Address\Mapper $mapper
+     * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param array $data
      */
     public function __construct(
@@ -73,15 +54,15 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         AddressConfig $addressConfig,
-        \Magento\Customer\Model\Address\Mapper $mapper,
+        \Magento\Customer\Model\Address\Mapper $addressMapper,
         array $data = []
     ) {
         $this->_filterGridFactory = $filterGridFactory;
         $this->_multishipping = $multishipping;
         $this->customerRepository = $customerRepository;
         $this->_addressConfig = $addressConfig;
-        $this->mapper = $mapper;
         parent::__construct($context, $data);
+        $this->addressMapper = $addressMapper;
         $this->_isScopePrivate = true;
     }
 
@@ -128,8 +109,8 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     public function getAddressesHtmlSelect($item, $index)
     {
         $select = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select')
-            ->setName('ship['.$index.']['.$item->getQuoteItemId().'][address]')
-            ->setId('ship_'.$index.'_'.$item->getQuoteItemId().'_address')
+            ->setName('ship[' . $index . '][' . $item->getQuoteItemId() . '][address]')
+            ->setId('ship_' . $index . '_' . $item->getQuoteItemId() . '_address')
             ->setValue($item->getCustomerAddressId())
             ->setOptions($this->getAddressOptions());
 
@@ -155,15 +136,14 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
             }
             /** @var \Magento\Customer\Api\Data\AddressInterface $address */
             foreach ($addresses as $address) {
-                $arrayData = $this->mapper->toFlatArray($address);
                 $label = $this->_addressConfig
                     ->getFormatByCode(AddressConfig::DEFAULT_ADDRESS_FORMAT)
                     ->getRenderer()
-                    ->renderArray($arrayData);
+                    ->renderArray($this->addressMapper->toFlatArray($address));
 
                 $options[] = [
                     'value' => $address->getId(),
-                    'label' => $label
+                    'label' => $label,
                 ];
             }
             $this->setData('address_options', $options);

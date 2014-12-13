@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework;
 
@@ -139,43 +120,6 @@ interface LocaleInterface
     public static function getTranslationList($path = null, $locale = null, $value = null);
 
     /**
-     * Returns an array with the name of all languages translated to the given language
-     *
-     * @param  string|\Magento\Framework\LocaleInterface $locale (Optional) Locale for language translation
-     * @return array
-     * @deprecated
-     */
-    public static function getLanguageTranslationList($locale = null);
-
-    /**
-     * Returns an array with the name of all scripts translated to the given language
-     *
-     * @param  string|\Magento\Framework\LocaleInterface $locale (Optional) Locale for script translation
-     * @return array
-     * @deprecated
-     */
-    public static function getScriptTranslationList($locale = null);
-
-    /**
-     * Returns an array with the name of all countries translated to the given language
-     *
-     * @param  string|\Magento\Framework\LocaleInterface $locale (Optional) Locale for country translation
-     * @return array
-     * @deprecated
-     */
-    public static function getCountryTranslationList($locale = null);
-
-    /**
-     * Returns an array with the name of all territories translated to the given language
-     * All territories contains other countries.
-     *
-     * @param  string|\Magento\Framework\LocaleInterface $locale (Optional) Locale for territory translation
-     * @return array
-     * @deprecated
-     */
-    public static function getTerritoryTranslationList($locale = null);
-
-    /**
      * Returns a localized information string, supported are several types of informations.
      * For detailed information about the types look into the documentation
      *
@@ -186,47 +130,6 @@ interface LocaleInterface
      * @return string|false The wished information in the given language
      */
     public static function getTranslation($value = null, $path = null, $locale = null);
-
-    /**
-     * Returns the localized language name
-     *
-     * @param  string $value  Name to get detailed information about
-     * @param  string $locale (Optional) Locale for language translation
-     * @return array
-     * @deprecated
-     */
-    public static function getLanguageTranslation($value, $locale = null);
-
-    /**
-     * Returns the localized script name
-     *
-     * @param  string $value  Name to get detailed information about
-     * @param  string $locale (Optional) locale for script translation
-     * @return array
-     * @deprecated
-     */
-    public static function getScriptTranslation($value, $locale = null);
-
-    /**
-     * Returns the localized country name
-     *
-     * @param  string             $value  Name to get detailed information about
-     * @param  string|\Magento\Framework\LocaleInterface $locale (Optional) Locale for country translation
-     * @return array
-     * @deprecated
-     */
-    public static function getCountryTranslation($value, $locale = null);
-
-    /**
-     * Returns the localized territory name
-     * All territories contains other countries.
-     *
-     * @param  string             $value  Name to get detailed information about
-     * @param  string|\Magento\Framework\LocaleInterface $locale (Optional) Locale for territory translation
-     * @return array
-     * @deprecated
-     */
-    public static function getTerritoryTranslation($value, $locale = null);
 
     /**
      * Returns an array with translated yes strings

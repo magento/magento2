@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -97,7 +78,7 @@ class CodeStyleTest extends \PHPUnit_Framework_TestCase
                     $this->{$method}();
                 }
 
-                self::$_cmd->run(array($inputFile));
+                self::$_cmd->run([$inputFile]);
                 $resultXml = simplexml_load_file(self::$_reportFile);
                 $this->_assertTotalErrorsAndWarnings($resultXml, $expectedXml);
                 $this->_assertErrors($resultXml, $expectedXml);
@@ -131,8 +112,8 @@ class CodeStyleTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getTestsAndExpectations($inputDir, $expectationDir)
     {
-        $result = array();
-        $skipFiles = array('.', '..');
+        $result = [];
+        $skipFiles = ['.', '..'];
         $dir = dir($inputDir);
         do {
             $file = $dir->read();
@@ -151,7 +132,7 @@ class CodeStyleTest extends \PHPUnit_Framework_TestCase
 
             $pathinfo = pathinfo($inputFilePath);
             $expectationFilePath = $expectationDir . $pathinfo['filename'] . '.xml';
-            $result[] = array($inputFilePath, $expectationFilePath);
+            $result[] = [$inputFilePath, $expectationFilePath];
         } while ($file !== false);
         $dir->close();
 
@@ -166,7 +147,7 @@ class CodeStyleTest extends \PHPUnit_Framework_TestCase
      */
     protected function _assertTotalErrorsAndWarnings($report, $expected)
     {
-        $elements = $expected->xpath('/config/total') ?: array();
+        $elements = $expected->xpath('/config/total') ?: [];
         if (!$elements) {
             return;
         }
@@ -201,11 +182,11 @@ class CodeStyleTest extends \PHPUnit_Framework_TestCase
      */
     protected function _calculateCountErrors($report)
     {
-        $errorNode = $report->xpath('/checkstyle/file/error[@severity="error"]') ?: array();
-        $warningNode = $report->xpath('/checkstyle/file/error[@severity="warning"]') ?: array();
+        $errorNode = $report->xpath('/checkstyle/file/error[@severity="error"]') ?: [];
+        $warningNode = $report->xpath('/checkstyle/file/error[@severity="warning"]') ?: [];
         $numErrorsActual = count($errorNode);
         $numWarningsActual = count($warningNode);
-        return array($numErrorsActual, $numWarningsActual);
+        return [$numErrorsActual, $numWarningsActual];
     }
 
     /**
@@ -216,7 +197,7 @@ class CodeStyleTest extends \PHPUnit_Framework_TestCase
      */
     protected function _assertErrors($report, $expected)
     {
-        $elements = $expected->xpath('/config/error') ?: array();
+        $elements = $expected->xpath('/config/error') ?: [];
         foreach ($elements as $element) {
             $lineExpected = (string)$element->attributes()->line;
             $errorElement = $report->xpath('/checkstyle/file/error[@severity="error"][@line=' . $lineExpected . ']');
@@ -235,7 +216,7 @@ class CodeStyleTest extends \PHPUnit_Framework_TestCase
      */
     protected function _assertWarnings($report, $expected)
     {
-        $elements = $expected->xpath('/config/warning') ?: array();
+        $elements = $expected->xpath('/config/warning') ?: [];
         foreach ($elements as $element) {
             $lineExpected = (string)$element->attributes()->line;
             $errorElement = $report->xpath('/checkstyle/file/error[@severity="warning"][@line=' . $lineExpected . ']');

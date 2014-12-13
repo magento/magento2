@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -253,45 +234,6 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
     }
 
     /**
-     * Walk through directory and add to tar file or directory.
-     * Result is packed string on TAR format.
-     *
-     * @param bool $skipRoot
-     * @return string
-     * @throws \Magento\Framework\Exception
-     *
-     * @deprecated after 1.7.0.0
-     */
-    protected function _packToTar($skipRoot = false)
-    {
-        $file = $this->_getCurrentFile();
-        $header = '';
-        $data = '';
-        if (!$skipRoot) {
-            $header = $this->_composeHeader();
-            $data = $this->_readFile($file);
-            $data = str_pad($data, floor(((is_dir($file) ? 0 : filesize($file)) + 512 - 1) / 512) * 512, "\0");
-        }
-        $sub = '';
-        if (is_dir($file)) {
-            $treeDir = scandir($file);
-            if (empty($treeDir)) {
-                throw new \Magento\Framework\Exception('Can\'t scan dir: ' . $file);
-            }
-            array_shift($treeDir);
-            /* remove  './'*/
-            array_shift($treeDir);
-            /* remove  '../'*/
-            foreach ($treeDir as $item) {
-                $sub .= $this->_setCurrentFile($file . $item)->_packToTar(false);
-            }
-        }
-        $tarData = $header . $data . $sub;
-        $tarData = str_pad($tarData, floor((strlen($tarData) - 1) / 1536) * 1536, "\0");
-        return $tarData;
-    }
-
-    /**
      * Recursively walk through file tree and create tarball
      *
      * @param bool $skipRoot
@@ -382,7 +324,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
             $longHeader = $this->_composeHeader(true);
             $longHeader .= str_pad($nameFile, floor((strlen($nameFile) + 512 - 1) / 512) * 512, "\0");
         }
-        $header = array();
+        $header = [];
         $header['100-name'] = $long ? '././@LongLink' : substr($nameFile, 0, 100);
         $header['8-mode'] = $long ? '       ' : str_pad(
             substr(sprintf("%07o", $infoFile['mode']), -4),
@@ -405,9 +347,9 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
         $header['100-symlink'] = is_link($file) ? readlink($file) : '';
         $header['6-magic'] = 'ustar ';
         $header['2-version'] = ' ';
-        $a = function_exists('posix_getpwuid') ? posix_getpwuid(fileowner($file)) : array('name' => '');
+        $a = function_exists('posix_getpwuid') ? posix_getpwuid(fileowner($file)) : ['name' => ''];
         $header['32-uname'] = $a['name'];
-        $a = function_exists('posix_getgrgid') ? posix_getgrgid(filegroup($file)) : array('name' => '');
+        $a = function_exists('posix_getgrgid') ? posix_getgrgid(filegroup($file)) : ['name' => ''];
         $header['32-gname'] = $a['name'];
         $header['8-devmajor'] = '';
         $header['8-devminor'] = '';
@@ -441,7 +383,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
     protected function _unpackCurrentTar($destination)
     {
         $archiveReader = $this->_getReader();
-        $list = array();
+        $list = [];
 
         while (!$archiveReader->eof()) {
             $header = $this->_extractFileHeader();
@@ -453,8 +395,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
             $currentFile = $destination . $header['name'];
             $dirname = dirname($currentFile);
 
-            if (in_array($header['type'], array("0", chr(0), ''))) {
-
+            if (in_array($header['type'], ["0", chr(0), ''])) {
                 if (!file_exists($dirname)) {
                     $mkdirResult = @mkdir($dirname, 0777, true);
 
@@ -466,7 +407,6 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
                 $this->_extractAndWriteFile($header, $currentFile);
                 $list[] = $currentFile;
             } elseif ($header['type'] == '5') {
-
                 if (!file_exists($dirname)) {
                     $mkdirResult = @mkdir($currentFile, $header['mode'], true);
 
@@ -476,77 +416,11 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
                 }
                 $list[] = $currentFile . '/';
             } elseif ($header['type'] == '2') {
-
                 //we do not interrupt unpack process if symlink creation failed as symlinks are not so important
                 @symlink($header['symlink'], $currentFile);
             }
         }
         return $list;
-    }
-
-    /**
-     * Get header from TAR string and unpacked it by format.
-     *
-     * @param resource &$pointer
-     * @return string|bool
-     *
-     * @deprecated after 1.7.0.0
-     */
-    protected function _parseHeader(&$pointer)
-    {
-        $firstLine = fread($pointer, 512);
-
-        if (strlen($firstLine) < 512) {
-            return false;
-        }
-
-        $fmt = self::_getFormatParseHeader();
-        $header = unpack($fmt, $firstLine);
-
-        $header['mode'] = $header['mode'] + 0;
-        $header['uid'] = octdec($header['uid']);
-        $header['gid'] = octdec($header['gid']);
-        $header['size'] = octdec($header['size']);
-        $header['mtime'] = octdec($header['mtime']);
-        $header['checksum'] = octdec($header['checksum']);
-
-        if ($header['type'] == "5") {
-            $header['size'] = 0;
-        }
-
-        $checksum = 0;
-        $firstLine = substr_replace($firstLine, '        ', 148, 8);
-        for ($i = 0; $i < 512; $i++) {
-            $checksum += ord(substr($firstLine, $i, 1));
-        }
-
-        $isUstar = 'ustar' == strtolower(substr($header['magic'], 0, 5));
-
-        $checksumOk = $header['checksum'] == $checksum;
-        if (isset($header['name']) && $checksumOk) {
-            if ($header['name'] == '././@LongLink' && $header['type'] == 'L') {
-                $realName = substr(
-                    fread($pointer, floor(($header['size'] + 512 - 1) / 512) * 512),
-                    0,
-                    $header['size']
-                );
-                $headerMain = $this->_parseHeader($pointer);
-                $headerMain['name'] = $realName;
-                return $headerMain;
-            } else {
-                if ($header['size'] > 0) {
-                    $header['data'] = substr(
-                        fread($pointer, floor(($header['size'] + 512 - 1) / 512) * 512),
-                        0,
-                        $header['size']
-                    );
-                } else {
-                    $header['data'] = '';
-                }
-                return $header;
-            }
-        }
-        return false;
     }
 
     /**
@@ -586,7 +460,6 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
         $checksumOk = $header['checksum'] == $checksum;
         if (isset($header['name']) && $checksumOk) {
-
             if (!($header['name'] == '././@LongLink' && $header['type'] == 'L')) {
                 $header['name'] = trim($header['name']);
                 return $header;

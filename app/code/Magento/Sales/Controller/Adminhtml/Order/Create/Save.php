@@ -1,30 +1,10 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
-use \Magento\Backend\App\Action;
 
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
@@ -48,13 +28,13 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
             $this->_processActionData('save');
             $paymentData = $this->getRequest()->getPost('payment');
             if ($paymentData) {
-                $paymentData['checks'] = array(
+                $paymentData['checks'] = [
                     \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_INTERNAL,
                     \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
                     \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
                     \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
-                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL
-                );
+                    \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL,
+                ];
                 $this->_getOrderCreateModel()->setPaymentData($paymentData);
                 $this->_getOrderCreateModel()->getQuote()->getPayment()->addData($paymentData);
             }
@@ -68,7 +48,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
             $this->_getSession()->clearStorage();
             $this->messageManager->addSuccess(__('You created the order.'));
             if ($this->_authorization->isAllowed('Magento_Sales::actions_view')) {
-                $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
+                $this->_redirect('sales/order/view', ['order_id' => $order->getId()]);
             } else {
                 $this->_redirect('sales/order/index');
             }

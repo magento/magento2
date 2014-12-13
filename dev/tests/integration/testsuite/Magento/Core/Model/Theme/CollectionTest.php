@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -40,22 +21,22 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\App\Filesystem\DirectoryList',
-            array(
+            [
                 'root' => DirectoryList::ROOT,
-                'config' => array(
-                    DirectoryList::THEMES => array(
-                        DirectoryList::PATH => dirname(__DIR__) . '/_files/design'
-                    )
-                )
-            )
+                'config' => [
+                    DirectoryList::THEMES => [
+                        DirectoryList::PATH => dirname(__DIR__) . '/_files/design',
+                    ],
+                ]
+            ]
         );
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\Filesystem',
-            array('directoryList' => $directoryList)
+            ['directoryList' => $directoryList]
         );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Core\Model\Theme\Collection',
-            array('filesystem' => $filesystem)
+            ['filesystem' => $filesystem]
         );
     }
 
@@ -66,7 +47,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadThemesFromFileSystem()
     {
-        $pathPattern = implode('/', array('frontend', '*', '*', 'theme.xml'));
+        $pathPattern = implode('/', ['frontend', '*', '*', 'theme.xml']);
         $this->_model->addTargetPattern($pathPattern);
         $this->assertEquals(8, count($this->_model));
     }
@@ -89,10 +70,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function expectedThemeDataFromConfiguration()
     {
-        return array(
-            array(
-                'themePath' => implode('/', array('frontend', 'Magento', 'default', 'theme.xml')),
-                'expectedData' => array(
+        return [
+            [
+                'themePath' => implode('/', ['frontend', 'Magento', 'default', 'theme.xml']),
+                'expectedData' => [
                     'area' => 'frontend',
                     'theme_title' => 'Default',
                     'theme_version' => '0.1.0',
@@ -101,10 +82,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                     'theme_path' => 'Magento/default',
                     'code' => 'Magento/default',
                     'preview_image' => null,
-                    'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
-                )
-            )
-        );
+                    'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL,
+                ],
+            ]
+        ];
     }
 
     /**
@@ -120,7 +101,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Design\ThemeInterface'
         );
         $themeModel->setData(
-            array(
+            [
                 'area' => 'space_area',
                 'theme_title' => 'Space theme',
                 'theme_version' => '0.1.0',
@@ -128,8 +109,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'is_featured' => false,
                 'theme_path' => 'default_space',
                 'preview_image' => 'images/preview.png',
-                'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
-            )
+                'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL,
+            ]
         );
 
         $this->_model->addDefaultPattern();

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *   
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\View\Design\Theme;
 
@@ -49,7 +30,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateById($path, $expectedId)
     {
-        $theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
+        $theme = $this->getMock('Magento\Core\Model\Theme', [], [], '', false);
         $theme->expects($this->exactly(3))->method('getId')->will($this->returnValue($expectedId));
 
         $theme->expects($this->once())->method('getFullPath')->will($this->returnValue(null));
@@ -72,10 +53,10 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function createByIdDataProvider()
     {
-        return array(
-            array(5, 5),
-            array('_theme10', 10),
-        );
+        return [
+            [5, 5],
+            ['_theme10', 10],
+        ];
     }
 
     /**
@@ -85,7 +66,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $path = 'frontend/Magento/luma';
         $themeId = 7;
-        $theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
+        $theme = $this->getMock('Magento\Core\Model\Theme', [], [], '', false);
         $theme->expects($this->exactly(3))->method('getId')->will($this->returnValue($themeId));
 
         $theme->expects($this->once())->method('getFullPath')->will($this->returnValue($path));
@@ -110,7 +91,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateDummy()
     {
         $themeId = 0;
-        $theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
+        $theme = $this->getMock('Magento\Core\Model\Theme', [], [], '', false);
         $theme->expects($this->once())->method('getId')->will($this->returnValue($themeId));
 
         $this->themeProviderMock->expects(

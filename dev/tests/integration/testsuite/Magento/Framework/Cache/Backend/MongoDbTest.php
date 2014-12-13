@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Cache\Backend;
 
@@ -48,7 +29,7 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
             $this->_dbName = MONGODB_DATABASE_NAME;
         }
         $this->_model = new \Magento\Framework\Cache\Backend\MongoDb(
-            array('connection_string' => $this->_connectionString, 'db' => $this->_dbName)
+            ['connection_string' => $this->_connectionString, 'db' => $this->_dbName]
         );
     }
 
@@ -75,16 +56,16 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->_model->getIds());
         $this->_model->save('test data 1', 'test1');
         $this->_model->save('test data 2', 'test2');
-        $this->assertEquals(array('test1', 'test2'), $this->_model->getIds());
+        $this->assertEquals(['test1', 'test2'], $this->_model->getIds());
     }
 
     public function testGetTags()
     {
         $this->assertEmpty($this->_model->getTags());
-        $this->_model->save('test data 1', 'test1', array('tag1', 'tag2'));
-        $this->_model->save('test data 2', 'test2', array('tag1', 'tag3'));
+        $this->_model->save('test data 1', 'test1', ['tag1', 'tag2']);
+        $this->_model->save('test data 2', 'test2', ['tag1', 'tag3']);
         $actual = $this->_model->getTags();
-        $expected = array('tag1', 'tag2', 'tag3');
+        $expected = ['tag1', 'tag2', 'tag3'];
         $this->assertEquals($expected, $actual);
     }
 
@@ -100,10 +81,10 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
 
     public function getIdsMatchingTagsDataProvider()
     {
-        return array(
-            'one tag' => array(array('tag1'), array('test1', 'test2', 'test3')),
-            'multiple tags' => array(array('tag1', 'tag2'), array('test1', 'test3'))
-        );
+        return [
+            'one tag' => [['tag1'], ['test1', 'test2', 'test3']],
+            'multiple tags' => [['tag1', 'tag2'], ['test1', 'test3']]
+        ];
     }
 
     /**
@@ -118,10 +99,10 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
 
     public function getIdsNotMatchingTagsDataProvider()
     {
-        return array(
-            'one tag' => array(array('tag2'), array('test2', 'test4', 'test5')),
-            'multiple tags' => array(array('tag1', 'tag2'), array('test4', 'test5'))
-        );
+        return [
+            'one tag' => [['tag2'], ['test2', 'test4', 'test5']],
+            'multiple tags' => [['tag1', 'tag2'], ['test4', 'test5']]
+        ];
     }
 
     /**
@@ -136,17 +117,17 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
 
     public function getIdsMatchingAnyTagsDataProvider()
     {
-        return array(
-            'no tags' => array(array(), array()),
-            'one tag' => array(array('tag2'), array('test1', 'test3')),
-            'multiple tags' => array(array('tag1', 'tag2'), array('test1', 'test2', 'test3'))
-        );
+        return [
+            'no tags' => [[], []],
+            'one tag' => [['tag2'], ['test1', 'test3']],
+            'multiple tags' => [['tag1', 'tag2'], ['test1', 'test2', 'test3']]
+        ];
     }
 
     public function testGetMetadatas()
     {
         $cacheId = 'test';
-        $tags = array('tag_1', 'tag_2');
+        $tags = ['tag_1', 'tag_2'];
         $this->_model->save('test data', $cacheId, $tags, 100);
         $actualResult = $this->_model->getMetadatas($cacheId);
         $this->assertArrayHasKey('expire', $actualResult);
@@ -163,7 +144,7 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     public function testTouch($extraLifeTime, \PHPUnit_Framework_Constraint $constraint)
     {
         $cacheId = 'test';
-        $this->_model->save('test data', $cacheId, array(), 2);
+        $this->_model->save('test data', $cacheId, [], 2);
         $this->assertGreaterThan(0, $this->_model->test($cacheId), "Cache with id '{$cacheId}' has not been saved");
         $this->_model->touch($cacheId, $extraLifeTime);
         sleep(2);
@@ -172,10 +153,10 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
 
     public function touchDataProvider()
     {
-        return array(
-            'not enough extra lifetime' => array(0, $this->isFalse()),
-            'enough extra lifetime' => array(1000, $this->logicalNot($this->isFalse()))
-        );
+        return [
+            'not enough extra lifetime' => [0, $this->isFalse()],
+            'enough extra lifetime' => [1000, $this->logicalNot($this->isFalse())]
+        ];
     }
 
     /**
@@ -188,19 +169,19 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     public function testLoad($data, $lifetime, $doNotTestValidity, $expected)
     {
         $cacheId = 'test';
-        $this->_model->save($data, $cacheId, array(), $lifetime);
+        $this->_model->save($data, $cacheId, [], $lifetime);
         $actualData = $this->_model->load($cacheId, $doNotTestValidity);
         $this->assertSame($expected, $actualData);
     }
 
     public function loadDataProvider()
     {
-        return array(
-            'infinite lifetime with validity' => array('test data', null, false, 'test data'),
-            'infinite lifetime without validity' => array('test data', null, true, 'test data'),
-            'zero lifetime with validity' => array('test data', 0, false, false),
-            'zero lifetime without validity' => array('test data', 0, true, 'test data')
-        );
+        return [
+            'infinite lifetime with validity' => ['test data', null, false, 'test data'],
+            'infinite lifetime without validity' => ['test data', null, true, 'test data'],
+            'zero lifetime with validity' => ['test data', 0, false, false],
+            'zero lifetime without validity' => ['test data', 0, true, 'test data']
+        ];
     }
 
     public function testTest()
@@ -214,7 +195,7 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
     {
         $cacheId = 'test_id';
         $data = 'test data';
-        $tags = array('tag1', 'tag2');
+        $tags = ['tag1', 'tag2'];
 
         $this->assertTrue($this->_model->save($data, $cacheId, $tags));
         $actualData = $this->_model->load($cacheId);
@@ -247,33 +228,33 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
 
     public function cleanDataProvider()
     {
-        return array(
-            'clean all cache' => array(\Zend_Cache::CLEANING_MODE_ALL, array(), array()),
-            'clean cache matching all tags' => array(
+        return [
+            'clean all cache' => [\Zend_Cache::CLEANING_MODE_ALL, [], []],
+            'clean cache matching all tags' => [
                 \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-                array('tag1', 'tag2'),
-                array('test2', 'test4', 'test5')
-            ),
-            'clean cache not matching tags' => array(
+                ['tag1', 'tag2'],
+                ['test2', 'test4', 'test5'],
+            ],
+            'clean cache not matching tags' => [
                 \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-                array('tag1', 'tag2'),
-                array('test1', 'test2', 'test3')
-            ),
-            'clean cache matching any tags' => array(
+                ['tag1', 'tag2'],
+                ['test1', 'test2', 'test3'],
+            ],
+            'clean cache matching any tags' => [
                 \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-                array('tag1', 'tag2'),
-                array('test4', 'test5')
-            )
-        );
+                ['tag1', 'tag2'],
+                ['test4', 'test5'],
+            ]
+        ];
     }
 
     public function testCleanOld()
     {
-        $this->_model->save('long-living entity', 'long', array(), 1000);
-        $this->_model->save('infinite-living entity', 'infinite', array(), null);
-        $this->_model->save('short-living entity', 'short', array(), 0);
+        $this->_model->save('long-living entity', 'long', [], 1000);
+        $this->_model->save('infinite-living entity', 'infinite', [], null);
+        $this->_model->save('short-living entity', 'short', [], 0);
         $this->_model->clean(\Zend_Cache::CLEANING_MODE_OLD);
-        $expectedIds = array('long', 'infinite');
+        $expectedIds = ['long', 'infinite'];
         $actualIds = $this->_model->getIds();
         $this->assertSame($expectedIds, $actualIds);
     }
@@ -283,10 +264,10 @@ class MongoDbTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareCollection()
     {
-        $this->_model->save('test data 1', 'test1', array('tag1', 'tag2', 'tag3'));
-        $this->_model->save('test data 2', 'test2', array('tag1', 'tag3'));
-        $this->_model->save('test data 3', 'test3', array('tag2', 'tag1'));
-        $this->_model->save('test data 4', 'test4', array('tag4', 'tag5'));
-        $this->_model->save('test data 5', 'test5', array());
+        $this->_model->save('test data 1', 'test1', ['tag1', 'tag2', 'tag3']);
+        $this->_model->save('test data 2', 'test2', ['tag1', 'tag3']);
+        $this->_model->save('test data 3', 'test3', ['tag2', 'tag1']);
+        $this->_model->save('test data 4', 'test4', ['tag4', 'tag5']);
+        $this->_model->save('test data 5', 'test5', []);
     }
 }

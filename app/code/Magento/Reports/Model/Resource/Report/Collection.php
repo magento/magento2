@@ -1,27 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-
 
 /**
  * Report Reviews collection
@@ -156,14 +136,14 @@ class Collection extends \Magento\Framework\Data\Collection
     protected function _getIntervals()
     {
         if (!$this->_intervals) {
-            $this->_intervals = array();
+            $this->_intervals = [];
             if (!$this->_from && !$this->_to) {
                 return $this->_intervals;
             }
             $dateStart = $this->_dateFactory->create($this->_from);
             $dateEnd = $this->_dateFactory->create($this->_to);
 
-            $interval = array();
+            $interval = [];
             $firstInterval = true;
             while ($dateStart->compare($dateEnd) <= 0) {
                 switch ($this->_period) {
@@ -196,11 +176,11 @@ class Collection extends \Magento\Framework\Data\Collection
      */
     protected function _getDayInterval(\Magento\Framework\Stdlib\DateTime\DateInterface $dateStart)
     {
-        $interval = array(
+        $interval = [
             'period' => $dateStart->toString($this->_localeDate->getDateFormat()),
             'start' => $dateStart->toString('yyyy-MM-dd HH:mm:ss'),
-            'end' => $dateStart->toString('yyyy-MM-dd 23:59:59')
-        );
+            'end' => $dateStart->toString('yyyy-MM-dd 23:59:59'),
+        ];
         return $interval;
     }
 
@@ -217,7 +197,7 @@ class Collection extends \Magento\Framework\Data\Collection
         \Magento\Framework\Stdlib\DateTime\DateInterface $dateEnd,
         $firstInterval
     ) {
-        $interval = array();
+        $interval = [];
         $interval['period'] = $dateStart->toString('MM/yyyy');
         if ($firstInterval) {
             $interval['start'] = $dateStart->toString('yyyy-MM-dd 00:00:00');
@@ -255,7 +235,7 @@ class Collection extends \Magento\Framework\Data\Collection
         \Magento\Framework\Stdlib\DateTime\DateInterface $dateEnd,
         $firstInterval
     ) {
-        $interval = array();
+        $interval = [];
         $interval['period'] = $dateStart->toString('yyyy');
         $interval['start'] = $firstInterval ? $dateStart->toString(
             'yyyy-MM-dd 00:00:00'
@@ -290,7 +270,7 @@ class Collection extends \Magento\Framework\Data\Collection
      */
     public function getPeriods()
     {
-        return array('day' => __('Day'), 'month' => __('Month'), 'year' => __('Year'));
+        return ['day' => __('Day'), 'month' => __('Month'), 'year' => __('Year')];
     }
 
     /**
@@ -357,7 +337,7 @@ class Collection extends \Magento\Framework\Data\Collection
     protected function _getReport($fromDate, $toDate)
     {
         if ($this->_reportCollection === null) {
-            return array();
+            return [];
         }
         $reportResource = $this->_collectionFactory->create($this->_reportCollection);
         $reportResource->setDateRange(
@@ -377,7 +357,7 @@ class Collection extends \Magento\Framework\Data\Collection
     public function getReports()
     {
         if (!$this->_reports) {
-            $reports = array();
+            $reports = [];
             foreach ($this->_getIntervals() as $interval) {
                 $interval->setChildren($this->_getReport($interval->getStart(), $interval->getEnd()));
                 if (count($interval->getChildren()) == 0) {

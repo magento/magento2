@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Model\ActionValidator;
 
@@ -37,13 +18,13 @@ class RemoveActionTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsAllowed($modelToCheck, $protectedModel, $secureArea, $expectedResult)
     {
-        $registryMock = $this->getMock('\Magento\Framework\Registry', array(), array(), '', false);
+        $registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
         $registryMock->expects($this->once())
             ->method('registry')->with('isSecureArea')->will($this->returnValue($secureArea));
 
         $model = new \Magento\Framework\Model\ActionValidator\RemoveAction(
             $registryMock,
-            array('class' => $protectedModel)
+            ['class' => $protectedModel]
         );
         $this->assertEquals($expectedResult, $model->isAllowed($modelToCheck));
     }
@@ -53,28 +34,28 @@ class RemoveActionTest extends \PHPUnit_Framework_TestCase
      */
     public function isAllowedDataProvider()
     {
-        $productMock = $this->getMock('\Magento\Catalog\Model\Product', array(), array(), '', false);
-        $bannerMock = $this->getMock('\Magento\Wishlist\Model\Wishlist', array(), array(), '', false);
+        $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $bannerMock = $this->getMock('\Magento\Wishlist\Model\Wishlist', [], [], '', false);
 
-        return array(
-            array(
+        return [
+            [
                 'modelToCheck' => $productMock,
                 'protectedModel' => 'Model',
                 'secureArea' => false,
-                'expectedResult' => true
-            ),
-            array(
+                'expectedResult' => true,
+            ],
+            [
                 'modelToCheck' => $bannerMock,
                 'protectedModel' => get_class($bannerMock),
                 'secureArea' => false,
                 'expectedResult' => false
-            ),
-            array(
+            ],
+            [
                 'modelToCheck' => $bannerMock,
                 'protectedModel' => get_class($bannerMock),
                 'secureArea' => true,
                 'expectedResult' => true
-            ),
-        );
+            ],
+        ];
     }
 }

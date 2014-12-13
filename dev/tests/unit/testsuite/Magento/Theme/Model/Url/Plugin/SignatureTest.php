@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Theme\Model\Url\Plugin;
@@ -50,7 +31,7 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
     {
         $this->config = $this->getMock('Magento\Framework\View\Url\ConfigInterface');
         $this->deploymentVersion = $this->getMock(
-            'Magento\Framework\App\View\Deployment\Version', array(), array(), '', false
+            'Magento\Framework\App\View\Deployment\Version', [], [], '', false
         );
         $this->closureMock = function () {
             return 'http://127.0.0.1/magento/pub/static/';
@@ -69,8 +50,7 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getValue')
             ->with(Signature::XML_PATH_STATIC_FILE_SIGNATURE)
-            ->will($this->returnValue($fixtureConfigFlag))
-        ;
+            ->will($this->returnValue($fixtureConfigFlag));
         $this->deploymentVersion->expects($this->never())->method($this->anything());
 
         $url = $this->getMockForAbstractClass('\Magento\Framework\Url\ScopeInterface');
@@ -80,10 +60,10 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
 
     public function aroundGetBaseUrlInactiveDataProvider()
     {
-        return array(
-            'disabled in config, relevant URL type'  => array(0, \Magento\Framework\UrlInterface::URL_TYPE_STATIC),
-            'enabled in config, irrelevant URL type' => array(1, \Magento\Framework\UrlInterface::URL_TYPE_LINK),
-        );
+        return [
+            'disabled in config, relevant URL type'  => [0, \Magento\Framework\UrlInterface::URL_TYPE_STATIC],
+            'enabled in config, irrelevant URL type' => [1, \Magento\Framework\UrlInterface::URL_TYPE_LINK],
+        ];
     }
 
     public function testAroundGetBaseUrlActive()
@@ -92,8 +72,7 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with(Signature::XML_PATH_STATIC_FILE_SIGNATURE)
-            ->will($this->returnValue(1))
-        ;
+            ->will($this->returnValue(1));
         $this->deploymentVersion->expects($this->once())->method('getValue')->will($this->returnValue('123'));
 
         $url = $this->getMockForAbstractClass('\Magento\Framework\Url\ScopeInterface');

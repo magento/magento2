@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
@@ -75,7 +56,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -102,7 +83,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -147,14 +128,16 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     }
 
     /**
-     * @param mixed $field
+     * Apply attribute filter to facet collection
+     *
+     * @param string $field
      * @param null $condition
      * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
     {
         if ($this->queryResponse !== null) {
-            throw \RuntimeException('Illegal state');
+            throw new \RuntimeException('Illegal state');
         }
         if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
             $this->requestBuilder->bind($field, $condition);
@@ -177,7 +160,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function addSearchFilter($query)
     {
-        $this->queryText = trim($this->queryText .' ' . $query);
+        $this->queryText = trim($this->queryText . ' ' . $query);
         return $this;
     }
 
@@ -193,7 +176,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
         $this->requestBuilder->bind(
             'price_dynamic_algorithm',
-            $this->_scopeConfig ->getValue(
+            $this->_scopeConfig->getValue(
                 \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
@@ -209,6 +192,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             $ids[] = $document->getId();
         }
         parent::addFieldToFilter('entity_id', ['in' => $ids]);
+        $this->_totalRecords = count($ids) - 1;
 
         if ($this->order && $this->order['field'] == 'relevance') {
             $this->getSelect()->order(
@@ -221,6 +205,15 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             );
         }
         return parent::_renderFiltersBefore();
+    }
+
+    /**
+     * @return $this
+     */
+    protected function _renderFilters()
+    {
+        $this->_filters = [];
+        return parent::_renderFilters();
     }
 
     /**
@@ -240,7 +233,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     }
 
     /**
-     * Stub method for campatibility with other search engines
+     * Stub method for compatibility with other search engines
      *
      * @return $this
      */
@@ -269,18 +262,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     }
 
     /**
-     * Apply attribute filter to facet collection
-     *
-     * @param string $field
-     * @param mixed $value
-     * @return void
-     */
-    public function applyFilterToCollection($field, $value)
-    {
-        $this->requestBuilder->bind($field, $value);
-    }
-
-    /**
      * Specify category filter for product collection
      *
      * @param \Magento\Catalog\Model\Category $category
@@ -288,7 +269,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function addCategoryFilter(\Magento\Catalog\Model\Category $category)
     {
-        $this->applyFilterToCollection('category_ids', $category->getId());
+        $this->addFieldToFilter('category_ids', $category->getId());
         return parent::addCategoryFilter($category);
     }
 
@@ -300,7 +281,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function setVisibility($visibility)
     {
-        $this->applyFilterToCollection('visibility', $visibility);
-        return $this;
+        $this->addFieldToFilter('visibility', $visibility);
+        return parent::setVisibility($visibility);
     }
 }

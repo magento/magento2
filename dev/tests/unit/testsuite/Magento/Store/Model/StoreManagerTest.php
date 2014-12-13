@@ -2,26 +2,7 @@
 /**
  * Test class for \Magento\Store\Model\StoreManager
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Store\Model;
 
@@ -54,16 +35,16 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_factoryMock = $this->getMock('Magento\Store\Model\StorageFactory', array(), array(), '', false);
-        $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface', array(), array(), '', false);
+        $this->_factoryMock = $this->getMock('Magento\Store\Model\StorageFactory', [], [], '', false);
+        $this->_requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
         $this->_configMock = $this->getMock(
             'Magento\Framework\App\Config\ScopeConfigInterface',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->_storage = $this->getMock('Magento\Framework\StoreManagerInterface');
+        $this->_storage = $this->getMock('Magento\Store\Model\StoreManagerInterface');
 
         $this->_model = new \Magento\Store\Model\StoreManager(
             $this->_factoryMock,
@@ -86,36 +67,36 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
 
         $map = array_values($arguments);
         $map[] = $expectedResult;
-        $this->_storage->expects($this->once())->method($method)->will($this->returnValueMap(array($map)));
+        $this->_storage->expects($this->once())->method($method)->will($this->returnValueMap([$map]));
 
-        $actualResult = call_user_func_array(array($this->_model, $method), $arguments);
+        $actualResult = call_user_func_array([$this->_model, $method], $arguments);
         $this->assertEquals($expectedResult, $actualResult);
     }
 
     public function proxyMethodDataProvider()
     {
-        return array(
-            'clearWebsiteCache' => array('clearWebsiteCache', array('id' => 101), null),
-            'getGroups' => array('getGroups', array('withDefault' => true, 'codeKey' => true), 'groupsArray'),
-            'getGroup' => array('getGroup', array('id' => 102), 'groupObject'),
-            'getDefaultStoreView' => array('getDefaultStoreView', array(), 'defaultStoreObject'),
-            'reinitStores' => array('reinitStores', array(), null),
-            'getWebsites' => array('getWebsites', array('withDefault' => true, 'codeKey' => true), 'websitesArray'),
-            'getWebsite' => array('getWebsite', array('id' => 103), 'websiteObject'),
-            'getStores' => array('getStores', array('withDefault' => true, 'codeKey' => true), 'storesArray'),
-            'getStore' => array('getStore', array('id' => 104), 'storeObject'),
-            'hasSingleStore' => array('hasSingleStore', array(), 'singleStoreResult'),
-        );
+        return [
+            'clearWebsiteCache' => ['clearWebsiteCache', ['id' => 101], null],
+            'getGroups' => ['getGroups', ['withDefault' => true, 'codeKey' => true], 'groupsArray'],
+            'getGroup' => ['getGroup', ['id' => 102], 'groupObject'],
+            'getDefaultStoreView' => ['getDefaultStoreView', [], 'defaultStoreObject'],
+            'reinitStores' => ['reinitStores', [], null],
+            'getWebsites' => ['getWebsites', ['withDefault' => true, 'codeKey' => true], 'websitesArray'],
+            'getWebsite' => ['getWebsite', ['id' => 103], 'websiteObject'],
+            'getStores' => ['getStores', ['withDefault' => true, 'codeKey' => true], 'storesArray'],
+            'getStore' => ['getStore', ['id' => 104], 'storeObject'],
+            'hasSingleStore' => ['hasSingleStore', [], 'singleStoreResult'],
+        ];
     }
 
     public function testGetStorageWithCurrentStore()
     {
-        $arguments = array(
+        $arguments = [
             'isSingleStoreAllowed' => true,
             'currentStore' => 'current_store_code',
             'scopeCode' => 'scope_code',
-            'scopeType' => 'scope_type'
-        );
+            'scopeType' => 'scope_type',
+        ];
 
         $this->_factoryMock->expects(
             $this->any()
@@ -134,12 +115,12 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStorageWithSingleStoreMode()
     {
-        $arguments = array(
+        $arguments = [
             'isSingleStoreAllowed' => false,
             'currentStore' => null,
             'scopeCode' => 'scope_code',
-            'scopeType' => 'scope_type'
-        );
+            'scopeType' => 'scope_type',
+        ];
 
         $this->_factoryMock->expects(
             $this->any()

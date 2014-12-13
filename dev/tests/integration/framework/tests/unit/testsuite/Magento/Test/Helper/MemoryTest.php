@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Test\Helper;
 
@@ -32,7 +13,7 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_shell = $this->getMock('Magento\Framework\Shell', array('execute'), array(), '', false);
+        $this->_shell = $this->getMock('Magento\Framework\Shell', ['execute'], [], '', false);
     }
 
     public function testGetRealMemoryUsageUnix()
@@ -89,17 +70,17 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
      */
     public function convertToBytesDataProvider()
     {
-        return array(
-            'B' => array('1B', '1'),
-            'KB' => array('3K', '3072'),
-            'MB' => array('2M', '2097152'),
-            'GB' => array('1G', '1073741824'),
-            'regular spaces' => array('1 234 K', '1263616'),
-            'no-break spaces' => array("1\xA0234\xA0K", '1263616'),
-            'tab' => array("1\x09234\x09K", '1263616'),
-            'coma' => array('1,234K', '1263616'),
-            'dot' => array('1.234 K', '1263616')
-        );
+        return [
+            'B' => ['1B', '1'],
+            'KB' => ['3K', '3072'],
+            'MB' => ['2M', '2097152'],
+            'GB' => ['1G', '1073741824'],
+            'regular spaces' => ['1 234 K', '1263616'],
+            'no-break spaces' => ["1\xA0234\xA0K", '1263616'],
+            'tab' => ["1\x09234\x09K", '1263616'],
+            'coma' => ['1,234K', '1263616'],
+            'dot' => ['1.234 K', '1263616']
+        ];
     }
 
     /**
@@ -117,11 +98,11 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
      */
     public function convertToBytesBadFormatDataProvider()
     {
-        return array(
-            'more than one unit of measure' => array('1234KB'),
-            'unknown unit of measure' => array('1234Z'),
-            'non-integer value' => array('1,234.56 K')
-        );
+        return [
+            'more than one unit of measure' => ['1234KB'],
+            'unknown unit of measure' => ['1234Z'],
+            'non-integer value' => ['1,234.56 K']
+        ];
     }
 
     /**
@@ -142,11 +123,11 @@ class MemoryTest extends \PHPUnit_Framework_TestCase
      */
     public function convertToBytes64DataProvider()
     {
-        return array(
-            array('2T', '2199023255552'),
-            array('1P', '1125899906842624'),
-            array('2E', '2305843009213693952')
-        );
+        return [
+            ['2T', '2199023255552'],
+            ['1P', '1125899906842624'],
+            ['2E', '2305843009213693952']
+        ];
     }
 
     /**

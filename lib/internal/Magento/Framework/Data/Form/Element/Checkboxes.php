@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data\Form\Element;
 
@@ -42,7 +23,7 @@ class Checkboxes extends AbstractElement
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        $data = array()
+        $data = []
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('checkbox');
@@ -56,7 +37,7 @@ class Checkboxes extends AbstractElement
      */
     public function getHtmlAttributes()
     {
-        return array('type', 'name', 'class', 'style', 'checked', 'onclick', 'onchange', 'disabled');
+        return ['type', 'name', 'class', 'style', 'checked', 'onclick', 'onchange', 'disabled'];
     }
 
     /**
@@ -66,12 +47,12 @@ class Checkboxes extends AbstractElement
      */
     protected function _prepareValues()
     {
-        $options = array();
-        $values = array();
+        $options = [];
+        $values = [];
 
         if ($this->getValues()) {
             if (!is_array($this->getValues())) {
-                $options = array($this->getValues());
+                $options = [$this->getValues()];
             } else {
                 $options = $this->getValues();
             }
@@ -84,10 +65,10 @@ class Checkboxes extends AbstractElement
                     if (!isset($v['label'])) {
                         $v['label'] = $v['value'];
                     }
-                    $values[] = array('label' => $v['label'], 'value' => $v['value']);
+                    $values[] = ['label' => $v['label'], 'value' => $v['value']];
                 }
             } else {
-                $values[] = array('label' => $v, 'value' => $k);
+                $values[] = ['label' => $v, 'value' => $k];
             }
         }
 
@@ -128,7 +109,7 @@ class Checkboxes extends AbstractElement
             return;
         }
         if (!is_array($checked)) {
-            $checked = array(strval($checked));
+            $checked = [strval($checked)];
         } else {
             foreach ($checked as $k => $v) {
                 $checked[$k] = strval($v);
@@ -148,7 +129,7 @@ class Checkboxes extends AbstractElement
     {
         if ($disabled = $this->getData('disabled')) {
             if (!is_array($disabled)) {
-                $disabled = array(strval($disabled));
+                $disabled = [strval($disabled)];
             } else {
                 foreach ($disabled as $k => $v) {
                     $disabled[$k] = strval($v);

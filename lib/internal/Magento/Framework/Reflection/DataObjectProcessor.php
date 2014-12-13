@@ -1,34 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\Reflection;
 
-use Zend\Code\Reflection\ClassReflection;
-use Zend\Code\Reflection\MethodReflection;
-use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\SimpleDataObjectConverter;
+use Zend\Code\Reflection\ClassReflection;
+use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Data object processor for de-serialization using class reflection
@@ -109,14 +90,14 @@ class DataObjectProcessor
                 }
                 $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 2));
                 $outputData[$key] = $this->castValueToType($value, $returnType);
-            } else if (substr($methodName, 0, 3) === self::HAS_METHOD_PREFIX) {
+            } elseif (substr($methodName, 0, 3) === self::HAS_METHOD_PREFIX) {
                 $value = $dataObject->{$methodName}();
                 if ($value === null && !$methodReflectionData['isRequired']) {
                     continue;
                 }
                 $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
                 $outputData[$key] = $this->castValueToType($value, $returnType);
-            } else if (substr($methodName, 0, 3) === self::GETTER_PREFIX) {
+            } elseif (substr($methodName, 0, 3) === self::GETTER_PREFIX) {
                 $value = $dataObject->{$methodName}();
                 if ($methodName === 'getCustomAttributes' && $value === []) {
                     continue;
@@ -127,10 +108,10 @@ class DataObjectProcessor
                 $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
                 if ($key === ExtensibleDataInterface::CUSTOM_ATTRIBUTES) {
                     $value = $this->convertCustomAttributes($value, $dataObjectType);
-                } else if (is_object($value)) {
+                } elseif (is_object($value)) {
                     $value = $this->buildOutputDataArray($value, $returnType);
-                } else if (is_array($value)) {
-                    $valueResult = array();
+                } elseif (is_array($value)) {
+                    $valueResult = [];
                     $arrayElementType = substr($returnType, 0, -2);
                     foreach ($value as $singleValue) {
                         if (is_object($singleValue)) {
@@ -205,7 +186,7 @@ class DataObjectProcessor
      */
     protected function convertCustomAttributes($customAttributes, $dataObjectType)
     {
-        $result = array();
+        $result = [];
         foreach ((array)$customAttributes as $customAttribute) {
             $result[] = $this->convertCustomAttribute($customAttribute, $dataObjectType);
         }
@@ -221,7 +202,7 @@ class DataObjectProcessor
      */
     protected function convertCustomAttribute($customAttribute, $dataObjectType)
     {
-        $data = array();
+        $data = [];
         $data[AttributeValue::ATTRIBUTE_CODE] = $customAttribute->getAttributeCode();
         $value = $customAttribute->getValue();
         if (is_object($value)) {
@@ -231,8 +212,8 @@ class DataObjectProcessor
                 $dataObjectType
             );
             $value = $this->buildOutputDataArray($value, $type);
-        } else if (is_array($value)) {
-            $valueResult = array();
+        } elseif (is_array($value)) {
+            $valueResult = [];
             foreach ($value as $singleValue) {
                 if (is_object($singleValue)) {
                     $type = $this->attributeTypeResolver->resolveObjectType(

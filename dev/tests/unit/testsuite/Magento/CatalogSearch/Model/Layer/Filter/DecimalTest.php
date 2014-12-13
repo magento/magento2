@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\CatalogSearch\Model\Layer\Filter;
@@ -32,6 +13,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class DecimalTest extends \PHPUnit_Framework_TestCase
 {
+    private $filterItem;
 
     /**
      * @var \Magento\CatalogSearch\Model\Resource\Fulltext\Collection|MockObject
@@ -78,23 +60,23 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $filterItem = $this->getMockBuilder(
+        $this->filterItem = $this->getMockBuilder(
             '\Magento\Catalog\Model\Layer\Filter\Item'
         )
             ->disableOriginalConstructor()
             ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();
-        $filterItem->expects($this->any())
+        $this->filterItem->expects($this->any())
             ->method($this->anything())
             ->will($this->returnSelf());
         $this->filterItemFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($filterItem));
+            ->will($this->returnValue($this->filterItem));
+
         $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
             '\Magento\CatalogSearch\Model\Resource\Fulltext\Collection'
         )
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter'])
             ->getMock();
 
         $this->layer->expects($this->any())
@@ -221,5 +203,25 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $this->target->apply($this->request);
+    }
+
+    public function testItemData()
+    {
+        $this->fulltextCollection->expects($this->any())
+            ->method('getSize')
+            ->willReturn(5);
+
+        $this->fulltextCollection->expects($this->any())
+            ->method('getFacetedData')
+            ->willReturn([
+                '2_10' => ['count' => 5],
+                '*_*' => ['count' => 2]
+            ]);
+        $this->assertEquals(
+            [
+                $this->filterItem
+            ],
+            $this->target->getItems()
+        );
     }
 }

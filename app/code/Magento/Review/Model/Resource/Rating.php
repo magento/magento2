@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Review\Model\Resource;
 
@@ -35,16 +16,14 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Rating data
-     *
-     * @var \Magento\Review\Helper\Data
+     * @var \Magento\Framework\Module\Manager
      */
-    protected $_ratingData = null;
+    protected $moduleManager;
 
     /**
      * @var \Magento\Framework\Logger
@@ -54,18 +33,20 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Review\Helper\Data $ratingData
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\Resource\Review\Summary $reviewSummary
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Logger $logger,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Review\Helper\Data $ratingData,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Review\Model\Resource\Review\Summary $reviewSummary
     ) {
-        $this->_ratingData = $ratingData;
+        $this->moduleManager = $moduleManager;
         $this->_storeManager = $storeManager;
         $this->_logger = $logger;
         $this->_reviewSummary = $reviewSummary;
@@ -89,7 +70,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _initUniqueFields()
     {
-        $this->_uniqueFields = array(array('field' => 'rating_code', 'title' => ''));
+        $this->_uniqueFields = [['field' => 'rating_code', 'title' => '']];
         return $this;
     }
 
@@ -111,9 +92,9 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $codeExpr = $adapter->getIfNullSql('title.value', "{$table}.rating_code");
 
         $select->joinLeft(
-            array('title' => $this->getTable('rating_title')),
+            ['title' => $this->getTable('rating_title')],
             $adapter->quoteInto("{$table}.rating_id = title.rating_id AND title.store_id = ?", $storeId),
-            array('rating_code' => $codeExpr)
+            ['rating_code' => $codeExpr]
         );
 
         return $select;
@@ -134,11 +115,11 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         $adapter = $this->_getReadAdapter();
-        $bind = array(':rating_id' => (int)$object->getId());
+        $bind = [':rating_id' => (int)$object->getId()];
         // load rating titles
         $select = $adapter->select()->from(
             $this->getTable('rating_title'),
-            array('store_id', 'value')
+            ['store_id', 'value']
         )->where(
             'rating_id=:rating_id'
         );
@@ -191,24 +172,24 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
             try {
                 $select = $adapter->select()->from(
                     $ratingTitleTable,
-                    array('store_id', 'value')
+                    ['store_id', 'value']
                 )->where(
                     'rating_id = :rating_id'
                 );
-                $old = $adapter->fetchPairs($select, array(':rating_id' => $ratingId));
+                $old = $adapter->fetchPairs($select, [':rating_id' => $ratingId]);
                 $new = array_filter(array_map('trim', $object->getRatingCodes()));
 
                 $insert = array_diff_assoc($new, $old);
                 $delete = array_diff_assoc($old, $new);
                 if (!empty($delete)) {
-                    $where = array('rating_id = ?' => $ratingId, 'store_id IN(?)' => array_keys($delete));
+                    $where = ['rating_id = ?' => $ratingId, 'store_id IN(?)' => array_keys($delete)];
                     $adapter->delete($ratingTitleTable, $where);
                 }
 
                 if ($insert) {
-                    $data = array();
+                    $data = [];
                     foreach ($insert as $storeId => $title) {
-                        $data[] = array('rating_id' => $ratingId, 'store_id' => (int)$storeId, 'value' => $title);
+                        $data[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId, 'value' => $title];
                     }
                     if (!empty($data)) {
                         $adapter->insertMultiple($ratingTitleTable, $data);
@@ -227,25 +208,25 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
             try {
                 $select = $adapter->select()->from(
                     $ratingStoreTable,
-                    array('store_id')
+                    ['store_id']
                 )->where(
                     'rating_id = :rating_id'
                 );
-                $old = $adapter->fetchCol($select, array(':rating_id' => $ratingId));
+                $old = $adapter->fetchCol($select, [':rating_id' => $ratingId]);
                 $new = $object->getStores();
 
                 $insert = array_diff($new, $old);
                 $delete = array_diff($old, $new);
 
                 if ($delete) {
-                    $where = array('rating_id = ?' => $ratingId, 'store_id IN(?)' => $delete);
+                    $where = ['rating_id = ?' => $ratingId, 'store_id IN(?)' => $delete];
                     $adapter->delete($ratingStoreTable, $where);
                 }
 
                 if ($insert) {
-                    $data = array();
+                    $data = [];
                     foreach ($insert as $storeId) {
-                        $data[] = array('rating_id' => $ratingId, 'store_id' => (int)$storeId);
+                        $data[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId];
                     }
                     $adapter->insertMultiple($ratingStoreTable, $data);
                 }
@@ -270,11 +251,11 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_afterDelete($object);
-        if (!$this->_ratingData->isModuleEnabled('Magento_Review')) {
+        if (!$this->moduleManager->isEnabled('Magento_Review')) {
             return $this;
         }
         $data = $this->_getEntitySummaryData($object);
-        $summary = array();
+        $summary = [];
         foreach ($data as $row) {
             $clone = clone $object;
             $clone->addData($row);
@@ -306,7 +287,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $stores = $this->_storeManager->getStores();
 
-        $result = array();
+        $result = [];
         foreach ($data as $row) {
             $clone = clone $object;
             $clone->addData($row);
@@ -340,28 +321,28 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $countColumn = new \Zend_Db_Expr("COUNT(*)");
 
         $select = $adapter->select()->from(
-            array('rating_vote' => $this->getTable('rating_option_vote')),
-            array('entity_pk_value' => 'rating_vote.entity_pk_value', 'sum' => $sumColumn, 'count' => $countColumn)
+            ['rating_vote' => $this->getTable('rating_option_vote')],
+            ['entity_pk_value' => 'rating_vote.entity_pk_value', 'sum' => $sumColumn, 'count' => $countColumn]
         )->join(
-            array('review' => $this->getTable('review')),
+            ['review' => $this->getTable('review')],
             'rating_vote.review_id=review.review_id',
-            array()
+            []
         )->joinLeft(
-            array('review_store' => $this->getTable('review_store')),
+            ['review_store' => $this->getTable('review_store')],
             'rating_vote.review_id=review_store.review_id',
-            array('review_store.store_id')
+            ['review_store.store_id']
         );
         if (!$this->_storeManager->isSingleStoreMode()) {
             $select->join(
-                array('rating_store' => $this->getTable('rating_store')),
+                ['rating_store' => $this->getTable('rating_store')],
                 'rating_store.rating_id = rating_vote.rating_id AND rating_store.store_id = review_store.store_id',
-                array()
+                []
             );
         }
         $select->join(
-            array('review_status' => $this->getTable('review_status')),
+            ['review_status' => $this->getTable('review_status')],
             'review.status_id = review_status.status_id',
-            array()
+            []
         )->where(
             'review_status.status_code = :status_code'
         )->group(
@@ -369,7 +350,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->group(
             'review_store.store_id'
         );
-        $bind = array(':status_code' => self::RATING_STATUS_APPROVED);
+        $bind = [':status_code' => self::RATING_STATUS_APPROVED];
 
         $entityPkValue = $object->getEntityPkValue();
         if ($entityPkValue) {
@@ -394,18 +375,18 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $sumColumn = new \Zend_Db_Expr("SUM(rating_vote.{$adapter->quoteIdentifier('percent')})");
         $countColumn = new \Zend_Db_Expr('COUNT(*)');
         $select = $adapter->select()->from(
-            array('rating_vote' => $this->getTable('rating_option_vote')),
-            array('sum' => $sumColumn, 'count' => $countColumn)
+            ['rating_vote' => $this->getTable('rating_option_vote')],
+            ['sum' => $sumColumn, 'count' => $countColumn]
         )->joinLeft(
-            array('review_store' => $this->getTable('review_store')),
+            ['review_store' => $this->getTable('review_store')],
             'rating_vote.review_id = review_store.review_id',
-            array('review_store.store_id')
+            ['review_store.store_id']
         );
         if (!$this->_storeManager->isSingleStoreMode()) {
             $select->join(
-                array('rating_store' => $this->getTable('rating_store')),
+                ['rating_store' => $this->getTable('rating_store')],
                 'rating_store.rating_id = rating_vote.rating_id AND rating_store.store_id = review_store.store_id',
-                array()
+                []
             );
         }
         $select->where(
@@ -416,7 +397,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'review_store.store_id'
         );
 
-        $data = $adapter->fetchAll($select, array(':review_id' => $object->getReviewId()));
+        $data = $adapter->fetchAll($select, [':review_id' => $object->getReviewId()]);
 
         if ($onlyForCurrentStore) {
             foreach ($data as $row) {
@@ -427,7 +408,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return $object;
         }
 
-        $result = array();
+        $result = [];
 
         $stores = $this->_storeManager->getStore()->getResourceCollection()->load();
 
@@ -462,12 +443,12 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $select = $this->_getReadAdapter()->select()->from(
             $this->getTable('rating_entity'),
-            array('entity_id')
+            ['entity_id']
         )->where(
             'entity_code = :entity_code'
         );
 
-        return $this->_getReadAdapter()->fetchOne($select, array(':entity_code' => $entityCode));
+        return $this->_getReadAdapter()->fetchOne($select, [':entity_code' => $entityCode]);
     }
 
     /**
@@ -481,10 +462,10 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $entityId = $this->getEntityIdByCode(\Magento\Review\Model\Rating::ENTITY_PRODUCT_CODE);
         $adapter = $this->_getWriteAdapter();
         $select = $adapter->select()->from($this->getMainTable(), 'rating_id')->where('entity_id = :entity_id');
-        $ratingIds = $adapter->fetchCol($select, array(':entity_id' => $entityId));
+        $ratingIds = $adapter->fetchCol($select, [':entity_id' => $entityId]);
 
         if ($ratingIds) {
-            $where = array('entity_pk_value = ?' => (int)$productId, 'rating_id IN(?)' => $ratingIds);
+            $where = ['entity_pk_value = ?' => (int)$productId, 'rating_id IN(?)' => $ratingIds];
             $adapter->delete($this->getTable('rating_option_vote_aggregated'), $where);
         }
 

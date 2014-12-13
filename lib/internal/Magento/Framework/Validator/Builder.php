@@ -2,26 +2,7 @@
 /**
  * Magento Validator Builder
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Validator;
 
@@ -84,7 +65,7 @@ class Builder
     protected function _checkConfigurationArguments(array $configuration, $argumentsIsArray)
     {
         // https://jira.corp.x.com/browse/MAGETWO-10439
-        $allowedKeys = array('arguments', 'callback', 'method', 'methods', 'breakChainOnFailure');
+        $allowedKeys = ['arguments', 'callback', 'method', 'methods', 'breakChainOnFailure'];
         if (!array_intersect($allowedKeys, array_keys($configuration))) {
             throw new \InvalidArgumentException('Configuration has incorrect format');
         }
@@ -136,7 +117,7 @@ class Builder
             if ($callbackIsArray) {
                 $callbacks = $configuration['callback'];
             } else {
-                $callbacks = array($configuration['callback']);
+                $callbacks = [$configuration['callback']];
             }
             foreach ($callbacks as $callback) {
                 if (!$callback instanceof \Magento\Framework\Validator\Constraint\Option\Callback) {
@@ -191,7 +172,7 @@ class Builder
                 continue;
             }
             if (!array_key_exists('options', $constraint) || !is_array($constraint['options'])) {
-                $constraint['options'] = array();
+                $constraint['options'] = [];
             }
             if (!array_key_exists('method', $configuration)) {
                 if (array_key_exists('arguments', $configuration)) {
@@ -219,7 +200,7 @@ class Builder
         \Magento\Framework\Validator\Constraint\Option\Callback $callback
     ) {
         if (!array_key_exists('callback', $constraint['options'])) {
-            $constraint['options']['callback'] = array();
+            $constraint['options']['callback'] = [];
         }
         $constraint['options']['callback'][] = $callback;
         return $constraint;
@@ -235,7 +216,7 @@ class Builder
     protected function _addConstraintMethod(array $constraint, array $configuration)
     {
         if (!array_key_exists('methods', $constraint['options'])) {
-            $constraint['options']['methods'] = array();
+            $constraint['options']['methods'] = [];
         }
         $constraint['options']['methods'][] = $configuration;
         return $constraint;
@@ -274,7 +255,7 @@ class Builder
         if (\Magento\Framework\Validator\Config::CONSTRAINT_TYPE_PROPERTY == $data['type']) {
             $result = new \Magento\Framework\Validator\Constraint\Property($validator, $data['property'], $data['alias']);
         } else {
-            $result = $this->_constraintFactory->create(array('validator' => $validator, 'alias' => $data['alias']));
+            $result = $this->_constraintFactory->create(['validator' => $validator, 'alias' => $data['alias']]);
         }
 
         return $result;
@@ -295,7 +276,7 @@ class Builder
                 $data['options']['arguments']
             ) ? $this->_applyArgumentsCallback(
                 $data['options']['arguments']
-            ) : array()
+            ) : []
         );
 
         // Check validator type
@@ -324,9 +305,9 @@ class Builder
                 if (method_exists($validator, $methodName)) {
                     if (array_key_exists('arguments', $methodData)) {
                         $arguments = $this->_applyArgumentsCallback($methodData['arguments']);
-                        call_user_func_array(array($validator, $methodName), $arguments);
+                        call_user_func_array([$validator, $methodName], $arguments);
                     } else {
-                        call_user_func(array($validator, $methodName));
+                        call_user_func([$validator, $methodName]);
                     }
                 }
             }
@@ -353,7 +334,7 @@ class Builder
         foreach ($arguments as &$argument) {
             if (is_array($argument)) {
                 $argument = $this->_applyArgumentsCallback($argument);
-            } else if ($argument instanceof OptionInterface) {
+            } elseif ($argument instanceof OptionInterface) {
                 $argument = $argument->getValue();
             }
         }

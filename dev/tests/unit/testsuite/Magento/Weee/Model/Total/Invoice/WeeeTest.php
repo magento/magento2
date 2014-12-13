@@ -1,29 +1,9 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Weee\Model\Total\Invoice;
 
-use \Magento\Framework\Object as MagentoObject;
 
 class WeeeTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,25 +61,25 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
 
         $this->order = $this->getMock(
             '\Magento\Sales\Model\Order',
-            array(
+            [
                 '__wakeup'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
 
         $this->invoice = $this->getMock(
             '\Magento\Sales\Model\Order\Invoice',
-            array(
+            [
                 'getAllItems',
                 'getOrder',
                 'roundPrice',
                 'isLast',
                 'getStore',
                 '__wakeup',
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
@@ -205,7 +185,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ],
             'invoice_data' => [
                 'items' => [
-                    'item_1' =>[
+                    'item_1' => [
                         'order_item' => [
                             'qty_ordered' => 3,
                             'weee_tax_applied_row_amount' => 30,
@@ -222,7 +202,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                     'base_row_amount' => 30,
                                     'row_amount' => 30,
                                     'base_row_amount_incl_tax' => 32.47,
-                                    'row_amount_incl_tax' => 32.47
+                                    'row_amount_incl_tax' => 32.47,
                                 ],
                             ],
                             'applied_weee_updated' => [
@@ -239,8 +219,8 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                             'applied_weee' => [
                                 [
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                 ],
                 'is_last' => true,
@@ -253,7 +233,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'subtotal_incl_tax' => 314.85,
                     'base_subtotal_incl_tax' => 314.85,
                     'tax_amount' => 16.09,
-                    'base_tax_amount' => 16.09
+                    'base_tax_amount' => 16.09,
                 ],
             ],
             'expected_results' => [
@@ -266,7 +246,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                 'row_amount' => 30,
                                 'base_row_amount_incl_tax' => 32.47,
                                 'row_amount_incl_tax' => 32.47,
-                            ]
+                            ],
                         ],
                         'weee_tax_applied_row_amount' => 30,
                         'base_weee_tax_applied_row_amount' => 30,
@@ -284,7 +264,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal_incl_tax' => 344.85,
 
                 ],
-            ]
+            ],
         ];
 
         // 3 item_1, $100 with $weee, 8.25 tax rate, partial invoice, invoice qty=2
@@ -307,7 +287,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ],
             'invoice_data' => [
                 'items' => [
-                    'item_1' =>[
+                    'item_1' => [
                         'order_item' => [
                             'qty_ordered' => 3,
                             'weee_tax_applied_row_amount' => 30,
@@ -324,7 +304,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                     'base_row_amount' => 30,
                                     'row_amount' => 30,
                                     'base_row_amount_incl_tax' => 32.47,
-                                    'row_amount_incl_tax' => 32.47
+                                    'row_amount_incl_tax' => 32.47,
                                 ],
                             ],
                             'applied_weee_updated' => [
@@ -341,8 +321,8 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                             'applied_weee' => [
                                 [
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                 ],
                 'is_last' => false,
@@ -355,7 +335,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'subtotal_incl_tax' => 216.5,
                     'base_subtotal_incl_tax' => 216.5,
                     'tax_amount' => 9.49,
-                    'base_tax_amount' => 9.49
+                    'base_tax_amount' => 9.49,
                 ],
             ],
             'expected_results' => [
@@ -368,7 +348,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                 'row_amount' => 20,
                                 'base_row_amount_incl_tax' => 21.65,
                                 'row_amount_incl_tax' => 21.65,
-                            ]
+                            ],
                         ],
                         'weee_tax_applied_row_amount' => 20,
                         'base_weee_tax_applied_row_amount' => 20,
@@ -386,7 +366,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal_incl_tax' => 238.15,
 
                 ],
-            ]
+            ],
         ];
 
         // 3 item_1, $100 with $weee, 8.25 tax rate, partial invoice: one item invoiced
@@ -410,7 +390,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ],
             'invoice_data' => [
                 'items' => [
-                    'item_1' =>[
+                    'item_1' => [
                         'order_item' => [
                             'qty_ordered' => 3,
                             'weee_tax_applied_row_amount' => 30,
@@ -427,7 +407,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                     'base_row_amount' => 30,
                                     'row_amount' => 30,
                                     'base_row_amount_incl_tax' => 32.47,
-                                    'row_amount_incl_tax' => 32.47
+                                    'row_amount_incl_tax' => 32.47,
                                 ],
                             ],
                             'applied_weee_updated' => [
@@ -444,8 +424,8 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                             'applied_weee' => [
                                 [
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                 ],
                 'is_last' => false,
@@ -471,7 +451,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                 'row_amount' => 10,
                                 'base_row_amount_incl_tax' => 10.82,
                                 'row_amount_incl_tax' => 10.82,
-                            ]
+                            ],
                         ],
                         'weee_tax_applied_row_amount' => 10,
                         'base_weee_tax_applied_row_amount' => 10,
@@ -489,7 +469,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal_incl_tax' => 119.07,
 
                 ],
-            ]
+            ],
         ];
 
         // 3 item_1, $100 with $weee, 8.25 tax rate, partial invoice: two item invoiced
@@ -513,7 +493,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             ],
             'invoice_data' => [
                 'items' => [
-                    'item_1' =>[
+                    'item_1' => [
                         'order_item' => [
                             'qty_ordered' => 3,
                             'weee_tax_applied_row_amount' => 30,
@@ -530,7 +510,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                     'base_row_amount' => 30,
                                     'row_amount' => 30,
                                     'base_row_amount_incl_tax' => 32.47,
-                                    'row_amount_incl_tax' => 32.47
+                                    'row_amount_incl_tax' => 32.47,
                                 ],
                             ],
                             'applied_weee_updated' => [
@@ -547,8 +527,8 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                             'applied_weee' => [
                                 [
                                 ],
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                 ],
                 'is_last' => true,
@@ -574,7 +554,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                 'row_amount' => 10,
                                 'base_row_amount_incl_tax' => 10.82,
                                 'row_amount_incl_tax' => 10.82,
-                            ]
+                            ],
                         ],
                         'weee_tax_applied_row_amount' => 10,
                         'base_weee_tax_applied_row_amount' => 10,
@@ -592,7 +572,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal_incl_tax' => 114.95,
 
                 ],
-            ]
+            ],
         ];
         return $result;
     }
@@ -606,11 +586,11 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
         $orderItem = $this->getMock(
             '\Magento\Sales\Model\Order\Item',
-            array(
+            [
                 'isDummy',
                 '__wakeup'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
@@ -647,12 +627,12 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject $invoiceItem */
         $invoiceItem = $this->getMock(
             '\Magento\Sales\Model\Order\Invoice\Item',
-            array(
+            [
                 'getOrderItem',
                 'isLast',
                 '__wakeup'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );

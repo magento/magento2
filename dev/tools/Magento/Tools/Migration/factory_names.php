@@ -2,26 +2,7 @@
 /**
  * Automated replacement of factory names into real ones
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 require realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) . '/dev/tests/static/framework/bootstrap.php';
 
@@ -33,8 +14,8 @@ foreach (\Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, true, 
     if (!$factoryNames) {
         continue;
     }
-    $search = array();
-    $replace = array();
+    $search = [];
+    $replace = [];
     foreach ($factoryNames as $factoryName) {
         list($module, $name) = getModuleName($factoryName);
         addReplace($factoryName, $module, $name, '::getModel(\'%s\'', '_Model_', $search, $replace);
@@ -51,7 +32,7 @@ foreach (\Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, true, 
 }
 
 // layouts
-$layouts = \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles(array(), false);
+$layouts = \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles([], false);
 foreach ($layouts as $file) {
     $xml = simplexml_load_file($file);
     $classes = \Magento\Framework\Test\Utility\Classes::collectLayoutClasses($xml);
@@ -59,8 +40,8 @@ foreach ($layouts as $file) {
     if (!$factoryNames) {
         continue;
     }
-    $search = array();
-    $replace = array();
+    $search = [];
+    $replace = [];
     foreach ($factoryNames as $factoryName) {
         list($module, $name) = getModuleName($factoryName);
         addReplace($factoryName, $module, $name, 'type="%s"', '_Block_', $search, $replace);
@@ -71,7 +52,7 @@ foreach ($layouts as $file) {
 // modules in configuration and layouts
 $configs = \Magento\Framework\Test\Utility\Files::init()->getConfigFiles(
     '*.xml',
-    array('wsdl.xml', 'wsdl2.xml', 'wsi.xml'),
+    ['wsdl.xml', 'wsdl2.xml', 'wsi.xml'],
     false
 );
 foreach (array_merge($layouts, $configs) as $file) {
@@ -86,8 +67,8 @@ foreach (array_merge($layouts, $configs) as $file) {
     if (!$factoryNames) {
         continue;
     }
-    $search = array();
-    $replace = array();
+    $search = [];
+    $replace = [];
     foreach ($factoryNames as $factoryName) {
         list($module, $name) = getModuleName($factoryName);
         if ($module) {
@@ -145,7 +126,7 @@ function getModuleName($factoryName)
         }
     }
 
-    return array($module, $name);
+    return [$module, $name];
 }
 
 /**

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CatalogInventory\Model\Spi;
 
@@ -130,7 +111,7 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
         'getIsSaleable',
         'getOrderedItems',
         'setOrderedItems',
-        'getProductName'
+        'getProductName',
     ];
 
     protected function setUp()
@@ -352,7 +333,7 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
             $expectedResult = isset($variation['results'][$methodName]) ? $variation['results'][$methodName] : null;
             $variations[] = [
                 'stockItem' => $stockItem,
-                'expectedResult' => $expectedResult
+                'expectedResult' => $expectedResult,
             ];
         }
         return $variations;
@@ -377,7 +358,7 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
                     '_suppress_check_qty_increments_' => false,
                     '_is_saleable_' => true,
                     '_ordered_items_' => 0,
-                    '_product_' => 'Test product Name'
+                    '_product_' => 'Test product Name',
                 ],
                 'results' => [
                     'verifyStock' => true,
@@ -386,8 +367,8 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
                     'suggestQty' => 51,
                     'getStockQty' => $stockQty,
                     'checkQtyIncrements' => false,
-                    'checkQuoteItemQty' => false
-                ]
+                    'checkQuoteItemQty' => false,
+                ],
             ],
             [
                 'values' => [
@@ -404,7 +385,7 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
                     '_suppress_check_qty_increments_' => false,
                     '_is_saleable_' => true,
                     '_ordered_items_' => 0,
-                    '_product_' => 'Test product Name'
+                    '_product_' => 'Test product Name',
                 ],
                 'results' => [
                     'verifyStock' => true,
@@ -413,7 +394,7 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
                     'suggestQty' => 50.5,
                     'getStockQty' => $stockQty,
                     'checkQtyIncrements' => false,
-                    'checkQuoteItemQty' => true
+                    'checkQuoteItemQty' => true,
                 ]
             ]
         ];

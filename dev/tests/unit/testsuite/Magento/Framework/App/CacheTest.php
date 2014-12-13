@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\App;
 
@@ -46,15 +27,15 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
         $this->_cacheFrontendMock = $this->getMockForAbstractClass(
             'Magento\Framework\Cache\FrontendInterface',
-            array(),
+            [],
             '',
             true,
             true,
             true,
-            array('clean')
+            ['clean']
         );
 
-        $frontendPoolMock = $this->getMock('Magento\Framework\App\Cache\Frontend\Pool', array(), array(), '', false);
+        $frontendPoolMock = $this->getMock('Magento\Framework\App\Cache\Frontend\Pool', [], [], '', false);
         $frontendPoolMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
 
         $frontendPoolMock->expects(
@@ -82,15 +63,15 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     protected function _initCacheTypeMocks()
     {
-        $cacheTypes = array(
+        $cacheTypes = [
             'Magento\Framework\Cache\Frontend\Decorator\TagScope',
-            'Magento\Framework\Cache\Frontend\Decorator\Bare'
-        );
+            'Magento\Framework\Cache\Frontend\Decorator\Bare',
+        ];
         foreach ($cacheTypes as $type) {
             $this->_cacheTypeMocks[$type] = $this->getMock(
                 $type,
-                array('clean'),
-                array($this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface'), 'FIXTURE_TAG')
+                ['clean'],
+                [$this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface'), 'FIXTURE_TAG']
             );
         }
     }
@@ -108,7 +89,7 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->_cacheTypeMocks = array();
+        $this->_cacheTypeMocks = [];
         $this->_cacheFrontendMock = null;
         $this->_model = null;
     }
@@ -164,26 +145,26 @@ class CacheTest extends \PHPUnit_Framework_TestCase
     public function saveDataProvider()
     {
         $configTag = \Magento\Framework\App\Config::CACHE_TAG;
-        return array(
-            'default tags' => array('test_data', 'test_id', array(), 'test_data', 'test_id', array()),
-            'config tags' => array(
+        return [
+            'default tags' => ['test_data', 'test_id', [], 'test_data', 'test_id', []],
+            'config tags' => [
                 'test_data',
                 'test_id',
-                array($configTag),
+                [$configTag],
                 'test_data',
                 'test_id',
-                array($configTag)
-            ),
-            'lowercase tags' => array(
+                [$configTag],
+            ],
+            'lowercase tags' => [
                 'test_data',
                 'test_id',
-                array('test_tag'),
+                ['test_tag'],
                 'test_data',
                 'test_id',
-                array('test_tag')
-            ),
-            'non-string data' => array(1234567890, 'test_id', array(), '1234567890', 'test_id', array())
-        );
+                ['test_tag'],
+            ],
+            'non-string data' => [1234567890, 'test_id', [], '1234567890', 'test_id', []]
+        ];
     }
 
     /**
@@ -206,12 +187,12 @@ class CacheTest extends \PHPUnit_Framework_TestCase
 
     public function successFailureDataProvider()
     {
-        return array('success' => array(true), 'failure' => array(false));
+        return ['success' => [true], 'failure' => [false]];
     }
 
     public function testCleanByTags()
     {
-        $expectedTags = array('test_tag');
+        $expectedTags = ['test_tag'];
         $this->_cacheFrontendMock->expects(
             $this->once()
         )->method(

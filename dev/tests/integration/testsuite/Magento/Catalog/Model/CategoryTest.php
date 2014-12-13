@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model;
 
@@ -45,8 +26,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $storeManager \Magento\Framework\StoreManagerInterface */
-        $storeManager = $objectManager->get('Magento\Framework\StoreManagerInterface');
+        /** @var $storeManager \Magento\Store\Model\StoreManagerInterface */
+        $storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
         $this->_store = $storeManager->getStore();
         $this->_model = $objectManager->create('Magento\Catalog\Model\Category');
     }
@@ -98,10 +79,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductsPosition()
     {
-        $this->assertEquals(array(), $this->_model->getProductsPosition());
+        $this->assertEquals([], $this->_model->getProductsPosition());
         $this->_model->unsetData();
         $this->_model->load(6);
-        $this->assertEquals(array(), $this->_model->getProductsPosition());
+        $this->assertEquals([], $this->_model->getProductsPosition());
 
         $this->_model->unsetData();
         $this->_model->load(4);
@@ -114,7 +95,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         /* id from fixture */
         $this->assertContains(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             $this->_model->getStoreIds()
         );
@@ -124,7 +105,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             $this->_model->getStoreId()
         );
@@ -210,7 +191,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testVerifyIds()
     {
-        $ids = $this->_model->verifyIds(array(1, 2, 3, 4, 100));
+        $ids = $this->_model->verifyIds([1, 2, 3, 4, 100]);
         $this->assertContains(4, $ids);
         $this->assertNotContains(100, $ids);
     }
@@ -241,16 +222,16 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->load(6);
         $this->assertEquals(0, $this->_model->getProductCount());
-        $this->_model->setData(array());
+        $this->_model->setData([]);
         $this->_model->load(3);
         $this->assertEquals(1, $this->_model->getProductCount());
     }
 
     public function testGetAvailableSortBy()
     {
-        $this->assertEquals(array(), $this->_model->getAvailableSortBy());
+        $this->assertEquals([], $this->_model->getAvailableSortBy());
         $this->_model->setData('available_sort_by', 'test,and,test');
-        $this->assertEquals(array('test', 'and', 'test'), $this->_model->getAvailableSortBy());
+        $this->assertEquals(['test', 'and', 'test'], $this->_model->getAvailableSortBy());
     }
 
     public function testGetAvailableSortByOptions()
@@ -268,11 +249,11 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testValidate()
     {
-        $this->_model->addData(array(
+        $this->_model->addData([
             "include_in_menu" => false,
             "is_active" => false,
-            'name' => 'test'
-        ));
+            'name' => 'test',
+        ]);
         $this->assertNotEmpty($this->_model->validate());
     }
 }

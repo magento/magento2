@@ -1,34 +1,15 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Sales\Model\AbstractModel;
-use Magento\Framework\Model\Exception;
-use Magento\Sales\Model\EntityInterface;
-use Magento\Sales\Api\Data\CreditmemoInterface;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Model\Exception;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Model\EntityInterface;
 
 /**
  * Order creditmemo model
@@ -146,7 +127,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     protected $_calculatorFactory;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -176,7 +157,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory
      * @param \Magento\Framework\Math\CalculatorFactory $calculatorFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Creditmemo\CommentFactory $commentFactory
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
@@ -195,7 +176,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory,
         \Magento\Framework\Math\CalculatorFactory $calculatorFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Creditmemo\CommentFactory $commentFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
@@ -479,7 +460,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         );
 
         if ($baseOrderRefund > $this->priceCurrency->round($this->getOrder()->getBaseTotalPaid())) {
-
             $baseAvailableRefund = $this->getOrder()->getBaseTotalPaid() - $this->getOrder()->getBaseTotalRefunded();
 
             throw new Exception(
@@ -644,7 +624,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
             self::$_states = [
                 self::STATE_OPEN => __('Pending'),
                 self::STATE_REFUNDED => __('Refunded'),
-                self::STATE_CANCELED => __('Canceled')
+                self::STATE_CANCELED => __('Canceled'),
             ];
         }
         return self::$_states;

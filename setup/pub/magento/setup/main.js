@@ -1,29 +1,11 @@
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 'use strict';
-var main = angular.module('main', []);
-main.controller('navigationController', ['$scope', '$state', '$rootScope', 'navigationService', function ($scope, $state, $rootScope, navigationService) {
+var main = angular.module('main', ['ngStorage']);
+main.controller('navigationController', ['$scope', '$state', '$rootScope', 'navigationService', '$localStorage', function ($scope, $state, $rootScope, navigationService, $localStorage) {
+    $localStorage.$reset();
     navigationService.load();
     $rootScope.isMenuEnabled = true;
     $scope.itemStatus = function (order) {
@@ -34,6 +16,7 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', 'navi
     '$scope', '$state', 'navigationService',
     function ($scope, $state, navigationService) {
         $scope.$on('$stateChangeSuccess', function (event, state) {
+            $scope.valid = true;
             $scope.class = 'col-lg-9';
             if (state.main) {
                 $scope.class = 'col-lg-offset-3 col-lg-6';
@@ -48,7 +31,8 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', 'navi
         };
 
         $scope.previousState = function () {
-            $state.go(navigationService.getPreviousState().id);
+                $scope.valid = true;
+                $state.go(navigationService.getPreviousState().id);
         };
 
         // Flag indicating the validity of the form
@@ -75,7 +59,7 @@ main.controller('navigationController', ['$scope', '$state', '$rootScope', 'navi
         states: [],
         load: function () {
             var self = this;
-            $http.get('data/states').success(function (data) {
+            $http.get('index.php/navigation').success(function (data) {
                 var currentState = $location.path().replace('/', '');
                 var isCurrentStateFound = false;
                 self.states = data.nav;

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
@@ -65,7 +46,7 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
     protected $regularPriceMock;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -157,30 +138,32 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
         $optionId = 1;
 
         $expected = [
-            'priceOptions' =>
-                [
-                    $attributeId =>
-                        [
+            'priceOptions' => [
+                    $attributeId => [
                             'id' => $attributeId,
                             'code' => $attributeCode,
                             'label' => $attributeLabel,
-                            'options' =>
-                                [
-                                    0 =>
-                                        [
+                            'options' => [
+                                    0 => [
                                             'id' => $valueIndex,
                                             'label' => $attributeLabel,
-                                            'price' => $modifiedValue,
-                                            'oldPrice' => $modifiedValue,
-                                            'inclTaxPrice' => $modifiedValue,
-                                            'exclTaxPrice' => $pricingValue,
-                                            'products' => []
+                                            'prices' => [
+                                                'oldPrice' => [
+                                                    'amount' => $modifiedValue,
+                                                ],
+                                                'basePrice' => [
+                                                    'amount' => $pricingValue,
+                                                ],
+                                                'finalPrice' => [
+                                                    'amount' => $modifiedValue,
+                                                ],
+                                            ],
+                                            'products' => [],
                                         ],
                                 ],
                         ],
                 ],
-            'defaultValues' =>
-                [
+            'defaultValues' => [
                     $attributeId => $optionId,
                 ],
         ];
@@ -189,12 +172,12 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
                 'is_percent' => false,
                 'pricing_value' => $pricingValue,
                 'value_index' => $valueIndex,
-                'label' => $attributeLabel
-            ]
+                'label' => $attributeLabel,
+            ],
         ];
 
         $configurableAttributes = [
-            $this->getAttributeMock($attributeId, $attributeCode, $attributeLabel, $attributePrices)
+            $this->getAttributeMock($attributeId, $attributeCode, $attributeLabel, $attributePrices),
         ];
         $configuredValueMock = $this->getMockBuilder('Magento\Framework\Object')
             ->disableOriginalConstructor()
@@ -326,7 +309,7 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
             $this->attribute->getOptionValueModified(
                 [
                     'is_percent' => true,
-                    'pricing_value' => 100
+                    'pricing_value' => 100,
                 ]
             )
         );
@@ -362,44 +345,9 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
             $this->attribute->getOptionValueModified(
                 [
                     'is_percent' => false,
-                    'pricing_value' => 77.33
+                    'pricing_value' => 77.33,
                 ]
             )
         );
-    }
-
-    /**
-     * test for method getTaxConfig
-     */
-    public function testGetTaxConfig()
-    {
-        $expectedTaxConfig = [
-            'includeTax' => false,
-            'showIncludeTax' => false,
-            'showBothPrices' => false,
-            'defaultTax' => 0,
-            'currentTax' => 0,
-            'inclTaxTitle' => __('Incl. Tax'),
-            'customerId' => 1
-        ];
-        $this->assertEquals($expectedTaxConfig, $this->attribute->getTaxConfig(1));
-    }
-
-    /**
-     *  test for method prepareAdjustmentConfig
-     */
-    public function testPrepareAdjustmentConfig()
-    {
-        $expectedAdjustmentConfig = [
-            'includeTax' => false,
-            'showIncludeTax' => false,
-            'showBothPrices' => false,
-            'defaultTax' => 0,
-            'currentTax' => 0,
-            'inclTaxTitle' => __('Incl. Tax'),
-            'product' => $this->saleableItemMock,
-            'customerId' => 1
-        ];
-        $this->assertEquals($expectedAdjustmentConfig, $this->attribute->prepareAdjustmentConfig(1));
     }
 }

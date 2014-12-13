@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\ProductLink;
 
@@ -45,7 +26,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $linkInitializerMock;
-
 
     protected function setUp()
     {
@@ -86,7 +66,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
                 ['product', false, null, $productMock],
-                ['linkedProduct', false, null, $linkedProductMock]
+                ['linkedProduct', false, null, $linkedProductMock],
             ]
         ));
         $customAttributeMock = $this->getMock('\Magento\Framework\Api\AttributeInterface');
@@ -117,7 +97,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
                 ['product', false, null, $productMock],
-                ['linkedProduct', false, null, $linkedProductMock]
+                ['linkedProduct', false, null, $linkedProductMock],
             ]
         ));
         $customAttributeMock = $this->getMock('\Magento\Framework\Api\AttributeInterface');
@@ -133,7 +113,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->linkInitializerMock->expects($this->once())->method('initializeLinks')->with($productMock, [
             'linkType' => [42 => ['attribute_code' => 'value', 'product_id' => 42]]
         ]);
-        $productMock->expects($this->once())->method('save')->willThrowException(new \Exception);
+        $productMock->expects($this->once())->method('save')->willThrowException(new \Exception());
         $this->model->save($entityMock);
     }
 
@@ -145,7 +125,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
                 ['product', false, null, $productMock],
-                ['linkedProduct', false, null, $linkedProductMock]
+                ['linkedProduct', false, null, $linkedProductMock],
             ]
         ));
         $entityMock->expects($this->once())->method('getLinkedProductSku')->willReturn('linkedProduct');
@@ -153,7 +133,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $entityMock->expects($this->exactly(2))->method('getLinkType')->willReturn('linkType');
         $linkedProductMock->expects($this->exactly(2))->method('getId')->willReturn(42);
         $this->entityCollectionProviderMock->expects($this->once())->method('getCollection')->willReturn([
-            42 => '', 37 => ''
+            42 => '', 37 => '',
         ]);
         $this->linkInitializerMock->expects($this->once())->method('initializeLinks')->with($productMock, [
             'linkType' => [37 => '']
@@ -173,7 +153,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
                 ['product', false, null, $productMock],
-                ['linkedProduct', false, null, $linkedProductMock]
+                ['linkedProduct', false, null, $linkedProductMock],
             ]
         ));
         $entityMock->expects($this->once())->method('getLinkedProductSku')->willReturn('linkedProduct');
@@ -181,12 +161,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $entityMock->expects($this->exactly(2))->method('getLinkType')->willReturn('linkType');
         $linkedProductMock->expects($this->exactly(2))->method('getId')->willReturn(42);
         $this->entityCollectionProviderMock->expects($this->once())->method('getCollection')->willReturn([
-            42 => '', 37 => ''
+            42 => '', 37 => '',
         ]);
         $this->linkInitializerMock->expects($this->once())->method('initializeLinks')->with($productMock, [
             'linkType' => [37 => '']
         ]);
-        $productMock->expects($this->once())->method('save')->willThrowException(new \Exception);
+        $productMock->expects($this->once())->method('save')->willThrowException(new \Exception());
         $this->model->delete($entityMock);
     }
 
@@ -202,7 +182,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
                 ['product', false, null, $productMock],
-                ['linkedProduct', false, null, $linkedProductMock]
+                ['linkedProduct', false, null, $linkedProductMock],
             ]
         ));
         $entityMock->expects($this->exactly(2))->method('getLinkedProductSku')->willReturn('linkedProduct');

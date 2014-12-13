@@ -1,30 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Paypal\Model;
 
-use \Magento\Paypal\UnavailableException;
+use Magento\Paypal\UnavailableException;
 
 class AbstractIpn
 {
@@ -50,7 +31,7 @@ class AbstractIpn
      *
      * @var array
      */
-    protected $_debugData = array();
+    protected $_debugData = [];
 
     /**
      * @var \Magento\Paypal\Model\ConfigFactory
@@ -72,7 +53,7 @@ class AbstractIpn
         \Magento\Paypal\Model\ConfigFactory $configFactory,
         \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_configFactory = $configFactory;
         $this->_logAdapterFactory = $logAdapterFactory;
@@ -107,12 +88,12 @@ class AbstractIpn
         $postbackUrl = $this->_config->getPaypalUrl();
         $this->_addDebugData('postback_to', $postbackUrl);
 
-        $httpAdapter->setConfig(array('verifypeer' => $this->_config->getConfigValue('verifyPeer')));
-        $httpAdapter->write(\Zend_Http_Client::POST, $postbackUrl, '1.1', array('Connection: close'), $postbackQuery);
+        $httpAdapter->setConfig(['verifypeer' => $this->_config->getConfigValue('verifyPeer')]);
+        $httpAdapter->write(\Zend_Http_Client::POST, $postbackUrl, '1.1', ['Connection: close'], $postbackQuery);
         try {
             $postbackResult = $httpAdapter->read();
         } catch (\Exception $e) {
-            $this->_addDebugData('http_error', array('error' => $e->getMessage(), 'code' => $e->getCode()));
+            $this->_addDebugData('http_error', ['error' => $e->getMessage(), 'code' => $e->getCode()]);
             throw $e;
         }
 
@@ -120,7 +101,7 @@ class AbstractIpn
          * Handle errors on PayPal side.
          */
         $responseCode = \Zend_Http_Response::extractCode($postbackResult);
-        if (empty($postbackResult) || in_array($responseCode, array('500', '502', '503'))) {
+        if (empty($postbackResult) || in_array($responseCode, ['500', '502', '503'])) {
             if (empty($postbackResult)) {
                 $reason = 'Empty response.';
             } else {
@@ -191,7 +172,7 @@ class AbstractIpn
                 ->getMethodCode() ? "payment_{$this
                 ->_config
                 ->getMethodCode()}.log" : self::DEFAULT_LOG_FILE;
-            $this->_logAdapterFactory->create(array('fileName' => $file))->log($this->_debugData);
+            $this->_logAdapterFactory->create(['fileName' => $file])->log($this->_debugData);
         }
     }
 

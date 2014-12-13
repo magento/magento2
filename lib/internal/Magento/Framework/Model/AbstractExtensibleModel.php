@@ -1,32 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\Model;
 
-use Magento\Framework\Api\MetadataServiceInterface;
-use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\MetadataServiceInterface;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 /**
@@ -68,7 +49,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
         AttributeDataBuilder $customAttributeBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->metadataService = $metadataService;
         $this->customAttributeBuilder = $customAttributeBuilder;
@@ -141,7 +122,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     {
         if (is_array($key)) {
             $key = $this->filterCustomAttributes($key);
-        } else if ($key == self::CUSTOM_ATTRIBUTES) {
+        } elseif ($key == self::CUSTOM_ATTRIBUTES) {
             $filteredData = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value]);
             $value = $filteredData[self::CUSTOM_ATTRIBUTES];
         }
@@ -169,7 +150,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     {
         if ($key === self::CUSTOM_ATTRIBUTES) {
             throw new \LogicException("Custom attributes array should be retrieved via getCustomAttributes() only.");
-        } else if ($key === '') {
+        } elseif ($key === '') {
             /** Represent model data and custom attributes as a flat array */
             $customAttributes = isset($this->_data[self::CUSTOM_ATTRIBUTES])
                 ? $this->_data[self::CUSTOM_ATTRIBUTES]

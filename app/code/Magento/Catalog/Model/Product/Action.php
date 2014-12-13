@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -70,7 +51,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_productWebsiteFactory = $productWebsiteFactory;
         $this->indexerRegistry = $indexerRegistry;
@@ -111,12 +92,12 @@ class Action extends \Magento\Framework\Model\AbstractModel
     {
         $this->_eventManager->dispatch(
             'catalog_product_attribute_update_before',
-            array('attributes_data' => &$attrData, 'product_ids' => &$productIds, 'store_id' => &$storeId)
+            ['attributes_data' => &$attrData, 'product_ids' => &$productIds, 'store_id' => &$storeId]
         );
 
         $this->_getResource()->updateAttributes($productIds, $attrData, $storeId);
         $this->setData(
-            array('product_ids' => array_unique($productIds), 'attributes_data' => $attrData, 'store_id' => $storeId)
+            ['product_ids' => array_unique($productIds), 'attributes_data' => $attrData, 'store_id' => $storeId]
         );
 
         if ($this->_hasIndexableAttributes($attrData)) {
@@ -177,12 +158,12 @@ class Action extends \Magento\Framework\Model\AbstractModel
     {
         if ($type == 'add') {
             $this->_productWebsiteFactory->create()->addProducts($websiteIds, $productIds);
-        } else if ($type == 'remove') {
+        } elseif ($type == 'remove') {
             $this->_productWebsiteFactory->create()->removeProducts($websiteIds, $productIds);
         }
 
         $this->setData(
-            array('product_ids' => array_unique($productIds), 'website_ids' => $websiteIds, 'action_type' => $type)
+            ['product_ids' => array_unique($productIds), 'website_ids' => $websiteIds, 'action_type' => $type]
         );
 
         $categoryIndexer = $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID);

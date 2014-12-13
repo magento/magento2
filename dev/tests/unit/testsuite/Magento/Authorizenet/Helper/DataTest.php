@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Authorizenet\Helper;
 
@@ -68,7 +49,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $payment->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($order));
-        $card = new \Magento\Framework\Object(['cc_last4' => self::LAST4]);
+        $card = new \Magento\Framework\Object(['cc_last_4' => self::LAST4]);
         $message = $this->_model->getTransactionMessage(
             $payment,
             $type,
@@ -96,7 +77,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 false,
                 $additionalMessage,
                 'Credit Card: xxxx-' . self::LAST4 . ' amount 12.3 authorize - successful. '
-                . 'Authorize.Net Transaction ID ' . self::TRID . '. Addition message.'
+                . 'Authorize.Net Transaction ID ' . self::TRID . '. Addition message.',
             ],
             [
                 'AUTH_CAPTURE',

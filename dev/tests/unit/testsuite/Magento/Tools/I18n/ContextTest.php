@@ -1,29 +1,9 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Tools\I18n;
 
-use Magento\Tools\I18n\Context;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,11 +33,11 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderContextByPath()
     {
-        return array(
-            array(array(Context::CONTEXT_TYPE_MODULE, 'Magento_Module'), '/app/code/Magento/Module/Block/Test.php'),
-            array(array(Context::CONTEXT_TYPE_THEME, 'area/theme/test.phtml'), '/app/design/area/theme/test.phtml'),
-            array(array(Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'), '/lib/web/module/test.phtml'),
-        );
+        return [
+            [[Context::CONTEXT_TYPE_MODULE, 'Magento_Module'], '/app/code/Magento/Module/Block/Test.php'],
+            [[Context::CONTEXT_TYPE_THEME, 'area/theme/test.phtml'], '/app/design/area/theme/test.phtml'],
+            [[Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'], '/lib/web/module/test.phtml'],
+        ];
     }
 
     /**
@@ -84,11 +64,11 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderPathToLocaleDirectoryByContext()
     {
-        return array(
-            array('app/code/Magento/Module/i18n/', array(Context::CONTEXT_TYPE_MODULE, 'Magento_Module')),
-            array('app/design/theme/test.phtml/i18n/', array(Context::CONTEXT_TYPE_THEME, 'theme/test.phtml')),
-            array('lib/web/i18n/', array(Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml')),
-        );
+        return [
+            ['app/code/Magento/Module/i18n/', [Context::CONTEXT_TYPE_MODULE, 'Magento_Module']],
+            ['app/design/theme/test.phtml/i18n/', [Context::CONTEXT_TYPE_THEME, 'theme/test.phtml']],
+            ['lib/web/i18n/', [Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml']],
+        ];
     }
 
     /**

@@ -1,33 +1,14 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Wishlist\Controller\Index;
 
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\App\Action;
 use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Wishlist\Controller\IndexInterface;
 
 class Send extends Action\Action implements IndexInterface
 {
@@ -167,7 +148,7 @@ class Send extends Action\Action implements IndexInterface
 
             try {
                 $scopeConfig = $this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
-                $storeManager = $this->_objectManager->get('Magento\Framework\StoreManagerInterface');
+                $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
                 foreach ($emails as $email) {
                     $transport = $this->_transportBuilder->setTemplateIdentifier(
                         $scopeConfig->getValue(
@@ -175,21 +156,21 @@ class Send extends Action\Action implements IndexInterface
                             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                         )
                     )->setTemplateOptions(
-                        array(
+                        [
                             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                            'store' => $storeManager->getStore()->getStoreId()
-                        )
+                            'store' => $storeManager->getStore()->getStoreId(),
+                        ]
                     )->setTemplateVars(
-                        array(
+                        [
                             'customer' => $customer,
                             'customerName' => $customerName,
                             'salable' => $wishlist->isSalable() ? 'yes' : '',
                             'items' => $this->getWishlistItems(),
-                            'addAllLink' => $this->_url->getUrl('*/shared/allcart', array('code' => $sharingCode)),
-                            'viewOnSiteLink' => $this->_url->getUrl('*/shared/index', array('code' => $sharingCode)),
+                            'addAllLink' => $this->_url->getUrl('*/shared/allcart', ['code' => $sharingCode]),
+                            'viewOnSiteLink' => $this->_url->getUrl('*/shared/index', ['code' => $sharingCode]),
                             'message' => $message,
-                            'store' => $storeManager->getStore()
-                        )
+                            'store' => $storeManager->getStore(),
+                        ]
                     )->setFrom(
                         $scopeConfig->getValue(
                             'wishlist/email/email_identity',
@@ -213,9 +194,9 @@ class Send extends Action\Action implements IndexInterface
 
             $this->inlineTranslation->resume();
 
-            $this->_eventManager->dispatch('wishlist_share', array('wishlist' => $wishlist));
+            $this->_eventManager->dispatch('wishlist_share', ['wishlist' => $wishlist]);
             $this->messageManager->addSuccess(__('Your wish list has been shared.'));
-            $this->_redirect('*/*', array('wishlist_id' => $wishlist->getId()));
+            $this->_redirect('*/*', ['wishlist_id' => $wishlist->getId()]);
         } catch (\Exception $e) {
             $this->inlineTranslation->resume();
             $this->messageManager->addError($e->getMessage());

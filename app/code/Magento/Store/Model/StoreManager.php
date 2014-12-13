@@ -1,29 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Store\Model;
 
-class StoreManager implements \Magento\Framework\StoreManagerInterface
+class StoreManager implements \Magento\Store\Model\StoreManagerInterface
 {
     /**
      * Application run code
@@ -97,7 +78,7 @@ class StoreManager implements \Magento\Framework\StoreManagerInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storage;
 
@@ -125,17 +106,17 @@ class StoreManager implements \Magento\Framework\StoreManagerInterface
     /**
      * Get storage instance
      *
-     * @return \Magento\Framework\StoreManagerInterface
+     * @return \Magento\Store\Model\StoreManagerInterface
      */
     protected function _getStorage()
     {
-        if (!$this->_storage instanceof \Magento\Framework\StoreManagerInterface) {
-            $arguments = array(
+        if (!$this->_storage instanceof \Magento\Store\Model\StoreManagerInterface) {
+            $arguments = [
                 'isSingleStoreAllowed' => $this->_isSingleStoreAllowed,
                 'currentStore' => $this->_currentStore,
                 'scopeCode' => $this->_scopeCode,
                 'scopeType' => $this->_scopeType
-            );
+            ];
             $this->_storage = $this->_factory->get($arguments);
         }
         return $this->_storage;
@@ -242,7 +223,7 @@ class StoreManager implements \Magento\Framework\StoreManagerInterface
     /**
      * Retrieve default store for default group and website
      *
-     * @return Store
+     * @return Store|null
      */
     public function getDefaultStoreView()
     {

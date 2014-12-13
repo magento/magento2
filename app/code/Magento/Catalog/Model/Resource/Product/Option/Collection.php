@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Resource\Product\Option;
 
@@ -33,7 +14,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Store manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -50,7 +31,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $optionValueCollectionFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -60,7 +41,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory $optionValueCollectionFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
@@ -109,16 +90,16 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         );
 
         $this->getSelect()->join(
-            array('default_option_title' => $productOptionTitleTable),
+            ['default_option_title' => $productOptionTitleTable],
             'default_option_title.option_id = main_table.option_id',
-            array('default_title' => 'title')
+            ['default_title' => 'title']
         )->joinLeft(
-            array('store_option_title' => $productOptionTitleTable),
+            ['store_option_title' => $productOptionTitleTable],
             'store_option_title.option_id = main_table.option_id AND ' . $adapter->quoteInto(
                 'store_option_title.store_id = ?',
                 $storeId
             ),
-            array('store_title' => 'title', 'title' => $titleExpr)
+            ['store_title' => 'title', 'title' => $titleExpr]
         )->where(
             'default_option_title.store_id = ?',
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
@@ -149,24 +130,24 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         );
 
         $this->getSelect()->joinLeft(
-            array('default_option_price' => $productOptionPriceTable),
+            ['default_option_price' => $productOptionPriceTable],
             'default_option_price.option_id = main_table.option_id AND ' . $adapter->quoteInto(
                 'default_option_price.store_id = ?',
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID
             ),
-            array('default_price' => 'price', 'default_price_type' => 'price_type')
+            ['default_price' => 'price', 'default_price_type' => 'price_type']
         )->joinLeft(
-            array('store_option_price' => $productOptionPriceTable),
+            ['store_option_price' => $productOptionPriceTable],
             'store_option_price.option_id = main_table.option_id AND ' . $adapter->quoteInto(
                 'store_option_price.store_id = ?',
                 $storeId
             ),
-            array(
+            [
                 'store_price' => 'price',
                 'store_price_type' => 'price_type',
                 'price' => $priceExpr,
                 'price_type' => $priceTypeExpr
-            )
+            ]
         );
 
         return $this;
@@ -183,7 +164,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         if ($storeId === null) {
             $storeId = $this->_storeManager->getStore()->getId();
         }
-        $optionIds = array();
+        $optionIds = [];
         foreach ($this as $option) {
             $optionIds[] = $option->getId();
         }
@@ -227,7 +208,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         if (empty($product)) {
             $this->addFieldToFilter('product_id', '');
         } elseif (is_array($product)) {
-            $this->addFieldToFilter('product_id', array('in' => $product));
+            $this->addFieldToFilter('product_id', ['in' => $product]);
         } elseif ($product instanceof \Magento\Catalog\Model\Product) {
             $this->addFieldToFilter('product_id', $product->getId());
         } else {

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\GroupedProduct\Model\Product\Type\Grouped;
 
@@ -37,12 +18,12 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->finalPriceModel = $helper->getObject(
             'Magento\GroupedProduct\Model\Product\Type\Grouped\Price',
-            array()
+            []
         );
     }
 
@@ -122,8 +103,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
         $productTypeMock = $this->getMock(
             'Magento\GroupedProduct\Model\Product\Type\Grouped',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -173,32 +154,32 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     {
         $optionMock = $this->getMock(
             'Magento\Catalog\Model\Product\Option',
-            array('getValue', '__wakeup'),
-            array(),
+            ['getValue', '__wakeup'],
+            [],
             '',
             false
         );
         /* quantity of options */
         $optionMock->expects($this->any())->method('getValue')->will($this->returnValue(5));
 
-        return array(
-            'custom_option_null' => array(
-                'associatedProducts' => array(),
-                'options' => array(array(), array()),
+        return [
+            'custom_option_null' => [
+                'associatedProducts' => [],
+                'options' => [[], []],
                 'expectedPriceCall' => 14, /* product call number to check final price formed correctly */
-                'expectedFinalPrice' => 10 /* 10(product price) + 2(options count) * 5(qty) * 5(option price) */
-            ),
-            'custom_option_exist' => array(
+                'expectedFinalPrice' => 10, /* 10(product price) + 2(options count) * 5(qty) * 5(option price) */
+            ],
+            'custom_option_exist' => [
                 'associatedProducts' => $this->generateAssociatedProducts(),
-                'options' => array(
-                    array('associated_product_1', false),
-                    array('associated_product_2', $optionMock),
-                    array('associated_product_3', $optionMock)
-                ),
+                'options' => [
+                    ['associated_product_1', false],
+                    ['associated_product_2', $optionMock],
+                    ['associated_product_3', $optionMock],
+                ],
                 'expectedPriceCall' => 17, /* product call number to check final price formed correctly */
-                'expectedFinalPrice' => 35 /* 10(product price) + 2(options count) * 5(qty) * 5(option price) */
-            )
-        );
+                'expectedFinalPrice' => 35, /* 10(product price) + 2(options count) * 5(qty) * 5(option price) */
+            ]
+        ];
     }
 
     /**
@@ -210,8 +191,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     {
         $childProductMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            array('getId', 'getFinalPrice', '__wakeup'),
-            array(),
+            ['getId', 'getFinalPrice', '__wakeup'],
+            [],
             '',
             false
         );

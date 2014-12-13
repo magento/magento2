@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -48,17 +29,17 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     {
         $this->_eventManager = $this->getMock(
             'Magento\TestFramework\EventManager',
-            array('fireEvent'),
-            array(array())
+            ['fireEvent'],
+            [[]]
         );
         $this->_adapter = $this->getMock(
             'Magento\TestFramework\Db\Adapter\TransactionInterface',
-            array('beginTransparentTransaction', 'commitTransparentTransaction', 'rollbackTransparentTransaction')
+            ['beginTransparentTransaction', 'commitTransparentTransaction', 'rollbackTransparentTransaction']
         );
         $this->_object = $this->getMock(
             'Magento\TestFramework\Event\Transaction',
-            array('_getAdapter'),
-            array($this->_eventManager)
+            ['_getAdapter'],
+            [$this->_eventManager]
         );
         $this->_object->expects($this->any())->method('_getAdapter')->will($this->returnValue($this->_adapter));
     }
@@ -149,10 +130,10 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
     public function startAndRollbackTransactionDataProvider()
     {
-        return array(
-            'method "startTest"' => array('startTest', 'startTestTransactionRequest'),
-            'method "endTest"' => array('endTest', 'endTestTransactionRequest')
-        );
+        return [
+            'method "startTest"' => ['startTest', 'startTestTransactionRequest'],
+            'method "endTest"' => ['endTest', 'endTestTransactionRequest']
+        ];
     }
 
     /**

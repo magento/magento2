@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
@@ -68,45 +49,45 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->urlBuilder = $this->getMock('Magento\Backend\Model\Url', array('getUrl'), array(), '', false);
-        $attributeFactory = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', array(), array(), '', false);
-        $urlFactory = $this->getMock('Magento\Backend\Model\UrlFactory', array(), array(), '', false);
+        $this->urlBuilder = $this->getMock('Magento\Backend\Model\Url', ['getUrl'], [], '', false);
+        $attributeFactory = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', [], [], '', false);
+        $urlFactory = $this->getMock('Magento\Backend\Model\UrlFactory', [], [], '', false);
         $this->fileHelper = $this->getMock(
             '\Magento\Downloadable\Helper\File',
-            array(
+            [
                 'getFilePath',
                 'ensureFileInFilesystem',
                 'getFileSize'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
         $this->productModel = $this->getMock(
             'Magento\Catalog\Model\Product',
-            array(
+            [
                 '__wakeup',
                 'getTypeId',
                 'getTypeInstance',
                 'getStoreId'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
         $this->downloadableProductModel = $this->getMock(
             '\Magento\Downloadable\Model\Product\Type',
-            array(
+            [
                 '__wakeup',
                 'getLinks'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
         $this->downloadableLinkModel = $this->getMock(
             '\Magento\Downloadable\Model\Link',
-            array(
+            [
                 '__wakeup',
                 'getId',
                 'getTitle',
@@ -119,35 +100,35 @@ class LinksTest extends \PHPUnit_Framework_TestCase
                 'getSortOrder',
                 'getLinkFile',
                 'getStoreTitle'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
 
         $this->coreRegistry = $this->getMock(
             '\Magento\Framework\Registry',
-            array(
+            [
                 '__wakeup',
                 'registry'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
 
-        $this->escaper = $this->getMock('\Magento\Framework\Escaper', array('escapeHtml'), array(), '', false);
+        $this->escaper = $this->getMock('\Magento\Framework\Escaper', ['escapeHtml'], [], '', false);
 
         $this->block = $objectManagerHelper->getObject(
             'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links',
-            array(
+            [
                 'urlBuilder' => $this->urlBuilder,
                 'attributeFactory' => $attributeFactory,
                 'urlFactory' => $urlFactory,
                 'coreRegistry' => $this->coreRegistry,
                 'escaper' => $this->escaper,
                 'downloadableFile' => $this->fileHelper
-            )
+            ]
         );
     }
 
@@ -161,20 +142,20 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLinkData()
     {
-        $expectingFileData = array(
-            'file' => array(
+        $expectingFileData = [
+            'file' => [
                 'file' => 'file/link.gif',
                 'name' => '<a href="final_url">link.gif</a>',
                 'size' => '1.1',
-                'status' => 'old'
-            ),
-            'sample_file' => array(
+                'status' => 'old',
+            ],
+            'sample_file' => [
                 'file' => 'file/sample.gif',
                 'name' => '<a href="final_url">sample.gif</a>',
                 'size' => '1.1',
-                'status' => 'old'
-            )
-        );
+                'status' => 'old',
+            ],
+        ];
 
         $this->productModel->expects($this->any())->method('getTypeId')
             ->will($this->returnValue('downloadable'));
@@ -183,7 +164,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->productModel->expects($this->any())->method('getStoreId')
             ->will($this->returnValue(0));
         $this->downloadableProductModel->expects($this->any())->method('getLinks')
-            ->will($this->returnValue(array($this->downloadableLinkModel)));
+            ->will($this->returnValue([$this->downloadableLinkModel]));
         $this->coreRegistry->expects($this->any())->method('registry')
             ->will($this->returnValue($this->productModel));
         $this->downloadableLinkModel->expects($this->any())->method('getId')
@@ -224,7 +205,6 @@ class LinksTest extends \PHPUnit_Framework_TestCase
             $sampleFileSave = $link->getSampleFileSave(0);
             $this->assertEquals($expectingFileData['file'], $fileSave);
             $this->assertEquals($expectingFileData['sample_file'], $sampleFileSave);
-
         }
     }
 }

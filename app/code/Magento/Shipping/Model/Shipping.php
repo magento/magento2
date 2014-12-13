@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Shipping\Model;
 
@@ -57,7 +38,7 @@ class Shipping implements RateCollectorInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -99,7 +80,7 @@ class Shipping implements RateCollectorInterface
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory
@@ -110,7 +91,7 @@ class Shipping implements RateCollectorInterface
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory,
@@ -225,7 +206,7 @@ class Shipping implements RateCollectorInterface
             }
         } else {
             if (!is_array($limitCarrier)) {
-                $limitCarrier = array($limitCarrier);
+                $limitCarrier = [$limitCarrier];
             }
             foreach ($limitCarrier as $carrierCode) {
                 $carrierConfig = $this->_scopeConfig->getValue(
@@ -271,7 +252,7 @@ class Shipping implements RateCollectorInterface
                 if ($carrier->getConfigData('shipment_requesttype')) {
                     $packages = $this->composePackagesForCarrier($carrier, $request);
                     if (!empty($packages)) {
-                        $sumResults = array();
+                        $sumResults = [];
                         foreach ($packages as $weight => $packageCount) {
                             $request->setPackageWeight($weight);
                             $result = $carrier->collectRates($request);
@@ -283,7 +264,7 @@ class Shipping implements RateCollectorInterface
                             $sumResults[] = $result;
                         }
                         if (!empty($sumResults) && count($sumResults) > 1) {
-                            $result = array();
+                            $result = [];
                             foreach ($sumResults as $res) {
                                 if (empty($result)) {
                                     $result = $res;
@@ -332,7 +313,7 @@ class Shipping implements RateCollectorInterface
     public function composePackagesForCarrier($carrier, $request)
     {
         $allItems = $request->getAllItems();
-        $fullItems = array();
+        $fullItems = [];
 
         $maxWeight = (double)$carrier->getConfigData('max_package_weight');
 
@@ -347,7 +328,7 @@ class Shipping implements RateCollectorInterface
             $qty = $item->getQty();
             $changeQty = true;
             $checkWeight = true;
-            $decimalItems = array();
+            $decimalItems = [];
 
             if ($item->getParentItem()) {
                 if (!$item->getParentItem()->getProduct()->getShipmentType()) {
@@ -374,10 +355,10 @@ class Shipping implements RateCollectorInterface
                         $itemWeight = $itemWeight * $item->getQty();
                         if ($itemWeight > $maxWeight) {
                             $qtyItem = floor($itemWeight / $maxWeight);
-                            $decimalItems[] = array('weight' => $maxWeight, 'qty' => $qtyItem);
+                            $decimalItems[] = ['weight' => $maxWeight, 'qty' => $qtyItem];
                             $weightItem = $this->mathDivision->getExactDivision($itemWeight, $maxWeight);
                             if ($weightItem) {
-                                $decimalItems[] = array('weight' => $weightItem, 'qty' => 1);
+                                $decimalItems[] = ['weight' => $weightItem, 'qty' => 1];
                             }
                             $checkWeight = false;
                         } else {
@@ -390,7 +371,7 @@ class Shipping implements RateCollectorInterface
             }
 
             if ($checkWeight && $maxWeight && $itemWeight > $maxWeight) {
-                return array();
+                return [];
             }
 
             if ($changeQty
@@ -427,7 +408,7 @@ class Shipping implements RateCollectorInterface
      */
     protected function _makePieces($items, $maxWeight)
     {
-        $pieces = array();
+        $pieces = [];
         if (!empty($items)) {
             $sumWeight = 0;
 

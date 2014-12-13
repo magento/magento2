@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Code\Generator;
 
@@ -89,24 +70,24 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         // with source class name
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Framework\Code\Generator\EntityAbstract',
-            array(self::SOURCE_CLASS)
+            [self::SOURCE_CLASS]
         );
         $this->assertAttributeEquals(self::SOURCE_CLASS, '_sourceClassName', $this->_model);
         $this->assertAttributeEquals(self::SOURCE_CLASS . 'Abstract', '_resultClassName', $this->_model);
 
         // with all arguments
-        $ioObject = $this->getMock('Magento\Framework\Code\Generator\Io', array(), array(), '', false);
+        $ioObject = $this->getMock('Magento\Framework\Code\Generator\Io', [], [], '', false);
         $codeGenerator = $this->getMock(
             'Magento\Framework\Code\Generator\CodeGenerator\Zend',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Framework\Code\Generator\EntityAbstract',
-            array(self::SOURCE_CLASS, self::RESULT_CLASS, $ioObject, $codeGenerator)
+            [self::SOURCE_CLASS, self::RESULT_CLASS, $ioObject, $codeGenerator]
         );
         $this->assertAttributeEquals(self::RESULT_CLASS, '_resultClassName', $this->_model);
         $this->assertAttributeEquals($ioObject, '_ioObject', $this->_model);
@@ -120,54 +101,54 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function generateDataProvider()
     {
-        return array(
-            'no_source_class' => array(
-                '$errors' => array('Source class ' . self::SOURCE_CLASS . ' doesn\'t exist.'),
+        return [
+            'no_source_class' => [
+                '$errors' => ['Source class ' . self::SOURCE_CLASS . ' doesn\'t exist.'],
                 '$isGeneration' => false,
-                '$classExistsFirst' => false
-            ),
-            'result_class_exists' => array(
-                '$errors' => array('Result class ' . self::RESULT_CLASS . ' already exists.'),
+                '$classExistsFirst' => false,
+            ],
+            'result_class_exists' => [
+                '$errors' => ['Result class ' . self::RESULT_CLASS . ' already exists.'],
                 '$isGeneration' => false,
                 '$classExistsFirst' => true,
-                '$classExistsSecond' => true
-            ),
-            'cant_create_generation_directory' => array(
-                '$errors' => array('Can\'t create directory ' . self::GENERATION_DIRECTORY . '.'),
+                '$classExistsSecond' => true,
+            ],
+            'cant_create_generation_directory' => [
+                '$errors' => ['Can\'t create directory ' . self::GENERATION_DIRECTORY . '.'],
                 '$isGeneration' => false,
                 '$classExistsFirst' => true,
                 '$classExistsSecond' => false,
-                '$makeGeneration' => false
-            ),
-            'cant_create_result_directory' => array(
-                '$errors' => array('Can\'t create directory ' . self::RESULT_DIRECTORY . '.'),
+                '$makeGeneration' => false,
+            ],
+            'cant_create_result_directory' => [
+                '$errors' => ['Can\'t create directory ' . self::RESULT_DIRECTORY . '.'],
                 '$isGeneration' => false,
                 '$classExistsFirst' => true,
                 '$classExistsSecond' => false,
                 '$makeGeneration' => true,
-                '$makeResultFile' => false
-            ),
-            'result_file_exists' => array(
-                '$errors' => array('Result file ' . self::RESULT_FILE . ' already exists.'),
+                '$makeResultFile' => false,
+            ],
+            'result_file_exists' => [
+                '$errors' => ['Result file ' . self::RESULT_FILE . ' already exists.'],
                 '$isGeneration' => false,
                 '$classExistsFirst' => true,
                 '$classExistsSecond' => false,
                 '$makeGeneration' => true,
                 '$makeResultFile' => true,
-                '$fileExists' => true
-            ),
-            'generate_no_data' => array(
-                '$errors' => array('Can\'t generate source code.'),
+                '$fileExists' => true,
+            ],
+            'generate_no_data' => [
+                '$errors' => ['Can\'t generate source code.'],
                 '$isGeneration' => true,
                 '$classExistsFirst' => true,
                 '$classExistsSecond' => false,
                 '$makeGeneration' => true,
                 '$makeResultFile' => true,
                 '$fileExists' => true,
-                '$isValid' => false
-            ),
-            'generate_ok' => array()
-        );
+                '$isValid' => false,
+            ],
+            'generate_ok' => []
+        ];
     }
 
     /**
@@ -194,7 +175,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      * @covers \Magento\Framework\Code\Generator\EntityAbstract::_fixCodeStyle
      */
     public function testGenerate(
-        $errors = array(),
+        $errors = [],
         $isGeneration = true,
         $classExistsFirst = true,
         $classExistsSecond = false,
@@ -214,7 +195,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
                 $fileExists
             );
         }
-        $abstractGetters = array('_getClassProperties', '_getClassMethods');
+        $abstractGetters = ['_getClassProperties', '_getClassMethods'];
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Framework\Code\Generator\EntityAbstract',
             $arguments,
@@ -226,7 +207,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         );
         // we need to mock abstract methods to set correct return value type
         foreach ($abstractGetters as $methodName) {
-            $this->_model->expects($this->any())->method($methodName)->will($this->returnValue(array()));
+            $this->_model->expects($this->any())->method($methodName)->will($this->returnValue([]));
         }
 
         $result = $this->_model->generate();
@@ -401,8 +382,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 
         $codeGenerator = $this->getMock(
             'Magento\Framework\Code\Generator\CodeGenerator\Zend',
-            array('setName', 'addProperties', 'addMethods', 'setClassDocBlock', 'generate'),
-            array(),
+            ['setName', 'addProperties', 'addMethods', 'setClassDocBlock', 'generate'],
+            [],
             '',
             false
         );
@@ -433,12 +414,12 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             $ioObject->expects($this->once())->method('writeResultFile')->with(self::RESULT_FILE, self::RESULT_CODE);
         }
 
-        return array(
+        return [
             'source_class' => $mocks['source_class'],
             'result_class' => $mocks['result_class'],
             'io_object' => $ioObject,
             'code_generator' => $codeGenerator,
             'definedClasses' => $mocks['definedClasses'],
-        );
+        ];
     }
 }

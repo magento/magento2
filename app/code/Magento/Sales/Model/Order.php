@@ -1,43 +1,24 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model;
 
 use Magento\Directory\Model\Currency;
+use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Sales\Api\Data\OrderInterface as ApiOrderInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Api\Data\OrderInterface as ApiOrderInterface;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Resource\Order\Address\Collection;
-use Magento\Sales\Model\Resource\Order\Item\Collection as ImportCollection;
+use Magento\Sales\Model\Resource\Order\Creditmemo\Collection as CreditmemoCollection;
 use Magento\Sales\Model\Resource\Order\Invoice\Collection as InvoiceCollection;
+use Magento\Sales\Model\Resource\Order\Item\Collection as ImportCollection;
 use Magento\Sales\Model\Resource\Order\Payment\Collection as PaymentCollection;
 use Magento\Sales\Model\Resource\Order\Shipment\Collection as ShipmentCollection;
 use Magento\Sales\Model\Resource\Order\Shipment\Track\Collection as TrackCollection;
-use Magento\Sales\Model\Resource\Order\Creditmemo\Collection as CreditmemoCollection;
 use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryCollection;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * Order model
@@ -318,7 +299,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     protected $entityType = 'order';
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -409,7 +390,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
@@ -438,7 +419,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         AttributeDataBuilder $customAttributeBuilder,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,
@@ -1465,7 +1446,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     public function getAllVisibleItems()
     {
         $items = [];
-        foreach ($this->getItemsCollection() as $item) {
+        foreach ($this->getItems() as $item) {
             if (!$item->isDeleted() && !$item->getParentItemId()) {
                 $items[] = $item;
             }
@@ -1488,7 +1469,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      */
     public function getItemByQuoteItemId($quoteItemId)
     {
-        foreach ($this->getItemsCollection() as $item) {
+        foreach ($this->getItems() as $item) {
             if ($item->getQuoteItemId() == $quoteItemId) {
                 return $item;
             }

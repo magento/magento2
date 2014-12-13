@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Reports\Model\Resource;
 
@@ -36,19 +17,19 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($resource);
         $this->_scopeConfig = $scopeConfig;
@@ -74,13 +55,13 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param array $types
      * @return $this
      */
-    public function updateCustomerType(\Magento\Reports\Model\Event $model, $visitorId, $customerId, $types = array())
+    public function updateCustomerType(\Magento\Reports\Model\Event $model, $visitorId, $customerId, $types = [])
     {
         if ($types) {
             $this->_getWriteAdapter()->update(
                 $this->getMainTable(),
-                array('subject_id' => (int) $customerId, 'subtype' => 0),
-                array('subject_id = ?' => (int) $visitorId, 'subtype = ?' => 1, 'event_type_id IN(?)' => $types)
+                ['subject_id' => (int) $customerId, 'subtype' => 0],
+                ['subject_id = ?' => (int) $visitorId, 'subtype = ?' => 1, 'event_type_id IN(?)' => $types]
             );
         }
         return $this;
@@ -103,7 +84,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $eventTypeId,
         $eventSubjectId,
         $subtype,
-        $skipIds = array()
+        $skipIds = []
     ) {
         $idFieldName = $collection->getResource()->getIdFieldName();
 
@@ -111,7 +92,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->select()
             ->from(
                 $this->getTable('report_event'),
-                array('event_id' => new \Zend_Db_Expr('MAX(event_id)'), 'object_id')
+                ['event_id' => new \Zend_Db_Expr('MAX(event_id)'), 'object_id']
             )
             ->where('event_type_id = ?', (int) $eventTypeId)
             ->where('subject_id = ?', (int) $eventSubjectId)
@@ -121,15 +102,15 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if ($skipIds) {
             if (!is_array($skipIds)) {
-                $skipIds = array((int) $skipIds);
+                $skipIds = [(int) $skipIds];
             }
             $derivedSelect->where('object_id NOT IN(?)', $skipIds);
         }
 
         $collection->getSelect()->joinInner(
-            array('evt' => new \Zend_Db_Expr("({$derivedSelect})")),
+            ['evt' => new \Zend_Db_Expr("({$derivedSelect})")],
             "{$idFieldName} = evt.object_id",
-            array()
+            []
         )->order('evt.event_id ' . \Magento\Framework\DB\Select::SQL_DESC);
 
         return $this;
@@ -143,7 +124,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCurrentStoreIds(array $predefinedStoreIds = null)
     {
-        $stores = array();
+        $stores = [];
         // get all or specified stores
         if ($this->_storeManager->getStore()->getId() == 0) {
             if (null !== $predefinedStoreIds) {
@@ -167,7 +148,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     $resourceStore = $this->_storeManager->getStore()->getGroup()->getStores();
                     break;
                 default:
-                    $resourceStore = array($this->_storeManager->getStore());
+                    $resourceStore = [$this->_storeManager->getStore()];
                     break;
             }
 
@@ -192,12 +173,12 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         while (true) {
             $select = $this->_getReadAdapter()->select()->from(
-                array('event_table' => $this->getMainTable()),
-                array('event_id')
+                ['event_table' => $this->getMainTable()],
+                ['event_id']
             )->joinLeft(
-                array('visitor_table' => $this->getTable('log_visitor')),
+                ['visitor_table' => $this->getTable('log_visitor')],
                 'event_table.subject_id = visitor_table.visitor_id',
-                array()
+                []
             )->where('visitor_table.visitor_id IS NULL')
                 ->where('event_table.subtype = ?', 1)
                 ->limit(1000);
@@ -207,7 +188,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 break;
             }
 
-            $this->_getWriteAdapter()->delete($this->getMainTable(), array('event_id IN(?)' => $eventIds));
+            $this->_getWriteAdapter()->delete($this->getMainTable(), ['event_id IN(?)' => $eventIds]);
         }
         return $this;
     }

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -67,6 +48,11 @@ class Observer
     protected $_localeResolver;
 
     /**
+     * @var \Magento\Framework\Registry
+     */
+    protected $_registry;
+
+    /**
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Tax\Model\Sales\Order\TaxFactory $orderTaxFactory
      * @param \Magento\Tax\Model\Sales\Order\Tax\ItemFactory $taxItemFactory
@@ -74,6 +60,7 @@ class Observer
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxData,
@@ -82,7 +69,8 @@ class Observer
         \Magento\Tax\Model\Calculation $calculation,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Tax\Model\Resource\Report\TaxFactory $reportTaxFactory,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Registry $registry
     ) {
         $this->_taxData = $taxData;
         $this->_orderTaxFactory = $orderTaxFactory;
@@ -91,6 +79,7 @@ class Observer
         $this->_localeDate = $localeDate;
         $this->_reportTaxFactory = $reportTaxFactory;
         $this->_localeResolver = $localeResolver;
+        $this->_registry = $registry;
     }
 
     /**
@@ -139,14 +128,14 @@ class Observer
         $getTaxesForItems = $order->getItemAppliedTaxes();
         $taxes = $order->getAppliedTaxes();
 
-        $ratesIdQuoteItemId = array();
+        $ratesIdQuoteItemId = [];
         if (!is_array($getTaxesForItems)) {
-            $getTaxesForItems = array();
+            $getTaxesForItems = [];
         }
         foreach ($getTaxesForItems as $quoteItemId => $taxesArray) {
             foreach ($taxesArray as $rates) {
                 if (count($rates['rates']) == 1) {
-                    $ratesIdQuoteItemId[$rates['id']][] = array(
+                    $ratesIdQuoteItemId[$rates['id']][] = [
                         'id' => $rates['item_id'],
                         'percent' => $rates['percent'],
                         'code' => $rates['rates'][0]['code'],
@@ -156,14 +145,14 @@ class Observer
                         'base_amount' => $rates['base_amount'],
                         'real_amount' => $rates['amount'],
                         'real_base_amount' => $rates['base_amount'],
-                    );
+                    ];
                 } else {
                     $percentDelta = $rates['percent'];
                     $percentSum = 0;
                     foreach ($rates['rates'] as $rate) {
                         $real_amount = $rates['amount'] * $rate['percent'] / $rates['percent'];
                         $real_base_amount = $rates['base_amount'] * $rate['percent'] / $rates['percent'];
-                        $ratesIdQuoteItemId[$rates['id']][] = array(
+                        $ratesIdQuoteItemId[$rates['id']][] = [
                             'id' => $rates['item_id'],
                             'percent' => $rate['percent'],
                             'code' => $rate['code'],
@@ -173,7 +162,7 @@ class Observer
                             'base_amount' => $rates['base_amount'],
                             'real_amount' => $real_amount,
                             'real_base_amount' => $real_base_amount,
-                        );
+                        ];
                         $percentSum += $rate['percent'];
                     }
 
@@ -203,7 +192,7 @@ class Observer
                 $priority = isset($tax['priority']) ? $tax['priority'] : 0;
                 $position = isset($tax['position']) ? $tax['position'] : 0;
                 $process = isset($row['process']) ? $row['process'] : 0;
-                $data = array(
+                $data = [
                     'order_id' => $order->getId(),
                     'code' => $tax['code'],
                     'title' => $tax['title'],
@@ -214,8 +203,8 @@ class Observer
                     'amount' => $row['amount'],
                     'base_amount' => $row['base_amount'],
                     'process' => $process,
-                    'base_real_amount' => $baseRealAmount
-                );
+                    'base_real_amount' => $baseRealAmount,
+                ];
 
                 /** @var $orderTax \Magento\Tax\Model\Sales\Order\Tax */
                 $orderTax = $this->_orderTaxFactory->create();
@@ -236,7 +225,7 @@ class Observer
                                 $associatedItemId = $item->getId();
                             }
 
-                            $data = array(
+                            $data = [
                                 'item_id' => $itemId,
                                 'tax_id' => $result->getTaxId(),
                                 'tax_percent' => $quoteItemId['percent'],
@@ -246,7 +235,7 @@ class Observer
                                 'real_amount' => $quoteItemId['real_amount'],
                                 'real_base_amount' => $quoteItemId['real_base_amount'],
                                 'taxable_item_type' => $quoteItemId['item_type'],
-                            );
+                            ];
                             /** @var $taxItem \Magento\Tax\Model\Sales\Order\Tax\Item */
                             $taxItem = $this->_taxItemFactory->create();
                             $taxItem->setData($data)->save();
@@ -291,6 +280,35 @@ class Observer
             $address->setExtraTaxAmount(0);
             $address->setBaseExtraTaxAmount(0);
         }
+        return $this;
+    }
+
+    /**
+     * Change default JavaScript templates for options rendering
+     *
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
+     */
+    public function updateProductOptions(\Magento\Framework\Event\Observer $observer)
+    {
+        $response = $observer->getEvent()->getResponseObject();
+        $options = $response->getAdditionalOptions();
+
+        $_product = $this->_registry->registry('current_product');
+        if (!$_product) {
+            return $this;
+        }
+
+        $algorithm = $this->_taxData->getCalculationAgorithm();
+        $options['calculationAlgorithm'] = $algorithm;
+        // prepare correct template for options render
+        if ($this->_taxData->displayBothPrices()) {
+            $options['optionTemplate'] =
+                '{{label}}{{#if finalPrice.value}} {{finalPrice.formatted}} ('
+                . __('Excl. tax:') . ' {{basePrice.formatted}}){{/if}}';
+        }
+
+        $response->setAdditionalOptions($options);
         return $this;
     }
 }

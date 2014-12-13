@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Model\Menu\Item;
 
@@ -65,15 +46,15 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_params = array(
+    protected $_params = [
         'id' => 'item',
         'title' => 'Item Title',
         'action' => '/system/config',
         'resource' => 'Magento_Backend::system_config',
         'dependsOnModule' => 'Magento_Backend',
         'dependsOnConfig' => 'system/config/isEnabled',
-        'toolTip' => 'Item tooltip'
-    );
+        'toolTip' => 'Item tooltip',
+    ];
 
     protected function setUp()
     {
@@ -99,7 +80,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function requiredParamsProvider()
     {
-        return array(array('id'), array('title'), array('resource'));
+        return [['id'], ['title'], ['resource']];
     }
 
     /**
@@ -122,22 +103,22 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function invalidParamsProvider()
     {
-        return array(
-            array('id', 'ab'),
-            array('id', 'abc$'),
-            array('title', 'a'),
-            array('title', '123456789012345678901234567890123456789012345678901'),
-            array('action', '1a'),
-            array('action', '12b|'),
-            array('resource', '1a'),
-            array('resource', '12b|'),
-            array('dependsOnModule', '1a'),
-            array('dependsOnModule', '12b|'),
-            array('dependsOnConfig', '1a'),
-            array('dependsOnConfig', '12b|'),
-            array('toolTip', 'a'),
-            array('toolTip', '123456789012345678901234567890123456789012345678901')
-        );
+        return [
+            ['id', 'ab'],
+            ['id', 'abc$'],
+            ['title', 'a'],
+            ['title', '123456789012345678901234567890123456789012345678901'],
+            ['action', '1a'],
+            ['action', '12b|'],
+            ['resource', '1a'],
+            ['resource', '12b|'],
+            ['dependsOnModule', '1a'],
+            ['dependsOnModule', '12b|'],
+            ['dependsOnConfig', '1a'],
+            ['dependsOnConfig', '12b|'],
+            ['toolTip', 'a'],
+            ['toolTip', '123456789012345678901234567890123456789012345678901']
+        ];
     }
 
     /**
@@ -166,52 +147,52 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function duplicateIdsProvider()
     {
-        return array(
-            array(
-                array(
-                    array(
+        return [
+            [
+                [
+                    [
                         'id' => 'item1',
                         'title' => 'Item 1',
                         'action' => 'adminhtml/controller/item1',
-                        'resource' => 'Namespace_Module::item1'
-                    ),
-                    array(
+                        'resource' => 'Namespace_Module::item1',
+                    ],
+                    [
                         'id' => 'item2',
                         'title' => 'Item 2',
                         'action' => 'adminhtml/controller/item2',
                         'resource' => 'Namespace_Module::item2'
-                    )
-                ),
-                array(
+                    ],
+                ],
+                [
                     'id' => 'item1',
                     'title' => 'Item 1',
                     'action' => 'adminhtml/controller/item1',
                     'resource' => 'Namespace_Module::item1'
-                )
-            ),
-            array(
-                array(
-                    array(
+                ],
+            ],
+            [
+                [
+                    [
                         'id' => 'Namespace_Module::item1',
                         'title' => 'Item 1',
                         'action' => 'adminhtml/controller/item1',
-                        'resource' => 'Namespace_Module::item1'
-                    ),
-                    array(
+                        'resource' => 'Namespace_Module::item1',
+                    ],
+                    [
                         'id' => 'Namespace_Module::item2',
                         'title' => 'Item 2',
                         'action' => 'adminhtml/controller/item2',
                         'resource' => 'Namespace_Module::item1'
-                    )
-                ),
-                array(
+                    ],
+                ],
+                [
                     'id' => 'Namespace_Module::item1',
                     'title' => 'Item 1',
                     'action' => 'adminhtml/controller/item1',
                     'resource' => 'Namespace_Module::item1'
-                )
-            )
-        );
+                ]
+            ]
+        ];
     }
 
     /**

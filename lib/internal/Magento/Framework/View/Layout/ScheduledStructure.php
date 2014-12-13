@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\View\Layout;
 
@@ -75,14 +56,14 @@ class ScheduledStructure
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
-        $this->_scheduledStructure = isset($data['scheduledStructure']) ? $data['scheduledStructure'] : array();
-        $this->_scheduledData = isset($data['scheduledData']) ? $data['scheduledData'] : array();
-        $this->_scheduledElements = isset($data['scheduledElements']) ? $data['scheduledElements'] : array();
-        $this->_scheduledMoves = isset($data['scheduledMoves']) ? $data['scheduledMoves'] : array();
-        $this->_scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : array();
-        $this->_scheduledPaths = isset($data['scheduledPaths']) ? $data['scheduledPaths'] : array();
+        $this->_scheduledStructure = isset($data['scheduledStructure']) ? $data['scheduledStructure'] : [];
+        $this->_scheduledData = isset($data['scheduledData']) ? $data['scheduledData'] : [];
+        $this->_scheduledElements = isset($data['scheduledElements']) ? $data['scheduledElements'] : [];
+        $this->_scheduledMoves = isset($data['scheduledMoves']) ? $data['scheduledMoves'] : [];
+        $this->_scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : [];
+        $this->_scheduledPaths = isset($data['scheduledPaths']) ? $data['scheduledPaths'] : [];
     }
 
     /**
@@ -122,7 +103,7 @@ class ScheduledStructure
      * @param array $default
      * @return bool|array
      */
-    public function getElement($elementName, $default = array())
+    public function getElement($elementName, $default = [])
     {
         return $this->hasElement($elementName) ? $this->_scheduledElements[$elementName] : $default;
     }
@@ -371,7 +352,7 @@ class ScheduledStructure
      */
     public function flushPaths()
     {
-        $this->_scheduledPaths = array();
+        $this->_scheduledPaths = [];
     }
 
     /**
@@ -382,7 +363,7 @@ class ScheduledStructure
     public function flushScheduledStructure()
     {
         $this->flushPaths();
-        $this->_scheduledElements = array();
-        $this->_scheduledStructure = array();
+        $this->_scheduledElements = [];
+        $this->_scheduledStructure = [];
     }
 }

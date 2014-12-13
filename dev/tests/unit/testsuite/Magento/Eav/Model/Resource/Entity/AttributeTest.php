@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Eav\Model\Resource\Entity;
 
@@ -34,7 +15,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         /** @var $resourceModel \Magento\Eav\Model\Resource\Entity\Attribute */
         list($adapter, $resourceModel) = $this->_prepareResourceModel();
 
-        $attributeData = array(
+        $attributeData = [
             'attribute_id' => '123',
             'entity_type_id' => 4,
             'attribute_code' => 'status',
@@ -46,23 +27,23 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'source_model' => 'Magento\Catalog\Model\Product\Attribute\Source\Status',
             'is_required' => 1,
             'is_user_defined' => 0,
-            'is_unique' => 0
-        );
+            'is_unique' => 0,
+        ];
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var $model \Magento\Framework\Model\AbstractModel */
         $arguments = $objectManagerHelper->getConstructArguments('Magento\Framework\Model\AbstractModel');
         $arguments['data'] = $attributeData;
         $model = $this->getMock('Magento\Framework\Model\AbstractModel', null, $arguments);
-        $model->setDefault(array('2'));
-        $model->setOption(array('delete' => array(1 => '', 2 => '')));
+        $model->setDefault(['2']);
+        $model->setOption(['delete' => [1 => '', 2 => '']]);
 
         $adapter->expects(
             $this->once()
         )->method(
             'insert'
         )->will(
-            $this->returnValueMap(array(array('eav_attribute', $attributeData, 1)))
+            $this->returnValueMap([['eav_attribute', $attributeData, 1]])
         );
 
         $adapter->expects(
@@ -71,13 +52,13 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'fetchRow'
         )->will(
             $this->returnValueMap(
-                array(
-                    array(
+                [
+                    [
                         'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
                         'WHERE (attribute_code="status") AND (entity_type_id="4")',
-                        $attributeData
-                    )
-                )
+                        $attributeData,
+                    ],
+                ]
             )
         );
         $adapter->expects(
@@ -86,8 +67,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'update'
         )->with(
             'eav_attribute',
-            array('default_value' => 2),
-            array('attribute_id = ?' => null)
+            ['default_value' => 2],
+            ['attribute_id = ?' => null]
         );
         $adapter->expects($this->never())->method('delete');
 
@@ -103,7 +84,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         /** @var $resourceModel \Magento\Eav\Model\Resource\Entity\Attribute */
         list($adapter, $resourceModel) = $this->_prepareResourceModel();
 
-        $attributeData = array(
+        $attributeData = [
             'entity_type_id' => 4,
             'attribute_code' => 'a_dropdown',
             'backend_model' => null,
@@ -114,23 +95,22 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Table',
             'is_required' => 0,
             'is_user_defined' => 1,
-            'is_unique' => 0
-        );
-
+            'is_unique' => 0,
+        ];
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var $model \Magento\Framework\Model\AbstractModel */
         $arguments = $objectManagerHelper->getConstructArguments('Magento\Framework\Model\AbstractModel');
         $arguments['data'] = $attributeData;
         $model = $this->getMock('Magento\Framework\Model\AbstractModel', null, $arguments);
-        $model->setOption(array('value' => array('option_1' => array('Backend Label', 'Frontend Label'))));
+        $model->setOption(['value' => ['option_1' => ['Backend Label', 'Frontend Label']]]);
 
         $adapter->expects(
             $this->any()
         )->method(
             'lastInsertId'
         )->will(
-            $this->returnValueMap(array(array('eav_attribute', 123), array('eav_attribute_option_value', 321)))
+            $this->returnValueMap([['eav_attribute', 123], ['eav_attribute_option_value', 321]])
         );
         $adapter->expects(
             $this->once()
@@ -138,7 +118,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'update'
         )->will(
             $this->returnValueMap(
-                array(array('eav_attribute', array('default_value' => ''), array('attribute_id = ?' => 123), 1))
+                [['eav_attribute', ['default_value' => ''], ['attribute_id = ?' => 123], 1]]
             )
         );
         $adapter->expects(
@@ -147,13 +127,13 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'fetchRow'
         )->will(
             $this->returnValueMap(
-                array(
-                    array(
+                [
+                    [
                         'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
                         'WHERE (attribute_code="a_dropdown") AND (entity_type_id="4")',
-                        false
-                    )
-                )
+                        false,
+                    ],
+                ]
             )
         );
         $adapter->expects(
@@ -161,7 +141,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         )->method(
             'delete'
         )->will(
-            $this->returnValueMap(array(array('eav_attribute_option_value', array('option_id = ?' => ''), 0)))
+            $this->returnValueMap([['eav_attribute_option_value', ['option_id = ?' => ''], 0]])
         );
         $adapter->expects(
             $this->exactly(4)
@@ -169,20 +149,20 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'insert'
         )->will(
             $this->returnValueMap(
-                array(
-                    array('eav_attribute', $attributeData, 1),
-                    array('eav_attribute_option', array('attribute_id' => 123, 'sort_order' => 0), 1),
-                    array(
+                [
+                    ['eav_attribute', $attributeData, 1],
+                    ['eav_attribute_option', ['attribute_id' => 123, 'sort_order' => 0], 1],
+                    [
                         'eav_attribute_option_value',
-                        array('option_id' => 123, 'store_id' => 0, 'value' => 'Backend Label'),
+                        ['option_id' => 123, 'store_id' => 0, 'value' => 'Backend Label'],
                         1
-                    ),
-                    array(
+                    ],
+                    [
                         'eav_attribute_option_value',
-                        array('option_id' => 123, 'store_id' => 1, 'value' => 'Frontend Label'),
+                        ['option_id' => 123, 'store_id' => 1, 'value' => 'Frontend Label'],
                         1
-                    )
-                )
+                    ],
+                ]
             )
         );
 
@@ -220,7 +200,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $adapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            array(
+            [
                 '_connect',
                 'delete',
                 'describeTable',
@@ -232,8 +212,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'beginTransaction',
                 'commit',
                 'rollback',
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
@@ -252,16 +232,16 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             'quote'
         )->will(
             $this->returnValueMap(
-                array(
-                    array(123, 123),
-                    array('4', '"4"'),
-                    array('a_dropdown', '"a_dropdown"'),
-                    array('status', '"status"')
-                )
+                [
+                    [123, 123],
+                    ['4', '"4"'],
+                    ['a_dropdown', '"a_dropdown"'],
+                    ['status', '"status"'],
+                ]
             )
         );
 
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManager', array('getStores'), array(), '', false);
+        $storeManager = $this->getMock('Magento\Store\Model\StoreManager', ['getStores'], [], '', false);
         $storeManager->expects(
             $this->any()
         )->method(
@@ -269,36 +249,36 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         )->with(
             true
         )->will(
-            $this->returnValue(array(
-                new \Magento\Framework\Object(array('id' => 0)),
-                new \Magento\Framework\Object(array('id' => 1)))
+            $this->returnValue([
+                new \Magento\Framework\Object(['id' => 0]),
+                new \Magento\Framework\Object(['id' => 1]), ]
             )
         );
 
         /** @var $resource \Magento\Framework\App\Resource */
         $resource = $this->getMock(
             'Magento\Framework\App\Resource',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false,
             false
         );
         $resource->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
         $resource->expects($this->any())->method('getConnection')->with()->will($this->returnValue($adapter));
-        $eavEntityType = $this->getMock('Magento\Eav\Model\Resource\Entity\Type', array(), array(), '', false, false);
-        $arguments = array(
+        $eavEntityType = $this->getMock('Magento\Eav\Model\Resource\Entity\Type', [], [], '', false, false);
+        $arguments = [
             'resource' => $resource,
             'storeManager' => $storeManager,
-            'eavEntityType' => $eavEntityType
-        );
+            'eavEntityType' => $eavEntityType,
+        ];
         $resourceModel = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute',
-            array('getAdditionalAttributeTable'),
+            ['getAdditionalAttributeTable'],
             $arguments
         );
 
-        return array($adapter, $resourceModel);
+        return [$adapter, $resourceModel];
     }
 
     /**

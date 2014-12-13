@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Email\Model\Template;
 
@@ -48,7 +29,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testViewDirective()
     {
         $url = $this->_model->viewDirective(
-            array('{{view url="Magento_Theme::favicon.ico"}}', 'view', ' url="Magento_Theme::favicon.ico"')
+            ['{{view url="Magento_Theme::favicon.ico"}}', 'view', ' url="Magento_Theme::favicon.ico"']
         );
         $this->assertStringEndsWith('favicon.ico', $url);
     }
@@ -61,11 +42,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testBlockDirective()
     {
         $class = 'Magento\\\\Theme\\\\Block\\\\Html\\\\Footer';
-        $data = array("{{block class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'}}",
+        $data = ["{{block class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'}}",
                 'block',
-                " class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'"
+                " class='$class' name='test.block' template='Magento_Theme::html/footer.phtml'",
 
-            );
+            ];
         $html = $this->_model->blockDirective($data);
         $this->assertContains('<div class="footer-container">', $html);
     }
@@ -77,18 +58,18 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testStoreDirective()
     {
         $url = $this->_model->storeDirective(
-            array('{{store direct_url="arbitrary_url/"}}', 'store', ' direct_url="arbitrary_url/"')
+            ['{{store direct_url="arbitrary_url/"}}', 'store', ' direct_url="arbitrary_url/"']
         );
         $this->assertStringMatchesFormat('http://example.com/%sarbitrary_url/', $url);
 
         $url = $this->_model->storeDirective(
-            array('{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"')
+            ['{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"']
         );
         $this->assertStringMatchesFormat('http://example.com/%stranslation/ajax/index/', $url);
 
         $this->_model->setStoreId(0);
         $url = $this->_model->storeDirective(
-            array('{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"')
+            ['{{store url="translation/ajax/index"}}', 'store', ' url="translation/ajax/index"']
         );
         $this->assertStringMatchesFormat('http://example.com/index.php/backend/translation/ajax/index/%A', $url);
     }
@@ -96,23 +77,23 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testEscapehtmlDirective()
     {
         $this->_model->setVariables(
-            array('first' => '<p><i>Hello</i> <b>world!</b></p>', 'second' => '<p>Hello <strong>world!</strong></p>')
+            ['first' => '<p><i>Hello</i> <b>world!</b></p>', 'second' => '<p>Hello <strong>world!</strong></p>']
         );
 
         $allowedTags = 'i,b';
 
-        $expectedResults = array(
+        $expectedResults = [
             'first' => '&lt;p&gt;<i>Hello</i> <b>world!</b>&lt;/p&gt;',
-            'second' => '&lt;p&gt;Hello &lt;strong&gt;world!&lt;/strong&gt;&lt;/p&gt;'
-        );
+            'second' => '&lt;p&gt;Hello &lt;strong&gt;world!&lt;/strong&gt;&lt;/p&gt;',
+        ];
 
         foreach ($expectedResults as $varName => $expectedResult) {
             $result = $this->_model->escapehtmlDirective(
-                array(
+                [
                     '{{escapehtml var=$' . $varName . ' allowed_tags=' . $allowedTags . '}}',
                     'escapehtml',
-                    ' var=$' . $varName . ' allowed_tags=' . $allowedTags
-                )
+                    ' var=$' . $varName . ' allowed_tags=' . $allowedTags,
+                ]
             );
             $this->assertEquals($expectedResult, $result);
         }
@@ -130,13 +111,13 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            array(
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => array(
-                    DirectoryList::THEMES => array(
-                        'path' => dirname(__DIR__) . '/_files/design'
-                    )
-                )
-            )
+            [
+                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
+                    DirectoryList::THEMES => [
+                        'path' => dirname(__DIR__) . '/_files/design',
+                    ],
+                ],
+            ]
         );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Email\Model\Template\Filter'
@@ -144,8 +125,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $themes = array('frontend' => 'test_default', 'adminhtml' => 'test_default');
-        $design = $objectManager->create('Magento\Core\Model\View\Design', array('themes' => $themes));
+        $themes = ['frontend' => 'test_default', 'adminhtml' => 'test_default'];
+        $design = $objectManager->create('Magento\Core\Model\View\Design', ['themes' => $themes]);
         $objectManager->addSharedInstance($design, 'Magento\Core\Model\View\Design');
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
@@ -166,7 +147,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('test_default');
 
         $actualOutput = $this->_model->layoutDirective(
-            array('{{layout ' . $directiveParams . '}}', 'layout', ' ' . $directiveParams)
+            ['{{layout ' . $directiveParams . '}}', 'layout', ' ' . $directiveParams]
         );
         $this->assertEquals($expectedOutput, trim($actualOutput));
     }
@@ -176,28 +157,28 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function layoutDirectiveDataProvider()
     {
-        $result = array(
-            'area parameter - omitted' => array(
+        $result = [
+            'area parameter - omitted' => [
                 'adminhtml',
                 'handle="email_template_test_handle"',
-                'E-mail content for frontend/test_default theme'
-            ),
-            'area parameter - frontend' => array(
+                'E-mail content for frontend/test_default theme',
+            ],
+            'area parameter - frontend' => [
                 'adminhtml',
                 'handle="email_template_test_handle" area="frontend"',
-                'E-mail content for frontend/test_default theme'
-            ),
-            'area parameter - backend' => array(
+                'E-mail content for frontend/test_default theme',
+            ],
+            'area parameter - backend' => [
                 'frontend',
                 'handle="email_template_test_handle" area="adminhtml"',
-                'E-mail content for adminhtml/test_default theme'
-            ),
-            'custom parameter' => array(
+                'E-mail content for adminhtml/test_default theme',
+            ],
+            'custom parameter' => [
                 'frontend',
                 'handle="email_template_test_handle" template="Magento_Core::sample_email_content_custom.phtml"',
-                'Custom E-mail content for frontend/test_default theme'
-            )
-        );
+                'Custom E-mail content for frontend/test_default theme',
+            ],
+        ];
         return $result;
     }
 }

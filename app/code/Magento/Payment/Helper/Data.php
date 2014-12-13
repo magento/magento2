@@ -1,28 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Payment\Helper;
 
+use Magento\Payment\Model\Method\Substitution;
 use Magento\Sales\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\Payment\Block\Form;
@@ -120,7 +102,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve method model object
      *
      * @param string $code
-     * @return MethodInterface|false
+     *
+     * @throws \Magento\Framework\Model\Exception
+     * @return MethodInterface
      */
     public function getMethodInstance($code)
     {
@@ -128,7 +112,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $this->getMethodModelConfigName($code),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        return $class ? $this->_methodFactory->create($class) : false;
+
+        if (!$class) {
+            throw new \UnexpectedValueException('Payment model name is not provided in config!');
+        }
+
+        return $this->_methodFactory->create($class);
     }
 
     /**
@@ -165,7 +154,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $res[] = $methodInstance;
         }
 
-        uasort($res, array($this, '_sortMethods'));
+        uasort($res, [$this, '_sortMethods']);
 
         return $res;
     }
@@ -278,17 +267,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getPaymentMethodList($sorted = true, $asLabelValue = false, $withGroups = false, $store = null)
     {
-        $methods = array();
-        $groups = array();
-        $groupRelations = array();
+        $methods = [];
+        $groups = [];
+        $groupRelations = [];
 
         foreach ($this->getPaymentMethods() as $code => $data) {
             if (isset($data['title'])) {
                 $methods[$code] = $data['title'];
             } else {
-                if ($this->getMethodInstance($code)) {
-                    $methods[$code] = $this->getMethodInstance($code)->getConfigData('title', $store);
-                }
+                $methods[$code] = $this->getMethodInstance($code)->getConfigData('title', $store);
             }
             if ($asLabelValue && $withGroups && isset($data['group'])) {
                 $groupRelations[$code] = $data['group'];
@@ -304,18 +291,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             asort($methods);
         }
         if ($asLabelValue) {
-            $labelValues = array();
+            $labelValues = [];
             foreach ($methods as $code => $title) {
-                $labelValues[$code] = array();
+                $labelValues[$code] = [];
             }
             foreach ($methods as $code => $title) {
                 if (isset($groups[$code])) {
                     $labelValues[$code]['label'] = $title;
                 } elseif (isset($groupRelations[$code])) {
                     unset($labelValues[$code]);
-                    $labelValues[$groupRelations[$code]]['value'][$code] = array('value' => $code, 'label' => $title);
+                    $labelValues[$groupRelations[$code]]['value'][$code] = ['value' => $code, 'label' => $title];
                 } else {
-                    $labelValues[$code] = array('value' => $code, 'label' => $title);
+                    $labelValues[$code] = ['value' => $code, 'label' => $title];
                 }
             }
             return $labelValues;

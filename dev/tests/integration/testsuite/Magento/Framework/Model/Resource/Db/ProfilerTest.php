@@ -2,26 +2,7 @@
 /**
  * Test for \Magento\Framework\Model\Resource\Db\Profiler
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Model\Resource\Db;
 
@@ -66,12 +47,12 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         $deploymentConfig = $objectManager->get('Magento\Framework\App\DeploymentConfig');
         $dbConfig = new DbConfig($deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
         $connectionConfig = $dbConfig->getConnection('default');
-        $connectionConfig['profiler'] = array(
+        $connectionConfig['profiler'] = [
             'class' => 'Magento\Framework\Model\Resource\Db\Profiler',
-            'enabled' => 'true'
-        );
+            'enabled' => 'true',
+        ];
 
-        return $objectManager->create('Magento\TestFramework\Db\Adapter\Mysql', array('config' => $connectionConfig));
+        return $objectManager->create('Magento\TestFramework\Db\Adapter\Mysql', ['config' => $connectionConfig]);
     }
 
     /**
@@ -114,24 +95,24 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
      */
     public function profileQueryDataProvider()
     {
-        return array(
-            array("SELECT * FROM %s", \Magento\Framework\DB\Profiler::SELECT),
-            array(
+        return [
+            ["SELECT * FROM %s", \Magento\Framework\DB\Profiler::SELECT],
+            [
                 "INSERT INTO %s (code, version, data_version) " .
                 "VALUES ('" .
                 self::$_testResourceName .
                 "', '1.1', '1.1')",
                 \Magento\Framework\DB\Profiler::INSERT
-            ),
-            array(
+            ],
+            [
                 "UPDATE %s SET version = '1.2' WHERE code = '" . self::$_testResourceName . "'",
                 \Magento\Framework\DB\Profiler::UPDATE
-            ),
-            array(
+            ],
+            [
                 "DELETE FROM %s WHERE code = '" . self::$_testResourceName . "'",
                 \Magento\Framework\DB\Profiler::DELETE
-            )
-        );
+            ]
+        ];
     }
 
     /**

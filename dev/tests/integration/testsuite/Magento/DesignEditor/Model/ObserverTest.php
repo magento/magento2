@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -56,12 +37,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         /** @var $pageAssets \Magento\Framework\View\Asset\GroupedCollection */
         $pageAssets = $objectManager->get('Magento\Framework\View\Asset\GroupedCollection');
 
-        $fixtureAssets = array(
-            array('file' => 'test.css', 'params' => array()),
-            array('file' => 'test_vde.css', 'params' => array('flag_name' => 'vde_design_mode')),
-            array('file' => 'test.js', 'params' => array()),
-            array('file' => 'test_vde.js', 'params' => array('flag_name' => 'vde_design_mode')),
-        );
+        $fixtureAssets = [
+            ['file' => 'test.css', 'params' => []],
+            ['file' => 'test_vde.css', 'params' => ['flag_name' => 'vde_design_mode']],
+            ['file' => 'test.js', 'params' => []],
+            ['file' => 'test_vde.js', 'params' => ['flag_name' => 'vde_design_mode']],
+        ];
 
         foreach ($fixtureAssets as $asset) {
             $pageAssets->add(
@@ -77,7 +58,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         /** @var $eventManager \Magento\Framework\Event\ManagerInterface */
         $eventManager = $objectManager->get('Magento\Framework\Event\ManagerInterface');
-        $eventManager->dispatch('layout_generate_blocks_after', array('layout' => $layout));
+        $eventManager->dispatch('layout_generate_blocks_after', ['layout' => $layout]);
 
         $actualAssets = array_keys($pageAssets->getAll());
         $this->assertEquals($expectedAssets, $actualAssets);
@@ -88,14 +69,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function cleanJsDataProvider()
     {
-        return array(
-            'vde area - design mode' => array('vde', '1', array('test.css', 'test_vde.css', 'test_vde.js')),
-            'vde area - non design mode' => array('vde', '0',
-                array('test.css', 'test_vde.css', 'test.js', 'test_vde.js')),
-            'default area - design mode' => array('default', '1',
-                array('test.css', 'test_vde.css', 'test.js', 'test_vde.js')),
-            'default area - non design mode' => array('default', '0',
-                array('test.css', 'test_vde.css', 'test.js', 'test_vde.js')),
-        );
+        return [
+            'vde area - design mode' => ['vde', '1', ['test.css', 'test_vde.css', 'test_vde.js']],
+            'vde area - non design mode' => ['vde', '0',
+                ['test.css', 'test_vde.css', 'test.js', 'test_vde.js'], ],
+            'default area - design mode' => ['default', '1',
+                ['test.css', 'test_vde.css', 'test.js', 'test_vde.js'], ],
+            'default area - non design mode' => ['default', '0',
+                ['test.css', 'test_vde.css', 'test.js', 'test_vde.js'], ],
+        ];
     }
 }

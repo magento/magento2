@@ -1,25 +1,5 @@
 // /**
-// //  * Magento
-//  *
-//  * NOTICE OF LICENSE
-//  *
-//  * This source file is subject to the Academic Free License (AFL 3.0)
-//  * that is bundled with this package in the file LICENSE_AFL.txt.
-//  * It is also available through the world-wide-web at this URL:
-//  * http://opensource.org/licenses/afl-3.0.php
-//  * If you did not receive a copy of the license and are unable to
-//  * obtain it through the world-wide-web, please send an email
-//  * to license@magentocommerce.com so we can send you a copy immediately.
-//  *
-//  * DISCLAIMER
-//  *
-//  * Do not edit or add to this file if you wish to upgrade Magento to newer
-//  * versions in the future. If you wish to customize Magento for your
-//  * needs please refer to http://www.magentocommerce.com for more information.
-//  *
-//  * @category    design
-//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 //  */
 
 @product-name-text-decoration: none;
@@ -80,7 +60,7 @@
             width: 150px;
             max-width: 100%;
             .page-products & {
-                width: 250px;
+                width: 240px;
             }
         }
 
@@ -251,103 +231,96 @@
 }
 
 .responsive-min-m(@break) when (@break = @screen-s) {
-    .product {
-        &-item {
-            .products-grid & {
-                margin-bottom: @indent-base;
-            }
-            &-info {
-                .products-grid &:hover {
-                    margin: -10px;
-                    padding: 9px;
-                    border: 1px solid #bbb;
-                    @_shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
-                    .css(box-shadow, @_shadow);
-                    position: relative;
-                    z-index: 2;
-                    background: @color-white;
-                    .product-item-inner {
-                        display: block;
-                    }
-                }
-            }
-            &-inner {
-                display: none;
-                position: absolute;
-                left: 0;
-                right: -1px;
-                z-index: 2;
-                background: @color-white;
-                padding: 0 9px 9px 9px;
-                margin: 9px 0 0 -1px;
-                border: 1px solid #bbb;
-                border-top: none;
-                @_shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
-                .css(box-shadow, @_shadow);
-            }
-
-            &-actions {
+    .product-item-info {
+        .products-grid &:hover {
+            margin: -10px;
+            padding: 9px;
+            border: 1px solid #bbb;
+            @_shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
+            .css(box-shadow, @_shadow);
+            position: relative;
+            z-index: 2;
+            background: @color-white;
+            .product-item-inner {
                 display: block;
-                .products-grid & {
-                    visibility: hidden;
-                    margin: -@indent-s-base 0 @indent-s-base;
-                }
-                .actions-primary + .actions-secondary {
-                    display: table-cell;
-                    width: 50%;
-                    padding-left: 10px;
-                    > .action {
-                        margin-right: 10px;
-                        &:last-child {
-                            margin-right: 0;
-                        }
-                    }
-                }
-                .actions-primary { display: table-cell; }
-                .products-grid .product-item-info:hover & {
-                    visibility: visible;
-                }
             }
         }
     }
-    
-    .products-grid .product-item { width: 100%/3 }
-    .layout-1 .products-grid .product-item { width: 100%/3 }
-    .layout-3 .products-grid .product-item { width: 100%/3 }
+    .product-item-inner {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: -1px;
+        z-index: 2;
+        background: @color-white;
+        padding: 0 9px 9px 9px;
+        margin: 9px 0 0 -1px;
+        border: 1px solid #bbb;
+        border-top: none;
+        @_shadow: 3px 4px 4px 0 rgba(0, 0, 0, .3);
+        .css(box-shadow, @_shadow);
+    }
+
+    .product-item-actions {
+        display: block;
+        .products-grid & {
+            visibility: hidden;
+            margin: -@indent-s-base 0 @indent-s-base;
+        }
+        .actions-primary + .actions-secondary {
+            display: table-cell;
+            width: 50%;
+            padding-left: 10px;
+            > .action {
+                margin-right: 10px;
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+        .actions-primary { display: table-cell; }
+        .products-grid .product-item-info:hover & {
+            visibility: visible;
+        }
+    }
+
+    .products-grid {
+        .product-item {
+            width: 100%/3;
+            margin-bottom: @indent-base;
+        }
+    }
+
+    .page-layout-1column .products-grid .product-item { width: 100%/3 }
+    .page-layout-3columns .products-grid .product-item { width: 100%/3 }
     .page-products .products-grid .product-item { width: 100%/3 }
-    .page-products.layout-1 .products-grid .product-item { width: 100%/3 }
-    .page-products.layout-3 .products-grid .product-item { width: 100%/3 }
+    .page-products.page-layout-1column .products-grid .product-item { width: 100%/3 }
+    .page-products.page-layout-3columns .products-grid .product-item { width: 100%/3 }
 }
 
+//
 //
 //    Desktop
 //--------------------------------------
 
 .responsive-min-l(@break) when (@break = @screen-m) {
     .page-products .products-grid .product-item { width: 100%/3 }
-    .page-products.layout-1 .products-grid .product-item { width: 100%/4 }
-    .page-products.layout-3 .products-grid .product-item { width: 100%/2 }
+    .page-products.page-layout-1column .products-grid .product-item { width: 100%/4 }
+    .page-products.page-layout-3columns .products-grid .product-item { width: 100%/2 }
 }
 .responsive-min-l(@break) when (@break = @screen-l) {
     .products-grid .product-item { width: 100%/5 }
-    .layout-1 .products-grid .product-item { width: 100%/6 }
-    .layout-3 .products-grid .product-item { width: 100%/4 }
+    .page-layout-1column .products-grid .product-item { width: 100%/6 }
+    .page-layout-3columns .products-grid .product-item { width: 100%/4 }
     .page-products .products-grid .product-items { margin: 0; }
     .page-products .products-grid .product-item {
-        width: 23%;
-        margin-left: calc(~"(100% - 4 * 23%) / 3");
+        width: 24%;
+        margin-left: calc(~"(100% - 4 * 24%) / 3");
         padding: 0;
         &:nth-child(4n+1) {
             margin-left: 0;
         }
     }
-    .page-products.layout-1 .products-grid .product-item { width: 100%/5 }
-    .page-products.layout-3 .products-grid .product-item { width: 100%/4 }
-}
-
-.responsive-min-l(@break) when (@break = @screen-xl) {
-    .page-products .products-grid .product-item {
-        width: 24.7%;
-        margin-left: calc(~"(100% - 4 * 24.7%) / 3");
-    }
+    .page-products.page-layout-1column .products-grid .product-item { width: 100%/5 }
+    .page-products.page-layout-3columns .products-grid .product-item { width: 100%/4 }
 }

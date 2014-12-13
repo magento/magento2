@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ImportExport\Model;
 
@@ -50,14 +31,14 @@ abstract class AbstractModel extends \Magento\Framework\Object
      *
      * @var string[]
      */
-    protected $_debugReplacePrivateDataKeys = array();
+    protected $_debugReplacePrivateDataKeys = [];
 
     /**
      * Contains all log information
      *
      * @var string[]
      */
-    protected $_logTrace = array();
+    protected $_logTrace = [];
 
     /**
      * @var \Magento\Framework\Logger
@@ -84,7 +65,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Logger\AdapterFactory $adapterFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_logger = $logger;
         $this->_varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
@@ -114,19 +95,19 @@ abstract class AbstractModel extends \Magento\Framework\Object
             $dirName = date('Y/m/d/');
             $fileName = join(
                 '_',
-                array(
+                [
                     str_replace(':', '-', $this->getRunAt()),
                     $this->getScheduledOperationId(),
                     $this->getOperationType(),
                     $this->getEntity()
-                )
+                ]
             );
             $path = 'import_export/' . $dirName;
             $this->_varDirectory->create($path);
 
             $fileName = $path . $fileName . '.log';
             $this->_logInstance = $this->_adapterFactory->create(
-                array('fileName' => $this->_varDirectory->getAbsolutePath($fileName))
+                ['fileName' => $this->_varDirectory->getAbsolutePath($fileName)]
             )->setFilterDataKeys(
                 $this->_debugReplacePrivateDataKeys
             );

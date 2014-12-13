@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Integration\Service\V1;
@@ -48,9 +29,9 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
         $loggerMock->expects($this->any())->method('logException')->will($this->returnSelf());
         $this->_service = $objectManager->create(
             'Magento\Integration\Service\V1\AuthorizationService',
-            array(
+            [
                 'logger' => $loggerMock
-            )
+            ]
         );
 
         $this->userContextMock = $this->getMockForAbstractClass('Magento\Authorization\Model\UserContextInterface');
@@ -74,7 +55,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
     public function testGrantPermissions()
     {
         $integrationId = rand(1, 1000);
-        $resources = array('Magento_Sales::create', 'Magento_Cms::page', 'Magento_Adminhtml::dashboard');
+        $resources = ['Magento_Sales::create', 'Magento_Cms::page', 'Magento_Adminhtml::dashboard'];
         /** Preconditions check */
         $this->_ensurePermissionsAreNotGranted($integrationId, $resources);
 
@@ -107,18 +88,18 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
 
     public function changePermissionsProvider()
     {
-        return array(
-            'integration' => array(
+        return [
+            'integration' => [
                 'integrationId' => rand(1, 1000),
-                'initialResources' => array('Magento_Cms::page', 'Magento_Adminhtml::dashboard'),
-                'newResources' => array('Magento_Sales::cancel', 'Magento_Cms::page_delete')
-            ),
-            'integration clear permissions' => array(
+                'initialResources' => ['Magento_Cms::page', 'Magento_Adminhtml::dashboard'],
+                'newResources' => ['Magento_Sales::cancel', 'Magento_Cms::page_delete'],
+            ],
+            'integration clear permissions' => [
                 'integrationId' => rand(1, 1000),
-                'initialResources' => array('Magento_Sales::capture', 'Magento_Cms::page_delete'),
-                'newResources' => array()
-            )
-        );
+                'initialResources' => ['Magento_Sales::capture', 'Magento_Cms::page_delete'],
+                'newResources' => [],
+            ]
+        ];
     }
 
     /**
@@ -128,7 +109,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
     {
         $integrationId = rand(1, 1000);
         $this->_service->grantAllPermissions($integrationId);
-        $this->_ensurePermissionsAreGranted($integrationId, array('Magento_Adminhtml::all'));
+        $this->_ensurePermissionsAreGranted($integrationId, ['Magento_Adminhtml::all']);
     }
 
     /**

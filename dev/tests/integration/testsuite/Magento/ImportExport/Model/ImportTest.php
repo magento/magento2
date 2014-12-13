@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ImportExport\Model;
 
@@ -45,34 +26,34 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_entityBehaviors = array(
-        'catalog_product' => array(
+    protected $_entityBehaviors = [
+        'catalog_product' => [
             'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
-            'code' => 'basic_behavior'
-        ),
-        'customer_composite' => array(
+            'code' => 'basic_behavior',
+        ],
+        'customer_composite' => [
             'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
-            'code' => 'basic_behavior'
-        ),
-        'customer' => array(
+            'code' => 'basic_behavior',
+        ],
+        'customer' => [
             'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
-            'code' => 'custom_behavior'
-        ),
-        'customer_address' => array(
+            'code' => 'custom_behavior',
+        ],
+        'customer_address' => [
             'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
-            'code' => 'custom_behavior'
-        )
-    );
+            'code' => 'custom_behavior',
+        ],
+    ];
 
     /**
      * Expected unique behaviors
      *
      * @var array
      */
-    protected $_uniqueBehaviors = array(
+    protected $_uniqueBehaviors = [
         'basic_behavior' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
-        'custom_behavior' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom'
-    );
+        'custom_behavior' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
+    ];
 
     protected function setUp()
     {
@@ -81,7 +62,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\ImportExport\Model\Import',
-            array('importConfig' => $this->_importConfig)
+            ['importConfig' => $this->_importConfig]
         );
     }
 
@@ -115,7 +96,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject $source */
         $source = $this->getMockForAbstractClass(
             'Magento\ImportExport\Model\Import\AbstractSource',
-            array(array('sku', 'name'))
+            [['sku', 'name']]
         );
         $source->expects($this->any())->method('_getNextRow')->will($this->returnValue(false));
         $this->assertTrue($this->_model->validateSource($source));
@@ -129,7 +110,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     {
         $source = $this->getMockForAbstractClass(
             'Magento\ImportExport\Model\Import\AbstractSource',
-            array(),
+            [],
             '',
             false
         );
@@ -178,7 +159,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityBehaviorsWithUnknownBehavior()
     {
         $this->_importConfig->merge(
-            array('entities' => array('customer' => array('behaviorModel' => 'Unknown_Behavior_Class')))
+            ['entities' => ['customer' => ['behaviorModel' => 'Unknown_Behavior_Class']]]
         );
         $importModel = $this->_model;
         $actualBehaviors = $importModel->getEntityBehaviors();

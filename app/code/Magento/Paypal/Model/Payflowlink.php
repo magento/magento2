@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Paypal\Model;
 
@@ -47,7 +28,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      *
      * @var array
      */
-    protected $_responseParamsMappings = array(
+    protected $_responseParamsMappings = [
         'firstname' => 'billtofirstname',
         'lastname' => 'billtolastname',
         'address' => 'billtostreet',
@@ -68,8 +49,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         'faxtoship' => 'shiptofax',
         'method' => 'tender',
         'cscmatch' => 'cvv2match',
-        'type' => 'trxtype'
-    );
+        'type' => 'trxtype',
+    ];
 
     /**
      * Payment method code
@@ -160,7 +141,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Centinel\Model\Service $centinelService
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
@@ -183,7 +164,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Centinel\Model\Service $centinelService,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Paypal\Model\ConfigFactory $configFactory,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
@@ -193,7 +174,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         \Magento\Framework\App\RequestInterface $requestHttp,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         OrderSender $orderSender,
-        array $data = array()
+        array $data = []
     ) {
         $this->_requestFactory = $requestFactory;
         $this->quoteRepository = $quoteRepository;
@@ -339,7 +320,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      */
     public function process($responseData)
     {
-        $debugData = array('response' => $responseData);
+        $debugData = ['response' => $responseData];
         $this->_debug($debugData);
 
         $this->setResponseData($responseData);

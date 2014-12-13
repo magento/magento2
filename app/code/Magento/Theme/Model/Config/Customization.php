@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Theme\Model\Config;
 
@@ -29,7 +10,7 @@ namespace Magento\Theme\Model\Config;
 class Customization
 {
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -60,12 +41,12 @@ class Customization
     protected $_unassignedTheme;
 
     /**
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider
      */
     public function __construct(
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider
     ) {
@@ -109,13 +90,13 @@ class Customization
      */
     public function getStoresByThemes()
     {
-        $storesByThemes = array();
+        $storesByThemes = [];
         $stores = $this->_storeManager->getStores();
         /** @var $store \Magento\Store\Model\Store */
         foreach ($stores as $store) {
             $themeId = $this->_getConfigurationThemeId($store);
             if (!isset($storesByThemes[$themeId])) {
-                $storesByThemes[$themeId] = array();
+                $storesByThemes[$themeId] = [];
             }
             $storesByThemes[$themeId][] = $store;
         }
@@ -170,7 +151,7 @@ class Customization
     {
         return $this->_design->getConfigurationDesignTheme(
             \Magento\Framework\App\Area::AREA_FRONTEND,
-            array('store' => $store)
+            ['store' => $store]
         );
     }
 
@@ -190,8 +171,8 @@ class Customization
 
         $assignedThemes = $this->getStoresByThemes();
 
-        $this->_assignedTheme = array();
-        $this->_unassignedTheme = array();
+        $this->_assignedTheme = [];
+        $this->_unassignedTheme = [];
 
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
         foreach ($themeCollection as $theme) {

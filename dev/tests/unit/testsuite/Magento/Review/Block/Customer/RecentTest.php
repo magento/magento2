@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Review\Block\Customer;
 
@@ -45,13 +26,13 @@ class RecentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject */
     protected $currentCustomer;
 
-    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('\Magento\Framework\StoreManagerInterface');
-        $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', array(), array(), '', false);
+        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->context->expects(
             $this->any()
         )->method(
@@ -61,15 +42,15 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         );
         $this->collection = $this->getMock(
             'Magento\Review\Model\Resource\Review\Product\Collection',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->collectionFactory = $this->getMock(
             'Magento\Review\Model\Resource\Review\Product\CollectionFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
@@ -82,8 +63,8 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         );
         $this->currentCustomer = $this->getMock(
             'Magento\Customer\Helper\Session\CurrentCustomer',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -91,11 +72,11 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->object = $this->objectManagerHelper->getObject(
             'Magento\Review\Block\Customer\Recent',
-            array(
+            [
                 'context' => $this->context,
                 'collectionFactory' => $this->collectionFactory,
                 'currentCustomer' => $this->currentCustomer
-            )
+            ]
         );
     }
 
@@ -106,7 +87,7 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getStore'
         )->will(
-            $this->returnValue(new \Magento\Framework\Object(array('id' => 42)))
+            $this->returnValue(new \Magento\Framework\Object(['id' => 42]))
         );
         $this->currentCustomer->expects($this->any())->method('getCustomerId')->will($this->returnValue(4242));
 

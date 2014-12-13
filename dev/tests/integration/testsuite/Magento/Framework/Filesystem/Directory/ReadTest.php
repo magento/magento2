@@ -2,26 +2,7 @@
 /**
  * Test for \Magento\Framework\Filesystem\Directory\Read
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Filesystem\Directory;
 
@@ -83,11 +64,11 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function readProvider()
     {
-        return array(
-            array('foo', null, array('bar', 'file_three.txt')),
-            array('foo/bar', null, array('baz', 'file_two.txt')),
-            array('foo', 'bar', array('bar/baz', 'bar/file_two.txt'))
-        );
+        return [
+            ['foo', null, ['bar', 'file_three.txt']],
+            ['foo/bar', null, ['baz', 'file_two.txt']],
+            ['foo', 'bar', ['bar/baz', 'bar/file_two.txt']]
+        ];
     }
 
     /**
@@ -114,11 +95,11 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function searchProvider()
     {
-        return array(
-            array('foo', 'bar/*', array('bar/file_two.txt', 'bar/baz')),
-            array('foo', '/*/*.txt', array('bar/file_two.txt')),
-            array('foo', '/notfound/', array())
-        );
+        return [
+            ['foo', 'bar/*', ['bar/file_two.txt', 'bar/baz']],
+            ['foo', '/*/*.txt', ['bar/file_two.txt']],
+            ['foo', '/notfound/', []]
+        ];
     }
 
     /**
@@ -142,7 +123,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function existsProvider()
     {
-        return array(array('foo', 'bar', true), array('foo', 'bar/baz/', true), array('foo', 'bar/notexists', false));
+        return [['foo', 'bar', true], ['foo', 'bar/baz/', true], ['foo', 'bar/notexists', false]];
     }
 
     /**
@@ -155,7 +136,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     public function testStat($dirPath, $path)
     {
         $dir = $this->getDirectoryInstance($dirPath);
-        $expectedInfo = array(
+        $expectedInfo = [
             'dev',
             'ino',
             'mode',
@@ -168,8 +149,8 @@ class ReadTest extends \PHPUnit_Framework_TestCase
             'mtime',
             'ctime',
             'blksize',
-            'blocks'
-        );
+            'blocks',
+        ];
         $result = $dir->stat($path);
         foreach ($expectedInfo as $key) {
             $this->assertTrue(array_key_exists($key, $result));
@@ -183,7 +164,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function statProvider()
     {
-        return array(array('foo', 'bar'), array('foo', 'file_three.txt'));
+        return [['foo', 'bar'], ['foo', 'file_three.txt']];
     }
 
     /**
@@ -231,7 +212,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function isReadableProvider()
     {
-        return array(array('foo', 'bar', true), array('foo', 'file_three.txt', true));
+        return [['foo', 'bar', true], ['foo', 'file_three.txt', true]];
     }
 
     /**
@@ -241,7 +222,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function isFileProvider()
     {
-        return array(array('bar', false), array('file_three.txt', true));
+        return [['bar', false], ['file_three.txt', true]];
     }
 
     /**
@@ -251,7 +232,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function isDirectoryProvider()
     {
-        return array(array('bar', true), array('file_three.txt', false));
+        return [['bar', true], ['file_three.txt', false]];
     }
 
     /**
@@ -284,10 +265,10 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function readFileProvider()
     {
-        return array(
-            array('popup.csv', 'var myData = 5;'),
-            array('data.csv', '"field1", "field2"' . "\n" . '"field3", "field4"' . "\n")
-        );
+        return [
+            ['popup.csv', 'var myData = 5;'],
+            ['data.csv', '"field1", "field2"' . "\n" . '"field3", "field4"' . "\n"]
+        ];
     }
 
     /**
@@ -311,7 +292,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadRecursively()
     {
-        $expected = array('bar/baz/file_one.txt', 'bar', 'bar/baz', 'bar/file_two.txt', 'file_three.txt');
+        $expected = ['bar/baz/file_one.txt', 'bar', 'bar/baz', 'bar/file_two.txt', 'file_three.txt'];
 
         $dir = $this->getDirectoryInstance('foo');
         $actual = $dir->readRecursively('');

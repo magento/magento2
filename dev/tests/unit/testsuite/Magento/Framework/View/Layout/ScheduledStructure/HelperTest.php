@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\View\Layout\ScheduledStructure;
@@ -92,10 +73,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      */
     public function providerScheduleStructure()
     {
-        return array(
-            array('current_node', 'current_node', $this->once(), $this->once()),
-            array('', 'parent_node_schedule_block0', $this->never(), $this->never())
-        );
+        return [
+            ['current_node', 'current_node', $this->once(), $this->once()],
+            ['', 'parent_node_schedule_block0', $this->never(), $this->never()]
+        ];
     }
 
     public function testScheduleNonExistentElement()
@@ -141,16 +122,16 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                             Layout\ScheduledStructure\Helper::SCHEDULED_STRUCTURE_INDEX_PARENT_NAME => $parentName,
                             Layout\ScheduledStructure\Helper::SCHEDULED_STRUCTURE_INDEX_SIBLING_NAME => $siblingName,
                             Layout\ScheduledStructure\Helper::SCHEDULED_STRUCTURE_INDEX_IS_AFTER => true,
-                        ]
+                        ],
                     ],
-                    [$parentName, null, []]
+                    [$parentName, null, []],
                 ]
             )
         );
         $scheduledStructure->expects($this->any())->method('getStructureElementData')->will(
             $this->returnValueMap([
                 [$key, null, $data],
-                [$parentName, null, $data]
+                [$parentName, null, $data],
             ])
         );
         $scheduledStructure->expects($this->any())->method('hasStructureElement')->will($this->returnValue(true));

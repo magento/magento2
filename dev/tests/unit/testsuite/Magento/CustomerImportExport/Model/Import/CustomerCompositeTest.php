@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
@@ -38,12 +19,12 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $_customerAttributes = array('firstname', 'lastname', 'dob');
+    protected $_customerAttributes = ['firstname', 'lastname', 'dob'];
 
     /**
      * @var array
      */
-    protected $_addressAttributes = array('city', 'country', 'street');
+    protected $_addressAttributes = ['city', 'country', 'street'];
 
     /**
      * @var \Magento\Core\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
@@ -95,19 +76,19 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_preparedData = array(
+    protected $_preparedData = [
         '_scope' => CustomerComposite::SCOPE_DEFAULT,
         Address::COLUMN_WEBSITE => 'admin',
         Address::COLUMN_EMAIL => 'test@qwewqeq.com',
-        Address::COLUMN_ADDRESS_ID => null
-    );
+        Address::COLUMN_ADDRESS_ID => null,
+    ];
 
     /**
      * List of mocked methods for customer and address entity adapters
      *
      * @var array
      */
-    protected $_entityMockedMethods = array(
+    protected $_entityMockedMethods = [
         'validateRow',
         'getErrorMessages',
         'getErrorsCount',
@@ -117,60 +98,60 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         'getProcessedEntitiesCount',
         'setParameters',
         'setSource',
-        'importData'
-    );
+        'importData',
+    ];
 
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $translateInline = $this->getMock('\Magento\Framework\Translate\InlineInterface', array(), array(), '', false);
+        $translateInline = $this->getMock('\Magento\Framework\Translate\InlineInterface', [], [], '', false);
         $translateInline->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
 
         $context =
-            $this->getMock('Magento\Framework\App\Helper\Context', array('getTranslateInline'), array(), '', false);
+            $this->getMock('Magento\Framework\App\Helper\Context', ['getTranslateInline'], [], '', false);
         $context->expects($this->any())->method('getTranslateInline')->will($this->returnValue($translateInline));
 
-        $data = array(
+        $data = [
             'context' => $context,
-            'locale' => $this->getMock('Magento\Framework\Locale', array(), array(), '', false),
-            'dateModel' => $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', array(), array(), '', false)
-        );
+            'locale' => $this->getMock('Magento\Framework\Locale', [], [], '', false),
+            'dateModel' => $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false),
+        ];
         $this->_coreHelper = $objectManager->getObject('Magento\Core\Helper\Data', $data);
         $this->_string = new \Magento\Framework\Stdlib\String();
 
         $this->_importFactory = $this->getMock(
             'Magento\ImportExport\Model\ImportFactory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->_resource = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false);
+        $this->_resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->_resourceHelper = $this->getMock(
             'Magento\ImportExport\Model\Resource\Helper',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->_dataFactory = $this->getMock(
             'Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->_customerFactory = $this->getMock(
             'Magento\CustomerImportExport\Model\Import\CustomerFactory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->_addressFactory = $this->getMock(
             'Magento\CustomerImportExport\Model\Import\AddressFactory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -216,13 +197,13 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelMockForPrepareRowForDb()
     {
-        $customerEntity = $this->_getCustomerEntityMock(array('validateRow'));
+        $customerEntity = $this->_getCustomerEntityMock(['validateRow']);
         $customerEntity->expects($this->any())->method('validateRow')->will($this->returnValue(true));
 
-        $customerStorage = $this->getMock('stdClass', array('getCustomerId'));
+        $customerStorage = $this->getMock('stdClass', ['getCustomerId']);
         $customerStorage->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
 
-        $addressEntity = $this->_getAddressEntityMock(array('validateRow', 'getCustomerStorage'));
+        $addressEntity = $this->_getAddressEntityMock(['validateRow', 'getCustomerStorage']);
         $addressEntity->expects($this->any())->method('validateRow')->will($this->returnValue(true));
         $addressEntity->expects(
             $this->any()
@@ -232,13 +213,13 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($customerStorage)
         );
 
-        $dataSourceMock = $this->getMock('stdClass', array('cleanBunches', 'saveBunch'));
+        $dataSourceMock = $this->getMock('stdClass', ['cleanBunches', 'saveBunch']);
         $dataSourceMock->expects(
             $this->any()
         )->method(
             'saveBunch'
         )->will(
-            $this->returnCallback(array($this, 'verifyPrepareRowForDbData'))
+            $this->returnCallback([$this, 'verifyPrepareRowForDbData'])
         );
 
         $data = $this->_getModelDependencies();
@@ -292,14 +273,14 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $customerEntity = $this->getMock(
             'Magento\CustomerImportExport\Model\Import\Customer',
             $mockedMethods,
-            array(),
+            [],
             '',
             false
         );
 
-        $attributeList = array();
+        $attributeList = [];
         foreach ($this->_customerAttributes as $code) {
-            $attribute = new \Magento\Framework\Object(array('attribute_code' => $code));
+            $attribute = new \Magento\Framework\Object(['attribute_code' => $code]);
             $attributeList[] = $attribute;
         }
         $customerEntity->expects(
@@ -327,14 +308,14 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $addressEntity = $this->getMock(
             'Magento\CustomerImportExport\Model\Import\Address',
             $mockedMethods,
-            array(),
+            [],
             '',
             false
         );
 
-        $attributeList = array();
+        $attributeList = [];
         foreach ($this->_addressAttributes as $code) {
-            $attribute = new \Magento\Framework\Object(array('attribute_code' => $code));
+            $attribute = new \Magento\Framework\Object(['attribute_code' => $code]);
             $attributeList[] = $attribute;
         }
         $addressEntity->expects(
@@ -355,18 +336,18 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelDependencies()
     {
-        $data = array(
+        $data = [
             'data_source_model' => 'not_used',
             'customer_data_source_model' => 'not_used',
             'address_data_source_model' => 'not_used',
             'connection' => 'not_used',
-            'helpers' => array(),
+            'helpers' => [],
             'page_size' => 1,
             'max_data_size' => 1,
             'bunch_size' => 1,
             'collection_by_pages_iterator' => 'not_used',
-            'next_customer_id' => 1
-        );
+            'next_customer_id' => 1,
+        ];
 
         return $data;
     }
@@ -406,14 +387,14 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         $customerEntity->expects($this->any())
             ->method('getErrorMessages')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $addressEntity
             ->expects($this->exactly($calls['addressValidationCalls']))
             ->method('validateRow')
             ->will($this->returnValue($validationReturn));
 
-        $customerStorage = $this->getMock('stdClass', array('getCustomerId'));
+        $customerStorage = $this->getMock('stdClass', ['getCustomerId']);
         $customerStorage->expects($this->any())->method('getCustomerId')->will($this->returnValue(true));
         $addressEntity->expects(
             $this->any()
@@ -423,15 +404,14 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($customerStorage)
         );
 
-        $addressEntity->expects($this->any())->method('getErrorMessages')->will($this->returnValue(array()));
-
+        $addressEntity->expects($this->any())->method('getErrorMessages')->will($this->returnValue([]));
 
         $data = $this->_getModelDependencies();
         $data['customer_entity'] = $customerEntity;
         $data['address_entity'] = $addressEntity;
 
         $modelUnderTest = $this->_createModelMock($data);
-        $modelUnderTest->setParameters(array('behavior' => $behavior));
+        $modelUnderTest->setParameters(['behavior' => $behavior]);
 
         foreach ($rows as $index => $data) {
             $modelUnderTest->validateRow($data, $index);
@@ -454,10 +434,10 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         )->method(
             'validateRow'
         )->will(
-            $this->returnCallback(array($this, 'validateAddressRowParams'))
+            $this->returnCallback([$this, 'validateAddressRowParams'])
         );
 
-        $customerStorage = $this->getMock('stdClass', array('getCustomerId'));
+        $customerStorage = $this->getMock('stdClass', ['getCustomerId']);
         $customerStorage->expects($this->any())->method('getCustomerId')->will($this->returnValue(true));
         $addressEntity->expects($this->any())
             ->method('getCustomerStorage')
@@ -469,7 +449,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         $modelUnderTest = $this->_createModelMock($data);
 
-        $rowData = array(
+        $rowData = [
             Customer::COLUMN_EMAIL => 'test@test.com',
             Customer::COLUMN_WEBSITE => 'admin',
             Address::COLUMN_ADDRESS_ID => null,
@@ -477,8 +457,8 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             CustomerComposite::COLUMN_DEFAULT_SHIPPING => true,
             'firstname' => 'John',
             'lastname' => 'Doe',
-            'dob' => '1984-11-11'
-        );
+            'dob' => '1984-11-11',
+        ];
 
         $modelUnderTest->validateRow($rowData, 1);
     }
@@ -508,85 +488,85 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      */
     public function getRowDataProvider()
     {
-        return array(
-            'customer and address rows, append behavior' => array(
-                '$rows' => array(
-                    array(
+        return [
+            'customer and address rows, append behavior' => [
+                '$rows' => [
+                    [
                         Customer::COLUMN_EMAIL => 'test@test.com',
                         Customer::COLUMN_WEBSITE => 'admin',
-                        Address::COLUMN_ADDRESS_ID => null
-                    ),
-                    array(
+                        Address::COLUMN_ADDRESS_ID => null,
+                    ],
+                    [
                         Customer::COLUMN_EMAIL => '',
                         Customer::COLUMN_WEBSITE => '',
                         Address::COLUMN_ADDRESS_ID => 1
-                    )
-                ),
-                '$calls' => array('customerValidationCalls' => 1, 'addressValidationCalls' => 2),
+                    ],
+                ],
+                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 2],
                 '$validationReturn' => true,
-                '$expectedErrors' => array(),
-                '$behavior' => Import::BEHAVIOR_APPEND
-            ),
-            'customer and address rows, delete behavior' => array(
-                '$rows' => array(
-                    array(
+                '$expectedErrors' => [],
+                '$behavior' => Import::BEHAVIOR_APPEND,
+            ],
+            'customer and address rows, delete behavior' => [
+                '$rows' => [
+                    [
                         Customer::COLUMN_EMAIL => 'test@test.com',
                         Customer::COLUMN_WEBSITE => 'admin',
-                        Address::COLUMN_ADDRESS_ID => null
-                    ),
-                    array(
+                        Address::COLUMN_ADDRESS_ID => null,
+                    ],
+                    [
                         Customer::COLUMN_EMAIL => '',
                         Customer::COLUMN_WEBSITE => '',
                         Address::COLUMN_ADDRESS_ID => 1
-                    )
-                ),
-                '$calls' => array('customerValidationCalls' => 1, 'addressValidationCalls' => 0),
+                    ],
+                ],
+                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 0],
                 '$validationReturn' => true,
-                '$expectedErrors' => array(),
-                '$behavior' => Import::BEHAVIOR_DELETE
-            ),
-            'customer and two addresses row, append behavior' => array(
-                '$rows' => array(
-                    array(
+                '$expectedErrors' => [],
+                '$behavior' => Import::BEHAVIOR_DELETE,
+            ],
+            'customer and two addresses row, append behavior' => [
+                '$rows' => [
+                    [
                         Customer::COLUMN_EMAIL => 'test@test.com',
                         Customer::COLUMN_WEBSITE => 'admin',
-                        Address::COLUMN_ADDRESS_ID => null
-                    ),
-                    array(
+                        Address::COLUMN_ADDRESS_ID => null,
+                    ],
+                    [
                         Customer::COLUMN_EMAIL => '',
                         Customer::COLUMN_WEBSITE => '',
                         Address::COLUMN_ADDRESS_ID => 1
-                    ),
-                    array(
+                    ],
+                    [
                         Customer::COLUMN_EMAIL => '',
                         Customer::COLUMN_WEBSITE => '',
                         Address::COLUMN_ADDRESS_ID => 2
-                    )
-                ),
-                '$calls' => array('customerValidationCalls' => 1, 'addressValidationCalls' => 3),
+                    ],
+                ],
+                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 3],
                 '$validationReturn' => true,
-                '$expectedErrors' => array(),
-                '$behavior' => Import::BEHAVIOR_APPEND
-            ),
-            'customer and addresses row with filed validation, append behavior' => array(
-                '$rows' => array(
-                    array(
+                '$expectedErrors' => [],
+                '$behavior' => Import::BEHAVIOR_APPEND,
+            ],
+            'customer and addresses row with filed validation, append behavior' => [
+                '$rows' => [
+                    [
                         Customer::COLUMN_EMAIL => 'test@test.com',
                         Customer::COLUMN_WEBSITE => 'admin',
-                        Address::COLUMN_ADDRESS_ID => null
-                    ),
-                    array(
+                        Address::COLUMN_ADDRESS_ID => null,
+                    ],
+                    [
                         Customer::COLUMN_EMAIL => '',
                         Customer::COLUMN_WEBSITE => '',
                         Address::COLUMN_ADDRESS_ID => 1
-                    )
-                ),
-                '$calls' => array('customerValidationCalls' => 1, 'addressValidationCalls' => 0),
+                    ],
+                ],
+                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 0],
                 '$validationReturn' => false,
-                '$expectedErrors' => array('Orphan rows that will be skipped due default row errors'),
-                '$behavior' => Import::BEHAVIOR_APPEND
-            )
-        );
+                '$expectedErrors' => ['Orphan rows that will be skipped due default row errors'],
+                '$behavior' => Import::BEHAVIOR_APPEND,
+            ]
+        ];
     }
 
     public function testSetParameters()
@@ -599,14 +579,14 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setParameters'
         )->will(
-            $this->returnCallback(array($this, 'callbackCheckParameters'))
+            $this->returnCallback([$this, 'callbackCheckParameters'])
         );
         $addressEntity->expects(
             $this->once()
         )->method(
             'setParameters'
         )->will(
-            $this->returnCallback(array($this, 'callbackCheckParameters'))
+            $this->returnCallback([$this, 'callbackCheckParameters'])
         );
         $data = $this->_getModelDependencies();
         $data['customer_entity'] = $customerEntity;
@@ -614,7 +594,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         $modelUnderTest = $this->_createModelMock($data);
 
-        $params = array('behavior' => Import::BEHAVIOR_APPEND);
+        $params = ['behavior' => Import::BEHAVIOR_APPEND];
         $modelUnderTest->setParameters($params);
     }
 
@@ -642,7 +622,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         $source = $this->getMockForAbstractClass(
             'Magento\ImportExport\Model\Import\AbstractSource',
-            array(),
+            [],
             '',
             false
         );
@@ -651,15 +631,15 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetErrorMessages()
     {
-        $errorMessages = array(
-            'Required field' => array(1, 2, 3),
-            'Bad password' => array(1),
-            'Wrong website' => array(1, 2)
-        );
+        $errorMessages = [
+            'Required field' => [1, 2, 3],
+            'Bad password' => [1],
+            'Wrong website' => [1, 2],
+        ];
         $customerEntity = $this->_getCustomerEntityMock();
         $customerEntity->expects($this->once())->method('getErrorMessages')->will($this->returnValue($errorMessages));
 
-        $errorMessages = array('Required field' => array(2, 3, 4, 5), 'Wrong address' => array(1, 2));
+        $errorMessages = ['Required field' => [2, 3, 4, 5], 'Wrong address' => [1, 2]];
         $addressEntity = $this->_getAddressEntityMock();
         $addressEntity->expects($this->once())->method('getErrorMessages')->will($this->returnValue($errorMessages));
 
@@ -671,12 +651,12 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         $modelUnderTest->addRowError('Bad password', 1);
 
-        $expectedErrors = array(
-            'Required field' => array(1, 2, 3, 4, 5),
-            'Bad password' => array(2),
-            'Wrong website' => array(1, 2),
-            'Wrong address' => array(1, 2)
-        );
+        $expectedErrors = [
+            'Required field' => [1, 2, 3, 4, 5],
+            'Bad password' => [2],
+            'Wrong website' => [1, 2],
+            'Wrong address' => [1, 2],
+        ];
 
         $actualErrors = $modelUnderTest->getErrorMessages();
         foreach ($expectedErrors as $error => $rows) {
@@ -689,7 +669,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     {
         $modelUnderTest = $this->_getModelMockForPrepareRowForDb();
         $pathToCsvFile = __DIR__ . '/_files/customer_composite_prepare_row_for_db.csv';
-        $directoryMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Write', array(), array(), '', false);
+        $directoryMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
         $directoryMock->expects($this->any())
             ->method('openFile')->will(
             $this->returnValue(new Read($pathToCsvFile, new File()))
@@ -729,44 +709,44 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderTestImportData()
     {
-        return array(
-            'add_update_behavior_customer_true_address_true' => array(
+        return [
+            'add_update_behavior_customer_true_address_true' => [
                 '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
                 '$customerImport' => true,
                 '$addressImport' => true,
-                '$result' => true
-            ),
-            'add_update_behavior_customer_true_address_false' => array(
+                '$result' => true,
+            ],
+            'add_update_behavior_customer_true_address_false' => [
                 '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
                 '$customerImport' => true,
                 '$addressImport' => false,
-                '$result' => false
-            ),
-            'add_update_behavior_customer_false_address_true' => array(
+                '$result' => false,
+            ],
+            'add_update_behavior_customer_false_address_true' => [
                 '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
                 '$customerImport' => false,
                 '$addressImport' => true,
-                '$result' => false
-            ),
-            'add_update_behavior_customer_false_address_false' => array(
+                '$result' => false,
+            ],
+            'add_update_behavior_customer_false_address_false' => [
                 '$behavior' => Import::BEHAVIOR_ADD_UPDATE,
                 '$customerImport' => false,
                 '$addressImport' => false,
-                '$result' => false
-            ),
-            'delete_behavior_customer_true' => array(
+                '$result' => false,
+            ],
+            'delete_behavior_customer_true' => [
                 '$behavior' => Import::BEHAVIOR_DELETE,
                 '$customerImport' => true,
                 '$addressImport' => false,
-                '$result' => true
-            ),
-            'delete_behavior_customer_false' => array(
+                '$result' => true,
+            ],
+            'delete_behavior_customer_false' => [
                 '$behavior' => Import::BEHAVIOR_DELETE,
                 '$customerImport' => false,
                 '$addressImport' => false,
-                '$result' => false
-            )
-        );
+                '$result' => false,
+            ]
+        ];
     }
 
     /**
@@ -781,7 +761,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     {
         $isDeleteBehavior = $behavior == Import::BEHAVIOR_DELETE;
         $entityMock = $this->_getModelMockForImportData($isDeleteBehavior, $customerImport, $addressImport);
-        $entityMock->setParameters(array('behavior' => $behavior));
+        $entityMock->setParameters(['behavior' => $behavior]);
         $importResult = $entityMock->importData();
         if ($result) {
             $this->assertTrue($importResult);

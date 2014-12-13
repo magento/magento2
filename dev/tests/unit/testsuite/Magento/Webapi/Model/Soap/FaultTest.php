@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Webapi\Model\Soap;
 
@@ -54,7 +35,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock = $this->getMock('\Magento\Framework\App\RequestInterface');
         /** Initialize SUT. */
         $message = "Soap fault reason.";
-        $details = array('param1' => 'value1', 'param2' => 2);
+        $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
         $webapiException = new \Magento\Webapi\Exception(
             $message,
@@ -78,7 +59,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(new \Zend_Locale('en_US'))
         );
 
-        $this->_appStateMock = $this->getMock('\Magento\Framework\App\State', array(), array(), '', false);
+        $this->_appStateMock = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
 
         $this->_soapFault = new \Magento\Webapi\Model\Soap\Fault(
             $this->_requestMock,
@@ -178,53 +159,53 @@ XML;
         $expectedXmls = include __DIR__ . '/../../_files/soap_fault/soap_fault_expected_xmls.php';
 
         //Each array contains data for SOAP Fault Message, Expected XML, and Assert Message.
-        return array(
-            'ArrayDataDetails' => array(
+        return [
+            'ArrayDataDetails' => [
                 'Fault reason',
                 'Sender',
-                array(
-                    Fault::NODE_DETAIL_PARAMETERS => array('key1' => 'value1', 'key2' => 'value2', 'value3'),
+                [
+                    Fault::NODE_DETAIL_PARAMETERS => ['key1' => 'value1', 'key2' => 'value2', 'value3'],
                     Fault::NODE_DETAIL_TRACE => 'Trace',
                     'Invalid' => 'This node should be skipped'
-                ),
+                ],
                 $expectedXmls['expectedResultArrayDataDetails'],
-                'SOAP fault message with associated array data details is invalid.'
-            ),
-            'IndexArrayDetails' => array(
+                'SOAP fault message with associated array data details is invalid.',
+            ],
+            'IndexArrayDetails' => [
                 'Fault reason',
                 'Sender',
-                array('value1', 'value2'),
+                ['value1', 'value2'],
                 $expectedXmls['expectedResultIndexArrayDetails'],
-                'SOAP fault message with index array data details is invalid.'
-            ),
-            'EmptyArrayDetails' => array(
+                'SOAP fault message with index array data details is invalid.',
+            ],
+            'EmptyArrayDetails' => [
                 'Fault reason',
                 'Sender',
-                array(),
+                [],
                 $expectedXmls['expectedResultEmptyArrayDetails'],
-                'SOAP fault message with empty array data details is invalid.'
-            ),
-            'ObjectDetails' => array(
+                'SOAP fault message with empty array data details is invalid.',
+            ],
+            'ObjectDetails' => [
                 'Fault reason',
                 'Sender',
-                (object)array('key' => 'value'),
+                (object)['key' => 'value'],
                 $expectedXmls['expectedResultObjectDetails'],
-                'SOAP fault message with object data details is invalid.'
-            ),
-            'ComplexDataDetails' => array(
+                'SOAP fault message with object data details is invalid.',
+            ],
+            'ComplexDataDetails' => [
                 'Fault reason',
                 'Sender',
-                array(Fault::NODE_DETAIL_PARAMETERS => array('key' => array('sub_key' => 'value'))),
+                [Fault::NODE_DETAIL_PARAMETERS => ['key' => ['sub_key' => 'value']]],
                 $expectedXmls['expectedResultComplexDataDetails'],
-                'SOAP fault message with complex data details is invalid.'
-            )
-        );
+                'SOAP fault message with complex data details is invalid.',
+            ]
+        ];
     }
 
     public function testConstructor()
     {
         $message = "Soap fault reason.";
-        $details = array('param1' => 'value1', 'param2' => 2);
+        $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
         $webapiException = new \Magento\Webapi\Exception(
             $message,

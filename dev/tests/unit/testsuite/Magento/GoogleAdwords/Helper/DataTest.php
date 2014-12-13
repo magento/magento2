@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\GoogleAdwords\Helper;
 
@@ -54,18 +35,18 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
+        $this->_registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $context = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
+        $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->_helper = $objectManager->getObject(
             'Magento\GoogleAdwords\Helper\Data',
-            array(
+            [
                 'config' => $this->_configMock,
                 'scopeConfig' => $this->_scopeConfigMock,
                 'registry' => $this->_registryMock,
                 'context' => $context
-            )
+            ]
         );
     }
 
@@ -74,12 +55,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderForTestIsActive()
     {
-        return array(
-            array(true, 1234, true),
-            array(true, 'conversionId', false),
-            array(true, '', false),
-            array(false, '', false)
-        );
+        return [
+            [true, 1234, true],
+            [true, 'conversionId', false],
+            [true, '', false],
+            [false, '', false]
+        ];
     }
 
     /**
@@ -112,7 +93,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLanguageCodes()
     {
-        $languages = array('en', 'ru', 'uk');
+        $languages = ['en', 'ru', 'uk'];
         $this->_configMock->expects(
             $this->once()
         )->method(
@@ -128,12 +109,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function dataProviderForTestConvertLanguage()
     {
-        return array(
-            array('some-language', 'some-language'),
-            array('zh_TW', 'zh_Hant'),
-            array('zh_CN', 'zh_Hans'),
-            array('iw', 'he')
-        );
+        return [
+            ['some-language', 'some-language'],
+            ['zh_TW', 'zh_Hant'],
+            ['zh_CN', 'zh_Hans'],
+            ['iw', 'he']
+        ];
     }
 
     /**
@@ -143,7 +124,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertLanguageCodeToLocaleCode($language, $returnLanguage)
     {
-        $convertArray = array('zh_TW' => 'zh_Hant', 'iw' => 'he', 'zh_CN' => 'zh_Hans');
+        $convertArray = ['zh_TW' => 'zh_Hant', 'iw' => 'he', 'zh_CN' => 'zh_Hans'];
         $this->_configMock->expects(
             $this->once()
         )->method(
@@ -199,15 +180,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderForTestStoreConfig()
     {
-        return array(
-            array('getConversionId', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_ID, 123),
-            array('getConversionLanguage', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_LANGUAGE, 'en'),
-            array('getConversionFormat', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_FORMAT, '2'),
-            array('getConversionColor', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_COLOR, 'ffffff'),
-            array('getConversionLabel', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_LABEL, 'Label'),
-            array('getConversionValueType', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE_TYPE, '1'),
-            array('getConversionValueConstant', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE, '0')
-        );
+        return [
+            ['getConversionId', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_ID, 123],
+            ['getConversionLanguage', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_LANGUAGE, 'en'],
+            ['getConversionFormat', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_FORMAT, '2'],
+            ['getConversionColor', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_COLOR, 'ffffff'],
+            ['getConversionLabel', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_LABEL, 'Label'],
+            ['getConversionValueType', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE_TYPE, '1'],
+            ['getConversionValueConstant', \Magento\GoogleAdwords\Helper\Data::XML_PATH_CONVERSION_VALUE, '0']
+        ];
     }
 
     /**
@@ -261,7 +242,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderForTestConversionValueConstant()
     {
-        return array(array(1.4, 1.4), array('', \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_DEFAULT));
+        return [[1.4, 1.4], ['', \Magento\GoogleAdwords\Helper\Data::CONVERSION_VALUE_DEFAULT]];
     }
 
     /**

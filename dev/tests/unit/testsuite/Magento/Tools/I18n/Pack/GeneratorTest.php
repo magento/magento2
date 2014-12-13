@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Tools\I18n\Pack;
 
@@ -57,17 +38,17 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->dictionaryLoaderMock = $this->getMock('Magento\Tools\I18n\Dictionary\Loader\FileInterface');
         $this->packWriterMock = $this->getMock('Magento\Tools\I18n\Pack\WriterInterface');
-        $this->factoryMock = $this->getMock('Magento\Tools\I18n\Factory', array(), array(), '', false);
-        $this->dictionaryMock = $this->getMock('Magento\Tools\I18n\Dictionary', array(), array(), '', false);
+        $this->factoryMock = $this->getMock('Magento\Tools\I18n\Factory', [], [], '', false);
+        $this->dictionaryMock = $this->getMock('Magento\Tools\I18n\Dictionary', [], [], '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_generator = $objectManagerHelper->getObject(
             'Magento\Tools\I18n\Pack\Generator',
-            array(
+            [
                 'dictionaryLoader' => $this->dictionaryLoaderMock,
                 'packWriter' => $this->packWriterMock,
                 'factory' => $this->factoryMock
-            )
+            ]
         );
     }
 
@@ -78,7 +59,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $localeString = 'locale';
         $mode = 'mode';
         $allowDuplicates = true;
-        $localeMock = $this->getMock('Magento\Tools\I18n\Locale', array(), array(), '', false);
+        $localeMock = $this->getMock('Magento\Tools\I18n\Locale', [], [], '', false);
 
         $phrases = [$this->getMock('Magento\Tools\I18n\Dictionary\Phrase', [], [], '', false)];
         $this->dictionaryMock->expects($this->once())
@@ -111,7 +92,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $localeString = 'locale';
         $mode = 'mode';
         $allowDuplicates = true;
-        $localeMock = $this->getMock('Magento\Tools\I18n\Locale', array(), array(), '', false);
+        $localeMock = $this->getMock('Magento\Tools\I18n\Locale', [], [], '', false);
 
         $this->factoryMock->expects($this->once())
             ->method('createLocale')
@@ -134,9 +115,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $allowDuplicates = false;
 
-        $phraseFirstMock = $this->getMock('Magento\Tools\I18n\Dictionary\Phrase', array(), array(), '', false);
+        $phraseFirstMock = $this->getMock('Magento\Tools\I18n\Dictionary\Phrase', [], [], '', false);
         $phraseFirstMock->expects($this->once())->method('getPhrase')->will($this->returnValue('phrase1'));
-        $phraseSecondMock = $this->getMock('Magento\Tools\I18n\Dictionary\Phrase', array(), array(), '', false);
+        $phraseSecondMock = $this->getMock('Magento\Tools\I18n\Dictionary\Phrase', [], [], '', false);
         $phraseSecondMock->expects($this->once())->method('getPhrase')->will($this->returnValue('phrase2'));
 
         $this->dictionaryLoaderMock->expects($this->any())
@@ -148,7 +129,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$phrases]));
         $this->dictionaryMock->expects($this->once())
             ->method('getDuplicates')
-            ->will($this->returnValue(array(array($phraseFirstMock), array($phraseSecondMock))));
+            ->will($this->returnValue([[$phraseFirstMock], [$phraseSecondMock]]));
 
         $this->_generator->generate('dictionary_path', 'pack_path', 'locale', 'mode', $allowDuplicates);
     }

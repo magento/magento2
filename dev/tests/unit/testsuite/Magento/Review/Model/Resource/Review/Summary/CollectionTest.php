@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *   
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Review\Model\Resource\Review\Summary;
@@ -65,37 +46,37 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->fetchStrategyMock = $this->getMock(
             'Magento\Framework\Data\Collection\Db\FetchStrategy\Query',
-            array('fetchAll'),
-            array(),
+            ['fetchAll'],
+            [],
             '',
             false
         );
         $this->entityFactoryMock = $this->getMock(
             'Magento\Core\Model\EntityFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', array('log'), array(), '', false);
+        $this->loggerMock = $this->getMock('Magento\Framework\Logger', ['log'], [], '', false);
         $this->resourceMock = $this->getMock(
             'Magento\Framework\App\Resource',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->adapterMock = $this->getMock(
             'Zend_Db_Adapter_Pdo_Mysql',
-            array('select', 'query'),
-            array(),
+            ['select', 'query'],
+            [],
             '',
             false
         );
         $this->selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
-            array('from'),
-            array('adapter' => $this->adapterMock)
+            ['from'],
+            ['adapter' => $this->adapterMock]
         );
         $this->adapterMock->expects($this->once())
             ->method('select')
@@ -117,8 +98,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchItem()
     {
-        $data = array(1 => 'test');
-        $statementMock = $this->getMock('Zend_Db_Statement_Pdo', array('fetch'), array(), '', false);
+        $data = [1 => 'test'];
+        $statementMock = $this->getMock('Zend_Db_Statement_Pdo', ['fetch'], [], '', false);
         $statementMock->expects($this->once())
             ->method('fetch')
             ->will($this->returnValue($data));
@@ -128,7 +109,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->with($this->selectMock, $this->anything())
             ->will($this->returnValue($statementMock));
 
-        $objectMock = $this->getMock('Magento\Framework\Object', array('setData'), array());
+        $objectMock = $this->getMock('Magento\Framework\Object', ['setData'], []);
         $objectMock->expects($this->once())
             ->method('setData')
             ->with($data);
@@ -144,13 +125,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $data = array(10 => 'test');
+        $data = [10 => 'test'];
         $this->fetchStrategyMock->expects($this->once())
             ->method('fetchAll')
-            ->with($this->selectMock, array())
-            ->will($this->returnValue(array($data)));
+            ->with($this->selectMock, [])
+            ->will($this->returnValue([$data]));
 
-        $objectMock = $this->getMock('Magento\Framework\Object', array('addData'), array());
+        $objectMock = $this->getMock('Magento\Framework\Object', ['addData'], []);
         $objectMock->expects($this->once())
             ->method('addData')
             ->with($data);

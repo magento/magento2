@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *   
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Indexer\Model\Config;
 
@@ -44,18 +25,18 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->_fileResolverMock = $this->getMock(
             'Magento\Framework\App\Config\FileResolver',
-            array('get'),
-            array(),
+            ['get'],
+            [],
             '',
             false
         );
 
-        $this->_converter = $this->getMock('Magento\Indexer\Model\Config\Converter', array('convert'));
+        $this->_converter = $this->getMock('Magento\Indexer\Model\Config\Converter', ['convert']);
 
         $moduleReader = $this->getMock(
             'Magento\Framework\Module\Dir\Reader',
-            array('getModuleDir'),
-            array(),
+            ['getModuleDir'],
+            [],
             '',
             false
         );
@@ -126,21 +107,21 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function readerDataProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'indexer_one.xml' => file_get_contents(__DIR__ . '/../../_files/indexer_one.xml'),
-                    'indexer_two.xml' => file_get_contents(__DIR__ . '/../../_files/indexer_two.xml')
-                ),
-                'indexer_merged_one.xml'
-            ),
-            array(
-                array(
+                    'indexer_two.xml' => file_get_contents(__DIR__ . '/../../_files/indexer_two.xml'),
+                ],
+                'indexer_merged_one.xml',
+            ],
+            [
+                [
                     'indexer_one.xml' => file_get_contents(__DIR__ . '/../../_files/indexer_one.xml'),
-                    'indexer_three.xml' => file_get_contents(__DIR__ . '/../../_files/indexer_three.xml')
-                ),
+                    'indexer_three.xml' => file_get_contents(__DIR__ . '/../../_files/indexer_three.xml'),
+                ],
                 'indexer_merged_two.xml'
-            )
-        );
+            ]
+        ];
     }
 }

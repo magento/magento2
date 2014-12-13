@@ -1,33 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Checkout\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Object;
 use Magento\Checkout\Model\Cart\CartInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Object;
 
 /**
  * Shopping cart model
@@ -63,7 +44,7 @@ class Cart extends Object implements CartInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -110,7 +91,7 @@ class Cart extends Object implements CartInterface
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Resource\Cart $resourceCart
      * @param Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
@@ -124,7 +105,7 @@ class Cart extends Object implements CartInterface
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Resource\Cart $resourceCart,
         Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
@@ -133,7 +114,7 @@ class Cart extends Object implements CartInterface
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
         ProductRepositoryInterface $productRepository,
-        array $data = array()
+        array $data = []
     ) {
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
@@ -187,7 +168,7 @@ class Cart extends Object implements CartInterface
     public function getItems()
     {
         if (!$this->getQuote()->getId()) {
-            return array();
+            return [];
         }
         return $this->getQuote()->getItemsCollection();
     }
@@ -201,7 +182,7 @@ class Cart extends Object implements CartInterface
     {
         $products = $this->getData('product_ids');
         if (is_null($products)) {
-            $products = array();
+            $products = [];
             foreach ($this->getQuote()->getAllItems() as $item) {
                 $products[$item->getProductId()] = $item->getProductId();
             }
@@ -329,7 +310,7 @@ class Cart extends Object implements CartInterface
         if ($requestInfo instanceof \Magento\Framework\Object) {
             $request = $requestInfo;
         } elseif (is_numeric($requestInfo)) {
-            $request = new \Magento\Framework\Object(array('qty' => $requestInfo));
+            $request = new \Magento\Framework\Object(['qty' => $requestInfo]);
         } else {
             $request = new \Magento\Framework\Object($requestInfo);
         }
@@ -382,7 +363,7 @@ class Cart extends Object implements CartInterface
                 if ($product->hasOptionsValidationFail()) {
                     $redirectUrl = $product->getUrlModel()->getUrl(
                         $product,
-                        array('_query' => array('startcustomization' => 1))
+                        ['_query' => ['startcustomization' => 1]]
                     );
                 } else {
                     $redirectUrl = $product->getProductUrl();
@@ -399,7 +380,7 @@ class Cart extends Object implements CartInterface
 
         $this->_eventManager->dispatch(
             'checkout_cart_product_add_after',
-            array('quote_item' => $result, 'product' => $product)
+            ['quote_item' => $result, 'product' => $product]
         );
         $this->_checkoutSession->setLastAddedProductId($productId);
         return $this;
@@ -564,7 +545,7 @@ class Cart extends Object implements CartInterface
      */
     public function save()
     {
-        $this->_eventManager->dispatch('checkout_cart_save_before', array('cart' => $this));
+        $this->_eventManager->dispatch('checkout_cart_save_before', ['cart' => $this]);
 
         $this->getQuote()->getBillingAddress();
         $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
@@ -574,7 +555,7 @@ class Cart extends Object implements CartInterface
         /**
          * Cart save usually called after changes with cart items.
          */
-        $this->_eventManager->dispatch('checkout_cart_save_after', array('cart' => $this));
+        $this->_eventManager->dispatch('checkout_cart_save_after', ['cart' => $this]);
         return $this;
     }
 
@@ -605,7 +586,7 @@ class Cart extends Object implements CartInterface
     public function getProductIds()
     {
         if (null === $this->_productIds) {
-            $this->_productIds = array();
+            $this->_productIds = [];
             if ($this->getSummaryQty() > 0) {
                 foreach ($this->getQuote()->getAllItems() as $item) {
                     $this->_productIds[] = $item->getProductId();
@@ -718,7 +699,7 @@ class Cart extends Object implements CartInterface
 
         $this->_eventManager->dispatch(
             'checkout_cart_product_update_after',
-            array('quote_item' => $result, 'product' => $product)
+            ['quote_item' => $result, 'product' => $product]
         );
         $this->_checkoutSession->setLastAddedProductId($productId);
         return $result;

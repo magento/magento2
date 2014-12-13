@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sitemap\Model;
 
@@ -78,7 +59,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helperMockCore = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false, false);
+        $this->_helperMockCore = $this->getMock('Magento\Core\Helper\Data', [], [], '', false, false);
         $this->_sitemapCategoryMock = $this->getMockBuilder(
             'Magento\Sitemap\Model\Resource\Catalog\Category'
         )->disableOriginalConstructor()->getMock();
@@ -90,7 +71,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $this->_helperMockSitemap = $this->getMock(
             'Magento\Sitemap\Helper\Data',
-            array(
+            [
                 'getCategoryChangefreq',
                 'getProductChangefreq',
                 'getPageChangefreq',
@@ -100,8 +81,8 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
                 'getMaximumLinesNumber',
                 'getMaximumFileSize',
                 'getEnableSubmissionRobots'
-            ),
-            array(),
+            ],
+            [],
             '',
             false,
             false
@@ -140,7 +121,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $this->_resourceMock = $this->getMockBuilder(
             'Magento\Sitemap\Model\Resource\Sitemap'
         )->setMethods(
-            array('_construct', 'beginTransaction', 'rollBack', 'save', 'addCommitCallback', 'commit', '__wakeup')
+            ['_construct', 'beginTransaction', 'rollBack', 'save', 'addCommitCallback', 'commit', '__wakeup']
         )->disableOriginalConstructor()->getMock();
         $this->_resourceMock->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
 
@@ -156,7 +137,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $this->_filesystemMock = $this->getMockBuilder(
             'Magento\Framework\Filesystem'
         )->setMethods(
-            array('getDirectoryWrite')
+            ['getDirectoryWrite']
         )->disableOriginalConstructor()->getMock();
         $this->_filesystemMock->expects(
             $this->any()
@@ -240,21 +221,21 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public static function sitemapDataProvider()
     {
-        $expectedSingleFile = array('/sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-single.xml');
+        $expectedSingleFile = ['/sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-single.xml'];
 
-        $expectedMultiFile = array(
+        $expectedMultiFile = [
             '/sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-1-1.xml',
             '/sitemap-1-2.xml' => __DIR__ . '/_files/sitemap-1-2.xml',
             '/sitemap-1-3.xml' => __DIR__ . '/_files/sitemap-1-3.xml',
             '/sitemap-1-4.xml' => __DIR__ . '/_files/sitemap-1-4.xml',
-            '/sitemap.xml' => __DIR__ . '/_files/sitemap-index.xml'
-        );
+            '/sitemap.xml' => __DIR__ . '/_files/sitemap-index.xml',
+        ];
 
-        return array(
-            array(50000, 10485760, $expectedSingleFile, 6),
-            array(1, 10485760, $expectedMultiFile, 18),
-            array(50000, 264, $expectedMultiFile, 18)
-        );
+        return [
+            [50000, 10485760, $expectedSingleFile, 6],
+            [1, 10485760, $expectedMultiFile, 18],
+            [50000, 264, $expectedMultiFile, 18]
+        ];
     }
 
     /**
@@ -268,7 +249,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateXml($maxLines, $maxFileSize, $expectedFile, $expectedWrites)
     {
-        $actualData = array();
+        $actualData = [];
         $model = $this->_prepareSitemapModelMock(
             $actualData,
             $maxLines,
@@ -298,69 +279,69 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public static function robotsDataProvider()
     {
-        $expectedSingleFile = array('/sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-single.xml');
+        $expectedSingleFile = ['/sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-single.xml'];
 
-        $expectedMultiFile = array(
+        $expectedMultiFile = [
             '/sitemap-1-1.xml' => __DIR__ . '/_files/sitemap-1-1.xml',
             '/sitemap-1-2.xml' => __DIR__ . '/_files/sitemap-1-2.xml',
             '/sitemap-1-3.xml' => __DIR__ . '/_files/sitemap-1-3.xml',
             '/sitemap-1-4.xml' => __DIR__ . '/_files/sitemap-1-4.xml',
-            '/sitemap.xml' => __DIR__ . '/_files/sitemap-index.xml'
-        );
+            '/sitemap.xml' => __DIR__ . '/_files/sitemap-index.xml',
+        ];
 
-        return array(
-            array(
+        return [
+            [
                 50000,
                 10485760,
                 $expectedSingleFile,
                 6,
-                array(
+                [
                     'robotsStart' => '',
                     'robotsFinish' => 'Sitemap: http://store.com/sitemap.xml',
                     'pushToRobots' => 1
-                )
-            ), // empty robots file
-            array(
+                ],
+            ], // empty robots file
+            [
                 50000,
                 10485760,
                 $expectedSingleFile,
                 6,
-                array(
+                [
                     'robotsStart' => "User-agent: *",
                     'robotsFinish' => "User-agent: *" . PHP_EOL . 'Sitemap: http://store.com/sitemap.xml',
                     'pushToRobots' => 1
-                )
-            ), // not empty robots file EOL
-            array(
+                ]
+            ], // not empty robots file EOL
+            [
                 1,
                 10485760,
                 $expectedMultiFile,
                 18,
-                array(
+                [
                     'robotsStart' => "User-agent: *\r\n",
                     'robotsFinish' => "User-agent: *\r\n\r\nSitemap: http://store.com/sitemap.xml",
                     'pushToRobots' => 1
-                )
-            ), // not empty robots file WIN
-            array(
+                ]
+            ], // not empty robots file WIN
+            [
                 50000,
                 264,
                 $expectedMultiFile,
                 18,
-                array(
+                [
                     'robotsStart' => "User-agent: *\n",
                     'robotsFinish' => "User-agent: *\n\nSitemap: http://store.com/sitemap.xml",
                     'pushToRobots' => 1
-                )
-            ), // not empty robots file UNIX
-            array(
+                ]
+            ], // not empty robots file UNIX
+            [
                 50000,
                 10485760,
                 $expectedSingleFile,
                 6,
-                array('robotsStart' => '', 'robotsFinish' => '', 'pushToRobots' => 0)
-            ) // empty robots file
-        );
+                ['robotsStart' => '', 'robotsFinish' => '', 'pushToRobots' => 0]
+            ] // empty robots file
+        ];
     }
 
     /**
@@ -375,7 +356,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddSitemapToRobotsTxt($maxLines, $maxFileSize, $expectedFile, $expectedWrites, $robotsInfo)
     {
-        $actualData = array();
+        $actualData = [];
         $model = $this->_prepareSitemapModelMock(
             $actualData,
             $maxLines,
@@ -408,7 +389,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $robotsInfo
     ) {
         // Check that all $expectedWrites lines were written
-        $actualData = array();
+        $actualData = [];
         $currentFile = '';
         $streamWriteCallback = function ($str) use (&$actualData, &$currentFile) {
             if (!array_key_exists($currentFile, $actualData)) {
@@ -468,7 +449,6 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             $this->equalTo($robotsFinish)
         );
 
-
         // Mock helper methods
         $pushToRobots = 0;
         if (isset($robotsInfo['pushToRobots'])) {
@@ -509,7 +489,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelMock($mockBeforeSave = false)
     {
-        $methods = array(
+        $methods = [
             '_construct',
             '_getResource',
             '_getBaseDir',
@@ -520,8 +500,8 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             '_getCategoryItemsCollection',
             '_getProductItemsCollection',
             '_getPageItemsCollection',
-            '_getDocumentRoot'
-        );
+            '_getDocumentRoot',
+        ];
         if ($mockBeforeSave) {
             $methods[] = 'beforeSave';
         }
@@ -532,14 +512,14 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             'getCollection'
         )->will(
             $this->returnValue(
-                array(
+                [
                     new \Magento\Framework\Object(
-                        array('url' => 'category.html', 'updated_at' => '2012-12-21 00:00:00')
+                        ['url' => 'category.html', 'updated_at' => '2012-12-21 00:00:00']
                     ),
                     new \Magento\Framework\Object(
-                        array('url' => '/category/sub-category.html', 'updated_at' => '2012-12-21 00:00:00')
-                    )
-                )
+                        ['url' => '/category/sub-category.html', 'updated_at' => '2012-12-21 00:00:00']
+                    ),
+                ]
             )
         );
         $this->_sitemapProductMock->expects(
@@ -548,34 +528,34 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             'getCollection'
         )->will(
             $this->returnValue(
-                array(
+                [
                     new \Magento\Framework\Object(
-                        array('url' => 'product.html', 'updated_at' => '2012-12-21 00:00:00')
+                        ['url' => 'product.html', 'updated_at' => '2012-12-21 00:00:00']
                     ),
                     new \Magento\Framework\Object(
-                        array(
+                        [
                             'url' => 'product2.html',
                             'updated_at' => '2012-12-21 00:00:00',
                             'images' => new \Magento\Framework\Object(
-                                array(
-                                    'collection' => array(
+                                [
+                                    'collection' => [
                                         new \Magento\Framework\Object(
-                                            array('url' => 'image1.png', 'caption' => 'caption & > title < "')
+                                            ['url' => 'image1.png', 'caption' => 'caption & > title < "']
                                         ),
                                         new \Magento\Framework\Object(
-                                            array('url' => 'image_no_caption.png', 'caption' => null)
-                                        )
-                                    ),
+                                            ['url' => 'image_no_caption.png', 'caption' => null]
+                                        ),
+                                    ],
                                     'thumbnail' => 'thumbnail.jpg',
-                                    'title' => 'Product & > title < "'
-                                )
-                            )
-                        )
-                    )
-                )
+                                    'title' => 'Product & > title < "',
+                                ]
+                            ),
+                        ]
+                    ),
+                ]
             )
         );
-        $this->_sitemapCmsPageMock->expects($this->any())->method('getCollection')->will($this->returnValue(array()));
+        $this->_sitemapCmsPageMock->expects($this->any())->method('getCollection')->will($this->returnValue([]));
 
         /** @var $model \Magento\Sitemap\Model\Sitemap */
         $model = $this->getMockBuilder(
@@ -612,7 +592,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $categoryFactory = $this->getMockBuilder(
             'Magento\Sitemap\Model\Resource\Catalog\CategoryFactory'
         )->setMethods(
-            array('create')
+            ['create']
         )->disableOriginalConstructor()->getMock();
         $categoryFactory->expects(
             $this->any()
@@ -625,28 +605,28 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $productFactory = $this->getMockBuilder(
             'Magento\Sitemap\Model\Resource\Catalog\ProductFactory'
         )->setMethods(
-            array('create')
+            ['create']
         )->disableOriginalConstructor()->getMock();
         $productFactory->expects($this->any())->method('create')->will($this->returnValue($this->_sitemapProductMock));
 
         $cmsFactory = $this->getMockBuilder(
             'Magento\Sitemap\Model\Resource\Cms\PageFactory'
         )->setMethods(
-            array('create')
+            ['create']
         )->disableOriginalConstructor()->getMock();
         $cmsFactory->expects($this->any())->method('create')->will($this->returnValue($this->_sitemapCmsPageMock));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $constructArguments = $objectManager->getConstructArguments(
             'Magento\Sitemap\Model\Sitemap',
-            array(
+            [
                 'categoryFactory' => $categoryFactory,
                 'productFactory' => $productFactory,
                 'cmsFactory' => $cmsFactory,
                 'coreData' => $this->_helperMockCore,
                 'sitemapData' => $this->_helperMockSitemap,
                 'filesystem' => $this->_filesystemMock
-            )
+            ]
         );
         $constructArguments['resource'] = null;
         return $constructArguments;
@@ -669,7 +649,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $model = $this->getMockBuilder(
             'Magento\Sitemap\Model\Sitemap'
         )->setMethods(
-            array('_getStoreBaseUrl', '_getDocumentRoot', '_getBaseDir', '_construct')
+            ['_getStoreBaseUrl', '_getDocumentRoot', '_getBaseDir', '_construct']
         )->setConstructorArgs(
             $this->_getModelConstructorArgs()
         )->getMock();
@@ -691,63 +671,63 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
      */
     public static function siteUrlDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'http://store.com',
                 'c:\\http\\mage2\\',
                 'c:\\http\\mage2\\',
                 '/',
                 'sitemap.xml',
-                'http://store.com/sitemap.xml'
-            ),
-            array(
+                'http://store.com/sitemap.xml',
+            ],
+            [
                 'http://store.com/store2',
                 'c:\\http\\mage2\\',
                 'c:\\http\\mage2\\',
                 '/sitemaps/store2',
                 'sitemap.xml',
                 'http://store.com/sitemaps/store2/sitemap.xml'
-            ),
-            array(
+            ],
+            [
                 'http://store.com/builds/regression/ee/',
                 '/var/www/html',
                 '/opt/builds/regression/ee',
                 '/',
                 'sitemap.xml',
                 'http://store.com/builds/regression/ee/sitemap.xml'
-            ),
-            array(
+            ],
+            [
                 'http://store.com/store2',
                 'c:\\http\\mage2\\',
                 'c:\\http\\mage2\\store2',
                 '/sitemaps/store2',
                 'sitemap.xml',
                 'http://store.com/store2/sitemaps/store2/sitemap.xml'
-            ),
-            array(
+            ],
+            [
                 'http://store2.store.com',
                 'c:\\http\\mage2\\',
                 'c:\\http\\mage2\\',
                 '/sitemaps/store2',
                 'sitemap.xml',
                 'http://store2.store.com/sitemaps/store2/sitemap.xml'
-            ),
-            array(
+            ],
+            [
                 'http://store.com',
                 '/var/www/store/',
                 '/var/www/store/',
                 '/',
                 'sitemap.xml',
                 'http://store.com/sitemap.xml'
-            ),
-            array(
+            ],
+            [
                 'http://store.com/store2',
                 '/var/www/store/',
                 '/var/www/store/store2/',
                 '/sitemaps/store2',
                 'sitemap.xml',
                 'http://store.com/store2/sitemaps/store2/sitemap.xml'
-            )
-        );
+            ]
+        ];
     }
 }

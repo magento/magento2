@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\CatalogSearch\Model\Layer\Filter;
@@ -32,7 +13,6 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
-
     private $itemDataBuilder;
 
     /**
@@ -105,7 +85,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             '\Magento\CatalogSearch\Model\Resource\Fulltext\Collection'
         )
             ->disableOriginalConstructor()
-            ->setMethods(['addCategoryFilter', 'getFacetedData'])
+            ->setMethods(['addCategoryFilter', 'getFacetedData', 'getSize'])
             ->getMock();
 
         $this->layer->expects($this->any())
@@ -279,9 +259,24 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $category2->expects($this->once())
             ->method('getIsActive')
             ->will($this->returnValue(true));
+
+        $category3 = $this->getMockBuilder('\Magento\Catalog\Model\Category')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId', 'getName', 'getIsActive'])
+            ->getMock();
+        $category3->expects($this->atLeastOnce())
+            ->method('getId')
+            ->will($this->returnValue(777));
+        $category3->expects($this->never())
+            ->method('getName');
+        $category3->expects($this->once())
+            ->method('getIsActive')
+            ->will($this->returnValue(true));
+
         $categories = [
             $category1,
             $category2,
+            $category3,
         ];
         $this->category->expects($this->once())
             ->method('getChildrenCategories')
@@ -290,7 +285,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $facetedData = [
             120 => ['count' => 10],
             5641 => ['count' => 45],
+            777 => ['count' => 80],
         ];
+
+        $this->fulltextCollection->expects($this->once())
+            ->method('getSize')
+            ->will($this->returnValue(50));
+
         $this->fulltextCollection->expects($this->once())
             ->method('getFacetedData')
             ->with('category')

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Paypal\Model;
 
@@ -45,17 +26,17 @@ class CartTest extends \PHPUnit_Framework_TestCase
      * @param array $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
         $this->_validItem = new \Magento\Framework\Object(
-            array(
+            [
                 'parent_item' => null,
                 'price' => 2.0,
                 'qty' => 3,
                 'name' => 'valid item',
-                'original_item' => new \Magento\Framework\Object(array('base_row_total' => 6.0))
-            )
+                'original_item' => new \Magento\Framework\Object(['base_row_total' => 6.0]),
+            ]
         );
     }
 
@@ -64,7 +45,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->_salesModel = $this->getMockForAbstractClass(
             'Magento\Payment\Model\Cart\SalesModel\SalesModelInterface'
         );
-        $factoryMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\Factory', array(), array(), '', false);
+        $factoryMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\Factory', [], [], '', false);
         $factoryMock->expects(
             $this->once()
         )->method(
@@ -86,7 +67,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testInvalidGetAllItems($items)
     {
         $taxContainer = new \Magento\Framework\Object(
-            array('base_hidden_tax_amount' => 0.2, 'base_shipping_hidden_tax_amnt' => 0.1)
+            ['base_hidden_tax_amount' => 0.2, 'base_shipping_hidden_tax_amnt' => 0.1]
         );
         $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
         $this->_salesModel->expects($this->once())->method('getAllItems')->will($this->returnValue($items));
@@ -103,47 +84,47 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function invalidGetAllItemsDataProvider()
     {
-        return array(
-            array(array()),
-            array(
-                array(
+        return [
+            [[]],
+            [
+                [
                     new \Magento\Framework\Object(
-                        array(
+                        [
                             'parent_item' => new \Magento\Framework\Object(),
                             'price' => 2.0,
                             'qty' => 3,
-                            'name' => 'item 1'
-                        )
-                    )
-                )
-            ),
-            array(
-                array(
+                            'name' => 'item 1',
+                        ]
+                    ),
+                ]
+            ],
+            [
+                [
                     $this->_validItem,
                     new \Magento\Framework\Object(
-                        array(
+                        [
                             'price' => 2.0,
                             'qty' => 3,
                             'name' => 'item 2',
-                            'original_item' => new \Magento\Framework\Object(array('base_row_total' => 6.01))
-                        )
-                    )
-                )
-            ),
-            array(
-                array(
+                            'original_item' => new \Magento\Framework\Object(['base_row_total' => 6.01]),
+                        ]
+                    ),
+                ]
+            ],
+            [
+                [
                     $this->_validItem,
                     new \Magento\Framework\Object(
-                        array(
+                        [
                             'price' => sqrt(2),
                             'qty' => sqrt(2),
                             'name' => 'item 3',
-                            'original_item' => new \Magento\Framework\Object(array('base_row_total' => 2))
-                        )
-                    )
-                )
-            )
-        );
+                            'original_item' => new \Magento\Framework\Object(['base_row_total' => 2]),
+                        ]
+                    ),
+                ]
+            ]
+        ];
     }
 
     /**
@@ -166,47 +147,47 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function invalidTotalsGetAllItemsDataProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'base_hidden_tax_amount' => 0,
                     'base_shipping_hidden_tax_amnt' => 0,
                     'base_subtotal' => 0,
                     'base_tax_amount' => 0,
                     'base_shipping_amount' => 0,
                     'base_discount_amount' => 6.1,
-                    'base_grand_total' => 0
-                ),
-                false
-            ),
-            array(
-                array(
+                    'base_grand_total' => 0,
+                ],
+                false,
+            ],
+            [
+                [
                     'base_hidden_tax_amount' => 1,
                     'base_shipping_hidden_tax_amnt' => 2,
                     'base_subtotal' => 3,
                     'base_tax_amount' => 4,
                     'base_shipping_amount' => 5,
                     'base_discount_amount' => 100,
-                    'base_grand_total' => 5.5
-                ),
+                    'base_grand_total' => 5.5,
+                ],
                 true
-            )
-        );
+            ]
+        ];
     }
 
     public function testGetAllItems()
     {
         $totals = $this->_prepareValidModelData();
         $this->assertEquals(
-            array(
+            [
                 new \Magento\Framework\Object(
-                    array(
+                    [
                         'name' => $this->_validItem->getName(),
                         'qty' => $this->_validItem->getQty(),
-                        'amount' => $this->_validItem->getPrice()
-                    )
-                )
-            ),
+                        'amount' => $this->_validItem->getPrice(),
+                    ]
+                ),
+            ],
             $this->_model->getAllItems()
         );
         $this->assertEquals($totals['subtotal'], $this->_model->getSubtotal());
@@ -233,16 +214,16 @@ class CartTest extends \PHPUnit_Framework_TestCase
         if (!$transferDiscount) {
             $expectedSubtotal -= $this->_model->getDiscount();
         }
-        $this->assertEquals(array(Cart::AMOUNT_SUBTOTAL => $expectedSubtotal), $result);
+        $this->assertEquals([Cart::AMOUNT_SUBTOTAL => $expectedSubtotal], $result);
     }
 
     public function invalidGetAmountsDataProvider()
     {
-        $data = array();
+        $data = [];
         $invalidTotalsData = $this->invalidTotalsGetAllItemsDataProvider();
         foreach ($invalidTotalsData as $dataItem) {
-            $data[] = array($dataItem[0], $dataItem[1], true);
-            $data[] = array($dataItem[0], $dataItem[1], false);
+            $data[] = [$dataItem[0], $dataItem[1], true];
+            $data[] = [$dataItem[0], $dataItem[1], false];
         }
         return $data;
     }
@@ -257,10 +238,10 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected function _prepareInvalidModelData($values, $transferDiscount)
     {
         $taxContainer = new \Magento\Framework\Object(
-            array(
+            [
                 'base_hidden_tax_amount' => $values['base_hidden_tax_amount'],
-                'base_shipping_hidden_tax_amnt' => $values['base_shipping_hidden_tax_amnt']
-            )
+                'base_shipping_hidden_tax_amnt' => $values['base_shipping_hidden_tax_amnt'],
+            ]
         );
         $expectedSubtotal = $values['base_subtotal'];
         if ($transferDiscount) {
@@ -273,7 +254,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getAllItems'
         )->will(
-            $this->returnValue(array($this->_validItem))
+            $this->returnValue([$this->_validItem])
         );
         $this->_salesModel->expects(
             $this->once()
@@ -328,9 +309,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected function _prepareValidModelData()
     {
-        $totals = array('discount' => 0.1, 'shipping' => 0.2, 'subtotal' => 0.3, 'tax' => 0.4);
+        $totals = ['discount' => 0.1, 'shipping' => 0.2, 'subtotal' => 0.3, 'tax' => 0.4];
         $taxContainer = new \Magento\Framework\Object(
-            array('base_hidden_tax_amount' => 0, 'base_shipping_hidden_tax_amnt' => 0)
+            ['base_hidden_tax_amount' => 0, 'base_shipping_hidden_tax_amnt' => 0]
         );
         $this->_salesModel->expects($this->once())->method('getTaxContainer')->will($this->returnValue($taxContainer));
         $this->_salesModel->expects(
@@ -338,7 +319,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getAllItems'
         )->will(
-            $this->returnValue(array($this->_validItem))
+            $this->returnValue([$this->_validItem])
         );
         $this->_salesModel->expects(
             $this->once()

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Stdlib\Cookie;
 
@@ -37,19 +18,19 @@ class SensitiveCookieMetadataTest extends \PHPUnit_Framework_TestCase
     /** @var SensitiveCookieMetadata */
     private $sensitiveCookieMetadata;
 
-    /** @var  \Magento\Framework\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
-    private $storeManagerMock;
+    /** @var  \Magento\Framework\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject */
+    private $requestMock;
 
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
             ->getMock();
         $this->sensitiveCookieMetadata = $this->objectManager->getObject(
             'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
             [
-                'storeManager' => $this->storeManagerMock,
+                'request' => $this->requestMock,
             ]
         );
     }
@@ -65,7 +46,7 @@ class SensitiveCookieMetadataTest extends \PHPUnit_Framework_TestCase
         $object = $this->objectManager->getObject(
             'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
             [
-                'storeManager' => $this->storeManagerMock,
+                'request' => $this->requestMock,
                 'metadata' => $metadata,
 
             ]
@@ -97,29 +78,23 @@ class SensitiveCookieMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $isCurrentlySecure
+     * @param bool $isSecure
      * @param array $metadata
      * @param bool $expected
      * @param int $callNum
      * @dataProvider getSecureDataProvider
      */
-    public function testGetSecure($isCurrentlySecure, $metadata, $expected, $callNum = 1)
+    public function testGetSecure($isSecure, $metadata, $expected, $callNum = 1)
     {
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock->expects($this->exactly($callNum))
-            ->method('getStore')
-            ->will($this->returnValue($storeMock));
-        $storeMock->expects($this->exactly($callNum))
-            ->method('isCurrentlySecure')
-            ->willReturn($isCurrentlySecure);
+        $this->requestMock->expects($this->exactly($callNum))
+            ->method('isSecure')
+            ->willReturn($isSecure);
 
         /** @var \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata $object */
         $object = $this->objectManager->getObject(
             'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
             [
-                'storeManager' => $this->storeManagerMock,
+                'request' => $this->requestMock,
                 'metadata' => $metadata,
             ]
         );
@@ -159,29 +134,23 @@ class SensitiveCookieMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $isCurrentlySecure
+     * @param bool $isSecure
      * @param array $metadata
      * @param bool $expected
      * @param int $callNum
      * @dataProvider toArrayDataProvider
      */
-    public function testToArray($isCurrentlySecure, $metadata, $expected, $callNum = 1)
+    public function testToArray($isSecure, $metadata, $expected, $callNum = 1)
     {
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock->expects($this->exactly($callNum))
-            ->method('getStore')
-            ->will($this->returnValue($storeMock));
-        $storeMock->expects($this->exactly($callNum))
-            ->method('isCurrentlySecure')
-            ->willReturn($isCurrentlySecure);
+        $this->requestMock->expects($this->exactly($callNum))
+            ->method('isSecure')
+            ->willReturn($isSecure);
 
         /** @var \Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata $object */
         $object = $this->objectManager->getObject(
             'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
             [
-                'storeManager' => $this->storeManagerMock,
+                'request' => $this->requestMock,
                 'metadata' => $metadata,
             ]
         );

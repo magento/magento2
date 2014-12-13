@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Block\Form;
 
@@ -64,27 +45,27 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_moduleManager = $this->getMock('Magento\Framework\Module\Manager', array(), array(), '', false);
-        $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $this->_customerUrl = $this->getMock('Magento\Customer\Model\Url', array(), array(), '', false);
+        $this->_moduleManager = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
+        $this->_coreData = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
+        $this->_customerUrl = $this->getMock('Magento\Customer\Model\Url', [], [], '', false);
         $this->_customerSession = $this->getMock(
             'Magento\Customer\Model\Session',
-            array('getCustomerFormData'),
-            array(),
+            ['getCustomerFormData'],
+            [],
             '',
             false
         );
 
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', array(), array(), '', false);
+        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
 
         $this->_block = new Register(
             $context,
             $this->_coreData,
-            $this->getMockForAbstractClass('Magento\Framework\Json\EncoderInterface', array(), '', false),
-            $this->getMock('Magento\Framework\App\Cache\Type\Config', array(), array(), '', false),
-            $this->getMock('Magento\Directory\Model\Resource\Region\CollectionFactory', array(), array(), '', false),
-            $this->getMock('Magento\Directory\Model\Resource\Country\CollectionFactory', array(), array(), '', false),
+            $this->getMockForAbstractClass('Magento\Framework\Json\EncoderInterface', [], '', false),
+            $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false),
+            $this->getMock('Magento\Directory\Model\Resource\Region\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Directory\Model\Resource\Country\CollectionFactory', [], [], '', false),
             $this->_moduleManager,
             $this->_customerSession,
             $this->_customerUrl
@@ -108,10 +89,10 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function getConfigProvider()
     {
-        return array(
-            array('/path/to/config/value', 'config value'),
-            array('/path/to/config/value/that/does/not/exist', null)
-        );
+        return [
+            ['/path/to/config/value', 'config value'],
+            ['/path/to/config/value/that/does/not/exist', null]
+        ];
     }
 
     public function testGetPostActionUrl()
@@ -181,7 +162,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $data = new \Magento\Framework\Object();
         $data->setFirstname('John');
         $data->setCustomerData(1);
-        $customerFormData = array('firstname' => 'John');
+        $customerFormData = ['firstname' => 'John'];
         $this->_customerSession->expects(
             $this->once()
         )->method(
@@ -203,7 +184,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $data->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $data->setCustomerData(1);
         $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
-        $customerFormData = array(self::REGION_ID_ATTRIBUTE_CODE => self::REGION_ID_ATTRIBUTE_VALUE);
+        $customerFormData = [self::REGION_ID_ATTRIBUTE_CODE => self::REGION_ID_ATTRIBUTE_VALUE];
         $this->_customerSession->expects(
             $this->once()
         )->method(
@@ -315,7 +296,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function isNewsletterEnabledProvider()
     {
-        return array(array(true, true), array(false, false));
+        return [[true, true], [false, false]];
     }
 
     /**
@@ -328,7 +309,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $data->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $data->setCustomerData(1);
         $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
-        $customerFormData = array(self::REGION_ID_ATTRIBUTE_CODE => self::REGION_ID_ATTRIBUTE_VALUE);
+        $customerFormData = [self::REGION_ID_ATTRIBUTE_CODE => self::REGION_ID_ATTRIBUTE_VALUE];
         $this->_customerSession->expects(
             $this->once()
         )->method(
@@ -336,8 +317,8 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($customerFormData)
         );
-        $form = $this->getMock('Magento\Customer\Model\Metadata\Form', array(), array(), '', false);
-        $request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface', array(), '', false);
+        $form = $this->getMock('Magento\Customer\Model\Metadata\Form', [], [], '', false);
+        $request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface', [], '', false);
         $formData = $this->_block->getFormData();
         $form->expects(
             $this->once()

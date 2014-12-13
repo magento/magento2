@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\DesignEditor\Model\Editor\Tools\Controls;
 
@@ -89,7 +70,7 @@ class Configuration
      *
      * @var array
      */
-    protected $_controlList = array();
+    protected $_controlList = [];
 
     /**
      * View config model
@@ -134,10 +115,10 @@ class Configuration
     protected function _initViewConfigs()
     {
         $this->_viewConfig = $this->_viewConfigLoader->getViewConfig(
-            array('area' => \Magento\Framework\View\DesignInterface::DEFAULT_AREA, 'themeModel' => $this->_theme)
+            ['area' => \Magento\Framework\View\DesignInterface::DEFAULT_AREA, 'themeModel' => $this->_theme]
         );
         $this->_viewConfigParent = $this->_viewConfigLoader->getViewConfig(
-            array('area' => \Magento\Framework\View\DesignInterface::DEFAULT_AREA, 'themeModel' => $this->_parentTheme)
+            ['area' => \Magento\Framework\View\DesignInterface::DEFAULT_AREA, 'themeModel' => $this->_parentTheme]
         );
         return $this;
     }
@@ -170,7 +151,7 @@ class Configuration
             if (!empty($control['components'])) {
                 $this->_prepareControlList($control['components']);
             }
-            $this->_controlList[$controlName] =& $control;
+            $this->_controlList[$controlName] = & $control;
         }
         return $this;
     }
@@ -238,11 +219,11 @@ class Configuration
      */
     protected function _prepareVarData(array $controlsData, array $controls)
     {
-        $result = array();
+        $result = [];
         foreach ($controlsData as $controlName => $controlValue) {
             if (isset($controls[$controlName])) {
                 list($module, $varKey) = $this->_extractModuleKey($controls[$controlName]['var']);
-                $result[$module][$varKey] = array($controlName, $controlValue);
+                $result[$module][$varKey] = [$controlName, $controlValue];
             }
         }
         return $result;
@@ -278,7 +259,7 @@ class Configuration
         $this->_saveViewConfiguration($configDom);
         $this->_eventDispatcher->dispatch(
             'save_view_configuration',
-            array('configuration' => $this, 'theme' => $this->_theme)
+            ['configuration' => $this, 'theme' => $this->_theme]
         );
         return $this;
     }

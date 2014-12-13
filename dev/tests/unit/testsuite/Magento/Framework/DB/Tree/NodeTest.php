@@ -2,26 +2,7 @@
 /**
  * \Magento\Framework\DB\Tree\Node test case
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\DB\Tree;
 
@@ -58,46 +39,46 @@ class NodeTest extends \PHPUnit_Framework_TestCase
      */
     public function isParentDataProvider()
     {
-        return array(
-            array(
-                array(
-                    'node_data' => array(
+        return [
+            [
+                [
+                    'node_data' => [
                         'id' => 'id',
                         'pid' => 'pid',
                         'level' => 'level',
                         'right_key' => 10,
-                        'left_key' => 5
-                    ),
-                    'keys' => array(
+                        'left_key' => 5,
+                    ],
+                    'keys' => [
                         'id' => 'id',
                         'pid' => 'pid',
                         'level' => 'level',
                         'right' => 'right_key',
-                        'left' => 'left_key'
-                    )
-                ),
-                'assertTrue'
-            ),
-            array(
-                array(
-                    'node_data' => array(
+                        'left' => 'left_key',
+                    ],
+                ],
+                'assertTrue',
+            ],
+            [
+                [
+                    'node_data' => [
                         'id' => 'id',
                         'pid' => 'pid',
                         'level' => 'level',
                         'right_key' => 5,
-                        'left_key' => 10
-                    ),
-                    'keys' => array(
+                        'left_key' => 10,
+                    ],
+                    'keys' => [
                         'id' => 'id',
                         'pid' => 'pid',
                         'level' => 'level',
                         'right' => 'right_key',
-                        'left' => 'left_key'
-                    )
-                ),
+                        'left' => 'left_key',
+                    ],
+                ],
                 'assertFalse'
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -105,31 +86,31 @@ class NodeTest extends \PHPUnit_Framework_TestCase
      */
     public function constructorDataProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'node_data' => null,
-                    'keys' => null
-                ),
+                    'keys' => null,
+                ],
+                '\Magento\Framework\DB\Tree\Node\NodeException',
+                'Empty array of node information',
+            ],
+            [
+                [
+                    'node_data' => null,
+                    'keys' => true,
+                ],
                 '\Magento\Framework\DB\Tree\Node\NodeException',
                 'Empty array of node information'
-            ),
-            array(
-                array(
-                    'node_data' => null,
-                    'keys' => true
-                ),
-                '\Magento\Framework\DB\Tree\Node\NodeException',
-                'Empty array of node information'
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'node_data' => true,
-                    'keys' => null
-                ),
+                    'keys' => null,
+                ],
                 '\Magento\Framework\DB\Tree\Node\NodeException',
                 'Empty keys array'
-            )
-        );
+            ]
+        ];
     }
 }

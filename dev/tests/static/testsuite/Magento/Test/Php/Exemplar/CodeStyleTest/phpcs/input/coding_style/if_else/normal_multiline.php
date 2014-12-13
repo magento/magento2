@@ -4,7 +4,7 @@ if ($a
     && $c
 ) {
     echo 'abc';
-} else if ($d
+} elseif ($d
            || $e
            && $f
 ) {

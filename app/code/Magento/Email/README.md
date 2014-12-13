@@ -1,4 +1,4 @@
 # Email
 
-**Email** provides the ability to manage email templates. The templates are used when sending email via the
+**Email** enables you to manage email templates, which are used when you send email through the
 *\Magento\Framework\Mail\TransportInterface* implementations.

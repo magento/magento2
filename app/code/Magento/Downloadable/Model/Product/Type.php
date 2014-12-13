@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Downloadable\Model\Product;
 
@@ -148,7 +129,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             )->addPriceToResult(
                 $product->getStore()->getWebsiteId()
             );
-            $linksCollectionById = array();
+            $linksCollectionById = [];
             foreach ($_linkCollection as $link) {
                 /* @var \Magento\Downloadable\Model\Link $link */
 
@@ -254,7 +235,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
 
         if ($data = $product->getDownloadableData()) {
             if (isset($data['sample'])) {
-                $_deleteItems = array();
+                $_deleteItems = [];
                 foreach ($data['sample'] as $sampleItem) {
                     if ($sampleItem['is_delete'] == '1') {
                         if ($sampleItem['sample_id']) {
@@ -266,7 +247,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
                             unset($sampleItem['sample_id']);
                         }
                         $sampleModel = $this->_createSample();
-                        $files = array();
+                        $files = [];
                         if (isset($sampleItem['file'])) {
                             $files = $this->_coreData->jsonDecode($sampleItem['file']);
                             unset($sampleItem['file']);
@@ -299,7 +280,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
                 }
             }
             if (isset($data['link'])) {
-                $_deleteItems = array();
+                $_deleteItems = [];
                 foreach ($data['link'] as $linkItem) {
                     if (isset($linkItem['is_delete']) && $linkItem['is_delete'] == '1') {
                         if ($linkItem['link_id']) {
@@ -310,12 +291,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
                         if (isset($linkItem['link_id']) && !$linkItem['link_id']) {
                             unset($linkItem['link_id']);
                         }
-                        $files = array();
+                        $files = [];
                         if (isset($linkItem['file'])) {
                             $files = $this->_coreData->jsonDecode($linkItem['file']);
                             unset($linkItem['file']);
                         }
-                        $sample = array();
+                        $sample = [];
                         if (isset($linkItem['sample'])) {
                             $sample = $linkItem['sample'];
                             unset($linkItem['sample']);
@@ -339,7 +320,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
                         if ($linkModel->getIsUnlimited()) {
                             $linkModel->setNumberOfDownloads(0);
                         }
-                        $sampleFile = array();
+                        $sampleFile = [];
                         if ($sample && isset($sample['type'])) {
                             if ($sample['type'] == 'url' && $sample['url'] != '') {
                                 $linkModel->setSampleUrl($sample['url']);
@@ -418,18 +399,18 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     {
         $options = parent::getOrderOptions($product);
         if ($linkIds = $product->getCustomOption('downloadable_link_ids')) {
-            $linkOptions = array();
+            $linkOptions = [];
             $links = $this->getLinks($product);
             foreach (explode(',', $linkIds->getValue()) as $linkId) {
                 if (isset($links[$linkId])) {
                     $linkOptions[] = $linkId;
                 }
             }
-            $options = array_merge($options, array('links' => $linkOptions));
+            $options = array_merge($options, ['links' => $linkOptions]);
         }
         $options = array_merge(
             $options,
-            array('is_downloadable' => true, 'real_product_type' => self::TYPE_DOWNLOADABLE)
+            ['is_downloadable' => true, 'real_product_type' => self::TYPE_DOWNLOADABLE]
         );
         return $options;
     }
@@ -512,9 +493,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     public function processBuyRequest($product, $buyRequest)
     {
         $links = $buyRequest->getLinks();
-        $links = is_array($links) ? array_filter($links, 'intval') : array();
+        $links = is_array($links) ? array_filter($links, 'intval') : [];
 
-        $options = array('links' => $links);
+        $options = ['links' => $links];
 
         return $options;
     }
@@ -550,7 +531,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     {
         if ($product->getOrigData('type_id') === \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
             $downloadableData = $product->getDownloadableData();
-            $sampleItems = array();
+            $sampleItems = [];
             if (isset($downloadableData['sample'])) {
                 foreach ($downloadableData['sample'] as $sample) {
                     $sampleItems[] = $sample['sample_id'];
@@ -559,7 +540,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             if ($sampleItems) {
                 $this->_sampleResFactory->create()->deleteItems($sampleItems);
             }
-            $linkItems = array();
+            $linkItems = [];
             if (isset($downloadableData['link'])) {
                 foreach ($downloadableData['link'] as $link) {
                     $linkItems[] = $link['link_id'];
@@ -593,7 +574,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             $originalLinksPurchasedSeparately = $product->getLinksPurchasedSeparately();
             $product->setLinksPurchasedSeparately(false);
         }
-        $preparedLinks = array();
+        $preparedLinks = [];
         if ($product->getLinksPurchasedSeparately()) {
             if ($links = $buyRequest->getLinks()) {
                 foreach ($this->getLinks($product) as $link) {

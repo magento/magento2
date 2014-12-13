@@ -1,6 +1,5 @@
 <?php
-$cmdCallback = function (array &$output = null)
-{
-    $output = array('Hello!');
+$cmdCallback = function (array &$output = null) {
+    $output = ['Hello!'];
     return 'Hello, World!';
 };

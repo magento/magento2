@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Model\Config\Backend\Show;
 
@@ -37,14 +18,14 @@ class Customer extends \Magento\Framework\App\Config\Value
      */
     protected $_eavConfig;
 
-    /** @var \Magento\Framework\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $storeManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -54,11 +35,11 @@ class Customer extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_eavConfig = $eavConfig;
         parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
@@ -82,7 +63,7 @@ class Customer extends \Magento\Framework\App\Config\Value
      */
     protected function _getAttributeObjects()
     {
-        return array($this->_eavConfig->getAttribute('customer', $this->_getAttributeCode()));
+        return [$this->_eavConfig->getAttribute('customer', $this->_getAttributeCode())];
     }
 
     /**
@@ -94,12 +75,12 @@ class Customer extends \Magento\Framework\App\Config\Value
     {
         $result = parent::afterSave();
 
-        $valueConfig = array(
-            '' => array('is_required' => 0, 'is_visible' => 0),
-            'opt' => array('is_required' => 0, 'is_visible' => 1),
-            '1' => array('is_required' => 0, 'is_visible' => 1),
-            'req' => array('is_required' => 1, 'is_visible' => 1)
-        );
+        $valueConfig = [
+            '' => ['is_required' => 0, 'is_visible' => 0],
+            'opt' => ['is_required' => 0, 'is_visible' => 1],
+            '1' => ['is_required' => 0, 'is_visible' => 1],
+            'req' => ['is_required' => 1, 'is_visible' => 1],
+        ];
 
         $value = $this->getValue();
         if (isset($valueConfig[$value])) {

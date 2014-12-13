@@ -1,32 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\View\Result;
 
 use Magento\Framework;
-use Magento\Framework\View;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\View;
 
 /**
  * A "page" result that encapsulates page type, page configuration
@@ -223,10 +204,10 @@ class Page extends Layout
      * @param string|null $defaultHandle
      * @return bool
      */
-    public function addPageLayoutHandles(array $parameters = array(), $defaultHandle = null)
+    public function addPageLayoutHandles(array $parameters = [], $defaultHandle = null)
     {
         $handle = $defaultHandle ? $defaultHandle : $this->getDefaultLayoutHandle();
-        $pageHandles = array($handle);
+        $pageHandles = [$handle];
         foreach ($parameters as $key => $value) {
             $pageHandles[] = $handle . '_' . $key . '_' . $value;
         }
@@ -253,7 +234,7 @@ class Page extends Layout
                 'htmlAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HTML),
                 'headAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HEAD),
                 'bodyAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_BODY),
-                'loaderIcon' => $this->getViewFileUrl('images/loader-2.gif')
+                'loaderIcon' => $this->getViewFileUrl('images/loader-2.gif'),
             ]);
 
             $output = $this->getLayout()->getOutput();
@@ -340,10 +321,10 @@ class Page extends Layout
      * @param array $params
      * @return string
      */
-    protected function getViewFileUrl($fileId, array $params = array())
+    protected function getViewFileUrl($fileId, array $params = [])
     {
         try {
-            $params = array_merge(array('_secure' => $this->request->isSecure()), $params);
+            $params = array_merge(['_secure' => $this->request->isSecure()], $params);
             return $this->assetRepo->getUrlWithParams($fileId, $params);
         } catch (\Magento\Framework\Exception $e) {
             $this->logger->logException($e);

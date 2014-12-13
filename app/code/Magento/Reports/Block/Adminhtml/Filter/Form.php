@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Reports\Block\Adminhtml\Filter;
 
@@ -35,21 +16,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @var array
      */
-    protected $_reportTypeOptions = array();
+    protected $_reportTypeOptions = [];
 
     /**
      * Report field visibility
      *
      * @var array
      */
-    protected $_fieldVisibility = array();
+    protected $_fieldVisibility = [];
 
     /**
      * Report field opions
      *
      * @var array
      */
-    protected $_fieldOptions = array();
+    protected $_fieldOptions = [];
 
     /**
      * Set field visibility
@@ -93,10 +74,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (is_array($option)) {
             $options = $option;
         } else {
-            $options = array($option => $value);
+            $options = [$option => $value];
         }
         if (!array_key_exists($fieldId, $this->_fieldOptions)) {
-            $this->_fieldOptions[$fieldId] = array();
+            $this->_fieldOptions[$fieldId] = [];
         }
         foreach ($options as $k => $v) {
             $this->_fieldOptions[$fieldId][$k] = $v;
@@ -127,69 +108,69 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
-            array('data' => array('id' => 'filter_form', 'action' => $actionUrl, 'method' => 'get'))
+            ['data' => ['id' => 'filter_form', 'action' => $actionUrl, 'method' => 'get']]
         );
 
         $htmlIdPrefix = 'sales_report_';
         $form->setHtmlIdPrefix($htmlIdPrefix);
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Filter')));
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Filter')]);
 
         $dateFormat = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
 
-        $fieldset->addField('store_ids', 'hidden', array('name' => 'store_ids'));
+        $fieldset->addField('store_ids', 'hidden', ['name' => 'store_ids']);
 
         $fieldset->addField(
             'report_type',
             'select',
-            array('name' => 'report_type', 'options' => $this->_reportTypeOptions, 'label' => __('Match Period To'))
+            ['name' => 'report_type', 'options' => $this->_reportTypeOptions, 'label' => __('Match Period To')]
         );
 
         $fieldset->addField(
             'period_type',
             'select',
-            array(
+            [
                 'name' => 'period_type',
-                'options' => array('day' => __('Day'), 'month' => __('Month'), 'year' => __('Year')),
+                'options' => ['day' => __('Day'), 'month' => __('Month'), 'year' => __('Year')],
                 'label' => __('Period'),
                 'title' => __('Period')
-            )
+            ]
         );
 
         $fieldset->addField(
             'from',
             'date',
-            array(
+            [
                 'name' => 'from',
                 'date_format' => $dateFormat,
                 'image' => $this->getViewFileUrl('images/grid-cal.gif'),
                 'label' => __('From'),
                 'title' => __('From'),
                 'required' => true
-            )
+            ]
         );
 
         $fieldset->addField(
             'to',
             'date',
-            array(
+            [
                 'name' => 'to',
                 'date_format' => $dateFormat,
                 'image' => $this->getViewFileUrl('images/grid-cal.gif'),
                 'label' => __('To'),
                 'title' => __('To'),
                 'required' => true
-            )
+            ]
         );
 
         $fieldset->addField(
             'show_empty_rows',
             'select',
-            array(
+            [
                 'name' => 'show_empty_rows',
-                'options' => array('1' => __('Yes'), '0' => __('No')),
+                'options' => ['1' => __('Yes'), '0' => __('No')],
                 'label' => __('Empty Rows'),
                 'title' => __('Empty Rows')
-            )
+            ]
         );
 
         $form->setUseContainer(true);

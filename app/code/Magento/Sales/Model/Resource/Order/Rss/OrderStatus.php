@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Resource\Order\Rss;
 
@@ -55,16 +36,16 @@ class OrderStatus
         $resource = $this->_resource;
         $read = $resource->getConnection('core_read');
 
-        $fields = array('notified' => 'is_customer_notified', 'comment', 'created_at');
-        $commentSelects = array();
-        foreach (array('invoice', 'shipment', 'creditmemo') as $entityTypeCode) {
+        $fields = ['notified' => 'is_customer_notified', 'comment', 'created_at'];
+        $commentSelects = [];
+        foreach (['invoice', 'shipment', 'creditmemo'] as $entityTypeCode) {
             $mainTable = $resource->getTableName('sales_' . $entityTypeCode);
             $slaveTable = $resource->getTableName('sales_' . $entityTypeCode . '_comment');
             $select = $read->select()->from(
-                array('main' => $mainTable),
-                array('entity_id' => 'order_id', 'entity_type_code' => new \Zend_Db_Expr("'{$entityTypeCode}'"))
+                ['main' => $mainTable],
+                ['entity_id' => 'order_id', 'entity_type_code' => new \Zend_Db_Expr("'{$entityTypeCode}'")]
             )->join(
-                array('slave' => $slaveTable),
+                ['slave' => $slaveTable],
                 'main.entity_id = slave.parent_id',
                 $fields
             )->where(
@@ -75,7 +56,7 @@ class OrderStatus
         }
         $select = $read->select()->from(
             $resource->getTableName('sales_order_status_history'),
-            array('entity_id' => 'parent_id', 'entity_type_code' => new \Zend_Db_Expr("'order'")) + $fields
+            ['entity_id' => 'parent_id', 'entity_type_code' => new \Zend_Db_Expr("'order'")] + $fields
         )->where(
             'parent_id = ?',
             $orderId
@@ -87,10 +68,10 @@ class OrderStatus
         $commentSelect = $read->select()->union($commentSelects, \Zend_Db_Select::SQL_UNION_ALL);
 
         $select = $read->select()->from(
-            array('orders' => $resource->getTableName('sales_order')),
-            array('increment_id')
+            ['orders' => $resource->getTableName('sales_order')],
+            ['increment_id']
         )->join(
-            array('t' => $commentSelect),
+            ['t' => $commentSelect],
             't.entity_id = orders.entity_id'
         )->order(
             'orders.created_at desc'

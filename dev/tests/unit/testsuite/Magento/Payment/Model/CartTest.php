@@ -1,29 +1,9 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Payment\Model;
 
-use Magento\Payment\Model\Cart;
 
 class CartTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,7 +20,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->_salesModelMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\SalesModelInterface');
-        $factoryMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\Factory', array(), array(), '', false);
+        $factoryMock = $this->getMock('Magento\Payment\Model\Cart\SalesModel\Factory', [], [], '', false);
         $factoryMock->expects($this->once())->method('create')->will($this->returnValue($this->_salesModelMock));
 
         $this->_model = new \Magento\Payment\Model\Cart($factoryMock, $this->_eventManagerMock, null);
@@ -106,15 +86,15 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $this->_collectItemsAndAmounts($transferFlags, $salesModelItems, $salesModelAmounts);
 
-        $customItems = array();
+        $customItems = [];
         if ($transferFlags['transfer_shipping']) {
             $customItems[] = new \Magento\Framework\Object(
-                array('name' => 'Shipping', 'qty' => 1, 'amount' => $salesModelAmounts['BaseShippingAmount'])
+                ['name' => 'Shipping', 'qty' => 1, 'amount' => $salesModelAmounts['BaseShippingAmount']]
             );
         }
         if ($transferFlags['transfer_discount']) {
             $customItems[] = new \Magento\Framework\Object(
-                array('name' => 'Discount', 'qty' => 1, 'amount' => -1.00 * $salesModelAmounts['BaseDiscountAmount'])
+                ['name' => 'Discount', 'qty' => 1, 'amount' => -1.00 * $salesModelAmounts['BaseDiscountAmount']]
             );
         }
 
@@ -129,7 +109,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function testAmountSettersAndGetters()
     {
-        foreach (array('Discount', 'Shipping', 'Tax') as $amountType) {
+        foreach (['Discount', 'Shipping', 'Tax'] as $amountType) {
             $setMethod = 'set' . $amountType;
             $getMethod = 'get' . $amountType;
             $addMethod = 'add' . $amountType;
@@ -165,59 +145,59 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function cartDataProvider()
     {
-        return array(
+        return [
             // 1. All transfer flags set to true
-            array(
-                array('transfer_shipping' => true, 'transfer_discount' => true),
+            [
+                ['transfer_shipping' => true, 'transfer_discount' => true],
                 $this->_getSalesModelItems(),
-                array(
+                [
                     'BaseDiscountAmount' => 15.0,
                     'BaseShippingAmount' => 20.0,
                     'BaseSubtotal' => 100.0,
                     'BaseTaxAmount' => 8.0
-                ),
-                array(
+                ],
+                [
                     Cart::AMOUNT_DISCOUNT => 0.0,
                     Cart::AMOUNT_SHIPPING => 0.0,
                     Cart::AMOUNT_SUBTOTAL => 105.0, // = 100.5 + shipping - discount
                     Cart::AMOUNT_TAX => 8.0
-                )
-            ),
+                ]
+            ],
             // 2. All transfer flags set to false
-            array(
-                array('transfer_shipping' => false, 'transfer_discount' => false),
+            [
+                ['transfer_shipping' => false, 'transfer_discount' => false],
                 $this->_getSalesModelItems(),
-                array(
+                [
                     'BaseDiscountAmount' => 15.0,
                     'BaseShippingAmount' => 20.0,
                     'BaseSubtotal' => 100.0,
                     'BaseTaxAmount' => 8.0
-                ),
-                array(
+                ],
+                [
                     Cart::AMOUNT_DISCOUNT => 15.0,
                     Cart::AMOUNT_SHIPPING => 20.0,
                     Cart::AMOUNT_SUBTOTAL => 100.0,
                     Cart::AMOUNT_TAX => 8.0
-                )
-            ),
+                ]
+            ],
             // 3. Shipping transfer flag set to true, discount to false, sales items are empty (don't affect result)
-            array(
-                array('transfer_shipping' => true, 'transfer_discount' => false),
-                array(),
-                array(
+            [
+                ['transfer_shipping' => true, 'transfer_discount' => false],
+                [],
+                [
                     'BaseDiscountAmount' => 15.0,
                     'BaseShippingAmount' => 20.0,
                     'BaseSubtotal' => 100.0,
                     'BaseTaxAmount' => 8.0
-                ),
-                array(
+                ],
+                [
                     Cart::AMOUNT_DISCOUNT => 15.0,
                     Cart::AMOUNT_SHIPPING => 0.0,
                     Cart::AMOUNT_SUBTOTAL => 120.0,
                     Cart::AMOUNT_TAX => 8.0
-                )
-            )
-        );
+                ]
+            ]
+        ];
     }
 
     /**
@@ -269,7 +249,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             'dispatch'
         )->with(
             $this->equalTo('payment_cart_collect_items_and_amounts'),
-            $this->equalTo(array('cart' => $this->_model))
+            $this->equalTo(['cart' => $this->_model])
         );
 
         $this->_salesModelMock->expects(
@@ -295,7 +275,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected function _getSalesModelItems()
     {
         $product = new \Magento\Framework\Object(['id' => '1']);
-        return array(
+        return [
             new \Magento\Framework\Object(
                 ['name' => 'name 1', 'qty' => 1, 'price' => 0.1, 'original_item' => $product]
             ),
@@ -308,10 +288,10 @@ class CartTest extends \PHPUnit_Framework_TestCase
                     'name' => 'name 3',
                     'qty' => 3,
                     'price' => 2.3,
-                    'original_item' => $product
+                    'original_item' => $product,
                 ]
             )
-        );
+        ];
     }
 
     /**
@@ -322,18 +302,18 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected function _convertToCartItems(array $salesModelItems)
     {
-        $result = array();
+        $result = [];
         foreach ($salesModelItems as $item) {
             if ($item->getParentItem()) {
                 continue;
             }
             $result[] = new \Magento\Framework\Object(
-                array(
+                [
                     'name' => $item->getName(),
                     'qty' => $item->getQty(),
                     'amount' => $item->getPrice(),
-                    'id' => $item->getOriginalItem()->getId()
-                )
+                    'id' => $item->getOriginalItem()->getId(),
+                ]
             );
         }
         return $result;

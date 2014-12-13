@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -46,11 +27,11 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructor()
     {
-        $options = array('concrete_backend' => $this->_mockBackend, 'testOption' => 'testOption');
+        $options = ['concrete_backend' => $this->_mockBackend, 'testOption' => 'testOption'];
 
         $decorator = $this->getMockForAbstractClass(
             'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator',
-            array($options)
+            [$options]
         );
 
         $backendProperty = new \ReflectionProperty(
@@ -78,15 +59,15 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorException($options)
     {
-        $this->getMockForAbstractClass('Magento\Framework\Cache\Backend\Decorator\AbstractDecorator', array($options));
+        $this->getMockForAbstractClass('Magento\Framework\Cache\Backend\Decorator\AbstractDecorator', [$options]);
     }
 
     public function constructorExceptionDataProvider()
     {
-        return array(
-            'empty' => array(array()),
-            'wrong_class' => array(array('concrete_backend' => $this->getMock('Test_Class')))
-        );
+        return [
+            'empty' => [[]],
+            'wrong_class' => [['concrete_backend' => $this->getMock('Test_Class')]]
+        ];
     }
 
     /**
@@ -98,16 +79,16 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
 
         $decorator = $this->getMockForAbstractClass(
             'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator',
-            array(array('concrete_backend' => $this->_mockBackend))
+            [['concrete_backend' => $this->_mockBackend]]
         );
 
-        call_user_func(array($decorator, $methodName), null, null);
+        call_user_func([$decorator, $methodName], null, null);
     }
 
     public function allMethodsDataProvider()
     {
-        $return = array();
-        $allMethods = array(
+        $return = [];
+        $allMethods = [
             'setDirectives',
             'load',
             'test',
@@ -125,11 +106,10 @@ class DecoratorAbstractTest extends \PHPUnit_Framework_TestCase
             'getCapabilities',
             'setOption',
             'getLifetime',
-            'isAutomaticCleaningAvailable',
-            'getTmpDir'
-        );
+            'getTmpDir',
+        ];
         foreach ($allMethods as $method) {
-            $return[$method] = array($method);
+            $return[$method] = [$method];
         }
         return $return;
     }

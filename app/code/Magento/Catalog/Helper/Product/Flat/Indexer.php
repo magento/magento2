@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Helper\Product\Flat;
 
@@ -70,7 +51,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var array
      */
-    protected $_systemAttributes = array('status', 'required_options', 'tax_class_id', 'weight');
+    protected $_systemAttributes = ['status', 'required_options', 'tax_class_id', 'weight'];
 
     /**
      * EAV Config instance
@@ -102,7 +83,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var array
      */
-    protected $_flatAttributeGroups = array();
+    protected $_flatAttributeGroups = [];
 
     /**
      * Config factory
@@ -117,7 +98,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_attributeFactory;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -143,7 +124,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Catalog\Model\Resource\ConfigFactory $configFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mview\View\Changelog $changelog
      * @param bool $addFilterableAttrs
      * @param bool $addChildData
@@ -156,11 +137,11 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\Resource\ConfigFactory $configFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Mview\View\Changelog $changelog,
         $addFilterableAttrs = false,
         $addChildData = false,
-        $flatAttributeGroups = array()
+        $flatAttributeGroups = []
     ) {
         $this->_configFactory = $configFactory;
         $this->_resource = $resource;
@@ -182,51 +163,51 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getFlatColumnsDdlDefinition()
     {
-        $columns = array();
-        $columns['entity_id'] = array(
+        $columns = [];
+        $columns['entity_id'] = [
             'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             'length' => null,
             'unsigned' => true,
             'nullable' => false,
             'default' => false,
             'primary' => true,
-            'comment' => 'Entity Id'
-        );
+            'comment' => 'Entity Id',
+        ];
         if ($this->isAddChildData()) {
-            $columns['child_id'] = array(
+            $columns['child_id'] = [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 'length' => null,
                 'unsigned' => true,
                 'nullable' => true,
                 'default' => null,
                 'primary' => true,
-                'comment' => 'Child Id'
-            );
-            $columns['is_child'] = array(
+                'comment' => 'Child Id',
+            ];
+            $columns['is_child'] = [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
                 'length' => 1,
                 'unsigned' => true,
                 'nullable' => false,
                 'default' => '0',
-                'comment' => 'Checks If Entity Is Child'
-            );
+                'comment' => 'Checks If Entity Is Child',
+            ];
         }
-        $columns['attribute_set_id'] = array(
+        $columns['attribute_set_id'] = [
             'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
             'length' => 5,
             'unsigned' => true,
             'nullable' => false,
             'default' => '0',
-            'comment' => 'Attribute Set Id'
-        );
-        $columns['type_id'] = array(
+            'comment' => 'Attribute Set Id',
+        ];
+        $columns['type_id'] = [
             'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             'length' => 32,
             'unsigned' => false,
             'nullable' => false,
             'default' => \Magento\Catalog\Model\Product\Type::DEFAULT_TYPE,
-            'comment' => 'Type Id'
-        );
+            'comment' => 'Type Id',
+        ];
         return $columns;
     }
 
@@ -305,7 +286,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAttributes()
     {
         if ($this->_attributes === null) {
-            $this->_attributes = array();
+            $this->_attributes = [];
             $attributeCodes = $this->getAttributeCodes();
             $entity = $this->_eavConfig->getEntityType($this->getEntityType())->getEntity();
 
@@ -339,33 +320,33 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     {
         if ($this->_attributeCodes === null) {
             $adapter = $this->_resource->getConnection('read');
-            $this->_attributeCodes = array();
+            $this->_attributeCodes = [];
 
             foreach ($this->_flatAttributeGroups as $attributeGroupName) {
                 $attributes = $this->_attributeConfig->getAttributeNames($attributeGroupName);
                 $this->_systemAttributes = array_unique(array_merge($attributes, $this->_systemAttributes));
             }
 
-            $bind = array(
+            $bind = [
                 'backend_type' => \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::TYPE_STATIC,
-                'entity_type_id' => $this->getEntityTypeId()
-            );
+                'entity_type_id' => $this->getEntityTypeId(),
+            ];
 
             $select = $adapter->select()->from(
-                array('main_table' => $this->getTable('eav_attribute'))
+                ['main_table' => $this->getTable('eav_attribute')]
             )->join(
-                array('additional_table' => $this->getTable('catalog_eav_attribute')),
+                ['additional_table' => $this->getTable('catalog_eav_attribute')],
                 'additional_table.attribute_id = main_table.attribute_id'
             )->where(
                 'main_table.entity_type_id = :entity_type_id'
             );
-            $whereCondition = array(
+            $whereCondition = [
                 'main_table.backend_type = :backend_type',
                 $adapter->quoteInto('additional_table.is_used_for_promo_rules = ?', 1),
                 $adapter->quoteInto('additional_table.used_in_product_listing = ?', 1),
                 $adapter->quoteInto('additional_table.used_for_sort_by = ?', 1),
-                $adapter->quoteInto('main_table.attribute_code IN(?)', $this->_systemAttributes)
-            );
+                $adapter->quoteInto('main_table.attribute_code IN(?)', $this->_systemAttributes),
+            ];
             if ($this->isAddFilterableAttributes()) {
                 $whereCondition[] = $adapter->quoteInto('additional_table.is_filterable > ?', 0);
             }
@@ -390,34 +371,34 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     public function getFlatIndexes()
     {
         if ($this->_indexes === null) {
-            $this->_indexes = array();
+            $this->_indexes = [];
             if ($this->isAddChildData()) {
-                $this->_indexes['PRIMARY'] = array(
+                $this->_indexes['PRIMARY'] = [
                     'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY,
-                    'fields' => array('entity_id', 'child_id')
-                );
-                $this->_indexes['IDX_CHILD'] = array(
+                    'fields' => ['entity_id', 'child_id'],
+                ];
+                $this->_indexes['IDX_CHILD'] = [
                     'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX,
-                    'fields' => array('child_id')
-                );
-                $this->_indexes['IDX_IS_CHILD'] = array(
+                    'fields' => ['child_id'],
+                ];
+                $this->_indexes['IDX_IS_CHILD'] = [
                     'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX,
-                    'fields' => array('entity_id', 'is_child')
-                );
+                    'fields' => ['entity_id', 'is_child'],
+                ];
             } else {
-                $this->_indexes['PRIMARY'] = array(
+                $this->_indexes['PRIMARY'] = [
                     'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY,
-                    'fields' => array('entity_id')
-                );
+                    'fields' => ['entity_id'],
+                ];
             }
-            $this->_indexes['IDX_TYPE_ID'] = array(
+            $this->_indexes['IDX_TYPE_ID'] = [
                 'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX,
-                'fields' => array('type_id')
-            );
-            $this->_indexes['IDX_ATTRIBUTE_SET'] = array(
+                'fields' => ['type_id'],
+            ];
+            $this->_indexes['IDX_ATTRIBUTE_SET'] = [
                 'type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX,
-                'fields' => array('attribute_set_id')
-            );
+                'fields' => ['attribute_set_id'],
+            ];
 
             foreach ($this->getAttributes() as $attribute) {
                 /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
@@ -442,7 +423,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getTablesStructure(array $attributes)
     {
-        $eavAttributes = array();
+        $eavAttributes = [];
         $flatColumnsList = $this->getFlatColumns();
         /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
         foreach ($attributes as $attribute) {
@@ -515,7 +496,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
                 unset($existentTables[$key]);
             }
         }
-        $actualStoreTables = array();
+        $actualStoreTables = [];
         foreach ($this->_storeManager->getStores() as $store) {
             $actualStoreTables[] = $this->getFlatTableName($store->getId());
         }

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Tools\Di\Compiler\Config;
 
@@ -71,7 +52,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->argumentsResolver= $this->getMock('Magento\Tools\Di\Compiler\ArgumentsResolver', [], [], '', false);
+        $this->argumentsResolver = $this->getMock('Magento\Tools\Di\Compiler\ArgumentsResolver', [], [], '', false);
         $this->classReaderDecorator = $this->getMock(
             'Magento\Tools\Di\Code\Reader\ClassReaderDecorator',
             [],
@@ -116,7 +97,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('getInstanceArguments')
             ->willReturnMap([
                 ['instanceType1', null],
-                ['instanceType2', ['arg1', 'arg2']]
+                ['instanceType2', ['arg1', 'arg2']],
             ]);
         $this->typeReader->expects($this->exactly(3))
             ->method('isConcrete')
@@ -124,13 +105,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
                 ['instanceType1', true],
                 ['instanceType2', false],
                 ['originalType1', true],
-                ['originalType2', false]
+                ['originalType2', false],
             ]);
         $this->argumentsResolver->expects($this->exactly(2))
             ->method('getResolvedConstructorArguments')
             ->willReturnMap([
                 ['instanceType1', 'resolvedConstructor1'],
-                ['instanceVirtualType1', 'resolvedConstructor2']
+                ['instanceVirtualType1', 'resolvedConstructor2'],
             ]);
         $this->diContainerConfig->expects($this->exactly(2))
             ->method('getVirtualTypes')
@@ -139,7 +120,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('getInstanceType')
             ->willReturnMap([
                 ['instanceVirtualType1', 'originalType1'],
-                ['instanceVirtualType2', 'originalType2']
+                ['instanceVirtualType2', 'originalType2'],
             ]);
         $definitionsCollection->expects($this->exactly(2))
             ->method('hasInstance')
@@ -151,13 +132,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('isShared')
             ->willReturnMap([
                 ['instanceType1', true],
-                ['instanceType2', false]
+                ['instanceType2', false],
             ]);
         $this->diContainerConfig->expects($this->once())
             ->method('getPreference')
             ->willReturnMap([
                 ['instanceType1', 'instanceType1ss'],
-                ['instanceType2', 'instanceType2']
+                ['instanceType2', 'instanceType2'],
             ]);
         $this->model->generateCachePerScope($definitionsCollection, 'areaCode', $extendConfig);
     }

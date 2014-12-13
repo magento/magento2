@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\DB;
 
@@ -64,7 +45,7 @@ class Tree
     /**
      * @var array
      */
-    private $_nodesInfo = array();
+    private $_nodesInfo = [];
 
     /**
      * Array of additional tables
@@ -78,7 +59,7 @@ class Tree
      *
      * @var array
      */
-    private $_extTables = array();
+    private $_extTables = [];
 
     /**
      * \Zend_Db_Adapter
@@ -96,11 +77,10 @@ class Tree
      * @param array $config
      * @throws TreeException
      */
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         // set a \Zend_Db_Adapter connection
         if (!empty($config['db'])) {
-
             // convenience variable
             $connection = $config['db'];
 
@@ -236,7 +216,7 @@ class Tree
      */
     public function getKeys()
     {
-        $keys = array();
+        $keys = [];
         $keys['id'] = $this->_id;
         $keys['left'] = $this->_left;
         $keys['right'] = $this->_right;
@@ -251,7 +231,7 @@ class Tree
      * @param array $data
      * @return string
      */
-    public function clear($data = array())
+    public function clear($data = [])
     {
         // clearing table
         $this->_db->query('TRUNCATE ' . $this->_table);
@@ -280,7 +260,7 @@ class Tree
     {
         if (empty($this->_nodesInfo[$nodeId])) {
             $sql = 'SELECT * FROM ' . $this->_table . ' WHERE ' . $this->_id . '=:id';
-            $res = $this->_db->query($sql, array('id' => $nodeId));
+            $res = $this->_db->query($sql, ['id' => $nodeId]);
             $data = $res->fetch();
             $this->_nodesInfo[$nodeId] = $data;
         } else {
@@ -337,7 +317,7 @@ class Tree
                     $this->_right .
                     '` >= :right';
 
-                $this->_db->query($sql, array('left' => $info[$this->_left], 'right' => $info[$this->_right]));
+                $this->_db->query($sql, ['left' => $info[$this->_left], 'right' => $info[$this->_right]]);
                 $this->_db->insert($this->_table, $data);
                 $this->_db->commit();
             } catch (\PDOException $p) {
@@ -364,12 +344,12 @@ class Tree
     {
         $sql = $this->_db->select();
         $sql->from(
-            array('t1' => $this->_table),
-            array('t1.' . $this->_id, new \Zend_Db_Expr('COUNT(t1.' . $this->_id . ') AS rep'))
+            ['t1' => $this->_table],
+            ['t1.' . $this->_id, new \Zend_Db_Expr('COUNT(t1.' . $this->_id . ') AS rep')]
         )->from(
-            array('t2' => $this->_table)
+            ['t2' => $this->_table]
         )->from(
-            array('t3' => $this->_table),
+            ['t3' => $this->_table],
             new \Zend_Db_Expr('MAX(t3.' . $this->_right . ') AS max_right')
         );
 
@@ -463,10 +443,8 @@ class Tree
      */
     public function moveNode($eId, $pId, $aId = 0)
     {
-
         $eInfo = $this->getNodeInfo($eId);
         $pInfo = $this->getNodeInfo($pId);
-
 
         $leftId = $eInfo[$this->_left];
         $rightId = $eInfo[$this->_right];
@@ -795,7 +773,6 @@ class Tree
      */
     public function moveNodes($eId, $pId, $aId = 0)
     {
-
         $eInfo = $this->getNodeInfo($eId);
         if ($pId != 0) {
             $pInfo = $this->getNodeInfo($pId);
@@ -829,7 +806,6 @@ class Tree
         } elseif ($pId != $eInfo[$this->_pid]) {
             $rightKeyNear = $pInfo[$this->_right] - 1;
         }
-
 
         $skewLevel = $pInfo[$this->_level] - $eInfo[$this->_level] + 1;
         $skewTree = $eInfo[$this->_right] - $eInfo[$this->_left] + 1;
@@ -972,7 +948,6 @@ class Tree
                 $rightKeyNear;
         }
 
-
         $this->_db->beginTransaction();
         try {
             $this->_db->query($sql);
@@ -996,7 +971,7 @@ class Tree
      */
     public function addTable($tableName, $joinCondition, $fields = '*')
     {
-        $this->_extTables[$tableName] = array('joinCondition' => $joinCondition, 'fields' => $fields);
+        $this->_extTables[$tableName] = ['joinCondition' => $joinCondition, 'fields' => $fields];
     }
 
     /**
@@ -1038,7 +1013,7 @@ class Tree
 
         $this->_addExtTablesToSelect($dbSelect);
 
-        $data = array();
+        $data = [];
         $data['left'] = $info[$this->_left];
         $data['right'] = $info[$this->_right];
 
@@ -1068,7 +1043,7 @@ class Tree
 
         $this->_addExtTablesToSelect($dbSelect);
 
-        $data = array();
+        $data = [];
         $data['id'] = $nodeId;
 
         $data = $this->_db->fetchRow($dbSelect, $data);

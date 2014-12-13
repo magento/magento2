@@ -1,38 +1,18 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Ui\Component;
 
-use Magento\Ui\DataProvider\Manager;
-use Magento\Framework\View\Element\Template;
-use Magento\Ui\ContentType\ContentTypeFactory;
-use Magento\Ui\Component\Filter\FilterAbstract;
-use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Framework\View\Element\UiComponent\ConfigFactory;
-use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
-use Magento\Ui\DataProvider\Factory as DataProviderFactory;
-use Magento\Ui\Component\Filter\FilterPool as FilterPoolProvider;
 use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
+use Magento\Framework\View\Element\UiComponent\ConfigFactory;
+use Magento\Framework\View\Element\UiComponent\Context;
+use Magento\Ui\Component\Filter\FilterAbstract;
+use Magento\Ui\Component\Filter\FilterPool as FilterPoolProvider;
+use Magento\Ui\ContentType\ContentTypeFactory;
+use Magento\Ui\DataProvider\Factory as DataProviderFactory;
+use Magento\Ui\DataProvider\Manager;
 
 /**
  * Class FilterPool
@@ -135,7 +115,7 @@ class FilterPool extends AbstractView
             if (isset($metaData[$field]['filter_type'])) {
                 $filters[$field] = [
                     'label' => $metaData[$field]['label'],
-                    'current_display_value' => $value
+                    'current_display_value' => $value,
                 ];
             }
         }

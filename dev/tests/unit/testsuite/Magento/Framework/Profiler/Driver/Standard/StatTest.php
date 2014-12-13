@@ -2,26 +2,7 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\Stat
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Profiler\Driver\Standard;
 
@@ -69,88 +50,88 @@ class StatTest extends \PHPUnit_Framework_TestCase
      */
     public function actionsDataProvider()
     {
-        return array(
-            'Start only once' => array(
-                'actions' => array(
-                    array('start', 'timer1', 'time' => 25, 'realMemory' => 1500, 'emallocMemory' => 10)
-                ),
-                'expected' => array(
-                    'timer1' => array(
+        return [
+            'Start only once' => [
+                'actions' => [
+                    ['start', 'timer1', 'time' => 25, 'realMemory' => 1500, 'emallocMemory' => 10],
+                ],
+                'expected' => [
+                    'timer1' => [
                         \Magento\Framework\Profiler\Driver\Standard\Stat::START => 25,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 0,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 0,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC => 0,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM_START => 1500,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC_START => 10,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 1
-                    )
-                )
-            ),
-            'Start only twice' => array(
-                'actions' => array(
-                    array('start', 'timer1', 'time' => 25, 'realMemory' => 1500, 'emallocMemory' => 10),
-                    array('start', 'timer1', 'time' => 75, 'realMemory' => 2000, 'emallocMemory' => 20)
-                ),
-                'expected' => array(
-                    'timer1' => array(
+                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 1,
+                    ],
+                ],
+            ],
+            'Start only twice' => [
+                'actions' => [
+                    ['start', 'timer1', 'time' => 25, 'realMemory' => 1500, 'emallocMemory' => 10],
+                    ['start', 'timer1', 'time' => 75, 'realMemory' => 2000, 'emallocMemory' => 20],
+                ],
+                'expected' => [
+                    'timer1' => [
                         \Magento\Framework\Profiler\Driver\Standard\Stat::START => 75,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 0,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 0,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC => 0,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM_START => 2000,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC_START => 20,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 2
-                    )
-                )
-            ),
-            'Start and stop consequentially' => array(
-                'actions' => array(
-                    array('start', 'timer1', 'time' => 25, 'realMemory' => 1500, 'emallocMemory' => 10),
-                    array('stop', 'timer1', 'time' => 75, 'realMemory' => 2000, 'emallocMemory' => 20),
-                    array('start', 'timer1', 'time' => 200, 'realMemory' => 3000, 'emallocMemory' => 50),
-                    array('stop', 'timer1', 'time' => 250, 'realMemory' => 4000, 'emallocMemory' => 80)
-                ),
-                'expected' => array(
-                    'timer1' => array(
+                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 2,
+                    ],
+                ],
+            ],
+            'Start and stop consequentially' => [
+                'actions' => [
+                    ['start', 'timer1', 'time' => 25, 'realMemory' => 1500, 'emallocMemory' => 10],
+                    ['stop', 'timer1', 'time' => 75, 'realMemory' => 2000, 'emallocMemory' => 20],
+                    ['start', 'timer1', 'time' => 200, 'realMemory' => 3000, 'emallocMemory' => 50],
+                    ['stop', 'timer1', 'time' => 250, 'realMemory' => 4000, 'emallocMemory' => 80],
+                ],
+                'expected' => [
+                    'timer1' => [
                         \Magento\Framework\Profiler\Driver\Standard\Stat::START => false,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 100,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 1500,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC => 40,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM_START => 3000,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC_START => 50,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 2
-                    )
-                )
-            ),
-            'Start and stop with inner timer' => array(
-                'actions' => array(
-                    array('start', 'timer1', 'time' => 25, 'realMemory' => 1500, 'emallocMemory' => 10),
-                    array('start', 'timer2', 'time' => 50, 'realMemory' => 2000, 'emallocMemory' => 20),
-                    array('stop', 'timer2', 'time' => 80, 'realMemory' => 2500, 'emallocMemory' => 25),
-                    array('stop', 'timer1', 'time' => 100, 'realMemory' => 4200, 'emallocMemory' => 55)
-                ),
-                'expected' => array(
-                    'timer1' => array(
+                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 2,
+                    ],
+                ],
+            ],
+            'Start and stop with inner timer' => [
+                'actions' => [
+                    ['start', 'timer1', 'time' => 25, 'realMemory' => 1500, 'emallocMemory' => 10],
+                    ['start', 'timer2', 'time' => 50, 'realMemory' => 2000, 'emallocMemory' => 20],
+                    ['stop', 'timer2', 'time' => 80, 'realMemory' => 2500, 'emallocMemory' => 25],
+                    ['stop', 'timer1', 'time' => 100, 'realMemory' => 4200, 'emallocMemory' => 55],
+                ],
+                'expected' => [
+                    'timer1' => [
                         \Magento\Framework\Profiler\Driver\Standard\Stat::START => false,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 75,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 2700,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC => 45,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM_START => 1500,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC_START => 10,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 1
-                    ),
-                    'timer2' => array(
+                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 1,
+                    ],
+                    'timer2' => [
                         \Magento\Framework\Profiler\Driver\Standard\Stat::START => false,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 30,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 500,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC => 5,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM_START => 2000,
                         \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC_START => 20,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 1
-                    )
-                )
-            )
-        );
+                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 1,
+                    ],
+                ],
+            ]
+        ];
     }
 
     /**
@@ -214,54 +195,54 @@ class StatTest extends \PHPUnit_Framework_TestCase
      */
     public function timersSortingDataProvider()
     {
-        return array(
-            'Without sorting' => array(
-                'actions' => array(
-                    array('start', 'root'),
-                    array('start', 'root->init'),
-                    array('stop', 'root->init'),
-                    array('stop', 'root')
-                ),
-                'expected' => array('root', 'root->init')
-            ),
-            'Simple sorting' => array(
-                'actions' => array(
-                    array('start', 'root'),
-                    array('start', 'root->di'),
-                    array('stop', 'root->di'),
-                    array('start', 'root->init'),
-                    array('start', 'root->init->init_stores'),
-                    array('start', 'root->init->init_stores->store_collection_load_after'),
-                    array('stop', 'root->init->init_stores->store_collection_load_after'),
-                    array('stop', 'root->init->init_stores'),
-                    array('stop', 'root->init'),
-                    array('start', 'root->dispatch'),
-                    array('stop', 'root->dispatch'),
-                    array('stop', 'root')
-                ),
-                'expected' => array(
+        return [
+            'Without sorting' => [
+                'actions' => [
+                    ['start', 'root'],
+                    ['start', 'root->init'],
+                    ['stop', 'root->init'],
+                    ['stop', 'root'],
+                ],
+                'expected' => ['root', 'root->init'],
+            ],
+            'Simple sorting' => [
+                'actions' => [
+                    ['start', 'root'],
+                    ['start', 'root->di'],
+                    ['stop', 'root->di'],
+                    ['start', 'root->init'],
+                    ['start', 'root->init->init_stores'],
+                    ['start', 'root->init->init_stores->store_collection_load_after'],
+                    ['stop', 'root->init->init_stores->store_collection_load_after'],
+                    ['stop', 'root->init->init_stores'],
+                    ['stop', 'root->init'],
+                    ['start', 'root->dispatch'],
+                    ['stop', 'root->dispatch'],
+                    ['stop', 'root'],
+                ],
+                'expected' => [
                     'root',
                     'root->di',
                     'root->init',
                     'root->init->init_stores',
                     'root->init->init_stores->store_collection_load_after',
-                    'root->dispatch'
-                )
-            ),
-            'Nested sorting' => array(
-                'actions' => array(
-                    array('start', 'root'),
-                    array('start', 'root->init'),
-                    array('start', 'root->system'),
-                    array('stop', 'root->system'),
-                    array('start', 'root->init->init_config'),
-                    array('stop', 'root->init->init_config'),
-                    array('stop', 'root->init'),
-                    array('stop', 'root')
-                ),
-                'expected' => array('root', 'root->init', 'root->init->init_config', 'root->system')
-            )
-        );
+                    'root->dispatch',
+                ],
+            ],
+            'Nested sorting' => [
+                'actions' => [
+                    ['start', 'root'],
+                    ['start', 'root->init'],
+                    ['start', 'root->system'],
+                    ['stop', 'root->system'],
+                    ['start', 'root->init->init_config'],
+                    ['stop', 'root->init->init_config'],
+                    ['stop', 'root->init'],
+                    ['stop', 'root'],
+                ],
+                'expected' => ['root', 'root->init', 'root->init->init_config', 'root->system'],
+            ]
+        ];
     }
 
     /**
@@ -288,36 +269,36 @@ class StatTest extends \PHPUnit_Framework_TestCase
      */
     public function timersFilteringDataProvider()
     {
-        return array(
-            'Filtering by pattern' => array(
-                'actions' => array(
-                    array('start', 'root'),
-                    array('start', 'root->init'),
-                    array('stop', 'root->init'),
-                    array('stop', 'root')
-                ),
-                'thresholds' => array(),
+        return [
+            'Filtering by pattern' => [
+                'actions' => [
+                    ['start', 'root'],
+                    ['start', 'root->init'],
+                    ['stop', 'root->init'],
+                    ['stop', 'root'],
+                ],
+                'thresholds' => [],
                 'filterPattern' => '/^root$/',
-                'expected' => array('root')
-            ),
-            'Filtering by thresholds' => array(
-                'actions' => array(
-                    array('start', 'root', 'time' => 0, 'realMemory' => 0, 'emallocMemory' => 0),
-                    array('start', 'root->init', 0),
-                    array('start', 'root->init->init_cache', 'time' => 50, 'realMemory' => 1000),
-                    array('stop', 'root->init->init_cache', 'time' => 100, 'realMemory' => 21000),
-                    array('stop', 'root->init', 999),
-                    array('stop', 'root', 'time' => 1000, 'realMemory' => 500, 'emallocMemory' => 0)
-                ),
-                'thresholds' => array(
+                'expected' => ['root'],
+            ],
+            'Filtering by thresholds' => [
+                'actions' => [
+                    ['start', 'root', 'time' => 0, 'realMemory' => 0, 'emallocMemory' => 0],
+                    ['start', 'root->init', 0],
+                    ['start', 'root->init->init_cache', 'time' => 50, 'realMemory' => 1000],
+                    ['stop', 'root->init->init_cache', 'time' => 100, 'realMemory' => 21000],
+                    ['stop', 'root->init', 999],
+                    ['stop', 'root', 'time' => 1000, 'realMemory' => 500, 'emallocMemory' => 0],
+                ],
+                'thresholds' => [
                     \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 1000,
-                    \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 20000
-                ),
+                    \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 20000,
+                ],
                 'filterPattern' => null,
                 // TIME >= 1000, REALMEM >= 20000
-                'expected' => array('root', 'root->init->init_cache')
-            )
-        );
+                'expected' => ['root', 'root->init->init_cache'],
+            ]
+        ];
     }
 
     /**
@@ -349,66 +330,66 @@ class StatTest extends \PHPUnit_Framework_TestCase
      */
     public function fetchDataProvider()
     {
-        return array(
-            array(
-                'actions' => array(
-                    array('start', 'root', 'time' => 0, 'realMemory' => 0, 'emallocMemory' => 0),
-                    array('stop', 'root', 'time' => 1000, 'realMemory' => 500, 'emallocMemory' => 10)
-                ),
-                'expects' => array(
-                    array(
+        return [
+            [
+                'actions' => [
+                    ['start', 'root', 'time' => 0, 'realMemory' => 0, 'emallocMemory' => 0],
+                    ['stop', 'root', 'time' => 1000, 'realMemory' => 500, 'emallocMemory' => 10],
+                ],
+                'expects' => [
+                    [
                         'timerId' => 'root',
                         'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::START,
-                        'expectedValue' => false
-                    ),
-                    array(
+                        'expectedValue' => false,
+                    ],
+                    [
                         'timerId' => 'root',
                         'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::TIME,
                         'expectedValue' => 1000
-                    ),
-                    array(
+                    ],
+                    [
                         'timerId' => 'root',
                         'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM,
                         'expectedValue' => 500
-                    ),
-                    array(
+                    ],
+                    [
                         'timerId' => 'root',
                         'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC,
                         'expectedValue' => 10
-                    )
-                )
-            ),
-            array(
-                'actions' => array(
-                    array('start', 'root', 'time' => 0),
-                    array('stop', 'root', 'time' => 10),
-                    array('start', 'root', 'time' => 20),
-                    array('stop', 'root', 'time' => 30)
-                ),
-                'expects' => array(
-                    array(
+                    ],
+                ],
+            ],
+            [
+                'actions' => [
+                    ['start', 'root', 'time' => 0],
+                    ['stop', 'root', 'time' => 10],
+                    ['start', 'root', 'time' => 20],
+                    ['stop', 'root', 'time' => 30],
+                ],
+                'expects' => [
+                    [
                         'timerId' => 'root',
                         'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::AVG,
-                        'expectedValue' => 10
-                    )
-                )
-            ),
-            array(
-                'actions' => array(array('start', 'root', 'time' => 0)),
-                'expects' => array(
-                    array(
+                        'expectedValue' => 10,
+                    ],
+                ]
+            ],
+            [
+                'actions' => [['start', 'root', 'time' => 0]],
+                'expects' => [
+                    [
                         'timerId' => 'root',
                         'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::TIME,
-                        'expectedValue' => $this->greaterThan(microtime(true))
-                    ),
-                    array(
+                        'expectedValue' => $this->greaterThan(microtime(true)),
+                    ],
+                    [
                         'timerId' => 'root',
                         'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::ID,
                         'expectedValue' => 'root'
-                    )
-                )
-            )
-        );
+                    ],
+                ]
+            ]
+        ];
     }
 
     /**

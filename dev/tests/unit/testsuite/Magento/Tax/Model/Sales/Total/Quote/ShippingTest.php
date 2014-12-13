@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
@@ -90,7 +71,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->taxClassKeyBuilder= $this->getMock('Magento\Tax\Api\Data\TaxClassKeyDataBuilder',
+        $this->taxClassKeyBuilder = $this->getMock('Magento\Tax\Api\Data\TaxClassKeyDataBuilder',
             ['setType', 'setValue', 'create'],
             [],
             '',
@@ -122,23 +103,23 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testCollectDoesNotCalculateTaxIfThereIsNoItemsRelatedToGivenAddress()
     {
         $storeId = 1;
-        $storeMock = $this->getMockObject('Magento\Store\Model\Store', array(
+        $storeMock = $this->getMockObject('Magento\Store\Model\Store', [
             'store_id' => $storeId,
-        ));
+        ]);
         $quoteMock = $this->getMockObject(
             'Magento\Sales\Model\Quote',
-            array(
+            [
                 'store' => $storeMock,
-            )
+            ]
         );
-        $addressMock = $this->getMockObject('Magento\Sales\Model\Quote\Address', array(
-            'all_non_nominal_items' => array(),
+        $addressMock = $this->getMockObject('Magento\Sales\Model\Quote\Address', [
+            'all_non_nominal_items' => [],
             'shipping_tax_calculation_amount' => 100,
             'base_shipping_tax_calculation_amount' => 200,
             'shipping_discount_amount' => 10,
             'base_shipping_discount_amount' => 20,
             'quote' => $quoteMock,
-        ));
+        ]);
         $this->taxCalculationMock->expects($this->never())->method('calculateTax');
         $this->model->collect($addressMock);
     }

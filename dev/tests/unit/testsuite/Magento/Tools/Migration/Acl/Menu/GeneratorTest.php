@@ -1,28 +1,8 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Tools\Migration\Acl\Menu;
-
 
 require_once realpath(
     __DIR__ . '/../../../../../../../../'
@@ -45,12 +25,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $_menuFiles = array();
+    protected $_menuFiles = [];
 
     /**
      * @var array
      */
-    protected $_menuIdToXPath = array();
+    protected $_menuIdToXPath = [];
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -61,17 +41,17 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->_fixturePath = realpath(__DIR__ . '/../') . '/_files';
 
-        $aclXPathToId = array(
+        $aclXPathToId = [
             'config/acl/resources/admin/system' => 'Module_Name::acl_resource',
             'config/acl/resources/admin/area_config/design/node' => 'Module_Name::acl_resource_design',
             'config/acl/resources/admin/area_config' => 'Module_Name::acl_resource_area',
-            'config/acl/resources/admin/some_other_resource' => 'Module_Name::some_other_resource'
-        );
+            'config/acl/resources/admin/some_other_resource' => 'Module_Name::some_other_resource',
+        ];
         $this->_fileManagerMock = $this->getMock('Magento\Tools\Migration\Acl\FileManager');
 
         $this->_model = new \Magento\Tools\Migration\Acl\Menu\Generator(
             $this->_fixturePath,
-            array(1),
+            [1],
             $aclXPathToId,
             $this->_fileManagerMock,
             false
@@ -80,21 +60,21 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $prefix = $this->_fixturePath . '/app/code/';
         $suffix = '/etc/adminhtml/menu.xml';
 
-        $this->_menuFiles = array(
+        $this->_menuFiles = [
             $prefix . 'community/Namespace/Module' . $suffix,
             $prefix . 'core/ANamespace/Module' . $suffix,
             $prefix . 'core/BNamespace/Module' . $suffix,
-            $prefix . 'local/Namespace/Module' . $suffix
-        );
+            $prefix . 'local/Namespace/Module' . $suffix,
+        ];
 
-        $this->_menuIdToXPath = array(
+        $this->_menuIdToXPath = [
             'Module_Name::system' => '/some/resource',
             'Module_Name::system_config' => 'system/config',
             'Module_Name::area_config_design_node' => 'area_config/design/node',
             'Some_Module::area_config_design' => 'area_config/design',
             'Magento_Module::area_config' => 'area_config',
-            'Local_Module::area_config_design_node_email_template' => 'area_config/design/node/email_template'
-        );
+            'Local_Module::area_config_design_node_email_template' => 'area_config/design/node/email_template',
+        ];
     }
 
     public function testGetEtcPattern()
@@ -115,14 +95,14 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->load($menuFile);
         $node = $dom->getElementsByTagName('menu')->item(0);
-        $expected = array(
-            'Module_Name::system' => array('parent' => '', 'resource' => '/some/resource'),
-            'Module_Name::system_config' => array('parent' => 'Module_Name::system', 'resource' => ''),
-            'Module_Name::area_config_design_node' => array(
+        $expected = [
+            'Module_Name::system' => ['parent' => '', 'resource' => '/some/resource'],
+            'Module_Name::system_config' => ['parent' => 'Module_Name::system', 'resource' => ''],
+            'Module_Name::area_config_design_node' => [
                 'parent' => 'Some_Module::area_config_design',
-                'resource' => ''
-            )
-        );
+                'resource' => '',
+            ],
+        ];
 
         $this->assertEmpty($this->_model->getMenuIdMaps());
         $this->_model->parseMenuNode($node);
@@ -156,11 +136,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->initParentItems($menuId);
 
-        $expected = array(
+        $expected = [
             'Module_Name::area_config_design_node',
             'Some_Module::area_config_design',
-            'Magento_Module::area_config'
-        );
+            'Magento_Module::area_config',
+        ];
         $maps = $this->_model->getMenuIdMaps();
         $this->assertEquals($expected, $maps[$menuId]['parents']);
     }
@@ -186,10 +166,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_model->setIdToXPath($this->_menuIdToXPath);
         $result = $this->_model->mapMenuToAcl();
         $map = $this->_model->getMenuIdToAclId();
-        $expectedMap = array(
+        $expectedMap = [
             'Module_Name::area_config_design_node' => 'Module_Name::acl_resource_design',
-            'Magento_Module::area_config' => 'Module_Name::acl_resource_area'
-        );
+            'Magento_Module::area_config' => 'Module_Name::acl_resource_area',
+        ];
         $this->assertEquals($expectedMap, $map);
         $this->assertEquals(array_keys($expectedMap), $result['mapped']);
         $this->assertEquals(4, count($result['not_mapped']));
@@ -207,12 +187,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $domExpected = new \DOMDocument();
         $domExpected->load($menuFileResult);
 
-        $domList = array($menuFileSource => $domSource);
-        $menuIdToAclId = array('item1' => 'acl1', 'item2' => 'acl2', 'item3' => 'acl3');
-        $aclXPathToId = array(
+        $domList = [$menuFileSource => $domSource];
+        $menuIdToAclId = ['item1' => 'acl1', 'item2' => 'acl2', 'item3' => 'acl3'];
+        $aclXPathToId = [
             'config/acl/resources/admin/some/resource' => 'acl4',
-            'config/acl/resources/admin/some_other_resource' => 'acl5'
-        );
+            'config/acl/resources/admin/some_other_resource' => 'acl5',
+        ];
         $this->_model->setMenuDomList($domList);
         $this->_model->setMenuIdToAclId($menuIdToAclId);
         $this->_model->setAclXPathToId($aclXPathToId);
@@ -232,7 +212,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public function testSaveMenuFiles()
     {
         $dom = new \DOMDocument();
-        $menuDomList = array('file1' => $dom, 'file2' => $dom, 'file3' => $dom);
+        $menuDomList = ['file1' => $dom, 'file2' => $dom, 'file3' => $dom];
         $this->_model->setMenuDomList($menuDomList);
 
         $this->_fileManagerMock->expects(

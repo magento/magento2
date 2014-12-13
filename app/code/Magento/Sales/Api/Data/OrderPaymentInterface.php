@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Api\Data;
 
@@ -61,7 +42,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     const CC_SECURE_VERIFY = 'cc_secure_verify';
     const PROTECTION_ELIGIBILITY = 'protection_eligibility';
     const CC_APPROVAL = 'cc_approval';
-    const CC_LAST4 = 'cc_last4';
+    const CC_LAST_4 = 'cc_last_4';
     const CC_STATUS_DESCRIPTION = 'cc_status_description';
     const ECHECK_TYPE = 'echeck_type';
     const CC_DEBUG_RESPONSE_SERIALIZED = 'cc_debug_response_serialized';
@@ -283,7 +264,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getCcExpYear();
 
     /**
-     * Returns cc_last4
+     * Returns cc_last_4
      *
      * @return string
      */

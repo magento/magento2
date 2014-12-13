@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Weee\Pricing\Render;
@@ -110,7 +91,13 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFinalAmount()
     {
-        $expectedValue = 10;
+        $this->priceCurrencyMock->expects($this->once())
+            ->method('format')
+            ->with(10, true, 2)
+            ->will($this->returnValue("$10.00"));
+
+        $displayValue = 10;
+        $expectedValue = "$10.00";
         $typeOfDisplay = 1; //Just to set it to not false
         /** @var \Magento\Framework\Pricing\Render\Amount $amountRender */
         $amountRender = $this->getMockBuilder('Magento\Framework\Pricing\Render\Amount')
@@ -119,7 +106,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $amountRender->expects($this->any())
             ->method('getDisplayValue')
-            ->will($this->returnValue($expectedValue));
+            ->will($this->returnValue($displayValue));
         $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')->will($this->returnValue($typeOfDisplay));
         /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
         $baseAmount = $this->getMockBuilder('Magento\Framework\Pricing\Amount\Base')

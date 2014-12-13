@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Catalog\Model\Resource\Product\Link\Product;
@@ -65,7 +46,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $universalFactoryMock;
 
-    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
 
     /** @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
@@ -100,7 +81,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->managerInterfaceMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->configMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->entityFactoryMock2 = $this->getMock('Magento\Eav\Model\EntityFactory');
+        $this->entityFactoryMock2 = $this->getMock('Magento\Eav\Model\EntityFactory', [], [], '', false);
         $this->helperMock = $this->getMock('Magento\Catalog\Model\Resource\Helper', [], [], '', false);
         $entity = $this->getMock('Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
         $adapter = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', [], '', false);
@@ -108,19 +89,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
         $this->universalFactoryMock = $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false);
         $this->universalFactoryMock->expects($this->any())->method('create')->will($this->returnValue($entity));
-        $this->storeManagerMock = $this->getMockForAbstractClass('Magento\Framework\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $this->storeManagerMock
             ->expects($this->any())
             ->method('getStore')
             ->will($this->returnCallback(
                 function ($store) {
-                    return is_object($store) ? $store : new \Magento\Framework\Object(array('id' => 42));
+                    return is_object($store) ? $store : new \Magento\Framework\Object(['id' => 42]);
                 }
             ));
         $this->catalogHelperMock = $this->getMock('Magento\Catalog\Helper\Data', [], [], '', false);
         $this->stateMock = $this->getMock('Magento\Catalog\Model\Indexer\Product\Flat\State', [], [], '', false);
         $this->scopeConfigInterfaceMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->optionFactoryMock = $this->getMock('Magento\Catalog\Model\Product\OptionFactory');
+        $this->optionFactoryMock = $this->getMock('Magento\Catalog\Model\Product\OptionFactory', [], [], '', false);
         $this->urlMock = $this->getMock('Magento\Catalog\Model\Resource\Url', [], [], '', false);
         $this->timezoneInterfaceMock = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->sessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
@@ -156,7 +137,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $product->expects($this->any())->method('getId')->will($this->returnValue('5'));
-        $productStore = new \Magento\Framework\Object(array('id' => 33));
+        $productStore = new \Magento\Framework\Object(['id' => 33]);
         $product->expects($this->any())->method('getStore')->will($this->returnValue($productStore));
         $this->collection->setProduct($product);
         $this->assertEquals(33, $this->collection->getStoreId());

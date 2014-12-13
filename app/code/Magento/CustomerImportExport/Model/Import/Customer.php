@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
@@ -83,7 +64,7 @@ class Customer extends AbstractCustomer
      *
      * @var array
      */
-    protected $_newCustomers = array();
+    protected $_newCustomers = [];
 
     /**
      * Array of attribute codes which will be ignored in validation and import procedures.
@@ -92,7 +73,7 @@ class Customer extends AbstractCustomer
      *
      * @var string[]
      */
-    protected $_ignoredAttributes = array('website_id', 'store_id');
+    protected $_ignoredAttributes = ['website_id', 'store_id'];
 
     /**
      * Customer entity DB table name.
@@ -139,7 +120,7 @@ class Customer extends AbstractCustomer
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
@@ -154,13 +135,13 @@ class Customer extends AbstractCustomer
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\Resource\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_resourceHelper = $resourceHelper;
 
@@ -230,7 +211,7 @@ class Customer extends AbstractCustomer
             $this->_connection->insertOnDuplicate(
                 $this->_entityTable,
                 $entitiesToUpdate,
-                array('group_id', 'store_id', 'updated_at', 'created_at')
+                ['group_id', 'store_id', 'updated_at', 'created_at']
             );
         }
 
@@ -246,19 +227,19 @@ class Customer extends AbstractCustomer
     protected function _saveCustomerAttributes(array $attributesData)
     {
         foreach ($attributesData as $tableName => $data) {
-            $tableData = array();
+            $tableData = [];
 
             foreach ($data as $customerId => $attributeData) {
                 foreach ($attributeData as $attributeId => $value) {
-                    $tableData[] = array(
+                    $tableData[] = [
                         'entity_id' => $customerId,
                         'entity_type_id' => $this->getEntityTypeId(),
                         'attribute_id' => $attributeId,
-                        'value' => $value
-                    );
+                        'value' => $value,
+                    ];
                 }
             }
-            $this->_connection->insertOnDuplicate($tableName, $tableData, array('value'));
+            $this->_connection->insertOnDuplicate($tableName, $tableData, ['value']);
         }
         return $this;
     }
@@ -303,9 +284,9 @@ class Customer extends AbstractCustomer
         $passwordAttributeId = $passwordAttribute->getId();
         $passwordStorageTable = $passwordAttribute->getBackend()->getTable();
 
-        $entitiesToCreate = array();
-        $entitiesToUpdate = array();
-        $attributesToSave = array();
+        $entitiesToCreate = [];
+        $entitiesToUpdate = [];
+        $attributesToSave = [];
 
         // entity table data
         $now = new \DateTime('@' . time());
@@ -314,12 +295,12 @@ class Customer extends AbstractCustomer
         } else {
             $createdAt = new \DateTime('@' . strtotime($rowData['created_at']));
         }
-        $entityRow = array(
+        $entityRow = [
             'group_id' => empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
             'store_id' => empty($rowData[self::COLUMN_STORE]) ? 0 : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]],
             'created_at' => $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
-            'updated_at' => $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
-        );
+            'updated_at' => $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+        ];
 
         $emailInLowercase = strtolower($rowData[self::COLUMN_EMAIL]);
         if ($entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE])) {
@@ -373,11 +354,11 @@ class Customer extends AbstractCustomer
                 );
         }
 
-        return array(
+        return [
             self::ENTITIES_TO_CREATE_KEY => $entitiesToCreate,
             self::ENTITIES_TO_UPDATE_KEY => $entitiesToUpdate,
             self::ATTRIBUTES_TO_SAVE_KEY => $attributesToSave
-        );
+        ];
     }
 
     /**
@@ -388,10 +369,10 @@ class Customer extends AbstractCustomer
     protected function _importData()
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            $entitiesToCreate = array();
-            $entitiesToUpdate = array();
-            $entitiesToDelete = array();
-            $attributesToSave = array();
+            $entitiesToCreate = [];
+            $entitiesToUpdate = [];
+            $entitiesToDelete = [];
+            $attributesToSave = [];
 
             foreach ($bunch as $rowNumber => $rowData) {
                 if (!$this->validateRow($rowData, $rowNumber)) {
@@ -409,7 +390,7 @@ class Customer extends AbstractCustomer
                     $entitiesToUpdate = array_merge($entitiesToUpdate, $processedData[self::ENTITIES_TO_UPDATE_KEY]);
                     foreach ($processedData[self::ATTRIBUTES_TO_SAVE_KEY] as $tableName => $customerAttributes) {
                         if (!isset($attributesToSave[$tableName])) {
-                            $attributesToSave[$tableName] = array();
+                            $attributesToSave[$tableName] = [];
                         }
                         $attributesToSave[$tableName] = array_diff_key(
                             $attributesToSave[$tableName],

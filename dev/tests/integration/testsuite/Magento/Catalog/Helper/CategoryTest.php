@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Helper;
 
@@ -56,15 +37,15 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $categories = $this->_helper->getStoreCategories();
         $this->assertInstanceOf('Magento\Framework\Data\Tree\Node\Collection', $categories);
         $index = 0;
-        $expectedPaths = array(
-            array(3, '1/2/3'),
-            array(6, '1/2/6'),
-            array(7, '1/2/7'),
-            array(9, '1/2/9'),
-            array(10, '1/2/10'),
-            array(11, '1/2/11'),
-            array(12, '1/2/12')
-        );
+        $expectedPaths = [
+            [3, '1/2/3'],
+            [6, '1/2/6'],
+            [7, '1/2/7'],
+            [9, '1/2/9'],
+            [10, '1/2/10'],
+            [11, '1/2/11'],
+            [12, '1/2/12'],
+        ];
         foreach ($categories as $category) {
             $this->assertInstanceOf('Magento\Framework\Data\Tree\Node', $category);
             $this->assertEquals($expectedPaths[$index][0], $category->getId());
@@ -78,11 +59,11 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $url = 'http://example.com/';
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category',
-            array('data' => array('url' => $url))
+            ['data' => ['url' => $url]]
         );
         $this->assertEquals($url, $this->_helper->getCategoryUrl($category));
 
-        $category = new \Magento\Framework\Object(array('url' => $url));
+        $category = new \Magento\Framework\Object(['url' => $url]);
         $this->assertEquals($url, $this->_helper->getCategoryUrl($category));
     }
 

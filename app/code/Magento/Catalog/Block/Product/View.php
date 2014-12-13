@@ -1,31 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Tax\Api\TaxCalculationInterface;
 
 /**
  * Product View block
@@ -45,9 +25,14 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
     protected $_jsonEncoder;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
      */
-    protected $_coreData;
+    protected $priceCurrency;
+
+    /**
+     * @var \Magento\Framework\Url\EncoderInterface
+     */
+    protected $urlEncoder;
 
     /**
      * @var \Magento\Catalog\Helper\Product
@@ -68,12 +53,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
      * @var \Magento\Customer\Model\Session
      */
     protected $customerSession;
-
-    /**
-     * @var TaxCalculationInterface
-     */
-    protected $taxCalculationService;
-
+    
     /**
      * @var ProductRepositoryInterface
      */
@@ -81,44 +61,46 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
 
     /**
      * @param Context $context
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param TaxCalculationInterface $taxCalculationService
-     * @param ProductRepositoryInterface $productRepository
+     * @param ProductRepositoryInterface|\Magento\Framework\Pricing\PriceCurrencyInterface $productRepository
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
+     * @codingStandardsIgnoreStart
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Customer\Model\Session $customerSession,
-        TaxCalculationInterface $taxCalculationService,
         ProductRepositoryInterface $productRepository,
-        array $data = array()
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        array $data = []
     ) {
         $this->_productHelper = $productHelper;
-        $this->_coreData = $coreData;
+        $this->urlEncoder = $urlEncoder;
         $this->_jsonEncoder = $jsonEncoder;
         $this->productTypeConfig = $productTypeConfig;
         $this->string = $string;
         $this->_localeFormat = $localeFormat;
         $this->customerSession = $customerSession;
-        $this->taxCalculationService = $taxCalculationService;
         $this->productRepository = $productRepository;
+        $this->priceCurrency = $priceCurrency;
         parent::__construct(
             $context,
             $data
         );
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Return wishlist widget options
@@ -163,7 +145,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         if ($this->_productHelper->canUseCanonicalTag()) {
             $this->pageConfig->addRemotePageAsset(
                 $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]),
-                ['attributes' => array('rel' => 'canonical')]
+                ['attributes' => ['rel' => 'canonical']]
             );
         }
 
@@ -205,7 +187,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
      * @param array $additional
      * @return string
      */
-    public function getAddToCartUrl($product, $additional = array())
+    public function getAddToCartUrl($product, $additional = [])
     {
         if ($this->hasCustomAddToCartUrl()) {
             return $this->getCustomAddToCartUrl();
@@ -216,8 +198,8 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         }
 
         $addUrlKey = \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED;
-        $addUrlValue = $this->_urlBuilder->getUrl('*/*/*', array('_use_rewrite' => true, '_current' => true));
-        $additional[$addUrlKey] = $this->_coreData->urlEncode($addUrlValue);
+        $addUrlValue = $this->_urlBuilder->getUrl('*/*/*', ['_use_rewrite' => true, '_current' => true]);
+        $additional[$addUrlKey] = $this->urlEncoder->encode($addUrlValue);
 
         return $this->_cartHelper->getAddUrl($product, $additional);
     }
@@ -230,53 +212,52 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
      */
     public function getJsonConfig()
     {
-        $config = array();
+        /* @var $product \Magento\Catalog\Model\Product */
+        $product = $this->getProduct();
+
+        $config = [];
         if (!$this->hasOptions()) {
+            $config = [
+                'productId' => $product->getId(),
+                'priceFormat' => $this->_localeFormat->getPriceFormat()
+                ];
             return $this->_jsonEncoder->encode($config);
         }
 
-        $customerId = $this->getCustomerId();
-        /* @var $product \Magento\Catalog\Model\Product */
-        $product = $this->getProduct();
-        $defaultTax = $this->taxCalculationService->getDefaultCalculatedRate(
-            $product->getTaxClassId(),
-            $customerId
-        );
-        $currentTax = $this->taxCalculationService->getCalculatedRate(
-            $product->getTaxClassId(),
-            $customerId
-        );
-
-        $tierPrices = array();
-
+        $tierPrices = [];
         $tierPricesList = $product->getPriceInfo()->getPrice('tier_price')->getTierPriceList();
-
         foreach ($tierPricesList as $tierPrice) {
-            $tierPrices[] = $tierPrice['price']->getValue();
+            $tierPrices[] = $this->priceCurrency->convert($tierPrice['price']->getValue());
         }
-        $config = array(
+        $config = [
             'productId' => $product->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
-            'includeTax' => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
-            'showIncludeTax' => $this->_taxData->displayPriceIncludingTax(),
-            'showBothPrices' => $this->_taxData->displayBothPrices(),
-            'productPrice' => $product->getPriceInfo()->getPrice('final_price')->getValue(),
-            'productOldPrice' => $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
-            'inclTaxPrice' => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
-            'exclTaxPrice' => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount(),
-            'defaultTax' => $defaultTax,
-            'currentTax' => $currentTax,
+            'prices' => [
+                'oldPrice' => [
+                    'amount' => $this->priceCurrency->convert(
+                        $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue()
+                    ),
+                    'adjustments' => []
+                ],
+                'basePrice' => [
+                    'amount' => $this->priceCurrency->convert(
+                        $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount()
+                    ),
+                    'adjustments' => []
+                ],
+                'finalPrice' => [
+                    'amount' => $this->priceCurrency->convert(
+                        $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue()
+                    ),
+                    'adjustments' => []
+                ]
+            ],
             'idSuffix' => '_clone',
-            'oldPlusDisposition' => 0,
-            'plusDisposition' => 0,
-            'plusDispositionTax' => 0,
-            'oldMinusDisposition' => 0,
-            'minusDisposition' => 0,
             'tierPrices' => $tierPrices
-        );
+        ];
 
         $responseObject = new \Magento\Framework\Object();
-        $this->_eventManager->dispatch('catalog_product_view_config', array('response_object' => $responseObject));
+        $this->_eventManager->dispatch('catalog_product_view_config', ['response_object' => $responseObject]);
         if (is_array($responseObject->getAdditionalOptions())) {
             foreach ($responseObject->getAdditionalOptions() as $option => $value) {
                 $config[$option] = $value;

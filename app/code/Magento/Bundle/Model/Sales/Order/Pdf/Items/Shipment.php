@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 
@@ -53,7 +34,7 @@ class Shipment extends AbstractItems
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->string = $string;
         parent::__construct(
@@ -82,13 +63,13 @@ class Shipment extends AbstractItems
         $this->_setFontRegular();
 
         $shipItems = $this->getChilds($item);
-        $items = array_merge(array($item->getOrderItem()), $item->getOrderItem()->getChildrenItems());
+        $items = array_merge([$item->getOrderItem()], $item->getOrderItem()->getChildrenItems());
 
         $prevOptionId = '';
-        $drawItems = array();
+        $drawItems = [];
 
         foreach ($items as $childItem) {
-            $line = array();
+            $line = [];
 
             $attributes = $this->getSelectionAttributes($childItem);
             if (is_array($attributes)) {
@@ -98,20 +79,20 @@ class Shipment extends AbstractItems
             }
 
             if (!isset($drawItems[$optionId])) {
-                $drawItems[$optionId] = array('lines' => array(), 'height' => 15);
+                $drawItems[$optionId] = ['lines' => [], 'height' => 15];
             }
 
             if ($childItem->getParentItem()) {
                 if ($prevOptionId != $attributes['option_id']) {
-                    $line[0] = array(
+                    $line[0] = [
                         'font' => 'italic',
                         'text' => $this->string->split($attributes['option_label'], 60, true, true),
-                        'feed' => 60
-                    );
+                        'feed' => 60,
+                    ];
 
-                    $drawItems[$optionId] = array('lines' => array($line), 'height' => 15);
+                    $drawItems[$optionId] = ['lines' => [$line], 'height' => 15];
 
-                    $line = array();
+                    $line = [];
 
                     $prevOptionId = $attributes['option_id'];
                 }
@@ -131,7 +112,7 @@ class Shipment extends AbstractItems
                 $qty = '';
             }
 
-            $line[] = array('text' => $qty, 'feed' => 35);
+            $line[] = ['text' => $qty, 'feed' => 35];
 
             // draw Name
             if ($childItem->getParentItem()) {
@@ -141,18 +122,18 @@ class Shipment extends AbstractItems
                 $feed = 60;
                 $name = $childItem->getName();
             }
-            $text = array();
+            $text = [];
             foreach ($this->string->split($name, 60, true, true) as $part) {
                 $text[] = $part;
             }
-            $line[] = array('text' => $text, 'feed' => $feed);
+            $line[] = ['text' => $text, 'feed' => $feed];
 
             // draw SKUs
-            $text = array();
+            $text = [];
             foreach ($this->string->split($childItem->getSku(), 25) as $part) {
                 $text[] = $part;
             }
-            $line[] = array('text' => $text, 'feed' => 440);
+            $line[] = ['text' => $text, 'feed' => 440];
 
             $drawItems[$optionId]['lines'][] = $line;
         }
@@ -162,8 +143,8 @@ class Shipment extends AbstractItems
         if ($options) {
             if (isset($options['options'])) {
                 foreach ($options['options'] as $option) {
-                    $lines = array();
-                    $lines[][] = array(
+                    $lines = [];
+                    $lines[][] = [
                         'text' => $this->string->split(
                             $this->filterManager->stripTags($option['label']),
                             70,
@@ -171,11 +152,11 @@ class Shipment extends AbstractItems
                             true
                         ),
                         'font' => 'italic',
-                        'feed' => 60
-                    );
+                        'feed' => 60,
+                    ];
 
                     if ($option['value']) {
-                        $text = array();
+                        $text = [];
                         $printValue = isset(
                             $option['print_value']
                         ) ? $option['print_value'] : $this->filterManager->stripTags(
@@ -188,15 +169,15 @@ class Shipment extends AbstractItems
                             }
                         }
 
-                        $lines[][] = array('text' => $text, 'feed' => 65);
+                        $lines[][] = ['text' => $text, 'feed' => 65];
                     }
 
-                    $drawItems[] = array('lines' => $lines, 'height' => 15);
+                    $drawItems[] = ['lines' => $lines, 'height' => 15];
                 }
             }
         }
 
-        $page = $pdf->drawLineBlocks($page, $drawItems, array('table_header' => true));
+        $page = $pdf->drawLineBlocks($page, $drawItems, ['table_header' => true]);
         $this->setPage($page);
     }
 }

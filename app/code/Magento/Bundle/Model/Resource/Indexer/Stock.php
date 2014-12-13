@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Bundle\Model\Resource\Indexer;
 
@@ -66,8 +47,8 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
         $adapter = $this->_getWriteAdapter();
         $select = $adapter->select()->from(
-            array('bo' => $this->getTable('catalog_product_bundle_option')),
-            array('parent_id')
+            ['bo' => $this->getTable('catalog_product_bundle_option')],
+            ['parent_id']
         );
         $this->_addWebsiteJoinToSelect($select, false);
         $status = new \Zend_Db_Expr(
@@ -77,27 +58,27 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
             'website_id',
             'cw'
         )->join(
-            array('cis' => $this->getTable('cataloginventory_stock')),
+            ['cis' => $this->getTable('cataloginventory_stock')],
             '',
-            array('stock_id')
+            ['stock_id']
         )->joinLeft(
-            array('bs' => $this->getTable('catalog_product_bundle_selection')),
+            ['bs' => $this->getTable('catalog_product_bundle_selection')],
             'bs.option_id = bo.option_id',
-            array()
+            []
         )->joinLeft(
-            array('i' => $idxTable),
+            ['i' => $idxTable],
             'i.product_id = bs.product_id AND i.website_id = cw.website_id AND i.stock_id = cis.stock_id',
-            array()
+            []
         )->joinLeft(
-            array('e' => $this->getTable('catalog_product_entity')),
+            ['e' => $this->getTable('catalog_product_entity')],
             'e.entity_id = bs.product_id',
-            array()
+            []
         )->where(
             'cw.website_id != 0'
         )->group(
-            array('bo.parent_id', 'cw.website_id', 'cis.stock_id', 'bo.option_id')
+            ['bo.parent_id', 'cw.website_id', 'cis.stock_id', 'bo.option_id']
         )->columns(
-            array('option_id' => 'bo.option_id', 'status' => $status)
+            ['option_id' => 'bo.option_id', 'status' => $status]
         );
 
         if (!is_null($entityIds)) {
@@ -131,34 +112,34 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
 
         $adapter = $this->_getWriteAdapter();
         $select = $adapter->select()->from(
-            array('e' => $this->getTable('catalog_product_entity')),
-            array('entity_id')
+            ['e' => $this->getTable('catalog_product_entity')],
+            ['entity_id']
         );
         $this->_addWebsiteJoinToSelect($select, true);
         $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
         $select->columns(
             'cw.website_id'
         )->join(
-            array('cis' => $this->getTable('cataloginventory_stock')),
+            ['cis' => $this->getTable('cataloginventory_stock')],
             '',
-            array('stock_id')
+            ['stock_id']
         )->joinLeft(
-            array('cisi' => $this->getTable('cataloginventory_stock_item')),
+            ['cisi' => $this->getTable('cataloginventory_stock_item')],
             'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
-            array()
+            []
         )->joinLeft(
-            array('o' => $this->_getBundleOptionTable()),
+            ['o' => $this->_getBundleOptionTable()],
             'o.entity_id = e.entity_id AND o.website_id = cw.website_id AND o.stock_id = cis.stock_id',
-            array()
+            []
         )->columns(
-            array('qty' => new \Zend_Db_Expr('0'))
+            ['qty' => new \Zend_Db_Expr('0')]
         )->where(
             'cw.website_id != 0'
         )->where(
             'e.type_id = ?',
             $this->getTypeId()
         )->group(
-            array('e.entity_id', 'cw.website_id', 'cis.stock_id')
+            ['e.entity_id', 'cw.website_id', 'cis.stock_id']
         );
 
         // add limitation of status
@@ -180,16 +161,16 @@ class Stock extends \Magento\CatalogInventory\Model\Resource\Indexer\Stock\Defau
         }
 
         $select->columns(
-            array(
+            [
                 'status' => $adapter->getLeastSql(
-                    array(
+                    [
                         new \Zend_Db_Expr(
                             'MIN(' . $adapter->getCheckSql('o.stock_status IS NOT NULL', 'o.stock_status', '0') . ')'
                         ),
-                        new \Zend_Db_Expr('MIN(' . $statusExpr . ')')
-                    )
-                )
-            )
+                        new \Zend_Db_Expr('MIN(' . $statusExpr . ')'),
+                    ]
+                ),
+            ]
         );
 
         if (!is_null($entityIds)) {

@@ -1,40 +1,21 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Setup\Controller;
 
-use Magento\Setup\Model\Lists;
-use Magento\Setup\Model\InstallerFactory;
-use Magento\Setup\Model\Installer;
+use Magento\Framework\App\MaintenanceMode;
+use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConsoleLogger;
+use Magento\Setup\Model\DeploymentConfigMapper;
+use Magento\Setup\Model\Installer;
+use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\Lists;
+use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
-use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
-use Magento\Setup\Model\AdminAccount;
-use Magento\Framework\App\MaintenanceMode;
-use Magento\Setup\Module\Setup\ConfigMapper;
 
 /**
  * Controller that handles all setup commands via command line interface.
@@ -153,22 +134,36 @@ class ConsoleController extends AbstractActionController
     }
 
     /**
+     * Gets command usage
+     *
+     * @return array
+     */
+    public static function getCommandUsage()
+    {
+        $result = [];
+        foreach (self::getCliConfig() as $key => $cmd) {
+            $result[$key] = $cmd['usage'];
+        }
+        return $result;
+    }
+
+    /**
      * The CLI that this controller implements
      *
      * @return array
      */
     private static function getCliConfig()
     {
-        $deployConfig = '--' . ConfigMapper::KEY_DB_HOST . '='
-            . ' --' . ConfigMapper::KEY_DB_NAME . '='
-            . ' --' . ConfigMapper::KEY_DB_USER . '='
-            . ' --' . ConfigMapper::KEY_BACKEND_FRONTNAME . '='
-            . ' [--' . ConfigMapper::KEY_DB_PASS . '=]'
-            . ' [--' . ConfigMapper::KEY_DB_PREFIX . '=]'
-            . ' [--' . ConfigMapper::KEY_DB_MODEL . '=]'
-            . ' [--' . ConfigMapper::KEY_DB_INIT_STATEMENTS . '=]'
-            . ' [--' . ConfigMapper::KEY_SESSION_SAVE . '=]'
-            . ' [--' . ConfigMapper::KEY_ENCRYPTION_KEY . '=]'
+        $deployConfig = '--' . DeploymentConfigMapper::KEY_DB_HOST . '='
+            . ' --' . DeploymentConfigMapper::KEY_DB_NAME . '='
+            . ' --' . DeploymentConfigMapper::KEY_DB_USER . '='
+            . ' --' . DeploymentConfigMapper::KEY_BACKEND_FRONTNAME . '='
+            . ' [--' . DeploymentConfigMapper::KEY_DB_PASS . '=]'
+            . ' [--' . DeploymentConfigMapper::KEY_DB_PREFIX . '=]'
+            . ' [--' . DeploymentConfigMapper::KEY_DB_MODEL . '=]'
+            . ' [--' . DeploymentConfigMapper::KEY_DB_INIT_STATEMENTS . '=]'
+            . ' [--' . DeploymentConfigMapper::KEY_SESSION_SAVE . '=]'
+            . ' [--' . DeploymentConfigMapper::KEY_ENCRYPTION_KEY . '=]'
             . ' [--' . Installer::ENABLE_MODULES . '=]'
             . ' [--' . Installer::DISABLE_MODULES . '=]';
         $userConfig = '[--' . UserConfig::KEY_BASE_URL . '=]'
@@ -190,9 +185,11 @@ class ConsoleController extends AbstractActionController
             self::CMD_INSTALL => [
                 'route' => self::CMD_INSTALL
                     . " {$deployConfig} {$userConfig} {$adminUser} {$salesConfig}"
-                    . ' [--' . Installer::CLEANUP_DB . ']',
+                    . ' [--' . Installer::CLEANUP_DB . ']'
+                    . ' [--' . Installer::USE_SAMPLE_DATA . '=]',
                 'usage' => "{$deployConfig} {$userConfig} {$adminUser} {$salesConfig}"
-                    . ' [--' . Installer::CLEANUP_DB . ']',
+                    . ' [--' . Installer::CLEANUP_DB . ']'
+                    . ' [--' . Installer::USE_SAMPLE_DATA . '=]',
                 'usage_short' => self::CMD_INSTALL . ' <options>',
                 'usage_desc' => 'Install Magento application',
             ],
@@ -294,6 +291,19 @@ class ConsoleController extends AbstractActionController
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function onDispatch(\Zend\Mvc\MvcEvent $e)
+    {
+        try {
+            return parent::onDispatch($e);
+        } catch (\Magento\Setup\Exception $exception) {
+            $this->log->log($exception->getMessage());
+            return $this->getResponse();
+        }
+    }
+
+    /**
      * Controller for Install Command
      *
      * @return void
@@ -314,9 +324,9 @@ class ConsoleController extends AbstractActionController
      */
     public function installDeploymentConfigAction()
     {
-        $this->installer->checkInstallationFilePermissions();
         /** @var \Zend\Console\Request $request */
         $request = $this->getRequest();
+        $this->installer->checkInstallationFilePermissions();
         $this->installer->installDeploymentConfig($request->getParams());
     }
 
@@ -431,7 +441,7 @@ class ConsoleController extends AbstractActionController
     public function helpAction()
     {
         $type = $this->getRequest()->getParam('type');
-        $details = self::getCliConfig();
+        $usages = self::getCommandUsage();
         switch($type) {
             case UserConfig::KEY_LANGUAGE:
                 return $this->arrayToString($this->options->getLocaleList());
@@ -440,9 +450,9 @@ class ConsoleController extends AbstractActionController
             case UserConfig::KEY_TIMEZONE:
                 return $this->arrayToString($this->options->getTimezoneList());
             default:
-                if (isset($details[$type])) {
-                    if ($details[$type]['usage']) {
-                        $formatted = $this->formatCliUsage($details[$type]['usage']);
+                if (isset($usages[$type])) {
+                    if ($usages[$type]) {
+                        $formatted = $this->formatCliUsage($usages[$type]);
                         return "\nAvailable parameters:\n{$formatted}\n";
                     }
                     return "\nThis command has no parameters.\n";

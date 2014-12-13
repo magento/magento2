@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Payment\Helper;
@@ -75,14 +56,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param string $code
-     * @param string $class
-     * @param string $methodInstance
-     * @dataProvider getMethodInstanceDataProvider
-     */
-    public function testGetMethodInstance($code, $class, $methodInstance)
+
+    public function testGetMethodInstance()
     {
+        list($code, $class, $methodInstance) = ['method_code', 'method_class', 'method_instance'];
+
         $this->scopeConfig->expects(
             $this->once()
         )->method(
@@ -105,6 +83,18 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($methodInstance, $this->helper->getMethodInstance($code));
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    public function testGetMethodInstanceWithException()
+    {
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->willReturn(null);
+
+        $this->helper->getMethodInstance('code');
     }
 
     /**
@@ -132,9 +122,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfig->expects(new MethodInvokedAtIndex(0))
             ->method('getValue')
-            ->with(
-                    sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $methodA['code'])
-            )
+            ->with(sprintf('%s/%s/model', Data::XML_PATH_PAYMENT_METHODS, $methodA['code']))
             ->will($this->returnValue('Magento\Payment\Model\Method\AbstractMethod'));
         $this->scopeConfig->expects(new MethodInvokedAtIndex(1))
             ->method('getValue')
@@ -149,8 +137,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $methodInstanceMockA = $this->getMock(
             'Magento\Framework\Object',
-            array('isAvailable','getConfigData'),
-            array(),
+            ['isAvailable', 'getConfigData'],
+            [],
             '',
             false
         );
@@ -163,8 +151,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $methodInstanceMockB = $this->getMock(
             'Magento\Framework\Object',
-            array('isAvailable','getConfigData'),
-            array(),
+            ['isAvailable', 'getConfigData'],
+            [],
             '',
             false
         );
@@ -280,25 +268,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($blockHtml, $this->helper->getInfoBlockHtml($infoMock, $storeId));
     }
 
-    public function getMethodInstanceDataProvider()
-    {
-        return array(
-            ['method_code', 'method_class', 'method_instance'],
-            ['method_code', false, false]
-        );
-    }
-
     public function getSortMethodsDataProvider()
     {
-        return array(
-            array(
-                array('code' => 'methodA', 'data' => ['sort_order' => 0]),
-                array('code' => 'methodB', 'data' => ['sort_order' => 1])
-            ),
-            array(
-                array('code' => 'methodA', 'data' => ['sort_order' => 2]),
-                array('code' => 'methodB', 'data' => ['sort_order' => 1]),
-            )
-        );
+        return [
+            [
+                ['code' => 'methodA', 'data' => ['sort_order' => 0]],
+                ['code' => 'methodB', 'data' => ['sort_order' => 1]]
+            ],
+            [
+                ['code' => 'methodA', 'data' => ['sort_order' => 2]],
+                ['code' => 'methodB', 'data' => ['sort_order' => 1]],
+            ]
+        ];
     }
 }

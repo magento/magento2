@@ -1,12 +1,12 @@
 <?php
 /**
- * Graph data structure
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data;
 
+/**
+ * Graph data structure
+ */
 class Graph
 {
     /**#@+
@@ -25,21 +25,21 @@ class Graph
      *
      * @var array
      */
-    protected $_nodes = array();
+    protected $_nodes = [];
 
     /**
      * Declared relations directed "from" "to"
      *
      * @var array
      */
-    protected $_from = array();
+    protected $_from = [];
 
     /**
      * Inverse relations "to" "from"
      *
      * @var array
      */
-    protected $_to = array();
+    protected $_to = [];
 
     /**
      * Validate consistency of the declared structure and assign it to the object state
@@ -118,8 +118,8 @@ class Graph
      */
     public function findCycle($node = null, $firstOnly = true)
     {
-        $nodes = null === $node ? $this->_nodes : array($node);
-        $results = array();
+        $nodes = null === $node ? $this->_nodes : [$node];
+        $results = [];
         foreach ($nodes as $node) {
             $result = $this->dfs($node, $node);
             if ($result) {
@@ -162,7 +162,7 @@ class Graph
      * @return array
      * @link http://en.wikipedia.org/wiki/Depth-first_search
      */
-    protected function _dfs($fromNode, $toNode, $graph, &$visited = array(), $stack = array())
+    protected function _dfs($fromNode, $toNode, $graph, &$visited = [], $stack = [])
     {
         $stack[] = $fromNode;
         $visited[$fromNode] = $fromNode;
@@ -180,7 +180,7 @@ class Graph
                 }
             }
         }
-        return array();
+        return [];
     }
 
     /**

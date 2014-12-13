@@ -1,36 +1,17 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 /* @var $this \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
 ?>
 <div class="page-actions">
     <?php echo $this->getBackButtonHtml() ?>
     <?php echo $this->getPreviewButtonHtml(); ?>
-    <?php if(!$this->getIsPreview()): ?>
+    <?php if (!$this->getIsPreview()): ?>
         <?php echo $this->getResetButtonHtml() ?>
         <?php echo $this->getSaveButtonHtml() ?>
     <?php endif ?>
-    <?php if($this->getCanResume()): ?>
+    <?php if ($this->getCanResume()): ?>
         <?php echo $this->getResumeButtonHtml() ?>
     <?php endif ?>
 </div>
@@ -42,7 +23,7 @@
 <form action="<?php echo $this->getPreviewUrl() ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
     <?php echo $this->getBlockHtml('formkey')?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php echo $this->getIsTextType()?1:2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?php echo $this->getIsTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />

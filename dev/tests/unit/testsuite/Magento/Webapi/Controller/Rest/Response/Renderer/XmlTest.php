@@ -2,26 +2,7 @@
 /**
  * Test XML Renderer for REST.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Webapi\Controller\Rest\Response\Renderer;
 
@@ -72,53 +53,53 @@ class XmlTest extends \PHPUnit_Framework_TestCase
      */
     public function providerXmlRender()
     {
-        return array(
+        return [
             // Each array consists of data to render, expected XML and assert message
-            array(
-                array('value1', 'value2'),
+            [
+                ['value1', 'value2'],
                 '<?xml version="1.0"?><response><item>value1</item><item>value2</item></response>',
                 'Invalid XML render of unassociated array data.'
-            ),
-            array(
-                array('key1' => 'value1', 'key2' => 'value2'),
+            ],
+            [
+                ['key1' => 'value1', 'key2' => 'value2'],
                 '<?xml version="1.0"?><response><key1>value1</key1><key2>value2</key2></response>',
                 'Invalid XML render of associated array data.'
-            ),
-            array(
-                (object)array('key' => 'value'),
+            ],
+            [
+                (object)['key' => 'value'],
                 '<?xml version="1.0"?><response><key>value</key></response>',
                 'Invalid XML render of object data.'
-            ),
-            array(
-                array('7key' => 'value'),
+            ],
+            [
+                ['7key' => 'value'],
                 '<?xml version="1.0"?><response><item_7key>value</item_7key></response>',
                 'Invalid XML render with numeric symbol in data index.'
-            ),
-            array(
-                array('.key' => 'value'),
+            ],
+            [
+                ['.key' => 'value'],
                 '<?xml version="1.0"?><response><item_key>value</item_key></response>',
                 'Invalid XML render with "." symbol in data index.'
-            ),
-            array(
-                array('-key' => 'value'),
+            ],
+            [
+                ['-key' => 'value'],
                 '<?xml version="1.0"?><response><item_-key>value</item_-key></response>',
                 'Invalid XML render with "-" symbol in data index.'
-            ),
-            array(
-                array(' prefix key:' => 'value'),
+            ],
+            [
+                [' prefix key:' => 'value'],
                 '<?xml version="1.0"?><response><prefix_key>value</prefix_key></response>',
                 'Invalid XML render with data key trimming.'
-            ),
-            array(
+            ],
+            [
                 'data',
                 '<?xml version="1.0"?><response>data</response>',
                 'Invalid XML render with simple data.'
-            ),
-            array(
-                new \Magento\Framework\Object(array('key' => 'value')),
+            ],
+            [
+                new \Magento\Framework\Object(['key' => 'value']),
                 '<?xml version="1.0"?><response><key>value</key></response>',
                 'Invalid XML render with \Magento\Framework\Object data.'
-            )
-        );
+            ]
+        ];
     }
 }

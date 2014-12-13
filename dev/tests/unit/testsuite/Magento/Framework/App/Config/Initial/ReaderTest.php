@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\App\Config\Initial;
 
@@ -59,8 +40,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_converterMock = $this->getMock('Magento\Framework\App\Config\Initial\Converter');
         $schemaLocatorMock = $this->getMock(
             'Magento\Framework\App\Config\Initial\SchemaLocator',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -70,8 +51,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $schemaLocatorMock->expects($this->once())->method('getSchema')->will($this->returnValue($schemaFile));
         $this->rootDirectory = $this->getMock(
             'Magento\Framework\Filesystem\Directory\Read',
-            array('readFile', 'getRelativePath'),
-            array(),
+            ['readFile', 'getRelativePath'],
+            [],
             '',
             false
         );
@@ -96,10 +77,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'config.xml',
             'global'
         )->will(
-            $this->returnValue(array())
+            $this->returnValue([])
         );
 
-        $this->assertEquals(array(), $this->_model->read());
+        $this->assertEquals([], $this->_model->read());
     }
 
     /**
@@ -107,11 +88,11 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadValidConfig()
     {
-        $testXmlFilesList = array(
+        $testXmlFilesList = [
             file_get_contents($this->_filePath . 'initial_config1.xml'),
-            file_get_contents($this->_filePath . 'initial_config2.xml')
-        );
-        $expectedConfig = array('data' => array(), 'metadata' => array());
+            file_get_contents($this->_filePath . 'initial_config2.xml'),
+        ];
+        $expectedConfig = ['data' => [], 'metadata' => []];
 
         $this->_fileResolverMock->expects(
             $this->at(0)

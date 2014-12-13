@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Session;
 
@@ -69,7 +50,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = $this->_objectManager->create(
             'Magento\Framework\Session\Config',
-            array('deploymentConfig' => $deploymentConfigMock)
+            ['deploymentConfig' => $deploymentConfigMock]
         );
     }
 
@@ -115,7 +96,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLifetimePathNonDefault()
     {
-
     }
 
     public function testSetOptionsInvalidValue()
@@ -130,38 +110,38 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetOptions($option, $getter, $value)
     {
-        $options = array($option => $value);
+        $options = [$option => $value];
         $this->_model->setOptions($options);
         $this->assertSame($value, $this->_model->{$getter}());
     }
 
     public function optionsProvider()
     {
-        return array(
-            array('save_path', 'getSavePath', __DIR__),
-            array('name', 'getName', 'FOOBAR'),
-            array('save_handler', 'getSaveHandler', 'user'),
-            array('gc_probability', 'getGcProbability', 42),
-            array('gc_divisor', 'getGcDivisor', 3),
-            array('gc_maxlifetime', 'getGcMaxlifetime', 180),
-            array('serialize_handler', 'getSerializeHandler', 'php_binary'),
-            array('cookie_lifetime', 'getCookieLifetime', 180),
-            array('cookie_path', 'getCookiePath', '/foo/bar'),
-            array('cookie_domain', 'getCookieDomain', 'framework.zend.com'),
-            array('cookie_secure', 'getCookieSecure', true),
-            array('cookie_httponly', 'getCookieHttpOnly', true),
-            array('use_cookies', 'getUseCookies', false),
-            array('use_only_cookies', 'getUseOnlyCookies', true),
-            array('referer_check', 'getRefererCheck', 'foobar'),
-            array('entropy_file', 'getEntropyFile', __FILE__),
-            array('entropy_length', 'getEntropyLength', 42),
-            array('cache_limiter', 'getCacheLimiter', 'private'),
-            array('cache_expire', 'getCacheExpire', 42),
-            array('use_trans_sid', 'getUseTransSid', true),
-            array('hash_function', 'getHashFunction', 'md5'),
-            array('hash_bits_per_character', 'getHashBitsPerCharacter', 5),
-            array('url_rewriter_tags', 'getUrlRewriterTags', 'a=href')
-        );
+        return [
+            ['save_path', 'getSavePath', __DIR__],
+            ['name', 'getName', 'FOOBAR'],
+            ['save_handler', 'getSaveHandler', 'user'],
+            ['gc_probability', 'getGcProbability', 42],
+            ['gc_divisor', 'getGcDivisor', 3],
+            ['gc_maxlifetime', 'getGcMaxlifetime', 180],
+            ['serialize_handler', 'getSerializeHandler', 'php_binary'],
+            ['cookie_lifetime', 'getCookieLifetime', 180],
+            ['cookie_path', 'getCookiePath', '/foo/bar'],
+            ['cookie_domain', 'getCookieDomain', 'framework.zend.com'],
+            ['cookie_secure', 'getCookieSecure', true],
+            ['cookie_httponly', 'getCookieHttpOnly', true],
+            ['use_cookies', 'getUseCookies', false],
+            ['use_only_cookies', 'getUseOnlyCookies', true],
+            ['referer_check', 'getRefererCheck', 'foobar'],
+            ['entropy_file', 'getEntropyFile', __FILE__],
+            ['entropy_length', 'getEntropyLength', 42],
+            ['cache_limiter', 'getCacheLimiter', 'private'],
+            ['cache_expire', 'getCacheExpire', 42],
+            ['use_trans_sid', 'getUseTransSid', true],
+            ['hash_function', 'getHashFunction', 'md5'],
+            ['hash_bits_per_character', 'getHashBitsPerCharacter', 5],
+            ['url_rewriter_tags', 'getUrlRewriterTags', 'a=href']
+        ];
     }
 
     public function testNameIsMutable()

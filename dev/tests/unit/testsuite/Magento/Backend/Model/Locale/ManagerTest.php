@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Model\Locale;
 
@@ -47,12 +28,12 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_session = $this->getMock('Magento\Backend\Model\Session', array(), array(), '', false);
+        $this->_session = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
 
         $this->_authSession = $this->getMock(
             'Magento\Backend\Model\Auth\Session',
-            array('getUser'),
-            array(),
+            ['getUser'],
+            [],
             '',
             false
         );
@@ -61,7 +42,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));
 
-        $this->_translator = $this->getMock('Magento\Framework\TranslateInterface', array(), array(), '', false);
+        $this->_translator = $this->getMock('Magento\Framework\TranslateInterface', [], [], '', false);
 
         $this->_translator->expects($this->any())->method('setLocale')->will($this->returnValue($this->_translator));
 
@@ -79,7 +60,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function switchBackendInterfaceLocaleDataProvider()
     {
-        return array('case1' => array('locale' => 'de_DE'), 'case2' => array('locale' => 'en_US'));
+        return ['case1' => ['locale' => 'de_DE'], 'case2' => ['locale' => 'en_US']];
     }
 
     /**

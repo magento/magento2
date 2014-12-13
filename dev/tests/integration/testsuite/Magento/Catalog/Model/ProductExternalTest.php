@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model;
 
@@ -49,7 +30,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\StoreManagerInterface'
+                'Magento\Store\Model\StoreManagerInterface'
             )->getStore()->getId(),
             $this->_model->getStoreId()
         );
@@ -67,7 +48,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
     public function testGetCategoryId()
     {
         $this->assertFalse($this->_model->getCategoryId());
-        $category = new \Magento\Framework\Object(array('id' => 5));
+        $category = new \Magento\Framework\Object(['id' => 5]);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\Registry')->register('current_category', $category);
@@ -87,7 +68,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\Registry')
-            ->register('current_category', new \Magento\Framework\Object(array('id' => 3)));
+            ->register('current_category', new \Magento\Framework\Object(['id' => 3]));
         // fixture
         try {
             $category = $this->_model->getCategory();
@@ -109,11 +90,11 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         // none
         /** @var $model \Magento\Catalog\Model\Product */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-        $this->assertEquals(array(), $model->getCategoryIds());
+        $this->assertEquals([], $model->getCategoryIds());
 
         // fixture
         $this->_model->setId(1);
-        $this->assertEquals(array(2, 3, 4), $this->_model->getCategoryIds());
+        $this->assertEquals([2, 3, 4], $this->_model->getCategoryIds());
     }
 
     public function testGetCategoryCollection()
@@ -127,11 +108,11 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $fixtureCollection = $this->_model->getCategoryCollection();
         $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Collection', $fixtureCollection);
         $this->assertNotSame($fixtureCollection, $collection);
-        $ids = array();
+        $ids = [];
         foreach ($fixtureCollection as $category) {
             $ids[] = $category->getId();
         }
-        $this->assertEquals(array(2, 3, 4), $ids);
+        $this->assertEquals([2, 3, 4], $ids);
     }
 
     public function testGetWebsiteIds()
@@ -140,13 +121,13 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         /** @var $model \Magento\Catalog\Model\Product */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product',
-            array('data' => array('website_ids' => array(1, 2)))
+            ['data' => ['website_ids' => [1, 2]]]
         );
-        $this->assertEquals(array(1, 2), $model->getWebsiteIds());
+        $this->assertEquals([1, 2], $model->getWebsiteIds());
 
         // fixture
         $this->_model->setId(1);
-        $this->assertEquals(array(1), $this->_model->getWebsiteIds());
+        $this->assertEquals([1], $this->_model->getWebsiteIds());
     }
 
     public function testGetStoreIds()
@@ -155,13 +136,13 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         /** @var $model \Magento\Catalog\Model\Product */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product',
-            array('data' => array('store_ids' => array(1, 2)))
+            ['data' => ['store_ids' => [1, 2]]]
         );
-        $this->assertEquals(array(1, 2), $model->getStoreIds());
+        $this->assertEquals([1, 2], $model->getStoreIds());
 
         // fixture
         $this->_model->setId(1);
-        $this->assertEquals(array(1), $this->_model->getStoreIds());
+        $this->assertEquals([1], $this->_model->getStoreIds());
     }
 
     /**
@@ -172,8 +153,8 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
      */
     public function testRelatedProductsApi()
     {
-        $this->assertEquals(array(), $this->_model->getRelatedProducts());
-        $this->assertEquals(array(), $this->_model->getRelatedProductIds());
+        $this->assertEquals([], $this->_model->getRelatedProducts());
+        $this->assertEquals([], $this->_model->getRelatedProductIds());
 
         $collection = $this->_model->getRelatedProductCollection();
         $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
@@ -192,8 +173,8 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpSellProductsApi()
     {
-        $this->assertEquals(array(), $this->_model->getUpSellProducts());
-        $this->assertEquals(array(), $this->_model->getUpSellProductIds());
+        $this->assertEquals([], $this->_model->getUpSellProducts());
+        $this->assertEquals([], $this->_model->getUpSellProductIds());
 
         $collection = $this->_model->getUpSellProductCollection();
         $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
@@ -212,8 +193,8 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
      */
     public function testCrossSellProductsApi()
     {
-        $this->assertEquals(array(), $this->_model->getCrossSellProducts());
-        $this->assertEquals(array(), $this->_model->getCrossSellProductIds());
+        $this->assertEquals([], $this->_model->getCrossSellProducts());
+        $this->assertEquals([], $this->_model->getCrossSellProductIds());
 
         $collection = $this->_model->getCrossSellProductCollection();
         $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
@@ -273,18 +254,18 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
      */
     public function testOptionApi()
     {
-        $this->assertEquals(array(), $this->_model->getOptions());
+        $this->assertEquals([], $this->_model->getOptions());
 
         $optionId = uniqid();
         $option = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product\Option',
-            array('data' => array('key' => 'value'))
+            ['data' => ['key' => 'value']]
         );
         $option->setId($optionId);
         $this->_model->addOption($option);
 
         $this->assertSame($option, $this->_model->getOptionById($optionId));
-        $this->assertEquals(array($optionId => $option), $this->_model->getOptions());
+        $this->assertEquals([$optionId => $option], $this->_model->getOptions());
     }
 
     /**
@@ -296,7 +277,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
      */
     public function testCustomOptionsApi()
     {
-        $this->assertEquals(array(), $this->_model->getCustomOptions());
+        $this->assertEquals([], $this->_model->getCustomOptions());
         $this->assertFalse($this->_model->hasCustomOptions());
 
         $this->_model->setId(99);
@@ -308,10 +289,10 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('one', $option->getCode());
         $this->assertEquals('value1', $option->getValue());
 
-        $this->assertEquals(array('one' => $option), $this->_model->getCustomOptions());
+        $this->assertEquals(['one' => $option], $this->_model->getCustomOptions());
         $this->assertTrue($this->_model->hasCustomOptions());
 
-        $this->_model->setCustomOptions(array('test'));
+        $this->_model->setCustomOptions(['test']);
         $this->assertTrue(is_array($this->_model->getCustomOptions()));
     }
 
@@ -325,13 +306,13 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAvailableInCategories()
     {
-        $this->assertEquals(array(), $this->_model->getAvailableInCategories());
+        $this->assertEquals([], $this->_model->getAvailableInCategories());
         $this->_model->load(4);
         // fixture
         $actualCategoryIds = $this->_model->getAvailableInCategories();
         sort($actualCategoryIds);
         // not depend on the order of items
-        $this->assertEquals(array(2, 10, 11, 12), $actualCategoryIds);
+        $this->assertEquals([2, 10, 11, 12], $actualCategoryIds);
         //Check not visible product
         $this->_model->load(3);
         $this->assertEmpty($this->_model->getAvailableInCategories());

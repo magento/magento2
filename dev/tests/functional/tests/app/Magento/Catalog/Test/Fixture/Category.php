@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Catalog\Test\Fixture;
@@ -53,12 +34,12 @@ class Category extends DataFixture
      * @param Config $configuration
      * @param array $placeholders
      */
-    public function __construct(Config $configuration, $placeholders = array())
+    public function __construct(Config $configuration, $placeholders = [])
     {
         parent::__construct($configuration, $placeholders);
 
-        $this->_placeholders['men::getCategoryName'] = array($this, '_categoryProvider');
-        $this->_placeholders['men::getCategoryId'] = array($this, '_categoryProvider');
+        $this->_placeholders['men::getCategoryName'] = [$this, '_categoryProvider'];
+        $this->_placeholders['men::getCategoryId'] = [$this, '_categoryProvider'];
     }
 
     /**
@@ -77,7 +58,7 @@ class Category extends DataFixture
             $this->_categories[$key] = $category;
         }
 
-        return is_callable(array($this->_categories[$key], $method)) ? $this->_categories[$key]->$method() : '';
+        return is_callable([$this->_categories[$key], $method]) ? $this->_categories[$key]->$method() : '';
     }
 
     /**
@@ -89,7 +70,6 @@ class Category extends DataFixture
     {
         return $this->getData('fields/name/value');
     }
-
 
     /**
      * Get product name
@@ -118,52 +98,52 @@ class Category extends DataFixture
      */
     protected function _initData()
     {
-        $this->_dataConfig = array(
+        $this->_dataConfig = [
             'constraint' => 'Success',
-            'request_params' => array(
-                'store' => '0'
-            ),
-            'input_prefix' => 'general'
-        );
+            'request_params' => [
+                'store' => '0',
+            ],
+            'input_prefix' => 'general',
+        ];
 
-        $this->_data = array(
-            'fields' => array(
-                'name' => array(
+        $this->_data = [
+            'fields' => [
+                'name' => [
                     'value' => 'Subcategory %isolation%',
-                    'group' => static::GROUP_GENERAL_INFORMATION
-                ),
-                'is_active' => array(
+                    'group' => static::GROUP_GENERAL_INFORMATION,
+                ],
+                'is_active' => [
                     'value' => 'Yes',
                     'input_value' => '1',
                     'group' => static::GROUP_GENERAL_INFORMATION,
-                    'input' => 'select'
-                ),
-                'include_in_menu' => array(
+                    'input' => 'select',
+                ],
+                'include_in_menu' => [
                     'value' => 'Yes',
                     'input_value' => '1',
                     'group' => static::GROUP_GENERAL_INFORMATION,
-                    'input' => 'select'
-                ),
-                'use_config_group_5available_sort_by' => array(
+                    'input' => 'select',
+                ],
+                'use_config_group_5available_sort_by' => [
                     'value' => '',
                     'input_name' => 'use_config[0]',
                     'input_value' => 'available_sort_by',
                     'group' => static::GROUP_DISPLAY_SETTINGS,
-                    'input' => 'checkbox'
-                ),
-                'use_config_group_5default_sort_by' => array(
+                    'input' => 'checkbox',
+                ],
+                'use_config_group_5default_sort_by' => [
                     'value' => '',
                     'input_name' => 'use_config[1]',
                     'input_value' => 'default_sort_by',
                     'group' => static::GROUP_DISPLAY_SETTINGS,
-                    'input' => 'checkbox'
-                )
-            ),
-            'category_path' =>  array(
+                    'input' => 'checkbox',
+                ],
+            ],
+            'category_path' =>  [
                 'value' => 'Default Category',
-                'input_value' => '2'
-            )
-        );
+                'input_value' => '2',
+            ],
+        ];
 
         $this->_repository = Factory::getRepositoryFactory()
             ->getMagentoCatalogCategory($this->_dataConfig, $this->_data);

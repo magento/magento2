@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
@@ -82,7 +63,7 @@ class TableBuilder
         $status = $this->_productIndexerHelper->getAttribute('status');
         $temporaryEavAttributes[$status->getBackendTable()]['status'] = $status;
         //Create list of temporary tables based on available attributes attributes
-        $valueTables = array();
+        $valueTables = [];
         foreach ($temporaryEavAttributes as $tableName => $columns) {
             $valueTables = array_merge(
                 $valueTables,
@@ -125,7 +106,7 @@ class TableBuilder
      */
     protected function _createTemporaryTable($tableName, array $columns, $valueFieldSuffix)
     {
-        $valueTables = array();
+        $valueTables = [];
         if (!empty($columns)) {
             $valueTableName = $tableName . $valueFieldSuffix;
             $temporaryTable = $this->_connection->newTable($tableName);
@@ -197,16 +178,16 @@ class TableBuilder
      * @param array  $changedIds
      * @return void
      */
-    protected function _fillTemporaryEntityTable($tableName, array $columns, array $changedIds = array())
+    protected function _fillTemporaryEntityTable($tableName, array $columns, array $changedIds = [])
     {
         if (!empty($columns)) {
             $select = $this->_connection->select();
             $temporaryEntityTable = $this->_getTemporaryTableName($tableName);
-            $idsColumns = array('entity_id', 'type_id', 'attribute_set_id');
+            $idsColumns = ['entity_id', 'type_id', 'attribute_set_id'];
 
             $columns = array_merge($idsColumns, array_keys($columns));
 
-            $select->from(array('e' => $tableName), $columns);
+            $select->from(['e' => $tableName], $columns);
             $onDuplicate = false;
             if (!empty($changedIds)) {
                 $select->where($this->_connection->quoteInto('e.entity_id IN (?)', $changedIds));
@@ -229,7 +210,7 @@ class TableBuilder
         $this->_connection->addIndex(
             $tableName,
             'entity_id',
-            array($columnName),
+            [$columnName],
             \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY
         );
     }
@@ -252,7 +233,6 @@ class TableBuilder
         $storeId
     ) {
         if (!empty($tableColumns)) {
-
             $columnsChunks = array_chunk(
                 $tableColumns,
                 Action\Indexer::ATTRIBUTES_CHUNK_SIZE,
@@ -266,15 +246,15 @@ class TableBuilder
                 );
                 $temporaryTableName = $this->_getTemporaryTableName($tableName);
                 $temporaryValueTableName = $temporaryTableName . $valueFieldSuffix;
-                $keyColumn = array('entity_id');
+                $keyColumn = ['entity_id'];
                 $columns = array_merge($keyColumn, array_keys($columnsList));
                 $valueColumns = $keyColumn;
                 $flatColumns = $this->_productIndexerHelper->getFlatColumns();
                 $iterationNum = 1;
 
-                $select->from(array('e' => $entityTableName), $keyColumn);
+                $select->from(['e' => $entityTableName], $keyColumn);
 
-                $selectValue->from(array('e' => $temporaryTableName), $keyColumn);
+                $selectValue->from(['e' => $temporaryTableName], $keyColumn);
 
                 /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
                 foreach ($columnsList as $columnName => $attribute) {
@@ -286,9 +266,9 @@ class TableBuilder
                     );
 
                     $select->joinLeft(
-                        array($countTableName => $tableName),
+                        [$countTableName => $tableName],
                         $joinCondition,
-                        array($columnName => 'value')
+                        [$columnName => 'value']
                     );
 
                     if ($attribute->getFlatUpdateSelect($storeId) instanceof \Magento\Framework\DB\Select) {
@@ -301,13 +281,13 @@ class TableBuilder
                                 $countTableName
                             );
                             $selectValue->joinLeft(
-                                array(
+                                [
                                     $countTableName => $this->_productIndexerHelper->getTable(
                                         'eav_attribute_option_value'
-                                    )
-                                ),
+                                    ),
+                                ],
                                 $valueJoinCondition,
-                                array($columnValueName => $countTableName . '.value')
+                                [$columnValueName => $countTableName . '.value']
                             );
                             $valueColumns[] = $columnValueName;
                         }

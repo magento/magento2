@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Paypal\Model\Api;
 
@@ -35,7 +16,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
      *
      * @var array
      */
-    protected $_globalMap = array(
+    protected $_globalMap = [
         // commands
         'business' => 'business_account',
         'notify_url' => 'notify_url',
@@ -59,27 +40,27 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
         'cpp_headerborder_color' => 'hdrbordercolor',
         'cpp_payflow_color' => 'payflowcolor',
         // 'cs' => '', // TODO
-        'lc' => 'locale'
-    );
+        'lc' => 'locale',
+    ];
 
     /**
      * Export filters
      *
      * @var array
      */
-    protected $_exportToRequestFilters = array(
+    protected $_exportToRequestFilters = [
         'amount' => '_filterAmount',
         'shipping' => '_filterAmount',
         'tax' => '_filterAmount',
-        'discount_amount' => '_filterAmount'
-    );
+        'discount_amount' => '_filterAmount',
+    ];
 
     /**
      * Interface for common and "aggregated order" specific fields
      *
      * @var string[]
      */
-    protected $_commonRequestFields = array(
+    protected $_commonRequestFields = [
         'business',
         'invoice',
         'currency_code',
@@ -98,49 +79,49 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
         'tax',
         'discount_amount',
         'item_name',
-        'lc'
-    );
+        'lc',
+    ];
 
     /**
      * Fields that should be replaced in debug with '***'
      *
      * @var string[]
      */
-    protected $_debugReplacePrivateDataKeys = array('business');
+    protected $_debugReplacePrivateDataKeys = ['business'];
 
     /**
      * Line items export mapping settings
      *
      * @var array
      */
-    protected $_lineItemTotalExportMap = array(
+    protected $_lineItemTotalExportMap = [
         Cart::AMOUNT_SUBTOTAL => 'amount',
         Cart::AMOUNT_DISCOUNT => 'discount_amount',
         Cart::AMOUNT_TAX => 'tax',
-        Cart::AMOUNT_SHIPPING => 'shipping'
-    );
+        Cart::AMOUNT_SHIPPING => 'shipping',
+    ];
 
     /**
      * @var array
      */
-    protected $_lineItemExportItemsFormat = array(
+    protected $_lineItemExportItemsFormat = [
         'id' => 'item_number_%d',
         'name' => 'item_name_%d',
         'qty' => 'quantity_%d',
-        'amount' => 'amount_%d'
-    );
+        'amount' => 'amount_%d',
+    ];
 
     /**
      * @var array
      */
-    protected $_lineItemExportItemsFilters = array('qty' => '_filterQty');
+    protected $_lineItemExportItemsFilters = ['qty' => '_filterQty'];
 
     /**
      * Address export to request map
      *
      * @var array
      */
-    protected $_addressMap = array(
+    protected $_addressMap = [
         'city' => 'city',
         'country' => 'country_id',
         'email' => 'email',
@@ -149,8 +130,8 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
         'zip' => 'postcode',
         'state' => 'region',
         'address1' => 'street',
-        'address2' => 'street2'
-    );
+        'address2' => 'street2',
+    ];
 
     /**
      * Generate PayPal Standard checkout request fields
@@ -166,7 +147,7 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
 
         $isLineItems = $this->_exportLineItems($request);
         if ($isLineItems) {
-            $request = array_merge($request, array('cmd' => '_cart', 'upload' => 1));
+            $request = array_merge($request, ['cmd' => '_cart', 'upload' => 1]);
             if (isset($request['tax'])) {
                 $request['tax_cart'] = $request['tax'];
             }
@@ -174,12 +155,12 @@ class Standard extends \Magento\Paypal\Model\Api\AbstractApi
                 $request['discount_amount_cart'] = $request['discount_amount'];
             }
         } else {
-            $request = array_merge($request, array('cmd' => '_ext-enter', 'redirect_cmd' => '_xclick'));
+            $request = array_merge($request, ['cmd' => '_ext-enter', 'redirect_cmd' => '_xclick']);
         }
 
         // payer address
         $this->_importAddress($request);
-        $this->_debug(array('request' => $request));
+        $this->_debug(['request' => $request]);
         // TODO: this is not supposed to be called in getter
         return $request;
     }

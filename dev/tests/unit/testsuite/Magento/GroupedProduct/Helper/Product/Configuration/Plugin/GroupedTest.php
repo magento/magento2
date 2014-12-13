@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\GroupedProduct\Helper\Product\Configuration\Plugin;
 
@@ -59,11 +40,11 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $this->groupedConfigPlugin = new Grouped();
         $this->itemMock = $this->getMock('Magento\Catalog\Model\Product\Configuration\Item\ItemInterface');
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->typeInstanceMock = $this->getMock(
             'Magento\GroupedProduct\Model\Product\Type\Grouped',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -80,8 +61,8 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $this->subjectMock = $this->getMock(
             'Magento\Catalog\Helper\Product\Configuration',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -95,7 +76,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $associatedProductId = 'associatedId';
         $associatedProdName = 'associatedProductName';
 
-        $associatedProdMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
+        $associatedProdMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
 
         $associatedProdMock->expects($this->once())->method('getId')->will($this->returnValue($associatedProductId));
 
@@ -108,7 +89,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->productMock
         )->will(
-            $this->returnValue(array($associatedProdMock))
+            $this->returnValue([$associatedProdMock])
         );
 
         $this->productMock->expects(
@@ -121,7 +102,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $quantityItemMock = $this->getMock(
             'Magento\Catalog\Model\Product\Configuration\Item\ItemInterface',
-            array('getValue', 'getProduct', 'getOptionByCode', 'getFileDownloadParams')
+            ['getValue', 'getProduct', 'getOptionByCode', 'getFileDownloadParams']
         );
 
         $quantityItemMock->expects($this->any())->method('getValue')->will($this->returnValue(1));
@@ -136,7 +117,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($quantityItemMock)
         );
 
-        $returnValue = array(array('label' => 'productName', 'value' => 2));
+        $returnValue = [['label' => 'productName', 'value' => 2]];
         $this->closureMock = function () use ($returnValue) {
             return $returnValue;
         };
@@ -146,10 +127,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             $this->closureMock,
             $this->itemMock
         );
-        $expectedResult = array(
-            array('label' => 'associatedProductName', 'value' => 1),
-            array('label' => 'productName', 'value' => 2)
-        );
+        $expectedResult = [
+            ['label' => 'associatedProductName', 'value' => 1],
+            ['label' => 'productName', 'value' => 2],
+        ];
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -176,7 +157,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(\Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE)
         );
 
-        $chainCallResult = array(array('label' => 'label', 'value' => 'value'));
+        $chainCallResult = [['label' => 'label', 'value' => 'value']];
 
         $this->closureMock = function () use ($chainCallResult) {
             return $chainCallResult;
@@ -195,7 +176,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      */
     public function testAroundGetOptionsAnotherProductType()
     {
-        $chainCallResult = array('result');
+        $chainCallResult = ['result'];
 
         $this->productMock->expects(
             $this->once()

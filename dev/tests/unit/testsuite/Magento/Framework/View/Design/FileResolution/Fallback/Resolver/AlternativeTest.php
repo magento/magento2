@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
@@ -45,19 +26,19 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->directory = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
+        $this->directory = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         $this->directory->expects($this->any())
             ->method('getRelativePath')
             ->will($this->returnArgument(0));
-        $filesystem = $this->getMock('\Magento\Framework\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
             ->will($this->returnValue($this->directory));
         $this->rule = $this->getMock(
-            '\Magento\Framework\View\Design\Fallback\Rule\RuleInterface', array(), array(), '', false
+            '\Magento\Framework\View\Design\Fallback\Rule\RuleInterface', [], [], '', false
         );
-        $rulePool = $this->getMock('Magento\Framework\View\Design\Fallback\RulePool', array(), array(), '', false);
+        $rulePool = $this->getMock('Magento\Framework\View\Design\Fallback\RulePool', [], [], '', false);
         $rulePool->expects($this->any())
             ->method('getRule')
             ->with('type')
@@ -81,8 +62,8 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\InvalidArgumentException', "\$alternativeExtensions must be an array with format:"
             . " array('ext1' => array('ext1', 'ext2'), 'ext3' => array(...)]");
 
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
-        $rulePool = $this->getMock('Magento\Framework\View\Design\Fallback\RulePool', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $rulePool = $this->getMock('Magento\Framework\View\Design\Fallback\RulePool', [], [], '', false);
         $cache = $this->getMockForAbstractClass(
             'Magento\Framework\View\Design\FileResolution\Fallback\CacheDataInterface'
         );

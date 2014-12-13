@@ -1,27 +1,9 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Block\System\Config;
+
 use Magento\Framework\App\Cache\State;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -71,7 +53,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\View\Layout',
-            array('area' => 'adminhtml')
+            ['area' => 'adminhtml']
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Config\ScopeInterface'
@@ -113,7 +95,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), array());
+        $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), []);
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Backend\Block\System\Config\FormStub */
@@ -176,13 +158,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public static function initFieldsUseDefaultCheckboxDataProvider()
     {
-        return array(
-            array(false, true, null, true),
-            array(false, false, null, false),
-            array(false, false, '', false),
-            array(false, false, 'value', false),
-            array(true, false, 'config value', false)
-        );
+        return [
+            [false, true, null, true],
+            [false, false, null, false],
+            [false, false, '', false],
+            [false, false, 'value', false],
+            [true, false, 'config value', false]
+        ];
     }
 
     /**
@@ -203,7 +185,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         );
         $form = $this->_formFactory->create();
-        $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), array());
+        $fieldset = $form->addFieldset($this->_section->getId() . '_' . $this->_group->getId(), []);
 
         /* @TODO Eliminate stub by proper mock / config fixture usage */
         /** @var $block \Magento\Backend\Block\System\Config\FormStub */
@@ -234,13 +216,13 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public static function initFieldsUseConfigPathDataProvider()
     {
-        return array(
-            array(false, true, null),
-            array(false, false, null),
-            array(false, false, ''),
-            array(false, false, 'value'),
-            array(true, false, 'config value')
-        );
+        return [
+            [false, true, null],
+            [false, false, null],
+            [false, false, ''],
+            [false, false, 'value'],
+            [true, false, 'config value']
+        ];
     }
 
     /**
@@ -250,9 +232,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected function _setupFieldsInheritCheckbox($useConfigField, $isConfigDataEmpty, $configDataValue)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize([
             State::PARAM_BAN_CACHE => true,
-        ));
+        ]);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Framework\Config\ScopeInterface')
             ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
@@ -272,7 +254,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         );
         $fileIterator = $fileIteratorFactory->create(
             $directory,
-            array($directory->getRelativePath(__DIR__ . '/_files/test_section_config.xml'))
+            [$directory->getRelativePath(__DIR__ . '/_files/test_section_config.xml')]
         );
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileIterator));
 
@@ -280,16 +262,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $structureReader = $objectManager->create(
             'Magento\Backend\Model\Config\Structure\Reader',
-            array('fileResolver' => $fileResolverMock)
+            ['fileResolver' => $fileResolverMock]
         );
         $structureData = $objectManager->create(
             'Magento\Backend\Model\Config\Structure\Data',
-            array('reader' => $structureReader)
+            ['reader' => $structureReader]
         );
         /** @var \Magento\Backend\Model\Config\Structure $structure  */
         $structure = $objectManager->create(
             'Magento\Backend\Model\Config\Structure',
-            array('structureData' => $structureData)
+            ['structureData' => $structureData]
         );
 
         $this->_section = $structure->getElement('test_section');
@@ -304,9 +286,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $fieldPath = $this->_field->getConfigPath();
 
         if ($isConfigDataEmpty) {
-            $this->_configData = array();
+            $this->_configData = [];
         } else {
-            $this->_configData = array($fieldPath => $configDataValue);
+            $this->_configData = [$fieldPath => $configDataValue];
         }
     }
 
@@ -328,40 +310,40 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'Magento\Backend\Block\System\Config\Form'
         );
         $block->initForm();
-        $expectedIds = array(
-            'general_country' => array(
+        $expectedIds = [
+            'general_country' => [
                 'general_country_default' => 'select',
                 'general_country_allow' => 'select',
                 'general_country_optional_zip_countries' => 'select',
-                'general_country_eu_countries' => 'select'
-            ),
-            'general_region' => array(
+                'general_country_eu_countries' => 'select',
+            ],
+            'general_region' => [
                 'general_region_state_required' => 'select',
-                'general_region_display_all' => 'select'
-            ),
-            'general_locale' => array(
+                'general_region_display_all' => 'select',
+            ],
+            'general_locale' => [
                 'general_locale_timezone' => 'select',
                 'general_locale_code' => 'select',
                 'general_locale_firstday' => 'select',
-                'general_locale_weekend' => 'select'
-            ),
-            'general_restriction' => array(
+                'general_locale_weekend' => 'select',
+            ],
+            'general_restriction' => [
                 'general_restriction_is_active' => 'select',
                 'general_restriction_mode' => 'select',
                 'general_restriction_http_redirect' => 'select',
                 'general_restriction_cms_page' => 'select',
-                'general_restriction_http_status' => 'select'
-            ),
-            'general_store_information' => array(
+                'general_restriction_http_status' => 'select',
+            ],
+            'general_store_information' => [
                 'general_store_information_name' => 'text',
                 'general_store_information_phone' => 'text',
                 'general_store_information_merchant_country' => 'select',
                 'general_store_information_merchant_vat_number' => 'text',
                 'general_store_information_validate_vat_number' => 'text',
-                'general_store_information_address' => 'textarea'
-            ),
-            'general_single_store_mode' => array('general_single_store_mode_enabled' => 'select')
-        );
+                'general_store_information_address' => 'textarea',
+            ],
+            'general_single_store_mode' => ['general_single_store_mode_enabled' => 'select'],
+        ];
         $elements = $block->getForm()->getElements();
         foreach ($elements as $element) {
             /** @var $element \Magento\Framework\Data\Form\Element\Fieldset */

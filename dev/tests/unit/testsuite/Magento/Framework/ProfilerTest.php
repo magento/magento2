@@ -2,26 +2,7 @@
 /**
  * Unit Test for \Magento\Framework\Profiler
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework;
 
@@ -46,7 +27,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultTags()
     {
-        $expected = array('some_key' => 'some_value');
+        $expected = ['some_key' => 'some_value'];
         \Magento\Framework\Profiler::setDefaultTags($expected);
         $this->assertAttributeEquals($expected, '_defaultTags', 'Magento\Framework\Profiler');
     }
@@ -57,7 +38,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\Profiler::addTagFilter('tag2', 'value_2.1');
         \Magento\Framework\Profiler::addTagFilter('tag1', 'value_1.2');
 
-        $expected = array('tag1' => array('value_1.1', 'value_1.2'), 'tag2' => array('value_2.1'));
+        $expected = ['tag1' => ['value_1.1', 'value_1.2'], 'tag2' => ['value_2.1']];
         $this->assertAttributeEquals($expected, '_tagFilters', 'Magento\Framework\Profiler');
         $this->assertAttributeEquals(true, '_hasTagFilters', 'Magento\Framework\Profiler');
     }
@@ -69,7 +50,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue(\Magento\Framework\Profiler::isEnabled());
 
-        $expected = array($mock);
+        $expected = [$mock];
         $this->assertAttributeEquals($expected, '_drivers', 'Magento\Framework\Profiler');
     }
 
@@ -81,7 +62,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         return $this->getMockBuilder(
             'Magento\Framework\Profiler\DriverInterface'
         )->setMethods(
-            array('start', 'stop', 'clear')
+            ['start', 'stop', 'clear']
         )->getMockForAbstractClass();
     }
 
@@ -198,20 +179,20 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     public function testTags()
     {
         $driver = $this->_getDriverMock();
-        $driver->expects($this->at(0))->method('start')->with('root_level_timer', array('default_tag' => 'default'));
+        $driver->expects($this->at(0))->method('start')->with('root_level_timer', ['default_tag' => 'default']);
         $driver->expects(
             $this->at(1)
         )->method(
             'start'
         )->with(
             'root_level_timer->some_other_timer',
-            array('default_tag' => 'default', 'type' => 'test')
+            ['default_tag' => 'default', 'type' => 'test']
         );
 
         \Magento\Framework\Profiler::add($driver);
-        \Magento\Framework\Profiler::setDefaultTags(array('default_tag' => 'default'));
+        \Magento\Framework\Profiler::setDefaultTags(['default_tag' => 'default']);
         \Magento\Framework\Profiler::start('root_level_timer');
-        \Magento\Framework\Profiler::start('some_other_timer', array('type' => 'test'));
+        \Magento\Framework\Profiler::start('some_other_timer', ['type' => 'test']);
     }
 
     public function testClearTimer()
@@ -241,13 +222,13 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\Profiler::add($driver);
         \Magento\Framework\Profiler::reset();
 
-        $this->assertAttributeEquals(array(), '_currentPath', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals(array(), '_tagFilters', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals(array(), '_defaultTags', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals(array(), '_drivers', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals([], '_currentPath', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals([], '_tagFilters', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals([], '_defaultTags', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals([], '_drivers', 'Magento\Framework\Profiler');
         $this->assertAttributeEquals(false, '_hasTagFilters', 'Magento\Framework\Profiler');
         $this->assertAttributeEquals(0, '_pathCount', 'Magento\Framework\Profiler');
-        $this->assertAttributeEquals(array(), '_pathIndex', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals([], '_pathIndex', 'Magento\Framework\Profiler');
     }
 
     /**
@@ -270,11 +251,11 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
      */
     public function skippedFilterDataProvider()
     {
-        return array(
-            'no tags' => array('timer', null),
-            'no expected tags' => array('timer', array('tag' => 'value')),
-            'no expected tag value' => array('timer', array('type' => 'db'))
-        );
+        return [
+            'no tags' => ['timer', null],
+            'no expected tags' => ['timer', ['tag' => 'value']],
+            'no expected tag value' => ['timer', ['type' => 'db']]
+        ];
     }
 
     /**
@@ -297,24 +278,24 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
      */
     public function passedFilterDataProvider()
     {
-        return array(
-            'one expected tag' => array('timer', array('type' => 'test')),
-            'more than one tag with expected' => array('timer', array('tag' => 'value', 'type' => 'test'))
-        );
+        return [
+            'one expected tag' => ['timer', ['type' => 'test']],
+            'more than one tag with expected' => ['timer', ['tag' => 'value', 'type' => 'test']]
+        ];
     }
 
     public function testApplyConfig()
     {
         $mockDriver = $this->getMock('Magento\Framework\Profiler\DriverInterface');
-        $driverConfig = array('type' => 'foo');
+        $driverConfig = ['type' => 'foo'];
         $mockDriverFactory = $this->getMockBuilder(
             'Magento\Framework\Profiler\Driver\Factory'
         )->disableOriginalConstructor()->getMock();
-        $config = array(
-            'drivers' => array($driverConfig),
+        $config = [
+            'drivers' => [$driverConfig],
             'driverFactory' => $mockDriverFactory,
-            'tagFilters' => array('tagName' => 'tagValue')
-        );
+            'tagFilters' => ['tagName' => 'tagValue'],
+        ];
 
         $mockDriverFactory->expects(
             $this->once()
@@ -327,9 +308,9 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         );
 
         \Magento\Framework\Profiler::applyConfig($config, '');
-        $this->assertAttributeEquals(array($mockDriver), '_drivers', 'Magento\Framework\Profiler');
+        $this->assertAttributeEquals([$mockDriver], '_drivers', 'Magento\Framework\Profiler');
         $this->assertAttributeEquals(
-            array('tagName' => array('tagValue')),
+            ['tagName' => ['tagValue']],
             '_tagFilters',
             'Magento\Framework\Profiler'
         );
@@ -357,82 +338,82 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     {
         $driverFactory = new \Magento\Framework\Profiler\Driver\Factory();
         $otherDriverFactory = $this->getMock('Magento\Framework\Profiler\Driver\Factory');
-        return array(
-            'Empty configuration' => array(
-                array(),
+        return [
+            'Empty configuration' => [
+                [],
                 false,
-                array(
-                    'driverConfigs' => array(),
+                [
+                    'driverConfigs' => [],
                     'driverFactory' => $driverFactory,
-                    'tagFilters' => array(),
+                    'tagFilters' => [],
                     'baseDir' => null
-                )
-            ),
-            'Full configuration' => array(
-                array(
-                    'drivers' => array(array('type' => 'foo')),
+                ],
+            ],
+            'Full configuration' => [
+                [
+                    'drivers' => [['type' => 'foo']],
                     'driverFactory' => $otherDriverFactory,
-                    'tagFilters' => array('key' => 'value'),
-                    'baseDir' => '/custom/base/dir'
-                ),
+                    'tagFilters' => ['key' => 'value'],
+                    'baseDir' => '/custom/base/dir',
+                ],
                 false,
-                array(
-                    'driverConfigs' => array(array('type' => 'foo', 'baseDir' => '/custom/base/dir')),
+                [
+                    'driverConfigs' => [['type' => 'foo', 'baseDir' => '/custom/base/dir']],
                     'driverFactory' => $otherDriverFactory,
-                    'tagFilters' => array('key' => 'value'),
+                    'tagFilters' => ['key' => 'value'],
                     'baseDir' => '/custom/base/dir'
-                )
-            ),
-            'Driver configuration with type in index' => array(
-                array('drivers' => array('foo' => 1)),
+                ],
+            ],
+            'Driver configuration with type in index' => [
+                ['drivers' => ['foo' => 1]],
                 false,
-                array(
-                    'driverConfigs' => array(array('type' => 'foo')),
+                [
+                    'driverConfigs' => [['type' => 'foo']],
                     'driverFactory' => $driverFactory,
-                    'tagFilters' => array(),
+                    'tagFilters' => [],
                     'baseDir' => null
-                )
-            ),
-            'Driver configuration with type in value' => array(
-                array('drivers' => array('foo')),
+                ],
+            ],
+            'Driver configuration with type in value' => [
+                ['drivers' => ['foo']],
                 false,
-                array(
-                    'driverConfigs' => array(array('type' => 'foo')),
+                [
+                    'driverConfigs' => [['type' => 'foo']],
                     'driverFactory' => $driverFactory,
-                    'tagFilters' => array(),
+                    'tagFilters' => [],
                     'baseDir' => null
-                )
-            ),
-            'Driver ignored configuration' => array(
-                array('drivers' => array('foo' => 0)),
+                ],
+            ],
+            'Driver ignored configuration' => [
+                ['drivers' => ['foo' => 0]],
                 false,
-                array(
-                    'driverConfigs' => array(),
+                [
+                    'driverConfigs' => [],
                     'driverFactory' => $driverFactory,
-                    'tagFilters' => array(),
+                    'tagFilters' => [],
                     'baseDir' => null
-                )
-            ),
-            'Ajax call' => array(
+                ],
+            ],
+            'Ajax call' => [
                 1,
                 true,
-                array(
-                    'driverConfigs' => array(array('output' => 'firebug')),
+                [
+                    'driverConfigs' => [['output' => 'firebug']],
                     'driverFactory' => $driverFactory,
-                    'tagFilters' => array(),
+                    'tagFilters' => [],
                     'baseDir' => ''
-                )
-            ),
-            'Non ajax call' => array(
+                ],
+            ],
+            'Non ajax call' => [
                 1,
                 false,
-                array(
-                    'driverConfigs' => array(array('output' => 'html')),
+                [
+                    'driverConfigs' => [['output' => 'html']],
                     'driverFactory' => $driverFactory,
-                    'tagFilters' => array(),
+                    'tagFilters' => [],
                     'baseDir' => ''
-                )
-            )
-        );
+                ],
+            ]
+        ];
     }
 }

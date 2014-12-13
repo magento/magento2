@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Model\Config\Structure\Element;
 
@@ -39,13 +20,13 @@ class Group extends AbstractComposite
     protected $_dependencyMapper;
 
     /**
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Backend\Model\Config\Structure\Element\Iterator\Field $childrenIterator
      * @param \Magento\Backend\Model\Config\BackendClone\Factory $cloneModelFactory
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
      */
     public function __construct(
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Backend\Model\Config\Structure\Element\Iterator\Field $childrenIterator,
         \Magento\Backend\Model\Config\BackendClone\Factory $cloneModelFactory,
         \Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
@@ -87,7 +68,7 @@ class Group extends AbstractComposite
      */
     public function populateFieldset(\Magento\Framework\Data\Form\Element\Fieldset $fieldset)
     {
-        $originalData = array();
+        $originalData = [];
         foreach ($this->_data as $key => $value) {
             if (!is_array($value)) {
                 $originalData[$key] = $value;
@@ -124,7 +105,7 @@ class Group extends AbstractComposite
      */
     public function getDependencies($storeCode)
     {
-        $dependencies = array();
+        $dependencies = [];
         if (false == isset($this->_data['depends']['fields'])) {
             return $dependencies;
         }

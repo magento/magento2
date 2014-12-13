@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Shipping\Block\Adminhtml\Order;
 
@@ -66,7 +47,7 @@ class Packaging extends \Magento\Backend\Block\Template
         \Magento\Shipping\Model\Carrier\Source\GenericInterface $sourceSizeModel,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $coreRegistry;
@@ -94,13 +75,13 @@ class Packaging extends \Magento\Backend\Block\Template
     {
         $shipmentId = $this->getShipment()->getId();
         $orderId = $this->getRequest()->getParam('order_id');
-        $urlParams = array();
+        $urlParams = [];
 
-        $itemsQty = array();
-        $itemsPrice = array();
-        $itemsName = array();
-        $itemsWeight = array();
-        $itemsProductId = array();
+        $itemsQty = [];
+        $itemsPrice = [];
+        $itemsName = [];
+        $itemsWeight = [];
+        $itemsProductId = [];
 
         if ($shipmentId) {
             $urlParams['shipment_id'] = $shipmentId;
@@ -130,7 +111,7 @@ class Packaging extends \Magento\Backend\Block\Template
                 }
             }
         }
-        $data = array(
+        $data = [
             'createLabelUrl' => $createLabelUrl,
             'itemsGridUrl' => $itemsGridUrl,
             'errorQtyOverLimit' => __(
@@ -144,8 +125,8 @@ class Packaging extends \Magento\Backend\Block\Template
             'shipmentItemsWeight' => $itemsWeight,
             'shipmentItemsProductId' => $itemsProductId,
             'shipmentItemsOrderItemId' => $itemsOrderItemId,
-            'customizable' => $this->_getCustomizableContainers()
-        );
+            'customizable' => $this->_getCustomizableContainers(),
+        ];
         return $this->_jsonEncoder->encode($data);
     }
 
@@ -167,15 +148,15 @@ class Packaging extends \Magento\Backend\Block\Template
         );
         if ($carrier) {
             $params = new \Magento\Framework\Object(
-                array(
+                [
                     'method' => $order->getShippingMethod(true)->getMethod(),
                     'country_shipper' => $countryShipper,
-                    'country_recipient' => $address->getCountryId()
-                )
+                    'country_recipient' => $address->getCountryId(),
+                ]
             );
             return $carrier->getContainerTypes($params);
         }
-        return array();
+        return [];
     }
 
     /**
@@ -190,7 +171,7 @@ class Packaging extends \Magento\Backend\Block\Template
         if ($carrier) {
             return $carrier->getCustomizableContainerTypes();
         }
-        return array();
+        return [];
     }
 
     /**
@@ -223,7 +204,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $order = $this->getShipment()->getOrder();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         if ($carrier) {
-            $params = new \Magento\Framework\Object(array('country_recipient' => $countryId));
+            $params = new \Magento\Framework\Object(['country_recipient' => $countryId]);
             $confirmationTypes = $carrier->getDeliveryConfirmationTypes($params);
             $confirmationType = !empty($confirmationTypes[$code]) ? $confirmationTypes[$code] : '';
             return $confirmationType;
@@ -310,11 +291,11 @@ class Packaging extends \Magento\Backend\Block\Template
         $countryId = $this->getShipment()->getOrder()->getShippingAddress()->getCountryId();
         $order = $this->getShipment()->getOrder();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
-        $params = new \Magento\Framework\Object(array('country_recipient' => $countryId));
+        $params = new \Magento\Framework\Object(['country_recipient' => $countryId]);
         if ($carrier && is_array($carrier->getDeliveryConfirmationTypes($params))) {
             return $carrier->getDeliveryConfirmationTypes($params);
         }
-        return array();
+        return [];
     }
 
     /**
@@ -329,7 +310,7 @@ class Packaging extends \Magento\Backend\Block\Template
         return $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->setData(
-            array('label' => __('Print'), 'onclick' => 'setLocation(\'' . $url . '\')')
+            ['label' => __('Print'), 'onclick' => 'setLocation(\'' . $url . '\')']
         )->toHtml();
     }
 
@@ -373,15 +354,15 @@ class Packaging extends \Magento\Backend\Block\Template
         );
         if ($carrier) {
             $params = new \Magento\Framework\Object(
-                array(
+                [
                     'method' => $order->getShippingMethod(true)->getMethod(),
                     'country_shipper' => $countryShipper,
-                    'country_recipient' => $address->getCountryId()
-                )
+                    'country_recipient' => $address->getCountryId(),
+                ]
             );
             return $carrier->getContentTypes($params);
         }
-        return array();
+        return [];
     }
 
     /**

@@ -1,30 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Checkout\Model;
 
-use Magento\Sales\Model\Quote;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Sales\Model\Quote;
 
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -87,7 +68,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_eventManager;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -110,7 +91,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
@@ -127,7 +108,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
         $this->_orderFactory = $orderFactory;
@@ -191,7 +172,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function getQuote()
     {
-        $this->_eventManager->dispatch('custom_quote_process', array('checkout_session' => $this));
+        $this->_eventManager->dispatch('custom_quote_process', ['checkout_session' => $this]);
 
         if ($this->_quote === null) {
             $quote = $this->quoteRepository->create();
@@ -228,21 +209,20 @@ class Session extends \Magento\Framework\Session\SessionManager
                         ? $this->_customer->getId()
                         : $this->_customerSession->getCustomerId();
                     try {
-                        $quote = $this->quoteRepository->getForCustomer($customerId);
+                        $quote = $this->quoteRepository->getActiveForCustomer($customerId);
                         $this->setQuoteId($quote->getId());
                     } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-
                     }
                 } else {
                     $quote->setIsCheckoutCart(true);
-                    $this->_eventManager->dispatch('checkout_quote_init', array('quote' => $quote));
+                    $this->_eventManager->dispatch('checkout_quote_init', ['quote' => $quote]);
                 }
             }
 
             if ($this->getQuoteId()) {
                 if ($this->_customer) {
                     $quote->setCustomer($this->_customer);
-                } else if ($this->_customerSession->isLoggedIn()) {
+                } elseif ($this->_customerSession->isLoggedIn()) {
                     $quote->setCustomer($this->customerRepository->getById($this->_customerSession->getCustomerId()));
                 }
             }
@@ -345,7 +325,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             }
         } else {
             if (!isset($steps[$step])) {
-                $steps[$step] = array();
+                $steps[$step] = [];
             }
             if (is_string($data)) {
                 $steps[$step][$data] = $value;
@@ -472,7 +452,6 @@ class Session extends \Magento\Framework\Session\SessionManager
                 $this->_eventManager->dispatch('restore_quote', ['order' => $order, 'quote' => $quote]);
                 return true;
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-
             }
         }
         return false;

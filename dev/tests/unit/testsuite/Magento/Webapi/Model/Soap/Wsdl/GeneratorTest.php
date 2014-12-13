@@ -2,26 +2,7 @@
 /**
  * Tests for \Magento\Webapi\Model\Soap\Wsdl\Generator.
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
@@ -42,7 +23,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_typeProcessor;
 
-    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
 
     protected function setUp()
@@ -54,7 +35,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $_wsdlMock = $this->getMockBuilder(
             'Magento\Webapi\Model\Soap\Wsdl'
         )->disableOriginalConstructor()->setMethods(
-            array(
+            [
                 'addSchemaTypeSection',
                 'addService',
                 'addPortType',
@@ -66,13 +47,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'addPortOperation',
                 'addBindingOperation',
                 'addSoapOperation',
-                'toXML'
-            )
+                'toXML',
+            ]
         )->getMock();
         $this->_wsdlFactoryMock = $this->getMockBuilder(
             'Magento\Webapi\Model\Soap\Wsdl\Factory'
         )->setMethods(
-            array('create')
+            ['create']
         )->disableOriginalConstructor()->getMock();
         $this->_wsdlFactoryMock->expects($this->any())->method('create')->will($this->returnValue($_wsdlMock));
 
@@ -84,14 +65,14 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->_typeProcessor = $this->getMock(
             'Magento\Framework\Reflection\TypeProcessor',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
 
         $this->storeManagerMock = $this->getMockBuilder(
-            'Magento\Framework\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->setMethods(['getStore'])->disableOriginalConstructor()->getMockForAbstractClass();
 
         $storeMock = $this->getMockBuilder(
@@ -195,19 +176,19 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $genWSDL = 'generatedWSDL';
         $exceptionMsg = 'exception message';
-        $requestedService = array('catalogProduct');
+        $requestedService = ['catalogProduct'];
 
         $wsdlGeneratorMock = $this->getMockBuilder(
             'Magento\Webapi\Model\Soap\Wsdl\Generator'
         )->setMethods(
-            array('_collectCallInfo')
+            ['_collectCallInfo']
         )->setConstructorArgs(
             [
                 $this->_soapConfigMock,
                 $this->_wsdlFactoryMock,
                 $this->_cacheMock,
                 $this->_typeProcessor,
-                $this->storeManagerMock
+                $this->storeManagerMock,
             ]
         )->getMock();
 

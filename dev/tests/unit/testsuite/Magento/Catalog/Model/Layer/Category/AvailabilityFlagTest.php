@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Catalog\Model\Layer\Category;
@@ -54,11 +35,11 @@ class AvailabilityFlagTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filterMock = $this->getMock(
-            '\Magento\Catalog\Model\Layer\Filter\AbstractFilter', array(), array(), '', false
+            '\Magento\Catalog\Model\Layer\Filter\AbstractFilter', [], [], '', false
         );
-        $this->filters = array($this->filterMock);
-        $this->layerMock = $this->getMock('\Magento\Catalog\Model\Layer', array(), array(), '', false);
-        $this->stateMock = $this->getMock('\Magento\Catalog\Model\Layer\State', array(), array(), '', false);
+        $this->filters = [$this->filterMock];
+        $this->layerMock = $this->getMock('\Magento\Catalog\Model\Layer', [], [], '', false);
+        $this->stateMock = $this->getMock('\Magento\Catalog\Model\Layer\State', [], [], '', false);
         $this->model = new AvailabilityFlag();
     }
 
@@ -85,27 +66,27 @@ class AvailabilityFlagTest extends \PHPUnit_Framework_TestCase
      */
     public function isEnabledDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'itemsCount' => 0,
-                'filters' => array(),
+                'filters' => [],
                 'expectedResult' => false,
-            ),
-            array(
+            ],
+            [
                 'itemsCount' => 0,
-                'filters' => array('filter'),
+                'filters' => ['filter'],
                 'expectedResult' => true,
-            ),
-            array(
+            ],
+            [
                 'itemsCount' => 1,
                 'filters' => 0,
                 'expectedResult' => true,
-            ),
-            array(
+            ],
+            [
                 'itemsCount' => 1,
-                'filters' => array('filter'),
+                'filters' => ['filter'],
                 'expectedResult' => true,
-            )
-        );
+            ]
+        ];
     }
 }

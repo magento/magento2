@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -44,7 +25,7 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_labelFactory = $labelFactory;
         parent::__construct($context, $resourceHelper, $data);
@@ -59,7 +40,7 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     {
         $options = $this->getOptions();
         if ($this->getColumn()->getWithEmpty()) {
-            array_unshift($options, array('value' => '', 'label' => ''));
+            array_unshift($options, ['value' => '', 'label' => '']);
         }
         $html = sprintf(
             '<select name="%s" id="%s" class="no-changes" %s>%s</select>',
@@ -134,6 +115,6 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
         if ($value == 'all') {
             $value = '';
         }
-        return array('eq' => $value);
+        return ['eq' => $value];
     }
 }

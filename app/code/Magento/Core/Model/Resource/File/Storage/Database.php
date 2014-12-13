@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Core\Model\Resource\File\Storage;
 
@@ -75,49 +56,49 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
             'file_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
             'File Id'
         )->addColumn(
             'content',
             \Magento\Framework\DB\Ddl\Table::TYPE_VARBINARY,
             \Magento\Framework\DB\Ddl\Table::MAX_VARBINARY_SIZE,
-            array('nullable' => false),
+            ['nullable' => false],
             'File Content'
         )->addColumn(
             'upload_time',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            array('nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT),
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Upload Timestamp'
         )->addColumn(
             'filename',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             100,
-            array('nullable' => false),
+            ['nullable' => false],
             'Filename'
         )->addColumn(
             'directory_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            array('unsigned' => true, 'default' => null),
+            ['unsigned' => true, 'default' => null],
             'Identifier of Directory where File is Located'
         )->addColumn(
             'directory',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
-            array('default' => null),
+            ['default' => null],
             'Directory Path'
         )->addIndex(
             $adapter->getIndexName(
                 $table,
-                array('filename', 'directory_id'),
+                ['filename', 'directory_id'],
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
-            array('filename', 'directory_id'),
-            array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
+            ['filename', 'directory_id'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->addIndex(
-            $adapter->getIndexName($table, array('directory_id')),
-            array('directory_id')
+            $adapter->getIndexName($table, ['directory_id']),
+            ['directory_id']
         )->addForeignKey(
             $adapter->getForeignKeyName($table, 'directory_id', $dirStorageTable, 'directory_id'),
             'directory_id',
@@ -172,12 +153,12 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
         $adapter = $this->_getReadAdapter();
 
         $select = $adapter->select()->from(
-            array('e' => $this->getMainTable())
+            ['e' => $this->getMainTable()]
         )->where(
             'filename = ?',
             $filename
         )->where(
-            $adapter->prepareSqlCondition('directory', array('seq' => $path))
+            $adapter->prepareSqlCondition('directory', ['seq' => $path])
         );
 
         $row = $adapter->fetchRow($select);
@@ -215,8 +196,8 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
         $adapter = $this->_getReadAdapter();
 
         $select = $adapter->select()->from(
-            array('e' => $this->getMainTable()),
-            array('filename', 'content', 'directory')
+            ['e' => $this->getMainTable()],
+            ['filename', 'content', 'directory']
         )->order(
             'file_id'
         )->limit(
@@ -240,15 +221,15 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
 
         $contentParam = new \Magento\Framework\DB\Statement\Parameter($file['content']);
         $contentParam->setIsBlob(true);
-        $data = array(
+        $data = [
             'content' => $contentParam,
             'upload_time' => $file['update_time'],
             'filename' => $file['filename'],
             'directory_id' => $file['directory_id'],
-            'directory' => $file['directory']
-        );
+            'directory' => $file['directory'],
+        ];
 
-        $adapter->insertOnDuplicate($this->getMainTable(), $data, array('content', 'upload_time'));
+        $adapter->insertOnDuplicate($this->getMainTable(), $data, ['content', 'upload_time']);
 
         return $this;
     }
@@ -265,10 +246,10 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
     public function renameFile($oldFilename, $oldPath, $newFilename, $newPath)
     {
         $adapter = $this->_getWriteAdapter();
-        $dataUpdate = array('filename' => $newFilename, 'directory' => $newPath);
+        $dataUpdate = ['filename' => $newFilename, 'directory' => $newPath];
 
-        $dataWhere = array('filename = ?' => $oldFilename);
-        $dataWhere[] = new \Zend_Db_Expr($adapter->prepareSqlCondition('directory', array('seq' => $oldPath)));
+        $dataWhere = ['filename = ?' => $oldFilename];
+        $dataWhere[] = new \Zend_Db_Expr($adapter->prepareSqlCondition('directory', ['seq' => $oldPath]));
 
         $adapter->update($this->getMainTable(), $dataUpdate, $dataWhere);
 
@@ -289,12 +270,12 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
         $adapter = $this->_getReadAdapter();
 
         $select = $adapter->select()->from(
-            array('e' => $this->getMainTable())
+            ['e' => $this->getMainTable()]
         )->where(
             'filename = ?',
             $oldFilename
         )->where(
-            $adapter->prepareSqlCondition('directory', array('seq' => $oldPath))
+            $adapter->prepareSqlCondition('directory', ['seq' => $oldPath])
         );
 
         $data = $adapter->fetchRow($select);
@@ -308,7 +289,7 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
             $data['directory'] = $newPath;
 
             $writeAdapter = $this->_getWriteAdapter();
-            $writeAdapter->insertOnDuplicate($this->getMainTable(), $data, array('content', 'upload_time'));
+            $writeAdapter->insertOnDuplicate($this->getMainTable(), $data, ['content', 'upload_time']);
         }
 
         return $this;
@@ -326,12 +307,12 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
         $adapter = $this->_getReadAdapter();
 
         $select = $adapter->select()->from(
-            array('e' => $this->getMainTable())
+            ['e' => $this->getMainTable()]
         )->where(
             'filename = ?',
             $filename
         )->where(
-            $adapter->prepareSqlCondition('directory', array('seq' => $path))
+            $adapter->prepareSqlCondition('directory', ['seq' => $path])
         )->limit(
             1
         );
@@ -353,7 +334,7 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
             return;
         }
 
-        $likeExpression = $this->_resourceHelper->addLikeEscape($folderName . '/', array('position' => 'start'));
+        $likeExpression = $this->_resourceHelper->addLikeEscape($folderName . '/', ['position' => 'start']);
         $this->_getWriteAdapter()->delete(
             $this->getMainTable(),
             new \Zend_Db_Expr('filename LIKE ' . $likeExpression)
@@ -371,8 +352,8 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
     {
         $adapter = $this->_getWriteAdapter();
 
-        $where = array('filename = ?' => $filename);
-        $where[] = new \Zend_Db_Expr($adapter->prepareSqlCondition('directory', array('seq' => $directory)));
+        $where = ['filename = ?' => $filename];
+        $where[] = new \Zend_Db_Expr($adapter->prepareSqlCondition('directory', ['seq' => $directory]));
 
         $adapter->delete($this->getMainTable(), $where);
     }
@@ -389,10 +370,10 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
         $adapter = $this->_getReadAdapter();
 
         $select = $adapter->select()->from(
-            array('e' => $this->getMainTable()),
-            array('filename', 'directory', 'content')
+            ['e' => $this->getMainTable()],
+            ['filename', 'directory', 'content']
         )->where(
-            $adapter->prepareSqlCondition('directory', array('seq' => $directory))
+            $adapter->prepareSqlCondition('directory', ['seq' => $directory])
         )->order(
             'file_id'
         );

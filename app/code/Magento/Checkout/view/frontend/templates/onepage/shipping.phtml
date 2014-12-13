@@ -1,32 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 ?>
 <form class="form shipping address" id="co-shipping-form" data-hasrequired="<?php echo __('* Required Fields') ?>">
 
 <?php if ($this->customerHasAddresses()): ?>
    <div class="field addresses">
-       <label class="label" for="shipping-address-select"><span><?php echo __('Select a shipping address from your address book or enter a new address.') ?></span></label>
+       <label class="label" for="shipping:address-select"><span><?php echo __('Select a shipping address from your address book or enter a new address.') ?></span></label>
        <div class="control"><?php echo $this->getAddressesHtmlSelect('shipping') ?></div>
    </div>
 <?php endif ?>
@@ -118,7 +99,7 @@
         <?php endif;?>
     </fieldset>
     <div class="choice field">
-            <input type="checkbox" name="shipping[same_as_billing]" id="shipping:same_as_billing" value="1"<?php if($this->getAddress()->getSameAsBilling()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+            <input type="checkbox" name="shipping[same_as_billing]" id="shipping:same_as_billing" value="1"<?php if ($this->getAddress()->getSameAsBilling()): ?> checked="checked"<?php endif; ?> class="checkbox" />
         <label class="label" for="shipping:same_as_billing"><span><?php echo __('Use Billing Address') ?></span></label>
     </div>
     <div class="actions" id="shipping-buttons-container">
@@ -133,7 +114,7 @@ require([
 ], function($){
 
     $('#shipping\\:country_id').mage('regionUpdater', {
-        optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
+        optionalRegionAllowed: <?php echo($this->getConfig('general/region/display_all') ? 'true' : 'false'); ?>,
         regionListId: '#shipping\\\:region_id',
         regionInputId: '#shipping\\\:region',
         postcodeId: '#shipping\\\:postcode',

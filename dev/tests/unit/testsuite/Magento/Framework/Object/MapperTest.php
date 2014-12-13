@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\Object;
@@ -43,8 +24,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fromMock = $this->getMock('Magento\Framework\Object', array(), array(), '', false);
-        $this->toMock = $this->getMock('Magento\Framework\Object', array(), array(), '', false);
+        $this->fromMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
+        $this->toMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
         $this->mapper = new \Magento\Framework\Object\Mapper();
     }
 
@@ -63,20 +44,19 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
     public function testAccumulateByMapWhenToAndFromAreObjects()
     {
-        $from = array(
+        $from = [
             $this->fromMock,
-            'getData'
-        );
-        $to = array(
+            'getData',
+        ];
+        $to = [
             $this->toMock,
-            'setData'
-        );
-        $default = array(0);
-        $map['key'] = array('value');
+            'setData',
+        ];
+        $default = [0];
+        $map['key'] = ['value'];
         $this->fromMock->expects($this->once())->method('hasData')->with('key')->will($this->returnValue(false));
         $this->fromMock->expects($this->once())->method('getData')->with('key')->will($this->returnValue(true));
         $this->assertEquals($this->toMock, $this->mapper->accumulateByMap($from, $to, $map, $default));
-
     }
 
     public function testAccumulateByMapWhenFromIsArrayToIsObject()
@@ -86,7 +66,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $default['new_key'] = 'default_value';
         $this->toMock->expects($this->exactly(2))->method('setData');
         $this->assertEquals($this->toMock, $this->mapper->accumulateByMap($from, $this->toMock, $map, $default));
-
     }
 
     public function testAccumulateByMapFromAndToAreArrays()
@@ -99,6 +78,5 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $expected['value'] = 'from_value';
         $expected['new_key'] = 'value';
         $this->assertEquals($expected, $this->mapper->accumulateByMap($from, $to, $map, $default));
-
     }
 }

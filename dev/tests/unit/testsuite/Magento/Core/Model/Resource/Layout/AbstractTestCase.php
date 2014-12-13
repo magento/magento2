@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Core\Model\Resource\Layout;
 
@@ -52,17 +33,17 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_expectedConditions = array();
+    protected $_expectedConditions = [];
 
     protected function setUp()
     {
-        $this->_expectedConditions = array(
+        $this->_expectedConditions = [
             'counter' => 0,
-            'data' => array(
-                0 => array($this->_tableAlias . '.updated_at', array('notnull' => true)),
-                1 => array($this->_tableAlias . '.updated_at', array('lt' => 'date'))
-            )
-        );
+            'data' => [
+                0 => [$this->_tableAlias . '.updated_at', ['notnull' => true]],
+                1 => [$this->_tableAlias . '.updated_at', ['lt' => 'date']],
+            ],
+        ];
     }
 
     /**
@@ -73,18 +54,18 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function _getResource(\Zend_Db_Select $select)
     {
-        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', array(), array(), '', false);
+        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $connection->expects($this->once())->method('select')->will($this->returnValue($select));
         $connection->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
 
         $resource = $this->getMockForAbstractClass(
             'Magento\Framework\Model\Resource\Db\AbstractDb',
-            array(),
+            [],
             '',
             false,
             true,
             true,
-            array('getReadConnection', 'getMainTable', 'getTable', '__wakeup')
+            ['getReadConnection', 'getMainTable', 'getTable', '__wakeup']
         );
         $resource->expects($this->any())->method('getReadConnection')->will($this->returnValue($connection));
         $resource->expects($this->any())->method('getTable')->will($this->returnArgument(0));
@@ -101,7 +82,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 
     public function testAddUpdatedDaysBeforeFilter()
     {
-        $select = $this->getMock('Zend_Db_Select', array(), array(), '', false);
+        $select = $this->getMock('Zend_Db_Select', [], [], '', false);
         $select->expects($this->any())->method('where')->with(self::TEST_WHERE_CONDITION);
 
         $collection = $this->_getCollection($select);
@@ -113,7 +94,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         )->method(
             'prepareSqlCondition'
         )->will(
-            $this->returnCallback(array($this, 'verifyPrepareSqlCondition'))
+            $this->returnCallback([$this, 'verifyPrepareSqlCondition'])
         );
 
         // expected date without time

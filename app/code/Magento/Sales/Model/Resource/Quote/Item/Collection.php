@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Resource\Quote\Item;
 
@@ -40,7 +21,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @var int[]
      */
-    protected $_productIds = array();
+    protected $_productIds = [];
 
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory
@@ -135,12 +116,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function resetJoinQuotes($quotesTableName, $productId = null)
     {
         $this->getSelect()->reset()->from(
-            array('qi' => $this->getResource()->getMainTable()),
-            array('item_id', 'qty', 'quote_id')
+            ['qi' => $this->getResource()->getMainTable()],
+            ['item_id', 'qty', 'quote_id']
         )->joinInner(
-            array('q' => $quotesTableName),
+            ['q' => $quotesTableName],
             'qi.quote_id = q.entity_id',
-            array('store_id', 'items_qty', 'items_count')
+            ['store_id', 'items_qty', 'items_count']
         );
         if ($productId) {
             $this->getSelect()->where('qi.product_id = ?', (int)$productId);
@@ -204,8 +185,8 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _assignProducts()
     {
-        \Magento\Framework\Profiler::start('QUOTE:' . __METHOD__, array('group' => 'QUOTE', 'method' => __METHOD__));
-        $productIds = array();
+        \Magento\Framework\Profiler::start('QUOTE:' . __METHOD__, ['group' => 'QUOTE', 'method' => __METHOD__]);
+        $productIds = [];
         foreach ($this as $item) {
             $productIds[] = (int)$item->getProductId();
         }
@@ -221,20 +202,20 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
         $this->_eventManager->dispatch(
             'prepare_catalog_product_collection_prices',
-            array('collection' => $productCollection, 'store_id' => $this->getStoreId())
+            ['collection' => $productCollection, 'store_id' => $this->getStoreId()]
         );
         $this->_eventManager->dispatch(
             'sales_quote_item_collection_products_after_load',
-            array('product_collection' => $productCollection)
+            ['product_collection' => $productCollection]
         );
 
         $recollectQuote = false;
         foreach ($this as $item) {
             $product = $productCollection->getItemById($item->getProductId());
             if ($product) {
-                $product->setCustomOptions(array());
-                $qtyOptions = array();
-                $optionProductIds = array();
+                $product->setCustomOptions([]);
+                $qtyOptions = [];
+                $optionProductIds = [];
                 foreach ($item->getOptions() as $option) {
                     /**
                      * Call type-specific logic for product associated with quote item

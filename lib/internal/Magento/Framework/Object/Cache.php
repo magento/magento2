@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Object;
 
@@ -51,56 +32,56 @@ class Cache
      *
      * @var array of objects
      */
-    protected $_objects = array();
+    protected $_objects = [];
 
     /**
      * SPL object hashes
      *
      * @var array
      */
-    protected $_hashes = array();
+    protected $_hashes = [];
 
     /**
      * SPL hashes by object
      *
      * @var array
      */
-    protected $_objectHashes = array();
+    protected $_objectHashes = [];
 
     /**
      * Objects by tags for cleanup
      *
      * @var array 2D
      */
-    protected $_tags = array();
+    protected $_tags = [];
 
     /**
      * Tags by objects
      *
      * @var array 2D
      */
-    protected $_objectTags = array();
+    protected $_objectTags = [];
 
     /**
      * References to objects
      *
      * @var array
      */
-    protected $_references = array();
+    protected $_references = [];
 
     /**
      * References by object
      *
      * @var array 2D
      */
-    protected $_objectReferences = array();
+    protected $_objectReferences = [];
 
     /**
      * Debug data such as backtrace per class
      *
      * @var array
      */
-    protected $_debug = array();
+    protected $_debug = [];
 
     /**
      * Singleton factory
@@ -296,7 +277,7 @@ class Cache
     public function deleteByTags($tags)
     {
         if (is_string($tags)) {
-            $tags = array($tags);
+            $tags = [$tags];
         }
         foreach ($tags as $t) {
             foreach ($this->_tags[$t] as $idx => $dummy) {
@@ -341,7 +322,7 @@ class Cache
      */
     public function findByIds($ids)
     {
-        $objects = array();
+        $objects = [];
         foreach ($this->_objects as $idx => $obj) {
             if (in_array($idx, $ids)) {
                 $objects[$idx] = $obj;
@@ -370,9 +351,9 @@ class Cache
     public function findByTags($tags)
     {
         if (is_string($tags)) {
-            $tags = array($tags);
+            $tags = [$tags];
         }
-        $objects = array();
+        $objects = [];
         foreach ($tags as $t) {
             foreach ($this->_tags[$t] as $idx => $dummy) {
                 if (isset($objects[$idx])) {
@@ -392,7 +373,7 @@ class Cache
      */
     public function findByClass($class)
     {
-        $objects = array();
+        $objects = [];
         foreach ($this->_objects as $idx => $object) {
             if ($object instanceof $class) {
                 $objects[$idx] = $object;
@@ -411,13 +392,13 @@ class Cache
     public function debug($idx, $object = null)
     {
         $bt = debug_backtrace();
-        $debug = array();
+        $debug = [];
         foreach ($bt as $i => $step) {
-            $debug[$i] = array(
+            $debug[$i] = [
                 'file' => isset($step['file']) ? $step['file'] : null,
                 'line' => isset($step['line']) ? $step['line'] : null,
-                'function' => isset($step['function']) ? $step['function'] : null
-            );
+                'function' => isset($step['function']) ? $step['function'] : null,
+            ];
         }
         $this->_debug[$idx] = $debug;
     }
@@ -431,9 +412,9 @@ class Cache
     public function debugByIds($ids)
     {
         if (is_string($ids)) {
-            $ids = array($ids);
+            $ids = [$ids];
         }
-        $debug = array();
+        $debug = [];
         foreach ($ids as $idx) {
             $debug[$idx] = $this->_debug[$idx];
         }

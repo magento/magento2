@@ -1,31 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\CatalogInventory\Helper;
 
-use Magento\Store\Model\Store;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Store\Model\Store;
 
 /**
  * MinSaleQty value manipulation helper
@@ -87,7 +68,7 @@ class Minsaleqty
             $data = (float) $value;
             return (string) $data;
         } elseif (is_array($value)) {
-            $data = array();
+            $data = [];
             foreach ($value as $groupId => $qty) {
                 if (!array_key_exists($groupId, $data)) {
                     $data[$groupId] = $this->fixQty($qty);
@@ -111,11 +92,11 @@ class Minsaleqty
     protected function unserializeValue($value)
     {
         if (is_numeric($value)) {
-            return array($this->getAllCustomersGroupId() => $this->fixQty($value));
+            return [$this->getAllCustomersGroupId() => $this->fixQty($value)];
         } elseif (is_string($value) && !empty($value)) {
             return unserialize($value);
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -150,10 +131,10 @@ class Minsaleqty
      */
     protected function encodeArrayFieldValue(array $value)
     {
-        $result = array();
+        $result = [];
         foreach ($value as $groupId => $qty) {
             $resultId = $this->mathRandom->getUniqueHash('_');
-            $result[$resultId] = array('customer_group_id' => $groupId, 'min_sale_qty' => $this->fixQty($qty));
+            $result[$resultId] = ['customer_group_id' => $groupId, 'min_sale_qty' => $this->fixQty($qty)];
         }
         return $result;
     }
@@ -166,7 +147,7 @@ class Minsaleqty
      */
     protected function decodeArrayFieldValue(array $value)
     {
-        $result = array();
+        $result = [];
         unset($value['__empty']);
         foreach ($value as $row) {
             if (!is_array($row)

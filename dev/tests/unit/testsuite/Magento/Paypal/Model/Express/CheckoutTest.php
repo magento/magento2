@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Paypal\Model\Express;
@@ -42,32 +23,32 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \\Magento\Sales\Model\Service\Quote
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Sales\Model\Service\Quote
      */
     protected $serviceQuote;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \\Magento\Sales\Model\Service\QuoteFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Sales\Model\Service\QuoteFactory
      */
     protected $quoteFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \\Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\AccountManagementInterface
      */
-    protected $customerAccountServiceMock;
+    protected $customerAccountManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \\Magento\Customer\Service\V1\Data\AddressBuilderFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\AddressDataBuilderFactory
      */
     protected $addressBuilderFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \\Magento\Framework\Object\Copy
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Object\Copy
      */
     protected $objectCopyServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \\Magento\Customer\Model\Session
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session
      */
     protected $customerSessionMock;
 
@@ -99,7 +80,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->customerAccountServiceMock = $this->getMock(
+        $this->customerAccountManagementMock = $this->getMock(
             '\Magento\Customer\Model\AccountManagement',
             [],
             [],
@@ -132,9 +113,9 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                 'params'                 => [
                     'quote' => $this->quoteMock,
                     'config' => $paypalConfigMock,
-                    'session' => $this->customerSessionMock
+                    'session' => $this->customerSessionMock,
                 ],
-                'accountManagement' => $this->customerAccountServiceMock,
+                'accountManagement' => $this->customerAccountManagementMock,
                 'serviceQuoteFactory' => $this->quoteFactoryMock,
                 'addressBuilderFactory' => $this->addressBuilderFactoryMock,
                 'objectCopyService' => $this->objectCopyServiceMock,
@@ -155,7 +136,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomerWithAddressChange()
     {
-        /** @var \Magento\Customer\Service\V1\Data\Customer $customerDataMock */
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customerDataMock */
         $customerDataMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         /** @var \Magento\Sales\Model\Quote\Address $customerDataMock */
         $quoteAddressMock = $this->getMock('Magento\Sales\Model\Quote\Address', [], [], '', false);

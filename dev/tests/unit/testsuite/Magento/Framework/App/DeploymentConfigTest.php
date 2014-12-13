@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\App;
@@ -34,7 +15,7 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
         'segment2' => [
             'foo' => 1,
             'bar' => ['baz' => 2],
-        ]
+        ],
     ];
 
     /**
@@ -80,7 +61,7 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
-        $this->_deploymentConfig = new \Magento\Framework\App\DeploymentConfig($this->reader, array());
+        $this->_deploymentConfig = new \Magento\Framework\App\DeploymentConfig($this->reader, []);
         $this->_deploymentConfigMerged = new \Magento\Framework\App\DeploymentConfig(
             $this->reader,
             require __DIR__ . '/_files/other/local_developer.php'
@@ -111,6 +92,15 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($object->isAvailable());
     }
 
+    public function testNotAvailableThenAvailable()
+    {
+        $this->reader->expects($this->at(0))->method('load')->willReturn([]);
+        $this->reader->expects($this->at(1))->method('load')->willReturn(['a' => 1]);
+        $object = new DeploymentConfig($this->reader);
+        $this->assertFalse($object->isAvailable());
+        $this->assertTrue($object->isAvailable());
+    }
+
     /**
      * @param array $data
      * @expectedException \Exception
@@ -134,5 +124,4 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
-
 }

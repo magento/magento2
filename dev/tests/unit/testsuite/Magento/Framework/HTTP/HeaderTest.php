@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\HTTP;
 
@@ -46,13 +27,13 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
 
         $this->_request = $this->getMock(
             'Magento\Framework\App\Request\Http',
-            array('getServer', 'getRequestUri'),
-            array(),
+            ['getServer', 'getRequestUri'],
+            [],
             '',
             false
         );
 
-        $this->_converter = $this->getMock('\Magento\Framework\Stdlib\String', array('cleanString'));
+        $this->_converter = $this->getMock('\Magento\Framework\Stdlib\String', ['cleanString']);
     }
 
     /**
@@ -76,11 +57,11 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
 
         $headerObject = $this->_objectManager->getObject(
             '\Magento\Framework\HTTP\Header',
-            array('httpRequest' => $this->_request, 'converter' => $this->_converter)
+            ['httpRequest' => $this->_request, 'converter' => $this->_converter]
         );
 
         $method = new \ReflectionMethod('\Magento\Framework\HTTP\Header', $method);
-        $result = $method->invokeArgs($headerObject, array('clean' => $clean));
+        $result = $method->invokeArgs($headerObject, ['clean' => $clean]);
 
         $this->assertEquals($expectedValue, $result);
     }
@@ -90,58 +71,58 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
      */
     public function methodsDataProvider()
     {
-        return array(
-            'getHttpHost clean true' => array(
+        return [
+            'getHttpHost clean true' => [
                 'method' => 'getHttpHost',
                 'clean' => true,
-                'expectedValue' => 'converted value'
-            ),
-            'getHttpHost clean false' => array(
+                'expectedValue' => 'converted value',
+            ],
+            'getHttpHost clean false' => [
                 'method' => 'getHttpHost',
                 'clean' => false,
-                'expectedValue' => 'value'
-            ),
-            'getHttpUserAgent clean true' => array(
+                'expectedValue' => 'value',
+            ],
+            'getHttpUserAgent clean true' => [
                 'method' => 'getHttpUserAgent',
                 'clean' => true,
-                'expectedValue' => 'converted value'
-            ),
-            'getHttpUserAgent clean false' => array(
+                'expectedValue' => 'converted value',
+            ],
+            'getHttpUserAgent clean false' => [
                 'method' => 'getHttpUserAgent',
                 'clean' => false,
-                'expectedValue' => 'value'
-            ),
-            'getHttpAcceptLanguage clean true' => array(
+                'expectedValue' => 'value',
+            ],
+            'getHttpAcceptLanguage clean true' => [
                 'method' => 'getHttpAcceptLanguage',
                 'clean' => true,
-                'expectedValue' => 'converted value'
-            ),
-            'getHttpAcceptLanguage clean false' => array(
+                'expectedValue' => 'converted value',
+            ],
+            'getHttpAcceptLanguage clean false' => [
                 'method' => 'getHttpAcceptLanguage',
                 'clean' => false,
-                'expectedValue' => 'value'
-            ),
-            'getHttpAcceptCharset clean true' => array(
+                'expectedValue' => 'value',
+            ],
+            'getHttpAcceptCharset clean true' => [
                 'method' => 'getHttpAcceptCharset',
                 'clean' => true,
-                'expectedValue' => 'converted value'
-            ),
-            'getHttpAcceptCharset clean false' => array(
+                'expectedValue' => 'converted value',
+            ],
+            'getHttpAcceptCharset clean false' => [
                 'method' => 'getHttpAcceptCharset',
                 'clean' => false,
-                'expectedValue' => 'value'
-            ),
-            'getHttpReferer clean true' => array(
+                'expectedValue' => 'value',
+            ],
+            'getHttpReferer clean true' => [
                 'method' => 'getHttpReferer',
                 'clean' => true,
-                'expectedValue' => 'converted value'
-            ),
-            'getHttpReferer clean false' => array(
+                'expectedValue' => 'converted value',
+            ],
+            'getHttpReferer clean false' => [
                 'method' => 'getHttpReferer',
                 'clean' => false,
-                'expectedValue' => 'value'
-            )
-        );
+                'expectedValue' => 'value',
+            ]
+        ];
     }
 
     /**
@@ -158,7 +139,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
 
         $headerObject = $this->_objectManager->getObject(
             '\Magento\Framework\HTTP\Header',
-            array('httpRequest' => $this->_request, 'converter' => $this->_converter)
+            ['httpRequest' => $this->_request, 'converter' => $this->_converter]
         );
 
         $result = $headerObject->getRequestUri($clean);
@@ -171,10 +152,10 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
      */
     public function getRequestUriDataProvider()
     {
-        return array(
-            'getRequestUri clean true' => array('clean' => true, 'expectedValue' => 'converted value'),
-            'getRequestUri clean false' => array('clean' => false, 'expectedValue' => 'value')
-        );
+        return [
+            'getRequestUri clean true' => ['clean' => true, 'expectedValue' => 'converted value'],
+            'getRequestUri clean false' => ['clean' => false, 'expectedValue' => 'value']
+        ];
     }
 
     /**

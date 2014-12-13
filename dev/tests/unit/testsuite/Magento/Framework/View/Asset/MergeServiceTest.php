@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\View\Asset;
 
@@ -58,16 +39,16 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_config = $this->getMock('Magento\Framework\View\Asset\ConfigInterface', array(), array(), '', false);
-        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
+        $this->_config = $this->getMock('Magento\Framework\View\Asset\ConfigInterface', [], [], '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->_directory = $this->getMock(
             '\Magento\Framework\Filesystem\Directory\Write',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->_state = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
+        $this->_state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->_filesystem->expects(
             $this->any()
         )->method(
@@ -90,7 +71,7 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMergedAssetsWrongContentType()
     {
-        $this->_object->getMergedAssets(array(), 'unknown');
+        $this->_object->getMergedAssets([], 'unknown');
     }
 
     /**
@@ -106,7 +87,7 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
         $this->_config->expects($this->once())->method('isMergeCssFiles')->will($this->returnValue(true));
         $this->_config->expects($this->once())->method('isMergeJsFiles')->will($this->returnValue(true));
 
-        $mergeStrategyMock = $this->getMock($mergeStrategy, array(), array(), '', false);
+        $mergeStrategyMock = $this->getMock($mergeStrategy, [], [], '', false);
 
         $this->_objectManager->expects(
             $this->once()
@@ -114,7 +95,7 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
             'create'
         )->with(
             'Magento\Framework\View\Asset\Merged',
-            array('assets' => $assets, 'mergeStrategy' => $mergeStrategyMock)
+            ['assets' => $assets, 'mergeStrategy' => $mergeStrategyMock]
         )->will(
             $this->returnValue($mergedAsset)
         );
@@ -134,52 +115,52 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
 
     public static function getMergedAssetsDataProvider()
     {
-        $jsAssets = array(
+        $jsAssets = [
             new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/script_one.js'),
-            new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/script_two.js')
-        );
-        $cssAssets = array(
+            new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/script_two.js'),
+        ];
+        $cssAssets = [
             new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/style_one.css'),
-            new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/style_two.css')
-        );
-        return array(
-            'js production mode' => array(
+            new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/style_two.css'),
+        ];
+        return [
+            'js production mode' => [
                 $jsAssets,
                 'js',
                 \Magento\Framework\App\State::MODE_PRODUCTION,
-                'Magento\Framework\View\Asset\MergeStrategy\FileExists'
-            ),
-            'css production mode' => array(
+                'Magento\Framework\View\Asset\MergeStrategy\FileExists',
+            ],
+            'css production mode' => [
                 $cssAssets,
                 'css',
                 \Magento\Framework\App\State::MODE_PRODUCTION,
-                'Magento\Framework\View\Asset\MergeStrategy\FileExists'
-            ),
-            'js default mode' => array(
+                'Magento\Framework\View\Asset\MergeStrategy\FileExists',
+            ],
+            'js default mode' => [
                 $jsAssets,
                 'js',
                 \Magento\Framework\App\State::MODE_DEFAULT,
-                'Magento\Framework\View\Asset\MergeStrategy\Checksum'
-            ),
-            'css default mode' => array(
+                'Magento\Framework\View\Asset\MergeStrategy\Checksum',
+            ],
+            'css default mode' => [
                 $cssAssets,
                 'js',
                 \Magento\Framework\App\State::MODE_DEFAULT,
-                'Magento\Framework\View\Asset\MergeStrategy\Checksum'
-            ),
-            'js developer mode' => array(
+                'Magento\Framework\View\Asset\MergeStrategy\Checksum',
+            ],
+            'js developer mode' => [
                 $jsAssets,
                 'js',
                 \Magento\Framework\App\State::MODE_DEVELOPER,
-                'Magento\Framework\View\Asset\MergeStrategy\Checksum'
-            ),
-            'css developer mode' => array(
+                'Magento\Framework\View\Asset\MergeStrategy\Checksum',
+            ],
+            'css developer mode' => [
                 $cssAssets,
                 'css',
                 \Magento\Framework\App\State::MODE_DEVELOPER,
-                'Magento\Framework\View\Asset\MergeStrategy\Checksum'
-            )
-        );
+                'Magento\Framework\View\Asset\MergeStrategy\Checksum',
+            ]
+        ];
     }
 
     public function testCleanMergedJsCss()

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -70,7 +51,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @var array
      */
-    protected $_currencyCache = array();
+    protected $_currencyCache = [];
 
     /**
      * ISO2 country codes which have optional Zip/Postal pre-configured
@@ -95,7 +76,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_coreHelper;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -115,7 +96,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
      * @param \Magento\Core\Helper\Data $coreHelper
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
@@ -125,7 +106,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
         \Magento\Core\Helper\Data $coreHelper,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
@@ -173,32 +154,32 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getRegionJson()
     {
-        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, array('group' => 'TEST', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         if (!$this->_regionJson) {
             $cacheKey = 'DIRECTORY_REGIONS_JSON_STORE' . $this->_storeManager->getStore()->getId();
             $json = $this->_configCacheType->load($cacheKey);
             if (empty($json)) {
-                $countryIds = array();
+                $countryIds = [];
                 foreach ($this->getCountryCollection() as $country) {
                     $countryIds[] = $country->getCountryId();
                 }
                 $collection = $this->_regCollectionFactory->create();
                 $collection->addCountryFilter($countryIds)->load();
-                $regions = array(
-                    'config' => array(
+                $regions = [
+                    'config' => [
                         'show_all_regions' => $this->isShowNonRequiredState(),
-                        'regions_required' => $this->getCountriesWithStatesRequired()
-                    )
-                );
+                        'regions_required' => $this->getCountriesWithStatesRequired(),
+                    ],
+                ];
                 foreach ($collection as $region) {
                     /** @var $region \Magento\Directory\Model\Region */
                     if (!$region->getRegionId()) {
                         continue;
                     }
-                    $regions[$region->getCountryId()][$region->getRegionId()] = array(
+                    $regions[$region->getCountryId()][$region->getRegionId()] = [
                         'code' => $region->getCode(),
-                        'name' => (string)__($region->getName())
-                    );
+                        'name' => (string)__($region->getName()),
+                    ];
                 }
                 $json = $this->_coreHelper->jsonEncode($regions);
 

@@ -1,31 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Integration\Helper\Oauth;
 
 class ConsumerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\StoreManagerInterface */
+    /** @var \Magento\Store\Model\StoreManagerInterface */
     protected $_storeManagerMock;
 
     /** @var \Magento\Integration\Model\Oauth\Consumer\Factory */
@@ -80,7 +61,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $this->_tokenFactory->expects($this->any())->method('create')->will($this->returnValue($this->_tokenMock));
 
         $this->_storeManagerMock = $this->getMockBuilder(
-            'Magento\Framework\StoreManagerInterface'
+            'Magento\Store\Model\StoreManagerInterface'
         )->disableOriginalConstructor()->getMockForAbstractClass();
         $this->_storeMock = $this->getMockBuilder(
             'Magento\Store\Model\Store'
@@ -111,7 +92,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $this->_loggerMock = $this->getMockBuilder(
             'Magento\Framework\Logger'
         )->disableOriginalConstructor()->setMethods(
-            array('logException')
+            ['logException']
         )->getMock();
 
         $this->_oauthService = new \Magento\Integration\Service\V1\Oauth(
@@ -142,7 +123,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $key = $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY);
         $secret = $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET);
 
-        $consumerData = array('name' => 'Integration Name', 'key' => $key, 'secret' => $secret);
+        $consumerData = ['name' => 'Integration Name', 'key' => $key, 'secret' => $secret];
         $this->_consumerMock->expects($this->once())->method('save')->will($this->returnSelf());
 
         /** @var \Magento\Integration\Model\Oauth\Consumer $consumer */
@@ -159,7 +140,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $secret = $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET);
         $oauthVerifier = $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_VERIFIER);
 
-        $consumerData = array('entity_id' => $consumerId, 'key' => $key, 'secret' => $secret);
+        $consumerData = ['entity_id' => $consumerId, 'key' => $key, 'secret' => $secret];
 
         $this->_consumerMock->expects(
             $this->once()

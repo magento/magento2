@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\SalesRule\Model\Resource;
 
@@ -35,18 +16,18 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      *
      * @var array
      */
-    protected $_associatedEntitiesMap = array(
-        'website' => array(
+    protected $_associatedEntitiesMap = [
+        'website' => [
             'associations_table' => 'salesrule_website',
             'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'website_id'
-        ),
-        'customer_group' => array(
+            'entity_id_field' => 'website_id',
+        ],
+        'customer_group' => [
             'associations_table' => 'salesrule_customer_group',
             'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'customer_group_id'
-        )
-    );
+            'entity_id_field' => 'customer_group_id',
+        ],
+    ];
 
     /**
      * Magento string lib
@@ -174,13 +155,13 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         $read = $this->_getReadAdapter();
         $select = $read->select()->from(
             $this->getTable('rule_customer'),
-            array('cnt' => 'count(*)')
+            ['cnt' => 'count(*)']
         )->where(
             'rule_id = :rule_id'
         )->where(
             'customer_id = :customer_id'
         );
-        return $read->fetchOne($select, array(':rule_id' => $rule->getRuleId(), ':customer_id' => $customerId));
+        return $read->fetchOne($select, [':rule_id' => $rule->getRuleId(), ':customer_id' => $customerId]);
     }
 
     /**
@@ -193,14 +174,14 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      */
     public function saveStoreLabels($ruleId, $labels)
     {
-        $deleteByStoreIds = array();
+        $deleteByStoreIds = [];
         $table = $this->getTable('salesrule_label');
         $adapter = $this->_getWriteAdapter();
 
-        $data = array();
+        $data = [];
         foreach ($labels as $storeId => $label) {
             if ($this->string->strlen($label)) {
-                $data[] = array('rule_id' => $ruleId, 'store_id' => $storeId, 'label' => $label);
+                $data[] = ['rule_id' => $ruleId, 'store_id' => $storeId, 'label' => $label];
             } else {
                 $deleteByStoreIds[] = $storeId;
             }
@@ -209,11 +190,11 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         $adapter->beginTransaction();
         try {
             if (!empty($data)) {
-                $adapter->insertOnDuplicate($table, $data, array('label'));
+                $adapter->insertOnDuplicate($table, $data, ['label']);
             }
 
             if (!empty($deleteByStoreIds)) {
-                $adapter->delete($table, array('rule_id=?' => $ruleId, 'store_id IN (?)' => $deleteByStoreIds));
+                $adapter->delete($table, ['rule_id=?' => $ruleId, 'store_id IN (?)' => $deleteByStoreIds]);
             }
         } catch (\Exception $e) {
             $adapter->rollback();
@@ -234,11 +215,11 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     {
         $select = $this->_getReadAdapter()->select()->from(
             $this->getTable('salesrule_label'),
-            array('store_id', 'label')
+            ['store_id', 'label']
         )->where(
             'rule_id = :rule_id'
         );
-        return $this->_getReadAdapter()->fetchPairs($select, array(':rule_id' => $ruleId));
+        return $this->_getReadAdapter()->fetchPairs($select, [':rule_id' => $ruleId]);
     }
 
     /**
@@ -260,7 +241,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         )->order(
             'store_id DESC'
         );
-        return $this->_getReadAdapter()->fetchOne($select, array(':rule_id' => $ruleId, ':store_id' => $storeId));
+        return $this->_getReadAdapter()->fetchOne($select, [':rule_id' => $ruleId, ':store_id' => $storeId]);
     }
 
     /**
@@ -272,12 +253,12 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     {
         $read = $this->_getReadAdapter();
         $select = $read->select()->from(
-            array('a' => $this->getTable('salesrule_product_attribute')),
+            ['a' => $this->getTable('salesrule_product_attribute')],
             new \Zend_Db_Expr('DISTINCT ea.attribute_code')
         )->joinInner(
-            array('ea' => $this->getTable('eav_attribute')),
+            ['ea' => $this->getTable('eav_attribute')],
             'ea.attribute_id = a.attribute_id',
-            array()
+            []
         );
         return $read->fetchAll($select);
     }
@@ -292,16 +273,16 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     public function setActualProductAttributes($rule, $attributes)
     {
         $write = $this->_getWriteAdapter();
-        $write->delete($this->getTable('salesrule_product_attribute'), array('rule_id=?' => $rule->getId()));
+        $write->delete($this->getTable('salesrule_product_attribute'), ['rule_id=?' => $rule->getId()]);
 
         //Getting attribute IDs for attribute codes
-        $attributeIds = array();
+        $attributeIds = [];
         $select = $this->_getReadAdapter()->select()->from(
-            array('a' => $this->getTable('eav_attribute')),
-            array('a.attribute_id')
+            ['a' => $this->getTable('eav_attribute')],
+            ['a.attribute_id']
         )->where(
             'a.attribute_code IN (?)',
-            array($attributes)
+            [$attributes]
         );
         $attributesFound = $this->_getReadAdapter()->fetchAll($select);
         if ($attributesFound) {
@@ -309,16 +290,16 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
                 $attributeIds[] = $attribute['attribute_id'];
             }
 
-            $data = array();
+            $data = [];
             foreach ($rule->getCustomerGroupIds() as $customerGroupId) {
                 foreach ($rule->getWebsiteIds() as $websiteId) {
                     foreach ($attributeIds as $attribute) {
-                        $data[] = array(
+                        $data[] = [
                             'rule_id' => $rule->getId(),
                             'website_id' => $websiteId,
                             'customer_group_id' => $customerGroupId,
-                            'attribute_id' => $attribute
-                        );
+                            'attribute_id' => $attribute,
+                        ];
                     }
                 }
             }
@@ -336,7 +317,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      */
     public function getProductAttributes($serializedString)
     {
-        $result = array();
+        $result = [];
         if (preg_match_all(
             '~s:32:"salesrule/rule_condition_product";s:9:"attribute";s:\d+:"(.*?)"~s',
             $serializedString,

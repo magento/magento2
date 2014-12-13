@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\ProductLink;
 
@@ -116,7 +97,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             ]
         );
     }
-    
+
     public function testGetLinkedItemsByType()
     {
         $productSku = 'product';
@@ -134,7 +115,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             'link_type' => $linkType,
             'linked_product_sku' => $item['sku'],
             'linked_product_type' => $item['type'],
-            'position' => $item['position']
+            'position' => $item['position'],
         ];
         $this->collectionProviderMock->expects($this->once())
             ->method('getCollection')
@@ -187,7 +168,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             );
             $linkMock->expects($this->exactly(2))
                 ->method('getLinkedProductSku')
-                ->willReturn('linkedProduct' . $i .'Sku');
+                ->willReturn('linkedProduct' . $i . 'Sku');
             $linkMock->expects($this->once())->method('__toArray');
             $linkedProductsMock[$i] = $linkMock;
             $linksData['productSku']['link'][] = $linkMock;
@@ -201,7 +182,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->linkInitializerMock->expects($this->once())->method('initializeLinks')
             ->with($this->productMock, [$type => [
                 1 => ['product_id' => 1],
-                2 => ['product_id' => 2]
+                2 => ['product_id' => 2],
             ]]);
         $this->productMock->expects($this->once())->method('save');
         $this->assertTrue($this->model->setProductLinks('', $type, $linkedProductsMock));
@@ -239,7 +220,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             );
             $productLinkMock->expects($this->any())
                 ->method('getLinkedProductSku')
-                ->willReturn('linkedProduct' . $i .'Sku');
+                ->willReturn('linkedProduct' . $i . 'Sku');
             $productLinkMock->expects($this->any())->method('getProductSku')->willReturn('productSku');
             $productLinkMock->expects($this->any())->method('getLinkType')->willReturn('link');
             $linkedProductsMock[$i] = $productLinkMock;
@@ -256,7 +237,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             [
                 '\Magento\Framework\Exception\NoSuchEntityException',
                 'Product with SKU "linkedProduct0Sku" does not exist',
-                ['linkedProduct1Sku' => 2]
+                ['linkedProduct1Sku' => 2],
             ], [
                 '\Magento\Framework\Exception\NoSuchEntityException',
                 'Product with SKU "linkedProduct1Sku" does not exist',
@@ -287,7 +268,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             );
             $linkMock->expects($this->exactly(2))
                 ->method('getLinkedProductSku')
-                ->willReturn('linkedProduct' . $i .'Sku');
+                ->willReturn('linkedProduct' . $i . 'Sku');
             $linkMock->expects($this->once())->method('__toArray');
             $linkedProductsMock[$i] = $linkMock;
             $linksData['productSku']['link'][] = $linkMock;
@@ -301,7 +282,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->linkInitializerMock->expects($this->once())->method('initializeLinks')
             ->with($this->productMock, [$type => [
                 1 => ['product_id' => 1],
-                2 => ['product_id' => 2]
+                2 => ['product_id' => 2],
             ]]);
         $this->productMock->expects($this->once())->method('save')->willThrowException(new \Exception());
         $this->model->setProductLinks('', $type, $linkedProductsMock);

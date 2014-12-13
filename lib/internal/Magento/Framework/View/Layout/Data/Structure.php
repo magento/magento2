@@ -1,14 +1,14 @@
 <?php
 /**
- * An associative data structure, that features "nested set" parent-child relations
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\View\Layout\Data;
 
 use Magento\Framework\Data\Structure as DataStructure;
 
+/**
+ * An associative data structure, that features "nested set" parent-child relations
+ */
 class Structure extends DataStructure
 {
     /**
@@ -52,7 +52,7 @@ class Structure extends DataStructure
         if (empty($name)) {
             $name = $this->_generateAnonymousName($class);
         }
-        $this->createElement($name, array('type' => $type));
+        $this->createElement($name, ['type' => $type]);
         return $name;
     }
 

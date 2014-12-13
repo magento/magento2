@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ImportExport\Model\Import\Source;
 
@@ -40,11 +21,11 @@ class CsvTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->_directoryMock = $this->getMock(
             'Magento\Framework\Filesystem\Directory\Write',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -88,7 +69,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
 
         $model = new \Magento\ImportExport\Model\Import\Source\Csv($stream, $this->_filesystem);
         foreach ($model as $value) {
-            $this->assertSame(array('column1' => 'value1', 'column2' => 'value2'), $value);
+            $this->assertSame(['column1' => 'value1', 'column2' => 'value2'], $value);
         }
     }
 
@@ -126,11 +107,11 @@ class CsvTest extends \PHPUnit_Framework_TestCase
      */
     public function optionalArgsDataProvider()
     {
-        return array(
-            array(',', '"', array('column1', 'column2')),
-            array(',', "'", array('column1', '"column2"')),
-            array('.', '"', array('column1,"column2"'))
-        );
+        return [
+            [',', '"', ['column1', 'column2']],
+            [',', "'", ['column1', '"column2"']],
+            ['.', '"', ['column1,"column2"']]
+        ];
     }
 
     public function testRewind()
@@ -161,6 +142,6 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         $model->next();
         $model->next();
         $this->assertSame(2, $model->key());
-        $this->assertSame(array('column1' => '5', 'column2' => ''), $model->current());
+        $this->assertSame(['column1' => '5', 'column2' => ''], $model->current());
     }
 }

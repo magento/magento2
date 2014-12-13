@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
@@ -96,7 +77,7 @@ class Samples extends \Magento\Backend\Block\Widget
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Downloadable\Model\Sample $sampleModel,
         \Magento\Backend\Model\UrlFactory $urlFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_coreFileStorageDb = $coreFileStorageDatabase;
@@ -138,12 +119,12 @@ class Samples extends \Magento\Backend\Block\Widget
         $addButton = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->setData(
-            array(
+            [
                 'label' => __('Add New Row'),
                 'id' => 'add_sample_item',
                 'class' => 'add',
-                'data_attribute' => array('action' => 'add-sample')
-            )
+                'data_attribute' => ['action' => 'add-sample'],
+            ]
         );
         return $addButton->toHtml();
     }
@@ -155,20 +136,20 @@ class Samples extends \Magento\Backend\Block\Widget
      */
     public function getSampleData()
     {
-        $samplesArr = array();
+        $samplesArr = [];
         if ($this->getProduct()->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
             return $samplesArr;
         }
         $samples = $this->getProduct()->getTypeInstance()->getSamples($this->getProduct());
         $fileHelper = $this->_downloadableFile;
         foreach ($samples as $item) {
-            $tmpSampleItem = array(
+            $tmpSampleItem = [
                 'sample_id' => $item->getId(),
                 'title' => $this->escapeHtml($item->getTitle()),
                 'sample_url' => $item->getSampleUrl(),
                 'sample_type' => $item->getSampleType(),
-                'sort_order' => $item->getSortOrder()
-            );
+                'sort_order' => $item->getSortOrder(),
+            ];
 
             $sampleFile = $item->getSampleFile();
             if ($sampleFile) {
@@ -179,18 +160,18 @@ class Samples extends \Magento\Backend\Block\Widget
                 if ($fileExist) {
                     $name = '<a href="' . $this->getUrl(
                         'adminhtml/downloadable_product_edit/sample',
-                        array('id' => $item->getId(), '_secure' => true)
+                        ['id' => $item->getId(), '_secure' => true]
                     ) . '">' . $fileHelper->getFileFromPathFile(
                         $sampleFile
                     ) . '</a>';
-                    $tmpSampleItem['file_save'] = array(
-                        array(
+                    $tmpSampleItem['file_save'] = [
+                        [
                             'file' => $sampleFile,
                             'name' => $name,
                             'size' => $fileHelper->getFileSize($file),
-                            'status' => 'old'
-                        )
-                    );
+                            'status' => 'old',
+                        ],
+                    ];
                 }
             }
 
@@ -238,12 +219,12 @@ class Samples extends \Magento\Backend\Block\Widget
         $this->addChild(
             'upload_button',
             'Magento\Backend\Block\Widget\Button',
-            array(
+            [
                 'id' => '',
                 'label' => __('Upload Files'),
                 'type' => 'button',
                 'onclick' => 'Downloadable.massUploadByType(\'samples\')'
-            )
+            ]
         );
     }
 
@@ -266,12 +247,12 @@ class Samples extends \Magento\Backend\Block\Widget
     {
         $url = $this->_urlFactory->create()->addSessionParam()->getUrl(
             'adminhtml/downloadable_file/upload',
-            array('type' => 'samples', '_secure' => true)
+            ['type' => 'samples', '_secure' => true]
         );
         $this->getConfig()->setUrl($url);
-        $this->getConfig()->setParams(array('form_key' => $this->getFormKey()));
+        $this->getConfig()->setParams(['form_key' => $this->getFormKey()]);
         $this->getConfig()->setFileField('samples');
-        $this->getConfig()->setFilters(array('all' => array('label' => __('All Files'), 'files' => array('*.*'))));
+        $this->getConfig()->setFilters(['all' => ['label' => __('All Files'), 'files' => ['*.*']]]);
         $this->getConfig()->setReplaceBrowseWithRemove(true);
         $this->getConfig()->setWidth('32');
         $this->getConfig()->setHideUploadButton(true);

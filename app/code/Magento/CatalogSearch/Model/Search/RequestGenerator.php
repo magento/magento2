@@ -1,34 +1,23 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\CatalogSearch\Model\Search;
 
 use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\Search\Request\FilterInterface;
+use Magento\Framework\Search\Request\QueryInterface;
 
 class RequestGenerator
 {
+    /** Filter name suffix */
+    const FILTER_SUFFIX = '_filter';
+
+    /** Bucket name suffix */
+    const BUCKET_SUFFIX = '_bucket';
+
     /**
      * @var CollectionFactory
      */
@@ -66,23 +55,22 @@ class RequestGenerator
         foreach ($this->getSearchableAttributes() as $attribute) {
             if ($attribute->getIsFilterable()) {
                 if (!in_array($attribute->getAttributeCode(), ['price', 'category_ids'])) {
-
                     $queryName = $attribute->getAttributeCode() . '_query';
 
                     $request['queries']['quick_search_container']['queryReference'][] = [
                         'clause' => 'should',
                         'ref' => $queryName,
                     ];
-                    $filterName = $attribute->getAttributeCode() . '_filter';
+                    $filterName = $attribute->getAttributeCode() . self::FILTER_SUFFIX;
                     $request['queries'][$queryName] = [
                         'name' => $queryName,
-                        'type' => 'filteredQuery',
-                        'filterReference' => [['ref' => $filterName]]
+                        'type' => QueryInterface::TYPE_FILTER,
+                        'filterReference' => [['ref' => $filterName]],
                     ];
-                    $bucketName = $attribute->getAttributeCode() . '_bucket';
+                    $bucketName = $attribute->getAttributeCode() . self::BUCKET_SUFFIX;
                     if ($attribute->getBackendType() == 'decimal') {
                         $request['filters'][$filterName] = [
-                            'type' => 'rangeFilter',
+                            'type' => FilterInterface::TYPE_RANGE,
                             'name' => $filterName,
                             'field' => $attribute->getAttributeCode(),
                             'from' => '$' . $attribute->getAttributeCode() . '.from$',
@@ -97,13 +85,13 @@ class RequestGenerator
                         ];
                     } else {
                         $request['filters'][$filterName] = [
-                            'type' => 'termFilter',
+                            'type' => FilterInterface::TYPE_TERM,
                             'name' => $filterName,
                             'field' => $attribute->getAttributeCode(),
                             'value' => '$' . $attribute->getAttributeCode() . '$',
                         ];
                         $request['aggregations'][$bucketName] = [
-                            'type' => 'termBucket',
+                            'type' => BucketInterface::TYPE_TERM,
                             'name' => $bucketName,
                             'field' => $attribute->getAttributeCode(),
                             'metric' => [["type" => "count"]],
@@ -172,15 +160,15 @@ class RequestGenerator
                 case 'text':
                 case 'varchar':
                     if ($attribute->getFrontendInput() === 'multiselect') {
-                        $filterName = $attribute->getAttributeCode() . '_filter';
+                        $filterName = $attribute->getAttributeCode() . self::FILTER_SUFFIX;
                         $request['queries'][$queryName] = [
                             'name' => $queryName,
-                            'type' => 'filteredQuery',
-                            'filterReference' => [['ref' => $filterName]]
+                            'type' => QueryInterface::TYPE_FILTER,
+                            'filterReference' => [['ref' => $filterName]],
                         ];
 
                         $request['filters'][$filterName] = [
-                            'type' => 'wildcardFilter',
+                            'type' => FilterInterface::TYPE_TERM,
                             'name' => $filterName,
                             'field' => $attribute->getAttributeCode(),
                             'value' => '$' . $attribute->getAttributeCode() . '$',
@@ -189,43 +177,43 @@ class RequestGenerator
                         $request['queries'][$queryName] = [
                             'name' => $queryName,
                             'type' => 'matchQuery',
-                            'value' => '$' . $attribute->getAttributeCode() . '$*',
+                            'value' => '$' . $attribute->getAttributeCode() . '$',
                             'match' => [
                                 [
                                     'field' => $attribute->getAttributeCode(),
                                     'boost' => $attribute->getSearchWeight() ?: 1,
-                                ]
-                            ]
+                                ],
+                            ],
                         ];
                     }
                     break;
                 case 'decimal':
                 case 'datetime':
                 case 'date':
-                    $filterName = $attribute->getAttributeCode() . '_filter';
+                    $filterName = $attribute->getAttributeCode() . self::FILTER_SUFFIX;
                     $request['queries'][$queryName] = [
                         'name' => $queryName,
-                        'type' => 'filteredQuery',
-                        'filterReference' => [['ref' => $filterName]]
+                        'type' => QueryInterface::TYPE_FILTER,
+                        'filterReference' => [['ref' => $filterName]],
                     ];
                     $request['filters'][$filterName] = [
                         'field' => $attribute->getAttributeCode(),
                         'name' => $filterName,
-                        'type' => 'rangeFilter',
+                        'type' => FilterInterface::TYPE_RANGE,
                         'from' => '$' . $attribute->getAttributeCode() . '.from$',
                         'to' => '$' . $attribute->getAttributeCode() . '.to$',
                     ];
                     break;
                 default:
-                    $filterName = $attribute->getAttributeCode() . '_filter';
+                    $filterName = $attribute->getAttributeCode() . self::FILTER_SUFFIX;
                     $request['queries'][$queryName] = [
                         'name' => $queryName,
-                        'type' => 'filteredQuery',
-                        'filterReference' => [['ref' => $filterName]]
+                        'type' => QueryInterface::TYPE_FILTER,
+                        'filterReference' => [['ref' => $filterName]],
                     ];
 
                     $request['filters'][$filterName] = [
-                        'type' => 'termFilter',
+                        'type' => FilterInterface::TYPE_TERM,
                         'name' => $filterName,
                         'field' => $attribute->getAttributeCode(),
                         'value' => '$' . $attribute->getAttributeCode() . '$',

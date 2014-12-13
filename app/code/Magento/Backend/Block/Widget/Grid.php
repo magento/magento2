@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backend\Block\Widget;
 
@@ -81,7 +62,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * @var array
      */
-    protected $_defaultFilter = array();
+    protected $_defaultFilter = [];
 
     /**
      * Empty grid text
@@ -155,7 +136,7 @@ class Grid extends \Magento\Backend\Block\Widget
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        array $data = array()
+        array $data = []
     ) {
         $this->_backendHelper = $backendHelper;
         $this->_backendSession = $context->getBackendSession();
@@ -353,7 +334,6 @@ class Grid extends \Magento\Backend\Block\Widget
     protected function _prepareCollection()
     {
         if ($this->getCollection()) {
-
             $this->_preparePage();
 
             $columnId = $this->getParam($this->getVarNameSort(), $this->_defaultSort);
@@ -368,9 +348,9 @@ class Grid extends \Magento\Backend\Block\Widget
                 $data = $this->_backendHelper->prepareFilterString($filter);
                 $data = array_merge($data, (array)$this->getRequest()->getPost($this->getVarNameFilter()));
                 $this->_setFilterValues($data);
-            } else if ($filter && is_array($filter)) {
+            } elseif ($filter && is_array($filter)) {
                 $this->_setFilterValues($filter);
-            } else if (0 !== sizeof($this->_defaultFilter)) {
+            } elseif (0 !== sizeof($this->_defaultFilter)) {
                 $this->_setFilterValues($this->_defaultFilter);
             }
 
@@ -443,7 +423,7 @@ class Grid extends \Magento\Backend\Block\Widget
             $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Widget\Button'
             )->setData(
-                array('label' => __('Reset Filter'), 'onclick' => $this->getJsObjectName() . '.resetFilter()', 'class' => 'action-reset')
+                ['label' => __('Reset Filter'), 'onclick' => $this->getJsObjectName() . '.resetFilter()', 'class' => 'action-reset']
             )
         );
         $this->setChild(
@@ -451,11 +431,11 @@ class Grid extends \Magento\Backend\Block\Widget
             $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Widget\Button'
             )->setData(
-                array(
+                [
                     'label' => __('Search'),
                     'onclick' => $this->getJsObjectName() . '.doFilter()',
-                    'class' => 'task'
-                )
+                    'class' => 'task',
+                ]
             )
         );
     }
@@ -714,7 +694,7 @@ class Grid extends \Magento\Backend\Block\Widget
      * @param array $params url parameters
      * @return string current grid url
      */
-    public function getAbsoluteGridUrl($params = array())
+    public function getAbsoluteGridUrl($params = [])
     {
         return $this->getCurrentUrl($params);
     }

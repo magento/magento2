@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\View\Element\Html;
 
@@ -33,7 +14,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      *
      * @var array
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Get options of the element
@@ -65,9 +46,9 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
      * @param array  $params HTML attributes
      * @return $this
      */
-    public function addOption($value, $label, $params = array())
+    public function addOption($value, $label, $params = [])
     {
-        $this->_options[] = array('value' => $value, 'label' => $label, 'params' => $params);
+        $this->_options[] = ['value' => $value, 'label' => $label, 'params' => $params];
         return $this;
     }
 
@@ -172,26 +153,26 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             if ($isArrayOption && is_array($option)) {
                 $value = $option['value'];
                 $label = (string)$option['label'];
-                $params = !empty($option['params']) ? $option['params'] : array();
+                $params = !empty($option['params']) ? $option['params'] : [];
             } else {
                 $value = (string)$key;
                 $label = (string)$option;
                 $isArrayOption = false;
-                $params = array();
+                $params = [];
             }
 
             if (is_array($value)) {
                 $html .= '<optgroup label="' . $label . '">';
                 foreach ($value as $keyGroup => $optionGroup) {
                     if (!is_array($optionGroup)) {
-                        $optionGroup = array('value' => $keyGroup, 'label' => $optionGroup);
+                        $optionGroup = ['value' => $keyGroup, 'label' => $optionGroup];
                     }
                     $html .= $this->_optionToHtml($optionGroup, in_array($optionGroup['value'], $values));
                 }
                 $html .= '</optgroup>';
             } else {
                 $html .= $this->_optionToHtml(
-                    array('value' => $value, 'label' => $label, 'params' => $params),
+                    ['value' => $value, 'label' => $label, 'params' => $params],
                     in_array($value, $values)
                 );
             }

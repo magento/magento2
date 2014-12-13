@@ -1,30 +1,11 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
-use \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
+use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Exception as IntegrationException;
 
 class Save extends \Magento\Integration\Controller\Adminhtml\Integration
@@ -38,7 +19,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
     {
         $integrationId = $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
         if ($integrationId) {
-            $this->_redirect('*/*/edit', array('id' => $integrationId));
+            $this->_redirect('*/*/edit', ['id' => $integrationId]);
         } else {
             $this->_redirect('*/*/new');
         }
@@ -54,7 +35,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
     public function execute()
     {
         /** @var array $integrationData */
-        $integrationData = array();
+        $integrationData = [];
         try {
             $integrationId = (int)$this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
             if ($integrationId) {
@@ -76,7 +57,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             if (!empty($data)) {
                 // TODO: Move out work with API permissions to Web API module
                 if (!isset($data['resource'])) {
-                    $integrationData['resource'] = array();
+                    $integrationData['resource'] = [];
                 }
                 $integrationData = array_merge($integrationData, $data);
                 if (!isset($integrationData[Info::DATA_ID])) {
@@ -96,7 +77,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                     $isTokenExchange = $integration->getEndpoint() && $integration->getIdentityLinkUrl() ? '1' : '0';
                     $this->getResponse()->representJson(
                         $this->_coreHelper->jsonEncode(
-                            array('integrationId' => $integration->getId(), 'isTokenExchange' => $isTokenExchange)
+                            ['integrationId' => $integration->getId(), 'isTokenExchange' => $isTokenExchange]
                         )
                     );
                 } else {

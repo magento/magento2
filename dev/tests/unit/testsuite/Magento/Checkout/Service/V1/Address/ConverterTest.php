@@ -1,33 +1,14 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Checkout\Service\V1\Address;
 
-use \Magento\Checkout\Service\V1\Data\Cart\Address;
-use \Magento\Checkout\Service\V1\Data\Cart\Address\Region;
-use \Magento\Framework\Api\AttributeValue;
+use Magento\Checkout\Service\V1\Data\Cart\Address;
+use Magento\Checkout\Service\V1\Data\Cart\Address\Region;
+use Magento\Framework\Api\AttributeValue;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,22 +33,22 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             '\Magento\Checkout\Service\V1\Data\Cart\AddressBuilder', [], [], '', false
         );
         $this->metadataServiceMock = $this
-            ->getMockBuilder('Magento\Customer\Service\V1\CustomerMetadataServiceInterface')
+            ->getMockBuilder('Magento\Customer\Api\CustomerMetadataInterface')
             ->setMethods(['getCustomAttributesMetadata'])
             ->getMockForAbstractClass();
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             'Magento\Checkout\Service\V1\Address\Converter',
-            ['addressBuilder' => $this->addressBuilderMock, 'metadataService' => $this->metadataServiceMock]
+            ['addressBuilder' => $this->addressBuilderMock, 'customerMetadata' => $this->metadataServiceMock]
         );
     }
 
-    public  function testConvertModelToDataObject()
+    public function testConvertModelToDataObject()
     {
         $addressMockMethods = [
             'getCountryId', 'getId', 'getCustomerId', 'getRegion', 'getRegionId', 'getRegionCode',
             'getStreet', 'getCompany', 'getTelephone', 'getFax', 'getPostcode', 'getFirstname', 'getMiddlename',
-            'getLastname', 'getPrefix', 'getSuffix', 'getEmail', 'getVatId', 'getCustomField', 'getCity', '__wakeup'
+            'getLastname', 'getPrefix', 'getSuffix', 'getEmail', 'getVatId', 'getCustomField', 'getCity', '__wakeup',
         ];
         $addressMock = $this->getMock('\Magento\Sales\Model\Quote\Address', $addressMockMethods, [], '', false);
 
@@ -114,7 +95,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             Address::KEY_SUFFIX => 'suffix',
             Address::KEY_EMAIL => 'aaa@aaa.com',
             Address::KEY_VAT_ID => 5,
-            Address::CUSTOM_ATTRIBUTES_KEY => [['attribute_code' => 'custom_field', 'value' => 'custom_value']]
+            Address::CUSTOM_ATTRIBUTES_KEY => [['attribute_code' => 'custom_field', 'value' => 'custom_value']],
         ];
 
         $this->metadataServiceMock
@@ -142,14 +123,14 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $attributeValueMock->expects($this->once())->method('getValue')->will($this->returnValue('value'));
 
         $addressData = [
-            'some_code' => 'some_value'
+            'some_code' => 'some_value',
         ];
         $regionMock = $this->getMock('Magento\Checkout\Service\V1\Data\Cart\Address\Region', [], [], '', false);
 
         $dataObjectMock->expects($this->once())->method('__toArray')->will($this->returnValue($addressData));
         $valueMap = [
             [$addressData, null],
-            ['attribute_value', 'value']
+            ['attribute_value', 'value'],
         ];
         $addressMock->expects($this->any())->method('setData')->will($this->returnValueMap($valueMap));
         $dataObjectMock

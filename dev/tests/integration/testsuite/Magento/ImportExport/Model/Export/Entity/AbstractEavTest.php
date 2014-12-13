@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -34,7 +15,7 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected static $_skippedAttributes = array('confirmation', 'lastname');
+    protected static $_skippedAttributes = ['confirmation', 'lastname'];
 
     /**
      * @var \Magento\ImportExport\Model\Export\Entity\AbstractEav
@@ -59,7 +40,7 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\ImportExport\Model\Export\Entity\AbstractEav',
-            array(),
+            [],
             '',
             false
         );
@@ -131,7 +112,7 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
         /** @var $attribute \Magento\Customer\Model\Attribute */
         $attribute = $attributeCollection->getFirstItem();
 
-        $expectedOptions = array();
+        $expectedOptions = [];
         foreach ($attribute->getSource()->getAllOptions(false) as $option) {
             $expectedOptions[$option['value']] = $option['label'];
         }
@@ -151,13 +132,13 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
         $attributeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Customer\Model\Resource\Attribute\Collection'
         );
-        $attributeCollection->addFieldToFilter('attribute_code', array('in' => self::$_skippedAttributes));
-        $skippedAttributes = array();
+        $attributeCollection->addFieldToFilter('attribute_code', ['in' => self::$_skippedAttributes]);
+        $skippedAttributes = [];
         /** @var $attribute  \Magento\Customer\Model\Attribute */
         foreach ($attributeCollection as $attribute) {
             $skippedAttributes[$attribute->getAttributeCode()] = $attribute->getId();
         }
 
-        return array(\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP => $skippedAttributes);
+        return [\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP => $skippedAttributes];
     }
 }

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
@@ -67,26 +48,26 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rule = $this->getMock('Magento\Framework\Object', null, array(), 'Rule', true);
-        $this->item = $this->getMock('Magento\Sales\Model\Quote\Item\AbstractItem', array(), array(), '', false);
+        $this->rule = $this->getMock('Magento\Framework\Object', null, [], 'Rule', true);
+        $this->item = $this->getMock('Magento\Sales\Model\Quote\Item\AbstractItem', [], [], '', false);
         $this->data = $this->getMock('Magento\SalesRule\Model\Rule\Action\Discount\Data', null);
 
-        $this->quote = $this->getMock('Magento\Sales\Model\Quote', array(), array(), '', false);
+        $this->quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
         $this->address = $this->getMock(
             'Magento\Sales\Model\Quote\Address',
-            array('getCartFixedRules', 'setCartFixedRules', '__wakeup'),
-            array(),
+            ['getCartFixedRules', 'setCartFixedRules', '__wakeup'],
+            [],
             '',
             false
         );
         $this->item->expects($this->any())->method('getQuote')->will($this->returnValue($this->quote));
         $this->item->expects($this->any())->method('getAddress')->will($this->returnValue($this->address));
 
-        $this->validator = $this->getMock('Magento\SalesRule\Model\Validator', array(), array(), '', false);
+        $this->validator = $this->getMock('Magento\SalesRule\Model\Validator', [], [], '', false);
         $dataFactory = $this->getMock(
             'Magento\SalesRule\Model\Rule\Action\Discount\DataFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
@@ -100,10 +81,10 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
      */
     public function testCalculate()
     {
-        $this->rule->setData(array('id' => 1, 'discount_amount' => 10.0));
+        $this->rule->setData(['id' => 1, 'discount_amount' => 10.0]);
 
-        $this->address->expects($this->any())->method('getCartFixedRules')->will($this->returnValue(array()));
-        $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
+        $this->address->expects($this->any())->method('getCartFixedRules')->will($this->returnValue([]));
+        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->priceCurrency->expects($this->atLeastOnce())->method('convert')->will($this->returnArgument(0));
         $this->priceCurrency->expects($this->atLeastOnce())->method('round')->will($this->returnArgument(0));
         $this->quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
@@ -146,7 +127,7 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(100)
         );
 
-        $this->address->expects($this->once())->method('setCartFixedRules')->with(array(1 => 0.0));
+        $this->address->expects($this->once())->method('setCartFixedRules')->with([1 => 0.0]);
         $this->model->calculate($this->rule, $this->item, 1);
 
         $this->assertEquals($this->data->getAmount(), 10);

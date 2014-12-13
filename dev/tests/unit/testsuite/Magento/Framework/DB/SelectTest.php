@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\DB;
 
@@ -46,8 +27,8 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     {
         $adapter = $this->getMock(
             'Zend_Db_Adapter_Pdo_Mysql',
-            array('supportStraightJoin', 'quote'),
-            array(),
+            ['supportStraightJoin', 'quote'],
+            [],
             '',
             false
         );
@@ -92,7 +73,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("SELECT `test`.* FROM `test` WHERE (field LIKE '%value?%')", $select->assemble());
 
         $select = new Select($this->_getAdapterMockWithMockedQuote(1, "'1', '2', '4', '8'"));
-        $select->from('test')->where("id IN (?)", array(1, 2, 4, 8));
+        $select->from('test')->where("id IN (?)", [1, 2, 4, 8]);
         $this->assertEquals("SELECT `test`.* FROM `test` WHERE (id IN ('1', '2', '4', '8'))", $select->assemble());
     }
 
@@ -107,8 +88,8 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     {
         $adapter = $this->getMock(
             'Zend_Db_Adapter_Pdo_Mysql',
-            array('supportStraightJoin', 'quote'),
-            array(),
+            ['supportStraightJoin', 'quote'],
+            [],
             '',
             false
         );

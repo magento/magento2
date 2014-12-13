@@ -1,26 +1,7 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Controller\Account;
 
@@ -30,7 +11,7 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\StoreManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\UrlFactory;
@@ -163,7 +144,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
         $addressForm = $this->formFactory->create('customer_address', 'customer_register_address');
         $allowedAttributes = $addressForm->getAllowedAttributes();
 
-        $addressData = array();
+        $addressData = [];
 
         foreach ($allowedAttributes as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
@@ -207,7 +188,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
         }
 
         if (!$this->getRequest()->isPost()) {
-            $url = $this->urlModel->getUrl('*/*/create', array('_secure' => true));
+            $url = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
             $this->getResponse()->setRedirect($this->_redirect->error($url));
             return;
         }
@@ -216,7 +197,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
 
         try {
             $address = $this->extractAddress();
-            $addresses = is_null($address) ? array() : array($address);
+            $addresses = is_null($address) ? [] : [$address];
 
             $customer = $this->customerExtractor->extract('customer_account_create', $this->_request);
             $customer = $this->customerDataBuilder
@@ -239,7 +220,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
 
             $this->_eventManager->dispatch(
                 'customer_register_success',
-                array('account_controller' => $this, 'customer' => $customer)
+                ['account_controller' => $this, 'customer' => $customer]
             );
 
             $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
@@ -253,7 +234,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
                     )
                 );
                 // @codingStandardsIgnoreEnd
-                $url = $this->urlModel->getUrl('*/*/index', array('_secure' => true));
+                $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
                 $this->getResponse()->setRedirect($this->_redirect->success($url));
             } else {
                 $this->_getSession()->setCustomerDataAsLoggedIn($customer);
@@ -281,7 +262,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
         }
 
         $this->_getSession()->setCustomerFormData($this->getRequest()->getPost());
-        $defaultUrl = $this->urlModel->getUrl('*/*/create', array('_secure' => true));
+        $defaultUrl = $this->urlModel->getUrl('*/*/create', ['_secure' => true]);
         $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
     }
 
@@ -343,7 +324,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
         if (!$redirectToDashboard && $this->_getSession()->getBeforeAuthUrl()) {
             $successUrl = $this->_getSession()->getBeforeAuthUrl(true);
         } else {
-            $successUrl = $this->urlModel->getUrl('*/*/index', array('_secure' => true));
+            $successUrl = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
         }
         return $this->_redirect->success($successUrl);
     }

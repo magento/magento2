@@ -13,7 +13,7 @@ class Magento_Test_Php_Exemplar_CodeStyleTest_phpcs_input_coding_style_functions
      *
      * @return string
      */
-    function publicMethod()
+    public function publicMethod()
     {
         return 'Hello!';
     }

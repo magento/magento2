@@ -1,29 +1,9 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Module;
 
-use \Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Resource Model
@@ -67,7 +47,7 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
     protected function _loadVersion($needType)
     {
         if ($needType == 'db' && is_null(self::$_versions) || $needType == 'data' && is_null(self::$_dataVersions)) {
-            self::$_versions = array();
+            self::$_versions = [];
             // Db version column always exists
             self::$_dataVersions = null;
             // Data version array will be filled only if Data column exist
@@ -79,7 +59,7 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
                     self::$_versions[$row['code']] = $row['version'];
                     if (array_key_exists('data_version', $row)) {
                         if (is_null(self::$_dataVersions)) {
-                            self::$_dataVersions = array();
+                            self::$_dataVersions = [];
                         }
                         self::$_dataVersions[$row['code']] = $row['data_version'];
                     }
@@ -107,14 +87,14 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
      */
     public function setDbVersion($resName, $version)
     {
-        $dbModuleInfo = array('code' => $resName, 'version' => $version);
+        $dbModuleInfo = ['code' => $resName, 'version' => $version];
 
         if ($this->getDbVersion($resName)) {
             self::$_versions[$resName] = $version;
             return $this->_getWriteAdapter()->update(
                 $this->getMainTable(),
                 $dbModuleInfo,
-                array('code = ?' => $resName)
+                ['code = ?' => $resName]
             );
         } else {
             self::$_versions[$resName] = $version;
@@ -139,11 +119,11 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb implement
      */
     public function setDataVersion($resName, $version)
     {
-        $data = array('code' => $resName, 'data_version' => $version);
+        $data = ['code' => $resName, 'data_version' => $version];
 
         if ($this->getDbVersion($resName) || $this->getDataVersion($resName)) {
             self::$_dataVersions[$resName] = $version;
-            $this->_getWriteAdapter()->update($this->getMainTable(), $data, array('code = ?' => $resName));
+            $this->_getWriteAdapter()->update($this->getMainTable(), $data, ['code = ?' => $resName]);
         } else {
             self::$_dataVersions[$resName] = $version;
             $this->_getWriteAdapter()->insert($this->getMainTable(), $data);

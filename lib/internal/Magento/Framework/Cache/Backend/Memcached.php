@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Cache\Backend;
 
@@ -41,7 +22,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
      * @param array $options @see \Zend_Cache_Backend_Memcached::__construct()
      * @throws \Magento\Framework\Exception
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         parent::__construct($options);
 
@@ -95,12 +76,12 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
      * @param bool $specificLifetime   @see \Zend_Cache_Backend_Memcached::save()
      * @return bool
      */
-    public function save($data, $id, $tags = array(), $specificLifetime = false)
+    public function save($data, $id, $tags = [], $specificLifetime = false)
     {
         if (is_string($data) && strlen($data) > $this->_options['slab_size']) {
             $dataChunks = str_split($data, $this->_options['slab_size']);
 
-            for ($i = 0,$cnt = count($dataChunks); $i < $cnt; $i++) {
+            for ($i = 0, $cnt = count($dataChunks); $i < $cnt; $i++) {
                 $chunkId = $this->_getChunkId($id, $i);
 
                 if (!parent::save($dataChunks[$i], $chunkId, $tags, $specificLifetime)) {
@@ -131,7 +112,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
 
             $arr = explode('|', $data);
             $chunks = isset($arr[1]) ? $arr[1] : false;
-            $chunkData = array();
+            $chunkData = [];
 
             if ($chunks && is_numeric($chunks)) {
                 for ($i = 0; $i < $chunks; $i++) {

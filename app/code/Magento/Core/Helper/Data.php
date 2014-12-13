@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Core\Helper;
 
@@ -58,12 +39,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var string[]
      */
-    protected $_allowedFormats = array(
+    protected $_allowedFormats = [
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_FULL,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_LONG,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
-    );
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+    ];
 
     /**
      * Core store config
@@ -73,7 +54,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -95,7 +76,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param PriceCurrencyInterface $priceCurrency
      * @param bool $dbCompatibleMode
@@ -103,7 +84,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         PriceCurrencyInterface $priceCurrency,
         $dbCompatibleMode = true
@@ -213,7 +194,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getCacheTypes()
     {
-        $types = array();
+        $types = [];
         foreach ($this->_cacheConfig->getTypes() as $type => $node) {
             if (array_key_exists('label', $node)) {
                 $types[$type] = $node['label'];
@@ -230,7 +211,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $options Additional options used during encoding
      * @return string
      */
-    public function jsonEncode($valueToEncode, $cycleCheck = false, $options = array())
+    public function jsonEncode($valueToEncode, $cycleCheck = false, $options = [])
     {
         $json = \Zend_Json::encode($valueToEncode, $cycleCheck, $options);
         $this->translateInline->processResponseBody($json, true);

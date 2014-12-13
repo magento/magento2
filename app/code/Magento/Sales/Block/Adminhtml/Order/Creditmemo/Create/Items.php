@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
@@ -54,7 +35,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Helper\Data $salesData,
-        array $data = array()
+        array $data = []
     ) {
         $this->_salesData = $salesData;
         parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $data);
@@ -71,7 +52,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         $this->addChild(
             'update_button',
             'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Update Qty\'s'), 'class' => 'update-button', 'onclick' => $onclick)
+            ['label' => __('Update Qty\'s'), 'class' => 'update-button', 'onclick' => $onclick]
         );
 
         if ($this->getCreditmemo()->canRefund()) {
@@ -79,31 +60,31 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
                 $this->addChild(
                     'submit_button',
                     'Magento\Backend\Block\Widget\Button',
-                    array(
+                    [
                         'label' => __('Refund'),
                         'class' => 'save submit-button refund',
                         'onclick' => 'disableElements(\'submit-button\');submitCreditMemo()'
-                    )
+                    ]
                 );
             }
             $this->addChild(
                 'submit_offline',
                 'Magento\Backend\Block\Widget\Button',
-                array(
+                [
                     'label' => __('Refund Offline'),
                     'class' => 'save submit-button',
                     'onclick' => 'disableElements(\'submit-button\');submitCreditMemoOffline()'
-                )
+                ]
             );
         } else {
             $this->addChild(
                 'submit_button',
                 'Magento\Backend\Block\Widget\Button',
-                array(
+                [
                     'label' => __('Refund Offline'),
                     'class' => 'save submit-button primary',
                     'onclick' => 'disableElements(\'submit-button\');submitCreditMemoOffline()'
-                )
+                ]
             );
         }
 
@@ -137,7 +118,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getOrderTotalData()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -149,12 +130,12 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     {
         $this->setPriceDataObject($this->getOrder());
 
-        $totalBarData = array();
-        $totalBarData[] = array(__('Paid Amount'), $this->displayPriceAttribute('total_invoiced'), false);
-        $totalBarData[] = array(__('Refund Amount'), $this->displayPriceAttribute('total_refunded'), false);
-        $totalBarData[] = array(__('Shipping Amount'), $this->displayPriceAttribute('shipping_invoiced'), false);
-        $totalBarData[] = array(__('Shipping Refund'), $this->displayPriceAttribute('shipping_refunded'), false);
-        $totalBarData[] = array(__('Order Grand Total'), $this->displayPriceAttribute('grand_total'), true);
+        $totalBarData = [];
+        $totalBarData[] = [__('Paid Amount'), $this->displayPriceAttribute('total_invoiced'), false];
+        $totalBarData[] = [__('Refund Amount'), $this->displayPriceAttribute('total_refunded'), false];
+        $totalBarData[] = [__('Shipping Amount'), $this->displayPriceAttribute('shipping_invoiced'), false];
+        $totalBarData[] = [__('Shipping Refund'), $this->displayPriceAttribute('shipping_refunded'), false];
+        $totalBarData[] = [__('Order Grand Total'), $this->displayPriceAttribute('grand_total'), true];
         return $totalBarData;
     }
 
@@ -200,10 +181,10 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     {
         return $this->getUrl(
             'sales/*/updateQty',
-            array(
+            [
                 'order_id' => $this->getCreditmemo()->getOrderId(),
                 'invoice_id' => $this->getRequest()->getParam('invoice_id', null)
-            )
+            ]
         );
     }
 

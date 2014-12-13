@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Config\Reader;
 
@@ -56,8 +37,8 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
         $this->_converterMock = $this->getMock(
             'Magento\Framework\Config\ConverterInterface',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -73,9 +54,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             $this->_schemaLocatorMock,
             $this->_validationStateMock,
             'fileName',
-            array()
+            []
         );
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue(array($this->_file)));
+        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
 
         $dom = new \DomDocument();
         $dom->loadXML($this->_file);
@@ -91,10 +72,10 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             $this->_schemaLocatorMock,
             $this->_validationStateMock,
             'fileName',
-            array()
+            []
         );
         $this->_fileResolverMock
-            ->expects($this->once())->method('get')->will($this->returnValue(array()));
+            ->expects($this->once())->method('get')->will($this->returnValue([]));
 
         $this->assertEmpty($model->read('scope'));
     }
@@ -119,9 +100,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             $this->_schemaLocatorMock,
             $this->_validationStateMock,
             'fileName',
-            array()
+            []
         );
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue(array($this->_file)));
+        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
 
         $model->read('scope');
     }
@@ -147,9 +128,9 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             $this->_schemaLocatorMock,
             $this->_validationStateMock,
             'fileName',
-            array()
+            []
         );
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue(array($this->_file)));
+        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
         $model->read('scope');
     }
 
@@ -159,14 +140,14 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
      */
     public function testReadException()
     {
-        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue(array($this->_file)));
+        $this->_fileResolverMock->expects($this->once())->method('get')->will($this->returnValue([$this->_file]));
         $model = new Filesystem(
             $this->_fileResolverMock,
             $this->_converterMock,
             $this->_schemaLocatorMock,
             $this->_validationStateMock,
             'fileName',
-            array(),
+            [],
             'StdClass'
         );
         $model->read();

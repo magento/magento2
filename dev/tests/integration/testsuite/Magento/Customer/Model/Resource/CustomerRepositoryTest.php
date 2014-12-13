@@ -1,33 +1,14 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Customer\Model\Resource;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -295,12 +276,12 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             'Customer with specific email' => [
                 [$builder->setField('email')->setValue('customer@search.example.com')->create()],
                 null,
-                [1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname']]
+                [1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname']],
             ],
             'Customer with specific first name' => [
                 [$builder->setField('firstname')->setValue('Firstname2')->create()],
                 null,
-                [2 => ['email' => 'customer2@search.example.com', 'firstname' => 'Firstname2']]
+                [2 => ['email' => 'customer2@search.example.com', 'firstname' => 'Firstname2']],
             ],
             'Customers with either email' => [
                 [],
@@ -311,18 +292,18 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 [
                     1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname'],
                     2 => ['email' => 'customer2@search.example.com', 'firstname' => 'Firstname2']
-                ]
+                ],
             ],
             'Customers created since' => [
                 [
                     $builder->setField('created_at')->setValue('2011-02-28 15:52:26')
-                        ->setConditionType('gt')->create()
+                        ->setConditionType('gt')->create(),
                 ],
                 [],
                 [
                     1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname'],
                     3 => ['email' => 'customer3@search.example.com', 'firstname' => 'Firstname3']
-                ]
+                ],
             ]
         ];
     }

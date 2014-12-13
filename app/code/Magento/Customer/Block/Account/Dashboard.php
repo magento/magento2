@@ -1,30 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Block\Account;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Customer dashboard block
@@ -72,7 +53,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
-        array $data = array()
+        array $data = []
     ) {
         $this->customerSession = $customerSession;
         $this->subscriberFactory = $subscriberFactory;
@@ -99,7 +80,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      */
     public function getAccountUrl()
     {
-        return $this->_urlBuilder->getUrl('customer/account/edit', array('_secure' => true));
+        return $this->_urlBuilder->getUrl('customer/account/edit', ['_secure' => true]);
     }
 
     /**
@@ -109,7 +90,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      */
     public function getAddressesUrl()
     {
-        return $this->_urlBuilder->getUrl('customer/address/index', array('_secure' => true));
+        return $this->_urlBuilder->getUrl('customer/address/index', ['_secure' => true]);
     }
 
     /**
@@ -122,7 +103,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     {
         return $this->_urlBuilder->getUrl(
             'customer/address/edit',
-            array('_secure' => true, 'id' => $address->getId())
+            ['_secure' => true, 'id' => $address->getId()]
         );
     }
 
@@ -133,7 +114,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      */
     public function getOrdersUrl()
     {
-        return $this->_urlBuilder->getUrl('customer/order/index', array('_secure' => true));
+        return $this->_urlBuilder->getUrl('customer/order/index', ['_secure' => true]);
     }
 
     /**
@@ -143,7 +124,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      */
     public function getReviewsUrl()
     {
-        return $this->_urlBuilder->getUrl('review/customer/index', array('_secure' => true));
+        return $this->_urlBuilder->getUrl('review/customer/index', ['_secure' => true]);
     }
 
     /**
@@ -153,7 +134,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      */
     public function getWishlistUrl()
     {
-        return $this->_urlBuilder->getUrl('customer/wishlist/index', array('_secure' => true));
+        return $this->_urlBuilder->getUrl('customer/wishlist/index', ['_secure' => true]);
     }
 
     /**
@@ -202,7 +183,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      */
     public function getPrimaryAddresses()
     {
-        $addresses = array();
+        $addresses = [];
         $customerId = $this->getCustomer()->getId();
 
         if ($defaultBilling = $this->customerAccountManagement->getDefaultBillingAddress($customerId)) {

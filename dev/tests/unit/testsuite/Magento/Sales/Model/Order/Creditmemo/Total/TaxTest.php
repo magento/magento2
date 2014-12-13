@@ -1,29 +1,10 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
-use \Magento\Framework\Object as MagentoObject;
+use Magento\Framework\Object as MagentoObject;
 
 class TaxTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,34 +41,34 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $this->order = $this->getMock(
             '\Magento\Sales\Model\Order',
-            array(
+            [
                 '__wakeup'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
 
         $this->invoice = $this->getMock(
             '\Magento\Sales\Model\Order\Invoice',
-            array(
+            [
                 '__wakeup',
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
 
         $this->creditmemo = $this->getMock(
             '\Magento\Sales\Model\Order\Creditmemo',
-            array(
+            [
                 'getAllItems',
                 'getOrder',
                 'roundPrice',
                 'isLast',
                 '__wakeup',
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
@@ -179,7 +160,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ],
             'creditmemo_data' => [
                 'items' => [
-                    'item_1' =>[
+                    'item_1' => [
                         'order_item' => [
                             'qty_invoiced' => 1,
                             'tax_invoiced' => 8.11,
@@ -244,7 +225,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     'shipping_tax_amount' => 2.45,
                     'base_shipping_tax_amount' => 2.45,
                 ],
-            ]
+            ],
         ];
 
         // scenario 2: 3 items, 2 invoiced, rowtotal of 150 with 8.25 tax rate
@@ -268,7 +249,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ],
             'creditmemo_data' => [
                 'items' => [
-                    'item_1' =>[
+                    'item_1' => [
                         'order_item' => [
                             'qty_invoiced' => 2,
                             'tax_invoiced' => 8.26,
@@ -315,7 +296,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     'shipping_tax_amount' => 1.24,
                     'base_shipping_tax_amount' => 1.24,
                 ],
-            ]
+            ],
         ];
 
         // scenario 3: 3 items, 3 invoiced, rowtotal of 150 with 8.25 tax rate
@@ -344,7 +325,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ],
             'creditmemo_data' => [
                 'items' => [
-                    'item_1' =>[
+                    'item_1' => [
                         'order_item' => [
                             'qty_invoiced' => 3,
                             'tax_invoiced' => 12.38,
@@ -389,7 +370,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     'tax_amount' => 4.95,
                     'base_tax_amount' => 4.95,
                 ],
-            ]
+            ],
         ];
 
         // scenario 4: 3 items, 2 invoiced, price includes tax
@@ -423,7 +404,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ],
             'creditmemo_data' => [
                 'items' => [
-                    'item_1' =>[
+                    'item_1' => [
                         'order_item' => [
                             'qty_invoiced' => 2,
                             'tax_invoiced' => 7.62,
@@ -470,7 +451,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     'tax_amount' => 4.57,
                     'base_tax_amount' => 4.57,
                 ],
-            ]
+            ],
         ];
         return $result;
     }
@@ -484,11 +465,11 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
         $orderItem = $this->getMock(
             '\Magento\Sales\Model\Order\Item',
-            array(
+            [
                 'isDummy',
                 '__wakeup'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );
@@ -499,12 +480,12 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject $creditmemoItem */
         $creditmemoItem = $this->getMock(
             '\Magento\Sales\Model\Order\Creditmemo\Item',
-            array(
+            [
                 'getOrderItem',
                 'isLast',
                 '__wakeup'
-            ),
-            array(),
+            ],
+            [],
             '',
             false
         );

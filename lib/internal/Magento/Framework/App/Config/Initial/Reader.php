@@ -2,26 +2,7 @@
 /**
  * Default configuration data reader. Reads configuration data from storage
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Framework\App\Config\Initial;
 
@@ -60,7 +41,7 @@ class Reader
      *
      * @var array
      */
-    protected $_scopePriorityScheme = array('global');
+    protected $_scopePriorityScheme = ['global'];
 
     /**
      * Path to corresponding XSD file with validation rules for config
@@ -101,7 +82,7 @@ class Reader
      */
     public function read()
     {
-        $fileList = array();
+        $fileList = [];
         foreach ($this->_scopePriorityScheme as $scope) {
             $directories = $this->_fileResolver->get($this->_fileName, $scope);
             foreach ($directories as $key => $directory) {
@@ -110,7 +91,7 @@ class Reader
         }
 
         if (!count($fileList)) {
-            return array();
+            return [];
         }
 
         /** @var \Magento\Framework\Config\Dom $domDocument */
@@ -119,7 +100,7 @@ class Reader
             try {
                 if (is_null($domDocument)) {
                     $class = $this->_domDocumentClass;
-                    $domDocument = new $class($file, array(), null, $this->_schemaFile);
+                    $domDocument = new $class($file, [], null, $this->_schemaFile);
                 } else {
                     $domDocument->merge($file);
                 }
@@ -128,7 +109,7 @@ class Reader
             }
         }
 
-        $output = array();
+        $output = [];
         if ($domDocument) {
             $output = $this->_converter->convert($domDocument->getDom());
         }

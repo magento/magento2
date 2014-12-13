@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data\Collection;
 
@@ -61,7 +42,7 @@ class Db extends \Magento\Framework\Data\Collection
      *
      * @var array
      */
-    protected $_bindParams = array();
+    protected $_bindParams = [];
 
     /**
      * All collection data array
@@ -311,7 +292,7 @@ class Db extends \Magento\Framework\Data\Collection
         unset($this->_orders[$field]);
         // avoid ordering by the same field twice
         if ($unshift) {
-            $orders = array($field => $direction);
+            $orders = [$field => $direction];
             foreach ($this->_orders as $key => $dir) {
                 $orders[$key] = $dir;
             }
@@ -378,7 +359,7 @@ class Db extends \Magento\Framework\Data\Collection
     public function addFieldToFilter($field, $condition = null)
     {
         if (is_array($field)) {
-            $conditions = array();
+            $conditions = [];
             foreach ($field as $key => $value) {
                 $conditions[] = $this->_translateCondition($value, isset($condition[$key]) ? $condition[$key] : null);
             }
@@ -618,7 +599,7 @@ class Db extends \Magento\Framework\Data\Collection
      * @param array $additional
      * @return array
      */
-    protected function _toOptionArray($valueField = null, $labelField = 'name', $additional = array())
+    protected function _toOptionArray($valueField = null, $labelField = 'name', $additional = [])
     {
         if ($valueField === null) {
             $valueField = $this->getIdFieldName();
@@ -741,7 +722,7 @@ class Db extends \Magento\Framework\Data\Collection
         $this->getSelect()->reset();
         $this->_initSelect();
         $this->_setIsLoaded(false);
-        $this->_items = array();
+        $this->_items = [];
         $this->_data = null;
         return $this;
     }
@@ -768,9 +749,9 @@ class Db extends \Magento\Framework\Data\Collection
     public function addFilterToMap($filter, $alias, $group = 'fields')
     {
         if (is_null($this->_map)) {
-            $this->_map = array($group => array());
+            $this->_map = [$group => []];
         } elseif (empty($this->_map[$group])) {
-            $this->_map[$group] = array();
+            $this->_map[$group] = [];
         }
         $this->_map[$group][$filter] = $alias;
 

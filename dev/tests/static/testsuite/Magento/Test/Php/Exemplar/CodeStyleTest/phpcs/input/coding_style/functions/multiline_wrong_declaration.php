@@ -11,7 +11,7 @@
  */
 function thereGoesFunc($someLongParam, $anotherLongParam, $moreEvenLongerParamForAllThatRoutineStuff,
     $andThereGoesOneParameter
-){
+) {
     if ($someLongParam === null) {
         $someLongParam = 'Stranger';
     }
@@ -49,8 +49,7 @@ function thereGoesAnotherFunc($someLongParam, $anotherLongParam, $moreEvenLonger
  */
 function thereGoesThirdFunc($someLongParam, $anotherLongParam, $moreEvenLongerParamForAllThatRoutineStuff,
     $andThereGoesOneParameter
-)
-{
+) {
     if ($someLongParam === null) {
         $someLongParam = 'Stranger';
     }
@@ -87,7 +86,8 @@ function thereGoesFourthFunc($someLongParam, $anotherLongParam, $moreEvenLongerP
  * @return string
  */
 function thereGoesFifthFunc($someLongParam, $anotherLongParam, $moreEvenLongerParamForAllThatRoutineStuff,
-    $andThereGoesOneParameter) {
+    $andThereGoesOneParameter)
+{
     if ($someLongParam === null) {
         $someLongParam = 'Stranger';
     }

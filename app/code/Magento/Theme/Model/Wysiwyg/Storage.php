@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -84,23 +65,39 @@ class Storage
     protected $mediaWriteDirectory;
 
     /**
+     * @var \Magento\Framework\Url\EncoderInterface
+     */
+    protected $urlEncoder;
+
+    /**
+     * @var \Magento\Framework\Url\DecoderInterface
+     */
+    protected $urlDecoder;
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Theme\Helper\Storage $helper
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Theme\Helper\Storage $helper,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\Image\AdapterFactory $imageFactory
+        \Magento\Framework\Image\AdapterFactory $imageFactory,
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        \Magento\Framework\Url\DecoderInterface $urlDecoder
     ) {
         $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_helper = $helper;
         $this->_objectManager = $objectManager;
         $this->_imageFactory = $imageFactory;
+        $this->urlEncoder = $urlEncoder;
+        $this->urlDecoder = $urlDecoder;
     }
 
     /**
@@ -113,7 +110,7 @@ class Storage
     public function uploadFile($targetPath)
     {
         /** @var $uploader \Magento\Core\Model\File\Uploader */
-        $uploader = $this->_objectManager->create('Magento\Core\Model\File\Uploader', array('fileId' => 'file'));
+        $uploader = $this->_objectManager->create('Magento\Core\Model\File\Uploader', ['fileId' => 'file']);
         $uploader->setAllowedExtensions($this->_helper->getAllowedExtensionsByType());
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(false);
@@ -125,13 +122,13 @@ class Storage
 
         $this->_createThumbnail($targetPath . '/' . $uploader->getUploadedFileName());
 
-        $result['cookie'] = array(
+        $result['cookie'] = [
             'name' => $this->_helper->getSession()->getName(),
             'value' => $this->_helper->getSession()->getSessionId(),
             'lifetime' => $this->_helper->getSession()->getCookieLifetime(),
             'path' => $this->_helper->getSession()->getCookiePath(),
             'domain' => $this->_helper->getSession()->getCookieDomain()
-        );
+        ];
 
         return $result;
     }
@@ -197,12 +194,12 @@ class Storage
 
         $this->mediaWriteDirectory->create($newPath);
 
-        $result = array(
+        $result = [
             'name' => $name,
             'short_name' => $this->_helper->getShortFilename($name),
             'path' => str_replace($this->_helper->getStorageRoot(), '', $newPath),
             'id' => $this->_helper->convertPathToId($newPath)
-        );
+        ];
 
         return $result;
     }
@@ -215,7 +212,7 @@ class Storage
      */
     public function deleteFile($file)
     {
-        $file = $this->_helper->urlDecode($file);
+        $file = $this->urlDecoder->decode($file);
         $path = $this->mediaWriteDirectory->getRelativePath($this->_helper->getCurrentPath());
 
         $filePath = $this->mediaWriteDirectory->getRelativePath($path . '/' . $file);
@@ -241,7 +238,7 @@ class Storage
             throw new \Magento\Framework\Model\Exception(__('We cannot find a directory with this name.'));
         }
         $paths = $this->mediaWriteDirectory->search('.*', $currentPath);
-        $directories = array();
+        $directories = [];
         foreach ($paths as $path) {
             if ($this->mediaWriteDirectory->isDirectory($path)) {
                 $directories[] = $path;
@@ -258,7 +255,7 @@ class Storage
     public function getFilesCollection()
     {
         $paths = $this->mediaWriteDirectory->search('.*', $this->_helper->getCurrentPath());
-        $files = array();
+        $files = [];
         $requestParams = $this->_helper->getRequestParams();
         $storageType = $this->_helper->getStorageType();
         foreach ($paths as $path) {
@@ -266,7 +263,7 @@ class Storage
                 continue;
             }
             $fileName = pathinfo($path, PATHINFO_BASENAME);
-            $file = array('text' => $fileName, 'id' => $this->_helper->urlEncode($fileName));
+            $file = ['text' => $fileName, 'id' => $this->urlEncoder->encode($fileName)];
             if (self::TYPE_IMAGE == $storageType) {
                 $requestParams['file'] = $fileName;
                 $file['thumbnailParams'] = $requestParams;
@@ -290,13 +287,13 @@ class Storage
     public function getTreeArray()
     {
         $directories = $this->getDirsCollection($this->_helper->getCurrentPath());
-        $resultArray = array();
+        $resultArray = [];
         foreach ($directories as $path) {
-            $resultArray[] = array(
+            $resultArray[] = [
                 'text' => $this->_helper->getShortFilename(pathinfo($path, PATHINFO_BASENAME), 20),
                 'id' => $this->_helper->convertPathToId($path),
                 'cls' => 'folder'
-            );
+            ];
         }
         return $resultArray;
     }

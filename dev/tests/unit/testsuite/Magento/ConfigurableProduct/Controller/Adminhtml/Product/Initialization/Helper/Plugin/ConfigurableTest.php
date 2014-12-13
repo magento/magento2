@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
@@ -54,23 +35,23 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $this->productTypeMock = $this->getMock(
             'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->requestMock = $this->getMock('\Magento\Framework\App\Request\Http', array(), array(), '', false);
-        $methods = array(
+        $this->requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
+        $methods = [
             'setNewVariationsAttributeSetId',
             'setAssociatedProductIds',
             'setCanSaveConfigurableAttributes',
-            '__wakeup'
-        );
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, array(), '', false);
+            '__wakeup',
+        ];
+        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, [], '', false);
         $this->subjectMock = $this->getMock(
             'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -79,22 +60,22 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterInitializeIfAttributesNotEmptyAndActionNameNotGenerateVariations()
     {
-        $associatedProductIds = array('key' => 'value');
-        $generatedProductIds = array('key_one' => 'value_one');
-        $expectedArray = array('key' => 'value', 'key_one' => 'value_one');
-        $attributes = array('key' => 'value');
+        $associatedProductIds = ['key' => 'value'];
+        $generatedProductIds = ['key_one' => 'value_one'];
+        $expectedArray = ['key' => 'value', 'key_one' => 'value_one'];
+        $attributes = ['key' => 'value'];
         $postValue = 'postValue';
-        $postValueMap = array(
-            array('new-variations-attribute-set-id', null, $postValue),
-            array('associated_product_ids', array(), $associatedProductIds),
-            array('affect_configurable_product_attributes', null, $postValue)
-        );
+        $postValueMap = [
+            ['new-variations-attribute-set-id', null, $postValue],
+            ['associated_product_ids', [], $associatedProductIds],
+            ['affect_configurable_product_attributes', null, $postValue],
+        ];
         $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($postValueMap));
 
-        $paramValueMap = array(
-            array('variations-matrix', array(), $postValue),
-            array('attributes', null, $attributes)
-        );
+        $paramValueMap = [
+            ['variations-matrix', [], $postValue],
+            ['attributes', null, $attributes],
+        ];
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($paramValueMap));
         $this->productTypeMock->expects(
             $this->once()
@@ -122,19 +103,19 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterInitializeIfAttributesNotEmptyAndActionNameGenerateVariations()
     {
-        $associatedProductIds = array('key' => 'value');
-        $attributes = array('key' => 'value');
+        $associatedProductIds = ['key' => 'value'];
+        $attributes = ['key' => 'value'];
         $postValue = 'postValue';
-        $valueMap = array(
-            array('new-variations-attribute-set-id', null, $postValue),
-            array('associated_product_ids', array(), $associatedProductIds),
-            array('affect_configurable_product_attributes', null, $postValue)
-        );
+        $valueMap = [
+            ['new-variations-attribute-set-id', null, $postValue],
+            ['associated_product_ids', [], $associatedProductIds],
+            ['affect_configurable_product_attributes', null, $postValue],
+        ];
         $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($valueMap));
-        $paramValueMap = array(
-            array('variations-matrix', array(), array()),
-            array('attributes', null, $attributes)
-        );
+        $paramValueMap = [
+            ['variations-matrix', [], []],
+            ['attributes', null, $attributes],
+        ];
         $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($paramValueMap));
         $this->productTypeMock->expects(
             $this->once()
@@ -160,7 +141,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         )->with(
             'attributes'
         )->will(
-            $this->returnValue(array())
+            $this->returnValue([])
         );
         $this->productTypeMock->expects($this->never())->method('setUsedProductAttributeIds');
         $this->requestMock->expects($this->never())->method('getPost');

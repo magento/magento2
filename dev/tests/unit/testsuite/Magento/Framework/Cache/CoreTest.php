@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -37,7 +18,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected static $_cacheStorage = array();
+    protected static $_cacheStorage = [];
 
     /**
      * Selected mock of \Zend_Cache_Backend_File to have extended
@@ -72,26 +53,26 @@ class CoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetBackendException($decorators)
     {
-        $core = new \Magento\Framework\Cache\Core(array('backend_decorators' => $decorators));
+        $core = new \Magento\Framework\Cache\Core(['backend_decorators' => $decorators]);
         $core->setBackend($this->_mockBackend);
     }
 
     public function setBackendExceptionProvider()
     {
-        return array(
-            'string' => array('string'),
-            'decorator setting is not an array' => array(array('decorator' => 'string')),
-            'decorator setting is empty array' => array(array('decorator' => array())),
-            'no class index in array' => array(array('decorator' => array('somedata'))),
-            'non-existing class passed' => array(array('decorator' => array('class' => 'NonExistingClass')))
-        );
+        return [
+            'string' => ['string'],
+            'decorator setting is not an array' => [['decorator' => 'string']],
+            'decorator setting is empty array' => [['decorator' => []]],
+            'no class index in array' => [['decorator' => ['somedata']]],
+            'non-existing class passed' => [['decorator' => ['class' => 'NonExistingClass']]]
+        ];
     }
 
     public function testSaveDisabled()
     {
         $backendMock = $this->getMock('Zend_Cache_Backend_BlackHole');
         $backendMock->expects($this->never())->method('save');
-        $frontend = new \Magento\Framework\Cache\Core(array('disable_save' => true));
+        $frontend = new \Magento\Framework\Cache\Core(['disable_save' => true]);
         $frontend->setBackend($backendMock);
         $result = $frontend->save('data', 'id');
         $this->assertTrue($result);
@@ -101,7 +82,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
     {
         $backendMock = $this->getMock('Zend_Cache_Backend_BlackHole');
         $backendMock->expects($this->never())->method('save');
-        $frontend = new \Magento\Framework\Cache\Core(array('disable_save' => false, 'caching' => false));
+        $frontend = new \Magento\Framework\Cache\Core(['disable_save' => false, 'caching' => false]);
         $frontend->setBackend($backendMock);
         $result = $frontend->save('data', 'id');
         $this->assertTrue($result);
@@ -110,9 +91,9 @@ class CoreTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         $data = 'data';
-        $tags = array('abc', '!def', '_ghi');
+        $tags = ['abc', '!def', '_ghi'];
         $prefix = 'prefix_';
-        $prefixedTags = array('prefix_abc', 'prefix__def', 'prefix__ghi');
+        $prefixedTags = ['prefix_abc', 'prefix__def', 'prefix__ghi'];
 
         $backendMock = $this->getMock('Zend_Cache_Backend_BlackHole');
         $backendMock->expects($this->once())
@@ -124,7 +105,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
             'caching'                   => true,
             'cache_id_prefix'           => $prefix,
             'automatic_cleaning_factor' => 0,
-            'write_control'             => false
+            'write_control'             => false,
         ]);
         $frontend->setBackend($backendMock);
         $result = $frontend->save($data, 'id', $tags);
@@ -134,9 +115,9 @@ class CoreTest extends \PHPUnit_Framework_TestCase
     public function testClean()
     {
         $mode = 'all';
-        $tags = array('abc', '!def', '_ghi');
+        $tags = ['abc', '!def', '_ghi'];
         $prefix = 'prefix_';
-        $prefixedTags = array('prefix_abc', 'prefix__def', 'prefix__ghi');
+        $prefixedTags = ['prefix_abc', 'prefix__def', 'prefix__ghi'];
         $expectedResult = true;
 
         $backendMock = $this->getMock('Zend_Cache_Backend_BlackHole');
@@ -146,7 +127,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expectedResult));
         $frontend = new \Magento\Framework\Cache\Core([
             'caching'         => true,
-            'cache_id_prefix' => $prefix
+            'cache_id_prefix' => $prefix,
         ]);
         $frontend->setBackend($backendMock);
 
@@ -156,10 +137,10 @@ class CoreTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdsMatchingTags()
     {
-        $tags = array('abc', '!def', '_ghi');
+        $tags = ['abc', '!def', '_ghi'];
         $prefix = 'prefix_';
-        $prefixedTags = array('prefix_abc', 'prefix__def', 'prefix__ghi');
-        $ids = array('id', 'id2', 'id3');
+        $prefixedTags = ['prefix_abc', 'prefix__def', 'prefix__ghi'];
+        $ids = ['id', 'id2', 'id3'];
 
         $backendMock = $this->getMock('Magento\Framework\Cache\CoreMock');
         $backendMock->expects($this->once())
@@ -171,7 +152,7 @@ class CoreTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['tags' => true]));
         $frontend = new \Magento\Framework\Cache\Core([
             'caching'         => true,
-            'cache_id_prefix' => $prefix
+            'cache_id_prefix' => $prefix,
         ]);
         $frontend->setBackend($backendMock);
 
@@ -181,10 +162,10 @@ class CoreTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdsNotMatchingTags()
     {
-        $tags = array('abc', '!def', '_ghi');
+        $tags = ['abc', '!def', '_ghi'];
         $prefix = 'prefix_';
-        $prefixedTags = array('prefix_abc', 'prefix__def', 'prefix__ghi');
-        $ids = array('id', 'id2', 'id3');
+        $prefixedTags = ['prefix_abc', 'prefix__def', 'prefix__ghi'];
+        $ids = ['id', 'id2', 'id3'];
 
         $backendMock = $this->getMock('Magento\Framework\Cache\CoreMock');
         $backendMock->expects($this->once())
@@ -196,14 +177,13 @@ class CoreTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['tags' => true]));
         $frontend = new \Magento\Framework\Cache\Core([
             'caching'         => true,
-            'cache_id_prefix' => $prefix
+            'cache_id_prefix' => $prefix,
         ]);
         $frontend->setBackend($backendMock);
 
         $result = $frontend->getIdsNotMatchingTags($tags);
         $this->assertEquals($ids, $result);
     }
-
 }
 
 abstract class CoreMock extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface

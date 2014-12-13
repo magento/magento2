@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 ?>
 <?php
@@ -46,7 +27,7 @@
         </div>
         <?php if ($this->isNewsletterEnabled()): ?>
             <div class="field choice newsletter">
-                <input type="checkbox" name="is_subscribed" title="<?php echo __('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if($this->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
+                <input type="checkbox" name="is_subscribed" title="<?php echo __('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if ($this->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
                 <label for="is_subscribed" class="label"><span><?php echo __('Sign Up for Newsletter') ?></span></label>
             </div>
             <?php /* Extensions placeholder */ ?>
@@ -68,7 +49,7 @@
             <?php echo $_gender->setGender($this->getFormData()->getGender())->toHtml() ?>
         <?php endif ?>
     </fieldset>
-    <?php if($this->getShowAddressFields()): ?>
+    <?php if ($this->getShowAddressFields()): ?>
         <fieldset class="fieldset address">
             <legend class="legend"><span><?php echo __('Address Information') ?></span></legend><br>
             <input type="hidden" name="create_address" value="1" />
@@ -202,7 +183,7 @@ require(['jquery', "mage/mage"], function(jQuery){
         }).find('input:text').attr('autocomplete', 'off');
         <?php if ($this->getShowAddressFields()): ?>
         $('#country').mage('regionUpdater', {
-            optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
+            optionalRegionAllowed: <?php echo($this->getConfig('general/region/display_all') ? 'true' : 'false'); ?>,
             regionListId: '#region_id',
             regionInputId: '#region',
             postcodeId: '#zip',

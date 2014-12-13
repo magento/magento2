@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\UrlRewrite\Helper;
 
@@ -73,18 +54,18 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
 
     public function requestPathDataProvider()
     {
-        return array(
-            'no leading slash' => array('correct/request/path'),
-            'leading slash' => array('another/good/request/path/')
-        );
+        return [
+            'no leading slash' => ['correct/request/path'],
+            'leading slash' => ['another/good/request/path/']
+        ];
     }
 
     public function requestPathExceptionDataProvider()
     {
-        return array(
-            'two slashes' => array('request/path/with/two//slashes'),
-            'three slashes' => array('request/path/with/three///slashes'),
-            'anchor' => array('request/path/with#anchor')
-        );
+        return [
+            'two slashes' => ['request/path/with/two//slashes'],
+            'three slashes' => ['request/path/with/three///slashes'],
+            'anchor' => ['request/path/with#anchor']
+        ];
     }
 }

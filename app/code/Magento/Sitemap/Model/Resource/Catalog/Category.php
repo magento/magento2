@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sitemap\Model\Resource\Catalog;
 
@@ -44,10 +25,10 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @var array
      */
-    protected $_attributesCache = array();
+    protected $_attributesCache = [];
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -58,12 +39,12 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Category $categoryResource
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Category $categoryResource
     ) {
         $this->_storeManager = $storeManager;
@@ -87,7 +68,7 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCollection($storeId)
     {
-        $categories = array();
+        $categories = [];
 
         /* @var $store \Magento\Store\Model\Store */
         $store = $this->_storeManager->getStore($storeId);
@@ -170,13 +151,13 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!isset($this->_attributesCache[$attributeCode])) {
             $attribute = $this->_categoryResource->getAttribute($attributeCode);
 
-            $this->_attributesCache[$attributeCode] = array(
+            $this->_attributesCache[$attributeCode] = [
                 'entity_type_id' => $attribute->getEntityTypeId(),
                 'attribute_id' => $attribute->getId(),
                 'table' => $attribute->getBackend()->getTable(),
                 'is_global' => $attribute->getIsGlobal(),
-                'backend_type' => $attribute->getBackendType()
-            );
+                'backend_type' => $attribute->getBackendType(),
+            ];
         }
         $attribute = $this->_attributesCache[$attributeCode];
 
@@ -196,9 +177,9 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $this->_select->where('e.' . $attributeCode . $conditionRule, $value);
         } else {
             $this->_select->join(
-                array('t1_' . $attributeCode => $attribute['table']),
+                ['t1_' . $attributeCode => $attribute['table']],
                 'e.entity_id = t1_' . $attributeCode . '.entity_id AND t1_' . $attributeCode . '.store_id = 0',
-                array()
+                []
             )->where(
                 't1_' . $attributeCode . '.attribute_id=?',
                 $attribute['attribute_id']
@@ -213,7 +194,7 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     't1_' . $attributeCode . '.value'
                 );
                 $this->_select->joinLeft(
-                    array('t2_' . $attributeCode => $attribute['table']),
+                    ['t2_' . $attributeCode => $attribute['table']],
                     $this->_getWriteAdapter()->quoteInto(
                         't1_' .
                         $attributeCode .
@@ -228,7 +209,7 @@ class Category extends \Magento\Framework\Model\Resource\Db\AbstractDb
                         '.store_id=?',
                         $storeId
                     ),
-                    array()
+                    []
                 )->where(
                     '(' . $ifCase . ')' . $conditionRule,
                     $value

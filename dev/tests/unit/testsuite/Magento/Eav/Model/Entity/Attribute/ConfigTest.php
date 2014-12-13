@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -61,16 +42,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute', array(), array(), '', false);
-        $this->_entityType = $this->getMock('Magento\Eav\Model\Entity\Type', array(), array(), '', false);
+        $this->_attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute', [], [], '', false);
+        $this->_entityType = $this->getMock('Magento\Eav\Model\Entity\Type', [], [], '', false);
         $this->_readerMock = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\Config\Reader',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $this->_cacheMock = $this->getMock('Magento\Framework\App\Cache\Type\Config', array(), array(), '', false);
+        $this->_cacheMock = $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false);
         $this->_cacheId = 'eav_attributes';
         $this->_cacheMock->expects(
             $this->once()
@@ -79,7 +60,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->equalTo($this->_cacheId)
         )->will(
-            $this->returnValue(serialize(array()))
+            $this->returnValue(serialize([]))
         );
 
         $this->_model = new \Magento\Eav\Model\Entity\Attribute\Config(
@@ -108,7 +89,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('attribute_code')
         );
         $result = $this->_model->getLockedFields($this->_attribute);
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     public function testGetLockedFields()
@@ -129,29 +110,29 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_attribute->expects($this->once())->method('getAttributeCode')->will($this->returnValue('test_code'));
-        $data = array(
-            'test_code1' => array(
-                'test_code2' => array('attributes' => array('test_code' => array('test_code1' => 'test_code1')))
-            )
-        );
+        $data = [
+            'test_code1' => [
+                'test_code2' => ['attributes' => ['test_code' => ['test_code1' => 'test_code1']]],
+            ],
+        ];
         $this->_model->merge($data);
         $result = $this->_model->getLockedFields($this->_attribute);
-        $this->assertEquals(array('test_code1' => 'test_code1'), $result);
+        $this->assertEquals(['test_code1' => 'test_code1'], $result);
     }
 
     public function testGetEntityAttributesLockedFields()
     {
-        $data = array(
-            'entity_code' => array(
-                'attributes' => array(
-                    'attribute_code' => array(
-                        'attribute_data' => array('locked' => 'locked_field', 'code' => 'code_test')
-                    )
-                )
-            )
-        );
+        $data = [
+            'entity_code' => [
+                'attributes' => [
+                    'attribute_code' => [
+                        'attribute_data' => ['locked' => 'locked_field', 'code' => 'code_test'],
+                    ],
+                ],
+            ],
+        ];
         $this->_model->merge($data);
         $result = $this->_model->getEntityAttributesLockedFields('entity_code');
-        $this->assertEquals(array('attribute_code' => array('code_test')), $result);
+        $this->assertEquals(['attribute_code' => ['code_test']], $result);
     }
 }

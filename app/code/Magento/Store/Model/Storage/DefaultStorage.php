@@ -2,30 +2,11 @@
 /**
  * Store loader
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Store\Model\Storage;
 
-class DefaultStorage implements \Magento\Framework\StoreManagerInterface
+class DefaultStorage implements \Magento\Store\Model\StoreManagerInterface
 {
     /**
      * Application store object
@@ -58,7 +39,6 @@ class DefaultStorage implements \Magento\Framework\StoreManagerInterface
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Store\Model\GroupFactory $groupFactory
     ) {
-
         $this->_store = $storeFactory->create();
         $this->_store->setId(\Magento\Store\Model\Store::DISTRO_STORE_ID);
         $this->_store->setCode(\Magento\Store\Model\Store::DEFAULT_CODE);
@@ -113,7 +93,7 @@ class DefaultStorage implements \Magento\Framework\StoreManagerInterface
      */
     public function getStores($withDefault = false, $codeKey = false)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -141,7 +121,7 @@ class DefaultStorage implements \Magento\Framework\StoreManagerInterface
      */
     public function getWebsites($withDefault = false, $codeKey = false)
     {
-        $websites = array();
+        $websites = [];
 
         if ($withDefault) {
             $key = $codeKey ? $this->_website->getCode() : $this->_website->getId();
@@ -174,7 +154,7 @@ class DefaultStorage implements \Magento\Framework\StoreManagerInterface
      */
     public function getGroups($withDefault = false, $codeKey = false)
     {
-        $groups = array();
+        $groups = [];
 
         if ($withDefault) {
             $key = $codeKey ? $this->_group->getCode() : $this->_group->getId();

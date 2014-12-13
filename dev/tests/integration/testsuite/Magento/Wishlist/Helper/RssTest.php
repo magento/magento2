@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Wishlist\Helper;
@@ -34,9 +15,9 @@ class RssTest extends \PHPUnit_Framework_TestCase
     /**
      * Core data
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Url\EncoderInterface
      */
-    protected $_coreData;
+    protected $urlEncoder;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -64,11 +45,11 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_customerSession = $this->_objectManager->create('Magento\Customer\Model\Session');
-        $this->_coreData = $this->_objectManager->create('Magento\Core\Helper\Data');
+        $this->urlEncoder = $this->_objectManager->create('Magento\Framework\Url\EncoderInterface');
 
         $this->_contextHelper = $this->_objectManager->create('Magento\Framework\App\Helper\Context');
         $request = $this->_contextHelper->getRequest();
-        $request->setParam('data', $this->_coreData->urlEncode($this->_fixtureCustomerId));
+        $request->setParam('data', $this->urlEncoder->encode($this->_fixtureCustomerId));
 
         $this->_wishlistHelper = $this->_objectManager->create('Magento\Wishlist\Helper\Rss',
             [

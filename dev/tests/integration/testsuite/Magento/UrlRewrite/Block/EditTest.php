@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\UrlRewrite\Block;
 
@@ -47,7 +28,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var $block \Magento\UrlRewrite\Block\Edit */
-        $block = $layout->createBlock('Magento\UrlRewrite\Block\Edit', '', array('data' => $blockAttributes));
+        $block = $layout->createBlock('Magento\UrlRewrite\Block\Edit', '', ['data' => $blockAttributes]);
 
         $this->_checkSelector($block, $expected);
         $this->_checkButtons($block, $expected);
@@ -163,34 +144,34 @@ class EditTest extends \PHPUnit_Framework_TestCase
         /** @var $existingUrlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $existingUrlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\UrlRewrite\Model\UrlRewrite',
-            array('data' => array('url_rewrite_id' => 1))
+            ['data' => ['url_rewrite_id' => 1]]
         );
 
-        return array(
+        return [
             // Creating new URL rewrite
-            array(
-                array('url_rewrite' => $urlRewrite),
-                array(
+            [
+                ['url_rewrite' => $urlRewrite],
+                [
                     'selector' => true,
                     'back_button' => true,
                     'save_button' => true,
                     'reset_button' => false,
                     'delete_button' => false,
-                    'form' => array('url_rewrite' => $urlRewrite)
-                )
-            ),
+                    'form' => ['url_rewrite' => $urlRewrite]
+                ]
+            ],
             // Editing URL rewrite
-            array(
-                array('url_rewrite' => $existingUrlRewrite),
-                array(
+            [
+                ['url_rewrite' => $existingUrlRewrite],
+                [
                     'selector' => true,
                     'back_button' => true,
                     'save_button' => true,
                     'reset_button' => true,
                     'delete_button' => true,
-                    'form' => array('url_rewrite' => $existingUrlRewrite)
-                )
-            )
-        );
+                    'form' => ['url_rewrite' => $existingUrlRewrite]
+                ]
+            ]
+        ];
     }
 }

@@ -2,31 +2,12 @@
 /**
  * Static class that represents profiling tool
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework;
 
-use Magento\Framework\Profiler\DriverInterface;
 use Magento\Framework\Profiler\Driver\Factory;
+use Magento\Framework\Profiler\DriverInterface;
 
 class Profiler
 {
@@ -47,7 +28,7 @@ class Profiler
      *
      * @var string[]
      */
-    private static $_currentPath = array();
+    private static $_currentPath = [];
 
     /**
      * Count of elements in $_currentPath
@@ -61,28 +42,28 @@ class Profiler
      *
      * @var array
      */
-    private static $_pathIndex = array();
+    private static $_pathIndex = [];
 
     /**
      * Collection for profiler drivers.
      *
      * @var DriverInterface[]
      */
-    private static $_drivers = array();
+    private static $_drivers = [];
 
     /**
      * List of default tags.
      *
      * @var array
      */
-    private static $_defaultTags = array();
+    private static $_defaultTags = [];
 
     /**
      * Collection of tag filters.
      *
      * @var array
      */
-    private static $_tagFilters = array();
+    private static $_tagFilters = [];
 
     /**
      * Has tag filters flag for faster checks of filters availability.
@@ -112,7 +93,7 @@ class Profiler
     public static function addTagFilter($tagName, $tagValue)
     {
         if (!isset(self::$_tagFilters[$tagName])) {
-            self::$_tagFilters[$tagName] = array();
+            self::$_tagFilters[$tagName] = [];
         }
         self::$_tagFilters[$tagName][] = $tagValue;
         self::$_hasTagFilters = true;
@@ -248,13 +229,13 @@ class Profiler
     {
         self::clear();
         self::$_enabled = false;
-        self::$_currentPath = array();
-        self::$_tagFilters = array();
-        self::$_defaultTags = array();
+        self::$_currentPath = [];
+        self::$_tagFilters = [];
+        self::$_defaultTags = [];
         self::$_hasTagFilters = false;
-        self::$_drivers = array();
+        self::$_drivers = [];
         self::$_pathCount = 0;
-        self::$_pathIndex = array();
+        self::$_pathIndex = [];
     }
 
     /**
@@ -367,26 +348,26 @@ class Profiler
      */
     protected static function _parseConfig($profilerConfig, $baseDir, $isAjax)
     {
-        $config = array('baseDir' => $baseDir, 'tagFilters' => array());
+        $config = ['baseDir' => $baseDir, 'tagFilters' => []];
 
         if (is_scalar($profilerConfig)) {
-            $config['drivers'] = array(
-                array('output' => $isAjax ? 'firebug' : (is_numeric($profilerConfig) ? 'html' : $profilerConfig))
-            );
+            $config['drivers'] = [
+                ['output' => $isAjax ? 'firebug' : (is_numeric($profilerConfig) ? 'html' : $profilerConfig)],
+            ];
         } else {
             $config = array_merge($config, $profilerConfig);
         }
 
-        $driverConfigs = (array)(isset($config['drivers']) ? $config['drivers'] : array());
+        $driverConfigs = (array)(isset($config['drivers']) ? $config['drivers'] : []);
         $driverFactory = isset($config['driverFactory']) ? $config['driverFactory'] : new Factory();
-        $tagFilters = (array)(isset($config['tagFilters']) ? $config['tagFilters'] : array());
+        $tagFilters = (array)(isset($config['tagFilters']) ? $config['tagFilters'] : []);
 
-        $result = array(
+        $result = [
             'driverConfigs' => self::_parseDriverConfigs($driverConfigs, $config['baseDir']),
             'driverFactory' => $driverFactory,
             'tagFilters' => $tagFilters,
-            'baseDir' => $config['baseDir']
-        );
+            'baseDir' => $config['baseDir'],
+        ];
         return $result;
     }
 
@@ -399,7 +380,7 @@ class Profiler
      */
     protected static function _parseDriverConfigs(array $driverConfigs, $baseDir)
     {
-        $result = array();
+        $result = [];
         foreach ($driverConfigs as $code => $driverConfig) {
             $driverConfig = self::_parseDriverConfig($driverConfig);
             if ($driverConfig === false) {
@@ -429,9 +410,9 @@ class Profiler
             $result = $driverConfig;
         } elseif (is_scalar($driverConfig) && $driverConfig) {
             if (is_numeric($driverConfig)) {
-                $result = array();
+                $result = [];
             } else {
-                $result = array('type' => $driverConfig);
+                $result = ['type' => $driverConfig];
             }
         }
         return $result;

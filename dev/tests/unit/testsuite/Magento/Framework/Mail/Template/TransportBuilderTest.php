@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Mail\Template;
 
@@ -72,13 +53,13 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->builder = $helper->getObject(
             $this->builderClassName,
-            array(
+            [
                 'templateFactory' => $this->templateFactoryMock,
                 'message' => $this->messageMock,
                 'objectManager' => $this->objectManagerMock,
                 'senderResolver' => $this->senderResolverMock,
                 'mailTransportFactory' => $this->_mailTransportFactoryMock
-            )
+            ]
         );
     }
 
@@ -90,8 +71,8 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTransport($templateType, $messageType, $bodyText)
     {
-        $vars = array('reason' => 'Reason', 'customer' => 'Customer');
-        $options = array('area' => 'frontend', 'store' => 1);
+        $vars = ['reason' => 'Reason', 'customer' => 'Customer'];
+        $options = ['area' => 'frontend', 'store' => 1];
         $template = $this->getMock('\Magento\Framework\Mail\TemplateInterface');
         $template->expects($this->once())->method('setVars')->with($this->equalTo($vars))->will($this->returnSelf());
         $template->expects(
@@ -152,7 +133,7 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            $this->equalTo(array('message' => $this->messageMock))
+            $this->equalTo(['message' => $this->messageMock])
         )->will(
             $this->returnValue($transport)
         );
@@ -176,23 +157,23 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function getTransportDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT,
                 \Magento\Framework\Mail\Message::TYPE_TEXT,
-                'Plain text'
-            ),
-            array(
+                'Plain text',
+            ],
+            [
                 \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
                 \Magento\Framework\Mail\Message::TYPE_HTML,
                 '<h1>Html message</h1>'
-            )
-        );
+            ]
+        ];
     }
 
     public function testSetFrom()
     {
-        $sender = array('email' => 'from@example.com', 'name' => 'name');
+        $sender = ['email' => 'from@example.com', 'name' => 'name'];
         $this->senderResolverMock->expects(
             $this->once()
         )->method(

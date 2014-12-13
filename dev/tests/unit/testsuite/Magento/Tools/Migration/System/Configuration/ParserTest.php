@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Tools\Migration\System\Configuration;
@@ -47,10 +28,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->_parser = null;
     }
 
-
     public function testParseEmptyDom()
     {
-        $this->assertEquals(array(), $this->_parser->parse(new \DOMDocument()));
+        $this->assertEquals([], $this->_parser->parse(new \DOMDocument()));
     }
 
     public function testParseDomWithoutNodes()
@@ -61,7 +41,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 </config>
 XML;
 
-        $expected = array();
+        $expected = [];
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
         $this->assertEquals($expected, $this->_parser->parse($dom));
@@ -99,22 +79,22 @@ XML;
  */
 
 XMLCOMMENT;
-        $expected = array(
+        $expected = [
             'comment' => $comment,
-            'sections' => array(
-                'some_section' => array(
-                    'label' => array('#text' => 'Section Name'),
-                    'tab' => array('#text' => 'test'),
-                    'frontend_type' => array('#text' => 'text'),
-                    'sort_order' => array('#text' => '140'),
-                    'show_in_default' => array('#text' => '1'),
-                    'show_in_website' => array('#text' => '1'),
-                    'show_in_store' => array('#text' => '1'),
-                    'resource' => array('#text' => 'Magento_Some::resource'),
-                    '@attributes' => array('translate' => 'label')
-                )
-            )
-        );
+            'sections' => [
+                'some_section' => [
+                    'label' => ['#text' => 'Section Name'],
+                    'tab' => ['#text' => 'test'],
+                    'frontend_type' => ['#text' => 'text'],
+                    'sort_order' => ['#text' => '140'],
+                    'show_in_default' => ['#text' => '1'],
+                    'show_in_website' => ['#text' => '1'],
+                    'show_in_store' => ['#text' => '1'],
+                    'resource' => ['#text' => 'Magento_Some::resource'],
+                    '@attributes' => ['translate' => 'label'],
+                ],
+            ],
+        ];
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
         $this->assertEquals($expected, $this->_parser->parse($dom));

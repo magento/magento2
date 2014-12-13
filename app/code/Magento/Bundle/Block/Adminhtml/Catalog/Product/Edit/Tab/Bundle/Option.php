@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
 
@@ -75,7 +56,7 @@ class Option extends \Magento\Backend\Block\Widget
         \Magento\Backend\Model\Config\Source\Yesno $yesno,
         \Magento\Bundle\Model\Source\Option\Type $optionTypes,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
         $this->_optionTypes = $optionTypes;
@@ -92,7 +73,6 @@ class Option extends \Magento\Backend\Block\Widget
      */
     protected function _construct()
     {
-
         $this->setCanReadPrice(true);
         $this->setCanEditPrice(true);
     }
@@ -170,28 +150,28 @@ class Option extends \Magento\Backend\Block\Widget
         $this->addChild(
             'add_selection_button',
             'Magento\Backend\Block\Widget\Button',
-            array(
+            [
                 'id' => $this->getFieldId() . '_{{index}}_add_button',
                 'label' => __('Add Products to Option'),
                 'class' => 'add add-selection'
-            )
+            ]
         );
 
         $this->addChild(
             'close_search_button',
             'Magento\Backend\Block\Widget\Button',
-            array(
+            [
                 'id' => $this->getFieldId() . '_{{index}}_close_button',
                 'label' => __('Close'),
                 'on_click' => 'bSelection.closeSearch(event)',
                 'class' => 'back no-display'
-            )
+            ]
         );
 
         $this->addChild(
             'option_delete_button',
             'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Delete Option'), 'class' => 'action-delete', 'on_click' => 'bOption.remove(event)')
+            ['label' => __('Delete Option'), 'class' => 'action-delete', 'on_click' => 'bOption.remove(event)']
         );
 
         $this->addChild(
@@ -290,11 +270,11 @@ class Option extends \Magento\Backend\Block\Widget
         $select = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
-            array(
+            [
                 'id' => $this->getFieldId() . '_{{index}}_type',
                 'class' => 'select select-product-option-type required-option-select',
-                'extra_params' => 'onchange="bOption.changeType(event)"'
-            )
+                'extra_params' => 'onchange="bOption.changeType(event)"',
+            ]
         )->setName(
             $this->getFieldName() . '[{{index}}][type]'
         )->setOptions(
@@ -312,7 +292,7 @@ class Option extends \Magento\Backend\Block\Widget
         $select = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
-            array('id' => $this->getFieldId() . '_{{index}}_required', 'class' => 'select')
+            ['id' => $this->getFieldId() . '_{{index}}_required', 'class' => 'select']
         )->setName(
             $this->getFieldName() . '[{{index}}][required]'
         )->setOptions(

@@ -1,27 +1,7 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-
 
 /**
  * Report collection abstract model
@@ -79,7 +59,7 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
      *
      * @var array
      */
-    protected $_aggregatedColumns = array();
+    protected $_aggregatedColumns = [];
 
     /**
      * Set array of columns that should be aggregated
@@ -181,7 +161,7 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
         $storeIds = $this->_storesIds;
 
         if (!is_array($storeIds)) {
-            $storeIds = array($storeIds);
+            $storeIds = [$storeIds];
         }
 
         $storeIds = array_unique($storeIds);
@@ -226,16 +206,23 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
     }
 
     /**
-     * Getter/Setter for isSubTotals
+     * Getter for isSubTotals
      *
-     * @param null|bool $flag
+     * @return bool
+     */
+    public function isSubTotals()
+    {
+        return $this->_isSubTotals;
+    }
+
+    /**
+     * Setter for isSubTotals
+     *
+     * @param bool $flag
      * @return $this
      */
-    public function isSubTotals($flag = null)
+    public function setIsSubTotals($flag)
     {
-        if (is_null($flag)) {
-            return $this->_isSubTotals;
-        }
         $this->_isSubTotals = $flag;
         return $this;
     }

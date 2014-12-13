@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Quote\Item;
 
@@ -37,7 +18,7 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->relatedProductTypes = array('type1', 'type2', 'type3');
+        $this->relatedProductTypes = ['type1', 'type2', 'type3'];
         $this->model = new \Magento\Sales\Model\Quote\Item\RelatedProducts($this->relatedProductTypes);
     }
 
@@ -51,11 +32,11 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRelatedProductIds($optionValue, $productId, $expectedResult)
     {
-        $quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item', array(), array(), '', false);
+        $quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item', [], [], '', false);
         $itemOptionMock = $this->getMock(
             '\Magento\Sales\Model\Quote\Item\Option',
-            array('getValue', 'getProductId', '__wakeup'),
-            array(),
+            ['getValue', 'getProductId', '__wakeup'],
+            [],
             '',
             false
         );
@@ -74,7 +55,7 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
 
         $itemOptionMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
 
-        $this->assertEquals($expectedResult, $this->model->getRelatedProductIds(array($quoteItemMock)));
+        $this->assertEquals($expectedResult, $this->model->getRelatedProductIds([$quoteItemMock]));
     }
 
     /*
@@ -84,12 +65,12 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
      */
     public function getRelatedProductIdsDataProvider()
     {
-        return array(
-            array('optionValue' => 'type1', 'productId' => 123, 'expectedResult' => array(123)),
-            array('optionValue' => 'other_type', 'productId' => 123, 'expectedResult' => array()),
-            array('optionValue' => 'type1', 'productId' => null, 'expectedResult' => array()),
-            array('optionValue' => 'other_type', 'productId' => false, 'expectedResult' => array())
-        );
+        return [
+            ['optionValue' => 'type1', 'productId' => 123, 'expectedResult' => [123]],
+            ['optionValue' => 'other_type', 'productId' => 123, 'expectedResult' => []],
+            ['optionValue' => 'type1', 'productId' => null, 'expectedResult' => []],
+            ['optionValue' => 'other_type', 'productId' => false, 'expectedResult' => []]
+        ];
     }
 
     /**
@@ -97,7 +78,7 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRelatedProductIdsNoOptions()
     {
-        $quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item', array(), array(), '', false);
+        $quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item', [], [], '', false);
 
         $quoteItemMock->expects(
             $this->once()
@@ -109,6 +90,6 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(new \stdClass())
         );
 
-        $this->assertEquals(array(), $this->model->getRelatedProductIds(array($quoteItemMock)));
+        $this->assertEquals([], $this->model->getRelatedProductIds([$quoteItemMock]));
     }
 }

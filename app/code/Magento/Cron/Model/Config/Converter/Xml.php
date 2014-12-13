@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Cron\Model\Config\Converter;
 
@@ -37,7 +18,7 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $output = array();
+        $output = [];
 
         if (!$source instanceof \DOMDocument) {
             return $output;
@@ -59,7 +40,7 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
                 if (!$jobName) {
                     throw new \InvalidArgumentException('Attribute "name" does not exist');
                 }
-                $config = array();
+                $config = [];
                 $config['name'] = $jobName;
                 $config += $this->convertCronConfig($jobConfig);
                 $config += $this->convertCronSchedule($jobConfig);
@@ -90,7 +71,7 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
             throw new \InvalidArgumentException('Attribute "method" does not exist');
         }
 
-        return array('instance' => $instanceName, 'method' => $methodName);
+        return ['instance' => $instanceName, 'method' => $methodName];
     }
 
     /**
@@ -101,7 +82,7 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
      */
     protected function convertCronSchedule(\DOMElement $jobConfig)
     {
-        $result = array();
+        $result = [];
         /** @var \DOMText $schedules */
         foreach ($jobConfig->childNodes as $schedules) {
             if ($schedules->nodeName == 'schedule') {
@@ -124,7 +105,7 @@ class Xml implements \Magento\Framework\Config\ConverterInterface
      */
     protected function convertCronConfigPath(\DOMElement $jobConfig)
     {
-        $result = array();
+        $result = [];
         /** @var \DOMText $schedules */
         foreach ($jobConfig->childNodes as $schedules) {
             if ($schedules->nodeName == 'config_path') {

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Resource\Product\Link;
 
@@ -116,7 +97,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function addLinkTypeIdFilter()
     {
         if ($this->_linkTypeId) {
-            $this->addFieldToFilter('link_type_id', array('eq' => $this->_linkTypeId));
+            $this->addFieldToFilter('link_type_id', ['eq' => $this->_linkTypeId]);
         }
         return $this;
     }
@@ -129,7 +110,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function addProductIdFilter()
     {
         if ($this->getProduct() && $this->getProduct()->getId()) {
-            $this->addFieldToFilter('product_id', array('eq' => $this->getProduct()->getId()));
+            $this->addFieldToFilter('product_id', ['eq' => $this->getProduct()->getId()]);
         }
         return $this;
     }
@@ -152,13 +133,13 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
             $aliasInCondition = $adapter->quoteColumnAs($alias, null);
             $this->getSelect()->joinLeft(
-                array($alias => $table),
+                [$alias => $table],
                 $aliasInCondition .
                 '.link_id = main_table.link_id AND ' .
                 $aliasInCondition .
                 '.product_link_attribute_id = ' .
                 (int)$attribute['id'],
-                array($attribute['code'] => 'value')
+                [$attribute['code'] => 'value']
             );
         }
 

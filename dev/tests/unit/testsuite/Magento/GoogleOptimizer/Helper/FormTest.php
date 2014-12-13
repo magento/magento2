@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\GoogleOptimizer\Helper;
 
@@ -49,27 +30,27 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->_formMock = $this->getMock(
             'Magento\Framework\Data\Form',
-            array('setFieldNameSuffix', 'addFieldset'),
-            array(),
+            ['setFieldNameSuffix', 'addFieldset'],
+            [],
             '',
             false
         );
         $this->_fieldsetMock = $this->getMock(
             'Magento\Framework\Data\Form\Element\Fieldset',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->_experimentCodeMock = $this->getMock(
             'Magento\GoogleOptimizer\Model\Code',
-            array('getExperimentScript', 'getCodeId', '__wakeup'),
-            array(),
+            ['getExperimentScript', 'getCodeId', '__wakeup'],
+            [],
             '',
             false
         );
-        $context = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
-        $data = array('context' => $context);
+        $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
+        $data = ['context' => $context];
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_helper = $objectManagerHelper->getObject('Magento\GoogleOptimizer\Helper\Form', $data);
     }
@@ -118,7 +99,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'addFieldset'
         )->with(
             'googleoptimizer_fields',
-            array('legend' => 'Google Analytics Content Experiments Code')
+            ['legend' => 'Google Analytics Content Experiments Code']
         )->will(
             $this->returnValue($this->_fieldsetMock)
         );
@@ -130,14 +111,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->with(
             'experiment_script',
             'textarea',
-            array(
+            [
                 'name' => 'experiment_script',
                 'label' => 'Experiment Code',
                 'value' => $experimentCode,
                 'class' => 'textarea googleoptimizer',
                 'required' => false,
                 'note' => 'Note: Experiment code should be added to the original page only.'
-            )
+            ]
         );
 
         $this->_fieldsetMock->expects(
@@ -147,7 +128,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->with(
             'code_id',
             'hidden',
-            array('name' => 'code_id', 'value' => $experimentCodeId, 'required' => false)
+            ['name' => 'code_id', 'value' => $experimentCodeId, 'required' => false]
         );
         $this->_formMock->expects($this->once())->method('setFieldNameSuffix')->with('google_experiment');
     }

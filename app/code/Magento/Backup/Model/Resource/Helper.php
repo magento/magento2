@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Backup\Model\Resource;
 
@@ -31,7 +12,7 @@ class Helper extends \Magento\Framework\DB\Helper
      *
      * @var array
      */
-    protected $_foreignKeys = array();
+    protected $_foreignKeys = [];
 
     /**
      * Core Date
@@ -81,7 +62,7 @@ class Helper extends \Magento\Framework\DB\Helper
             foreach ($this->_foreignKeys as $table => $foreignKeys) {
                 $sql .= $this->_buildForeignKeysAlterTableSql($table, $foreignKeys);
             }
-        } else if (isset($this->_foreignKeys[$tableName])) {
+        } elseif (isset($this->_foreignKeys[$tableName])) {
             $foreignKeys = $this->_foreignKeys[$tableName];
             $sql = $this->_buildForeignKeysAlterTableSql($tableName, $foreignKeys);
         }
@@ -154,7 +135,7 @@ class Helper extends \Magento\Framework\DB\Helper
             'REFERENCES `([^`]*)` \(`([^`]*)`\)' .
             '( ON DELETE (RESTRICT|CASCADE|SET NULL|NO ACTION))?' .
             '( ON UPDATE (RESTRICT|CASCADE|SET NULL|NO ACTION))?/';
-        $matches = array();
+        $matches = [];
         preg_match_all($regExp, $row['Create Table'], $matches, PREG_SET_ORDER);
 
         if (is_array($matches)) {
@@ -312,8 +293,8 @@ class Helper extends \Magento\Framework\DB\Helper
     {
         $adapter = $this->_getReadAdapter();
         $describe = $adapter->describeTable($tableName);
-        $dataTypes = array('bigint', 'mediumint', 'smallint', 'tinyint');
-        $rowData = array();
+        $dataTypes = ['bigint', 'mediumint', 'smallint', 'tinyint'];
+        $rowData = [];
         foreach ($row as $key => $data) {
             if ($data === null) {
                 $value = 'NULL';

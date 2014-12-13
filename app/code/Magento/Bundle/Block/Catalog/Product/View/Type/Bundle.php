@@ -1,56 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Tax\Api\TaxCalculationInterface;
-
 /**
  * Catalog bundle product info block
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {
-    /**
-     * constants for different rounding methods
-     */
-    const UNIT_ROUNDING = 0;
-    const ROW_ROUNDING = 1;
-    const TOTAL_ROUNDING = 2;
-
-    /**
-     * Mapping between constants in \Magento\Tax\Model\Calculation and this class
-     *
-     * @var array
-     */
-    protected $mapping = [
-        TaxCalculationInterface::CALC_UNIT_BASE => self::UNIT_ROUNDING,
-        TaxCalculationInterface::CALC_ROW_BASE => self::ROW_ROUNDING,
-        TaxCalculationInterface::CALC_TOTAL_BASE => self::TOTAL_ROUNDING,
-    ];
-
     /**
      * @var array
      */
@@ -79,16 +39,10 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $_localeFormat;
 
     /**
-     * @var PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Bundle\Model\Product\PriceFactory $productPrice
-     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param array $data
@@ -99,15 +53,13 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Bundle\Model\Product\PriceFactory $productPrice,
-        PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
-        array $data = array(),
-        array $priceBlockTypes = array()
+        array $data = [],
+        array $priceBlockTypes = []
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_productPrice = $productPrice;
-        $this->priceCurrency = $priceCurrency;
         $this->jsonEncoder = $jsonEncoder;
         $this->_localeFormat = $localeFormat;
         parent::__construct(
@@ -160,7 +112,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * Returns JSON encoded config to be used in JS scripts
      *
      * @return string
-     * 
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -169,16 +121,15 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         /** @var \Magento\Bundle\Model\Option[] $optionsArray */
         $optionsArray = $this->getOptions();
-        $options = array();
-        $selected = array();
+        $options = [];
+        $selected = [];
         $currentProduct = $this->getProduct();
 
         if ($preConfiguredFlag = $currentProduct->hasPreconfiguredValues()) {
             $preConfiguredValues = $currentProduct->getPreconfiguredValues();
-            $defaultValues = array();
+            $defaultValues = [];
         }
 
-        $isFixedPrice = $this->getProduct()->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED;
 
         $position = 0;
         foreach ($optionsArray as $optionItem) {
@@ -188,12 +139,12 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             }
 
             $optionId = $optionItem->getId();
-            $option = array(
-                'selections' => array(),
+            $option = [
+                'selections' => [],
                 'title' => $optionItem->getTitle(),
-                'isMulti' => in_array($optionItem->getType(), array('multi', 'checkbox')),
+                'isMulti' => in_array($optionItem->getType(), ['multi', 'checkbox']),
                 'position' => $position++
-            );
+            ];
 
             $selectionCount = count($optionItem->getSelections());
 
@@ -217,43 +168,43 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                     $priceBaseAmount = $bundleProductPrice->getLowestPrice($currentProduct, $priceBaseAmount);
                     $priceValue = $bundleProductPrice->getLowestPrice($currentProduct, $priceValue);
 
-                    $tierPriceInfo['price'] = $this->_taxData->displayPriceIncludingTax()
-                        ? $priceValue : $priceBaseAmount;
-                    $tierPriceInfo['exclTaxPrice'] = $priceBaseAmount;
-                    $tierPriceInfo['inclTaxPrice'] = $priceValue;
+                    $tierPriceInfo['prices'] = [
+                        'oldPrice' => [
+                            'amount' => $priceBaseAmount
+                        ],
+                        'basePrice' => [
+                            'amount' => $priceBaseAmount
+                        ],
+                        'finalPrice' => [
+                            'amount' => $priceValue
+                        ]
+                    ];
                 }
-                // break the reference with the last element
-
                 $bundleOptionPriceAmount = $currentProduct->getPriceInfo()->getPrice('bundle_option')
                     ->getOptionSelectionAmount($selectionItem);
-                $priceInclTax = $bundleOptionPriceAmount->getValue();
-                $priceExclTax = $bundleOptionPriceAmount->getBaseAmount();
+                $finalPrice = $bundleOptionPriceAmount->getValue();
+                $basePrice = $bundleOptionPriceAmount->getBaseAmount();
 
-                $selection = array(
+                $selection = [
                     'qty' => $qty,
                     'customQty' => $selectionItem->getSelectionCanChangeQty(),
-                    'inclTaxPrice' => $priceInclTax,
-                    'exclTaxPrice' => $priceExclTax,
+                    'prices' => [
+                        'oldPrice' => [
+                            'amount' => $basePrice
+                        ],
+                        'basePrice' => [
+                            'amount' => $basePrice
+                        ],
+                        'finalPrice' => [
+                            'amount' => $finalPrice
+                        ]
+                    ],
                     'priceType' => $selectionItem->getSelectionPriceType(),
                     'tierPrice' => $tierPrices,
                     'name' => $selectionItem->getName(),
-                    'plusDisposition' => 0,
-                    'minusDisposition' => 0,
                     'canApplyMsrp' => false
-                );
+                ];
 
-                $selection['price'] = $this->_taxData->displayPriceIncludingTax()
-                    ? $selection['inclTaxPrice']
-                    : $selection['exclTaxPrice'];
-
-                $responseObject = new \Magento\Framework\Object();
-                $args = array('response_object' => $responseObject, 'selection' => $selectionItem);
-                $this->_eventManager->dispatch('bundle_product_view_config', $args);
-                if (is_array($responseObject->getAdditionalOptions())) {
-                    foreach ($responseObject->getAdditionalOptions() as $index => $value) {
-                        $selection[$index] = $value;
-                    }
-                }
                 $option['selections'][$selectionId] = $selection;
 
                 if (($selectionItem->getIsDefault() || $selectionCount == 1 && $optionItem->getRequired())
@@ -272,6 +223,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 }
             }
         }
+        $isFixedPrice = $this->getProduct()->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED;
 
         $productAmount = $currentProduct
             ->getPriceInfo()
@@ -283,30 +235,25 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             ->getPrice(\Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE)
             ->getAmount();
 
-        $config = array(
+        $config = [
             'options' => $options,
             'selected' => $selected,
             'bundleId' => $currentProduct->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
-            'basePrice' => $baseProductAmount->getValue(),
-            'finalBasePriceInclTax' => $isFixedPrice
-                ? $productAmount->getValue()
-                : 0,
-            'finalBasePriceExclTax' => $isFixedPrice
-                ? $productAmount->getBaseAmount()
-                : 0,
+            'prices' => [
+                'oldPrice' => [
+                    'amount' => $isFixedPrice ?  $baseProductAmount->getValue() : 0
+                ],
+                'basePrice' => [
+                    'amount' => $isFixedPrice ? $productAmount->getBaseAmount() : 0
+                ],
+                'finalPrice' => [
+                    'amount' => $isFixedPrice ? $productAmount->getValue() : 0
+                ]
+            ],
             'priceType' => $currentProduct->getPriceType(),
-            'specialPrice' => $currentProduct
-                ->getPriceInfo()
-                ->getPrice(\Magento\Catalog\Pricing\Price\SpecialPrice::PRICE_CODE)
-                ->getValue(),
-            'includeTax' => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
             'isFixedPrice' => $isFixedPrice,
-        );
-
-        $config['finalPrice'] = $this->_taxData->displayPriceIncludingTax()
-            ? $config['finalBasePriceInclTax']
-            : $config['finalBasePriceExclTax'];
+        ];
 
         if ($preConfiguredFlag && !empty($defaultValues)) {
             $config['defaultValues'] = $defaultValues;
@@ -328,17 +275,5 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             return __('There is no defined renderer for "%1" option type.', $option->getType());
         }
         return $optionBlock->setOption($option)->toHtml();
-    }
-
-    /**
-     * Return the rounding method based on tax calculation
-     * This is a workaround as the proper way is to always call tax service to get taxed price
-     *
-     * @return int
-     */
-    public function getRoundingMethod()
-    {
-        $algorithm = $this->_taxData->getCalculationAgorithm();
-        return isset($this->mapping[$algorithm]) ? $this->mapping[$algorithm] : self::TOTAL_ROUNDING;
     }
 }

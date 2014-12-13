@@ -58,7 +58,7 @@ class Magento_Test_Php_Exemplar_CodeStyleTest_phpcs_input_coding_style_classes_n
      * @param string $string
      * return int
      */
-    static protected function _customCrc($string)
+    protected static function _customCrc($string)
     {
         return crc32($string);
     }

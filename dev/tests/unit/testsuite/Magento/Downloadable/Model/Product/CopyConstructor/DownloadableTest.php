@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Downloadable\Model\Product\CopyConstructor;
 
@@ -67,27 +48,27 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_encoderMock = $this->getMock('\Magento\Core\Helper\Data', array(), array(), '', false);
+        $this->_encoderMock = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
         $this->_model = new \Magento\Downloadable\Model\Product\CopyConstructor\Downloadable($this->_encoderMock);
 
-        $this->_productMock = $this->getMock('\Magento\Catalog\Model\Product', array(), array(), '', false);
+        $this->_productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
 
         $this->_duplicateMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
-            array('setDownloadableData', '__wakeup'),
-            array(),
+            ['setDownloadableData', '__wakeup'],
+            [],
             '',
             false
         );
 
-        $this->_linkMock = $this->getMock('\Magento\Downloadable\Model\Link', array(), array(), '', false);
+        $this->_linkMock = $this->getMock('\Magento\Downloadable\Model\Link', [], [], '', false);
 
-        $this->_sampleMock = $this->getMock('\Magento\Downloadable\Model\Sample', array(), array(), '', false);
+        $this->_sampleMock = $this->getMock('\Magento\Downloadable\Model\Sample', [], [], '', false);
 
         $this->_productTypeMock = $this->getMock(
             '\Magento\Downloadable\Model\Product\Type',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -131,7 +112,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->_productMock
         )->will(
-            $this->returnValue(array($this->_linkMock))
+            $this->returnValue([$this->_linkMock])
         );
 
         $this->_productTypeMock->expects(
@@ -141,10 +122,10 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         )->with(
             $this->_productMock
         )->will(
-            $this->returnValue(array($this->_sampleMock))
+            $this->returnValue([$this->_sampleMock])
         );
 
-        $linkData = array(
+        $linkData = [
             'title' => 'title',
             'is_shareable' => 'is_shareable',
             'sample_type' => 'sample_type',
@@ -155,16 +136,16 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             'link_url' => 'link_url',
             'sort_order' => 'sort_order',
             'price' => 'price',
-            'number_of_downloads' => 'number_of_downloads'
-        );
+            'number_of_downloads' => 'number_of_downloads',
+        ];
 
-        $sampleData = array(
+        $sampleData = [
             'title' => 'title',
             'sample_type' => 'sample_type',
             'sample_file' => 'sample_file',
             'sample_url' => 'sample_url',
-            'sort_order' => 'sort_order'
-        );
+            'sort_order' => 'sort_order',
+        ];
 
         $this->_linkMock->expects($this->once())->method('getData')->will($this->returnValue($linkData));
         $this->_sampleMock->expects($this->once())->method('getData')->will($this->returnValue($sampleData));

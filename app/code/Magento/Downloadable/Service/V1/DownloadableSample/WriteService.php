@@ -1,37 +1,18 @@
 <?php
 /**
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Downloadable\Service\V1\DownloadableSample;
 
-use \Magento\Downloadable\Service\V1\Data\FileContentUploaderInterface;
-use \Magento\Downloadable\Service\V1\DownloadableSample\Data\DownloadableSampleContent;
-use \Magento\Catalog\Api\ProductRepositoryInterface;
-use \Magento\Downloadable\Service\V1\DownloadableSample\Data\DownloadableSampleContentValidator;
-use \Magento\Framework\Exception\InputException;
-use \Magento\Framework\Json\EncoderInterface;
-use \Magento\Downloadable\Model\SampleFactory;
-use \Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Downloadable\Model\SampleFactory;
+use Magento\Downloadable\Service\V1\Data\FileContentUploaderInterface;
+use Magento\Downloadable\Service\V1\DownloadableSample\Data\DownloadableSampleContent;
+use Magento\Downloadable\Service\V1\DownloadableSample\Data\DownloadableSampleContentValidator;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Json\EncoderInterface;
 
 class WriteService implements WriteServiceInterface
 {
@@ -94,7 +75,7 @@ class WriteService implements WriteServiceInterface
             throw new InputException('Provided sample information is invalid.');
         }
 
-        if (!in_array($sampleContent->getSampleType(), array('url', 'file'))) {
+        if (!in_array($sampleContent->getSampleType(), ['url', 'file'])) {
             throw new InputException('Invalid sample type.');
         }
 
@@ -103,23 +84,23 @@ class WriteService implements WriteServiceInterface
             throw new InputException('Sample title cannot be empty.');
         }
 
-        $sampleData = array(
+        $sampleData = [
             'sample_id' => 0,
             'is_delete' => 0,
             'type' => $sampleContent->getSampleType(),
             'sort_order' => $sampleContent->getSortOrder(),
             'title' => $sampleContent->getTitle(),
-        );
+        ];
 
         if ($sampleContent->getSampleType() == 'file') {
-            $sampleData['file'] = $this->jsonEncoder->encode(array(
-                $this->fileContentUploader->upload($sampleContent->getSampleFile(), 'sample')
-            ));
+            $sampleData['file'] = $this->jsonEncoder->encode([
+                $this->fileContentUploader->upload($sampleContent->getSampleFile(), 'sample'),
+            ]);
         } else {
             $sampleData['sample_url'] = $sampleContent->getSampleUrl();
         }
 
-        $downloadableData = array('sample' => array($sampleData));
+        $downloadableData = ['sample' => [$sampleData]];
         $product->setDownloadableData($downloadableData);
         if ($isGlobalScopeContent) {
             $product->setStoreId(0);

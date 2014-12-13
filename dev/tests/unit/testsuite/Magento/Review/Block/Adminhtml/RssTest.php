@@ -1,30 +1,11 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Review\Block\Adminhtml;
 
-use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class RssTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +20,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerInterface;
 
@@ -55,7 +36,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerInterface = $this->getMock('Magento\Framework\StoreManagerInterface');
+        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->rss = $this->getMock('Magento\Review\Model\Rss', ['__wakeUp', 'getProductCollection'], [], '', false);
         $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -71,26 +52,24 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRssData()
     {
-        $rssData = array(
+        $rssData = [
             'title' => 'Pending product review(s)',
             'description' => 'Pending product review(s)',
             'link' => 'http://rss.magento.com',
             'charset' => 'UTF-8',
-            'entries' =>
-                array(
+            'entries' => [
                     'title' => 'Product: "Product Name" reviewed by: Product Nick',
                     'link' => 'http://product.magento.com',
-                    'description' =>
-                        array(
+                    'description' => [
                             'rss_url' => 'http://rss.magento.com',
                             'name' => 'Product Name',
                             'summary' => 'Product Title',
                             'review' => 'Product Detail',
                             'store' => 'Store Name',
 
-                        )
-                )
-        );
+                        ],
+                ],
+        ];
         $rssUrl = 'http://rss.magento.com';
         $productModel = $this->getMock(
             'Magento\Catalog\Model\Resource\Product',
@@ -127,7 +106,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
         $productModel->expects($this->any())->method('getProductUrl')
             ->will($this->returnValue('http://product.magento.com'));
         $this->rss->expects($this->once())->method('getProductCollection')
-            ->will($this->returnValue(array($productModel)));
+            ->will($this->returnValue([$productModel]));
 
         $data = $this->block->getRssData();
 
@@ -156,6 +135,6 @@ class RssTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFeeds()
     {
-        $this->assertEquals(array(), $this->block->getFeeds());
+        $this->assertEquals([], $this->block->getFeeds());
     }
 }

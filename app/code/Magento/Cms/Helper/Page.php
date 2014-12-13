@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Cms\Helper;
 
@@ -70,7 +51,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Store manager
      *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -88,6 +69,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @deprecated
+     * @TODO MAGETWO-28356: Refactor controller actions to new ResultInterface
      * @var \Magento\Framework\App\ViewInterface
      */
     protected $_view;
@@ -105,7 +87,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Cms\Model\Page $page
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Cms\Model\PageFactory $pageFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\App\ViewInterface $view
@@ -117,7 +99,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Cms\Model\Page $page,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Cms\Model\PageFactory $pageFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\App\ViewInterface $view,
@@ -201,11 +183,11 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $resultPage->initLayout();
         $resultPage->addHandle('cms_page_view');
-        $resultPage->addPageLayoutHandles(array('id' => $this->_page->getIdentifier()));
+        $resultPage->addPageLayoutHandles(['id' => $this->_page->getIdentifier()]);
 
         $this->_eventManager->dispatch(
             'cms_page_render',
-            array('page' => $this->_page, 'controller_action' => $action)
+            ['page' => $this->_page, 'controller_action' => $action]
         );
 
         if ($this->_page->getCustomLayoutUpdateXml() && $inRange) {
@@ -271,6 +253,6 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
             return null;
         }
 
-        return $this->_urlBuilder->getUrl(null, array('_direct' => $page->getIdentifier()));
+        return $this->_urlBuilder->getUrl(null, ['_direct' => $page->getIdentifier()]);
     }
 }

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 /** @var \Magento\ToolkitFramework\Application $this */
 $cartPriceRulesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('cart_price_rules', 9);
@@ -34,7 +15,7 @@ $category = $this->getObjectManager()->get('Magento\Catalog\Model\Category');
 $model = $this->getObjectManager()->get('Magento\SalesRule\Model\Rule');
 
 //Get all websites
-$categoriesArray = array();
+$categoriesArray = [];
 $websites = $storeManager->getWebsites();
 foreach ($websites as $website) {
     //Get all groups
@@ -49,7 +30,7 @@ foreach ($websites as $website) {
             $category->load($resultsCategory);
             $structure = explode('/', $category->getPath());
             if (count($structure) > 2) {
-                $categoriesArray[] = array($category->getId(), $website->getId());
+                $categoriesArray[] = [$category->getId(), $website->getId()];
             }
         }
     }
@@ -58,22 +39,21 @@ asort($categoriesArray);
 $categoriesArray = array_values($categoriesArray);
 $idField = $model->getIdFieldName();
 
-
 for ($i = 0; $i < $cartPriceRulesCount; $i++) {
     $ruleName = sprintf('Shopping Cart Price Rule %1$d', $i);
-    $data = array(
+    $data = [
         $idField                => null,
         'product_ids'           => '',
         'name'                  => $ruleName,
         'description'           => '',
         'is_active'             => '1',
         'website_ids'           => $categoriesArray[$i % count($categoriesArray)][1],
-        'customer_group_ids'    => array (
+        'customer_group_ids'    => [
             0 => '0',
             1 => '1',
             2 => '2',
             3 => '3',
-        ),
+        ],
         'coupon_type'           => '1',
         'coupon_code'           => '',
         'uses_per_customer'     => '',
@@ -81,49 +61,42 @@ for ($i = 0; $i < $cartPriceRulesCount; $i++) {
         'to_date'               => '',
         'sort_order'            => '',
         'is_rss'                => '1',
-        'rule'                  => array (
-            'conditions' =>
-            array (
-                1 =>
-                array (
+        'rule'                  => [
+            'conditions' => [
+                1 => [
                     'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Combine',
                     'aggregator' => 'all',
                     'value' => '1',
                     'new_child' => '',
-                ),
-                '1--1' =>
-                array (
+                ],
+                '1--1' => [
                     'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Address',
                     'attribute' => 'total_qty',
                     'operator' => '>=',
                     'value' => $cartPriceRulesProductsFloor + $i,
-                ),
-                '1--2' =>
-                array (
+                ],
+                '1--2' => [
                     'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Found',
                     'value' => '1',
                     'aggregator' => 'all',
                     'new_child' => '',
-                ),
-                '1--2--1' =>
-                array (
+                ],
+                '1--2--1' => [
                     'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product',
                     'attribute' => 'category_ids',
                     'operator' => '==',
                     'value' => $categoriesArray[$i % count($categoriesArray)][0],
-                ),
-            ),
-            'actions' =>
-            array (
-                1 =>
-                array (
+                ],
+            ],
+            'actions' => [
+                1 => [
                     'type' => 'Magento\\SalesRule\\Model\\Rule\\Condition\\Product\\Combine',
                     'aggregator' => 'all',
                     'value' => '1',
                     'new_child' => '',
-                ),
-            ),
-        ),
+                ],
+            ],
+        ],
         'simple_action'             => 'by_percent',
         'discount_amount'           => '10',
         'discount_qty'              => '0',
@@ -132,7 +105,7 @@ for ($i = 0; $i < $cartPriceRulesCount; $i++) {
         'simple_free_shipping'      => '0',
         'stop_rules_processing'     => '0',
         'reward_points_delta'       => '',
-        'store_labels'              => array (
+        'store_labels'              => [
             0 => '',
             1 => '',
             2 => '',
@@ -145,19 +118,19 @@ for ($i = 0; $i < $cartPriceRulesCount; $i++) {
             9 => '',
             10 => '',
             11 => '',
-        ),
+        ],
         'page'                      => '1',
         'limit'                     => '20',
         'in_banners'                => '',
-        'banner_id'                 => array (
+        'banner_id'                 => [
             'from'  => '',
             'to'    => '',
-        ),
+        ],
         'banner_name'               => '',
         'visible_in'                => '',
         'banner_is_enabled'         => '',
-        'related_banners'           => array (),
-    );
+        'related_banners'           => [],
+    ];
     if (isset($data['simple_action']) && $data['simple_action'] == 'by_percent'
         && isset($data['discount_amount'])
     ) {

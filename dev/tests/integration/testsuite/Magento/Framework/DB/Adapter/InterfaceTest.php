@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -53,15 +34,15 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     {
         $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\Module\DataSetup',
-            array(
+            [
                 'resourceName' => 'core_setup',
                 'moduleName' => 'Magento_Core'
-            )
+            ]
         );
         $this->_connection = $installer->getConnection();
         $this->_tableName = $this->_connection->getTableName('table_two_column_idx');
-        $this->_oneColumnIdxName = $this->_connection->getIndexName($this->_tableName, array('column1'));
-        $this->_twoColumnIdxName = $this->_connection->getIndexName($this->_tableName, array('column1', 'column2'));
+        $this->_oneColumnIdxName = $this->_connection->getIndexName($this->_tableName, ['column1']);
+        $this->_twoColumnIdxName = $this->_connection->getIndexName($this->_tableName, ['column1', 'column2']);
 
         $table = $this->_connection->newTable(
             $this->_tableName
@@ -69,7 +50,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
             'id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
             'Id'
         )->addColumn(
             'column1',
@@ -79,10 +60,10 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER
         )->addIndex(
             $this->_oneColumnIdxName,
-            array('column1')
+            ['column1']
         )->addIndex(
             $this->_twoColumnIdxName,
-            array('column1', 'column2')
+            ['column1', 'column2']
         );
         $this->_connection->createTable($table);
     }
@@ -108,12 +89,12 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
             'Table column "column2" must be provided by the fixture.'
         );
         $this->assertEquals(
-            array('column1'),
+            ['column1'],
             $this->_getIndexColumns($this->_tableName, $this->_oneColumnIdxName),
             'Single-column index must be provided by the fixture.'
         );
         $this->assertEquals(
-            array('column1', 'column2'),
+            ['column1', 'column2'],
             $this->_getIndexColumns($this->_tableName, $this->_twoColumnIdxName),
             'Multiple-column index must be provided by the fixture.'
         );
@@ -157,7 +138,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
             'Column index must be dropped along with the column.'
         );
         $this->assertEquals(
-            array('column2'),
+            ['column2'],
             $this->_getIndexColumns($this->_tableName, $this->_twoColumnIdxName),
             'References to the dropped column must be removed from the multiple-column indexes.'
         );
@@ -170,7 +151,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     {
         $this->_connection->dropColumn($this->_tableName, 'column2');
         $this->assertEquals(
-            array('column1'),
+            ['column1'],
             $this->_getIndexColumns($this->_tableName, $this->_oneColumnIdxName),
             'Column index must be preserved.'
         );
@@ -201,32 +182,32 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function insertArrayDataProvider()
     {
-        return array(
-            'one column' => array(
-                array('column1'),
-                array(array(1), array(2)),
-                array(array('column1' => 1, 'column2' => null), array('column1' => 2, 'column2' => null))
-            ),
-            'one column simple' => array(
-                array('column1'),
-                array(1, 2),
-                array(array('column1' => 1, 'column2' => null), array('column1' => 2, 'column2' => null))
-            ),
-            'two columns' => array(
-                array('column1', 'column2'),
-                array(array(1, 2), array(3, 4)),
-                array(array('column1' => 1, 'column2' => 2), array('column1' => 3, 'column2' => 4))
-            ),
-            'several columns with identity' => array( // test possibility to insert data with filled identity field
-                array('id', 'column1', 'column2'),
-                array(array(1, 0, 0), array(2, 1, 1), array(3, 2, 2)),
-                array(
-                    array('id' => 1, 'column1' => 0, 'column2' => 0),
-                    array('id' => 2, 'column1' => 1, 'column2' => 1),
-                    array('id' => 3, 'column1' => 2, 'column2' => 2)
-                )
-            )
-        );
+        return [
+            'one column' => [
+                ['column1'],
+                [[1], [2]],
+                [['column1' => 1, 'column2' => null], ['column1' => 2, 'column2' => null]],
+            ],
+            'one column simple' => [
+                ['column1'],
+                [1, 2],
+                [['column1' => 1, 'column2' => null], ['column1' => 2, 'column2' => null]],
+            ],
+            'two columns' => [
+                ['column1', 'column2'],
+                [[1, 2], [3, 4]],
+                [['column1' => 1, 'column2' => 2], ['column1' => 3, 'column2' => 4]],
+            ],
+            'several columns with identity' => [ // test possibility to insert data with filled identity field
+                ['id', 'column1', 'column2'],
+                [[1, 0, 0], [2, 1, 1], [3, 2, 2]],
+                [
+                    ['id' => 1, 'column1' => 0, 'column2' => 0],
+                    ['id' => 2, 'column1' => 1, 'column2' => 1],
+                    ['id' => 3, 'column1' => 2, 'column2' => 2]
+                ],
+            ]
+        ];
     }
 
     /**
@@ -234,7 +215,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testInsertArrayTwoColumnsWithSimpleData()
     {
-        $this->_connection->insertArray($this->_tableName, array('column1', 'column2'), array(1, 2));
+        $this->_connection->insertArray($this->_tableName, ['column1', 'column2'], [1, 2]);
     }
 
     /**
@@ -283,6 +264,6 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
      */
     public function insertDataProvider()
     {
-        return array('column with identity field' => array(array('id' => 1, 'column1' => 10, 'column2' => 20)));
+        return ['column with identity field' => [['id' => 1, 'column1' => 10, 'column2' => 20]]];
     }
 }

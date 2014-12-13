@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Paypal\Model\Hostedpro;
 
@@ -56,7 +37,7 @@ class Request extends \Magento\Framework\Object
      *
      * @var string[]
      */
-    protected $_notButtonVars = array('METHOD', 'BUTTONCODE', 'BUTTONTYPE');
+    protected $_notButtonVars = ['METHOD', 'BUTTONCODE', 'BUTTONTYPE'];
 
     /**
      * Customer address
@@ -85,7 +66,7 @@ class Request extends \Magento\Framework\Object
      */
     public function getRequestData()
     {
-        $requestData = array();
+        $requestData = [];
         if (!empty($this->_data)) {
             // insert params to request as additional button variables,
             // except special params from _notButtonVars list
@@ -142,7 +123,7 @@ class Request extends \Magento\Framework\Object
      */
     protected function _getPaymentData(\Magento\Paypal\Model\Hostedpro $paymentMethod)
     {
-        $request = array(
+        $request = [
             'paymentaction' => strtolower($paymentMethod->getConfigData('payment_action')),
             'notify_url' => $paymentMethod->getNotifyUrl(),
             'cancel_return' => $paymentMethod->getCancelUrl(),
@@ -155,8 +136,8 @@ class Request extends \Magento\Framework\Object
             'showBillingPhone' => 'false',
             'showCustomerName' => 'false',
             'showCardInfo' => 'true',
-            'showHostedThankyouPage' => 'false'
-        );
+            'showHostedThankyouPage' => 'false',
+        ];
 
         return $request;
     }
@@ -169,7 +150,7 @@ class Request extends \Magento\Framework\Object
      */
     protected function _getOrderData(\Magento\Sales\Model\Order $order)
     {
-        $request = array(
+        $request = [
             'subtotal' => $this->_formatPrice(
                 $this->_formatPrice(
                     $order->getPayment()->getBaseAmountAuthorized()
@@ -184,8 +165,8 @@ class Request extends \Magento\Framework\Object
             'invoice' => $order->getIncrementId(),
             'address_override' => 'true',
             'currency_code' => $order->getBaseCurrencyCode(),
-            'buyer_email' => $order->getCustomerEmail()
-        );
+            'buyer_email' => $order->getCustomerEmail(),
+        ];
 
         // append to request billing address data
         if ($billingAddress = $order->getBillingAddress()) {
@@ -209,14 +190,14 @@ class Request extends \Magento\Framework\Object
     protected function _getShippingAddress(\Magento\Framework\Object $address)
     {
         $region = $address->getRegionCode() ? $address->getRegionCode() : $address->getRegion();
-        $request = array(
+        $request = [
             'first_name' => $address->getFirstname(),
             'last_name' => $address->getLastname(),
             'city' => $address->getCity(),
             'state' => $region ? $region : $address->getCity(),
             'zip' => $address->getPostcode(),
-            'country' => $address->getCountry()
-        );
+            'country' => $address->getCountry(),
+        ];
 
         // convert streets to tow lines format
         $street = $this->_customerAddress->convertStreetLines($address->getStreet(), 2);
@@ -236,14 +217,14 @@ class Request extends \Magento\Framework\Object
     protected function _getBillingAddress(\Magento\Framework\Object $address)
     {
         $region = $address->getRegionCode() ? $address->getRegionCode() : $address->getRegion();
-        $request = array(
+        $request = [
             'billing_first_name' => $address->getFirstname(),
             'billing_last_name' => $address->getLastname(),
             'billing_city' => $address->getCity(),
             'billing_state' => $region ? $region : $address->getCity(),
             'billing_zip' => $address->getPostcode(),
-            'billing_country' => $address->getCountry()
-        );
+            'billing_country' => $address->getCountry(),
+        ];
 
         // convert streets to tow lines format
         $street = $this->_customerAddress->convertStreetLines($address->getStreet(), 2);

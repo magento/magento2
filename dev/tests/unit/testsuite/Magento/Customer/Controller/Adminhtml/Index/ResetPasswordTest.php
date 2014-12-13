@@ -1,31 +1,12 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Api\Data\CustomerInterface;
 
 /**
  * Unit test for \Magento\Customer\Controller\Adminhtml\Index controller
@@ -120,7 +101,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = $this->getMockBuilder(
             'Magento\Framework\App\ObjectManager'
         )->disableOriginalConstructor()->setMethods(
-            array('get', 'create')
+            ['get', 'create']
         )->getMock();
         $frontControllerMock = $this->getMockBuilder(
             'Magento\Framework\App\FrontController'
@@ -133,23 +114,23 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $this->_session = $this->getMockBuilder(
             'Magento\Backend\Model\Session'
         )->disableOriginalConstructor()->setMethods(
-            array('setIsUrlNotice', '__wakeup')
+            ['setIsUrlNotice', '__wakeup']
         )->getMock();
         $this->_session->expects($this->any())->method('setIsUrlNotice');
 
         $this->_helper = $this->getMockBuilder(
             'Magento\Backend\Helper\Data'
         )->disableOriginalConstructor()->setMethods(
-            array('getUrl')
+            ['getUrl']
         )->getMock();
 
         $this->messageManager = $this->getMockBuilder(
             'Magento\Framework\Message\Manager'
         )->disableOriginalConstructor()->setMethods(
-            array('addSuccess', 'addMessage', 'addException')
+            ['addSuccess', 'addMessage', 'addException']
         )->getMock();
 
-        $contextArgs = array(
+        $contextArgs = [
             'getHelper',
             'getSession',
             'getAuthorization',
@@ -163,8 +144,8 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             'getRequest',
             'getResponse',
             'getTitle',
-            'getView'
-        );
+            'getView',
+        ];
         $contextMock = $this->getMockBuilder(
             '\Magento\Backend\App\Action\Context'
         )->disableOriginalConstructor()->setMethods(
@@ -214,9 +195,8 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $args = [
             'context' => $contextMock,
             'customerAccountManagement' => $this->_customerAccountManagementMock,
-            'customerRepository' => $this->_customerRepositoryMock
+            'customerRepository' => $this->_customerRepositoryMock,
         ];
-
 
         $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_testedObject = $helperObjectManager->getObject(
@@ -245,7 +225,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             'getUrl'
         )->with(
             $this->equalTo('customer/index'),
-            $this->equalTo(array())
+            $this->equalTo([])
         )->will(
             $this->returnValue($redirectLink)
         );
@@ -290,7 +270,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             'getUrl'
         )->with(
             $this->equalTo('customer/index'),
-            $this->equalTo(array())
+            $this->equalTo([])
         )->will(
             $this->returnValue($redirectLink)
         );
@@ -482,7 +462,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             'getUrl'
         )->with(
             $this->equalTo('customer/*/edit'),
-            $this->equalTo(array('id' => $customerId, '_current' => true))
+            $this->equalTo(['id' => $customerId, '_current' => true])
         )->will(
             $this->returnValue($redirectLink)
         );

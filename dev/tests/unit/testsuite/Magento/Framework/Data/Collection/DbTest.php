@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data\Collection;
 
@@ -48,12 +29,12 @@ class DbTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->fetchStrategyMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db\FetchStrategy\Query', array('fetchAll'), array(), '', false
+            'Magento\Framework\Data\Collection\Db\FetchStrategy\Query', ['fetchAll'], [], '', false
         );
         $this->entityFactoryMock = $this->getMock(
-            'Magento\Core\Model\EntityFactory', array('create'), array(), '', false
+            'Magento\Core\Model\EntityFactory', ['create'], [], '', false
         );
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', array('log'), array(), '', false);
+        $this->loggerMock = $this->getMock('Magento\Framework\Logger', ['log'], [], '', false);
         $this->collection = new \Magento\Framework\Data\Collection\Db(
             $this->entityFactoryMock,
             $this->loggerMock,
@@ -73,12 +54,12 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $adapter = $this->getMockForAbstractClass(
             'Zend_Db_Adapter_Abstract',
-            array(),
+            [],
             '',
             false,
             true,
             true,
-            array('fetchAll')
+            ['fetchAll']
         );
         $this->collection->setConnection($adapter);
 
@@ -93,7 +74,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
         $this->collection->load();
         $selectOrders = $select->getPart(\Zend_Db_Select::ORDER);
-        $this->assertEquals(array('select_field', 'ASC'), array_shift($selectOrders));
+        $this->assertEquals(['select_field', 'ASC'], array_shift($selectOrders));
         $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
         $this->assertEquals('other_field DESC', (string)array_shift($selectOrders));
         $this->assertEmpty(array_shift($selectOrders));
@@ -123,7 +104,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFieldToFilter()
     {
-        $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', array('prepareSqlCondition'), array(), '', false);
+        $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', ['prepareSqlCondition'], [], '', false);
         $adapter->expects(
             $this->any()
         )->method(
@@ -137,7 +118,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->setConnection($adapter);
         $select = $this->collection->getSelect()->from('test');
 
-        $this->collection->addFieldToFilter('is_imported', array('eq' => '1'));
+        $this->collection->addFieldToFilter('is_imported', ['eq' => '1']);
         $this->assertEquals('SELECT `test`.* FROM `test` WHERE (is_imported = 1)', $select->assemble());
     }
 
@@ -147,14 +128,14 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFieldToFilterWithMultipleParams()
     {
-        $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', array('prepareSqlCondition'), array(), '', false);
+        $adapter = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', ['prepareSqlCondition'], [], '', false);
         $adapter->expects(
             $this->at(0)
         )->method(
             'prepareSqlCondition'
         )->with(
             '`weight`',
-            array('in' => array(1, 3))
+            ['in' => [1, 3]]
         )->will(
             $this->returnValue('weight in (1, 3)')
         );
@@ -164,7 +145,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             'prepareSqlCondition'
         )->with(
             '`name`',
-            array('like' => 'M%')
+            ['like' => 'M%']
         )->will(
             $this->returnValue("name like 'M%'")
         );
@@ -172,8 +153,8 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $select = $this->collection->getSelect()->from("test");
 
         $this->collection->addFieldToFilter(
-            array('weight', 'name'),
-            array(array('in' => array(1, 3)), array('like' => 'M%'))
+            ['weight', 'name'],
+            [['in' => [1, 3]], ['like' => 'M%']]
         );
 
         $this->assertEquals(
@@ -192,7 +173,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('is_imported = 1')
         );
 
-        $this->collection->addFieldToFilter('is_imported', array('eq' => '1'));
+        $this->collection->addFieldToFilter('is_imported', ['eq' => '1']);
         $this->assertEquals(
             "SELECT `test`.* FROM `test` WHERE ((weight in (1, 3)) OR (name like 'M%')) AND (is_imported = 1)",
             $select->assemble()
@@ -206,8 +187,8 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $adapter = $this->getMock(
             'Zend_Db_Adapter_Pdo_Mysql',
-            array('select', 'prepareSqlCondition', 'supportStraightJoin'),
-            array(),
+            ['select', 'prepareSqlCondition', 'supportStraightJoin'],
+            [],
             '',
             false
         );
@@ -217,7 +198,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
             'prepareSqlCondition'
         )->with(
             '`email`',
-            array('like' => 'value?')
+            ['like' => 'value?']
         )->will(
             $this->returnValue('email LIKE \'%value?%\'')
         );
@@ -227,7 +208,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->setConnection($adapter);
 
         $select = $this->collection->getSelect()->from('test');
-        $this->collection->addFieldToFilter('email', array('like' => 'value?'));
+        $this->collection->addFieldToFilter('email', ['like' => 'value?']);
         $this->assertEquals("SELECT `test`.* FROM `test` WHERE (email LIKE '%value?%')", $select->assemble());
     }
 
@@ -238,8 +219,8 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $adapter = $this->getMock(
             'Zend_Db_Adapter_Pdo_Mysql',
-            array('quoteIdentifier', 'prepareSqlCondition'),
-            array(),
+            ['quoteIdentifier', 'prepareSqlCondition'],
+            [],
             '',
             false
         );
@@ -265,7 +246,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->setConnection($adapter);
         $select = $this->collection->getSelect()->from('test');
 
-        $this->collection->addFieldToFilter('email', array('eq' => 'foo@example.com'));
+        $this->collection->addFieldToFilter('email', ['eq' => 'foo@example.com']);
         $this->assertEquals('SELECT `test`.* FROM `test` WHERE (`email` = "foo@example.com")', $select->assemble());
     }
 
@@ -277,7 +258,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testClone()
     {
-        $adapter = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', array(), '', false);
+        $adapter = $this->getMockForAbstractClass('Zend_Db_Adapter_Abstract', [], '', false);
         $this->collection->setConnection($adapter);
         $this->assertInstanceOf('Zend_Db_Select', $this->collection->getSelect());
 
@@ -308,11 +289,11 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
     public function printLogQueryPrintingDataProvider()
     {
-        return array(
-            array(false, false, 'some_query', ''),
-            array(true, false, 'some_query', 'some_query'),
-            array(false, true, 'some_query', 'some_query')
-        );
+        return [
+            [false, false, 'some_query', ''],
+            [true, false, 'some_query', 'some_query'],
+            [false, true, 'some_query', 'some_query']
+        ];
     }
 
     /**
@@ -331,11 +312,11 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
     public function printLogQueryLoggingDataProvider()
     {
-        return array(
-            array(true, false, 1),
-            array(false, true, 1),
-            array(false, false, 0),
-        );
+        return [
+            [true, false, 1],
+            [false, true, 1],
+            [false, false, 0],
+        ];
     }
 
     /**
@@ -350,19 +331,19 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchItem()
     {
-        $data = array(1 => 'test');
+        $data = [1 => 'test'];
         $counter = 0;
-        $statementMock = $this->getMock('Zend_Db_Statement_Pdo', array('fetch'), array(), '', false);
+        $statementMock = $this->getMock('Zend_Db_Statement_Pdo', ['fetch'], [], '', false);
         $statementMock->expects($this->exactly(2))
             ->method('fetch')
             ->will($this->returnCallback(function () use (&$counter, $data) {
-                return ++$counter % 2 ? array() : $data;
+                return ++$counter % 2 ? [] : $data;
             }));
 
         $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql',
-            array('select', 'query'), array(), '', false);
+            ['select', 'query'], [], '', false);
         $selectMock = $this->getMock(
-            'Magento\Framework\DB\Select', array(), array('adapter' => $adapterMock)
+            'Magento\Framework\DB\Select', [], ['adapter' => $adapterMock]
         );
         $adapterMock->expects($this->once())
             ->method('query')
@@ -375,7 +356,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->collection->setConnection($adapterMock);
         $this->assertFalse($this->collection->fetchItem());
 
-        $objectMock = $this->getMock('Magento\Framework\Object', array('setData'), array());
+        $objectMock = $this->getMock('Magento\Framework\Object', ['setData'], []);
         $objectMock->expects($this->once())
             ->method('setData')
             ->with($data);
@@ -392,15 +373,15 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $countSql = 500;
         $adapterMock = $this->getMock(
             'Zend_Db_Adapter_Pdo_Mysql',
-            array('select', 'quoteInto', 'prepareSqlCondition', 'fetchOne'),
-            array(),
+            ['select', 'quoteInto', 'prepareSqlCondition', 'fetchOne'],
+            [],
             '',
             false
         );
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
-            array('orWhere', 'where', 'reset', 'columns'),
-            array('adapter' => $adapterMock)
+            ['orWhere', 'where', 'reset', 'columns'],
+            ['adapter' => $adapterMock]
         );
         $selectMock->expects($this->exactly(4))
             ->method('reset');
@@ -412,32 +393,32 @@ class DbTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($selectMock));
         $adapterMock->expects($this->exactly(2))
             ->method('quoteInto')
-            ->will($this->returnValueMap(array(
-                        array('testField1=?', 'testValue1', null, null, 'testField1=testValue1'),
-                        array('testField4=?', 'testValue4', null, null, 'testField4=testValue4'),
-                    )));
+            ->will($this->returnValueMap([
+                        ['testField1=?', 'testValue1', null, null, 'testField1=testValue1'],
+                        ['testField4=?', 'testValue4', null, null, 'testField4=testValue4'],
+                    ]));
         $selectMock->expects($this->once())
             ->method('orWhere')
             ->with('testField1=testValue1');
         $selectMock->expects($this->exactly(3))
             ->method('where')
-            ->will($this->returnValueMap(array(
-                array('testValue2', $this->returnSelf()),
-                array(
+            ->will($this->returnValueMap([
+                ['testValue2', $this->returnSelf()],
+                [
                     'testField3 = testValue3',
                     null,
                     \Magento\Framework\DB\Select::TYPE_CONDITION,
                     $this->returnSelf()
-                ),
-                array('testField4=testValue4', $this->returnSelf()),
-            )));
+                ],
+                ['testField4=testValue4', $this->returnSelf()],
+            ]));
         $adapterMock->expects($this->once())
             ->method('prepareSqlCondition')
             ->with('testField3', 'testValue3')
             ->will($this->returnValue('testField3 = testValue3'));
         $adapterMock->expects($this->once())
             ->method('fetchOne')
-            ->with($selectMock, array())
+            ->with($selectMock, [])
             ->will($this->returnValue($countSql));
 
         $this->collection->addFilter('testField1', 'testValue1', 'or');
@@ -451,9 +432,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSelectSql()
     {
-        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', array('select'), array(), '', false);
+        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', ['select'], [], '', false);
         $selectMock = $this->getMock(
-            'Magento\Framework\DB\Select', array('__toString'), array('adapter' => $adapterMock)
+            'Magento\Framework\DB\Select', ['__toString'], ['adapter' => $adapterMock]
         );
         $adapterMock->expects($this->once())
             ->method('select')
@@ -473,15 +454,15 @@ class DbTest extends \PHPUnit_Framework_TestCase
     {
         $adapterMock = $this->getMock(
             'Zend_Db_Adapter_Pdo_Mysql',
-            array('select', 'quoteInto', 'prepareSqlCondition', 'fetchOne'),
-            array(),
+            ['select', 'quoteInto', 'prepareSqlCondition', 'fetchOne'],
+            [],
             '',
             false
         );
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
-            array('orWhere', 'where', 'reset', 'columns'),
-            array('adapter' => $adapterMock)
+            ['orWhere', 'where', 'reset', 'columns'],
+            ['adapter' => $adapterMock]
         );
         $selectMock->expects($this->once())
             ->method('where')
@@ -509,11 +490,11 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testDistinct($flag, $expectedFlag)
     {
-        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', array('select'), array(), '', false);
+        $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql', ['select'], [], '', false);
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
-            array('distinct'),
-            array('adapter' => $adapterMock)
+            ['distinct'],
+            ['adapter' => $adapterMock]
         );
         $adapterMock->expects($this->once())
             ->method('select')
@@ -528,19 +509,19 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
     public function distinctDataProvider()
     {
-        return array(
-            array(true, true),
-            array(false, false),
-        );
+        return [
+            [true, true],
+            [false, false],
+        ];
     }
 
     public function testToOptionHash()
     {
-        $data = array(10 => 'test');
+        $data = [10 => 'test'];
         $adapterMock = $this->getMock('Zend_Db_Adapter_Pdo_Mysql',
-            array('select', 'query'), array(), '', false);
+            ['select', 'query'], [], '', false);
         $selectMock = $this->getMock(
-            'Magento\Framework\DB\Select', array(), array('adapter' => $adapterMock)
+            'Magento\Framework\DB\Select', [], ['adapter' => $adapterMock]
         );
         $adapterMock->expects($this->once())
             ->method('select')
@@ -548,23 +529,23 @@ class DbTest extends \PHPUnit_Framework_TestCase
 
         $this->fetchStrategyMock->expects($this->once())
             ->method('fetchAll')
-            ->with($selectMock, array())
-            ->will($this->returnValue(array($data)));
+            ->with($selectMock, [])
+            ->will($this->returnValue([$data]));
 
         $objectMock = $this->getMock(
             'Magento\Framework\Object',
-            array('addData', 'setIdFieldName', 'getData'),
-            array()
+            ['addData', 'setIdFieldName', 'getData'],
+            []
         );
         $objectMock->expects($this->once())
             ->method('addData')
             ->with($data);
         $objectMock->expects($this->any())
             ->method('getData')
-            ->will($this->returnValueMap(array(
-                array(null, null, 10),
-                array('name', null, 'test'),
-            )));
+            ->will($this->returnValueMap([
+                [null, null, 10],
+                ['name', null, 'test'],
+            ]));
         $this->entityFactoryMock->expects($this->once())
             ->method('create')
             ->with('Magento\Framework\Object')

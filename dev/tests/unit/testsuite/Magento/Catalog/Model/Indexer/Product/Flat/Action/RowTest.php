@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
@@ -77,35 +58,35 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->connection = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
-        $this->resource = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false);
+        $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $this->resource->expects($this->any())->method('getConnection')
             ->with('default')
             ->will($this->returnValue($this->connection));
-        $this->storeManager = $this->getMock('Magento\Framework\StoreManagerInterface');
-        $this->store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->store->expects($this->any())->method('getId')->will($this->returnValue('store_id_1'));
-        $this->storeManager->expects($this->any())->method('getStores')->will($this->returnValue(array($this->store)));
+        $this->storeManager->expects($this->any())->method('getStores')->will($this->returnValue([$this->store]));
         $this->productIndexerHelper = $this->getMock(
-            'Magento\Catalog\Helper\Product\Flat\Indexer', array(), array(), '', false
+            'Magento\Catalog\Helper\Product\Flat\Indexer', [], [], '', false
         );
         $this->flatItemEraser = $this->getMock(
-            '\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser', array(), array(), '', false
+            '\Magento\Catalog\Model\Indexer\Product\Flat\Action\Eraser', [], [], '', false
         );
         $this->flatItemWriter = $this->getMock(
-            '\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer', array(), array(), '', false
+            '\Magento\Catalog\Model\Indexer\Product\Flat\Action\Indexer', [], [], '', false
         );
         $this->flatTableBuilder = $this->getMock(
-            '\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder', array(), array(), '', false
+            '\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder', [], [], '', false
         );
 
-        $this->model = $objectManager->getObject('Magento\Catalog\Model\Indexer\Product\Flat\Action\Row', array(
+        $this->model = $objectManager->getObject('Magento\Catalog\Model\Indexer\Product\Flat\Action\Row', [
             'resource' => $this->resource,
             'storeManager' => $this->storeManager,
             'productHelper' => $this->productIndexerHelper,
             'flatItemEraser' => $this->flatItemEraser,
             'flatItemWriter' => $this->flatItemWriter,
             'flatTableBuilder' => $this->flatTableBuilder
-        ));
+        ]);
     }
 
     /**
@@ -124,7 +105,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
             ->will($this->returnValue(false));
         $this->flatItemEraser->expects($this->never())->method('removeDeletedProducts');
-        $this->flatTableBuilder->expects($this->once())->method('build')->with('store_id_1', array('product_id_1'));
+        $this->flatTableBuilder->expects($this->once())->method('build')->with('store_id_1', ['product_id_1']);
         $this->flatItemWriter->expects($this->once())->method('write')->with('store_id_1', 'product_id_1');
         $this->model->execute('product_id_1');
     }
@@ -136,7 +117,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
             ->will($this->returnValue(true));
         $this->flatItemEraser->expects($this->once())->method('removeDeletedProducts');
-        $this->flatTableBuilder->expects($this->never())->method('build')->with('store_id_1', array('product_id_1'));
+        $this->flatTableBuilder->expects($this->never())->method('build')->with('store_id_1', ['product_id_1']);
         $this->model->execute('product_id_1');
     }
 }

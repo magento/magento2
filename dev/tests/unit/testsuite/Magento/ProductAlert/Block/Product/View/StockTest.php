@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\ProductAlert\Block\Product\View;
 
@@ -58,15 +39,15 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_helper = $this->getMock(
             'Magento\ProductAlert\Helper\Data',
-            array('isStockAlertAllowed', 'getSaveUrl'),
-            array(),
+            ['isStockAlertAllowed', 'getSaveUrl'],
+            [],
             '',
             false
         );
         $this->_product = $this->getMock(
             'Magento\Catalog\Model\Product',
-            array('isAvailable', 'getId', '__wakeup'),
-            array(),
+            ['isAvailable', 'getId', '__wakeup'],
+            [],
             '',
             false
         );
@@ -74,13 +55,13 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->_registry = $this->getMockBuilder(
             'Magento\Framework\Registry'
         )->disableOriginalConstructor()->setMethods(
-            array('registry')
+            ['registry']
         )->getMock();
         $this->_block = $objectManager->getObject(
             'Magento\ProductAlert\Block\Product\View\Stock',
-            array('helper' => $this->_helper, 'registry' => $this->_registry)
+            ['helper' => $this->_helper, 'registry' => $this->_registry]
         );
-        $this->_layout = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
+        $this->_layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
     }
 
     public function testSetTemplateStockUrlAllowed()
@@ -152,11 +133,11 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     public function setTemplateStockUrlNotAllowedDataProvider()
     {
-        return array(
-            'stock alert not allowed' => array(false, false),
-            'product is available (no alert)' => array(true, true),
-            'stock alert not allowed and product is available' => array(false, true)
-        );
+        return [
+            'stock alert not allowed' => [false, false],
+            'product is available (no alert)' => [true, true],
+            'stock alert not allowed and product is available' => [false, true]
+        ];
     }
 
     public function testSetTemplateNoProduct()

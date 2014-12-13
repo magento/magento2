@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Theme\Model;
 
@@ -85,12 +66,12 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject[]
      */
-    protected $_targetFiles = array();
+    protected $_targetFiles = [];
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject[]
      */
-    protected $_sourceFiles = array();
+    protected $_sourceFiles = [];
 
     protected $_dirWriteMock;
 
@@ -102,51 +83,51 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
     {
         $sourceFileOne = $this->getMock(
             'Magento\Core\Model\Theme\File',
-            array('__wakeup', 'delete'),
-            array(),
+            ['__wakeup', 'delete'],
+            [],
             '',
             false
         );
         $sourceFileOne->setData(
-            array(
+            [
                 'file_path' => 'fixture_file_path_one',
                 'file_type' => 'fixture_file_type_one',
                 'content' => 'fixture_content_one',
-                'sort_order' => 10
-            )
+                'sort_order' => 10,
+            ]
         );
         $sourceFileTwo = $this->getMock(
             'Magento\Core\Model\Theme\File',
-            array('__wakeup', 'delete'),
-            array(),
+            ['__wakeup', 'delete'],
+            [],
             '',
             false
         );
         $sourceFileTwo->setData(
-            array(
+            [
                 'file_path' => 'fixture_file_path_two',
                 'file_type' => 'fixture_file_type_two',
                 'content' => 'fixture_content_two',
-                'sort_order' => 20
-            )
+                'sort_order' => 20,
+            ]
         );
-        $this->_sourceFiles = array($sourceFileOne, $sourceFileTwo);
+        $this->_sourceFiles = [$sourceFileOne, $sourceFileTwo];
         $this->_sourceTheme = $this->getMock(
             'Magento\Core\Model\Theme',
-            array('__wakeup', 'getCustomization'),
-            array(),
+            ['__wakeup', 'getCustomization'],
+            [],
             '',
             false
         );
 
-        $this->_targetFiles = array(
-            $this->getMock('Magento\Core\Model\Theme\File', array('__wakeup', 'delete'), array(), '', false),
-            $this->getMock('Magento\Core\Model\Theme\File', array('__wakeup', 'delete'), array(), '', false)
-        );
+        $this->_targetFiles = [
+            $this->getMock('Magento\Core\Model\Theme\File', ['__wakeup', 'delete'], [], '', false),
+            $this->getMock('Magento\Core\Model\Theme\File', ['__wakeup', 'delete'], [], '', false),
+        ];
         $this->_targetTheme = $this->getMock(
             'Magento\Core\Model\Theme',
-            array('__wakeup', 'getCustomization'),
-            array(),
+            ['__wakeup', 'getCustomization'],
+            [],
             '',
             false
         );
@@ -154,25 +135,25 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->_customizationPath = $this->getMock(
             'Magento\Framework\View\Design\Theme\Customization\Path',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
 
         $this->_fileFactory = $this->getMock(
             'Magento\Framework\View\Design\Theme\FileFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
         $this->_filesystem =
-            $this->getMock('Magento\Framework\Filesystem', array('getDirectoryWrite'), array(), '', false);
+            $this->getMock('Magento\Framework\Filesystem', ['getDirectoryWrite'], [], '', false);
         $this->_dirWriteMock = $this->getMock(
             'Magento\Framework\Filesystem\Directory\Write',
-            array('isDirectory', 'search', 'copy', 'delete', 'read', 'copyFile', 'isExist'),
-            array(),
+            ['isDirectory', 'search', 'copy', 'delete', 'read', 'copyFile', 'isExist'],
+            [],
             '',
             false
         );
@@ -189,23 +170,23 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         /* Init \Magento\Core\Model\Resource\Layout\Collection model  */
         $this->_updateFactory = $this->getMock(
             'Magento\Core\Model\Layout\UpdateFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
         $this->_update = $this->getMock(
             'Magento\Core\Model\Layout\Update',
-            array('__wakeup', 'getCollection'),
-            array(),
+            ['__wakeup', 'getCollection'],
+            [],
             '',
             false
         );
         $this->_updateFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->_update));
         $this->_updateCollection = $this->getMock(
             'Magento\Core\Model\Resource\Layout\Collection',
-            array('addThemeFilter', 'delete', 'getIterator'),
-            array(),
+            ['addThemeFilter', 'delete', 'getIterator'],
+            [],
             '',
             false
         );
@@ -220,15 +201,15 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         /* Init Link an Link_Collection model */
         $this->_link = $this->getMock(
             'Magento\Core\Model\Layout\Link',
-            array('__wakeup', 'getCollection'),
-            array(),
+            ['__wakeup', 'getCollection'],
+            [],
             '',
             false
         );
         $this->_linkCollection = $this->getMock(
             'Magento\Core\Model\Resource\Layout\Link\Collection',
-            array('addThemeFilter', 'getIterator'),
-            array(),
+            ['addThemeFilter', 'getIterator'],
+            [],
             '',
             false
         );
@@ -236,8 +217,8 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
 
         $eventManager = $this->getMock(
             'Magento\Framework\Event\ManagerInterface',
-            array('dispatch'),
-            array(),
+            ['dispatch'],
+            [],
             '',
             false
         );
@@ -263,8 +244,8 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         $this->_linkCollection = null;
         $this->_updateCollection = null;
         $this->_updateFactory = null;
-        $this->_sourceFiles = array();
-        $this->_targetFiles = array();
+        $this->_sourceFiles = [];
+        $this->_targetFiles = [];
     }
 
     /**
@@ -274,12 +255,12 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
     {
         $customization = $this->getMock(
             'Magento\Framework\View\Design\Theme\Customization',
-            array('getFiles'),
-            array(),
+            ['getFiles'],
+            [],
             '',
             false
         );
-        $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue(array()));
+        $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue([]));
         $this->_sourceTheme->expects(
             $this->once()
         )->method(
@@ -300,20 +281,20 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
 
         $targetLinkOne = $this->getMock(
             'Magento\Core\Model\Layout\Link',
-            array('__wakeup', 'setId', 'setThemeId', 'save', 'setLayoutUpdateId'),
-            array(),
+            ['__wakeup', 'setId', 'setThemeId', 'save', 'setLayoutUpdateId'],
+            [],
             '',
             false
         );
-        $targetLinkOne->setData(array('id' => 1, 'layout_update_id' => 1));
+        $targetLinkOne->setData(['id' => 1, 'layout_update_id' => 1]);
         $targetLinkTwo = $this->getMock(
             'Magento\Core\Model\Layout\Link',
-            array('__wakeup', 'setId', 'setThemeId', 'save', 'setLayoutUpdateId'),
-            array(),
+            ['__wakeup', 'setId', 'setThemeId', 'save', 'setLayoutUpdateId'],
+            [],
             '',
             false
         );
-        $targetLinkTwo->setData(array('id' => 2, 'layout_update_id' => 2));
+        $targetLinkTwo->setData(['id' => 2, 'layout_update_id' => 2]);
 
         $targetLinkOne->expects($this->at(0))->method('setThemeId')->with(123);
         $targetLinkOne->expects($this->at(1))->method('setLayoutUpdateId')->with(1);
@@ -325,25 +306,25 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         $targetLinkTwo->expects($this->at(2))->method('setId')->with(null);
         $targetLinkTwo->expects($this->at(3))->method('save');
 
-        $linkReturnValues = $this->onConsecutiveCalls(new \ArrayIterator(array($targetLinkOne, $targetLinkTwo)));
+        $linkReturnValues = $this->onConsecutiveCalls(new \ArrayIterator([$targetLinkOne, $targetLinkTwo]));
         $this->_linkCollection->expects($this->any())->method('getIterator')->will($linkReturnValues);
 
         $targetUpdateOne = $this->getMock(
             'Magento\Core\Model\Layout\Update',
-            array('__wakeup', 'setId', 'load', 'save'),
-            array(),
+            ['__wakeup', 'setId', 'load', 'save'],
+            [],
             '',
             false
         );
-        $targetUpdateOne->setData(array('id' => 1));
+        $targetUpdateOne->setData(['id' => 1]);
         $targetUpdateTwo = $this->getMock(
             'Magento\Core\Model\Layout\Update',
-            array('__wakeup', 'setId', 'load', 'save'),
-            array(),
+            ['__wakeup', 'setId', 'load', 'save'],
+            [],
             '',
             false
         );
-        $targetUpdateTwo->setData(array('id' => 2));
+        $targetUpdateTwo->setData(['id' => 2]);
         $updateReturnValues = $this->onConsecutiveCalls($this->_update, $targetUpdateOne, $targetUpdateTwo);
         $this->_updateFactory->expects($this->any())->method('create')->will($updateReturnValues);
 
@@ -358,8 +339,8 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
     {
         $sourceCustom = $this->getMock(
             'Magento\Framework\View\Design\Theme\Customization',
-            array('getFiles'),
-            array(),
+            ['getFiles'],
+            [],
             '',
             false
         );
@@ -379,8 +360,8 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         );
         $targetCustom = $this->getMock(
             'Magento\Framework\View\Design\Theme\Customization',
-            array('getFiles'),
-            array(),
+            ['getFiles'],
+            [],
             '',
             false
         );
@@ -411,7 +392,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getIterator'
         )->will(
-            $this->returnValue(new \ArrayIterator(array()))
+            $this->returnValue(new \ArrayIterator([]))
         );
 
         foreach ($this->_targetFiles as $targetFile) {
@@ -420,15 +401,15 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
 
         $newFileOne = $this->getMock(
             'Magento\Core\Model\Theme\File',
-            array('__wakeup', 'setData', 'save'),
-            array(),
+            ['__wakeup', 'setData', 'save'],
+            [],
             '',
             false
         );
         $newFileTwo = $this->getMock(
             'Magento\Core\Model\Theme\File',
-            array('__wakeup', 'setData', 'save'),
-            array(),
+            ['__wakeup', 'setData', 'save'],
+            [],
             '',
             false
         );
@@ -437,13 +418,13 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setData'
         )->with(
-            array(
+            [
                 'theme_id' => 123,
                 'file_path' => 'fixture_file_path_one',
                 'file_type' => 'fixture_file_type_one',
                 'content' => 'fixture_content_one',
-                'sort_order' => 10
-            )
+                'sort_order' => 10,
+            ]
         );
         $newFileOne->expects($this->at(1))->method('save');
         $newFileTwo->expects(
@@ -451,13 +432,13 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setData'
         )->with(
-            array(
+            [
                 'theme_id' => 123,
                 'file_path' => 'fixture_file_path_two',
                 'file_type' => 'fixture_file_type_two',
                 'content' => 'fixture_content_two',
-                'sort_order' => 20
-            )
+                'sort_order' => 20,
+            ]
         );
         $newFileTwo->expects($this->at(1))->method('save');
         $this->_fileFactory->expects(
@@ -465,7 +446,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            array()
+            []
         )->will(
             $this->onConsecutiveCalls($newFileOne, $newFileTwo)
         );
@@ -480,12 +461,12 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
     {
         $customization = $this->getMock(
             'Magento\Framework\View\Design\Theme\Customization',
-            array('getFiles'),
-            array(),
+            ['getFiles'],
+            [],
             '',
             false
         );
-        $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue(array()));
+        $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue([]));
         $this->_sourceTheme->expects(
             $this->once()
         )->method(
@@ -513,7 +494,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getIterator'
         )->will(
-            $this->returnValue(new \ArrayIterator(array()))
+            $this->returnValue(new \ArrayIterator([]))
         );
 
         $this->_customizationPath->expects(
@@ -537,7 +518,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         )->method(
             'isDirectory'
         )->will(
-            $this->returnValueMap(array(array('source/path', true)))
+            $this->returnValueMap([['source/path', true]])
         );
 
         $this->_dirWriteMock->expects(
@@ -546,18 +527,18 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
             'read'
         )->will(
             $this->returnValueMap(
-                array(
-                    array('target/path', array()),
-                    array('source/path', array('source/path/file_one.jpg', 'source/path/file_two.png'))
-                )
+                [
+                    ['target/path', []],
+                    ['source/path', ['source/path/file_one.jpg', 'source/path/file_two.png']],
+                ]
             )
         );
 
-        $expectedCopyEvents = array(
-            array('source/path/file_one.jpg', 'target/path/file_one.jpg', null),
-            array('source/path/file_two.png', 'target/path/file_two.png', null)
-        );
-        $actualCopyEvents = array();
+        $expectedCopyEvents = [
+            ['source/path/file_one.jpg', 'target/path/file_one.jpg', null],
+            ['source/path/file_two.png', 'target/path/file_two.png', null],
+        ];
+        $actualCopyEvents = [];
         $recordCopyEvent = function () use (&$actualCopyEvents) {
             $actualCopyEvents[] = func_get_args();
         };

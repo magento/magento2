@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Eav\Model\Resource\Entity\Attribute;
 
@@ -56,10 +37,10 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function itemExists($object)
     {
         $adapter = $this->_getReadAdapter();
-        $bind = array(
+        $bind = [
             'attribute_set_id' => $object->getAttributeSetId(),
-            'attribute_group_name' => $object->getAttributeGroupName()
-        );
+            'attribute_group_name' => $object->getAttributeGroupName(),
+        ];
         $select = $adapter->select()->from(
             $this->getMainTable()
         )->where(
@@ -112,7 +93,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _getMaxSortOrder($object)
     {
         $adapter = $this->_getReadAdapter();
-        $bind = array(':attribute_set_id' => $object->getAttributeSetId());
+        $bind = [':attribute_set_id' => $object->getAttributeSetId()];
         $select = $adapter->select()->from(
             $this->getMainTable(),
             new \Zend_Db_Expr("MAX(sort_order)")
@@ -132,7 +113,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function updateDefaultGroup($attributeSetId)
     {
         $adapter = $this->_getWriteAdapter();
-        $bind = array(':attribute_set_id' => $attributeSetId);
+        $bind = [':attribute_set_id' => $attributeSetId];
         $select = $adapter->select()->from(
             $this->getMainTable(),
             $this->getIdFieldName()
@@ -147,8 +128,8 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $groupId = $adapter->fetchOne($select, $bind);
 
         if ($groupId) {
-            $data = array('default_id' => 1);
-            $where = array('attribute_group_id =?' => $groupId);
+            $data = ['default_id' => 1];
+            $where = ['attribute_group_id =?' => $groupId];
             $adapter->update($this->getMainTable(), $data, $where);
         }
 

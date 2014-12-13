@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Reports\Block\Adminhtml;
 
@@ -49,14 +30,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @var array
      */
-    protected $_filters = array();
+    protected $_filters = [];
 
     /**
      * Default filters values
      *
      * @var array
      */
-    protected $_defaultFilters = array('report_from' => '', 'report_to' => '', 'report_period' => 'day');
+    protected $_defaultFilters = ['report_from' => '', 'report_to' => '', 'report_period' => 'day'];
 
     /**
      * Sub-report rows count
@@ -70,7 +51,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @var array
      */
-    protected $_errors = array();
+    protected $_errors = [];
 
     /**
      * Block template file name
@@ -100,7 +81,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         }
 
         if (is_string($filter)) {
-            $data = array();
+            $data = [];
             $filter = base64_decode($filter);
             parse_str(urldecode($filter), $data);
 
@@ -155,7 +136,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
             $this->_eventManager->dispatch(
                 'adminhtml_widget_grid_filter_collection',
-                array('collection' => $this->getCollection(), 'filter_values' => $this->_filterValues)
+                ['collection' => $this->getCollection(), 'filter_values' => $this->_filterValues]
             );
         }
 
@@ -172,9 +153,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         /**
          * Getting and saving store ids for website & group
          */
-        $storeIds = array();
+        $storeIds = [];
         if ($this->getRequest()->getParam('store')) {
-            $storeIds = array($this->getParam('store'));
+            $storeIds = [$this->getParam('store')];
         } elseif ($this->getRequest()->getParam('website')) {
             $storeIds = $this->_storeManager->getWebsite($this->getRequest()->getParam('website'))->getStoreIds();
         } elseif ($this->getRequest()->getParam('group')) {
@@ -377,7 +358,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         $this->addChild(
             'refresh_button',
             'Magento\Backend\Block\Widget\Button',
-            array('label' => __('Refresh'), 'onclick' => "{$this->getJsObjectName()}.doFilter();", 'class' => 'task')
+            ['label' => __('Refresh'), 'onclick' => "{$this->getJsObjectName()}.doFilter();", 'class' => 'task']
         );
     }
 }

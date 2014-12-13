@@ -2,26 +2,7 @@
 /**
  * Magento\Customer\Model\Metadata\Form\File
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
@@ -30,8 +11,8 @@ use Magento\Customer\Model\Metadata\ElementFactory;
 class FileTest extends AbstractFormTestCase
 {
     const ENTITY_TYPE = 0;
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Core\Helper\Data */
-    protected $coreDataMock;
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Url\EncoderInterface */
+    protected $urlEncode;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Core\Model\File\Validator\NotProtectedExtension */
     protected $fileValidatorMock;
@@ -50,7 +31,7 @@ class FileTest extends AbstractFormTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->coreDataMock = $this->getMockBuilder('Magento\Core\Helper\Data')
+        $this->urlEncode = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')
             ->disableOriginalConstructor()->getMock();
         $this->fileValidatorMock = $this->getMockBuilder('Magento\Core\Model\File\Validator\NotProtectedExtension')
             ->disableOriginalConstructor()->getMock();
@@ -66,7 +47,7 @@ class FileTest extends AbstractFormTestCase
                     'setModuleName',
                     'getActionName',
                     'setActionName',
-                    'getCookie'
+                    'getCookie',
                 ]
             )
             ->getMock();
@@ -101,7 +82,7 @@ class FileTest extends AbstractFormTestCase
             $this->returnValue($attributeCode)
         );
         if (!empty($attributeCode)) {
-            $_FILES[$attributeCode] = array('attributeCodeValue');
+            $_FILES[$attributeCode] = ['attributeCodeValue'];
         }
         $this->assertEquals($expected, $fileForm->extractValue($this->requestMock));
         if (!empty($attributeCode)) {
@@ -111,13 +92,13 @@ class FileTest extends AbstractFormTestCase
 
     public function extractValueNoRequestScopeDataProvider()
     {
-        return array(
-            'ajax' => array(false, '', true),
-            'no_file' => array([]),
-            'delete' => array(array('delete' => true), '', false, true),
-            'file_delete' => array(array('attributeCodeValue', 'delete' => true), 'attributeCode', false, true),
-            'file_!delete' => array(array('attributeCodeValue'), 'attributeCode', false, false)
-        );
+        return [
+            'ajax' => [false, '', true],
+            'no_file' => [[]],
+            'delete' => [['delete' => true], '', false, true],
+            'file_delete' => [['attributeCodeValue', 'delete' => true], 'attributeCode', false, true],
+            'file_!delete' => [['attributeCodeValue'], 'attributeCode', false, false]
+        ];
     }
 
     /**
@@ -136,14 +117,14 @@ class FileTest extends AbstractFormTestCase
         )->method(
             'getParam'
         )->will(
-            $this->returnValue(array('delete' => true))
+            $this->returnValue(['delete' => true])
         );
         $this->requestMock->expects(
             $this->any()
         )->method(
             'getParams'
         )->will(
-            $this->returnValue(array('delete' => true))
+            $this->returnValue(['delete' => true])
         );
 
         $this->attributeMetadataMock->expects(
@@ -167,19 +148,19 @@ class FileTest extends AbstractFormTestCase
 
     public function extractValueWithRequestScopeDataProvider()
     {
-        return array(
-            'requestScope' => array([], 'requestScope'),
-            'mainScope' => array(
-                array('fileKey' => 'attributeValue'),
+        return [
+            'requestScope' => [[], 'requestScope'],
+            'mainScope' => [
+                ['fileKey' => 'attributeValue'],
                 'mainScope',
-                array('fileKey' => array('attributeCode' => 'attributeValue'))
-            ),
-            'mainScope/scopeName' => array(
-                array('fileKey' => 'attributeValue'),
+                ['fileKey' => ['attributeCode' => 'attributeValue']],
+            ],
+            'mainScope/scopeName' => [
+                ['fileKey' => 'attributeValue'],
                 'mainScope/scopeName',
-                array('fileKey' => array('scopeName' => array('attributeCode' => 'attributeValue')))
-            )
-        );
+                ['fileKey' => ['scopeName' => ['attributeCode' => 'attributeValue']]],
+            ]
+        ];
     }
 
     /**
@@ -212,12 +193,12 @@ class FileTest extends AbstractFormTestCase
 
     public function validateValueNotToUploadDataProvider()
     {
-        return array(
-            'emptyValue' => array(true, [], true),
-            'someValue' => array(true, array('some value')),
-            'delete_someValue' => array(true, array('delete' => true, 'some value'), false, false),
-            'null' => array(array('"attributeLabel" is a required value.'), null)
-        );
+        return [
+            'emptyValue' => [true, [], true],
+            'someValue' => [true, ['some value']],
+            'delete_someValue' => [true, ['delete' => true, 'some value'], false, false],
+            'null' => [['"attributeLabel" is a required value.'], null]
+        ];
     }
 
     /**
@@ -228,7 +209,7 @@ class FileTest extends AbstractFormTestCase
      */
     public function testValidateValueToUpload($expected, $value, $parameters = [])
     {
-        $parameters = array_merge(array('uploaded' => true, 'valid' => true), $parameters);
+        $parameters = array_merge(['uploaded' => true, 'valid' => true], $parameters);
         $fileForm = $this->getClass($value, false);
         $fileForm->expects($this->any())->method('_isUploadedFile')->will($this->returnValue($parameters['uploaded']));
         $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue(false));
@@ -245,7 +226,7 @@ class FileTest extends AbstractFormTestCase
         )->method(
             'getMessages'
         )->will(
-            $this->returnValue(array('Validation error message.'))
+            $this->returnValue(['Validation error message.'])
         );
         $this->fileValidatorMock->expects(
             $this->any()
@@ -259,19 +240,19 @@ class FileTest extends AbstractFormTestCase
 
     public function validateValueToUploadDataProvider()
     {
-        return array(
-            'notValid' => array(
-                array('Validation error message.'),
-                array('tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin'),
-                array('valid' => false)
-            ),
-            'notUploaded' => array(
-                array('"realFileName.bin" is not a valid file.'),
-                array('tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin'),
-                array('uploaded' => false)
-            ),
-            'isValid' => array(true, array('tmp_name' => 'tempName_0001.txt', 'name' => 'realFileName.txt'))
-        );
+        return [
+            'notValid' => [
+                ['Validation error message.'],
+                ['tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin'],
+                ['valid' => false],
+            ],
+            'notUploaded' => [
+                ['"realFileName.bin" is not a valid file.'],
+                ['tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin'],
+                ['uploaded' => false],
+            ],
+            'isValid' => [true, ['tmp_name' => 'tempName_0001.txt', 'name' => 'realFileName.txt']]
+        ];
     }
 
     public function testCompactValueIsAjax()
@@ -359,13 +340,13 @@ class FileTest extends AbstractFormTestCase
 
     public function outputValueDataProvider()
     {
-        return array(
-            ElementFactory::OUTPUT_FORMAT_TEXT => array(ElementFactory::OUTPUT_FORMAT_TEXT),
-            ElementFactory::OUTPUT_FORMAT_ARRAY => array(ElementFactory::OUTPUT_FORMAT_ARRAY),
-            ElementFactory::OUTPUT_FORMAT_HTML => array(ElementFactory::OUTPUT_FORMAT_HTML),
-            ElementFactory::OUTPUT_FORMAT_ONELINE => array(ElementFactory::OUTPUT_FORMAT_ONELINE),
-            ElementFactory::OUTPUT_FORMAT_PDF => array(ElementFactory::OUTPUT_FORMAT_PDF)
-        );
+        return [
+            ElementFactory::OUTPUT_FORMAT_TEXT => [ElementFactory::OUTPUT_FORMAT_TEXT],
+            ElementFactory::OUTPUT_FORMAT_ARRAY => [ElementFactory::OUTPUT_FORMAT_ARRAY],
+            ElementFactory::OUTPUT_FORMAT_HTML => [ElementFactory::OUTPUT_FORMAT_HTML],
+            ElementFactory::OUTPUT_FORMAT_ONELINE => [ElementFactory::OUTPUT_FORMAT_ONELINE],
+            ElementFactory::OUTPUT_FORMAT_PDF => [ElementFactory::OUTPUT_FORMAT_PDF]
+        ];
     }
 
     public function testOutputValueJson()
@@ -373,16 +354,16 @@ class FileTest extends AbstractFormTestCase
         $value = 'value';
         $urlKey = 'url_key';
         $fileForm = $this->getClass($value, false);
-        $this->coreDataMock->expects(
+        $this->urlEncode->expects(
             $this->once()
         )->method(
-            'urlEncode'
+            'encode'
         )->with(
             $this->equalTo($value)
         )->will(
             $this->returnValue($urlKey)
         );
-        $expected = array('value' => $value, 'url_key' => $urlKey);
+        $expected = ['value' => $value, 'url_key' => $urlKey];
         $this->assertSame($expected, $fileForm->outputValue(ElementFactory::OUTPUT_FORMAT_JSON));
     }
 
@@ -397,8 +378,8 @@ class FileTest extends AbstractFormTestCase
     {
         $fileForm = $this->getMock(
             'Magento\Customer\Model\Metadata\Form\File',
-            array('_isUploadedFile'),
-            array(
+            ['_isUploadedFile'],
+            [
                 $this->localeMock,
                 $this->loggerMock,
                 $this->attributeMetadataMock,
@@ -406,11 +387,11 @@ class FileTest extends AbstractFormTestCase
                 $value,
                 self::ENTITY_TYPE,
                 $isAjax,
-                $this->coreDataMock,
+                $this->urlEncode,
                 $this->fileValidatorMock,
                 $this->fileSystemMock,
                 $this->uploaderFactoryMock
-            )
+            ]
         );
         return $fileForm;
     }

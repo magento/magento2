@@ -1,14 +1,14 @@
 <?php
 /**
- * An associative data structure, that features "nested set" parent-child relations
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Exception;
 
+/**
+ * An associative data structure, that features "nested set" parent-child relations
+ */
 class Structure
 {
     /**
@@ -23,7 +23,7 @@ class Structure
     /**
      * @var array
      */
-    protected $_elements = array();
+    protected $_elements = [];
 
     /**
      * Set elements in constructor
@@ -134,7 +134,7 @@ class Structure
         if (isset($this->_elements[$elementId])) {
             throw new Exception("Element with ID '{$elementId}' already exists.");
         }
-        $this->_elements[$elementId] = array();
+        $this->_elements[$elementId] = [];
         foreach ($data as $key => $value) {
             $this->setAttribute($elementId, $key, $value);
         }
@@ -433,7 +433,7 @@ class Structure
     {
         return isset(
             $this->_elements[$parentId][self::CHILDREN]
-        ) ? $this->_elements[$parentId][self::CHILDREN] : array();
+        ) ? $this->_elements[$parentId][self::CHILDREN] : [];
     }
 
     /**
@@ -493,7 +493,7 @@ class Structure
      */
     public function getGroupChildNames($parentId, $groupName)
     {
-        $result = array();
+        $result = [];
         if (isset($this->_elements[$parentId][self::GROUPS][$groupName])) {
             foreach ($this->_elements[$parentId][self::GROUPS][$groupName] as $childId) {
                 if (isset($this->_elements[$parentId][self::CHILDREN][$childId])) {
@@ -585,7 +585,7 @@ class Structure
         }
         $this->_elements[$targetParentId][self::CHILDREN] = array_merge(
             array_slice($children, 0, $offset),
-            array($elementId => $alias),
+            [$elementId => $alias],
             array_slice($children, $offset)
         );
         $this->_elements[$elementId][self::PARENT] = $targetParentId;

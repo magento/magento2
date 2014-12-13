@@ -1,3 +1,4 @@
+# @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 # Generator running options, in case "generate_specified_modules" is set to "yes" then specified file is used
 generate_specified_modules: no
 specified_modules: dev\tests\functional\utils\config\ee_modules.yml.dist

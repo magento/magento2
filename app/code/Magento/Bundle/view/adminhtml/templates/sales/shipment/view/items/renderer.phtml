@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Academic Free License (AFL 3.0)
- * that is bundled with this package in the file LICENSE_AFL.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/afl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 ?>
 <?php
@@ -29,14 +10,14 @@
 ?>
 
 <?php $_item = $this->getItem() ?>
-<?php $items = array_merge(array($_item->getOrderItem()), $_item->getOrderItem()->getChildrenItems()) ?>
+<?php $items = array_merge([$_item->getOrderItem()], $_item->getOrderItem()->getChildrenItems()) ?>
 <?php $shipItems = $this->getChilds($_item) ?>
-<?php $_count = count ($items) ?>
+<?php $_count = count($items) ?>
 <?php $_index = 0 ?>
 
 <?php $_prevOptionId = '' ?>
 
-<?php if($this->getOrderOptions() || $_item->getDescription()): ?>
+<?php if ($this->getOrderOptions() || $_item->getDescription()): ?>
     <?php $_showlastRow = true ?>
 <?php else: ?>
     <?php $_showlastRow = false ?>
@@ -54,7 +35,7 @@
         <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr<?php echo (++$_index==$_count && !$_showlastRow)?' class="border"':'' ?>>
+    <tr<?php echo(++$_index == $_count && !$_showlastRow) ? ' class="border"' : '' ?>>
         <?php if (!$_item->getParentItem()): ?>
         <td class="col-product">
             <div class="product-title"><?php echo $this->escapeHtml($_item->getName()) ?></div>
@@ -81,7 +62,7 @@
         </td>
     </tr>
 <?php endforeach; ?>
-<?php if($_showlastRow): ?>
+<?php if ($_showlastRow): ?>
     <tr class="border">
         <td class="col-product">
             <?php if ($this->getOrderOptions($_item->getOrderItem())): ?>
@@ -101,7 +82,7 @@ require(['prototype'], function(){
                             $('<?php echo $_id ?>').hide();
                             $('<?php echo $_id ?>').up().observe('mouseover', function(){$('<?php echo $_id ?>').show();});
                             $('<?php echo $_id ?>').up().observe('mouseout',  function(){$('<?php echo $_id ?>').hide();});
-                            
+
 });
 </script>
                         <?php endif;?>

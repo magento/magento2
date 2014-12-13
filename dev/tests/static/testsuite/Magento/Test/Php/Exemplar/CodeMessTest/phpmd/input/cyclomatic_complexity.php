@@ -11,16 +11,16 @@ abstract class Foo
         if ($one == $two) { // 1
             if ($three == $four) { // 2
                 $this->stub();
-            } else if ($five == $six) { // 3
+            } elseif ($five == $six) { // 3
                 $this->stub();
-            }  else {
+            } else {
                 $this->stub();
             }
-        } else if ($seven == $eight) { // 4
+        } elseif ($seven == $eight) { // 4
             while ($seven == $eight) { // 5
                 $this->stub();
             }
-        } else if ($nine == $ten) { // 6
+        } elseif ($nine == $ten) { // 6
             for ($n = 0; $n < $eleven; $n++) { // 7
                 $this->stub();
             }

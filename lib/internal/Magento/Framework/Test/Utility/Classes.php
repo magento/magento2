@@ -2,26 +2,7 @@
 /**
  * A helper for handling Magento-specific class names in various use cases
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Test\Utility;
 
@@ -32,7 +13,7 @@ class Classes
      *
      * @var array
      */
-    protected static $_virtualClasses = array();
+    protected static $_virtualClasses = [];
 
     /**
      * Find all unique matches in specified content using specified PCRE
@@ -42,7 +23,7 @@ class Classes
      * @param array &$result
      * @return array
      */
-    public static function getAllMatches($contents, $regex, &$result = array())
+    public static function getAllMatches($contents, $regex, &$result = [])
     {
         preg_match_all($regex, $contents, $matches);
 
@@ -70,8 +51,8 @@ class Classes
      */
     public static function getXmlNodeValues(\SimpleXMLElement $xml, $xPath)
     {
-        $result = array();
-        $nodes = $xml->xpath($xPath) ?: array();
+        $result = [];
+        $nodes = $xml->xpath($xPath) ?: [];
         foreach ($nodes as $node) {
             $result[] = (string)$node;
         }
@@ -87,8 +68,8 @@ class Classes
      */
     public static function getXmlNodeNames(\SimpleXMLElement $xml, $xpath)
     {
-        $result = array();
-        $nodes = $xml->xpath($xpath) ?: array();
+        $result = [];
+        $nodes = $xml->xpath($xpath) ?: [];
         foreach ($nodes as $node) {
             $result[] = $node->getName();
         }
@@ -105,8 +86,8 @@ class Classes
      */
     public static function getXmlAttributeValues(\SimpleXMLElement $xml, $xPath, $attributeName)
     {
-        $result = array();
-        $nodes = $xml->xpath($xPath) ?: array();
+        $result = [];
+        $nodes = $xml->xpath($xPath) ?: [];
         foreach ($nodes as $node) {
             $node = (array)$node;
             if (isset($node['@attributes'][$attributeName])) {
@@ -154,7 +135,7 @@ class Classes
             )
         );
 
-        $classes = array_map(array('Magento\Framework\Test\Utility\Classes', 'getCallbackClass'), $classes);
+        $classes = array_map(['Magento\Framework\Test\Utility\Classes', 'getCallbackClass'], $classes);
         $classes = array_map('trim', $classes);
         $classes = array_unique($classes);
         $classes = array_filter(
@@ -206,7 +187,7 @@ class Classes
             \Magento\Framework\Test\Utility\Files::init()->getPathToSource(),
             '/'
         ) . '\/app\/code\/([A-Za-z]+)\/([A-Za-z]+)\/(' . $subTypePattern . '\/.+)\.php$/';
-        $result = array();
+        $result = [];
         foreach (\Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, false, false) as $file) {
             if (preg_match($pattern, $file, $matches)) {
                 $module = "{$matches[1]}_{$matches[2]}";
@@ -306,7 +287,7 @@ class Classes
      * @param array &$classes
      * @return array
      */
-    public static function collectPhpCodeClasses($contents, &$classes = array())
+    public static function collectPhpCodeClasses($contents, &$classes = [])
     {
         self::getAllMatches(
             $contents,
@@ -343,7 +324,7 @@ class Classes
         // check ->_init | parent::_init
         $skipForInit = implode(
             '|',
-            array(
+            [
                 'id',
                 '[\w\d_]+_id',
                 'pk',
@@ -353,7 +334,7 @@ class Classes
                 'entity_pk_value',
                 'currency_code',
                 'unique_key'
-            )
+            ]
         );
         self::getAllMatches(
             $contents,

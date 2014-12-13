@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Block\Reorder;
 
@@ -85,7 +66,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_orderConfig = $orderConfig;
@@ -120,7 +101,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
 
         $orders = $this->_orderCollectionFactory->create()
             ->addAttributeToFilter('customer_id', $customerId)
-            ->addAttributeToFilter('status', array('in' => $this->_orderConfig->getVisibleOnFrontStatuses()))
+            ->addAttributeToFilter('status', ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()])
             ->addAttributeToSort('created_at', 'desc')
             ->setPage(1, 1);
         //TODO: add filter by current website
@@ -134,7 +115,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
      */
     public function getItems()
     {
-        $items = array();
+        $items = [];
         $order = $this->getLastOrder();
         $limit = self::SIDEBAR_ORDER_LIMIT;
 
@@ -177,7 +158,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
      */
     public function getFormActionUrl()
     {
-        return $this->getUrl('checkout/cart/addgroup', array('_secure' => true));
+        return $this->getUrl('checkout/cart/addgroup', ['_secure' => true]);
     }
 
     /**
@@ -213,7 +194,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
      */
     public function getIdentities()
     {
-        $identities = array();
+        $identities = [];
         foreach ($this->getItems() as $item) {
             $identities = array_merge($identities, $item->getProduct()->getIdentities());
         }

@@ -2,26 +2,7 @@
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\AbstractOutput
  *
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Framework\Profiler\Driver\Standard;
 
@@ -70,11 +51,11 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructor()
     {
-        $configuration = array('filterPattern' => '/filter pattern/', 'thresholds' => array('fetchKey' => 100));
+        $configuration = ['filterPattern' => '/filter pattern/', 'thresholds' => ['fetchKey' => 100]];
         /** @var $output \Magento\Framework\Profiler\Driver\Standard\AbstractOutput  */
         $output = $this->getMockForAbstractClass(
             'Magento\Framework\Profiler\Driver\Standard\AbstractOutput',
-            array($configuration)
+            [$configuration]
         );
         $this->assertEquals('/filter pattern/', $output->getFilterPattern());
         $thresholds = $output->getThresholds();
@@ -102,13 +83,13 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function renderColumnValueDataProvider()
     {
-        return array(
-            array('someTimerId', \Magento\Framework\Profiler\Driver\Standard\Stat::ID, 'someTimerId'),
-            array(10000.123, \Magento\Framework\Profiler\Driver\Standard\Stat::TIME, '10,000.123000'),
-            array(200000.123456789, \Magento\Framework\Profiler\Driver\Standard\Stat::AVG, '200,000.123457'),
-            array(1000000000.12345678, \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC, '1,000,000,000'),
-            array(2000000000.12345678, \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM, '2,000,000,000')
-        );
+        return [
+            ['someTimerId', \Magento\Framework\Profiler\Driver\Standard\Stat::ID, 'someTimerId'],
+            [10000.123, \Magento\Framework\Profiler\Driver\Standard\Stat::TIME, '10,000.123000'],
+            [200000.123456789, \Magento\Framework\Profiler\Driver\Standard\Stat::AVG, '200,000.123457'],
+            [1000000000.12345678, \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC, '1,000,000,000'],
+            [2000000000.12345678, \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM, '2,000,000,000']
+        ];
     }
 
     /**
@@ -132,7 +113,7 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_output->setFilterPattern('/filter pattern/');
 
         $mockStat = $this->getMock('Magento\Framework\Profiler\Driver\Standard\Stat');
-        $expectedTimerIds = array('test');
+        $expectedTimerIds = ['test'];
         $mockStat->expects(
             $this->once()
         )->method(

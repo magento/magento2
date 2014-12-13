@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Order\Pdf;
 
@@ -37,20 +18,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_dataStorage = $this->getMock('Magento\Framework\Config\Data', array(), array(), '', false);
+        $this->_dataStorage = $this->getMock('Magento\Framework\Config\Data', [], [], '', false);
         $this->_model = new \Magento\Sales\Model\Order\Pdf\Config($this->_dataStorage);
     }
 
     public function testGetRenderersPerProduct()
     {
-        $configuration = array('product_type_one' => 'Renderer_One', 'product_type_two' => 'Renderer_Two');
+        $configuration = ['product_type_one' => 'Renderer_One', 'product_type_two' => 'Renderer_Two'];
         $this->_dataStorage->expects(
             $this->once()
         )->method(
             'get'
         )->with(
             "renderers/page_type",
-            array()
+            []
         )->will(
             $this->returnValue($configuration)
         );
@@ -60,7 +41,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTotals()
     {
-        $configuration = array('total1' => array('title' => 'Title1'), 'total2' => array('title' => 'Title2'));
+        $configuration = ['total1' => ['title' => 'Title1'], 'total2' => ['title' => 'Title2']];
 
         $this->_dataStorage->expects(
             $this->once()
@@ -68,7 +49,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'get'
         )->with(
             'totals',
-            array()
+            []
         )->will(
             $this->returnValue($configuration)
         );

@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Newsletter\Model;
 
@@ -48,8 +29,8 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
         $builder = $this->getMock(
             '\Magento\Newsletter\Model\Queue\TransportBuilder',
-            array('getTransport', 'setFrom', 'addTo'),
-            array(),
+            ['getTransport', 'setFrom', 'addTo'],
+            [],
             '',
             false
         );
@@ -60,7 +41,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         /** @var $queue \Magento\Newsletter\Model\Queue */
         $queue = $objectManager->create(
             'Magento\Newsletter\Model\Queue',
-            array('filter' => $filter, 'transportBuilder' => $builder)
+            ['filter' => $filter, 'transportBuilder' => $builder]
         );
         $queue->load('Subject', 'newsletter_subject');
         // fixture
@@ -91,8 +72,8 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
         $builder = $this->getMock(
             '\Magento\Newsletter\Model\Queue\TransportBuilder',
-            array('getTransport', 'setFrom', 'addTo'),
-            array(),
+            ['getTransport', 'setFrom', 'addTo'],
+            [],
             '',
             false
         );
@@ -101,14 +82,13 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $builder->expects($this->any())->method('addTo')->will($this->returnSelf());
 
         /** @var $queue \Magento\Newsletter\Model\Queue */
-        $queue = $objectManager->create('Magento\Newsletter\Model\Queue', array('transportBuilder' => $builder));
+        $queue = $objectManager->create('Magento\Newsletter\Model\Queue', ['transportBuilder' => $builder]);
         $queue->load('Subject', 'newsletter_subject');
         // fixture
 
         $problem = $objectManager->create('Magento\Newsletter\Model\Problem');
         $problem->load($queue->getId(), 'queue_id');
         $this->assertEmpty($problem->getId());
-
 
         $queue->sendPerSubscriber();
 

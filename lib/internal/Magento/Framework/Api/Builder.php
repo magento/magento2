@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Framework\Api;
@@ -188,7 +169,7 @@ class Builder implements BuilderInterface
      */
     public function populateWithArray(array $data)
     {
-        $this->data = array();
+        $this->data = [];
         $this->_setDataValues($data);
         return $this;
     }
@@ -270,7 +251,7 @@ class Builder implements BuilderInterface
         $dataType = $this->_getDataObjectType();
         if (is_subclass_of($dataType, '\Magento\Framework\Api\AbstractSimpleObject')) {
             return self::TYPE_DATA_OBJECT;
-        } else if (is_subclass_of($dataType, '\Magento\Framework\Model\AbstractExtensibleModel')) {
+        } elseif (is_subclass_of($dataType, '\Magento\Framework\Model\AbstractExtensibleModel')) {
             return self::TYPE_DATA_MODEL;
         }
 
@@ -283,7 +264,7 @@ class Builder implements BuilderInterface
 
         if (is_subclass_of($sourceClassPreference, '\Magento\Framework\Api\AbstractSimpleObject')) {
             return self::TYPE_DATA_OBJECT;
-        } else if (is_subclass_of($sourceClassPreference, '\Magento\Framework\Model\AbstractExtensibleModel')) {
+        } elseif (is_subclass_of($sourceClassPreference, '\Magento\Framework\Model\AbstractExtensibleModel')) {
             return self::TYPE_DATA_MODEL;
         } else {
             throw new \LogicException(
@@ -328,10 +309,10 @@ class Builder implements BuilderInterface
         foreach ($data as $key => $value) {
             /* First, verify is there any getter for the key on the Service Data Object */
             $camelCaseKey = \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
-            $possibleMethods = array(
+            $possibleMethods = [
                 'get' . $camelCaseKey,
-                'is' . $camelCaseKey
-            );
+                'is' . $camelCaseKey,
+            ];
             if ($key === ExtensibleDataInterface::CUSTOM_ATTRIBUTES
                 && is_array($data[$key])
                 && !empty($data[$key])

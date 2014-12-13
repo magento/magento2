@@ -1,5 +1,5 @@
 # User
 
-**User** provides the ability to manage administrators and other non-customer users. Different roles can be assigned to
-each user to limit what permissions each user has. User passwords can be reset and access tokens can be invalidated
-using this module.
+**User** enables admin users to manage and assign roles to administrators and other non-customer users,
+reset user passwords, and invalidate access tokens.
+Different roles can be assigned to different users to define their permissions.

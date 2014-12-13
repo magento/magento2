@@ -1,32 +1,13 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
-use Magento\Sales\Api\Data\InvoiceInterface;
-use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * @method \Magento\Sales\Model\Order\Invoice setStoreId(int $value)
@@ -487,7 +468,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         $order->setBaseDiscountInvoiced($order->getBaseDiscountInvoiced() - $this->getBaseDiscountAmount());
         $order->setBaseTotalInvoicedCost($order->getBaseTotalInvoicedCost() - $this->getBaseCost());
 
-
         if ($this->getState() == self::STATE_PAID) {
             $this->getOrder()->setTotalPaid($this->getOrder()->getTotalPaid() - $this->getGrandTotal());
             $this->getOrder()->setBaseTotalPaid($this->getOrder()->getBaseTotalPaid() - $this->getBaseGrandTotal());
@@ -602,7 +582,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
             self::$_states = [
                 self::STATE_OPEN => __('Pending'),
                 self::STATE_PAID => __('Paid'),
-                self::STATE_CANCELED => __('Canceled')
+                self::STATE_CANCELED => __('Canceled'),
             ];
         }
         return self::$_states;
@@ -683,7 +663,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 
         $order->setShippingTaxInvoiced($order->getShippingTaxInvoiced() + $this->getShippingTaxAmount());
         $order->setBaseShippingTaxInvoiced($order->getBaseShippingTaxInvoiced() + $this->getBaseShippingTaxAmount());
-
 
         $order->setShippingInvoiced($order->getShippingInvoiced() + $this->getShippingAmount());
         $order->setBaseShippingInvoiced($order->getBaseShippingInvoiced() + $this->getBaseShippingAmount());
@@ -1034,7 +1013,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getEmailSent()
     {
-         return $this->getData(InvoiceInterface::EMAIL_SENT);
+        return $this->getData(InvoiceInterface::EMAIL_SENT);
     }
 
     /**
@@ -1044,7 +1023,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getGlobalCurrencyCode()
     {
-         return $this->getData(InvoiceInterface::GLOBAL_CURRENCY_CODE);
+        return $this->getData(InvoiceInterface::GLOBAL_CURRENCY_CODE);
     }
 
     /**
@@ -1054,7 +1033,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getGrandTotal()
     {
-         return $this->getData(InvoiceInterface::GRAND_TOTAL);
+        return $this->getData(InvoiceInterface::GRAND_TOTAL);
     }
 
     /**
@@ -1064,7 +1043,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getHiddenTaxAmount()
     {
-         return $this->getData(InvoiceInterface::HIDDEN_TAX_AMOUNT);
+        return $this->getData(InvoiceInterface::HIDDEN_TAX_AMOUNT);
     }
 
     /**
@@ -1074,7 +1053,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getIsUsedForRefund()
     {
-         return $this->getData(InvoiceInterface::IS_USED_FOR_REFUND);
+        return $this->getData(InvoiceInterface::IS_USED_FOR_REFUND);
     }
 
     /**
@@ -1084,7 +1063,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getOrderCurrencyCode()
     {
-         return $this->getData(InvoiceInterface::ORDER_CURRENCY_CODE);
+        return $this->getData(InvoiceInterface::ORDER_CURRENCY_CODE);
     }
 
     /**
@@ -1094,7 +1073,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getOrderId()
     {
-         return $this->getData(InvoiceInterface::ORDER_ID);
+        return $this->getData(InvoiceInterface::ORDER_ID);
     }
 
     /**
@@ -1104,7 +1083,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getShippingAddressId()
     {
-         return $this->getData(InvoiceInterface::SHIPPING_ADDRESS_ID);
+        return $this->getData(InvoiceInterface::SHIPPING_ADDRESS_ID);
     }
 
     /**

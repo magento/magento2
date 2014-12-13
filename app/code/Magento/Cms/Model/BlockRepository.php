@@ -1,29 +1,9 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Cms\Model;
 
-use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -32,7 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Class BlockRepository
  * @api
  */
-class BlockRepository implements BlockRepositoryInterface
+class BlockRepository
 {
     /**
      * @var \Magento\Cms\Model\Resource\Block
@@ -40,12 +20,12 @@ class BlockRepository implements BlockRepositoryInterface
     protected $resource;
 
     /**
-     * @var \Magento\Cms\Api\Data\BlockInterfaceFactory
+     * @var \Magento\Cms\Model\BlockFactory
      */
     protected $blockFactory;
 
     /**
-     * @var \Magento\Cms\Api\Data\BlockCollectionInterfaceFactory
+     * @var \Magento\Cms\Model\Resource\Block\CollectionFactory
      */
     protected $blockCollectionFactory;
 
@@ -60,16 +40,16 @@ class BlockRepository implements BlockRepositoryInterface
     protected $mapperFactory;
 
     /**
-     * @param Resource\Block $resource
-     * @param \Magento\Cms\Api\Data\BlockInterfaceFactory $blockFactory
-     * @param \Magento\Cms\Api\Data\BlockCollectionInterfaceFactory $blockCollectionFactory
+     * @param \Magento\Cms\Model\Resource\Block $resource
+     * @param \Magento\Cms\Model\BlockFactory $blockFactory
+     * @param \Magento\Cms\Model\Resource\Block\CollectionFactory $blockCollectionFactory
      * @param \Magento\Framework\DB\QueryBuilderFactory $queryBuilderFactory
      * @param \Magento\Framework\DB\MapperFactory $mapperFactory
      */
     public function __construct(
         \Magento\Cms\Model\Resource\Block $resource,
-        \Magento\Cms\Api\Data\BlockInterfaceFactory $blockFactory,
-        \Magento\Cms\Api\Data\BlockCollectionInterfaceFactory $blockCollectionFactory,
+        \Magento\Cms\Model\BlockFactory $blockFactory,
+        \Magento\Cms\Model\Resource\Block\CollectionFactory $blockCollectionFactory,
         \Magento\Framework\DB\QueryBuilderFactory $queryBuilderFactory,
         \Magento\Framework\DB\MapperFactory $mapperFactory
     ) {
@@ -83,11 +63,11 @@ class BlockRepository implements BlockRepositoryInterface
     /**
      * Save Block data
      *
-     * @param \Magento\Cms\Api\Data\BlockInterface $block
-     * @return \Magento\Cms\Api\Data\BlockInterface
+     * @param \Magento\Cms\Model\Block $block
+     * @return \Magento\Cms\Model\Block
      * @throws CouldNotSaveException
      */
-    public function save(\Magento\Cms\Api\Data\BlockInterface $block)
+    public function save(\Magento\Cms\Model\Block $block)
     {
         try {
             $this->resource->save($block);
@@ -101,7 +81,7 @@ class BlockRepository implements BlockRepositoryInterface
      * Load Block data by given Block Identity
      *
      * @param string $blockId
-     * @return \Magento\Cms\Api\Data\BlockInterface
+     * @return \Magento\Cms\Model\Block
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($blockId)
@@ -117,10 +97,10 @@ class BlockRepository implements BlockRepositoryInterface
     /**
      * Load Block data collection by given search criteria
      *
-     * @param \Magento\Cms\Api\BlockCriteriaInterface $criteria
-     * @return \Magento\Cms\Api\Data\BlockCollectionInterface
+     * @param \Magento\Cms\Model\BlockCriteriaInterface $criteria
+     * @return \Magento\Cms\Model\Resource\Block\Collection
      */
-    public function getList(\Magento\Cms\Api\BlockCriteriaInterface $criteria)
+    public function getList(\Magento\Cms\Model\BlockCriteriaInterface $criteria)
     {
         $queryBuilder = $this->queryBuilderFactory->create();
         $queryBuilder->setCriteria($criteria);
@@ -133,11 +113,11 @@ class BlockRepository implements BlockRepositoryInterface
     /**
      * Delete Block
      *
-     * @param \Magento\Cms\Api\Data\BlockInterface $block
+     * @param \Magento\Cms\Model\Block $block
      * @return bool
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function delete(\Magento\Cms\Api\Data\BlockInterface $block)
+    public function delete(\Magento\Cms\Model\Block $block)
     {
         try {
             $this->resource->delete($block);

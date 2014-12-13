@@ -1,25 +1,6 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 /**
@@ -66,7 +47,12 @@ class Widget
     /**
      * @var array
      */
-    protected $_widgetsArray = array();
+    protected $_widgetsArray = [];
+
+    /**
+     * @var \Magento\Widget\Helper\Conditions
+     */
+    protected $conditionsHelper;
 
     /**
      * @param \Magento\Framework\Escaper $escaper
@@ -74,19 +60,22 @@ class Widget
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\Asset\Source $assetSource
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
+     * @param \Magento\Widget\Helper\Conditions $conditionsHelper
      */
     public function __construct(
         \Magento\Framework\Escaper $escaper,
         \Magento\Widget\Model\Config\Data $dataStorage,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\Asset\Source $assetSource,
-        \Magento\Framework\View\FileSystem $viewFileSystem
+        \Magento\Framework\View\FileSystem $viewFileSystem,
+        \Magento\Widget\Helper\Conditions $conditionsHelper
     ) {
         $this->_escaper = $escaper;
         $this->_dataStorage = $dataStorage;
         $this->_assetRepo = $assetRepo;
         $this->_assetSource = $assetSource;
         $this->_viewFileSystem = $viewFileSystem;
+        $this->conditionsHelper = $conditionsHelper;
     }
 
     /**
@@ -144,7 +133,7 @@ class Widget
 
         // Correct widget parameters and convert its data to objects
         $params = $object->getData('parameters');
-        $newParams = array();
+        $newParams = [];
         if (is_array($params)) {
             $sortOrder = 0;
             foreach ($params as $key => $data) {
@@ -153,7 +142,7 @@ class Widget
                     $data['sort_order'] = isset($data['sort_order']) ? (int)$data['sort_order'] : $sortOrder;
 
                     // prepare values (for drop-dawns) specified directly in configuration
-                    $values = array();
+                    $values = [];
                     if (isset($data['values']) && is_array($data['values'])) {
                         foreach ($data['values'] as $value) {
                             if (isset($value['label']) && isset($value['value'])) {
@@ -180,7 +169,7 @@ class Widget
                 }
             }
         }
-        uasort($newParams, array($this, '_sortParameters'));
+        uasort($newParams, [$this, '_sortParameters']);
         $object->setData('parameters', $newParams);
 
         return $object;
@@ -192,7 +181,7 @@ class Widget
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
      */
-    public function getWidgets($filters = array())
+    public function getWidgets($filters = [])
     {
         $widgets = $this->_dataStorage->get();
         $result = $widgets;
@@ -222,19 +211,19 @@ class Widget
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
      */
-    public function getWidgetsArray($filters = array())
+    public function getWidgetsArray($filters = [])
     {
         if (empty($this->_widgetsArray)) {
-            $result = array();
+            $result = [];
             foreach ($this->getWidgets($filters) as $code => $widget) {
-                $result[$widget['name']] = array(
+                $result[$widget['name']] = [
                     'name' => __((string)$widget['name']),
                     'code' => $code,
                     'type' => $widget['@']['type'],
-                    'description' => __((string)$widget['description'])
-                );
+                    'description' => __((string)$widget['description']),
+                ];
             }
-            usort($result, array($this, "_sortWidgets"));
+            usort($result, [$this, "_sortWidgets"]);
             $this->_widgetsArray = $result;
         }
         return $this->_widgetsArray;
@@ -248,13 +237,16 @@ class Widget
      * @param bool $asIs Return result as widget directive(true) or as placeholder image(false)
      * @return string Widget directive ready to parse
      */
-    public function getWidgetDeclaration($type, $params = array(), $asIs = true)
+    public function getWidgetDeclaration($type, $params = [], $asIs = true)
     {
         $directive = '{{widget type="' . preg_quote($type) . '"';
 
         foreach ($params as $name => $value) {
             // Retrieve default option value if pre-configured
-            if (is_array($value)) {
+            if ($name == 'conditions') {
+                $name = 'conditions_encoded';
+                $value = $this->conditionsHelper->encode($value);
+            } elseif (is_array($value)) {
                 $value = implode(',', $value);
             } elseif (trim($value) == '') {
                 $widget = $this->getConfigAsObject($type);
@@ -314,7 +306,7 @@ class Widget
      */
     public function getPlaceholderImageUrls()
     {
-        $result = array();
+        $result = [];
         $widgets = $this->getWidgets();
         /** @var array $widget */
         foreach ($widgets as $widget) {

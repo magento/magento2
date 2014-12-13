@@ -1,35 +1,16 @@
 <?php
 /**
- * Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Open Software License (OSL 3.0)
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/osl-3.0.php
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@magentocommerce.com so we can send you a copy immediately.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade Magento to newer
- * versions in the future. If you wish to customize Magento for your
- * needs please refer to http://www.magentocommerce.com for more information.
- *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Wishlist\Model;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Wishlist item model
@@ -79,21 +60,21 @@ class Item extends AbstractModel implements ItemInterface
      *
      * @var Option[]
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Item options by code cache
      *
      * @var array
      */
-    protected $_optionsByCode = array();
+    protected $_optionsByCode = [];
 
     /**
      * Not Represent options
      *
      * @var string[]
      */
-    protected $_notRepresentOptions = array('info_buyRequest');
+    protected $_notRepresentOptions = ['info_buyRequest'];
 
     /**
      * Flag stating that options were successfully saved
@@ -103,7 +84,7 @@ class Item extends AbstractModel implements ItemInterface
     protected $_flagOptionsSaved = null;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -140,7 +121,7 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param OptionFactory $wishlistOptFactory
@@ -154,7 +135,7 @@ class Item extends AbstractModel implements ItemInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         OptionFactory $wishlistOptFactory,
@@ -163,7 +144,7 @@ class Item extends AbstractModel implements ItemInterface
         ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->productTypeConfig = $productTypeConfig;
         $this->_storeManager = $storeManager;
@@ -216,7 +197,7 @@ class Item extends AbstractModel implements ItemInterface
      */
     protected function _compareOptions($options1, $options2)
     {
-        $skipOptions = array('id', 'qty', 'return_url');
+        $skipOptions = ['id', 'qty', 'return_url'];
         foreach ($options1 as $code => $value) {
             if (in_array($code, $skipOptions)) {
                 continue;
@@ -429,7 +410,7 @@ class Item extends AbstractModel implements ItemInterface
             if ($product->getStoreId() == $storeId) {
                 return false;
             }
-            $urlData = $this->_catalogUrl->getRewriteByProductStore(array($product->getId() => $storeId));
+            $urlData = $this->_catalogUrl->getRewriteByProductStore([$product->getId() => $storeId]);
             if (!isset($urlData[$product->getId()])) {
                 return false;
             }
@@ -468,13 +449,13 @@ class Item extends AbstractModel implements ItemInterface
     public function getProductUrl()
     {
         $product = $this->getProduct();
-        $query = array();
+        $query = [];
 
         if ($product->getTypeInstance()->hasRequiredOptions($product)) {
             $query['options'] = 'cart';
         }
 
-        return $product->getUrlModel()->getUrl($product, array('_query' => $query));
+        return $product->getUrlModel()->getUrl($product, ['_query' => $query]);
     }
 
     /**
@@ -520,7 +501,7 @@ class Item extends AbstractModel implements ItemInterface
         if ($option) {
             $option->setValue($sBuyRequest);
         } else {
-            $this->addOption(array('code' => 'info_buyRequest', 'value' => $sBuyRequest));
+            $this->addOption(['code' => 'info_buyRequest', 'value' => $sBuyRequest]);
         }
 
         return $this;
