@@ -50,8 +50,7 @@ before_script:
   # Change memory_limit for travis
   - echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv rehash;
-  - composer install --no-interaction --prefer-source --dev
-  - cd ..
+  - composer install --no-interaction --dev
 script:
   # Unit tests
   - sh -c "if [ '$TEST_SUITE' = 'unit' ]; then ./vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist; fi"
