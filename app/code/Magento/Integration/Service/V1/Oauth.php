@@ -9,7 +9,7 @@ use Magento\Integration\Helper\Oauth\Data as IntegrationOauthHelper;
 use Magento\Integration\Model\Oauth\Consumer as ConsumerModel;
 use Magento\Integration\Model\Oauth\Consumer\Factory as ConsumerFactory;
 use Magento\Integration\Model\Oauth\Token as OauthTokenModel;
-use Magento\Integration\Model\Oauth\Token\Factory as TokenFactory;
+use Magento\Integration\Model\Oauth\TokenFactory as TokenFactory;
 use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
 
 /**

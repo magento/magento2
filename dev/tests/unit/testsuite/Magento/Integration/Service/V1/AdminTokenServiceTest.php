@@ -15,7 +15,7 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
     /** \Magento\Integration\Service\V1\AdminTokenService */
     protected $_tokenService;
 
-    /** \Magento\Integration\Model\Oauth\Token\Factory|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_tokenModelFactoryMock;
 
     /** \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject */
@@ -35,7 +35,7 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_tokenModelFactoryMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token\Factory')
+        $this->_tokenModelFactoryMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\TokenFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -9,7 +9,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Helper\Validator;
 use Magento\Integration\Model\Oauth\Token as Token;
-use Magento\Integration\Model\Oauth\Token\Factory as TokenModelFactory;
+use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory as TokenCollectionFactory;
 use Magento\User\Model\User as UserModel;
 

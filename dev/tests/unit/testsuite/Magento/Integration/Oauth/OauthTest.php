@@ -15,7 +15,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Model\Oauth\Nonce\Factory */
     private $_nonceFactory;
 
-    /** @var \Magento\Integration\Model\Oauth\Token\Factory */
+    /** @var \Magento\Integration\Model\Oauth\TokenFactory */
     private $_tokenFactory;
 
     /** @var \Magento\Integration\Model\Oauth\Consumer */
@@ -76,7 +76,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             'Magento\Integration\Model\Oauth\Nonce\Factory'
         )->disableOriginalConstructor()->getMock();
         $this->_tokenFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Token\Factory'
+            'Magento\Integration\Model\Oauth\TokenFactory'
         )->disableOriginalConstructor()->getMock();
         $this->_tokenMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
             ->disableOriginalConstructor()
