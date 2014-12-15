@@ -75,6 +75,13 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @var bool
      */
+    protected $_isOffline = false;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
     protected $_canOrder = false;
 
     /**
@@ -368,6 +375,16 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     public function isGateway()
     {
         return $this->_isGateway;
+    }
+
+    /**
+     * Retrieve payment method online/offline flag
+     *
+     * @return bool
+     */
+    public function isOffline()
+    {
+        return $this->_isOffline;
     }
 
     /**
