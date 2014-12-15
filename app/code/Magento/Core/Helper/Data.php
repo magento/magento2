@@ -255,4 +255,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_dbCompatibleMode;
     }
+
+    /**
+     *  base64_dencode() for URLs dencoding
+     *
+     *  @param    string $url
+     *  @return   string
+     */
+    public function urlDecode($url)
+    {
+        $url = base64_decode(strtr($url, '-_,', '+/='));
+        return $url;
+    }
 }
