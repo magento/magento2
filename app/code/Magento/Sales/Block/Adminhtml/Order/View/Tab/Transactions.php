@@ -34,7 +34,7 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Framework\Registry $registry,
-        array $data = array()
+        array $data = []
     ) {
         $this->_authorization = $authorization;
         $this->_coreRegistry = $registry;
