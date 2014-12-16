@@ -93,10 +93,11 @@ class TransactionsTest extends \PHPUnit_Framework_TestCase
     public function canShowTabDataProvider()
     {
         return [
-            ['\Magento\Pbridge\Model\Payment\Method\Authorizenet', true],
-            ['\Magento\Authorizenet\Model\Authorizenet', true],
+            ['\Magento\Sales\Block\Adminhtml\Order\View\Tab\Stub\OnlineMethod', true],
             ['\Magento\OfflinePayments\Model\Cashondelivery', false],
-            ['\Magento\OfflinePayments\Model\Checkmo', false]
+            ['\Magento\OfflinePayments\Model\Checkmo', false],
+            ['\Magento\OfflinePayments\Model\Banktransfer', false],
+            ['\Magento\OfflinePayments\Model\Purchaseorder', false]
         ];
     }
 
