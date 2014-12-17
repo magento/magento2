@@ -77,7 +77,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $this->_tokenFactory = $this->getMockBuilder(
             'Magento\Integration\Model\Oauth\TokenFactory'
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
             ->disableOriginalConstructor()
             ->setMethods(
@@ -122,8 +122,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             $this->_consumerFactory,
             $this->_tokenFactory,
             $this->_dataHelperMock,
-            $this->_dateMock,
-            $this->_tokenMock
+            $this->_dateMock
         );
         $this->_oauth = new \Magento\Framework\Oauth\Oauth(
             $this->_oauthHelperMock,
