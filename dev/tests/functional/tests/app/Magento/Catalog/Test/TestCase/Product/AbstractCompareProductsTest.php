@@ -17,69 +17,70 @@ use Mtf\Fixture\InjectableFixture;
 use Mtf\TestCase\Injectable;
 
 /**
- * Class AbstractCompareProductsTest
- * Abstract class for compare products class
+ * Abstract class for compare products class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCompareProductsTest extends Injectable
 {
     /**
-     * Array products
+     * Array products.
      *
      * @var array
      */
     protected $products;
 
     /**
-     * Cms index page
+     * Cms index page.
      *
      * @var CmsIndex
      */
     protected $cmsIndex;
 
     /**
-     * Browser
+     * Browser.
      *
      * @var Browser
      */
     protected $browser;
 
     /**
-     * Catalog product compare page
+     * Catalog product compare page.
      *
      * @var CatalogProductCompare
      */
     protected $catalogProductCompare;
 
     /**
-     * Catalog product page
+     * Catalog product page.
      *
      * @var CatalogProductView
      */
     protected $catalogProductView;
 
     /**
-     * Customer login page
+     * Customer login page.
      *
      * @var CustomerAccountLogin
      */
     protected $customerAccountLogin;
 
     /**
-     * Fixture factory
+     * Fixture factory.
      *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Fixture customer
+     * Fixture customer.
      *
      * @var CustomerInjectable
      */
     protected $customer;
 
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param FixtureFactory $fixtureFactory
      * @param CustomerInjectable $customer
@@ -93,7 +94,7 @@ abstract class AbstractCompareProductsTest extends Injectable
     }
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogProductView $catalogProductView
@@ -114,7 +115,7 @@ abstract class AbstractCompareProductsTest extends Injectable
     }
 
     /**
-     * Login customer
+     * Login customer.
      *
      * @return void
      */
@@ -127,7 +128,7 @@ abstract class AbstractCompareProductsTest extends Injectable
     }
 
     /**
-     * Create products
+     * Create products.
      *
      * @param string $products
      * @return array
@@ -145,7 +146,7 @@ abstract class AbstractCompareProductsTest extends Injectable
     }
 
     /**
-     * Add products to compare list
+     * Add products to compare list.
      *
      * @param array $products
      * @param AbstractConstraint $assert
@@ -163,7 +164,7 @@ abstract class AbstractCompareProductsTest extends Injectable
     }
 
     /**
-     * Perform assert
+     * Perform assert.
      *
      * @param AbstractConstraint $assert
      * @param InjectableFixture $product
@@ -171,10 +172,7 @@ abstract class AbstractCompareProductsTest extends Injectable
      */
     protected function productCompareAssert(AbstractConstraint $assert, InjectableFixture $product)
     {
-        $assert->configure(
-            $this,
-            ['catalogProductView' => $this->catalogProductView, 'product' => $product]
-        );
+        $assert->configure(['catalogProductView' => $this->catalogProductView, 'product' => $product]);
         \PHPUnit_Framework_Assert::assertThat($this->getName(), $assert);
     }
 }

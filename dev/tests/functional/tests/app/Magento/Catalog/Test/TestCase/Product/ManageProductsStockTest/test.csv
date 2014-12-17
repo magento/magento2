@@ -1,2 +1,0 @@
-"description";"product/dataSet";"product/data/qty_and_stock_status/is_in_stock";"constraint"
-"add out of stock product to cart";"default";"Out of Stock";"assertAddedProductToCartSuccessMessage, assertProductQtyInShoppingCart"

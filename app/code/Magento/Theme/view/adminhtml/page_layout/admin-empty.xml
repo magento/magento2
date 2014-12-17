@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_layout.xsd">
+    <container name="root">
+        <container name="page.formkey" as="page.formkey"/>
+        <container name="page.js.translate" as="page.js.translate"/>
+        <container name="content" as="content"/>
+        <container name="js" as="js" label="JavaScript"/>
+    </container>
+</layout>

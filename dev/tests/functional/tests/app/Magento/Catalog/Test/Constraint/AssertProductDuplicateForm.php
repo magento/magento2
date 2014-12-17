@@ -10,12 +10,16 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AssertProductDuplicateForm
+ * Assert form data equals fixture data.
  */
 class AssertProductDuplicateForm extends AssertProductForm
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
-     * Formatting options for numeric values
+     * Formatting options for numeric values.
      *
      * @var array
      */
@@ -38,14 +42,7 @@ class AssertProductDuplicateForm extends AssertProductForm
     ];
 
     /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
-
-    /**
-     * Assert form data equals fixture data
+     * Assert form data equals fixture data.
      *
      * @param FixtureInterface $product
      * @param CatalogProductIndex $productGrid
@@ -68,7 +65,7 @@ class AssertProductDuplicateForm extends AssertProductForm
     }
 
     /**
-     * Prepares fixture data for comparison
+     * Prepares fixture data for comparison.
      *
      * @param array $data
      * @param array $sortFields [optional]
@@ -97,18 +94,33 @@ class AssertProductDuplicateForm extends AssertProductForm
             $compareData['status'] = 'Product offline';
         }
         if (isset($compareData['quantity_and_stock_status']['qty'])) {
-            $compareData['quantity_and_stock_status']['qty'] = 0;
+            $compareData['quantity_and_stock_status']['qty'] = '';
+            $compareData['quantity_and_stock_status']['is_in_stock'] = 'Out of Stock';
         }
         if (isset($compareData['special_price'])) {
             $compareData['special_price'] = ['special_price' => $compareData['special_price']];
         }
         $compareData['sku'] .= '-1';
+        $compareData['url_key'] = $this->prepareUrlKey($compareData['url_key']);
 
         return parent::prepareFixtureData($compareData, $sortFields);
     }
 
     /**
-     * Returns a string representation of the object
+     * Prepare url key.
+     *
+     * @param string $urlKey
+     * @return string
+     */
+    protected function prepareUrlKey($urlKey)
+    {
+        preg_match("~\d+$~", $urlKey, $matches);
+        $key = intval($matches[0]) + 1;
+        return str_replace($matches[0], $key, $urlKey);
+    }
+
+    /**
+     * Returns a string representation of the object.
      *
      * @return string
      */

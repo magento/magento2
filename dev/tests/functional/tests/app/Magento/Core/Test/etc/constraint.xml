@@ -6,27 +6,27 @@
 -->
 <constraint>
     <assertCustomVariableSuccessDeleteMessage module="Magento_Core">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomVariableSuccessDeleteMessage>
     <assertCustomVariableNotInGrid module="Magento_Core">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomVariableNotInGrid>
     <assertCustomVariableNotInCmsPageForm module="Magento_Core">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomVariableNotInCmsPageForm>
     <assertCustomVariableSuccessSaveMessage module="Magento_Core">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomVariableSuccessSaveMessage>
     <assertCustomVariableInGrid module="Magento_Core">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomVariableInGrid>
     <assertCustomVariableNotInCmsPageForm module="Magento_Core">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomVariableNotInCmsPageForm>
     <assertCustomVariableForm module="Magento_Core">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomVariableForm>
     <assertCustomVariableInPage module="Magento_Core">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomVariableInPage>
 </constraint>

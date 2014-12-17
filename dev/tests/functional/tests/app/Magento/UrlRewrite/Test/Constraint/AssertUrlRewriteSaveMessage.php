@@ -14,14 +14,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertUrlRewriteSaveMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'The URL Rewrite has been saved.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const SUCCESS_MESSAGE = 'The URL Rewrite has been saved.';
 
     /**
      * Assert that url rewrite success message is displayed

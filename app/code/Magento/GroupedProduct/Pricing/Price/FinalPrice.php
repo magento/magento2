@@ -6,12 +6,12 @@
 namespace Magento\GroupedProduct\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Catalog\Pricing\Price\FinalPriceInterface;
 
 /**
  * Final price model
  */
-class FinalPrice extends AbstractPrice
+class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements FinalPriceInterface
 {
     /**
      * Price type final

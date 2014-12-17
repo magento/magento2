@@ -146,8 +146,8 @@ class Order extends SalesResource implements OrderResourceInterface
                 $store->getName(),
             ];
             $object->setStoreName(implode("\n", $name));
+            $object->setTotalItemCount($this->calculateItems($object));
         }
-        $object->setTotalItemCount($this->calculateItems($object));
         $object->setData(
             'protect_code',
             substr(md5(uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)), 5, 6)

@@ -169,7 +169,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEntityStoresCategoryStoresException()
     {
-        $args = ['category' => new \Magento\Framework\Object(['id' => 1])];
+        $args = ['category' => $this->objectManager->create(
+            'Magento\Catalog\Model\Category',
+            ['data' => ['entity_id' => 1, 'initial_setup_flag' => true]]
+        )];
         $form = $this->_getFormInstance($args);
         $this->assertEquals([], $form->getElement('store_id')->getValues());
         $this->assertEquals(

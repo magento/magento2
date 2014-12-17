@@ -14,17 +14,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertAccessTokensErrorRevokeMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * User revoke tokens error message.
      */
     const ERROR_MESSAGE = 'This user has no tokens.';
-
-    /**
-     * Constraint severeness.
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that error message appears after click on 'Force Sing-In' button for user without tokens.

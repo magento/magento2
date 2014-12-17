@@ -1,0 +1,77 @@
+<?php
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+
+namespace Magento\Catalog\Plugin\Model\Indexer\Category\Product;
+
+class ExecuteTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var \Magento\Catalog\Plugin\Model\Indexer\Category\Product\Execute */
+    protected $execute;
+
+    /** @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    protected $config;
+
+    /** @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $typeList;
+
+    protected function setUp()
+    {
+        $this->config = $this->getMockBuilder('Magento\PageCache\Model\Config')
+            ->disableOriginalConstructor()
+            ->setMethods(['isEnabled'])
+            ->getMock();
+        $this->typeList = $this->getMockBuilder('Magento\Framework\App\Cache\TypeListInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['invalidate'])
+            ->getMockForAbstractClass();
+
+        $this->execute = new Execute($this->config, $this->typeList);
+    }
+
+    public function testAfterExecute()
+    {
+        $subject = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Category\Product\AbstractAction')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $result = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Category\Product\AbstractAction')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->config->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(false);
+        $this->typeList->expects($this->never())
+            ->method('invalidate');
+
+        $this->assertEquals(
+            $result,
+            $this->execute->afterExecute($subject, $result)
+        );
+    }
+
+    public function testAfterExecuteInvalidate()
+    {
+        $subject = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Category\Product\AbstractAction')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $result = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Category\Product\AbstractAction')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->config->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(true);
+        $this->typeList->expects($this->once())
+            ->method('invalidate')
+            ->with('full_page');
+
+        $this->assertEquals(
+            $result,
+            $this->execute->afterExecute($subject, $result)
+        );
+    }
+}

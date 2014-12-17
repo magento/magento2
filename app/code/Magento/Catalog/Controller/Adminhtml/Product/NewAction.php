@@ -59,6 +59,12 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
         $product = $this->productBuilder->build($this->getRequest());
 
         $productData = $this->getRequest()->getPost('product');
+        if (!$productData) {
+            $sessionData = $this->_session->getProductData(true);
+            if (!empty($sessionData['product'])) {
+                $productData = $sessionData['product'];
+            }
+        }
         if ($productData) {
             $stockData = isset($productData['stock_data']) ? $productData['stock_data'] : [];
             $productData['stock_data'] = $this->stockFilter->filter($stockData);

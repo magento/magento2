@@ -11,7 +11,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     /**
      * Type configuration
      *
-     * @var \Magento\Framework\ObjectManager\ConfigInterface
+     * @var \Magento\Framework\Interception\ObjectManager\ConfigInterface
      */
     protected $_omConfig;
 
@@ -74,7 +74,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * @param \Magento\Framework\Config\ScopeListInterface $scopeList
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\ObjectManager\RelationsInterface $relations
-     * @param \Magento\Framework\Interception\ObjectManager\Config $omConfig
+     * @param \Magento\Framework\Interception\ObjectManager\ConfigInterface $omConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions
      * @param string $cacheId
      */
@@ -83,7 +83,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         \Magento\Framework\Config\ScopeListInterface $scopeList,
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Framework\ObjectManager\RelationsInterface $relations,
-        \Magento\Framework\Interception\ObjectManager\Config $omConfig,
+        \Magento\Framework\Interception\ObjectManager\ConfigInterface $omConfig,
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         $cacheId = 'interception'
     ) {
@@ -166,6 +166,9 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      */
     public function hasPlugins($type)
     {
-        return isset($this->_intercepted[$type]) ? $this->_intercepted[$type] : $this->_inheritInterception($type);
+        if (isset($this->_intercepted[$type])) {
+            return $this->_intercepted[$type];
+        }
+        return $this->_inheritInterception($type);
     }
 }

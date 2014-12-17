@@ -42,7 +42,7 @@ class Less implements PreProcessorInterface
         $cssTrimmedContent = trim($cssContent);
         if (!empty($cssTrimmedContent)) {
             $chain->setContent($cssContent);
-            $chain->setContentType('css');
         }
+        $chain->setContentType('css');
     }
 }

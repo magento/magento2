@@ -4,11 +4,16 @@
 /*jshint browser:true jquery:true expr:true*/
 define([
     "jquery",
-    "jquery/ui"
+    "jquery/ui",
+    "Magento_Catalog/js/price-box"
 ], function($){
     "use strict";
     
     $.widget('mage.downloadable', {
+        options: {
+            priceHolderSelector: '.price-box'
+        },
+
         _create: function() {
             var self = this;
 
@@ -36,26 +41,14 @@ define([
          * @private
          */
         _reloadPrice: function() {
-            var price = 0,
-                oldPrice = 0,
-                inclTaxPrice = 0,
-                exclTaxPrice = 0;
+            var finalPrice = 0;
             this.element.find(this.options.linkElement + ':checked').each($.proxy(function(index, element) {
-                price += this.options.config.links[$(element).val()].price;
-                oldPrice += this.options.config.links[$(element).val()].oldPrice;
-                inclTaxPrice += this.options.config.links[$(element).val()].inclTaxPrice;
-                exclTaxPrice += this.options.config.links[$(element).val()].exclTaxPrice;
+                finalPrice += this.options.config.links[$(element).val()].finalPrice;
             }, this));
 
-            this.element.trigger('changePrice', {
-                'config': 'config',
-                'price': {
-                    'price': price,
-                    'oldPrice': oldPrice,
-                    'inclTaxPrice': inclTaxPrice,
-                    'exclTaxPrice': exclTaxPrice
-                }
-            }).trigger('reloadPrice');
+            $(this.options.priceHolderSelector).trigger('updatePrice', {
+                'prices': { 'finalPrice': { 'amount': finalPrice }}
+            });
         }
     });
     

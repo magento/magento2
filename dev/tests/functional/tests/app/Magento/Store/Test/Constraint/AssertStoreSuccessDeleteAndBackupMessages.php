@@ -14,6 +14,10 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertStoreSuccessDeleteAndBackupMessages extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Success backup message
      */
@@ -23,13 +27,6 @@ class AssertStoreSuccessDeleteAndBackupMessages extends AbstractConstraint
      * Success store delete message
      */
     const SUCCESS_DELETE_MESSAGE = 'The store view has been deleted.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that store success delete and backup messages are present

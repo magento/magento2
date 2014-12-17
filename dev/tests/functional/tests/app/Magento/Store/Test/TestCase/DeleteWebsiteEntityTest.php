@@ -102,6 +102,6 @@ class DeleteWebsiteEntityTest extends Injectable
         $this->storeIndex->getStoreGrid()->searchAndOpenWebsite($website);
         $this->editWebsite->getFormPageActions()->delete();
         $this->deleteWebsite->getDeleteWebsiteForm()->fillForm(['create_backup' => $createBackup]);
-        $this->deleteWebsite->getFormPageFooterActions()->delete();
+        $this->deleteWebsite->getFormPageActions()->delete();
     }
 }

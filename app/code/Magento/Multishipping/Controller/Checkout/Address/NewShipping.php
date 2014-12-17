@@ -29,7 +29,7 @@ class NewShipping extends \Magento\Multishipping\Controller\Checkout\Address
             );
 
             $this->_view->getPage()->getConfig()->getTitle()->set(
-                $addressForm->getTitle() . ' - ' . $this->_view->getPage()->getConfig()->getDefaultTitle()
+                $addressForm->getTitle() . ' - ' . $this->_view->getPage()->getConfig()->getTitle()->getDefault()
             );
 
             if ($this->_getCheckout()->getCustomerDefaultShippingAddress()) {

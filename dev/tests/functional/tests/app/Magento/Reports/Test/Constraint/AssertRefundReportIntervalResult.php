@@ -14,12 +14,9 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
  */
 class AssertRefundReportIntervalResult extends AbstractAssertSalesReportResult
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert Credit Memo info in report: Refunds Orders, Total Refunded
