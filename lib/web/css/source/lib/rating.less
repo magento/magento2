@@ -204,69 +204,7 @@
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
-) when (@_icon-count = 10) {
-    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
-}
-
-.mixin-rating-icons-content(
-    @_icon-count: @rating-icon-count,
-    @_icon-content: @rating-icon-content
-) when (@_icon-count = 9) {
-    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
-}
-
-.mixin-rating-icons-content(
-    @_icon-count: @rating-icon-count,
-    @_icon-content: @rating-icon-content
-) when (@_icon-count = 8) {
-    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
-}
-
-.mixin-rating-icons-content(
-    @_icon-count: @rating-icon-count,
-    @_icon-content: @rating-icon-content
-) when (@_icon-count = 7) {
-    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
-}
-
-.mixin-rating-icons-content(
-    @_icon-count: @rating-icon-count,
-    @_icon-content: @rating-icon-content
-) when (@_icon-count = 6) {
-    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
-}
-
-.mixin-rating-icons-content(
-    @_icon-count: @rating-icon-count,
-    @_icon-content: @rating-icon-content
-) when (@_icon-count = 5) {
-    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
-}
-
-.mixin-rating-icons-content(
-    @_icon-count: @rating-icon-count,
-    @_icon-content: @rating-icon-content
-) when (@_icon-count = 4) {
-    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content);
-}
-
-.mixin-rating-icons-content(
-    @_icon-count: @rating-icon-count,
-    @_icon-content: @rating-icon-content
-) when (@_icon-count = 3) {
-    .css(content, @_icon-content @_icon-content @_icon-content);
-}
-
-.mixin-rating-icons-content(
-    @_icon-count: @rating-icon-count,
-    @_icon-content: @rating-icon-content
-) when (@_icon-count = 2) {
-    .css(content, @_icon-content @_icon-content);
-}
-
-.mixin-rating-icons-content(
-    @_icon-count: @rating-icon-count,
-    @_icon-content: @rating-icon-content
-) when (@_icon-count = 1) {
-    .css(content, @_icon-content);
+) when (@_icon-count > 0) {
+    .mixin-rating-icons-content((@_icon-count - 1),@_icon-content);
+    content+_: @_icon-content;
 }
