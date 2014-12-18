@@ -181,4 +181,18 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         return $this->_salesData->canSendNewOrderConfirmationEmail($this->getQuote()->getStoreId());
     }
+
+    /**
+     * Get note notification
+     *
+     * @return bool
+     */
+    public function getNoteNotify()
+    {
+        $notify = $this->getQuote()->getCustomerNoteNotify();
+        if (is_null($notify) || $notify) {
+            return true;
+        }
+        return false;
+    }
 }
