@@ -116,7 +116,7 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
             throw $e;
         } catch (\Exception $e) {
             $adapter->rollBack();
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
     }
 }

@@ -56,7 +56,7 @@ class UpdatePost extends \Magento\Checkout\Controller\Cart
             );
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot update the shopping cart.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         }
     }
 

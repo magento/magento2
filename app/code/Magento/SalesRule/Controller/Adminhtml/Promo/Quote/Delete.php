@@ -29,7 +29,7 @@ class Delete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $this->messageManager->addError(
                     __('An error occurred while deleting the rule. Please review the log and try again.')
                 );
-                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
                 $this->_redirect('sales_rule/*/edit', ['id' => $this->getRequest()->getParam('id')]);
                 return;
             }

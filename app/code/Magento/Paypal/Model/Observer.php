@@ -111,11 +111,11 @@ class Observer
                 try {
                     $reports->fetchAndSave(\Magento\Paypal\Model\Report\Settlement::createConnection($config));
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                 }
             }
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
     }
 

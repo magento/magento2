@@ -105,13 +105,13 @@ class Config
             $this->_initMenu();
             return $this->_menu;
         } catch (\InvalidArgumentException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw $e;
         } catch (\BadMethodCallException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw $e;
         } catch (\OutOfRangeException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw $e;
         } catch (\Exception $e) {
             throw $e;

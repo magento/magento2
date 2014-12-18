@@ -20,7 +20,7 @@ class Delete extends \Magento\Checkout\Controller\Cart
                 $this->cart->removeItem($id)->save();
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('We cannot remove the item.'));
-                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             }
         }
         $defaultUrl = $this->_objectManager->create('Magento\Framework\UrlInterface')->getUrl('*/*');

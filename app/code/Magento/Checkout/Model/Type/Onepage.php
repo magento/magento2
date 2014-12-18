@@ -925,7 +925,7 @@ class Onepage
             try {
                 $this->_involveNewCustomer();
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
 
@@ -953,7 +953,7 @@ class Onepage
                 try {
                     $this->orderSender->send($order);
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                 }
             }
 

@@ -123,7 +123,7 @@ class Save extends \Magento\Backend\App\Action
             $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setFormData($data);
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             $this->messageManager->addError(__('Cannot save the credit memo.'));
         }
         $this->_redirect('sales/*/new', ['_current' => true]);

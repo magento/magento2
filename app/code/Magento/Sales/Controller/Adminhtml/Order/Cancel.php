@@ -24,7 +24,7 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('You have not canceled the item.'));
-                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             }
             $this->_redirect('sales/order/view', ['order_id' => $order->getId()]);
         }

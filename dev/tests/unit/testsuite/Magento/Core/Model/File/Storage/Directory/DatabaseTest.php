@@ -175,7 +175,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->directoryMock->expects($this->any())->method('getParentId')->will($this->returnValue(null));
 
-        $this->loggerMock->expects($this->any())->method('logException');
+        $this->loggerMock->expects($this->any())->method('critical');
 
         $this->directoryDatabase->importDirectories([]);
     }

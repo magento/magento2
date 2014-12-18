@@ -105,7 +105,7 @@ class WriteService implements WriteServiceInterface
         try {
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             throw new InputException('Unable to save address. Please, check input data.');
         }
         return $quote->getBillingAddress()->getId();

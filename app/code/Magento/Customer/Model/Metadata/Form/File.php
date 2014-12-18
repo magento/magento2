@@ -270,7 +270,7 @@ class File extends AbstractData
                 $uploader->save($mediaDir->getAbsolutePath($this->_entityTypeCode), $value['name']);
                 $result = $uploader->getUploadedFileName();
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
 

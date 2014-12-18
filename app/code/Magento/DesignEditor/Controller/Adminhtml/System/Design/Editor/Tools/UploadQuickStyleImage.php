@@ -39,14 +39,14 @@ class UploadQuickStyleImage extends \Magento\DesignEditor\Controller\Adminhtml\S
         } catch (CoreException $e) {
             $this->messageManager->addError($e->getMessage());
             $response = ['error' => true, 'message' => $e->getMessage()];
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         } catch (\Exception $e) {
             $errorMessage = __(
                 'Something went wrong uploading the image.' .
                 ' Please check the file format and try again (JPEG, GIF, or PNG).'
             );
             $response = ['error' => true, 'message' => $errorMessage];
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         }
         $this->getResponse()->representJson(
             $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)

@@ -198,7 +198,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     public function testMaskException($exception, $expectedHttpCode, $expectedMessage, $expectedDetails)
     {
         /** Assert that exception was logged. */
-        // TODO:MAGETWO-21077 $this->_loggerMock->expects($this->once())->method('logException');
+        // TODO:MAGETWO-21077 $this->_loggerMock->expects($this->once())->method('critical');
         $maskedException = $this->_errorProcessor->maskException($exception);
         $this->assertMaskedException(
             $maskedException,

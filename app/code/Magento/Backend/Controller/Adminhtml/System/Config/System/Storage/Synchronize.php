@@ -43,7 +43,7 @@ class Synchronize extends \Magento\Backend\Controller\Adminhtml\System\Config\Sy
         try {
             $this->_getSyncSingleton()->synchronize($storage);
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             $flag->passError($e);
         }
 

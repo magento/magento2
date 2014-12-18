@@ -49,7 +49,7 @@ class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
             $this->messageManager->addError(
                 __('An error occurred while showing the product views report. Please review the log and try again.')
             );
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             $this->_redirect('reports/*/viewed/');
             return;
         }

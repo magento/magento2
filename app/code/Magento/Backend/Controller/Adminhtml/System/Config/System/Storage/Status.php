@@ -80,7 +80,7 @@ class Status extends \Magento\Backend\Controller\Adminhtml\System\Config\System\
                         ) {
                             $this->_objectManager->get(
                                 'Magento\Framework\Logger'
-                            )->logException(
+                            )->critical(
                                 new \Magento\Framework\Exception(
                                     __('The timeout limit for response from synchronize process was reached.')
                                 )

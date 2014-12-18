@@ -53,12 +53,12 @@ class Index extends \Magento\Framework\App\Action\Action
             $data = $this->getRequest()->getPost();
             $this->_ipnFactory->create(['data' => $data])->processIpnRequest();
         } catch (UnavailableException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             $this->getResponse()->setHeader('HTTP/1.1', '503 Service Unavailable')->sendResponse();
             /** @todo eliminate usage of exit statement */
             exit;
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             $this->getResponse()->setHttpResponseCode(500);
         }
     }

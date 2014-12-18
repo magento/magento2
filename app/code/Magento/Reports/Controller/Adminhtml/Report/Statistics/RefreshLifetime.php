@@ -25,7 +25,7 @@ class RefreshLifetime extends \Magento\Reports\Controller\Adminhtml\Report\Stati
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         }
 
         if ($this->_getSession()->isFirstPageAfterLogin()) {

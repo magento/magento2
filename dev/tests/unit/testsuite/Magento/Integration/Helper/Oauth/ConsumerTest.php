@@ -92,7 +92,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         $this->_loggerMock = $this->getMockBuilder(
             'Magento\Framework\Logger'
         )->disableOriginalConstructor()->setMethods(
-            ['logException']
+            ['critical']
         )->getMock();
 
         $this->_oauthService = new \Magento\Integration\Service\V1\Oauth(

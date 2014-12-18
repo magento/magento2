@@ -39,13 +39,13 @@ class Fetch extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
                     $this->messageManager->addError(
                         __("We couldn't fetch reports from '%1@%2'.", $config['username'], $config['hostname'])
                     );
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                 }
             }
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
         $this->_redirect('*/*/index');
     }

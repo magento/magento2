@@ -41,7 +41,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())->method('isPost')->will($this->returnValue(true));
         $exception = new \Exception();
         $this->request->expects($this->once())->method('getPost')->will($this->throwException($exception));
-        $this->logger->expects($this->once())->method('logException')->with($this->identicalTo($exception));
+        $this->logger->expects($this->once())->method('critical')->with($this->identicalTo($exception));
         $this->response->expects($this->once())->method('setHttpResponseCode')->with(500);
         $this->model->execute();
     }

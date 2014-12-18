@@ -41,7 +41,7 @@ class ConfirmCaptcha extends \Magento\GoogleShopping\Controller\Adminhtml\Google
                 )
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             $this->messageManager->addError(__('Something went wrong during Captcha confirmation.'));
         }
 

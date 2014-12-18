@@ -86,7 +86,7 @@ class Feed extends \Magento\Framework\App\Action\Action
                 $this->customerSession->setCustomerDataAsLoggedIn($customer);
                 $this->customerSession->regenerateId();
             } catch (\Exception $e) {
-                $this->logger->logException($e);
+                $this->logger->critical($e);
             }
         }
 

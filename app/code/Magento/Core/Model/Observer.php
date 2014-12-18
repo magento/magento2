@@ -102,7 +102,7 @@ class Observer
         try {
             $this->_registration->register($pathPattern);
         } catch (\Magento\Framework\Model\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
         return $this;
     }
@@ -133,7 +133,7 @@ class Observer
                     $this->_pageAssets->add($identifier, $asset);
                 }
             } catch (\InvalidArgumentException $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
     }

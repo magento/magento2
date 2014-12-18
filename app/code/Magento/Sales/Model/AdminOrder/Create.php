@@ -1034,7 +1034,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
             $this->recollectCart();
             throw $e;
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
         $this->recollectCart();
 

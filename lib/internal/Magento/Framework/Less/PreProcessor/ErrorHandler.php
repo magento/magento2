@@ -27,6 +27,6 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     public function processException(\Exception $e)
     {
-        $this->logger->logException($e);
+        $this->logger->critical($e);
     }
 }

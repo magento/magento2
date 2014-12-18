@@ -48,7 +48,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
         $this->_assetJsTwo->expects($this->any())->method('getPath')
             ->will($this->returnValue('script_two.js'));
 
-        $this->_logger = $this->getMock('Magento\Framework\Logger', ['logException'], [], '', false);
+        $this->_logger = $this->getMock('Magento\Framework\Logger', ['critical'], [], '', false);
 
         $this->_mergeStrategy = $this->getMock('Magento\Framework\View\Asset\MergeStrategyInterface');
 
@@ -100,7 +100,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
     public function testIteratorInterfaceMerge()
     {
         $assets = [$this->_assetJsOne, $this->_assetJsTwo];
-        $this->_logger->expects($this->never())->method('logException');
+        $this->_logger->expects($this->never())->method('critical');
         $merged = new \Magento\Framework\View\Asset\Merged(
             $this->_logger,
             $this->_mergeStrategy,
@@ -135,7 +135,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             [$this->_assetJsOne, $this->_assetJsTwo, $assetBroken]
         );
 
-        $this->_logger->expects($this->once())->method('logException')->with($this->identicalTo($mergeError));
+        $this->_logger->expects($this->once())->method('critical')->with($this->identicalTo($mergeError));
 
         $expectedResult = [$this->_assetJsOne, $this->_assetJsTwo, $assetBroken];
         $this->_assertIteratorEquals($expectedResult, $merged);

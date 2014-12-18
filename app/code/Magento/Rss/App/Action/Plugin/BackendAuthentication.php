@@ -93,7 +93,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
             try {
                 $this->_auth->login($login, $password);
             } catch (\Magento\Backend\Model\Auth\Exception $e) {
-                $this->logger->logException($e);
+                $this->logger->critical($e);
             }
         }
 

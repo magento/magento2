@@ -167,7 +167,7 @@ class Area implements \Magento\Framework\App\AreaInterface
                 return true;
             }
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
         return false;
     }

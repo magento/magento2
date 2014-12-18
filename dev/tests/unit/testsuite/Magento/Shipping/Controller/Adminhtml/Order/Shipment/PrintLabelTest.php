@@ -303,7 +303,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
 
         $loggerMock = $this->getMock(
             'Magento\Framework\Logger',
-            ['logException'],
+            ['critical'],
             [],
             '',
             false
@@ -335,7 +335,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Framework\Logger')
             ->will($this->returnValue($loggerMock));
         $loggerMock->expects($this->once())
-            ->method('logException');
+            ->method('critical');
         $this->requestMock->expects($this->at(4))
             ->method('getParam')
             ->with('shipment_id')

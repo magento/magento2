@@ -94,7 +94,7 @@ class Update extends Action\Action implements IndexInterface
                     try {
                         $item->delete();
                     } catch (\Exception $e) {
-                        $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                        $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
                         $this->messageManager->addError(__('Can\'t delete item from wishlist'));
                     }
                 }

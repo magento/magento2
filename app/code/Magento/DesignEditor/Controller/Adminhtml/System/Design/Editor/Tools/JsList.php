@@ -24,7 +24,7 @@ class JsList extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
                 $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         }
     }
 }

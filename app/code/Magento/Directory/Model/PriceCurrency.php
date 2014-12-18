@@ -135,7 +135,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
                 $scope = $this->storeManager->getStore($scope);
             }
         } catch (\Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             $scope = $this->storeManager->getStore();
         }
 

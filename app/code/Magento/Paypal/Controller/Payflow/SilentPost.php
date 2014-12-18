@@ -21,7 +21,7 @@ class SilentPost extends \Magento\Paypal\Controller\Payflow
             try {
                 $paymentModel->process($data);
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
     }

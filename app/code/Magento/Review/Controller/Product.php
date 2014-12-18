@@ -195,7 +195,7 @@ class Product extends \Magento\Framework\App\Action\Action
                 ['product' => $product, 'controller_action' => $this]
             );
         } catch (\Magento\Framework\Model\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             return false;
         }
 

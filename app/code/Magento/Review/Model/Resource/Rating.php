@@ -197,7 +197,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 }
                 $adapter->commit();
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
                 $adapter->rollBack();
             }
         }
@@ -233,7 +233,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
                 $adapter->commit();
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
                 $adapter->rollBack();
             }
         }

@@ -77,7 +77,7 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
         } catch (\Exception $e) {
             $error = true;
             $this->messageManager->addError(__('There was a category move error.'));
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
 
         if (!$error) {

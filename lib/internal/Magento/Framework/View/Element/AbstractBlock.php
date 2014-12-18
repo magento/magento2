@@ -743,7 +743,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
             $params = array_merge(['_secure' => $this->getRequest()->isSecure()], $params);
             return $this->_assetRepo->getUrlWithParams($fileId, $params);
         } catch (\Magento\Framework\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             return $this->_getNotFoundUrl();
         }
     }

@@ -312,7 +312,7 @@ class AccountManagement implements AccountManagementInterface
             );
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
     }
 
@@ -432,7 +432,7 @@ class AccountManagement implements AccountManagementInterface
             }
         } catch (MailException $e) {
             // If we are not able to send a reset password email, this should be ignored
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
     }
 
@@ -585,7 +585,7 @@ class AccountManagement implements AccountManagementInterface
             }
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
     }
 
@@ -639,7 +639,7 @@ class AccountManagement implements AccountManagementInterface
         try {
             $this->sendPasswordResetNotificationEmail($customer);
         } catch (MailException $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
 
         return true;

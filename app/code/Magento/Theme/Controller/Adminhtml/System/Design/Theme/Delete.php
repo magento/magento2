@@ -35,7 +35,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('We cannot delete the theme.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         }
         /**
          * @todo Temporary solution. Theme module should not know about the existence of editor module.

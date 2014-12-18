@@ -210,7 +210,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
         $this->_asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
         $e = new \Exception('test');
         $this->_adapter->expects($this->once())->method('minify')->with('content')->will($this->throwException($e));
-        $this->_logger->expects($this->once())->method('logException');
+        $this->_logger->expects($this->once())->method('critical');
         $this->_staticViewDir->expects($this->never())->method('writeFile');
         $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
         $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));

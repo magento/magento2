@@ -179,7 +179,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                 $this->throwException(new \Exception())
             );
         $this->loggerMock->expects($this->once())
-            ->method('logException');
+            ->method('critical');
         $this->productMock->expects($this->once())
             ->method('setAttributeSetId')
             ->with(3)

@@ -215,7 +215,7 @@ class Combine extends AbstractCondition
                     $this->addCondition($condition);
                     $condition->loadArray($conditionArr, $key);
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                 }
             }
         }

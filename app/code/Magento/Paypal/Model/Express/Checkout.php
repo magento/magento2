@@ -391,7 +391,7 @@ class Checkout
                     $this->_configCacheType->save($pal, $cacheId);
                 } catch (\Exception $e) {
                     $this->_configCacheType->save(self::PAL_CACHE_ID, $cacheId);
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                 }
             }
         }
@@ -815,7 +815,7 @@ class Checkout
             try {
                 $this->_involveNewCustomer();
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
 

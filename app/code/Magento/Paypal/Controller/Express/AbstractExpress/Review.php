@@ -33,7 +33,7 @@ class Review extends \Magento\Paypal\Controller\Express\AbstractExpress
             $this->messageManager->addError(
                 __('We can\'t initialize Express Checkout review.')
             );
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         }
         $this->_redirect('checkout/cart');
     }

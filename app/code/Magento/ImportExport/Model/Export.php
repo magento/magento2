@@ -94,7 +94,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 try {
                     $this->_entityAdapter = $this->_entityFactory->create($entities[$this->getEntity()]['model']);
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                     throw new \Magento\Framework\Model\Exception(__('Please enter a correct entity model'));
                 }
                 if (!$this->_entityAdapter instanceof \Magento\ImportExport\Model\Export\Entity\AbstractEntity &&
@@ -138,7 +138,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                 try {
                     $this->_writer = $this->_exportAdapterFac->create($fileFormats[$this->getFileFormat()]['model']);
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                     throw new \Magento\Framework\Model\Exception(__('Please enter a correct entity model'));
                 }
                 if (!$this->_writer instanceof \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter) {

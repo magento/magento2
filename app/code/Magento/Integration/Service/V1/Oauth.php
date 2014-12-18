@@ -220,7 +220,7 @@ class Oauth implements OauthInterface
         } catch (\Magento\Framework\Oauth\Exception $exception) {
             throw $exception;
         } catch (\Exception $exception) {
-            $this->_logger->logException($exception);
+            $this->_logger->critical($exception);
             throw new \Magento\Framework\Oauth\Exception(
                 'Unable to post data to consumer due to an unexpected error'
             );

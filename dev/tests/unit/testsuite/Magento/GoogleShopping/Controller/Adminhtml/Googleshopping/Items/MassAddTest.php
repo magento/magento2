@@ -73,7 +73,7 @@ class MassAddTest extends \PHPUnit_Framework_TestCase
         $this->flag->expects($this->once())->method('lock')
             ->will($this->throwException(new \Exception('Test exception')));
 
-        $logger = $this->getMockBuilder('Magento\Framework\Logger')->setMethods(['logException'])
+        $logger = $this->getMockBuilder('Magento\Framework\Logger')->setMethods(['critical'])
             ->disableOriginalConstructor()->getMock();
         $this->controllerArguments['context']->getObjectManager()
             ->expects($this->at(2))->method('get')->with('Magento\Framework\Logger')

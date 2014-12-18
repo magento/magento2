@@ -615,7 +615,7 @@ class Filter extends \Magento\Framework\Filter\Template
             $value = parent::filter($value);
         } catch (\Exception $e) {
             $value = '';
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
         return $value;
     }

@@ -1005,7 +1005,7 @@ abstract class AbstractType
         } catch (\Magento\Framework\Model\Exception $e) {
             $errors[] = $e->getMessages();
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             $errors[] = __('Something went wrong while processing the request.');
         }
 

@@ -193,7 +193,7 @@ class File
             try {
                 $fileInfo = $this->_mediaHelper->collectFileInfo($this->getMediaBaseDirectory(), $fileName);
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
                 continue;
             }
 
@@ -221,7 +221,7 @@ class File
                 $this->{$callback}($part);
             } catch (\Exception $e) {
                 $this->_errors[] = $e->getMessage();
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
 
@@ -284,7 +284,7 @@ class File
 
                 return $this->_fileUtility->saveFile($filename, $file['content'], $overwrite);
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
                 throw new \Magento\Framework\Model\Exception(
                     __('Unable to save file "%1" at "%2"', $file['filename'], $file['directory'])
                 );

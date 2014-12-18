@@ -316,7 +316,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
 
         $this->loggerMock->expects($this->once())
-            ->method('logException')
+            ->method('critical')
             ->with($exception);
 
         $this->urlBuilderMock->expects($this->once())

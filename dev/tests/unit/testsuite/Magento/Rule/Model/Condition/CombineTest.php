@@ -111,7 +111,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->conditionObjectMock);
 
         $this->loggerMock->expects($this->never())
-            ->method('logException');
+            ->method('critical');
 
         $result = $this->combine->loadArray($array);
 
@@ -138,7 +138,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Exception('everything is fine, it is test'));
 
         $this->loggerMock->expects($this->once())
-            ->method('logException')
+            ->method('critical')
             ->with();
 
         $result = $this->combine->loadArray($array);

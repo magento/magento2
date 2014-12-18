@@ -127,7 +127,7 @@ class Add extends Action\Action implements IndexInterface
             );
         } catch (\Exception $e) {
             $this->messageManager->addError(__('An error occurred while adding item to wish list.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         }
 
         $this->_redirect('*', ['wishlist_id' => $wishlist->getId()]);

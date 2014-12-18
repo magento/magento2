@@ -27,7 +27,7 @@ class LoadAttributes extends \Magento\GoogleShopping\Controller\Adminhtml\Google
                 )->toHtml()
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             // just need to output text with error
             $this->messageManager->addError(__("We can't load attributes."));
         }

@@ -223,7 +223,7 @@ class Minified implements MergeableInterface
             try {
                 $this->fillPropertiesByMinifyingAsset();
             } catch (\Exception $e) {
-                $this->logger->logException(
+                $this->logger->critical(
                     new \Magento\Framework\Exception(
                         'Could not minify file: ' . $this->originalAsset->getSourceFile(),
                         0,

@@ -316,7 +316,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
         } catch (\Exception $e) {
             $adapter->rollback();
             $stream->close();
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw new \Magento\Framework\Model\Exception(__('Something went wrong while importing table rates.'));
         }
 

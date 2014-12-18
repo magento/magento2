@@ -201,7 +201,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
     {
         $logerMock = $this->getMock(
             'Magento\Framework\Logger',
-            ['logException', '__wakeup'],
+            ['critical', '__wakeup'],
             [],
             '',
             false
@@ -215,7 +215,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
             ->with($this->shipmentMock, $this->requestMock)
             ->will($this->returnValue(true));
         $this->shipmentMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));
-        $logerMock->expects($this->once())->method('logException');
+        $logerMock->expects($this->once())->method('critical');
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with('Magento\Framework\Logger')

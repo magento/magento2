@@ -35,10 +35,10 @@ class SaveCssContent extends \Magento\DesignEditor\Controller\Adminhtml\System\D
             ];
         } catch (CoreException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('We can\'t save the custom css file.')];
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         }
         $this->getResponse()->representJson(
             $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)

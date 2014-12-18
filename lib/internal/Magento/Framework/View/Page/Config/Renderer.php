@@ -339,7 +339,7 @@ class Renderer
                 $result .= sprintf($template, $asset->getUrl());
             }
         } catch (\Magento\Framework\Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
         }
         return $result;

@@ -79,7 +79,7 @@ class AclRetriever
         } catch (AuthorizationException $e) {
             throw $e;
         } catch (\Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             throw new LocalizedException(
                 'Error happened while getting a list of allowed resources. Check exception log for details.'
             );

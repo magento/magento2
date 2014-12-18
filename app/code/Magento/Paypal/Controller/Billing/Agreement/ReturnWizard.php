@@ -38,7 +38,7 @@ class ReturnWizard extends \Magento\Paypal\Controller\Billing\Agreement
             } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
                 $this->messageManager->addError(__('We couldn\'t finish the billing agreement wizard.'));
             }
             $this->_redirect('*/*/index');

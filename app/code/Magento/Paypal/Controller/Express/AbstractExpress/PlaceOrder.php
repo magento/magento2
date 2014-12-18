@@ -66,7 +66,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             $this->_redirect('*/*/review');
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t place the order.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             $this->_redirect('*/*/review');
         }
     }

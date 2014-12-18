@@ -40,7 +40,7 @@ class DirectorTest extends \PHPUnit_Framework_TestCase
         $this->_builderMock = $this->getMock('Magento\Backend\Model\Menu\Builder', [], [], '', false);
         $this->_logger = $this->getMock(
             'Magento\Framework\Logger',
-            ['addStoreLog', 'log', 'logException'],
+            ['addStoreLog', 'log', 'critical'],
             [],
             '',
             false

@@ -29,7 +29,7 @@ class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $this->messageManager->addError($errorMessage . ' ' . $ruleJob->getError());
             }
         } catch (\Exception $e) {
-            $this->_objectManager->create('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->create('Magento\Framework\Logger')->critical($e);
             $this->messageManager->addError($errorMessage);
         }
         $this->_redirect('catalog_rule/*');

@@ -144,7 +144,7 @@ class Observer
             $this->_errors[] = $e->getMessage();
             $this->_errors[] = $e->getTrace();
             $this->_logger->log($e->getMessage(), \Zend_Log::ERR);
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
 
         if ($this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_MAINTENANCE_MODE, ScopeInterface::SCOPE_STORE)) {

@@ -22,7 +22,7 @@ class DeleteCustomFiles extends \Magento\DesignEditor\Controller\Adminhtml\Syste
             $this->_forward('jsList');
         } catch (\Exception $e) {
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         }
     }
 }

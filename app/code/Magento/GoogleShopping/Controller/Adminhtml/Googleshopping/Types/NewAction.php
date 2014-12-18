@@ -26,7 +26,7 @@ class NewAction extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopp
             $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Google Content Attribute Mapping'));
             $this->_view->renderLayout();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             $this->messageManager->addError(__("We can't create Attribute Set Mapping."));
             $this->_redirect('adminhtml/*/index', ['store' => $this->_getStore()->getId()]);
         }

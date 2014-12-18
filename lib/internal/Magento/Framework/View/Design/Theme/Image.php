@@ -158,7 +158,7 @@ class Image
             $this->theme->setPreviewImage($destinationFileName);
         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
             $this->theme->setPreviewImage(null);
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
         return $isCopied;
     }

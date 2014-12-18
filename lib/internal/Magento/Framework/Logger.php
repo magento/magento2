@@ -69,7 +69,7 @@ class Logger
      * @param \Exception $e
      * @return void
      */
-    public function logException(\Exception $e)
+    public function critical(\Exception $e)
     {
         $this->log("\n" . $e->__toString(), \Zend_Log::ERR);
     }

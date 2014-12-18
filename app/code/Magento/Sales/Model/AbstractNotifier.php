@@ -67,7 +67,7 @@ abstract class AbstractNotifier extends \Magento\Framework\Model\AbstractModel
                 $historyItem->save();
             }
         } catch (Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             return false;
         }
         return true;

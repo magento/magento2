@@ -63,7 +63,7 @@ class OrderNotifierTest extends \PHPUnit_Framework_TestCase
         );
         $this->loggerMock = $this->getMock(
             'Magento\Framework\Logger',
-            ['logException'],
+            ['critical'],
             [],
             '',
             false
@@ -139,7 +139,7 @@ class OrderNotifierTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->order))
             ->will($this->throwException($exception));
         $this->loggerMock->expects($this->once())
-            ->method('logException')
+            ->method('critical')
             ->with($this->equalTo($exception));
         $this->assertFalse($this->notifier->notify($this->order));
     }

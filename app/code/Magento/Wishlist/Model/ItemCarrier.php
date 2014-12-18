@@ -145,7 +145,7 @@ class ItemCarrier
                     $cart->getQuote()->deleteItem($cartItem);
                 }
             } catch (\Exception $e) {
-                $this->logger->logException($e);
+                $this->logger->critical($e);
                 $messages[] = __('We cannot add this item to your shopping cart.');
             }
         }

@@ -80,7 +80,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addWarning');
         $this->loggerMock->expects($this->once())
-            ->method('logException');
+            ->method('critical');
 
         $this->assertFalse($this->emailSender->send($this->orderMock));
     }

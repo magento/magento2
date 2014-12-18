@@ -31,9 +31,9 @@ class QuickEdit extends \Magento\DesignEditor\Controller\Adminhtml\System\Design
             $response = ['success' => true];
         } catch (CoreException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             $response = ['error' => true, 'message' => __('This theme is not saved.')];
         }
         $this->getResponse()->representJson($coreHelper->jsonEncode($response));

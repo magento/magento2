@@ -410,7 +410,7 @@ class Bootstrap
                 if (!$this->objectManager) {
                     throw new \DomainException();
                 }
-                $this->objectManager->get('Magento\Framework\Logger')->logException($e);
+                $this->objectManager->get('Magento\Framework\Logger')->critical($e);
             } catch (\Exception $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }

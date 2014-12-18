@@ -1102,7 +1102,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             if ($linkedId == null) {
                                 // Import file links to a SKU which is skipped for some reason, which leads to a "NULL"
                                 // link causing fatal errors.
-                                $this->_logger->logException(
+                                $this->_logger->critical(
                                     new \Exception(
                                         sprintf(
                                             'WARNING: Orphaned link skipped: From SKU %s (ID %d) to SKU %s, ' .

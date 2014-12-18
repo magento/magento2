@@ -187,7 +187,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     public function testRenderMsrpNotRegisteredException()
     {
         $this->logger->expects($this->once())
-            ->method('logException');
+            ->method('critical');
 
         $this->priceInfo->expects($this->once())
             ->method('getPrice')

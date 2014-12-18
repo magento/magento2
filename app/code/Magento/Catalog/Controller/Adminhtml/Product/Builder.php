@@ -75,7 +75,7 @@ class Builder
                 $product->load($productId);
             } catch (\Exception $e) {
                 $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE);
-                $this->logger->logException($e);
+                $this->logger->critical($e);
             }
         }
 

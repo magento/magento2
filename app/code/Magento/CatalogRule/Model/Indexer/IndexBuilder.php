@@ -129,7 +129,7 @@ class IndexBuilder
         try {
             $this->doReindexByIds($ids);
         } catch (\Exception $e) {
-            $this->logException($e);
+            $this->critical($e);
             throw new CatalogRuleException($e->getMessage(), $e->getCode(), $e);
         }
     }
@@ -162,7 +162,7 @@ class IndexBuilder
         try {
             $this->doReindexFull();
         } catch (\Exception $e) {
-            $this->logException($e);
+            $this->critical($e);
             throw new CatalogRuleException($e->getMessage(), $e->getCode(), $e);
         }
     }
@@ -551,7 +551,7 @@ class IndexBuilder
     /**
      * @param int $websiteId
      * @param int|null $productId
-     * @return \Zend\Db\Adapter\Driver\StatementInterface|\Zend_Db_Statement_Interface
+     * @return \Zend_Db_Statement_Interface
      * @throws \Magento\Eav\Exception
      */
     protected function getRuleProductsStmt($websiteId, $productId = null)
@@ -691,8 +691,8 @@ class IndexBuilder
      * @param \Exception $e
      * @return void
      */
-    protected function logException($e)
+    protected function critical($e)
     {
-        $this->logger->logException($e);
+        $this->logger->critical($e);
     }
 }

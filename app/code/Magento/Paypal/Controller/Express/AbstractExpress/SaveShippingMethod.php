@@ -29,7 +29,7 @@ class SaveShippingMethod extends \Magento\Paypal\Controller\Express\AbstractExpr
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t update shipping method.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
         }
         if ($isAjax) {
             $this->getResponse()->setBody(

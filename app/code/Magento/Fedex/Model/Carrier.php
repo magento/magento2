@@ -459,7 +459,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $debugData['result'] = $response;
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         } else {
             $response = unserialize($response);
@@ -774,7 +774,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 throw new \Exception(__('Failed to parse xml document: %1', $xmlContent));
             }
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             return false;
         }
     }
@@ -1038,7 +1038,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $debugData['result'] = $response;
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         } else {
             $response = unserialize($response);

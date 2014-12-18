@@ -451,7 +451,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
                 $nextPeriod = $tr['time'];
             }
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
 
         return $tzTransitions;

@@ -71,7 +71,7 @@ class Save extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
                 );
             }
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             $this->messageManager->addError(__("We can't save Attribute Set Mapping."));
         }
         $this->_redirect('adminhtml/*/index', ['store' => $this->_getStore()->getId()]);

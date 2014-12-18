@@ -180,7 +180,7 @@ class MassOperations
                         $e->getMessage()
                     );
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                     $errors[] = __('The product "%1" hasn\'t been added to Google Content.', $product->getName());
                 }
             }
@@ -268,7 +268,7 @@ class MassOperations
                     );
                     $totalFailed++;
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                     $errors[] = __('The item "%1" hasn\'t been updated.', $item->getProduct()->getName());
                     $totalFailed++;
                 }
@@ -329,7 +329,7 @@ class MassOperations
                         $item->getProduct()
                     );
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                     $errors[] = __('The item "%1" hasn\'t been deleted.', $item->getProduct()->getName());
                 }
             }

@@ -27,7 +27,7 @@ class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wys
                 DirectoryList::MEDIA
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
             $this->_redirect('core/index/notFound');
         }
     }
