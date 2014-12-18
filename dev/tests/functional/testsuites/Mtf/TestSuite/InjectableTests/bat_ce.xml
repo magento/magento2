@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../vendor/magento/mtf/Mtf/TestRunner/etc/testRunner.xsd">
+    <rule scope="testsuite">
+        <allow>
+            <!--Products-->
+            <class value="Magento\Bundle\Test\TestCase\BundleFixedTest" />
+            <class value="Magento\Catalog\Test\TestCase\Product\CreateTest" />
+            <class value="Magento\ConfigurableProduct\Test\TestCase\CreateConfigurableTest" />
+            <class value="Magento\ConfigurableProduct\Test\TestCase\CreateWithAttributeTest" />
+            <class value="Magento\Catalog\Test\TestCase\Product\CreateSimpleWithCustomOptionsAndCategoryTest" />
+            <!--Category-->
+            <class value="Magento\Catalog\Test\TestCase\Category\CreateTest" />
+            <!--Stores-->
+            <class value="Magento\Store\Test\TestCase\StoreTest" />
+        </allow>
+    </rule>
+    <rule scope="variation">
+        <allow>
+            <tag group="bamboo_plan" value="BAT" />
+        </allow>
+    </rule>
+</config>
