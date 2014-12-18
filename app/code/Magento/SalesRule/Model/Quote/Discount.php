@@ -87,6 +87,7 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
         foreach ($items as $item) {
             if ($item->getNoDiscount() || !$this->_calculator->canApplyDiscount($item)) {
                 $item->setDiscountAmount(0);
+                $item->setIsApplyDiscount(false);
                 $item->setBaseDiscountAmount(0);
 
                 // ensure my children are zeroed out
@@ -119,6 +120,7 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
                 $this->_calculator->process($item);
                 $this->_aggregateItemDiscount($item);
             }
+            $item->setIsApplyDiscount(true);
         }
 
         /**

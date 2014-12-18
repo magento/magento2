@@ -270,16 +270,33 @@ class Create extends \Magento\Backend\App\Action
         if (isset($data) && isset($data['coupon']['code'])) {
             $couponCode = trim($data['coupon']['code']);
         }
+
         if (!empty($couponCode)) {
-            if ($this->_getQuote()->getCouponCode() !== $couponCode) {
+            $isApplyDiscount = false;
+            foreach ($this->_getQuote()->getAllItems() as $item) {
+                if ($item->getIsApplyDiscount() === true) {
+                    $isApplyDiscount = true;
+                    break;
+                }
+            }
+            if (!$isApplyDiscount) {
                 $this->messageManager->addError(
                     __(
-                        '"%1" coupon code is not valid.',
+                        '"%1" coupon code for item(s) selected do not apply discount',
                         $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
                     )
                 );
             } else {
-                $this->messageManager->addSuccess(__('The coupon code has been accepted.'));
+                if ($this->_getQuote()->getCouponCode() !== $couponCode) {
+                    $this->messageManager->addError(
+                        __(
+                            '"%1" coupon code is not valid.',
+                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                        )
+                    );
+                } else {
+                    $this->messageManager->addSuccess(__('The coupon code has been accepted.'));
+                }
             }
         }
 
