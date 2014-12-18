@@ -1,0 +1,72 @@
+#  Dockerized testing and analysis tools for developers
+# ======================================================
+#
+# 1. Make sure you have docker set up.
+# 2. Make sure you have fig installed.
+# 3. Run `fig run --rm setup` to get things set up.
+# 4. Run `fig up -d webapp` to launch the web server.
+#
+#  Troubleshooting
+# -----------------
+#
+# You probably want to set
+# ini_set('xdebug.max_nesting_level', 200);
+# ini_set('display_errors', 1);
+#
+# in app/bootstrap.php
+#
+dbdata:
+    image: mysql:5
+    command: echo 'Just providing a volume for mysql data'
+db:
+    image: mysql:5
+    environment:
+        - MYSQL_ROOT_PASSWORD=mage
+        - MYSQL_USER=mage
+        - MYSQL_PASSWORD=mage
+        - MYSQL_DATABASE=mage
+    volumes_from:
+        - dbdata
+    ports:
+        - 3306:3306
+setup:
+    image: kojiromike/magento_tools
+    volumes:
+        - .:/srv/magento
+        - /Users/smithm5/.composer/auth.json:/root/.composer/auth.json
+    links:
+        - db
+    command: sh -ec 'composer -o install &&
+                     cd setup &&
+                     php -d xdebug.max_nesting_level=200
+                         index.php install --base_url=http://localhost/
+                                           --backend_frontname=admin
+                                           --db_host=db_1
+                                           --db_name="$DB_1_ENV_MYSQL_DATABASE"
+                                           --db_user="$DB_1_ENV_MYSQL_USER"
+                                           --db_pass="$DB_1_ENV_MYSQL_PASSWORD"
+                                           --admin_firstname=Nim
+                                           --admin_lastname=Da
+                                           --admin_email=admin@localhost
+                                           --admin_username=admin
+                                           --admin_password=admin123
+                                           --language=en_US
+                                           --currency=USD
+                                           --timezone=America/New_York'
+shell:
+    image: kojiromike/magento_tools
+    volumes:
+        - .:/srv/magento
+    volumes_from:
+        - dbdata
+    links:
+        - db
+    command: ["/bin/bash", "--login"]
+webapp:
+    image: kojiromike/magento_apache
+    volumes:
+        - .:/srv/magento
+    links:
+        - db
+    ports:
+        - "80:80"
