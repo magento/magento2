@@ -47,17 +47,15 @@ class Logger extends \Magento\Framework\Logger
     /**
      * @param string $message
      * @param int $level
-     * @param string $loggerKey
      */
-    public function log($message, $level = \Zend_Log::DEBUG, $loggerKey = \Magento\Framework\Logger::LOGGER_SYSTEM)
+    public function log($message, $level = \Zend_Log::DEBUG)
     {
         if ($level <= $this->minimumErrorLevel) {
             $this->messages[] = [
-                'logger' => $loggerKey,
                 'level' => $level,
                 'message' => $message,
             ];
         }
-        parent::log($message, $level, $loggerKey);
+        parent::log($message, $level);
     }
 }

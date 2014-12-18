@@ -297,8 +297,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->_logger->expects($this->atLeastOnce())->method('log')
             ->with(
                 $this->stringStartsWith($errorString),
-                \Zend_Log::ERR,
-                \Magento\Framework\Logger::LOGGER_SYSTEM
+                \Zend_Log::ERR
             );
 
         $actualXml = $this->_model->getFileLayoutUpdatesXml();

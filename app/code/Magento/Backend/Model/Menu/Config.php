@@ -101,10 +101,6 @@ class Config
      */
     public function getMenu()
     {
-        if ($this->_scopeConfig->getValue('dev/log/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
-            $this->_logger->addStreamLog(\Magento\Backend\Model\Menu::LOGGER_KEY);
-        }
-
         try {
             $this->_initMenu();
             return $this->_menu;

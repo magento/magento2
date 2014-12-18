@@ -207,8 +207,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'logFile'
         )->with(
             $this->stringStartsWith($logText),
-            \Zend_Log::DEBUG,
-            \Magento\Framework\Logger::LOGGER_EXCEPTION
+            \Zend_Log::DEBUG
         );
 
         $messageCollection = $this->getMockBuilder(
