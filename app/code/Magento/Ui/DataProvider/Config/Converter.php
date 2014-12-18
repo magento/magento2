@@ -26,7 +26,7 @@ class Converter implements ConverterInterface
         'text' => 'input',
         'textarea' => 'textarea',
         'multiline' => 'input',
-        'date' => 'input',
+        'date' => 'date',
         'select' => 'select',
         'multiselect' => 'multiselect',
         'boolean' => 'select',

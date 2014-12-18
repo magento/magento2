@@ -6,63 +6,63 @@
 -->
 <constraint>
     <assertProductRatingSuccessSaveMessage module="Magento_Review">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertProductRatingSuccessSaveMessage>
     <assertProductRatingSuccessDeleteMessage module="Magento_Review">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertProductRatingSuccessDeleteMessage>
     <assertProductRatingInGrid module="Magento_Review">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
     </assertProductRatingInGrid>
     <assertProductRatingNotInGrid module="Magento_Review">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
     </assertProductRatingNotInGrid>
     <assertProductRatingInProductPage module="Magento_Review">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
     </assertProductRatingInProductPage>
     <assertProductRatingNotInProductPage module="Magento_Review">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
     </assertProductRatingNotInProductPage>
     <assertReviewSuccessSaveMessage module="Magento_Review">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertReviewSuccessSaveMessage>
     <assertReviewCreationSuccessMessage module="Magento_Review">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertReviewCreationSuccessMessage>
     <assertProductReviewInGrid module="Magento_Review">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductReviewInGrid>
     <assertProductRatingOnReviewPage module="Magento_Review">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
     </assertProductRatingOnReviewPage>
     <assertProductRatingInProductPage module="Magento_Review">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
     </assertProductRatingInProductPage>
     <assertProductReviewMassActionSuccessMessage module="Magento_Review">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
         </require>
     </assertProductReviewMassActionSuccessMessage>
     <assertProductReviewMassActionSuccessDeleteMessage module="Magento_Review">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
         </require>
     </assertProductReviewMassActionSuccessDeleteMessage>
     <assertProductReviewBackendSuccessSaveMessage module="Magento_Review">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
     </assertProductReviewBackendSuccessSaveMessage>
     <assertProductReviewNotOnProductPage module="Magento_Review">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
     </assertProductReviewNotOnProductPage>
     <assertProductReviewOnProductPage module="Magento_Review">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
     </assertProductReviewOnProductPage>
     <assertProductReviewNotInGrid module="Magento_Review">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductReviewNotInGrid>
     <assertProductReviewInGridOnCustomerPage module="Magento_Review">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductReviewInGridOnCustomerPage>
 </constraint>

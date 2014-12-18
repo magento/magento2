@@ -17,12 +17,9 @@ use Mtf\Fixture\InjectableFixture;
  */
 class AssertProductIsPresentInWishlist extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that product is present in default wishlist

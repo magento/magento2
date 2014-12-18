@@ -23,11 +23,11 @@ class GoogleShoppingForm extends Form
     protected $attributeOptions = '//select[@id="gcontent_attribute_0_attribute"]//option';
 
     /**
-     * Loading Mask locator
+     * Locator for root elements
      *
      * @var string
      */
-    protected $loadingMask = '//ancestor::body/div[@id="loading-mask"]';
+    protected $loaderRootLocator = 'body';
 
     /**
      * Fill specified form data
@@ -43,7 +43,10 @@ class GoogleShoppingForm extends Form
             $element = $this->getElement($context, $field);
             if ($this->mappingMode || ($element->isVisible() && !$element->isDisabled())) {
                 $element->setValue($field['value']);
-                $this->waitForElementNotVisible($this->loadingMask, Locator::SELECTOR_XPATH);
+                $this->blockFactory->create(
+                    'Magento\Backend\Test\Block\Template',
+                    ['element' => $this->browser->find($this->loaderRootLocator)]
+                )->waitLoader();
             }
         }
     }

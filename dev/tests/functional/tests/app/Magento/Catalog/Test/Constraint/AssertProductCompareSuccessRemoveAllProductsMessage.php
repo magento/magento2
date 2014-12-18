@@ -13,14 +13,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductCompareSuccessRemoveAllProductsMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'You cleared the comparison list.';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    const SUCCESS_MESSAGE = 'You cleared the comparison list.';
 
     /**
      * Assert message is appeared on "Compare Products" page.

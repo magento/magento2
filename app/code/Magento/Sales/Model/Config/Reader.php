@@ -20,6 +20,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         '/config/section' => 'name',
         '/config/section/group' => 'name',
         '/config/section/group/item' => 'name',
+        '/config/section/group/item/renderer' => 'name',
         '/config/order/available_product_type' => 'name',
     ];
 

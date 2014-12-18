@@ -2,27 +2,14 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 define([
-    'underscore',
     'Magento_Ui/js/form/component'
-], function(_, Component) {
+], function(Component) {
     'use strict';
 
-    var defaults = {
-        collapsible:    false,
-        opened:         true
-    };
-
-    var __super__ = Component.prototype;
-
     return Component.extend({
-
-        /**
-         * Merges 'defaults' to instance, calls 'initialize' of parent
-         */
-        initialize: function() {
-            _.extend(this, defaults);
-
-            __super__.initialize.apply(this, arguments);
+        defaults: {
+            collapsible:    false,
+            opened:         true
         },
 
         /**
@@ -31,9 +18,8 @@ define([
          * @return {Object} - reference to instance
          */
         initObservable: function(){
-            __super__.initObservable.apply(this, arguments);
-
-            this.observe('opened');
+            this._super()
+                .observe('opened');
 
             return this;
         },

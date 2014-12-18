@@ -14,14 +14,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductAttributeSuccessDeleteMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'The product attribute has been deleted.';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    const SUCCESS_MESSAGE = 'The product attribute has been deleted.';
 
     /**
      * Assert that message "The product attribute has been deleted." is present on Attribute page

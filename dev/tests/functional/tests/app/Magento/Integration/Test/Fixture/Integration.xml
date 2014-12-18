@@ -1,0 +1,206 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<fixture class="Magento\Integration\Test\Fixture\Integration">
+    <module>Magento_Integration</module>
+    <type>composite</type>
+    <entities>
+        <integration>integration</integration>
+        <oauth_token>oauth_token</oauth_token>
+        <oauth_consumer>oauth_consumer</oauth_consumer>
+    </entities>
+    <entity_type>integration</entity_type>
+    <collection>Magento\Integration\Model\Resource\Integration\Collection</collection>
+    <fields>
+        <integration_id>
+            <attribute_code>integration_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value />
+            <input />
+        </integration_id>
+        <name>
+            <attribute_code>name</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+            <group>integration_info</group>
+        </name>
+        <email>
+            <attribute_code>email</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+            <group>integration_info</group>
+        </email>
+        <endpoint>
+            <attribute_code>endpoint</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+            <group>integration_info</group>
+        </endpoint>
+        <status>
+            <attribute_code>status</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </status>
+        <consumer_id>
+            <attribute_code>consumer_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </consumer_id>
+        <created_at>
+            <attribute_code>created_at</attribute_code>
+            <backend_type>timestamp</backend_type>
+            <is_required />
+            <default_value>CURRENT_TIMESTAMP</default_value>
+            <input />
+        </created_at>
+        <updated_at>
+            <attribute_code>updated_at</attribute_code>
+            <backend_type>timestamp</backend_type>
+            <is_required />
+            <default_value>0000-00-00 00:00:00</default_value>
+            <input />
+        </updated_at>
+        <setup_type>
+            <attribute_code>setup_type</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required />
+            <default_value>0</default_value>
+            <input />
+        </setup_type>
+        <identity_link_url>
+            <attribute_code>identity_link_url</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+            <group>integration_info</group>
+        </identity_link_url>
+        <entity_id>
+            <attribute_code>entity_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value />
+            <input />
+        </entity_id>
+        <admin_id>
+            <attribute_code>admin_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </admin_id>
+        <customer_id>
+            <attribute_code>customer_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </customer_id>
+        <type>
+            <attribute_code>type</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </type>
+        <token>
+            <attribute_code>token</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </token>
+        <secret>
+            <attribute_code>secret</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </secret>
+        <verifier>
+            <attribute_code>verifier</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </verifier>
+        <callback_url>
+            <attribute_code>callback_url</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </callback_url>
+        <revoked>
+            <attribute_code>revoked</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required />
+            <default_value>0</default_value>
+            <input />
+        </revoked>
+        <authorized>
+            <attribute_code>authorized</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required />
+            <default_value>0</default_value>
+            <input />
+        </authorized>
+        <user_type>
+            <attribute_code>user_type</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </user_type>
+        <key>
+            <attribute_code>key</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </key>
+        <rejected_callback_url>
+            <attribute_code>rejected_callback_url</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </rejected_callback_url>
+        <resource_access>
+            <attribute_code>resource_access</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>api</group>
+        </resource_access>
+        <resources>
+            <attribute_code>resources</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>api</group>
+        </resources>
+        <token_secret>
+            <attribute_code>token_secret</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>api</group>
+        </token_secret>
+        <consumer_secret>
+            <attribute_code>consumer_secret</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>api</group>
+        </consumer_secret>
+    </fields>
+    <repository_class>Magento\Integration\Test\Repository\Integration</repository_class>
+    <handler_interface>Magento\Integration\Test\Handler\Integration\IntegrationInterface</handler_interface>
+</fixture>

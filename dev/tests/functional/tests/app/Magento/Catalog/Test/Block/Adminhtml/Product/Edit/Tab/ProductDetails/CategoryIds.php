@@ -9,20 +9,26 @@ use Mtf\Client\Driver\Selenium\Element\MultisuggestElement;
 use Mtf\Client\Element\Locator;
 
 /**
- * Class CategoryIds
- * Typified element class for category element
+ * Typified element class for category element.
  */
 class CategoryIds extends MultisuggestElement
 {
     /**
-     * Selector suggest input
+     * Selector suggest input.
      *
      * @var string
      */
     protected $suggest = '#category_ids-suggest';
 
     /**
-     * Selector item of search result
+     * Selector for suggest element.
+     *
+     * @var string
+     */
+    protected $suggestElement = '.mage-suggest.category-select';
+
+    /**
+     * Selector item of search result.
      *
      * @var string
      */
@@ -36,7 +42,7 @@ class CategoryIds extends MultisuggestElement
     protected $top = './ancestor::body//*[@class="page-main-actions"]';
 
     /**
-     * Set value
+     * Set value.
      *
      * @param array|string $values
      * @return void
@@ -44,6 +50,25 @@ class CategoryIds extends MultisuggestElement
     public function setValue($values)
     {
         $this->find($this->top, Locator::SELECTOR_XPATH)->click();
+        $this->waitInitElement();
         parent::setValue($values);
+    }
+
+    /**
+     * Wait init search suggest container.
+     *
+     * @return void
+     * @throws \Exception
+     */
+    protected function waitInitElement()
+    {
+        $browser = clone $this;
+        $selector = $this->suggestElement;
+
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                return $browser->find($selector)->isVisible() ? true : null;
+            }
+        );
     }
 }

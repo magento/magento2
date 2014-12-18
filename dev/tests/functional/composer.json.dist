@@ -1,16 +1,16 @@
 {
     "require": {
-        "magento/mtf": "dev-master",
+        "magento/mtf": "dev-develop",
         "php": ">=5.4.0",
         "phpunit/phpunit": "4.1.0",
         "phpunit/phpunit-selenium": ">=1.2",
         "netwing/selenium-server-standalone": ">=2.35"
     },
     "autoload": {
-        "psr-0": {
-            "Mtf\\": "lib",
-            "Magento\\": "",
-            "": ["testsuites", "generated", "lib", "tests/app"]
+        "psr-4": {
+            "Mtf\\": ["lib/Mtf/", "generated/Mtf/", "testsuites/Mtf/"],
+            "Magento\\": ["generated/Magento/", "tests/app/Magento/"],
+            "Test\\": "generated/Test/"
         }
     }
 }

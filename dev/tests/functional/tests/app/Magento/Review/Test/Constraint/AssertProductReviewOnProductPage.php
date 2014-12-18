@@ -18,12 +18,9 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductReviewOnProductPage extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'middle';
+    /* tags */
+    const SEVERITY = 'middle';
+    /* end tags */
 
     /**
      * Assert that product review available on product page

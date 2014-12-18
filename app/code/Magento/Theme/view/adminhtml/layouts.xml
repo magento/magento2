@@ -5,6 +5,9 @@
  */
 -->
 <page_layouts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/View/PageLayout/etc/layouts.xsd">
+    <layout id="admin-empty">
+        <label translate="true">Admin empty</label>
+    </layout>
     <layout id="admin-1column">
         <label translate="true">Admin 1column</label>
     </layout>

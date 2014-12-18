@@ -44,6 +44,7 @@ $categories = [
 ];
 foreach ($categories as $data) {
     $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+    $model->isObjectNew(true);
     $model->setId($data['id'])
         ->setName($data['name'])
         ->setParentId($data['parent_id'])

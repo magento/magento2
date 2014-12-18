@@ -1,7 +1,0 @@
-"product";"constraint"
-"catalogProductSimple::default";"assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty"
-"catalogProductVirtual::default";"assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty"
-"downloadableProductInjectable::with_two_separately_links";"assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty, assertProductDetailsInWishlist"
-"configurableProductInjectable::default";"assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty, assertProductDetailsInWishlist"
-"bundleProduct::bundle_dynamic_product";"assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty, assertProductDetailsInWishlist"
-"bundleProduct::bundle_fixed_product";"assertMoveProductToWishlistSuccessMessage, assertProductIsPresentInWishlist, assertCartIsEmpty, assertProductDetailsInWishlist"

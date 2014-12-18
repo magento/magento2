@@ -4,6 +4,8 @@
  */
 namespace Magento\Framework\Module;
 
+use Magento\Framework\Module\Plugin\DbStatusValidator;
+
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -26,11 +28,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $_outputConfig;
 
-    /**
-     * @var \Magento\Framework\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $moduleResource;
-
     protected function setUp()
     {
         $this->_moduleList = $this->getMockForAbstractClass('Magento\Framework\Module\ModuleListInterface');
@@ -42,11 +39,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 ['Module_Three', ['name' => 'Two_Three']],
             ]));
         $this->_outputConfig = $this->getMockForAbstractClass('Magento\Framework\Module\Output\ConfigInterface');
-        $this->moduleResource = $this->getMockForAbstractClass('\Magento\Framework\Module\ResourceInterface');
         $this->_model = new \Magento\Framework\Module\Manager(
             $this->_outputConfig,
             $this->_moduleList,
-            $this->moduleResource,
             [
                 'Module_Two' => self::XML_PATH_OUTPUT_ENABLED,
             ]
@@ -110,70 +105,5 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'path literal, output disabled' => [false, false],
             'path literal, output enabled'  => [true, true],
         ];
-    }
-
-    /**
-     * @param string $moduleName
-     * @param string|bool $dbVersion
-     * @param bool $expectedResult
-     *
-     * @dataProvider isDbUpToDateDataProvider
-     */
-    public function testIsDbSchemaUpToDate($moduleName, $dbVersion, $expectedResult)
-    {
-        $resourceName = 'resource';
-        $this->moduleResource->expects($this->once())
-            ->method('getDbVersion')
-            ->with($resourceName)
-            ->will($this->returnValue($dbVersion));
-        $this->assertSame($expectedResult, $this->_model->isDbSchemaUpToDate($moduleName, $resourceName));
-    }
-
-    /**
-     * @param string $moduleName
-     * @param string|bool $dbVersion
-     * @param bool $expectedResult
-     *
-     * @dataProvider isDbUpToDateDataProvider
-     */
-    public function testIsDbDataUpToDate($moduleName, $dbVersion, $expectedResult)
-    {
-        $resourceName = 'resource';
-        $this->moduleResource->expects($this->once())
-            ->method('getDataVersion')
-            ->with($resourceName)
-            ->will($this->returnValue($dbVersion));
-        $this->assertSame($expectedResult, $this->_model->isDbDataUpToDate($moduleName, $resourceName));
-    }
-
-    /**
-     * @return array
-     */
-    public function isDbUpToDateDataProvider()
-    {
-        return [
-            'version in config == version in db' => ['Module_One', '1', true],
-            'version in config < version in db' => ['Module_One', '2', false],
-            'version in config > version in db' => ['Module_Two', '1', false],
-            'no version in db' => ['Module_One', false, false],
-        ];
-    }
-
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Schema version for module 'Module_Three' is not specified
-     */
-    public function testIsDbSchemaUpToDateException()
-    {
-        $this->_model->isDbSchemaUpToDate('Module_Three', 'resource');
-    }
-
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Schema version for module 'Module_Three' is not specified
-     */
-    public function testIsDbDataUpToDateException()
-    {
-        $this->_model->isDbDataUpToDate('Module_Three', 'resource');
     }
 }

@@ -140,7 +140,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
                     $this->quoteRepository->save($this->_quote);
                     $this->setQuoteId($this->_quote->getId());
                 } else {
-                    $this->_quote = $this->quoteRepository->get($this->getQuoteId());
+                    $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);
                     $this->_quote->setStoreId($this->getStoreId());
                 }
 

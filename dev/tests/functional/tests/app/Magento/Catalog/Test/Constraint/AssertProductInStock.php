@@ -15,12 +15,9 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductInStock extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Text value for checking Stock Availability

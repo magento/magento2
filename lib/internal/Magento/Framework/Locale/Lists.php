@@ -126,11 +126,10 @@ class Lists implements \Magento\Framework\Locale\ListsInterface
     public function getOptionTimezones()
     {
         $options = [];
-        $zones = $this->getTranslationList('windowstotimezone');
-        ksort($zones);
-        foreach ($zones as $code => $name) {
-            $name = trim($name);
-            $options[] = ['label' => empty($name) ? $code : $name . ' (' . $code . ')', 'value' => $code];
+        $zones = $this->getTranslationList('timezonetowindows');
+        foreach ($zones as $windowsTimezones => $isoTimezones) {
+            $windowsTimezones = trim($windowsTimezones);
+            $options[] = ['label' => empty($windowsTimezones) ? $isoTimezones : $windowsTimezones . ' (' . $isoTimezones . ')', 'value' => $isoTimezones];
         }
         return $this->_sortOptionArray($options);
     }

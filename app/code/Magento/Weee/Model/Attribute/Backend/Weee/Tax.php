@@ -140,7 +140,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
             if (isset($tax['state']) && $tax['state']) {
                 $state = $tax['state'];
             } else {
-                $state = '*';
+                $state = '0';
             }
 
             $data = [];

@@ -16,12 +16,9 @@ use Mtf\Fixture\InjectableFixture;
  */
 class AssertProductAttributeIsUsedInSortOnFrontend extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that attribute present in sort dropdown on search results page on frontend.

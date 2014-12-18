@@ -8,28 +8,34 @@ define([
     'Magento_Ui/js/lib/validation/validator'
 ], function (_, utils, Component, validator) {
     'use strict';
-
-    var defaults = {
-        hidden:             false,
-        preview:            '',
-        focused:            false,
-        tooltip:            null,
-        required:           false,
-        disabled:           false,
-        tmpPath:            'ui/form/element/',
-        tooltipTpl:         'ui/form/element/helper/tooltip',
-        input_type:         'input',
-        placeholder:        null,
-        noticeid:           null,
-        description:        '',
-        label:              '',
-        error:              '',
-        notice:             null
-    };
-
-    var __super__ = Component.prototype;
+    
+    /**
+     * Checks wether the incoming value is not empty,
+     * e.g. not 'null' or 'undefined'
+     *
+     * @param {*} value - Value to check.
+     * @returns {Boolean}
+     */
+    function isEmpty(value){
+        return _.isUndefined(value) || _.isNull(value);
+    }
 
     return Component.extend({
+        defaults: {
+            hidden:             false,
+            preview:            '',
+            focused:            false,
+            required:           false,
+            disabled:           false,
+            tmpPath:            'ui/form/element/',
+            tooltipTpl:         'ui/form/element/helper/tooltip',
+            input_type:         'input',
+            placeholder:        '',
+            description:        '',
+            label:              '',
+            error:              '',
+            notice:             ''
+        },
 
         /**
          * Invokes initialize method of parent class, contains initialization
@@ -38,14 +44,13 @@ define([
          * @param {Object} config - form element configuration
          */
         initialize: function () {
-            _.extend(this, defaults);
-
             _.bindAll(this, 'onUpdate', 'reset');
 
-            __super__.initialize.apply(this, arguments);
-
-            this.setHidden(this.hidden())
+            this._super()
+                .setHidden(this.hidden())
                 .store(this.value());
+
+            return this;
         },
 
         /**
@@ -54,18 +59,15 @@ define([
          * @returns {Abstract} Chainable.
          */
         initObservable: function () {
-            var value = this.getInititalValue(), 
-                rules;
+            var rules = this.validation = this.validation || {};
 
-            __super__.initObservable.apply(this, arguments);
+            this._super();
 
-            rules = this.validation = this.validation || {};
-
-            this.initialValue = value;
+            this.initialValue = this.getInititalValue();
 
             this.observe('error disabled focused preview hidden')
                 .observe({
-                    'value':    value,
+                    'value':    this.initialValue,
                     'required': !!rules['required-entry']
                 });
 
@@ -78,11 +80,14 @@ define([
          * @returns {Abstract} Chainable.
          */
         initProperties: function () {
-            __super__.initProperties.apply(this, arguments);
+            var uid = utils.uniqueid();
+
+            this._super();
 
             _.extend(this, {
-                'uid':        utils.uniqueid(),
-                'inputName':  utils.serializeName(this.dataScope)
+                'uid':          uid,
+                'noticeId':     'notice-' + this.uid,
+                'inputName':    utils.serializeName(this.dataScope)
             });
 
             _.defaults(this, {
@@ -101,7 +106,7 @@ define([
             var provider  = this.provider,
                 data      = provider.data;
 
-            __super__.initListeners.apply(this, arguments);
+            this._super();
 
             data.on('reset', this.reset, this.name);
             
@@ -117,22 +122,14 @@ define([
          */
         getInititalValue: function(){
             var data    = this.provider.data,
-                value   = data.get(this.dataScope);
+                values  = [data.get(this.dataScope), this.default],
+                value;
 
-            if(_.isUndefined(value) || _.isNull(value)){
-                value = '';
-            }
+            values.some(function(v){
+                return !isEmpty(value = v);
+            });
 
-            return value;
-        },
-
-        /**
-         * Defines notice id for the element.
-         * 
-         * @returns {String} Notice id.
-         */
-        getNoticeId: function () {
-            return 'notice-' + this.uid;
+            return isEmpty(value) ? '': value;
         },
 
         /**
@@ -262,6 +259,6 @@ define([
                 .trigger('update', this.hasChanged());
 
             this.validate();
-        },
+        }
     });
 });

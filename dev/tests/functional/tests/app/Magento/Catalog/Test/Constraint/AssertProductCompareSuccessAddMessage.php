@@ -14,14 +14,11 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductCompareSuccessAddMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'You added product %s to the comparison list.';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    const SUCCESS_MESSAGE = 'You added product %s to the comparison list.';
 
     /**
      * Assert success message is presented on page
