@@ -185,9 +185,6 @@
             "tinymce/tinymce": "lib/web/tiny_mce"
         }
     },
-    "config": {
-        "use-include-path": true
-    },
     "autoload": {
         "psr-4": {
             "Magento\\Framework\\": "lib/internal/Magento/Framework/"
