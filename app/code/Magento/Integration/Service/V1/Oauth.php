@@ -14,9 +14,6 @@ use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
 
 /**
  * Integration oAuth service.
- *
- * TODO: Fix coupling between objects
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Oauth implements OauthInterface
 {
