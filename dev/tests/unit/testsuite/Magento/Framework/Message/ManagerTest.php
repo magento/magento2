@@ -30,11 +30,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected $session;
 
     /**
-     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $logger;
-
-    /**
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eventManager;
@@ -66,11 +61,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods(
             ['getData', 'setData']
         )->getMock();
-        $this->logger = $this->getMockBuilder(
-            'Magento\Framework\Logger'
-        )->setMethods(
-            ['logFile']
-        )->disableOriginalConstructor()->getMock();
         $this->eventManager = $this->getMockBuilder(
             'Magento\Framework\Event\Manager'
         )->setMethods(
@@ -86,7 +76,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 'messageFactory' => $this->messageFactory,
                 'session' => $this->session,
                 'eventManager' => $this->eventManager,
-                'logger' => $this->logger
             ]
         );
     }
@@ -199,15 +188,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $alternativeText
         )->will(
             $this->returnValue($messageError)
-        );
-
-        $this->logger->expects(
-            $this->atLeastOnce()
-        )->method(
-            'logFile'
-        )->with(
-            $this->stringStartsWith($logText),
-            \Zend_Log::DEBUG
         );
 
         $messageCollection = $this->getMockBuilder(

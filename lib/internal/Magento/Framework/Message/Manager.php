@@ -258,7 +258,7 @@ class Manager implements ManagerInterface
             $exception->getTraceAsString()
         );
 
-        $this->logger->logFile($message, \Zend_Log::DEBUG);
+        $this->logger->debug($message);
         $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_ERROR, $alternativeText), $group);
         return $this;
     }

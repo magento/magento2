@@ -59,7 +59,6 @@ class ExportTest extends \PHPUnit_Framework_TestCase
 
         $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $adapterFactory = $this->getMock('Magento\Framework\Logger\AdapterFactory', [], [], '', false);
         $entityFactory = $this->getMock(
             'Magento\ImportExport\Model\Export\Entity\Factory',
             [],
@@ -78,7 +77,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
         $mockModelExport = $this->getMock(
             'Magento\ImportExport\Model\Export',
             ['getEntityAdapter', '_getEntityAdapter', '_getWriter'],
-            [$logger, $filesystem, $adapterFactory, $this->_exportConfigMock, $entityFactory, $exportAdapterFac]
+            [$logger, $filesystem, $this->_exportConfigMock, $entityFactory, $exportAdapterFac]
         );
         $mockModelExport->expects(
             $this->any()

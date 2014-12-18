@@ -172,7 +172,7 @@ class Block implements Layout\GeneratorInterface
             try {
                 $block = $this->blockFactory->createBlock($block, $arguments);
             } catch (\ReflectionException $e) {
-                $this->logger->log($e->getMessage());
+                $this->logger->info($e->getMessage());
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {

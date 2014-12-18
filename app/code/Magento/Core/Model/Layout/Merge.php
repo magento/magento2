@@ -436,7 +436,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
                 $messages = $this->_layoutValidator->getMessages();
                 //Add first message to exception
                 $message = reset($messages);
-                $this->_logger->log('Cache file with merged layout: ' . $cacheId . ': ' . $message, \Zend_Log::ERR);
+                $this->_logger->info('Cache file with merged layout: ' . $cacheId . ': ' . $message);
             }
         }
         return $this;
@@ -696,9 +696,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
                 $errors[] = "{$error->message} Line: {$error->line}";
             }
 
-            $this->_logger->log(
-                sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $errors)),
-                \Zend_Log::ERR
+            $this->_logger->info(
+                sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $errors))
             );
         }
     }

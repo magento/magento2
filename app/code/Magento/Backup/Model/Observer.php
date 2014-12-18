@@ -139,11 +139,11 @@ class Observer
 
             $backupManager->create();
             $message = $this->_backupData->getCreateSuccessMessageByType($type);
-            $this->_logger->log($message);
+            $this->_logger->info($message);
         } catch (\Exception $e) {
             $this->_errors[] = $e->getMessage();
             $this->_errors[] = $e->getTrace();
-            $this->_logger->log($e->getMessage(), \Zend_Log::ERR);
+            $this->_logger->info($e->getMessage());
             $this->_logger->critical($e);
         }
 

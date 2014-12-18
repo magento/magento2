@@ -32,7 +32,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_items['item3'] = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
         $this->_items['item3']->expects($this->any())->method('getId')->will($this->returnValue('item3'));
 
-        $this->_logger = $this->getMock('Magento\Framework\Logger', ['log'], [], '', false);
+        $this->_logger = $this->getMock('Magento\Framework\Logger', ['info'], [], '', false);
 
         $this->_model = new \Magento\Backend\Model\Menu($this->_logger);
     }
@@ -50,7 +50,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_logger->expects(
             $this->once()
         )->method(
-            'log'
+            'info'
         )->with(
             $this->equalTo(sprintf('Add of item with id %s was processed', $this->_items['item1']->getId()))
         );
@@ -207,7 +207,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_logger->expects(
             $this->once()
         )->method(
-            'log'
+            'info'
         )->with(
             $this->equalTo(sprintf('Remove on item with id %s was processed', $this->_items['item1']->getId()))
         );
@@ -335,7 +335,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     public function testSerialize()
     {
         $this->assertNotEmpty($this->_model->serialize());
-        $this->_logger->expects($this->once())->method('log');
+        $this->_logger->expects($this->once())->method('info');
         $this->_model->add($this->_items['item1']);
     }
 }

@@ -223,9 +223,9 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
 
                 if ($result) {
                     $this->_resource->setDataVersion($this->_resourceName, $file['toVersion']);
-                    $this->_logger->log($fileName);
+                    $this->_logger->info($fileName);
                 } else {
-                    $this->_logger->log("Failed resource setup: {$fileName}");
+                    $this->_logger->info("Failed resource setup: {$fileName}");
                 }
             } catch (\Exception $e) {
                 throw new \Magento\Framework\Exception(

@@ -117,7 +117,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
      * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
@@ -139,7 +139,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Magento\Framework\Logger $logger,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
         \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
@@ -162,7 +162,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         parent::__construct(
             $scopeConfig,
             $rateErrorFactory,
-            $logAdapterFactory,
+            $logger,
             $xmlElFactory,
             $rateFactory,
             $rateMethodFactory,
@@ -518,7 +518,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
                         $message = __(
                             'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.'
                         );
-                        $this->_logger->log($message . ': ' . $errorTitle);
+                        $this->_logger->info($message . ': ' . $errorTitle);
                         break;
                     case 6:
                         if (in_array($row[3], $allowedMethods)) {

@@ -18,13 +18,8 @@ class Logger extends \Magento\Framework\Logger
      */
     protected $minimumErrorLevel;
 
-    /**
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param string $defaultFile
-     */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, $defaultFile = '')
+    public function __construct()
     {
-        parent::__construct($filesystem, $defaultFile);
         $this->minimumErrorLevel = defined('TESTS_ERROR_LOG_LISTENER_LEVEL') ? TESTS_ERROR_LOG_LISTENER_LEVEL : -1;
     }
 
@@ -46,16 +41,10 @@ class Logger extends \Magento\Framework\Logger
 
     /**
      * @param string $message
-     * @param int $level
+     * @internal param int $level
      */
-    public function log($message, $level = \Zend_Log::DEBUG)
+    public function info($message)
     {
-        if ($level <= $this->minimumErrorLevel) {
-            $this->messages[] = [
-                'level' => $level,
-                'message' => $message,
-            ];
-        }
-        parent::log($message, $level);
+        parent::info($message);
     }
 }

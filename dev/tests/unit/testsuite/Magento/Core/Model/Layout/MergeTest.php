@@ -294,11 +294,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function testGetFileLayoutUpdatesXml()
     {
         $errorString = "Theme layout update file '" . __DIR__ . "/_files/layout/file_wrong.xml' is not valid.";
-        $this->_logger->expects($this->atLeastOnce())->method('log')
-            ->with(
-                $this->stringStartsWith($errorString),
-                \Zend_Log::ERR
-            );
+        $this->_logger->expects($this->atLeastOnce())->method('info')
+            ->with($this->stringStartsWith($errorString));
 
         $actualXml = $this->_model->getFileLayoutUpdatesXml();
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/merged.xml', $actualXml->asNiceXml());
@@ -405,11 +402,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $messages = $this->_layoutValidator->getMessages();
 
         // Testing error message is logged with logger
-        $this->_logger->expects($this->once())->method('log')
-            ->with(
-                'Cache file with merged layout: ' . $cacheId . ': ' . array_shift($messages),
-                \Zend_Log::ERR
-            );
+        $this->_logger->expects($this->once())->method('info')
+            ->with('Cache file with merged layout: ' . $cacheId . ': ' . array_shift($messages));
 
         $this->_model->load();
     }

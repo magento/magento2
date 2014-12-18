@@ -20,47 +20,25 @@ class Logger
      * Log a message
      *
      * @param string $message
-     * @param int $level
-     * @return void
+     * @internal param int $level
      */
-    public function log($message, $level = \Zend_Log::DEBUG)
+    public function info($message)
     {
         if (is_array($message) || is_object($message)) {
             $message = print_r($message, true);
         }
-        $this->log($message, $level);
-    }
-
-    /**
-     * Log a message in specific file
-     *
-     * @param string $message
-     * @param int $level
-     * @param string $file
-     * @return void
-     */
-    public function logFile($message, $level = \Zend_Log::DEBUG, $file = '')
-    {
-        if (!isset($file)) {
-            $this->log($message, $level);
-        }
-        if (is_array($message) || is_object($message)) {
-            $message = print_r($message, true);
-        }
-        /** @var $logger \Zend_Log */
-        $this->log($message, $level, $file);
+        //$this->log($message, $level);
     }
 
     /**
      * Log a message with "debug" level
      *
      * @param string $message
-     * @param string $loggerKey
      * @return void
      */
-    public function logDebug($message)
+    public function debug($message)
     {
-        $this->log($message, \Zend_Log::DEBUG);
+        $this->info($message);
     }
 
     /**
@@ -71,6 +49,6 @@ class Logger
      */
     public function critical(\Exception $e)
     {
-        $this->log("\n" . $e->__toString(), \Zend_Log::ERR);
+        $this->info("\n" . $e->__toString());
     }
 }
