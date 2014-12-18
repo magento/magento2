@@ -17,11 +17,17 @@ abstract class Compiled implements \Magento\Framework\ObjectManager\DefinitionIn
     protected $_definitions;
 
     /**
+     * @var \Magento\Framework\Code\Reader\ClassReader
+     */
+    protected $reader ;
+
+    /**
      * @param array $definitions
      */
-    public function __construct(array $definitions)
+    public function __construct(array $definitions, \Magento\Framework\Code\Reader\ClassReader $reader = null)
     {
         list($this->_signatures, $this->_definitions) = $definitions;
+        $this->reader = $reader ?: new \Magento\Framework\Code\Reader\ClassReader();
     }
 
     /**
@@ -50,6 +56,11 @@ abstract class Compiled implements \Magento\Framework\ObjectManager\DefinitionIn
      */
     public function getParameters($className)
     {
+        // if the definition isn't found in the list gathered from the compiled file using reflection to find it
+        if (!isset($this->_definitions[$className])) {
+            return $this->reader->getConstructor($className);
+        }
+
         $definition = $this->_definitions[$className];
         if ($definition !== null) {
             if (is_string($this->_signatures[$definition])) {
