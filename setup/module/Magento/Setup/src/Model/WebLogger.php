@@ -164,7 +164,9 @@ class WebLogger implements LoggerInterface
      */
     public function clear()
     {
-        unlink($this->logFile);
+        if (file_exists($this->logFile)) {
+            unlink($this->logFile);
+        }
     }
 
     /**
