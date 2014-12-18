@@ -84,7 +84,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Convert dom Container node to magneto array
+     * Convert dom Container node to Magento array
      *
      * @param \DOMNode $source
      * @return array
