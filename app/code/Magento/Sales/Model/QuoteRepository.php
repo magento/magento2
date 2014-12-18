@@ -4,7 +4,7 @@
  */
 namespace Magento\Sales\Model;
 
-use \Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
 class QuoteRepository

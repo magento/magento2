@@ -5,14 +5,14 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
-use \Magento\Framework\Exception\NoSuchEntityException;
-use \Magento\Webapi\Exception;
-use \Magento\Framework\Exception\StateException;
-use \Magento\Framework\Exception\InputException;
-use \Magento\Framework\Exception\CouldNotSaveException;
-use \Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
-use \Magento\Catalog\Model\Product\Type as ProductType;
-use \Magento\Store\Model\Store;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Webapi\Exception;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
+use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
