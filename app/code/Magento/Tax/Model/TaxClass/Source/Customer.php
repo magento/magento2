@@ -48,12 +48,12 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * Retrieve all customer tax classes as an options array.
      *
-     * @param bool $withEmpty
      * @return array
      */
-    public function getAllOptions($withEmpty = true)
+    public function getAllOptions()
     {
-        if (!$this->_options) {
+        if (empty($this->_options)) {
+            $options = [];
             $filter = $this->filterBuilder
                 ->setField(TaxClass::KEY_TYPE)
                 ->setValue(TaxClassManagementInterface::TYPE_CUSTOMER)
@@ -61,20 +61,17 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $searchCriteria = $this->searchCriteriaBuilder->addFilter([$filter])->create();
             $searchResults = $this->taxClassRepository->getList($searchCriteria);
             foreach ($searchResults->getItems() as $taxClass) {
-                $this->_options[] = [
+                $options[] = [
                     'value' => $taxClass->getClassId(),
                     'label' => $taxClass->getClassName(),
                 ];
             }
+            if (empty($options)) {
+                $options = [['value' => '0', 'label' => __('None')]];
+            }
+            $this->_options = $options;
         }
 
-        if ($withEmpty) {
-            if (!$this->_options) {
-                return [['value' => '0', 'label' => __('None')]];
-            } else {
-                return array_merge([['value' => '0', 'label' => __('None')]], $this->_options);
-            }
-        }
         return $this->_options;
     }
 }
