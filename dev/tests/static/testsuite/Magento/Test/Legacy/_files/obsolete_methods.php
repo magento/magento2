@@ -2001,4 +2001,9 @@ return [
     ['getScriptTranslation', 'Magento\Framework\LocaleInterface'],
     ['getCountryTranslation', 'Magento\Framework\LocaleInterface'],
     ['getTerritoryTranslation', 'Magento\Framework\LocaleInterface'],
+    [
+        'getNoteNotify',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Comment',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Totals'
+    ],
 ];
