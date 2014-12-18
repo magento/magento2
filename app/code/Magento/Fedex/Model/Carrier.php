@@ -131,7 +131,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Dir\Reader $configReader
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
@@ -154,7 +153,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Framework\Logger $logger,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Dir\Reader $configReader,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
@@ -183,7 +181,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->_shipServiceWsdl = $wsdlBasePath . 'ShipService_v10.wsdl';
         $this->_rateServiceWsdl = $wsdlBasePath . 'RateService_v10.wsdl';
         $this->_trackServiceWsdl = $wsdlBasePath . 'TrackService_v5.wsdl';
-        $this->_logger = $logger;
     }
 
     /**

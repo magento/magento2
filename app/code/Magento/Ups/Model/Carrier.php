@@ -129,7 +129,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param Config $configHelper
      * @param array $data
@@ -151,12 +150,10 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Framework\Logger $logger,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         Config $configHelper,
         array $data = []
     ) {
-        $this->_logger = $logger;
         $this->_localeFormat = $localeFormat;
         $this->configHelper = $configHelper;
         parent::__construct(
