@@ -37,24 +37,32 @@ class Provider implements TokenProviderInterface
     protected $token;
 
     /**
+     * @var \Magento\Framework\Logger
+     */
+    protected $logger;
+
+    /**
      * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
      * @param \Magento\Integration\Model\Oauth\Token\Factory $tokenFactory
      * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param Token $token
+     * @param \Magento\Framework\Logger $logger
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
         \Magento\Integration\Model\Oauth\Token\Factory $tokenFactory,
         \Magento\Integration\Helper\Oauth\Data $dataHelper,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        Token $token
+        Token $token,
+        \Magento\Framework\Logger $logger
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_tokenFactory = $tokenFactory;
         $this->_dataHelper = $dataHelper;
         $this->_date = $date;
         $this->token = $token;
+        $this->logger = $logger;
     }
 
     /**
@@ -119,8 +127,8 @@ class Provider implements TokenProviderInterface
      */
     public function getAccessToken($consumer)
     {
-        /** TODO: log the request token in dev mode since its not persisted. */
         $token = $this->getIntegrationTokenByConsumerId($consumer->getId());
+        $this->logger->log('Request token: ' . $token->getToken());
         if (Token::TYPE_REQUEST != $token->getType()) {
             throw new \Magento\Framework\Oauth\Exception(
                 'Cannot get access token because consumer token is not a request token'

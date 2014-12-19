@@ -39,6 +39,11 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Stdlib\DateTime\DateTime */
     private $_dateMock;
 
+    /**
+     * @var \Magento\Framework\Logger
+     */
+    private $_loggerMock;
+
     private $_oauthToken;
 
     private $_oauthSecret;
@@ -112,6 +117,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->_loggerMock = $this->getMockBuilder('Magento\Framework\Logger')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $nonceGenerator = new \Magento\Integration\Model\Oauth\Nonce\Generator(
             $this->_oauthHelperMock,
@@ -123,7 +131,8 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             $this->_tokenFactory,
             $this->_dataHelperMock,
             $this->_dateMock,
-            $this->_tokenMock
+            $this->_tokenMock,
+            $this->_loggerMock
         );
         $this->_oauth = new \Magento\Framework\Oauth\Oauth(
             $this->_oauthHelperMock,
