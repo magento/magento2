@@ -140,7 +140,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->with($searchCriteriaMock)
             ->willReturn($searchResultsMock);
 
-        $items = [];
         if (!$isEmpty) {
             $taxClassMock->expects($this->once())
                 ->method('getClassId')
@@ -148,17 +147,28 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $taxClassMock->expects($this->once())
                 ->method('getClassName')
                 ->willReturn('class-name');
+
             $items = [$taxClassMock];
-        }
+            $searchResultsMock->expects($this->once())
+                ->method('getItems')
+                ->willReturn($items);
 
-        $searchResultsMock->expects($this->once())
-            ->method('getItems')
-            ->willReturn($items);
-
-        // checking of a lack of re-initialization
-        for ($i = 10; --$i;) {
-            $result = $this->customer->getAllOptions();
-            $this->assertEquals($expected, $result);
+            // checking of a lack of re-initialization
+            for ($i = 10; --$i;) {
+                $result = $this->customer->getAllOptions();
+                $this->assertEquals($expected, $result);
+            }
+        } else {
+            $items = [];
+            $searchResultsMock->expects($this->once())
+                ->method('getItems')
+                ->willReturn($items);
+            // checking exception
+            try {
+                $this->customer->getAllOptions();
+            } catch (\Exception $e) {
+                $this->assertInstanceOf('Magento\Framework\Exception\StateException', $e);
+            }
         }
     }
 
