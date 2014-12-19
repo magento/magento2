@@ -14,16 +14,9 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $categoryFactory = $this->getMock(
-            'Magento\Catalog\Model\CategoryFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
         $this->block = $objectManager->getObject(
             'Magento\Catalog\Block\Navigation',
-            ['categoryFactory' => $categoryFactory]
+            []
         );
     }
 
