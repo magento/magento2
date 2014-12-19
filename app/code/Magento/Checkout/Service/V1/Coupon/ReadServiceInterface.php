@@ -6,6 +6,7 @@ namespace Magento\Checkout\Service\V1\Coupon;
 
 /**
  * Coupon read service interface.
+ * @deprecated
  */
 interface ReadServiceInterface
 {
@@ -15,6 +16,7 @@ interface ReadServiceInterface
      * @param int $cartId The cart ID.
      * @return \Magento\Checkout\Service\V1\Data\Cart\Coupon Coupon object.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @see \Magento\Checkout\Api\CartManagementInterface::getCouponCode
      */
     public function get($cartId);
 }

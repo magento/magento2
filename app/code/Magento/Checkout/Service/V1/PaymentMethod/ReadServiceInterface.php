@@ -15,6 +15,8 @@ interface ReadServiceInterface
      * @param int $cartId The cart ID.
      * @return \Magento\Checkout\Service\V1\Data\Cart\PaymentMethod  Payment method object.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @deprecated
+     * @see \Magento\Checkout\Api\PaymentMethodManagementInterface::get
      */
     public function getPayment($cartId);
 
@@ -24,6 +26,8 @@ interface ReadServiceInterface
      * @param int $cartId The cart ID.
      * @return \Magento\Checkout\Service\V1\Data\PaymentMethod[] Array of payment methods.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @deprecated
+     * @see \Magento\Checkout\Api\PaymentMethodManagementInterface::getList
      */
     public function getList($cartId);
 }

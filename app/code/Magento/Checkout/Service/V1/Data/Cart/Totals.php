@@ -8,6 +8,8 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
  * Cart Totals
  *
  * @codeCoverageIgnore
+ * @deprecated
+ * @see \Magento\Checkout\Api\Data\TotalsInterface
  */
 class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
 {

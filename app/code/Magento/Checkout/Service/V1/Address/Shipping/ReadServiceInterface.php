@@ -13,6 +13,8 @@ interface ReadServiceInterface
      * @param int $cartId The cart ID.
      * @return \Magento\Checkout\Service\V1\Data\Cart\Address Shipping address object.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @deprecated
+     * @see \Magento\Checkout\Api\ShippingAddressManagementInterface::get
      */
     public function getAddress($cartId);
 }

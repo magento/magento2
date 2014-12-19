@@ -18,6 +18,7 @@ interface WriteServiceInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified item could not be saved to the cart.
      * @throws \Magento\Framework\Exception\InputException The specified item or cart is not valid.
+     * @see \Magento\Checkout\Api\CartItemRepositoryInterface::save
      */
     public function addItem($cartId, \Magento\Checkout\Service\V1\Data\Cart\Item $data);
 
@@ -31,6 +32,7 @@ interface WriteServiceInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified item or cart does not exist.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The item could not be updated.
      * @throws \Magento\Framework\Exception\InputException The specified item or cart is not valid.
+     * @see \Magento\Checkout\Api\CartItemRepositoryInterface::save
      */
     public function updateItem($cartId, $itemId, \Magento\Checkout\Service\V1\Data\Cart\Item $data);
 
@@ -42,6 +44,7 @@ interface WriteServiceInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified item or cart does not exist.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The item could not be removed.
+     * @see \Magento\Checkout\Api\CartItemRepositoryInterface::deleteById
      */
     public function removeItem($cartId, $itemId);
 }

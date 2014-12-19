@@ -20,6 +20,8 @@ interface WriteServiceInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException The shipping method could not be saved.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart contains only virtual products so the shipping method does not apply.
      * @throws \Magento\Framework\Exception\StateException The billing or shipping address is not set.
+     * @deprecated
+     * @see \Magento\Checkout\Api\ShippingMethodManagementInterface::set
      */
     public function setMethod($cartId, $carrierCode, $methodCode);
 }

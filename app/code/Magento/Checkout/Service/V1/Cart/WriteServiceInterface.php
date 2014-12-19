@@ -14,6 +14,8 @@ interface WriteServiceInterface
      *
      * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
      * @return int Cart ID.
+     * @deprecated
+     * @see \Magento\Checkout\Api\CartManagementInterface::createEmptyCart
      */
     public function create();
 
@@ -23,6 +25,8 @@ interface WriteServiceInterface
      * @param int $cartId The cart ID.
      * @param int $customerId The customer ID.
      * @return boolean
+     * @deprecated
+     * @see \Magento\Checkout\Api\CartManagementInterface::assignCustomer
      */
     public function assignCustomer($cartId, $customerId);
 
@@ -31,6 +35,7 @@ interface WriteServiceInterface
      *
      * @param int $cartId The cart ID.
      * @return int Order ID.
+     * @see \Magento\Checkout\Api\CartManagementInterface::order
      */
     public function order($cartId);
 }

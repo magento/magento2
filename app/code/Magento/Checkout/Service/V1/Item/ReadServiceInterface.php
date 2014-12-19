@@ -15,6 +15,7 @@ interface ReadServiceInterface
      * @param int $cartId The cart ID.
      * @return \Magento\Checkout\Service\V1\Data\Cart\Item[] Array of items.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @see \Magento\Checkout\Api\CartItemRepositoryInterface::getList
      */
     public function getList($cartId);
 }

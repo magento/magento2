@@ -9,6 +9,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
  * Shopping cart item data object.
  *
  * @codeCoverageIgnore
+ * @see \Magento\Checkout\Api\Data\CartItemInterface
  */
 class Item extends \Magento\Framework\Api\AbstractExtensibleObject
 {

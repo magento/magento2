@@ -8,6 +8,8 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
  * Coupon data for quote.
  *
  * @codeCoverageIgnore
+ * @deprecated
+ * @todo remove this dto
  */
 class Coupon extends \Magento\Framework\Api\AbstractExtensibleObject
 {

@@ -17,6 +17,8 @@ interface WriteServiceInterface
      * @return int Address ID.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      * @throws \Magento\Framework\Exception\InputException The specified cart ID or address data is not valid.
+     * @deprecated
+     * @see \Magento\Checkout\Api\BillingAddressManagementInterface::assign
      */
     public function setAddress($cartId, $addressData);
 }

@@ -6,6 +6,7 @@ namespace Magento\Checkout\Service\V1\Coupon;
 
 /**
  * Coupon write service interface.
+ * @deprecated
  */
 interface WriteServiceInterface
 {
@@ -17,6 +18,7 @@ interface WriteServiceInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified coupon could not be added.
+     * @see \Magento\Checkout\Api\CartManagementInterface::setCoupon
      */
     public function set($cartId, \Magento\Checkout\Service\V1\Data\Cart\Coupon $couponCodeData);
 
@@ -27,6 +29,7 @@ interface WriteServiceInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      * @throws \Magento\Framework\Exception\CouldNotDeleteException The specified coupon could not be deleted.
+     * @see \Magento\Checkout\Api\CartManagementInterface::removeCoupon
      */
     public function delete($cartId);
 }

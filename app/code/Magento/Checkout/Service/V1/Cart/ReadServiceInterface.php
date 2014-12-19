@@ -17,6 +17,8 @@ interface ReadServiceInterface
      * @param int $cartId The cart ID.
      * @return \Magento\Checkout\Service\V1\Data\Cart Cart object.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @deprecated
+     * @see \Magento\Checkout\Api\CartRepositoryInterface::get
      */
     public function getCart($cartId);
 
@@ -26,6 +28,8 @@ interface ReadServiceInterface
      * @param int $customerId The customer ID.
      * @return \Magento\Checkout\Service\V1\Data\Cart Cart object.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified customer does not exist.
+     * @deprecated
+     * @see \Magento\Checkout\Api\CartManagementInterface::getCartForCustomer
      */
     public function getCartForCustomer($customerId);
 
@@ -34,6 +38,8 @@ interface ReadServiceInterface
      *
      * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
      * @return \Magento\Checkout\Service\V1\Data\CartSearchResults Cart search results object.
+     * @deprecated
+     * @see \Magento\Checkout\Api\CartRepositoryInterface::getList
      */
     public function getCartList(SearchCriteria $searchCriteria);
 }

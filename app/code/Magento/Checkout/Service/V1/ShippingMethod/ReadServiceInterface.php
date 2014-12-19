@@ -16,6 +16,8 @@ interface ReadServiceInterface
      * @return \Magento\Checkout\Service\V1\Data\Cart\ShippingMethod Shipping method.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified shopping cart does not exist.
      * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
+     * @deprecated
+     * @see \Magento\Checkout\Api\ShippingMethodManagementInterface::get
      */
     public function getMethod($cartId);
 
@@ -26,6 +28,8 @@ interface ReadServiceInterface
      * @return \Magento\Checkout\Service\V1\Data\Cart\ShippingMethod[] An array of shipping methods.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified quote does not exist.
      * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
+     * @deprecated
+     * @see \Magento\Checkout\Api\ShippingMethodManagementInterface::getList
      */
     public function getList($cartId);
 }
