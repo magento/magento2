@@ -78,7 +78,7 @@ class Page extends Layout
     protected $assetRepo;
 
     /**
-     * @var Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
