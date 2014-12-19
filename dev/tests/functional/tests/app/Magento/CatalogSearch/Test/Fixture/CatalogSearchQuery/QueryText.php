@@ -33,6 +33,7 @@ class QueryText implements FixtureInterface
     protected $data;
 
     /**
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
