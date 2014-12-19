@@ -16,7 +16,7 @@
     
     $.widget("mage.validation", $.mage.validation, {
         options: {
-            radioCheckboxClosest: 'ul',
+            radioCheckboxClosest: 'ul, ol',
             errorPlacement: function (error, element) {
                 if (element.attr('data-validate-message-box')) {
                     var messageBox = $(element.attr('data-validate-message-box'));
