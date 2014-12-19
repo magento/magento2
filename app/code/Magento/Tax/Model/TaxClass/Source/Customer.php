@@ -5,8 +5,9 @@
 
 namespace Magento\Tax\Model\TaxClass\Source;
 
-use Magento\Tax\Api\Data\TaxClassInterface as TaxClass;
+use Magento\Framework\Exception\StateException;
 use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Api\Data\TaxClassInterface as TaxClass;
 
 /**
  * Customer tax class source model.
@@ -49,13 +50,13 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve all customer tax classes as an options array.
      *
      * @return array
+     * @throws StateException
      */
     public function getAllOptions()
     {
         if (empty($this->_options)) {
             $options = [];
-            $filter = $this->filterBuilder
-                ->setField(TaxClass::KEY_TYPE)
+            $filter = $this->filterBuilder->setField(TaxClass::KEY_TYPE)
                 ->setValue(TaxClassManagementInterface::TYPE_CUSTOMER)
                 ->create();
             $searchCriteria = $this->searchCriteriaBuilder->addFilter([$filter])->create();
@@ -67,7 +68,7 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
                 ];
             }
             if (empty($options)) {
-                $options = [['value' => '0', 'label' => __('None')]];
+                throw new StateException('Customer tax class cannot does not exist.');
             }
             $this->_options = $options;
         }
