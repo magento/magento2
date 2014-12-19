@@ -33,7 +33,7 @@ class Observer
     protected $_coreData;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -66,7 +66,7 @@ class Observer
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Paypal\Helper\Hss $paypalHss
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param Report\SettlementFactory $settlementFactory
      * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
@@ -77,7 +77,7 @@ class Observer
         \Magento\Core\Helper\Data $coreData,
         \Magento\Paypal\Helper\Hss $paypalHss,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory,
         \Magento\Framework\App\ViewInterface $view,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,

@@ -61,13 +61,7 @@ class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->loggerMock = $this->getMock(
-            'Magento\Framework\Logger',
-            ['critical'],
-            [],
-            '',
-            false
-        );
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->notifier = new ShipmentNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,

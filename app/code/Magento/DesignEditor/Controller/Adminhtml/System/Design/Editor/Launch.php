@@ -154,12 +154,12 @@ class Launch extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
             $this->_view->renderLayout();
         } catch (CoreException $e) {
             $this->messageManager->addException($e, $e->getMessage());
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_redirect('adminhtml/*/');
             return;
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Sorry, there was an unknown error.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_redirect('adminhtml/*/');
             return;
         }

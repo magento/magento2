@@ -61,13 +61,7 @@ class OrderNotifierTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->loggerMock = $this->getMock(
-            'Magento\Framework\Logger',
-            ['critical'],
-            [],
-            '',
-            false
-        );
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->notifier = new OrderNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,

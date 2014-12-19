@@ -74,7 +74,7 @@ class Minified implements MergeableInterface
     /**
      * Logger
      *
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -103,7 +103,7 @@ class Minified implements MergeableInterface
      * Constructor
      *
      * @param LocalInterface $asset
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\UrlInterface $baseUrl
      * @param \Magento\Framework\Code\Minifier\AdapterInterface $adapter
@@ -111,7 +111,7 @@ class Minified implements MergeableInterface
      */
     public function __construct(
         LocalInterface $asset,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\UrlInterface $baseUrl,
         \Magento\Framework\Code\Minifier\AdapterInterface $adapter,

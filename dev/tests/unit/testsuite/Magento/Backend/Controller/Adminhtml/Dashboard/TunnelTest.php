@@ -142,11 +142,11 @@ class TunnelTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Framework\HTTP\ZendClient')
             ->will($this->throwException($exceptionMock));
-        $loggerMock = $this->getMock('Magento\Framework\Logger', ['critical'], [], '', false);
+        $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $loggerMock->expects($this->once())->method('critical')->with($exceptionMock);
         $this->_objectManager->expects($this->at(2))
             ->method('get')
-            ->with('Magento\Framework\Logger')
+            ->with('Psr\Log\LoggerInterface')
             ->will($this->returnValue($loggerMock));
 
         $controller = $this->_factory($this->_request, $this->_response);

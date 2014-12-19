@@ -25,7 +25,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $config = $this->getMock('Magento\Ogone\Model\Config', [], [], '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $loggerFactory = $this->getMock('\Magento\Framework\Logger\AdapterFactory', [], [], '', false);
+        $loggerFactory = $this->getMock('\Psr\Log\LoggerInterface\AdapterFactory', [], [], '', false);
         $object = new \Magento\Ogone\Model\Api(
             $eventManager,
             $paymentDataMock,

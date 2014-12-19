@@ -439,10 +439,10 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 
     /**
      * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Paypal\Model\Api\ProcessableExceptionFactory $processableExceptionFactory
      * @param \Magento\Framework\Model\ExceptionFactory $frameworkExceptionFactory
@@ -453,10 +453,10 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Paypal\Model\Api\ProcessableExceptionFactory $processableExceptionFactory,
         \Magento\Framework\Model\ExceptionFactory $frameworkExceptionFactory,

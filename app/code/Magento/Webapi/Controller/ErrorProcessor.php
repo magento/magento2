@@ -48,7 +48,7 @@ class ErrorProcessor
     protected $_appState;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -67,13 +67,13 @@ class ErrorProcessor
     /**
      * @param \Magento\Core\Helper\Data $helper
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Helper\Data $helper,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem
     ) {
         $this->_coreHelper = $helper;

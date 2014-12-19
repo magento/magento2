@@ -12,7 +12,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     protected $collection;
 
     /**
-     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $loggerMock;
 
@@ -34,7 +34,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->entityFactoryMock = $this->getMock(
             'Magento\Core\Model\EntityFactory', ['create'], [], '', false
         );
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', ['info'], [], '', false);
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->collection = new \Magento\Framework\Data\Collection\Db(
             $this->entityFactoryMock,
             $this->loggerMock,

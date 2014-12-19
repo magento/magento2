@@ -29,7 +29,7 @@ class DefaultTemplate extends \Magento\Email\Controller\Adminhtml\Email\Template
                 $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($template->getData())
             );
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
     }
 }

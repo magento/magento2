@@ -19,18 +19,18 @@ class Structure extends DataStructure
     protected $_nameIncrement = [];
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $elements
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         array $elements = null
     ) {
         $this->logger = $logger;

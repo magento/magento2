@@ -35,7 +35,7 @@ class Service extends \Magento\Framework\Object
     /**
      * Log adapter factory
      *
-     * @var \Magento\Framework\Logger\AdapterFactory
+     * @var \Psr\Log\LoggerInterface\AdapterFactory
      */
     protected $_logAdapterFactory;
 
@@ -57,14 +57,14 @@ class Service extends \Magento\Framework\Object
      * By default is looking for first argument as array and assigns it as object
      * attributes This behavior may change in child classes
      *
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\Framework\Gdata\Gshopping\ContentFactory $contentFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\Framework\Gdata\Gshopping\ContentFactory $contentFactory,

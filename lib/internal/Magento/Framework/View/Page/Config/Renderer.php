@@ -39,7 +39,7 @@ class Renderer
     protected $string;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -55,7 +55,7 @@ class Renderer
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Stdlib\String $string
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         Config $pageConfig,
@@ -64,7 +64,7 @@ class Renderer
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Stdlib\String $string,
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->pageConfig = $pageConfig;
         $this->assetMinifyService = $assetMinifyService;

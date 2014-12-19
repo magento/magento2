@@ -301,13 +301,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
         $labelContent = 'Label-content';
         $incrementId = '1000001';
 
-        $loggerMock = $this->getMock(
-            'Magento\Framework\Logger',
-            ['critical'],
-            [],
-            '',
-            false
-        );
+        $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
@@ -332,7 +326,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\Logger')
+            ->with('Psr\Log\LoggerInterface')
             ->will($this->returnValue($loggerMock));
         $loggerMock->expects($this->once())
             ->method('critical');

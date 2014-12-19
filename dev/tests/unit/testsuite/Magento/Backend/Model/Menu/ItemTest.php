@@ -217,7 +217,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $menuMock = $this->getMock(
             'Magento\Backend\Model\Menu',
             [],
-            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+            [$this->getMock('Psr\Log\LoggerInterface')]
         );
 
         $this->_menuFactoryMock->expects($this->once())->method('create')->will($this->returnValue($menuMock));

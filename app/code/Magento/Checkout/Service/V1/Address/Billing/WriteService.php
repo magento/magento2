@@ -9,7 +9,7 @@ use Magento\Checkout\Service\V1\Address\Validator;
 use Magento\Sales\Model\Quote\AddressFactory;
 use Magento\Sales\Model\QuoteRepository;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /** Quote billing address write service object. */
 class WriteService implements WriteServiceInterface

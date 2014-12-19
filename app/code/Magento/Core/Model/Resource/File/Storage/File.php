@@ -17,15 +17,15 @@ class File
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Logger $log
+     * @param \Psr\Log\LoggerInterface $log
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, \Magento\Framework\Logger $log)
+    public function __construct(\Magento\Framework\Filesystem $filesystem, \Psr\Log\LoggerInterface $log)
     {
         $this->_logger = $log;
         $this->_filesystem = $filesystem;

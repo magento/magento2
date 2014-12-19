@@ -81,7 +81,7 @@ class Start extends \Magento\Paypal\Controller\Express\AbstractExpress
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t start Express Checkout.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
 
         $this->_redirect('checkout/cart');

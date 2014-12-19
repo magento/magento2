@@ -99,7 +99,7 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('An error occurred while updating wish list.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->_redirect('*/*', ['wishlist_id' => $wishlist->getId()]);
     }

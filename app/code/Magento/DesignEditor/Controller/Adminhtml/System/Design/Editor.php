@@ -123,7 +123,7 @@ class Editor extends \Magento\Backend\App\Action
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t load the list of themes.'));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
     }
 

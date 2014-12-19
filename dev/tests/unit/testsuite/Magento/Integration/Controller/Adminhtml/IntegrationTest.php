@@ -190,9 +190,9 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         $menuMock = $this->getMock(
             'Magento\Backend\Model\Menu',
             [],
-            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+            [$this->getMock('Psr\Log\LoggerInterface')]
         );
-        $loggerMock = $this->getMockBuilder('Magento\Framework\Logger')->disableOriginalConstructor()->getMock();
+        $loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
         $loggerMock->expects($this->any())->method('critical')->will($this->returnSelf());
         $menuMock->expects($this->any())->method('getParentItems')->will($this->returnValue([]));
         $blockMock->expects($this->any())->method('getMenuModel')->will($this->returnValue($menuMock));

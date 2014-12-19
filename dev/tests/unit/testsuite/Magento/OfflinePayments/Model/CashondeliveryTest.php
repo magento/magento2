@@ -18,7 +18,7 @@ class CashondeliveryTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $adapterFactoryMock = $this->getMock(
-            'Magento\Framework\Logger\AdapterFactory',
+            'Psr\Log\LoggerInterface\AdapterFactory',
             ['create'],
             [],
             '',

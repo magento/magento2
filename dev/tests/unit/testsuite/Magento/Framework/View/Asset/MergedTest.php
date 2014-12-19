@@ -48,7 +48,7 @@ class MergedTest extends \PHPUnit_Framework_TestCase
         $this->_assetJsTwo->expects($this->any())->method('getPath')
             ->will($this->returnValue('script_two.js'));
 
-        $this->_logger = $this->getMock('Magento\Framework\Logger', ['critical'], [], '', false);
+        $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->_mergeStrategy = $this->getMock('Magento\Framework\View\Asset\MergeStrategyInterface');
 

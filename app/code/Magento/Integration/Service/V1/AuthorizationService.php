@@ -15,7 +15,7 @@ use Magento\Framework\Acl;
 use Magento\Framework\Acl\Builder as AclBuilder;
 use Magento\Framework\Acl\RootResource as RootAclResource;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Service for integration permissions management.

@@ -153,7 +153,7 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $directoryWrite;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 

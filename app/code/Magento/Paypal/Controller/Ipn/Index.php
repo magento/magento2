@@ -14,7 +14,7 @@ use Magento\Paypal\UnavailableException;
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -26,12 +26,12 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Paypal\Model\IpnFactory $ipnFactory
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Paypal\Model\IpnFactory $ipnFactory,
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->_logger = $logger;
         $this->_ipnFactory = $ipnFactory;

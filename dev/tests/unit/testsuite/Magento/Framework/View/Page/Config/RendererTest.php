@@ -56,7 +56,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected $stringMock;
 
     /**
-     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $loggerMock;
 
@@ -106,8 +106,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder('Magento\Framework\Logger')
-            ->disableOriginalConstructor()
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
             ->getMock();
 
         $this->assetsCollection = $this->getMockBuilder('Magento\Framework\View\Asset\GroupedCollection')

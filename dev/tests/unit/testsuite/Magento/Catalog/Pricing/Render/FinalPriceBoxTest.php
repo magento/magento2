@@ -41,7 +41,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     protected $product;
 
     /**
-     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $logger;
 
@@ -74,7 +74,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
 
         $this->priceBox = $this->getMock('Magento\Framework\Pricing\Render\PriceBox', [], [], '', false);
-        $this->logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->layout->expects($this->any())
             ->method('getBlock')

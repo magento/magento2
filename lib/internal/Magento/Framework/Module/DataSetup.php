@@ -50,7 +50,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
     protected $_eventManager;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 

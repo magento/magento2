@@ -17,8 +17,8 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $moduleList = $objectManager->get('Magento\Framework\Module\ModuleListInterface');
         $paymentData = $objectManager->get('Magento\Payment\Helper\Data');
         $scopeConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
-        $logger = $objectManager->get('Magento\Framework\Logger');
-        $logAdapterFactory = $objectManager->get('Magento\Framework\Logger\AdapterFactory');
+        $logger = $objectManager->get('Psr\Log\LoggerInterface');
+        $logAdapterFactory = $objectManager->get('Psr\Log\LoggerInterface\AdapterFactory');
         $localeDate = $objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $centinelService = $objectManager->get('Magento\Centinel\Model\Service');
         $storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');

@@ -20,7 +20,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
     private $conditionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Logger | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $loggerMock;
 
@@ -40,7 +40,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder('\Magento\Framework\Logger')
+        $this->loggerMock = $this->getMockBuilder('\Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

@@ -38,13 +38,7 @@ class DirectorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_builderMock = $this->getMock('Magento\Backend\Model\Menu\Builder', [], [], '', false);
-        $this->_logger = $this->getMock(
-            'Magento\Framework\Logger',
-            ['debug', 'info', 'critical'],
-            [],
-            '',
-            false
-        );
+        $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->_commandMock = $this->getMock(
             'Magento\Backend\Model\Menu\Builder\AbstractCommand',
             ['getId', '_execute', 'execute', 'chain'],

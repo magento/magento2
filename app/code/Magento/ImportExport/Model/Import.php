@@ -110,7 +110,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_filesystem;
 
     /**
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
@@ -125,7 +125,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,

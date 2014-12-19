@@ -50,10 +50,10 @@ class Cancel extends \Magento\Framework\App\Action\Action
                 $this->_view
             );
         } catch (\Magento\Framework\Model\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $result['error_message'] = $e->getMessage();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $result['error_message'] = __(
                 'There was an error canceling transactions. Please contact us or try again later.'
             );

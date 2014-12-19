@@ -6,7 +6,7 @@ namespace Magento\Checkout\Service\V1\Address\Shipping;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /** Quote shipping address write service object. */
 class WriteService implements WriteServiceInterface

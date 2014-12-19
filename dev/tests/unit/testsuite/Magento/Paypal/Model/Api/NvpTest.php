@@ -15,7 +15,7 @@ class NvpTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerAddressHelper;
 
-    /** @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $logger;
 
     /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -45,10 +45,10 @@ class NvpTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->customerAddressHelper = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
-        $this->logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->resolver = $this->getMock('Magento\Framework\Locale\ResolverInterface');
         $this->regionFactory = $this->getMock('Magento\Directory\Model\RegionFactory', [], [], '', false);
-        $this->adapterFactory = $this->getMock('Magento\Framework\Logger\AdapterFactory', [], [], '', false);
+        $this->adapterFactory = $this->getMock('Psr\Log\LoggerInterface\AdapterFactory', [], [], '', false);
         $this->countryFactory = $this->getMock('Magento\Directory\Model\CountryFactory', [], [], '', false);
         $processableExceptionFactory = $this->getMock(
             'Magento\Paypal\Model\Api\ProcessableExceptionFactory',

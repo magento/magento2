@@ -35,7 +35,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
     protected $_logTrace = [];
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -45,12 +45,12 @@ abstract class AbstractModel extends \Magento\Framework\Object
     protected $_varDirectory;
 
     /**
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
         array $data = []
     ) {

@@ -57,7 +57,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_exportFileExtension)
         );
 
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $entityFactory = $this->getMock(
             'Magento\ImportExport\Model\Export\Entity\Factory',

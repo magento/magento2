@@ -12,7 +12,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Acl\Builder as AclBuilder;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Permission tree retriever

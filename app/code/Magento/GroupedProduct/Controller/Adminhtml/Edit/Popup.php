@@ -18,7 +18,7 @@ class Popup extends \Magento\Backend\App\AbstractAction
     protected $factory;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -26,13 +26,13 @@ class Popup extends \Magento\Backend\App\AbstractAction
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $factory
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $factory,
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->registry = $registry;
         $this->factory = $factory;

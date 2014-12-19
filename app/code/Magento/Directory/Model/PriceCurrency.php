@@ -6,7 +6,7 @@ namespace Magento\Directory\Model;
 
 use Magento\Framework\App\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Store\Model\Store;
 
 /**

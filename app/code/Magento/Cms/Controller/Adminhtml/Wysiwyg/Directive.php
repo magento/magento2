@@ -28,7 +28,7 @@ class Directive extends \Magento\Backend\App\Action
         } catch (\Exception $e) {
             $image->open($this->_objectManager->get('Magento\Cms\Model\Wysiwyg\Config')->getSkinImagePlaceholderUrl());
             $response->setHeader('Content-Type', $image->getMimeType())->setBody($image->getImage());
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
     }
 }

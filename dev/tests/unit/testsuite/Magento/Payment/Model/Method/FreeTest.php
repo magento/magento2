@@ -20,7 +20,7 @@ class FreeTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentData  = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
-        $logAdapterFactory = $this->getMock('Magento\Framework\Logger\AdapterFactory', [], [], '', false);
+        $logAdapterFactory = $this->getMock('Psr\Log\LoggerInterface\AdapterFactory', [], [], '', false);
         $this->currencyPrice = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
 
         $this->methodFree = new \Magento\Payment\Model\Method\Free(

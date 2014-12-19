@@ -31,7 +31,7 @@ class StorageFactory
     protected $_eventManager;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_log;
 

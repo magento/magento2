@@ -56,7 +56,7 @@ class SavePayment extends \Magento\Checkout\Controller\Onepage
         } catch (\Magento\Framework\Model\Exception $e) {
             $result['error'] = $e->getMessage();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $result['error'] = __('Unable to set Payment Method');
         }
         $this->getResponse()->representJson(

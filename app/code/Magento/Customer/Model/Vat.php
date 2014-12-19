@@ -5,7 +5,7 @@
 namespace Magento\Customer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Store\Model\ScopeInterface;
 
 /**

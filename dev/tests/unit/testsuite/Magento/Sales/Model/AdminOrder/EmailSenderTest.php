@@ -41,7 +41,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->loggerMock = $this->getMock(
-            '\Magento\Framework\Logger',
+            '\Psr\Log\LoggerInterface',
             [],
             [],
             '',

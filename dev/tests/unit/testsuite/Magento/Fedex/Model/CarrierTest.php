@@ -77,7 +77,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 'scopeConfig' => $scopeConfig,
                 'rateErrorFactory' =>
                     $this->getMock('Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory', [], [], '', false),
-                'logger' => $this->getMock('Magento\Framework\Logger', [], [], '', false),
+                'logger' => $this->getMock('Psr\Log\LoggerInterface'),
                 'xmlElFactory' => $this->getMock('Magento\Shipping\Model\Simplexml\ElementFactory', [], [], '', false),
                 'rateFactory' => $rateFactory,
                 'rateMethodFactory' => $rateMethodFactory,

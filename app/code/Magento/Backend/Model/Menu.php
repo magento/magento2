@@ -10,11 +10,6 @@ namespace Magento\Backend\Model;
 class Menu extends \ArrayObject
 {
     /**
-     * Name of special logger key for debugging building menu
-     */
-    const LOGGER_KEY = 'menu-debug';
-
-    /**
      * Path in tree structure
      *
      * @var string
@@ -22,15 +17,15 @@ class Menu extends \ArrayObject
     protected $_path = '';
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param string $pathInMenuStructure
      */
-    public function __construct(\Magento\Framework\Logger $logger, $pathInMenuStructure = '')
+    public function __construct(\Psr\Log\LoggerInterface $logger, $pathInMenuStructure = '')
     {
         if ($pathInMenuStructure) {
             $this->_path = $pathInMenuStructure . '/';
@@ -61,8 +56,7 @@ class Menu extends \ArrayObject
             if (!isset($this[$index])) {
                 $this->offsetSet($index, $item);
                 $this->_logger->debug(
-                    sprintf('Add of item with id %s was processed', $item->getId()),
-                    self::LOGGER_KEY
+                    sprintf('Add of item with id %s was processed', $item->getId())
                 );
             } else {
                 $this->add($item, $parentId, $index + 1);
@@ -127,8 +121,7 @@ class Menu extends \ArrayObject
                 unset($this[$key]);
                 $result = true;
                 $this->_logger->debug(
-                    sprintf('Remove on item with id %s was processed', $item->getId()),
-                    self::LOGGER_KEY
+                    sprintf('Remove on item with id %s was processed', $item->getId())
                 );
                 break;
             }

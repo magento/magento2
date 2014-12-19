@@ -14,7 +14,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
     protected $_asset;
 
     /**
-     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_logger;
 
@@ -51,7 +51,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
-        $this->_logger = $this->getMock('\Magento\Framework\Logger', [], [], '', false);
+        $this->_logger = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
         $this->_baseUrl = $this->getMock('\Magento\Framework\Url', [], [], '', false);
         $this->_staticViewDir = $this->getMockForAbstractClass(
             '\Magento\Framework\Filesystem\Directory\WriteInterface'

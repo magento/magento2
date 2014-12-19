@@ -199,13 +199,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteSaveException()
     {
-        $logerMock = $this->getMock(
-            'Magento\Framework\Logger',
-            ['critical', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $logerMock = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
@@ -218,7 +212,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
         $logerMock->expects($this->once())->method('critical');
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\Logger')
+            ->with('Psr\Log\LoggerInterface')
             ->will($this->returnValue($logerMock));
         $this->responseMock->expects($this->once())->method('representJson');
 

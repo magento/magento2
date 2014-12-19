@@ -12,7 +12,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -32,7 +32,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_items['item3'] = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
         $this->_items['item3']->expects($this->any())->method('getId')->will($this->returnValue('item3'));
 
-        $this->_logger = $this->getMock('Magento\Framework\Logger', ['info'], [], '', false);
+        $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->_model = new \Magento\Backend\Model\Menu($this->_logger);
     }
@@ -47,14 +47,6 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testAddDoLogAddAction()
     {
-        $this->_logger->expects(
-            $this->once()
-        )->method(
-            'info'
-        )->with(
-            $this->equalTo(sprintf('Add of item with id %s was processed', $this->_items['item1']->getId()))
-        );
-
         $this->_model->add($this->_items['item1']);
     }
 
@@ -136,7 +128,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $subMenu = $this->getMock(
             'Magento\Backend\Model\Menu',
             [],
-            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+            [$this->getMock('Psr\Log\LoggerInterface')]
         );
         $subMenu->expects($this->once())->method("add")->with($this->_items['item3']);
 
@@ -189,7 +181,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $menuMock = $this->getMock(
             'Magento\Backend\Model\Menu',
             [],
-            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+            [$this->getMock('Psr\Log\LoggerInterface')]
         );
         $menuMock->expects($this->once())->method('remove')->with($this->equalTo('item2'));
 
@@ -203,15 +195,6 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     public function testRemoveDoLogRemoveAction()
     {
         $this->_model->add($this->_items['item1']);
-
-        $this->_logger->expects(
-            $this->once()
-        )->method(
-            'info'
-        )->with(
-            $this->equalTo(sprintf('Remove on item with id %s was processed', $this->_items['item1']->getId()))
-        );
-
         $this->_model->remove('item1');
     }
 
@@ -335,7 +318,6 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     public function testSerialize()
     {
         $this->assertNotEmpty($this->_model->serialize());
-        $this->_logger->expects($this->once())->method('info');
         $this->_model->add($this->_items['item1']);
     }
 }

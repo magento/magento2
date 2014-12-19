@@ -33,7 +33,7 @@ class Config
     protected $_menu;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -64,7 +64,7 @@ class Config
      * @param \Magento\Backend\Model\Menu\Config\Reader $configReader
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\State $appState
      */
@@ -75,7 +75,7 @@ class Config
         \Magento\Backend\Model\Menu\Config\Reader $configReader,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\State $appState
     ) {

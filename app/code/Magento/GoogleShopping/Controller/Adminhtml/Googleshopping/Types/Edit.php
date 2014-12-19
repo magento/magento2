@@ -43,7 +43,7 @@ class Edit extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
             $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Google Content Attributes'));
             $this->_view->renderLayout();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->messageManager->addError(__("We can't edit Attribute Set Mapping."));
             $this->_redirect('adminhtml/*/index');
         }

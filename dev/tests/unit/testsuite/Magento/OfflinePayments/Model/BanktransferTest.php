@@ -18,7 +18,7 @@ class BanktransferTest extends \PHPUnit_Framework_TestCase
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $adapterFactoryMock = $this->getMock(
-            'Magento\Framework\Logger\AdapterFactory',
+            'Psr\Log\LoggerInterface\AdapterFactory',
             ['create'],
             [],
             '',

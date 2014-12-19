@@ -63,7 +63,7 @@ class Image
     /**
      * Logger
      *
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -88,7 +88,7 @@ class Image
      * @param \Magento\Framework\Image\Factory $imageFactory
      * @param Image\Uploader $uploader
      * @param Image\PathInterface $themeImagePath
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $imageParams
      * @param ThemeInterface $theme
      * @codingStandardsIgnoreStart
@@ -98,7 +98,7 @@ class Image
         \Magento\Framework\Image\Factory $imageFactory,
         Image\Uploader $uploader,
         Image\PathInterface $themeImagePath,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         array $imageParams = [self::PREVIEW_IMAGE_WIDTH, self::PREVIEW_IMAGE_HEIGHT],
         ThemeInterface $theme = null
     ) {

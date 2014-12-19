@@ -41,7 +41,7 @@ class LoadThemeList extends \Magento\DesignEditor\Controller\Adminhtml\System\De
 
             $response = ['content' => $this->_view->getLayout()->getOutput()];
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $response = ['error' => __('Sorry, but we can\'t load the theme list.')];
         }
         $this->getResponse()->representJson($coreHelper->jsonEncode($response));

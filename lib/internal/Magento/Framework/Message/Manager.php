@@ -5,7 +5,7 @@
 namespace Magento\Framework\Message;
 
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Message manager model

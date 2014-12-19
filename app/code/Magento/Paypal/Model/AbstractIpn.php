@@ -45,13 +45,13 @@ class AbstractIpn
 
     /**
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         array $data = []
     ) {

@@ -159,7 +159,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
                     $this->_getSession()->setUsername($login['username']);
                 } catch (\Exception $e) {
                     // PA DSS violation: this exception log can disclose customer password
-                    // $this->_objectManager->get('Magento\Framework\Logger')->critical($e);
+                    // $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                     $this->messageManager->addError(__('There was an error validating the login and password.'));
                 }
             } else {

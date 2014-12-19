@@ -82,7 +82,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
     protected $_customerAddress;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -97,7 +97,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
     protected $_regionFactory;
 
     /**
-     * @var \Magento\Framework\Logger\AdapterFactory
+     * @var \Psr\Log\LoggerInterface\AdapterFactory
      */
     protected $_logAdapterFactory;
 
@@ -108,18 +108,18 @@ abstract class AbstractApi extends \Magento\Framework\Object
      * attributes This behavior may change in child classes
      *
      * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
         array $data = []
     ) {
         $this->_customerAddress = $customerAddress;

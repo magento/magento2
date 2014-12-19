@@ -46,7 +46,7 @@ class Oauth implements OauthInterface
     protected $_httpClient;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -68,7 +68,7 @@ class Oauth implements OauthInterface
      * @param TokenFactory $tokenFactory
      * @param IntegrationOauthHelper $dataHelper
      * @param \Magento\Framework\HTTP\ZendClient $httpClient
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param OauthHelper $oauthHelper
      * @param TokenProvider $tokenProvider
      */
@@ -78,7 +78,7 @@ class Oauth implements OauthInterface
         TokenFactory $tokenFactory,
         IntegrationOauthHelper $dataHelper,
         \Magento\Framework\HTTP\ZendClient $httpClient,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         OauthHelper $oauthHelper,
         TokenProvider $tokenProvider
     ) {

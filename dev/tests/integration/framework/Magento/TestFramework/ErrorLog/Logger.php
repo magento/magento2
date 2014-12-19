@@ -4,7 +4,7 @@
  */
 namespace Magento\TestFramework\ErrorLog;
 
-class Logger extends \Magento\Framework\Logger
+class Logger extends \Psr\Log\LoggerInterface
 {
     /** @var array */
     protected $messages = [];

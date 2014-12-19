@@ -169,7 +169,7 @@ class Checkout
     protected $_customerUrl;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -199,7 +199,7 @@ class Checkout
     protected $_cartFactory;
 
     /**
-     * @var \Magento\Framework\Logger\AdapterFactory
+     * @var \Psr\Log\LoggerInterface\AdapterFactory
      */
     protected $_logFactory;
 
@@ -271,7 +271,7 @@ class Checkout
     /**
      * Set config, session and quote instances
      *
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Checkout\Helper\Data $checkoutData
@@ -282,7 +282,7 @@ class Checkout
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $coreUrl
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
-     * @param \Magento\Framework\Logger\AdapterFactory $logFactory
+     * @param \Psr\Log\LoggerInterface\AdapterFactory $logFactory
      * @param \Magento\Checkout\Model\Type\OnepageFactory $onepageFactory
      * @param \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
@@ -300,7 +300,7 @@ class Checkout
      * @throws \Exception
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Checkout\Helper\Data $checkoutData,
@@ -311,7 +311,7 @@ class Checkout
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $coreUrl,
         \Magento\Paypal\Model\CartFactory $cartFactory,
-        \Magento\Framework\Logger\AdapterFactory $logFactory,
+        \Psr\Log\LoggerInterface\AdapterFactory $logFactory,
         \Magento\Checkout\Model\Type\OnepageFactory $onepageFactory,
         \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,

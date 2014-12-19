@@ -22,7 +22,7 @@ class ContainerAbstractTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $paymentInfo = $objectManagerHelper->getObject('Magento\Payment\Model\Info');
         $adapterFactoryMock = $this->getMock(
-            'Magento\Framework\Logger\AdapterFactory',
+            'Psr\Log\LoggerInterface\AdapterFactory',
             ['create'],
             [],
             '',

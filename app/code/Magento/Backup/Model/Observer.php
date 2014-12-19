@@ -43,7 +43,7 @@ class Observer
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -74,7 +74,7 @@ class Observer
     /**
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Backup\Factory $backupFactory
@@ -83,7 +83,7 @@ class Observer
     public function __construct(
         \Magento\Backup\Helper\Data $backupData,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Backup\Factory $backupFactory,

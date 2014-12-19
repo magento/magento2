@@ -117,7 +117,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     /**
      * Logger
      *
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 

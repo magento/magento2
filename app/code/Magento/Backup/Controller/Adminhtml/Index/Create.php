@@ -86,10 +86,10 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
         } catch (\Magento\Framework\Backup\Exception\NotEnoughFreeSpace $e) {
             $errorMessage = __('You need more free space to create a backup.');
         } catch (\Magento\Framework\Backup\Exception\NotEnoughPermissions $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->log($e->getMessage());
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->log($e->getMessage());
             $errorMessage = __('You need more permissions to create a backup.');
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->log($e->getMessage());
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->log($e->getMessage());
             $errorMessage = __('Something went wrong creating the backup.');
         }
 

@@ -12,7 +12,7 @@ class Combine extends AbstractCondition
     protected $_conditionFactory;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
