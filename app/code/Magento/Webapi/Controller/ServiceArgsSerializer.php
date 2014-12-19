@@ -90,7 +90,7 @@ class ServiceArgsSerializer
                     ? $inputArray[$paramName]
                     : $inputArray[$snakeCaseParamName];
 
-                $paramType = $this->getParamType($param);
+                $paramType = $this->typeProcessor->getParamType($param);
                 $inputData[] = $this->_convertValue($paramValue, $paramType);
             } else {
                 $inputData[] = $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null;
@@ -101,38 +101,16 @@ class ServiceArgsSerializer
     }
 
     /**
-     * Get the parameter type
-     *
-     * @param ParameterReflection $param
-     * @return string
-     */
-    private function getParamType(ParameterReflection $param)
-    {
-        $type = $param->getType();
-        if ($type == 'array') {
-            // try to determine class, if it's array of objects
-            $docBlock = $param->getDeclaringFunction()->getDocBlock();
-            $pattern = "/\@param\s+([\w\\\_]+\[\])\s+\\\${$param->getName()}\n/";
-            if (preg_match($pattern, $docBlock->getContents(), $matches)) {
-                return $matches[1];
-            }
-            return "{$type}[]";
-        }
-        return $type;
-    }
-
-    /**
      * Creates a new instance of the given class and populates it with the array of data. The data can
      * be in different forms depending on the adapter being used, REST vs. SOAP. For REST, the data is
      * in snake_case (e.g. tax_class_id) while for SOAP the data is in camelCase (e.g. taxClassId).
      *
-     * @param string|\ReflectionClass $class
+     * @param string $className
      * @param array $data
      * @return object the newly created and populated object
      */
-    protected function _createFromArray($class, $data)
+    protected function _createFromArray($className, $data)
     {
-        $className = is_string($class) ? $class : $class->getName();
         $data = is_array($data) ? $data : [];
         $class = new ClassReflection($className);
 
@@ -142,7 +120,7 @@ class ServiceArgsSerializer
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
             // This use case is for REST only. SOAP request data is already camel cased
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
-            $methodName = $this->_processGetterMethod($class, $camelCaseProperty);
+            $methodName = $this->typeProcessor->findGetterMethodName($class, $camelCaseProperty);
             $methodReflection = $class->getMethod($methodName);
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
@@ -271,34 +249,6 @@ class ServiceArgsSerializer
             }
         }
         return $result;
-    }
-
-    /**
-     * Find the getter method for a given property in the Data Object class
-     *
-     * @param ClassReflection $class
-     * @param string $camelCaseProperty
-     * @return string processed method name
-     * @throws \Exception If $camelCaseProperty has no corresponding getter method
-     */
-    protected function _processGetterMethod(ClassReflection $class, $camelCaseProperty)
-    {
-        $getterName = 'get' . $camelCaseProperty;
-        $boolGetterName = 'is' . $camelCaseProperty;
-        if ($class->hasMethod($getterName)) {
-            $methodName = $getterName;
-        } elseif ($class->hasMethod($boolGetterName)) {
-            $methodName = $boolGetterName;
-        } else {
-            throw new \Exception(
-                sprintf(
-                    'Property :"%s" does not exist in the Data Object class: "%s".',
-                    $camelCaseProperty,
-                    $class->getName()
-                )
-            );
-        }
-        return $methodName;
     }
 
     /**
