@@ -13,6 +13,8 @@ interface ReadServiceInterface
      * Lists active checkout agreements.
      *
      * @return \Magento\CheckoutAgreements\Service\V1\Data\Agreement[] Array of active checkout agreements.
+     * @deprecated
+     * @see \app\code\Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface::getList
      */
     public function getList();
 }
