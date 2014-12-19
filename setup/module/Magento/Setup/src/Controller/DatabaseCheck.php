@@ -4,6 +4,7 @@
  */
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\Filesystem;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\WebLogger;
 use Zend\Json\Json;
@@ -20,13 +21,22 @@ class DatabaseCheck extends AbstractActionController
     private $installerFactory;
 
     /**
+     * Filesystem to access log
+     *
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
+     * @param Filesystem $filesystem
      */
-    public function __construct(InstallerFactory $installerFactory)
+    public function __construct(InstallerFactory $installerFactory, Filesystem $filesystem)
     {
         $this->installerFactory = $installerFactory;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -38,7 +48,7 @@ class DatabaseCheck extends AbstractActionController
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         try {
-            $installer = $this->installerFactory->create(new WebLogger());
+            $installer = $this->installerFactory->create(new WebLogger($this->filesystem));
             $password = isset($params['password']) ? $params['password'] : '';
             $installer->checkDatabaseConnection($params['name'], $params['host'], $params['user'], $password);
             return new JsonModel(['success' => true]);
