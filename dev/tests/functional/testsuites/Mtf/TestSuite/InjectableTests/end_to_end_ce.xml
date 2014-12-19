@@ -32,8 +32,8 @@
             <class value="Magento\Catalog\Test\TestCase\Product\CrosssellTest" />
             <class value="Magento\Catalog\Test\TestCase\Product\RelatedProductTest" />
             <!--Url rewrites-->
-            <class value="Magento\Urlrewrite\Test\TestCase\ProductTest" />
-            <class value="Magento\Urlrewrite\Test\TestCase\CategoryTest" />
+            <class value="Magento\UrlRewrite\Test\TestCase\ProductTest" />
+            <class value="Magento\UrlRewrite\Test\TestCase\CategoryTest" />
             <!--Customer-->
             <class value="Magento\Customer\Test\TestCase\BackendCustomerCreateTest" />
             <class value="Magento\Customer\Test\TestCase\CreateOnFrontendTest" />
