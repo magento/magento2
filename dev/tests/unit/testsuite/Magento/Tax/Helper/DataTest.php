@@ -301,6 +301,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                         'percent' => 20.0,
                         'tax_amount' => 2.5,
                         'base_tax_amount' => 2.5,
+                        'type' => 'product',
                     ],
                 ],
             ],
@@ -362,6 +363,75 @@ class DataTest extends \PHPUnit_Framework_TestCase
                         'percent' => 20.0,
                         'tax_amount' => 6.5,
                         'base_tax_amount' => 6.5,
+                        'type' => 'product',
+                    ],
+                ],
+            ],
+            //Scenario 3: one item, with both shipping and product taxes
+            'one_item_with_both_shipping_and_product_taxes' => [
+                'order' => [
+                    'order_id' => 1,
+                    'shipping_tax_amount' => 2,
+                    'order_tax_details' => [
+                        'items' => [
+                            'shippingTax1' => [
+                                'item_id' => null,
+                                'type' => 'shipping',
+                                'applied_taxes' => [
+                                    [
+                                        'amount' => 2.0,
+                                        'base_amount' => 2.0,
+                                        'code' => 'US-CA-Ship',
+                                        'title' => 'US-CA-Sales-Tax-Ship',
+                                        'percent' => 10.0,
+                                    ],
+                                ],
+                            ],
+                            'itemTax1' => [
+                                'item_id' => 1,
+                                'applied_taxes' => [
+                                    [
+                                        'amount' => 5.0,
+                                        'base_amount' => 5.0,
+                                        'code' => 'US-CA',
+                                        'title' => 'US-CA-Sales-Tax',
+                                        'percent' => 20.0,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'invoice' => [
+                    'shipping_tax_amount' => 2,
+                    'invoice_items' => [
+                        'item1' => new MagentoObject(
+                            [
+                                'order_item' => new MagentoObject(
+                                    [
+                                        'id' => 1,
+                                        'tax_amount' => 5.00,
+                                    ]
+                                ),
+                                'tax_amount' => 5.00,
+                            ]
+                        ),
+                    ],
+                ],
+                'expected_results' => [
+                    [
+                        'title' => 'US-CA-Sales-Tax',
+                        'percent' => 20.0,
+                        'tax_amount' => 5.00,
+                        'base_tax_amount' => 5.00,
+                        'type' => 'product',
+                    ],
+                    [
+                        'title' => 'US-CA-Sales-Tax-Ship',
+                        'percent' => 10.0,
+                        'tax_amount' => 2.00,
+                        'base_tax_amount' => 2.00,
+                        'type' => 'shipping',
                     ],
                 ],
             ],
