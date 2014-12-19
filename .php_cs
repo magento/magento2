@@ -1,4 +1,12 @@
 <?php
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+
+/**
+ * Pre-commit hook installation:
+ * vendor/bin/static-review.php hook:install dev/tools/Magento/Tools/StaticReview/pre-commit .git/hooks/pre-commit
+ */
 $finder = Symfony\CS\Finder\DefaultFinder::create()
     ->name('*.phtml')
     ->exclude('dev/tests/functional/generated')

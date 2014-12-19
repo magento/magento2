@@ -6,20 +6,20 @@
 -->
 <constraint>
     <assertUrlRewriteInGrid module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <urlRewriteIndex class="Magento\UrlRewrite\Test\Fixture\UrlRewriteCategory"/>
             <urlRewriteCategory class="Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex"/>
         </require>
     </assertUrlRewriteInGrid>
     <assertUrlRewriteSaveMessage module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertUrlRewriteSaveMessage>
     <assertUrlRewriteCategoryRedirect module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertUrlRewriteCategoryRedirect>
     <assertUrlRewriteProductRedirect module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <urlRewrite class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView"/>
@@ -28,20 +28,20 @@
         </require>
     </assertUrlRewriteProductRedirect>
     <assertUrlRewriteDeletedMessage module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <index class="Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex"/>
         </require>
     </assertUrlRewriteDeletedMessage>
     <assertUrlRewriteNotInGrid module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <urlRewriteIndex class="Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex"/>
             <productRedirect class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
         </require>
     </assertUrlRewriteNotInGrid>
     <assertPageByUrlRewriteIsNotFound module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView"/>
             <productRedirect class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
@@ -49,17 +49,17 @@
         </require>
     </assertPageByUrlRewriteIsNotFound>
     <assertUrlRewriteCustomRedirect module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertUrlRewriteCustomRedirect>
     <assertUrlRewriteSuccessOutsideRedirect module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <urlRewrite class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
             <browser class="Mtf\Client\Browser"/>
         </require>
     </assertUrlRewriteSuccessOutsideRedirect>
     <assertUrlRewriteCustomSearchRedirect module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <urlRewrite class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
             <browser class="Mtf\Client\Browser"/>
@@ -67,12 +67,12 @@
         </require>
     </assertUrlRewriteCustomSearchRedirect>
     <assertUrlRewriteCategoryInGrid module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertUrlRewriteCategoryInGrid>
     <assertUrlRewriteUpdatedProductInGrid module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertUrlRewriteUpdatedProductInGrid>
     <assertUrlRewriteCategoryNotInGrid module="Magento_UrlRewrite">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertUrlRewriteCategoryNotInGrid>
 </constraint>

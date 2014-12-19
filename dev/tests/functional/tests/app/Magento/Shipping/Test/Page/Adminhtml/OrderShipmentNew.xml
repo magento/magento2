@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="admin/order_shipment/new" module="Magento_Shipping">
+    <blocks>
+        <shipItemsBlock>
+            <class>Magento\Shipping\Test\Block\Adminhtml\Create\Items</class>
+            <locator>#ship_items_container</locator>
+            <strategy>css selector</strategy>
+        </shipItemsBlock>
+        <formBlock>
+            <class>Magento\Shipping\Test\Block\Adminhtml\Form</class>
+            <locator>#edit_form</locator>
+            <strategy>css selector</strategy>
+        </formBlock>
+    </blocks>
+</page>

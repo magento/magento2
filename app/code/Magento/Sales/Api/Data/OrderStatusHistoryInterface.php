@@ -5,75 +5,103 @@
 namespace Magento\Sales\Api\Data;
 
 /**
- * Interface OrderStatusHistoryInterface
+ * Order status history interface.
+ *
+ * An order is a document that a web store issues to a customer. Magento generates a sales order that lists the product
+ * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
+ * a purchase order, is emailed to the customer.
  */
 interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
+     * Constants for keys of data array. Identical to the name of the getter in snake case.
+     */
+    /*
+     * Entity ID.
      */
     const ENTITY_ID = 'entity_id';
+    /*
+     * Parent ID.
+     */
     const PARENT_ID = 'parent_id';
+    /*
+     *  Is-customer-notified flag.
+     */
     const IS_CUSTOMER_NOTIFIED = 'is_customer_notified';
+    /*
+     * Is-visible-on-storefront flag.
+     */
     const IS_VISIBLE_ON_FRONT = 'is_visible_on_front';
+    /*
+     * Comment.
+     */
     const COMMENT = 'comment';
+    /*
+     * Status.
+     */
     const STATUS = 'status';
+    /*
+     * Create-at timestamp.
+     */
     const CREATED_AT = 'created_at';
+    /*
+     * Entity name.
+     */
     const ENTITY_NAME = 'entity_name';
 
     /**
-     * Returns comment
+     * Gets the comment for the order status history.
      *
-     * @return string
+     * @return string Comment.
      */
     public function getComment();
 
     /**
-     * Returns created_at
+     * Gets the created-at timestamp for the order status history.
      *
-     * @return string
+     * @return string Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
-     * Returns entity_id
+     * Gets the ID for the order status history.
      *
-     * @return int
+     * @return int Order status history ID.
      */
     public function getEntityId();
 
     /**
-     * Returns entity_name
+     * Gets the entity name for the order status history.
      *
-     * @return string
+     * @return string Entity name.
      */
     public function getEntityName();
 
     /**
-     * Returns is_customer_notified
+     * Gets the is-customer-notified flag value for the order status history.
      *
-     * @return int
+     * @return int Is-customer-notified flag value.
      */
     public function getIsCustomerNotified();
 
     /**
-     * Returns is_visible_on_front
+     * Gets the is-visible-on-storefront flag value for the order status history.
      *
-     * @return int
+     * @return int Is-visible-on-storefront flag value.
      */
     public function getIsVisibleOnFront();
 
     /**
-     * Returns parent_id
+     * Gets the parent ID for the order status history.
      *
-     * @return int
+     * @return int Parent ID.
      */
     public function getParentId();
 
     /**
-     * Returns status
+     * Gets the status for the order status history.
      *
-     * @return string
+     * @return string Status.
      */
     public function getStatus();
 }

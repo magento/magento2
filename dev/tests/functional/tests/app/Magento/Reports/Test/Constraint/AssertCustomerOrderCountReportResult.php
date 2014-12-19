@@ -14,12 +14,9 @@ use Magento\Reports\Test\Page\Adminhtml\CustomerOrdersReport;
  */
 class AssertCustomerOrderCountReportResult extends AbstractAssertCustomerOrderReportResult
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert OrderCountReport grid for all params

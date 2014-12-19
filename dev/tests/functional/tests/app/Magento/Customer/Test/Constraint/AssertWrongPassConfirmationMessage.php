@@ -5,48 +5,52 @@
 
 namespace Magento\Customer\Test\Constraint;
 
+use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountEdit;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertWrongPassConfirmationMessage
- * Check that conformation message is present
+ * Check that conformation message is present.
  */
 class AssertWrongPassConfirmationMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Conformation message
      */
-    const CONFIRMATION_MESSAGE = 'Confirm your new password';
+    const CONFIRMATION_MESSAGE = 'Please enter the same value again.';
 
     /**
-     * Constraint severeness
+     * Assert that conformation message is present.
      *
-     * @var string
-     */
-    protected $severeness = 'low';
-
-    /**
-     * Assert that conformation message is present
-     *
+     * @param CustomerInjectable $customer
      * @param CustomerAccountEdit $customerAccountEdit
      * @return void
      */
-    public function processAssert(CustomerAccountEdit $customerAccountEdit)
+    public function processAssert(CustomerInjectable $customer, CustomerAccountEdit $customerAccountEdit)
     {
-        \PHPUnit_Framework_Assert::assertEquals(
-            self::CONFIRMATION_MESSAGE,
-            $customerAccountEdit->getMessages()->getErrorMessages()
-        );
+        $validationMessages = $customerAccountEdit->getAccountInfoForm()->getValidationMessages($customer);
+        if (isset($validationMessages['password_confirmation'])) {
+            \PHPUnit_Framework_Assert::assertEquals(
+                self::CONFIRMATION_MESSAGE,
+                $validationMessages['password_confirmation'],
+                'Wrong password confirmation validation text message.'
+            );
+        } else {
+            \PHPUnit_Framework_TestCase::fail('Password confirmation validation message is absent.');
+        }
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Conformation message is displayed.';
+        return 'Password confirmation validation text message is displayed.';
     }
 }

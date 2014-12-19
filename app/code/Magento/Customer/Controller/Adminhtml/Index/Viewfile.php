@@ -5,11 +5,96 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressDataBuilder;
+use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\ObjectFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
 {
+    /**
+     * @var \Magento\Framework\Url\DecoderInterface
+     */
+    protected $urlDecoder;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Customer\Model\AddressFactory $addressFactory
+     * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
+     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param \Magento\Customer\Helper\View $viewHelper
+     * @param \Magento\Framework\Math\Random $random
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param Mapper $addressMapper
+     * @param AccountManagementInterface $customerAccountManagement
+     * @param AddressRepositoryInterface $addressRepository
+     * @param CustomerDataBuilder $customerDataBuilder
+     * @param AddressDataBuilder $addressDataBuilder
+     * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param ObjectFactory $objectFactory
+     * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Customer\Model\AddressFactory $addressFactory,
+        \Magento\Customer\Model\Metadata\FormFactory $formFactory,
+        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        \Magento\Customer\Helper\View $viewHelper,
+        \Magento\Framework\Math\Random $random,
+        CustomerRepositoryInterface $customerRepository,
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        Mapper $addressMapper,
+        AccountManagementInterface $customerAccountManagement,
+        AddressRepositoryInterface $addressRepository,
+        CustomerDataBuilder $customerDataBuilder,
+        AddressDataBuilder $addressDataBuilder,
+        \Magento\Customer\Model\Customer\Mapper $customerMapper,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        ObjectFactory $objectFactory,
+        \Magento\Framework\Url\DecoderInterface $urlDecoder
+    ) {
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $fileFactory,
+            $customerFactory,
+            $addressFactory,
+            $formFactory,
+            $subscriberFactory,
+            $viewHelper,
+            $random,
+            $customerRepository,
+            $extensibleDataObjectConverter,
+            $addressMapper,
+            $customerAccountManagement,
+            $addressRepository,
+            $customerDataBuilder,
+            $addressDataBuilder,
+            $customerMapper,
+            $dataObjectProcessor,
+            $objectFactory
+        );
+        $this->urlDecoder  = $urlDecoder;
+    }
+
     /**
      * Customer view file action
      *
@@ -24,14 +109,12 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         $plain = false;
         if ($this->getRequest()->getParam('file')) {
             // download file
-            $file = $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
-            )->urlDecode(
+            $file = $this->urlDecoder->decode(
                 $this->getRequest()->getParam('file')
             );
         } elseif ($this->getRequest()->getParam('image')) {
             // show plain image
-            $file = $this->_objectManager->get('Magento\Core\Helper\Data')->urlDecode(
+            $file = $this->urlDecoder->decode(
                 $this->getRequest()->getParam('image')
             );
             $plain = true;

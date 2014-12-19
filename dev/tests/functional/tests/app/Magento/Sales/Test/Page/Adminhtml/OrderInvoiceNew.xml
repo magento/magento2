@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/order_invoice/new" module="Magento_Sales">
+    <blocks>
+        <formBlock>
+            <class>Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Form</class>
+            <locator>#edit_form</locator>
+            <strategy>css selector</strategy>
+        </formBlock>
+        <totalsBlock>
+            <class>Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Totals</class>
+            <locator>#invoice_totals</locator>
+            <strategy>css selector</strategy>
+        </totalsBlock>
+    </blocks>
+</page>

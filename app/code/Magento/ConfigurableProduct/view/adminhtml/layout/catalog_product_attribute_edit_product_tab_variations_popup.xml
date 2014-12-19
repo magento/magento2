@@ -4,20 +4,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <body>
-        <remove name="left"/>
-        <referenceBlock name="attribute_edit_content">
-            <arguments>
-                <argument name="template" xsi:type="string">Magento_Catalog::catalog/product/attribute/form.phtml</argument>
-            </arguments>
-            <container name="form" label="Form">
-                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\Edit\Tab\Variations\Main" as="main"/>
-                <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options" as="advanced-options"/>
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced" as="options"/>
-                <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Labels" as="labels"/>
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front" as="front-options"/>
-            </container>
-        </referenceBlock>
-    </body>
+<page layout="admin-empty" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="catalog_product_attribute_edit_popup"/>
 </page>

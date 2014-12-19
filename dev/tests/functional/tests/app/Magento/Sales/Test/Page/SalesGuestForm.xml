@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/guest/form" module="Magento_Sales">
+    <blocks>
+        <searchForm>
+            <class>Magento\Sales\Test\Block\Widget\Guest\Form</class>
+            <locator>#oar-widget-orders-and-returns-form</locator>
+            <strategy>css selector</strategy>
+        </searchForm>
+    </blocks>
+</page>

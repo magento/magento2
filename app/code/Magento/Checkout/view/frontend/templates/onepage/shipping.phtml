@@ -67,7 +67,7 @@
         <div class="field zip required">
             <label class="label" for="shipping:postcode"><span><?php echo __('Zip/Postal Code') ?></span></label>
             <div class="control">
-                <input type="text" title="<?php echo __('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode') ?>" />
+                <input type="text" title="<?php echo __('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode') ?>" data-validate="{'required':true, 'validate-zip-international':true}" />
             </div>
         </div>
         <div class="field country required">
@@ -102,8 +102,10 @@
             <input type="checkbox" name="shipping[same_as_billing]" id="shipping:same_as_billing" value="1"<?php if ($this->getAddress()->getSameAsBilling()): ?> checked="checked"<?php endif; ?> class="checkbox" />
         <label class="label" for="shipping:same_as_billing"><span><?php echo __('Use Billing Address') ?></span></label>
     </div>
-    <div class="actions" id="shipping-buttons-container">
-        <div class="primary"><button data-role="opc-continue" type="button" class="button action continue"><span><?php echo __('Continue') ?></span></button></div>
+    <div class="actions-toolbar" id="shipping-buttons-container">
+        <div class="primary">
+            <button data-role="opc-continue" type="button" class="action continue primary"><span><?php echo __('Continue') ?></span></button>
+        </div>
         <div class="secondary"><a href="#" class="action back"><span><?php echo __('Back') ?></span></a></div>
     </div>
 </form>

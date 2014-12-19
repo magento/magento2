@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/order_status/index" module="Magento_Sales">
+    <blocks>
+        <orderStatusGrid>
+            <class>Magento\Sales\Test\Block\Adminhtml\Order\StatusGrid</class>
+            <locator>#sales_order_status_grid</locator>
+            <strategy>css selector</strategy>
+        </orderStatusGrid>
+        <gridPageActions>
+            <class>Magento\Sales\Test\Block\Adminhtml\Order\Status\GridPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </gridPageActions>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+    </blocks>
+</page>

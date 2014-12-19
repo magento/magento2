@@ -68,6 +68,11 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
                     ]
                 )
             );
+        $collection->expects($this->any())
+            ->method('addFieldToFilter')
+            ->with(['is_searchable', 'is_visible_in_advanced_search', 'is_filterable'], [1, 1, [1, 2]])
+            ->will($this->returnSelf());
+
         $this->productAttributeCollectionFactory->expects($this->any())
             ->method('create')
             ->willReturn($collection);

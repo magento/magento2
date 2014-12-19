@@ -25,6 +25,13 @@ class AttributeForm extends FormTabs
     protected $closedToggle = '//*[contains(@class,"collapsable-wrapper") and not(contains(@class,"opened"))]//strong';
 
     /**
+     * Properties tab selector.
+     *
+     * @var string
+     */
+    protected $propertiesTab = '#product_attribute_tabs_main';
+
+    /**
      * Get data of the tabs.
      *
      * @param FixtureInterface $fixture
@@ -37,22 +44,27 @@ class AttributeForm extends FormTabs
      */
     public function getData(FixtureInterface $fixture = null, Element $element = null)
     {
+        $this->waitForElementVisible($this->propertiesTab);
         $data = [];
         if (null === $fixture) {
             foreach ($this->tabs as $tabName => $tab) {
-                $this->openTab($tabName);
-                $this->expandAllToggles();
-                $tabData = $this->getTabElement($tabName)->getDataFormTab();
-                $data = array_merge($data, $tabData);
+                if ($this->isTabVisible($tabName)) {
+                    $this->openTab($tabName);
+                    $this->expandAllToggles();
+                    $tabData = $this->getTabElement($tabName)->getDataFormTab();
+                    $data = array_merge($data, $tabData);
+                }
             }
         } else {
             $isHasData = ($fixture instanceof InjectableFixture) ? $fixture->hasData() : true;
             $tabsFields = $isHasData ? $this->getFieldsByTabs($fixture) : [];
             foreach ($tabsFields as $tabName => $fields) {
-                $this->openTab($tabName);
-                $this->expandAllToggles();
-                $tabData = $this->getTabElement($tabName)->getDataFormTab($fields, $this->_rootElement);
-                $data = array_merge($data, $tabData);
+                if ($this->isTabVisible($tabName)) {
+                    $this->openTab($tabName);
+                    $this->expandAllToggles();
+                    $tabData = $this->getTabElement($tabName)->getDataFormTab($fields, $this->_rootElement);
+                    $data = array_merge($data, $tabData);
+                }
             }
         }
 
@@ -85,10 +97,24 @@ class AttributeForm extends FormTabs
             ? $this->tabs[$tabName]['strategy']
             : Locator::SELECTOR_CSS;
         $tab = $this->_rootElement->find($selector, $strategy);
-        $target = $this->browser->find('.logo');// Handle menu overlap problem
+        $target = $this->browser->find('.page-title .title');// Handle menu overlap problem
         $this->_rootElement->dragAndDrop($target);
         $tab->click();
-
         return $this;
+    }
+
+    /**
+     * Check if tab is visible.
+     *
+     * @param string $tabName
+     * @return bool
+     */
+    protected function isTabVisible($tabName)
+    {
+        $selector = $this->tabs[$tabName]['selector'];
+        $strategy = isset($this->tabs[$tabName]['strategy'])
+            ? $this->tabs[$tabName]['strategy']
+            : Locator::SELECTOR_CSS;
+        return $this->_rootElement->find($selector, $strategy)->isVisible();
     }
 }

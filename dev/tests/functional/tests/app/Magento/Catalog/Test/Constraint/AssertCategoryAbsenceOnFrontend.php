@@ -16,17 +16,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertCategoryAbsenceOnFrontend extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Message on the product page 404
      */
     const NOT_FOUND_MESSAGE = 'Whoops, our bad...';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that not displayed category in frontend main menu

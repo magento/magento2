@@ -14,14 +14,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserInvalidEmailMessage extends AbstractConstraint
 {
-    const ERROR_MESSAGE = 'Please correct this email address: "%s".';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const ERROR_MESSAGE = 'Please correct this email address: "%s".';
 
     /**
      * Asserts that error message equals to expected message.

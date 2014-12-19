@@ -6,12 +6,12 @@
 -->
 <constraint>
     <assertGiftMessageInFrontendOrderItems module="Magento_GiftMessage">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertGiftMessageInFrontendOrderItems>
     <assertGiftMessageInFrontendOrder module="Magento_GiftMessage">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertGiftMessageInFrontendOrder>
     <assertGiftMessageInBackendOrder module="Magento_GiftMessage">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertGiftMessageInBackendOrder>
 </constraint>

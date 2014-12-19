@@ -41,7 +41,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
     public function sampleTokenizeStringProvider()
     {
         return [
-            [" direct_url='about-magento-demo-store'", ['direct_url' => 'about-magento-demo-store']],
+            ["%20direct_url='about-magento-demo-store'", ['direct_url' => 'about-magento-demo-store']],
             [" direct_url='about-magento-demo-store\\[newDemo]",
             ['direct_url' => 'about-magento-demo-store\\[newDemo]']],
             ["   ", []]

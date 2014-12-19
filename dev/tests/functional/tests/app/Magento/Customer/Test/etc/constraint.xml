@@ -6,39 +6,39 @@
 -->
 <constraint>
     <assertCustomerSuccessSaveMessage module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <pageCustomerIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
         </require>
     </assertCustomerSuccessSaveMessage>
     <assertCustomerSuccessDeleteMessage module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <pageCustomerIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
         </require>
     </assertCustomerSuccessDeleteMessage>
     <assertCustomerSuccessRegisterMessage module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <registerPage class="Magento\Customer\Test\Page\CustomerAccountCreate" />
         </require>
     </assertCustomerSuccessRegisterMessage>
     <assertCustomerInGrid module="Magento_Customer">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
         <require>
             <customer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
             <pageCustomerIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
         </require>
     </assertCustomerInGrid>
     <assertCustomerNotInGrid module="Magento_Customer">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
         <require>
             <customer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
             <customerIndexPage class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
         </require>
     </assertCustomerNotInGrid>
     <assertCustomerForm module="Magento_Customer">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
         <require>
             <customer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
             <pageCustomerIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerIndex" />
@@ -46,7 +46,7 @@
         </require>
     </assertCustomerForm>
     <assertCustomerInvalidEmail module="Magento_Customer">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
         <require>
             <customer class="Magento\Customer\Test\Fixture\CustomerInjectable" />
             <addresses class="Magento\Customer\Test\Fixture\AddressInjectable" />
@@ -54,79 +54,79 @@
         </require>
     </assertCustomerInvalidEmail>
     <assertCustomerGroupSuccessSaveMessage module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerGroupSuccessSaveMessage>
     <assertCustomerGroupInGrid module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerGroupInGrid>
     <assertCustomerGroupOnCustomerForm module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerGroupOnCustomerForm>
     <assertCustomerGroupAlreadyExists module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerGroupAlreadyExists>
     <assertCustomerGroupNotInGrid module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerGroupNotInGrid>
     <assertCustomerFailRegisterMessage module="Magento_Customer">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <registerPage class="Magento\Customer\Test\Page\CustomerAccountCreate" />
         </require>
     </assertCustomerFailRegisterMessage>
     <assertCustomerGroupSuccessDeleteMessage module="Magento_Customer">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <customerGroupIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex" />
         </require>
     </assertCustomerGroupSuccessDeleteMessage>
     <assertCustomerGroupForm module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerGroupForm>
     <assertCustomerInfoSuccessSavedMessage module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <customerAccountIndex class="Magento\Customer\Test\Page\CustomerAccountIndex" />
         </require>
     </assertCustomerInfoSuccessSavedMessage>
     <assertCustomerAddressSuccessSaveMessage module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <customerAccountIndex class="Magento\Customer\Test\Page\CustomerAccountIndex" />
         </require>
     </assertCustomerAddressSuccessSaveMessage>
     <assertCustomerDefaultAddresses module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <customerAccountIndex class="Magento\Customer\Test\Page\CustomerAccountIndex" />
             <address class="Magento\Customer\Test\Fixture\AddressInjectable" />
         </require>
     </assertCustomerDefaultAddresses>
     <assertCustomerMassDeleteSuccessMessage module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerMassDeleteSuccessMessage>
     <assertCustomerMassDeleteNotInGrid module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerMassDeleteNotInGrid>
     <assertCustomerMassDeleteInGrid module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerMassDeleteInGrid>
     <assertMassActionSuccessUpdateMessage module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertMassActionSuccessUpdateMessage>
     <assertAddressDeletedFrontend module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertAddressDeletedFrontend>
     <assertAddressDeletedBackend module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertAddressDeletedBackend>
     <assertCustomerPasswordChanged module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerPasswordChanged>
     <assertChangePasswordFailMessage module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertChangePasswordFailMessage>
     <assertWrongPassConfirmationMessage module="Magento_Customer">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertWrongPassConfirmationMessage>
 </constraint>

@@ -15,12 +15,9 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductNotInGrid extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that product cannot be found by name and sku

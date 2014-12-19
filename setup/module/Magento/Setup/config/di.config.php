@@ -26,6 +26,7 @@ return [
                 'Zend\EventManager\EventManagerInterface' => 'EventManager',
                 'Zend\ServiceManager\ServiceLocatorInterface' => 'ServiceManager',
                 'Magento\Framework\DB\LoggerInterface' => 'Magento\Framework\DB\Logger\Null',
+                'Magento\Framework\Locale\ConfigInterface' => 'Magento\Framework\Locale\Config',
             ],
         ],
     ],

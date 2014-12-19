@@ -28,7 +28,7 @@ class Footer extends Block
      *
      * @var string
      */
-    protected $variableSelector = './/div[contains(@class, "links")]/*[text()="%s"]';
+    protected $variableSelector = './/ul[contains(@class, "links")]/*[text()="%s"]';
 
     /**
      * Store group dropdown selector

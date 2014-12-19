@@ -4,6 +4,7 @@
  */
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(
     333
 )->setCreatedAt(

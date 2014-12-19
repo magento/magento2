@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page module="Magento_Shipping">
+    <orderShipmentNew>
+        <mca>admin/order_shipment/new</mca>
+        <area>adminhtml</area>
+        <class>Magento\Sales\Test\Page\Adminhtml\OrderShipmentNew</class>
+    </orderShipmentNew>
+    <shipmentIndex>
+        <mca>sales/shipment</mca>
+        <area>adminhtml</area>
+        <class>Magento\Shipping\Test\Page\Adminhtml\ShipmentIndex</class>
+    </shipmentIndex>
+    <orderShipmentView>
+        <mca>order_shipment/view</mca>
+        <area>adminhtml</area>
+        <class>Magento\Shipping\Test\Page\Adminhtml\OrderShipmentView</class>
+    </orderShipmentView>
+</page>
