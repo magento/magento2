@@ -133,6 +133,14 @@
        box-sizing: border-box;
        max-width: 380px;
     }
+    .control-addon {
+        + .mage-error {
+            .no-flexbox.no-flexboxlegacy & {
+                display: inline-block;
+                width: 100%;
+            }
+        }
+    }
 }
 
 .form__field {

@@ -8,29 +8,25 @@ define([
 ], function($, _, Component) {
     'use strict';
 
-    var defaults = {
-        content:        '',
-        showSpinner:    false,
-        loading:        false,
-        template:       'ui/content/content'
-    };
-
-    var __super__ = Component.prototype;
-
     return Component.extend({
+        defaults: {
+            content:        '',
+            showSpinner:    false,
+            loading:        false,
+            template:       'ui/content/content'
+        },
 
         /**
          * Extends instance with default config, calls 'initialize' method of
          *     parent, calls 'initAjaxConfig'
          */
         initialize: function() {
-            _.extend(this, defaults);
-
-            __super__.initialize.apply(this, arguments);
-
             _.bindAll(this, 'onContainerToggle', 'onDataLoaded');
 
-            this.initAjaxConfig();
+            this._super()
+                .initAjaxConfig();
+
+            return this;
         },
 
         /**
@@ -39,10 +35,9 @@ define([
          *     
          * @return {Object} - reference to instance
          */
-        initObservable: function(){
-            __super__.initObservable.apply(this, arguments);
-
-            this.observe('content loading');
+        initObservable: function() {
+            this._super()
+                .observe('content loading');
 
             return this;
         },
@@ -52,18 +47,18 @@ define([
          * 
          * @return {Object} - reference to instance
          */
-        initListeners: function () {
-            __super__.initListeners.apply(this, arguments);
+        initListeners: function() {
+            this._super();
 
-            this.loading.subscribe(function(value){
+            this.loading.subscribe(function(value) {
                 this.trigger(value ? 'loading' : 'loaded');
             }, this);
 
             return this;
         },
 
-        initContainer: function(parent){
-            __super__.initContainer.apply(this, arguments);
+        initContainer: function(parent) {
+            this._super();
 
             parent.on('active', this.onContainerToggle);
 
@@ -91,8 +86,8 @@ define([
          * 
          * @param  {Boolean} active
          */
-        onContainerToggle: function(active){
-            if(active && this.shouldLoad()){
+        onContainerToggle: function(active) {
+            if (active && this.shouldLoad()) {
                 this.loadData();
             }
         },
@@ -102,7 +97,7 @@ define([
          * 
          * @return {Boolean} [description]
          */
-        hasData: function(){
+        hasData: function() {
             return !!this.content();
         },
 
@@ -111,7 +106,7 @@ define([
          * 
          * @return {Boolean}
          */
-        shouldLoad: function(){
+        shouldLoad: function() {
             return this.source && !this.hasData() && !this.loading();
         },
 
@@ -120,7 +115,7 @@ define([
          * 
          * @return {Object} - reference to instance
          */
-        loadData: function(){
+        loadData: function() {
             this.loading(true);
 
             $.ajax(this.ajaxConfig);
@@ -134,9 +129,9 @@ define([
          * 
          * @param  {String} data
          */
-        onDataLoaded: function(data){
+        onDataLoaded: function(data) {
             this.updateContent(data)
-                .loading(false); 
+                .loading(false);
         },
 
         /**
@@ -145,7 +140,7 @@ define([
          * @param  {String} content
          * @return {Object} - reference to instance
          */
-        updateContent: function(content){
+        updateContent: function(content) {
             this.content(content);
 
             return this;

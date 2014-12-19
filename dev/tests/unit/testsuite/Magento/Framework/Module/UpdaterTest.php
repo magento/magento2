@@ -27,9 +27,9 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
     protected $_resourceSetupMock;
 
     /**
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\DbVersionInfo|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $moduleManager;
+    private $_dbVersionInfo;
 
     /**
      * @var \Magento\Framework\Module\Updater
@@ -63,36 +63,24 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             ->with('Test_Module')
             ->will($this->returnValue($resourceList));
 
-        $this->moduleManager = $this->getMock('\Magento\Framework\Module\Manager', [], [], '', false);
+        $this->_dbVersionInfo = $this->getMock('Magento\Framework\Module\DbVersionInfo', [], [], '', false);
 
         $this->_model = new \Magento\Framework\Module\Updater(
             $this->_factoryMock,
             $this->_moduleListMock,
             $this->_resourceResolver,
-            $this->moduleManager
+            $this->_dbVersionInfo
         );
-    }
-
-    /**
-     * @covers \Magento\Framework\Module\Updater::updateData
-     */
-    public function testUpdateDataNotApplied()
-    {
-        $this->moduleManager->expects($this->once())
-            ->method('isDbDataUpToDate')
-            ->with('Test_Module', 'catalog_setup')
-            ->will($this->returnValue(true));
-        $this->_factoryMock->expects($this->never())
-            ->method('create');
-        $this->_model->updateData();
     }
 
     public function testUpdateData()
     {
-        $this->moduleManager->expects($this->once())
-            ->method('isDbDataUpToDate')
+        $this->_dbVersionInfo->expects($this->once())
+            ->method('isDataUpToDate')
             ->with('Test_Module', 'catalog_setup')
-            ->will($this->returnValue(false));
+            ->will(
+                $this->returnValue(false)
+            );
         $this->_factoryMock->expects($this->any())
             ->method('create')
             ->with('catalog_setup', 'Test_Module')
@@ -105,8 +93,8 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateDataNoUpdates()
     {
-        $this->moduleManager->expects($this->once())
-            ->method('isDbDataUpToDate')
+        $this->_dbVersionInfo->expects($this->once())
+            ->method('isDataUpToDate')
             ->with('Test_Module', 'catalog_setup')
             ->will($this->returnValue(true));
         $this->_factoryMock->expects($this->never())

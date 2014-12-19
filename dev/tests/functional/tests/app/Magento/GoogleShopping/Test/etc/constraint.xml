@@ -6,6 +6,6 @@
 -->
 <constraint>
     <assertProductAttributeAbsenceForAttributeMapping module="Magento_GoogleShopping">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductAttributeAbsenceForAttributeMapping>
 </constraint>

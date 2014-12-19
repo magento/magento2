@@ -5,763 +5,1049 @@
 namespace Magento\Sales\Api\Data;
 
 /**
- * Interface OrderItemInterface
+ * Order item interface.
+ *
+ * An order is a document that a web store issues to a customer. Magento generates a sales order that lists the product
+ * items, billing and shipping addresses, and shipping and payment methods. A corresponding external document, known as
+ * a purchase order, is emailed to the customer.
  */
 interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
+    /*
+     * Item ID.
+     */
     const ITEM_ID = 'item_id';
+    /*
+     * Order ID.
+     */
     const ORDER_ID = 'order_id';
+    /*
+     * Parent item ID.
+     */
     const PARENT_ITEM_ID = 'parent_item_id';
+    /*
+     * Quote item ID.
+     */
     const QUOTE_ITEM_ID = 'quote_item_id';
+    /*
+     * Store ID.
+     */
     const STORE_ID = 'store_id';
+    /*
+     * Created-at timestamp.
+     */
     const CREATED_AT = 'created_at';
+    /*
+     * Updated-at timestamp.
+     */
     const UPDATED_AT = 'updated_at';
+    /*
+     * Product ID.
+     */
     const PRODUCT_ID = 'product_id';
+    /*
+     * Product type.
+     */
     const PRODUCT_TYPE = 'product_type';
+    /*
+     * Product options.
+     */
     const PRODUCT_OPTIONS = 'product_options';
+    /*
+     * Weight.
+     */
     const WEIGHT = 'weight';
+    /*
+     * Is-virtual flag.
+     */
     const IS_VIRTUAL = 'is_virtual';
+    /*
+     * SKU.
+     */
     const SKU = 'sku';
+    /*
+     * Name.
+     */
     const NAME = 'name';
+    /*
+     * Description.
+     */
     const DESCRIPTION = 'description';
+    /*
+     * Applied rule IDs.
+     */
     const APPLIED_RULE_IDS = 'applied_rule_ids';
+    /*
+     * Additional data.
+     */
     const ADDITIONAL_DATA = 'additional_data';
+    /*
+     * Is-quantity-decimal flag.
+     */
     const IS_QTY_DECIMAL = 'is_qty_decimal';
+    /*
+     * No-discount flag.
+     */
     const NO_DISCOUNT = 'no_discount';
+    /*
+     * Quantity backordered.
+     */
     const QTY_BACKORDERED = 'qty_backordered';
+    /*
+     * Quantity canceled.
+     */
     const QTY_CANCELED = 'qty_canceled';
+    /*
+     * Quantity invoiced.
+     */
     const QTY_INVOICED = 'qty_invoiced';
+    /*
+     * Quantity ordered.
+     */
     const QTY_ORDERED = 'qty_ordered';
+    /*
+     * Quantity refunded.
+     */
     const QTY_REFUNDED = 'qty_refunded';
+    /*
+     * Quantity shipped.
+     */
     const QTY_SHIPPED = 'qty_shipped';
+    /*
+     * Base cost.
+     */
     const BASE_COST = 'base_cost';
+    /*
+     * Price.
+     */
     const PRICE = 'price';
+    /*
+     * Base price.
+     */
     const BASE_PRICE = 'base_price';
+    /*
+     * Original price.
+     */
     const ORIGINAL_PRICE = 'original_price';
+    /*
+     * Base original price.
+     */
     const BASE_ORIGINAL_PRICE = 'base_original_price';
+    /*
+     * Tax percent.
+     */
     const TAX_PERCENT = 'tax_percent';
+    /*
+     * Tax amount.
+     */
     const TAX_AMOUNT = 'tax_amount';
+    /*
+     * Base tax amount.
+     */
     const BASE_TAX_AMOUNT = 'base_tax_amount';
+    /*
+     * Tax invoiced.
+     */
     const TAX_INVOICED = 'tax_invoiced';
+    /*
+     * Base tax invoiced.
+     */
     const BASE_TAX_INVOICED = 'base_tax_invoiced';
+    /*
+     * Discount percent.
+     */
     const DISCOUNT_PERCENT = 'discount_percent';
+    /*
+     * Discount amount.
+     */
     const DISCOUNT_AMOUNT = 'discount_amount';
+    /*
+     * Base discount amount.
+     */
     const BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
+    /*
+     * Discount invoiced.
+     */
     const DISCOUNT_INVOICED = 'discount_invoiced';
+    /*
+     * Base discount invoiced.
+     */
     const BASE_DISCOUNT_INVOICED = 'base_discount_invoiced';
+    /*
+     * Amount refunded.
+     */
     const AMOUNT_REFUNDED = 'amount_refunded';
+    /*
+     * Base amount refunded.
+     */
     const BASE_AMOUNT_REFUNDED = 'base_amount_refunded';
+    /*
+     * Row total.
+     */
     const ROW_TOTAL = 'row_total';
+    /*
+     * Base row total.
+     */
     const BASE_ROW_TOTAL = 'base_row_total';
+    /*
+     * Row invoiced.
+     */
     const ROW_INVOICED = 'row_invoiced';
+    /*
+     * Base row invoiced.
+     */
     const BASE_ROW_INVOICED = 'base_row_invoiced';
+    /*
+     * Row weight.
+     */
     const ROW_WEIGHT = 'row_weight';
+    /*
+     * Base tax before discount.
+     */
     const BASE_TAX_BEFORE_DISCOUNT = 'base_tax_before_discount';
+    /*
+     * Tax before discount.
+     */
     const TAX_BEFORE_DISCOUNT = 'tax_before_discount';
+    /*
+     * External order item ID.
+     */
     const EXT_ORDER_ITEM_ID = 'ext_order_item_id';
+    /*
+     * Locked DO invoice.
+     */
     const LOCKED_DO_INVOICE = 'locked_do_invoice';
+    /*
+     * Locked DO ship.
+     */
     const LOCKED_DO_SHIP = 'locked_do_ship';
+    /*
+     * Price including tax.
+     */
     const PRICE_INCL_TAX = 'price_incl_tax';
+    /*
+     * Base price including tax.
+     */
     const BASE_PRICE_INCL_TAX = 'base_price_incl_tax';
+    /*
+     * Row total including tax.
+     */
     const ROW_TOTAL_INCL_TAX = 'row_total_incl_tax';
+    /*
+     * Base row total including tax.
+     */
     const BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
+    /*
+     * Hidden tax amount.
+     */
     const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    /*
+     * Base hidden tax amount.
+     */
     const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    /*
+     * Hidden tax invoiced.
+     */
     const HIDDEN_TAX_INVOICED = 'hidden_tax_invoiced';
+    /*
+     * Base hidden tax invoiced.
+     */
     const BASE_HIDDEN_TAX_INVOICED = 'base_hidden_tax_invoiced';
+    /*
+     * Hidden tax refunded.
+     */
     const HIDDEN_TAX_REFUNDED = 'hidden_tax_refunded';
+    /*
+     * Base hidden tax refunded.
+     */
     const BASE_HIDDEN_TAX_REFUNDED = 'base_hidden_tax_refunded';
+    /*
+     * Is-nominal flag.
+     */
     const IS_NOMINAL = 'is_nominal';
+    /*
+     * Tax-canceled flag.
+     */
     const TAX_CANCELED = 'tax_canceled';
+    /*
+     * Hidden-tax-canceled flag.
+     */
     const HIDDEN_TAX_CANCELED = 'hidden_tax_canceled';
+    /*
+     * Tax refunded.
+     */
     const TAX_REFUNDED = 'tax_refunded';
+    /*
+     * Base tax refunded.
+     */
     const BASE_TAX_REFUNDED = 'base_tax_refunded';
+    /*
+     * Discount refunded.
+     */
     const DISCOUNT_REFUNDED = 'discount_refunded';
+    /*
+     * Base discount refunded.
+     */
     const BASE_DISCOUNT_REFUNDED = 'base_discount_refunded';
+    /*
+     * GW ID.
+     */
     const GW_ID = 'gw_id';
+    /*
+     * GW base price.
+     */
     const GW_BASE_PRICE = 'gw_base_price';
+    /*
+     * GW price.
+     */
     const GW_PRICE = 'gw_price';
+    /*
+     * GW base tax amount.
+     */
     const GW_BASE_TAX_AMOUNT = 'gw_base_tax_amount';
+    /*
+     * GW tax amount.
+     */
     const GW_TAX_AMOUNT = 'gw_tax_amount';
+    /*
+     * GW base price invoiced.
+     */
     const GW_BASE_PRICE_INVOICED = 'gw_base_price_invoiced';
+    /*
+     * GW price invoiced.
+     */
     const GW_PRICE_INVOICED = 'gw_price_invoiced';
+    /*
+     * GW base tax amount invoiced.
+     */
     const GW_BASE_TAX_AMOUNT_INVOICED = 'gw_base_tax_amount_invoiced';
+    /*
+     * GW tax amount invoiced.
+     */
     const GW_TAX_AMOUNT_INVOICED = 'gw_tax_amount_invoiced';
+    /*
+     * GW base price refunded.
+     */
     const GW_BASE_PRICE_REFUNDED = 'gw_base_price_refunded';
+    /*
+     * GW price refunded.
+     */
     const GW_PRICE_REFUNDED = 'gw_price_refunded';
+    /*
+     * GW base tax amount refunded.
+     */
     const GW_BASE_TAX_AMOUNT_REFUNDED = 'gw_base_tax_amount_refunded';
+    /*
+     * GW tax amount refunded.
+     */
     const GW_TAX_AMOUNT_REFUNDED = 'gw_tax_amount_refunded';
+    /*
+     * Free shipping.
+     */
     const FREE_SHIPPING = 'free_shipping';
+    /*
+     * Quantity returned.
+     */
     const QTY_RETURNED = 'qty_returned';
+    /*
+     * Event ID.
+     */
     const EVENT_ID = 'event_id';
+    /*
+     * Base WEEE tax applied amount.
+     */
     const BASE_WEEE_TAX_APPLIED_AMOUNT = 'base_weee_tax_applied_amount';
+    /*
+     * Base WEEE tax applied row amount.
+     */
     const BASE_WEEE_TAX_APPLIED_ROW_AMNT = 'base_weee_tax_applied_row_amnt';
+    /*
+     * WEEE tax applied amount.
+     */
     const WEEE_TAX_APPLIED_AMOUNT = 'weee_tax_applied_amount';
+    /*
+     * WEEE tax applied row amount.
+     */
     const WEEE_TAX_APPLIED_ROW_AMOUNT = 'weee_tax_applied_row_amount';
+    /*
+     * WEEE tax applied.
+     */
     const WEEE_TAX_APPLIED = 'weee_tax_applied';
+    /*
+     * WEEE tax disposition.
+     */
     const WEEE_TAX_DISPOSITION = 'weee_tax_disposition';
+    /*
+     * WEEE tax row disposition.
+     */
     const WEEE_TAX_ROW_DISPOSITION = 'weee_tax_row_disposition';
+    /*
+     * Base WEEE tax disposition.
+     */
     const BASE_WEEE_TAX_DISPOSITION = 'base_weee_tax_disposition';
+    /*
+     * Base WEEE tax row disposition.
+     */
     const BASE_WEEE_TAX_ROW_DISPOSITION = 'base_weee_tax_row_disposition';
 
     /**
-     * Returns additional_data
+     * Gets the additional data for the order item.
      *
-     * @return string
+     * @return string Additional data.
      */
     public function getAdditionalData();
 
     /**
-     * Returns amount_refunded
+     * Gets the amount refunded for the order item.
      *
-     * @return float
+     * @return float Amount refunded.
      */
     public function getAmountRefunded();
 
     /**
-     * Returns applied_rule_ids
+     * Gets the applied rule IDs for the order item.
      *
-     * @return string
+     * @return string Applied rule IDs.
      */
     public function getAppliedRuleIds();
 
     /**
-     * Returns base_amount_refunded
+     * Gets the base amount refunded for the order item.
      *
-     * @return float
+     * @return float Base amount refunded.
      */
     public function getBaseAmountRefunded();
 
     /**
-     * Returns base_cost
+     * Gets the base cost for the order item.
      *
-     * @return float
+     * @return float Base cost.
      */
     public function getBaseCost();
 
     /**
-     * Returns base_discount_amount
+     * Gets the base discount amount for the order item.
      *
-     * @return float
+     * @return float Base discount amount.
      */
     public function getBaseDiscountAmount();
 
     /**
-     * Returns base_discount_invoiced
+     * Gets the base discount invoiced for the order item.
      *
-     * @return float
+     * @return float Base discount invoiced.
      */
     public function getBaseDiscountInvoiced();
 
     /**
-     * Returns base_discount_refunded
+     * Gets the base discount refunded for the order item.
      *
-     * @return float
+     * @return float Base discount refunded.
      */
     public function getBaseDiscountRefunded();
 
     /**
-     * Returns base_hidden_tax_amount
+     * Gets the base hidden tax amount for the order item.
      *
-     * @return float
+     * @return float Base hidden tax amount.
      */
     public function getBaseHiddenTaxAmount();
 
     /**
-     * Returns base_hidden_tax_invoiced
+     * Gets the base hidden tax invoiced for the order item.
      *
-     * @return float
+     * @return float Base hidden tax invoiced.
      */
     public function getBaseHiddenTaxInvoiced();
 
     /**
-     * Returns base_hidden_tax_refunded
+     * Gets the base hidden tax refunded for the order item.
      *
-     * @return float
+     * @return float Base hidden tax refunded.
      */
     public function getBaseHiddenTaxRefunded();
 
     /**
-     * Returns base_original_price
+     * Gets the base original price for the order item.
      *
-     * @return float
+     * @return float Base original price.
      */
     public function getBaseOriginalPrice();
 
     /**
-     * Returns base_price
+     * Gets the base price for the order item.
      *
-     * @return float
+     * @return float Base price.
      */
     public function getBasePrice();
 
     /**
-     * Returns base_price_incl_tax
+     * Gets the base price including tax for the order item.
      *
-     * @return float
+     * @return float Base price including tax.
      */
     public function getBasePriceInclTax();
 
     /**
-     * Returns base_row_invoiced
+     * Gets the base row invoiced for the order item.
      *
-     * @return float
+     * @return float Base row invoiced.
      */
     public function getBaseRowInvoiced();
 
     /**
-     * Returns base_row_total
+     * Gets the base row total for the order item.
      *
-     * @return float
+     * @return float Base row total.
      */
     public function getBaseRowTotal();
 
     /**
-     * Returns base_row_total_incl_tax
+     * Gets the base row total including tax for the order item.
      *
-     * @return float
+     * @return float Base row total including tax.
      */
     public function getBaseRowTotalInclTax();
 
     /**
-     * Returns base_tax_amount
+     * Gets the base tax amount for the order item.
      *
-     * @return float
+     * @return float Base tax amount.
      */
     public function getBaseTaxAmount();
 
     /**
-     * Returns base_tax_before_discount
+     * Gets the base tax before discount for the order item.
      *
-     * @return float
+     * @return float Base tax before discount.
      */
     public function getBaseTaxBeforeDiscount();
 
     /**
-     * Returns base_tax_invoiced
+     * Gets the base tax invoiced for the order item.
      *
-     * @return float
+     * @return float Base tax invoiced.
      */
     public function getBaseTaxInvoiced();
 
     /**
-     * Returns base_tax_refunded
+     * Gets the base tax refunded for the order item.
      *
-     * @return float
+     * @return float Base tax refunded.
      */
     public function getBaseTaxRefunded();
 
     /**
-     * Returns base_weee_tax_applied_amount
+     * Gets the base WEEE tax applied amount for the order item.
      *
-     * @return float
+     * @return float Base WEEE tax applied amount.
      */
     public function getBaseWeeeTaxAppliedAmount();
 
     /**
-     * Returns base_weee_tax_applied_row_amnt
+     * Gets the base WEEE tax applied row amount for the order item.
      *
-     * @return float
+     * @return float Base WEEE tax applied row amount.
      */
     public function getBaseWeeeTaxAppliedRowAmnt();
 
     /**
-     * Returns base_weee_tax_disposition
+     * Gets the base WEEE tax disposition for the order item.
      *
-     * @return float
+     * @return float Base WEEE tax disposition.
      */
     public function getBaseWeeeTaxDisposition();
 
     /**
-     * Returns base_weee_tax_row_disposition
+     * Gets the base WEEE tax row disposition for the order item.
      *
-     * @return float
+     * @return float Base WEEE tax row disposition.
      */
     public function getBaseWeeeTaxRowDisposition();
 
     /**
-     * Returns created_at
+     * Gets the created-at timestamp for the order item.
      *
-     * @return string
+     * @return string Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
-     * Returns description
+     * Gets the description for the order item.
      *
-     * @return string
+     * @return string Description.
      */
     public function getDescription();
 
     /**
-     * Returns discount_amount
+     * Gets the discount amount for the order item.
      *
-     * @return float
+     * @return float Discount amount.
      */
     public function getDiscountAmount();
 
     /**
-     * Returns discount_invoiced
+     * Gets the discount invoiced for the order item.
      *
-     * @return float
+     * @return float Discount invoiced.
      */
     public function getDiscountInvoiced();
 
     /**
-     * Returns discount_percent
+     * Gets the discount percent for the order item.
      *
-     * @return float
+     * @return float Discount percent.
      */
     public function getDiscountPercent();
 
     /**
-     * Returns discount_refunded
+     * Gets the discount refunded for the order item.
      *
-     * @return float
+     * @return float Discount refunded.
      */
     public function getDiscountRefunded();
 
     /**
-     * Returns event_id
+     * Gets the event ID for the order item.
      *
-     * @return int
+     * @return int Event ID.
      */
     public function getEventId();
 
     /**
-     * Returns ext_order_item_id
+     * Gets the external order item ID for the order item.
      *
-     * @return string
+     * @return string External order item ID.
      */
     public function getExtOrderItemId();
 
     /**
-     * Returns free_shipping
+     * Gets the free-shipping flag value for the order item.
      *
-     * @return int
+     * @return int Free-shipping flag value.
      */
     public function getFreeShipping();
 
     /**
-     * Returns gw_base_price
+     * Gets the GW base price for the order item.
      *
-     * @return float
+     * @return float GW base price.
      */
     public function getGwBasePrice();
 
     /**
-     * Returns gw_base_price_invoiced
+     * Gets the GW base price invoiced for the order item.
      *
-     * @return float
+     * @return float GW base price invoiced.
      */
     public function getGwBasePriceInvoiced();
 
     /**
-     * Returns gw_base_price_refunded
+     * Gets the GW base price refunded for the order item.
      *
-     * @return float
+     * @return float GW base price refunded.
      */
     public function getGwBasePriceRefunded();
 
     /**
-     * Returns gw_base_tax_amount
+     * Gets the GW base tax amount for the order item.
      *
-     * @return float
+     * @return float GW base tax amount.
      */
     public function getGwBaseTaxAmount();
 
     /**
-     * Returns gw_base_tax_amount_invoiced
+     * Gets the GW base tax amount invoiced for the order item.
      *
-     * @return float
+     * @return float GW base tax amount invoiced.
      */
     public function getGwBaseTaxAmountInvoiced();
 
     /**
-     * Returns gw_base_tax_amount_refunded
+     * Gets the GW base tax amount refunded for the order item.
      *
-     * @return float
+     * @return float GW base tax amount refunded.
      */
     public function getGwBaseTaxAmountRefunded();
 
     /**
-     * Returns gw_id
+     * Gets the GW ID for the order item.
      *
-     * @return int
+     * @return int GW ID.
      */
     public function getGwId();
 
     /**
-     * Returns gw_price
+     * Gets the GW price for the order item.
      *
-     * @return float
+     * @return float GW price.
      */
     public function getGwPrice();
 
     /**
-     * Returns gw_price_invoiced
+     * Gets the GW price invoiced for the order item.
      *
-     * @return float
+     * @return float GW price invoiced.
      */
     public function getGwPriceInvoiced();
 
     /**
-     * Returns gw_price_refunded
+     * Gets the GW price refunded for the order item.
      *
-     * @return float
+     * @return float GW price refunded.
      */
     public function getGwPriceRefunded();
 
     /**
-     * Returns gw_tax_amount
+     * Gets the GW tax amount for the order item.
      *
-     * @return float
+     * @return float GW tax amount.
      */
     public function getGwTaxAmount();
 
     /**
-     * Returns gw_tax_amount_invoiced
+     * Gets the GW tax amount invoiced for the order item.
      *
-     * @return float
+     * @return float GW tax amount invoiced.
      */
     public function getGwTaxAmountInvoiced();
 
     /**
-     * Returns gw_tax_amount_refunded
+     * Gets the GW tax amount refunded for the order item.
      *
-     * @return float
+     * @return float GW tax amount refunded.
      */
     public function getGwTaxAmountRefunded();
 
     /**
-     * Returns hidden_tax_amount
+     * Gets the hidden tax amount for the order item.
      *
-     * @return float
+     * @return float Hidden tax amount.
      */
     public function getHiddenTaxAmount();
 
     /**
-     * Returns hidden_tax_canceled
+     * Gets the hidden tax canceled for the order item.
      *
-     * @return float
+     * @return float Hidden tax canceled.
      */
     public function getHiddenTaxCanceled();
 
     /**
-     * Returns hidden_tax_invoiced
+     * Gets the hidden tax invoiced for the order item.
      *
-     * @return float
+     * @return float Hidden tax invoiced.
      */
     public function getHiddenTaxInvoiced();
 
     /**
-     * Returns hidden_tax_refunded
+     * Gets the hidden tax refunded for the order item.
      *
-     * @return float
+     * @return float Hidden tax refunded.
      */
     public function getHiddenTaxRefunded();
 
     /**
-     * Returns is_nominal
+     * Gets the is-nominal flag value for the order item.
      *
-     * @return int
+     * @return int Is-nominal flag value.
      */
     public function getIsNominal();
 
     /**
-     * Returns is_qty_decimal
+     * Gets the is-quantity-decimal flag value for the order item.
      *
-     * @return int
+     * @return int Is-quantity-decimal flag value.
      */
     public function getIsQtyDecimal();
 
     /**
-     * Returns is_virtual
+     * Gets the is-virtual flag value for the order item.
      *
-     * @return int
+     * @return int Is-virtual flag value.
      */
     public function getIsVirtual();
 
     /**
-     * Returns item_id
+     * Gets the item ID for the order item.
      *
-     * @return int
+     * @return int Item ID.
      */
     public function getItemId();
 
     /**
-     * Returns locked_do_invoice
+     * Gets the locked DO invoice flag value for the order item.
      *
-     * @return int
+     * @return int Locked DO invoice flag value.
      */
     public function getLockedDoInvoice();
 
     /**
-     * Returns locked_do_ship
+     * Gets the locked DO ship flag value for the order item.
      *
-     * @return int
+     * @return int Locked DO ship flag value.
      */
     public function getLockedDoShip();
 
     /**
-     * Returns name
+     * Gets the name for the order item.
      *
-     * @return string
+     * @return string Name.
      */
     public function getName();
 
     /**
-     * Returns no_discount
+     * Gets the no discount flag value for the order item.
      *
-     * @return int
+     * @return int No-discount flag value.
      */
     public function getNoDiscount();
 
     /**
-     * Returns order_id
+     * Gets the order ID for the order item.
      *
-     * @return int
+     * @return int Order ID.
      */
     public function getOrderId();
 
     /**
-     * Returns original_price
+     * Gets the original price for the order item.
      *
-     * @return float
+     * @return float Original price.
      */
     public function getOriginalPrice();
 
     /**
-     * Returns parent_item_id
+     * Gets the parent item ID for the order item.
      *
-     * @return int
+     * @return int Parent item ID.
      */
     public function getParentItemId();
 
     /**
-     * Returns price
+     * Gets the price for the order item.
      *
-     * @return float
+     * @return float Price.
      */
     public function getPrice();
 
     /**
-     * Returns price_incl_tax
+     * Gets the price including tax for the order item.
      *
-     * @return float
+     * @return float Price including tax.
      */
     public function getPriceInclTax();
 
     /**
-     * Returns product_id
+     * Gets the product ID for the order item.
      *
-     * @return int
+     * @return int Product ID.
      */
     public function getProductId();
 
     /**
-     * Returns product_options
+     * Gets the product options for the order item.
      *
-     * @return string[]
+     * @return string[] Array of product options.
      */
     public function getProductOptions();
 
     /**
-     * Returns product_type
+     * Gets the product type for the order item.
      *
-     * @return string
+     * @return string Product type.
      */
     public function getProductType();
 
     /**
-     * Returns qty_backordered
+     * Gets the quantity backordered for the order item.
      *
-     * @return float
+     * @return float Quantity backordered.
      */
     public function getQtyBackordered();
 
     /**
-     * Returns qty_canceled
+     * Gets the quantity canceled for the order item.
      *
-     * @return float
+     * @return float Quantity canceled.
      */
     public function getQtyCanceled();
 
     /**
-     * Returns qty_invoiced
+     * Gets the quantity invoiced for the order item.
      *
-     * @return float
+     * @return float Quantity invoiced.
      */
     public function getQtyInvoiced();
 
     /**
-     * Returns qty_ordered
+     * Gets the quantity ordered for the order item.
      *
-     * @return float
+     * @return float Quantity ordered.
      */
     public function getQtyOrdered();
 
     /**
-     * Returns qty_refunded
+     * Gets the quantity refunded for the order item.
      *
-     * @return float
+     * @return float Quantity refunded.
      */
     public function getQtyRefunded();
 
     /**
-     * Returns qty_returned
+     * Gets the quantity returned for the order item.
      *
-     * @return float
+     * @return float Quantity returned.
      */
     public function getQtyReturned();
 
     /**
-     * Returns qty_shipped
+     * Gets the quantity shipped for the order item.
      *
-     * @return float
+     * @return float Quantity shipped.
      */
     public function getQtyShipped();
 
     /**
-     * Returns quote_item_id
+     * Gets the quote item ID for the order item.
      *
-     * @return int
+     * @return int Quote item ID.
      */
     public function getQuoteItemId();
 
     /**
-     * Returns row_invoiced
+     * Gets the row invoiced for the order item.
      *
-     * @return float
+     * @return float Row invoiced.
      */
     public function getRowInvoiced();
 
     /**
-     * Returns row_total
+     * Gets the row total for the order item.
      *
-     * @return float
+     * @return float Row total.
      */
     public function getRowTotal();
 
     /**
-     * Returns row_total_incl_tax
+     * Gets the row total including tax for the order item.
      *
-     * @return float
+     * @return float Row total including tax.
      */
     public function getRowTotalInclTax();
 
     /**
-     * Returns row_weight
+     * Gets the row weight for the order item.
      *
-     * @return float
+     * @return float Row weight.
      */
     public function getRowWeight();
 
     /**
-     * Returns sku
+     * Gets the SKU for the order item.
      *
-     * @return string
+     * @return string SKU.
      */
     public function getSku();
 
     /**
-     * Returns store_id
+     * Gets the store ID for the order item.
      *
-     * @return int
+     * @return int Store ID.
      */
     public function getStoreId();
 
     /**
-     * Returns tax_amount
+     * Gets the tax amount for the order item.
      *
-     * @return float
+     * @return float Tax amount.
      */
     public function getTaxAmount();
 
     /**
-     * Returns tax_before_discount
+     * Gets the tax before discount for the order item.
      *
-     * @return float
+     * @return float Tax before discount.
      */
     public function getTaxBeforeDiscount();
 
     /**
-     * Returns tax_canceled
+     * Gets the tax canceled for the order item.
      *
-     * @return float
+     * @return float Tax canceled.
      */
     public function getTaxCanceled();
 
     /**
-     * Returns tax_invoiced
+     * Gets the tax invoiced for the order item.
      *
-     * @return float
+     * @return float Tax invoiced.
      */
     public function getTaxInvoiced();
 
     /**
-     * Returns tax_percent
+     * Gets the tax percent for the order item.
      *
-     * @return float
+     * @return float Tax percent.
      */
     public function getTaxPercent();
 
     /**
-     * Returns tax_refunded
+     * Gets the tax refunded for the order item.
      *
-     * @return float
+     * @return float Tax refunded.
      */
     public function getTaxRefunded();
 
     /**
-     * Returns updated_at
+     * Gets the updated-at timestamp for the order item.
      *
-     * @return string
+     * @return string Updated-at timestamp.
      */
     public function getUpdatedAt();
 
     /**
-     * Returns weee_tax_applied
+     * Gets the WEEE tax applied for the order item.
      *
-     * @return string
+     * @return string WEEE tax applied.
      */
     public function getWeeeTaxApplied();
 
     /**
-     * Returns weee_tax_applied_amount
+     * Gets the WEEE tax applied amount for the order item.
      *
-     * @return float
+     * @return float WEEE tax applied amount.
      */
     public function getWeeeTaxAppliedAmount();
 
     /**
-     * Returns weee_tax_applied_row_amount
+     * Gets the WEEE tax applied row amount for the order item.
      *
-     * @return float
+     * @return float WEEE tax applied row amount.
      */
     public function getWeeeTaxAppliedRowAmount();
 
     /**
-     * Returns weee_tax_disposition
+     * Gets the WEEE tax disposition for the order item.
      *
-     * @return float
+     * @return float WEEE tax disposition.
      */
     public function getWeeeTaxDisposition();
 
     /**
-     * Returns weee_tax_row_disposition
+     * Gets the WEEE tax row disposition for the order item.
      *
-     * @return float
+     * @return float WEEE tax row disposition.
      */
     public function getWeeeTaxRowDisposition();
 
     /**
-     * Returns weight
+     * Gets the weight for the order item.
      *
-     * @return float
+     * @return float Weight.
      */
     public function getWeight();
 }

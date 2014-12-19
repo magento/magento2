@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <resources>
+            <selector>[data-role="tree-resources-container"]</selector>
+            <strategy>css selector</strategy>
+            <input>jquerytree</input>
+        </resources>
+    </fields>
+</mapping>

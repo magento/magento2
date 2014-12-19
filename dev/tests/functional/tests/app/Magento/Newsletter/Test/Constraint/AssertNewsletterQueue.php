@@ -15,19 +15,16 @@ use Mtf\Constraint\AbstractAssertForm;
  */
 class AssertNewsletterQueue extends AbstractAssertForm
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Skipped fields for verify data
      *
      * @var array
      */
     protected $skippedFields = ['code'];
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that "Edit Queue" page opened and subject, sender name, sender email and template content correct

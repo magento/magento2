@@ -5,7 +5,7 @@
 ?>
 <?php /* @var $this \Magento\ProductAlert\Block\Product\View */?>
 <div class="product alert <?php echo $this->getHtmlClass() ?>">
-    <a href="<?php echo $this->escapeHtml($this->getSignupUrl()) ?>"
+    <a href="#" data-post='<?php echo $this->getPostAction(); ?>'
        title="<?php echo $this->escapeHtml(__($this->getSignupLabel())); ?>" class="action alert">
         <?php echo $this->escapeHtml(__($this->getSignupLabel())); ?>
     </a>

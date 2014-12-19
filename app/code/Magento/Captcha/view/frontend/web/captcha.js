@@ -12,7 +12,8 @@ define([
         options: {
             refreshClass: 'refreshing',
             reloadSelector: '.captcha-reload',
-            imageSelector: '.captcha-img'
+            imageSelector: '.captcha-img',
+            imageLoader: ''
         },
 
         /**
@@ -28,8 +29,13 @@ define([
          * @param e - Event
          */
         refresh: function(e) {
-            var reloadImage = $(e.currentTarget);
-            reloadImage.addClass(this.options.refreshClass);
+            var imageLoader = this.options.imageLoader;
+
+            if (imageLoader) {
+                this.element.find(this.options.imageSelector).attr('src', imageLoader);
+            }
+            this.element.addClass(this.options.refreshClass);
+
             $.ajax({
                 url: this.options.url,
                 type: 'post',
@@ -45,7 +51,7 @@ define([
                     }
                 },
                 complete: function() {
-                    reloadImage.removeClass(this.options.refreshClass);
+                    this.element.removeClass(this.options.refreshClass);
                 }
             });
         }

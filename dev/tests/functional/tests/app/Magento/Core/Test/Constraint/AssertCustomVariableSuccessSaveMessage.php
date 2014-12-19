@@ -14,14 +14,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertCustomVariableSuccessSaveMessage extends AbstractConstraint
 {
-    const SUCCESS_SAVE_MESSAGE = 'You saved the custom variable.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const SUCCESS_SAVE_MESSAGE = 'You saved the custom variable.';
 
     /**
      * Assert that success delete message is correct after Custom System Variable deleted

@@ -1,0 +1,16 @@
+{
+    "require": {
+        "magento/mtf": "1.0.0-rc10",
+        "php": ">=5.4.0",
+        "phpunit/phpunit": "4.1.0",
+        "phpunit/phpunit-selenium": ">=1.2",
+        "netwing/selenium-server-standalone": ">=2.35"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mtf\\": ["lib/Mtf/", "generated/Mtf/", "testsuites/Mtf/"],
+            "Magento\\": ["generated/Magento/", "tests/app/Magento/"],
+            "Test\\": "generated/Test/"
+        }
+    }
+}

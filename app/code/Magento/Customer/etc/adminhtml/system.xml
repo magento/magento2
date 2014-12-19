@@ -79,6 +79,7 @@
                 <field id="viv_disable_auto_group_assign_default" translate="label" type="select" sortOrder="57" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Default Value for Disable Automatic Group Changes Based on VAT ID</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault</backend_model>
                 </field>
                 <field id="vat_frontend_visibility" translate="label" type="select" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show VAT Number on Frontend</label>

@@ -5,6 +5,7 @@
 namespace Magento\Core\Model;
 
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Theme model class
@@ -117,7 +118,6 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
         $this->_imageFactory = $imageFactory;
         $this->_validator = $validator;
         $this->_customFactory = $customizationFactory;
-
         $this->addData(['type' => self::TYPE_VIRTUAL]);
     }
 

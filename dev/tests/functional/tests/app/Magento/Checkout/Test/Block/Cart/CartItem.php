@@ -39,7 +39,7 @@ class CartItem extends AbstractCartItem
      *
      * @var string
      */
-    protected $wishlistButton = '.actions .towishlist';
+    protected $wishlistButton = '.towishlist';
 
     /**
      * Quantity input selector

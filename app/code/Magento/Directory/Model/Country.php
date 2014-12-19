@@ -10,10 +10,6 @@
  * @method \Magento\Directory\Model\Resource\Country getResource()
  * @method string getCountryId()
  * @method \Magento\Directory\Model\Country setCountryId(string $value)
- * @method string getIso2Code()
- * @method \Magento\Directory\Model\Country setIso2Code(string $value)
- * @method string getIso3Code()
- * @method \Magento\Directory\Model\Country setIso3Code(string $value)
  */
 namespace Magento\Directory\Model;
 

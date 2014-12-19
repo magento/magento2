@@ -9,6 +9,8 @@
 namespace Magento\Core\Model;
 
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Design\Theme\Image\PathInterface;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,7 +56,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 'customizationFactory' => $customizationFactory,
                 'customizationConfig' => $customizationConfig,
                 'imageFactory' => $this->_imageFactory,
-                'resourceCollection' => $resourceCollection
+                'resourceCollection' => $resourceCollection,
             ]
         );
 

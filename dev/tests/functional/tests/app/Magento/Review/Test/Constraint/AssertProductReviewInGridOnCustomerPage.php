@@ -18,12 +18,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductReviewInGridOnCustomerPage extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Asserts all Product Review variables in the reviews grid on customer page

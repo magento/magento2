@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<fixture>
+    <order module="Magento_Sales">
+        <type>flat</type>
+        <entity_type>sales_order</entity_type>
+        <collection>Magento\Sales\Model\Resource\Order\Collection</collection>
+        <identifier />
+        <fields>
+            <id>
+                <attribute_code>id</attribute_code>
+                <backend_type>virtual</backend_type>
+            </id>
+        </fields>
+        <data_set />
+        <data_config />
+    </order>
+    <orderInjectable module="Magento_Sales">
+        <type>flat</type>
+        <entity_type>sales_order</entity_type>
+        <collection>Magento\Sales\Model\Resource\Order\Collection</collection>
+        <identifier />
+        <fields>
+            <id>
+                <attribute_code>id</attribute_code>
+                <backend_type>virtual</backend_type>
+            </id>
+        </fields>
+        <data_set />
+        <data_config />
+    </orderInjectable>
+    <orderStatus module="Magento_Sales">
+        <type>composite</type>
+        <entities>
+            <sales_order_status>sales_order_status</sales_order_status>
+            <sales_order_status_state>sales_order_status_state</sales_order_status_state>
+        </entities>
+        <collection>Magento\Sales\Model\Resource\Order\Status\Collection</collection>
+    </orderStatus>
+</fixture>

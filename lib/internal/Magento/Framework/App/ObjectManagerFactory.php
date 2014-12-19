@@ -41,7 +41,7 @@ class ObjectManagerFactory
      *
      * @var string
      */
-    protected $_configClassName = 'Magento\Framework\Interception\ObjectManager\Config';
+    protected $_configClassName = 'Magento\Framework\Interception\ObjectManager\ConfigInterface';
 
     /**
      * Environment factory class name
@@ -111,7 +111,7 @@ class ObjectManagerFactory
         /** @var EnvironmentInterface $env */
         $env =  $enFactory->createEnvironment();
 
-        /** @var \Magento\Framework\Interception\ObjectManager\Config $diConfig */
+        /** @var \Magento\Framework\Interception\ObjectManager\ConfigInterface $diConfig */
         $diConfig = $env->getDiConfig();
 
         $appMode = isset($arguments[State::PARAM_MODE]) ? $arguments[State::PARAM_MODE] : State::MODE_DEFAULT;
@@ -136,7 +136,7 @@ class ObjectManagerFactory
             'Magento\Framework\ObjectManager\RelationsInterface' => $relations,
             'Magento\Framework\Interception\DefinitionInterface' => $definitionFactory->createPluginDefinition(),
             'Magento\Framework\ObjectManager\ConfigInterface' => $diConfig,
-            'Magento\Framework\Interception\ObjectManager\Config' => $diConfig,
+            'Magento\Framework\Interception\ObjectManager\ConfigInterface' => $diConfig,
             'Magento\Framework\ObjectManager\DefinitionInterface' => $definitions,
             'Magento\Framework\Stdlib\BooleanUtils' => $booleanUtils,
             'Magento\Framework\ObjectManager\Config\Mapper\Dom' => $argumentMapper,

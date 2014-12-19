@@ -5,8 +5,10 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit;
 
-use Magento\Backend\Test\Block\Widget\Tab;
 use Mtf\Client\Element\Locator;
+use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit;
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
 /**
  * General class for tabs on product FormTabs with "Add attribute" button.
@@ -18,7 +20,7 @@ class ProductTab extends Tab
      *
      * @var string
      */
-    protected $attributeSearch = "//div[contains(@data-role, '%s')]//*[@id='product-attribute-search-container']";
+    protected $attributeSearch = "//div[contains(@data-role, 'product-details')]//*[@data-toggle='dropdown']/span";
 
     /**
      * Selector for 'New Attribute' button.
@@ -26,6 +28,13 @@ class ProductTab extends Tab
      * @var string
      */
     protected $newAttributeButton = '[id^="create_attribute"]';
+
+    /**
+     * Selector for search input field.
+     *
+     * @var string
+     */
+    protected $searchAttribute = "//input[@data-role='product-attribute-search']";
 
     /**
      * Fixture mapping.
@@ -51,7 +60,18 @@ class ProductTab extends Tab
      */
     public function addNewAttribute($tabName)
     {
-        $this->_rootElement->find(sprintf($this->attributeSearch, $tabName), Locator::SELECTOR_XPATH)->click();
-        $this->_rootElement->find($this->newAttributeButton)->click();
+        $element = $this->_rootElement;
+        $selector = sprintf($this->attributeSearch, $tabName);
+        $element->waitUntil(
+            function () use ($element, $selector) {
+                return $element->find($selector, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
+            }
+        );
+        $addAttributeToggle = $element->find($selector, Locator::SELECTOR_XPATH);
+        $addAttributeToggle->click();
+        if (!$addAttributeToggle->find($this->newAttributeButton)->isVisible()) {
+            $element->find($this->searchAttribute, Locator::SELECTOR_XPATH)->click();
+        }
+        $element->find($this->newAttributeButton)->click();
     }
 }

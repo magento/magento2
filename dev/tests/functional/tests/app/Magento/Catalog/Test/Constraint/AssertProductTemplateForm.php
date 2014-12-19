@@ -17,12 +17,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductTemplateForm extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
     /**
      * Assert that after save a product template on edit product set page displays:

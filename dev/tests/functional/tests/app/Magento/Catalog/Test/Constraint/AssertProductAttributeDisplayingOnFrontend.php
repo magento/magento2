@@ -16,12 +16,9 @@ use Mtf\Fixture\InjectableFixture;
  */
 class AssertProductAttributeDisplayingOnFrontend extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Check whether the attribute is visible on the frontend.

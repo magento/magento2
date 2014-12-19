@@ -98,7 +98,7 @@
         <div class="field zip required">
             <label class="label" for="billing:postcode"><span><?php echo __('Zip/Postal Code') ?></span></label>
             <div class="control">
-                <input type="text" title="<?php echo __('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode') ?>" data-validate="{'validate-zip-international':true}"/>
+                <input type="text" title="<?php echo __('Zip/Postal Code') ?>" name="billing[postcode]" id="billing:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode') ?>" data-validate="{'required':true, 'validate-zip-international':true}"/>
             </div>
         </div>
 

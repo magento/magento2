@@ -160,6 +160,7 @@ abstract class AbstractCalculator
     /**
      * Set billing address
      *
+     * @codeCoverageIgnoreStart
      * @param CustomerAddress $billingAddress
      * @return void
      */
@@ -200,6 +201,7 @@ abstract class AbstractCalculator
     {
         $this->customerId = $customerId;
     }
+    // @codeCoverageIgnoreEnd
 
     /**
      * Calculate tax details for quote item with given quantity

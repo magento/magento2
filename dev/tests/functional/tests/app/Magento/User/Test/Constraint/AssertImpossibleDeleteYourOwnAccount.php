@@ -13,14 +13,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertImpossibleDeleteYourOwnAccount extends AbstractConstraint
 {
-    const ERROR_MESSAGE = 'You cannot delete your own account.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const ERROR_MESSAGE = 'You cannot delete your own account.';
 
     /**
      * Asserts that error message equals to expected message.

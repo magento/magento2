@@ -11,10 +11,10 @@
             <locator>#edit_form</locator>
             <strategy>css selector</strategy>
         </deleteGroupForm>
-        <formPageFooterActions>
-            <class>Magento\Backend\Test\Block\System\Store\FormPageFooterActions</class>
-            <locator>.content-footer</locator>
+        <formPageActions>
+            <class>Magento\Backend\Test\Block\System\Store\FormPageActions</class>
+            <locator>.page-main-actions</locator>
             <strategy>css selector</strategy>
-        </formPageFooterActions>
+        </formPageActions>
     </blocks>
 </page>

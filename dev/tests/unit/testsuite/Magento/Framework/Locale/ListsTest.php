@@ -218,6 +218,11 @@ class ListsTest extends \PHPUnit_Framework_TestCase
         foreach ($expectedResults as $value) {
             $this->assertContains($value, $timeZones);
         }
+
+        $timeZoneList = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC);
+        foreach ($timeZones as $timeZone) {
+            $this->assertContains($timeZone['value'], $timeZoneList);
+        }
     }
 
     public function testGetOptionLocales()
