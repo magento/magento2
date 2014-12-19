@@ -5,6 +5,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Psr\Log\LoggerInterface" type="Monolog\Logger" />
     <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\Framework\Search\Adapter\Mysql\Filter\Preprocessor" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver" />
@@ -84,6 +85,32 @@
     <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Null"/>
     <preference for="Magento\Framework\App\Resource\ConnectionAdapterInterface" type="Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
+    <virtualType name="Monolog\Heandler\Stream\System" type="Monolog\Handler\StreamHandler">
+        <arguments>
+            <argument name="stream" xsi:type="string">var/log/system.log</argument>
+            <argument name="level" xsi:type="const">Monolog\Logger::DEBUG</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Monolog\Heandler\Stream\Exception" type="Monolog\Handler\StreamHandler">
+        <arguments>
+            <argument name="stream" xsi:type="string">var/log/exception.log</argument>
+            <argument name="level" xsi:type="const">Monolog\Logger::CRITICAL</argument>
+        </arguments>
+    </virtualType>
+    <type name="Monolog\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">main</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="exception" xsi:type="object">Monolog\Heandler\Stream\Exception</item>
+                <item name="system" xsi:type="object">Monolog\Heandler\Stream\System</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Monolog\Handler\StreamHandler">
+        <arguments>
+            <argument name="stream" xsi:type="string">var/log/system.log</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Model\Context">
         <arguments>
             <argument name="actionValidator" xsi:type="object">Magento\Framework\Model\ActionValidator\RemoveAction\Proxy</argument>
