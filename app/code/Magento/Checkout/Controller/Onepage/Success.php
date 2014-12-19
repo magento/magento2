@@ -23,6 +23,7 @@ class Success extends \Magento\Checkout\Controller\Onepage
         //@todo: Refactor it to match CQRS
         $this->_view->loadLayout();
         $this->_view->getLayout()->initMessages();
+        $this->_view->getPage()->getConfig()->getTitle()->set(__('Thank you for your purchase!'));
         $this->_eventManager->dispatch(
             'checkout_onepage_controller_success_action',
             ['order_ids' => [$session->getLastOrderId()]]
