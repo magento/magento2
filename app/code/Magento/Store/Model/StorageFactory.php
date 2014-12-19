@@ -31,11 +31,6 @@ class StorageFactory
     protected $_eventManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $_log;
-
-    /**
      * @var \Magento\Framework\Session\SidResolverInterface
      */
     protected $_sidResolver;
