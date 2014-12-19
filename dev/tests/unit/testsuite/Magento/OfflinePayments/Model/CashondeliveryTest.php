@@ -17,13 +17,6 @@ class CashondeliveryTest extends \PHPUnit_Framework_TestCase
 
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $adapterFactoryMock = $this->getMock(
-            'Psr\Log\LoggerInterface\AdapterFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
 
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_object = $helper->getObject(
@@ -32,7 +25,6 @@ class CashondeliveryTest extends \PHPUnit_Framework_TestCase
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,
                 'scopeConfig' => $scopeConfig,
-                'logAdapterFactory' => $adapterFactoryMock
             ]
         );
     }

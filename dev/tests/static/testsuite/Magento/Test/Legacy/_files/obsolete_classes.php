@@ -1980,7 +1980,7 @@ return [
     ['Magento\Core\Model\Image\Adapter\Config', 'Magento\Framework\Image\Adapter\Config'],
     ['Magento\Core\Model\AbstractShell', 'Magento\Framework\App\AbstractShell'],
     ['Magento\Core\Model\Calculator', 'Magento\Framework\Math\Calculator'],
-    ['Magento\Core\Model\Log\Adapter', 'Psr\Log\LoggerInterface\Adapter'],
+    ['Magento\Core\Model\Log\Adapter', 'Magento\Framework\Logger\Adapter'],
     ['Magento\Core\Model\Input\Filter', 'Magento\Framework\Filter\Input'],
     ['Magento\Core\Model\Input\Filter\MaliciousCode', 'Magento\Framework\Filter\Input\MaliciousCode'],
     ['Magento\Core\Model\Option\ArrayInterface', 'Magento\Framework\Option\ArrayInterface'],

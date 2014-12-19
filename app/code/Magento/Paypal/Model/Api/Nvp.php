@@ -744,7 +744,6 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Paypal\Model\Api\ProcessableExceptionFactory $processableExceptionFactory
      * @param \Magento\Framework\Model\ExceptionFactory $frameworkExceptionFactory
@@ -756,14 +755,13 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Paypal\Model\Api\ProcessableExceptionFactory $processableExceptionFactory,
         \Magento\Framework\Model\ExceptionFactory $frameworkExceptionFactory,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         array $data = []
     ) {
-        parent::__construct($customerAddress, $logger, $localeResolver, $regionFactory, $logAdapterFactory, $data);
+        parent::__construct($customerAddress, $logger, $localeResolver, $regionFactory, $data);
         $this->_countryFactory = $countryFactory;
         $this->_processableExceptionFactory = $processableExceptionFactory;
         $this->_frameworkExceptionFactory = $frameworkExceptionFactory;

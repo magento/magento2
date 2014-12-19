@@ -82,7 +82,6 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -107,7 +106,6 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -130,7 +128,6 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
             $eventManager,
             $paymentData,
             $scopeConfig,
-            $logAdapterFactory,
             $logger,
             $moduleList,
             $localeDate,
@@ -727,7 +724,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
             $order->registerCancellation($message)->save();
         } catch (\Exception $e) {
             //quiet decline
-            $this->_logger->critical($e);
+            $this->logger->critical($e);
         }
     }
 
@@ -766,7 +763,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
                 $order->save();
             } catch (\Exception $e) {
                 //if we couldn't capture order, just leave it as NEW order.
-                $this->_logger->critical($e);
+                $this->logger->critical($e);
             }
         }
     }

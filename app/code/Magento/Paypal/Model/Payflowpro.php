@@ -216,7 +216,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -233,7 +232,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -252,7 +250,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
             $eventManager,
             $paymentData,
             $scopeConfig,
-            $logAdapterFactory,
             $logger,
             $moduleList,
             $localeDate,

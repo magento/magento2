@@ -97,11 +97,6 @@ abstract class AbstractApi extends \Magento\Framework\Object
     protected $_regionFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface\AdapterFactory
-     */
-    protected $_logAdapterFactory;
-
-    /**
      * Constructor
      *
      * By default is looking for first argument as array and assigns it as object
@@ -111,7 +106,6 @@ abstract class AbstractApi extends \Magento\Framework\Object
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
      * @param array $data
      */
     public function __construct(
@@ -119,14 +113,12 @@ abstract class AbstractApi extends \Magento\Framework\Object
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
         array $data = []
     ) {
         $this->_customerAddress = $customerAddress;
         $this->_logger = $logger;
         $this->_localeResolver = $localeResolver;
         $this->_regionFactory = $regionFactory;
-        $this->_logAdapterFactory = $logAdapterFactory;
         parent::__construct($data);
     }
 
@@ -603,13 +595,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->_logAdapterFactory->create(
-                ['fileName' => 'payment_' . $this->_config->getMethodCode() . '.log']
-            )->setFilterDataKeys(
-                $this->_debugReplacePrivateDataKeys
-            )->log(
-                $debugData
-            );
+            $this->_logger->debug($debugData);
         }
     }
 

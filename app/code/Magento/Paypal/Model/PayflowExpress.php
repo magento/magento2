@@ -35,7 +35,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param ProFactory $proFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
@@ -49,7 +49,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         ProFactory $proFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlBuilder,
@@ -63,7 +63,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
             $eventManager,
             $paymentData,
             $scopeConfig,
-            $logAdapterFactory,
+            $logger,
             $proFactory,
             $storeManager,
             $urlBuilder,

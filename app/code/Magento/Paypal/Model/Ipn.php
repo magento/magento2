@@ -42,7 +42,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
 
     /**
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param Info $paypalInfo
@@ -52,7 +52,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         Info $paypalInfo,
@@ -60,7 +60,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         CreditmemoSender $creditmemoSender,
         array $data = []
     ) {
-        parent::__construct($configFactory, $logAdapterFactory, $curlFactory, $data);
+        parent::__construct($configFactory, $logger, $curlFactory, $data);
         $this->_orderFactory = $orderFactory;
         $this->_paypalInfo = $paypalInfo;
         $this->orderSender = $orderSender;

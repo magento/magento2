@@ -101,7 +101,7 @@ class IpnTest extends \PHPUnit_Framework_TestCase
         $this->_ipn = $objectHelper->getObject('Magento\Paypal\Model\Ipn',
             [
                 'configFactory' => $this->configFactory,
-                'logAdapterFactory' => $this->getMock('Psr\Log\LoggerInterface\AdapterFactory', [], [], '', false),
+                'logger' => $this->getMock('Psr\Log\LoggerInterface'),
                 'curlFactory' => $this->curlFactory,
                 'orderFactory' => $this->_orderMock,
                 'paypalInfo' => $this->_paypalInfo,
@@ -180,7 +180,7 @@ class IpnTest extends \PHPUnit_Framework_TestCase
         $this->_ipn = $objectHelper->getObject('Magento\Paypal\Model\Ipn',
             [
                 'configFactory' => $this->configFactory,
-                'logAdapterFactory' => $this->getMock('Psr\Log\LoggerInterface\AdapterFactory', [], [], '', false),
+                'logger' => $this->getMock('Psr\Log\LoggerInterface'),
                 'curlFactory' => $this->curlFactory,
                 'orderFactory' => $this->_orderMock,
                 'paypalInfo' => $this->_paypalInfo,

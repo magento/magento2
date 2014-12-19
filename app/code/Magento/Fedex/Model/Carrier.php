@@ -107,11 +107,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_storeManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $_logger;
-
-    /**
      * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
      */
     protected $_productCollectionFactory;

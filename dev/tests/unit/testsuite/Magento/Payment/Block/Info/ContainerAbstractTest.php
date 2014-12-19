@@ -21,17 +21,7 @@ class ContainerAbstractTest extends \PHPUnit_Framework_TestCase
         );
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $paymentInfo = $objectManagerHelper->getObject('Magento\Payment\Model\Info');
-        $adapterFactoryMock = $this->getMock(
-            'Psr\Log\LoggerInterface\AdapterFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $methodInstance = $objectManagerHelper->getObject(
-            'Magento\OfflinePayments\Model\Checkmo',
-            ['logAdapterFactory' => $adapterFactoryMock]
-        );
+        $methodInstance = $objectManagerHelper->getObject('Magento\OfflinePayments\Model\Checkmo');
         $paymentInfo->setMethodInstance($methodInstance);
         $block->expects($this->atLeastOnce())->method('getPaymentInfo')->will($this->returnValue($paymentInfo));
 

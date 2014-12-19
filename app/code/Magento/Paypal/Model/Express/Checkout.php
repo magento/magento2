@@ -199,11 +199,6 @@ class Checkout
     protected $_cartFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface\AdapterFactory
-     */
-    protected $_logFactory;
-
-    /**
      * @var \Magento\Checkout\Model\Type\OnepageFactory
      */
     protected $_checkoutOnepageFactory;
@@ -282,7 +277,6 @@ class Checkout
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $coreUrl
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
-     * @param \Psr\Log\LoggerInterface\AdapterFactory $logFactory
      * @param \Magento\Checkout\Model\Type\OnepageFactory $onepageFactory
      * @param \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
@@ -311,7 +305,6 @@ class Checkout
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $coreUrl,
         \Magento\Paypal\Model\CartFactory $cartFactory,
-        \Psr\Log\LoggerInterface\AdapterFactory $logFactory,
         \Magento\Checkout\Model\Type\OnepageFactory $onepageFactory,
         \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
@@ -337,7 +330,6 @@ class Checkout
         $this->_storeManager = $storeManager;
         $this->_coreUrl = $coreUrl;
         $this->_cartFactory = $cartFactory;
-        $this->_logFactory = $logFactory;
         $this->_checkoutOnepageFactory = $onepageFactory;
         $this->_serviceQuoteFactory = $serviceQuoteFactory;
         $this->_agreementFactory = $agreementFactory;
@@ -727,8 +719,6 @@ class Checkout
      */
     public function getShippingOptionsCallbackResponse(array $request)
     {
-        // prepare debug data
-        $logger = $this->_logFactory->create(['fileName' => 'payment_' . $this->_methodType . '.log']);
         $debugData = ['request' => $request, 'response' => []];
 
         try {
@@ -750,10 +740,10 @@ class Checkout
 
             // log request and response
             $debugData['response'] = $response;
-            $logger->log($debugData);
+            $this->_logger->debug($debugData);
             return $response;
         } catch (\Exception $e) {
-            $logger->log($debugData);
+            $this->_logger->critical($debugData);
             throw $e;
         }
     }

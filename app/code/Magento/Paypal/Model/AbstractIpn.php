@@ -10,11 +10,6 @@ use Magento\Paypal\UnavailableException;
 class AbstractIpn
 {
     /**
-     * Default log filename
-     */
-    const DEFAULT_LOG_FILE = 'paypal_unknown_ipn.log';
-
-    /**
      * @var Config
      */
     protected $_config;
@@ -45,18 +40,18 @@ class AbstractIpn
 
     /**
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
-     * @param \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Paypal\Model\ConfigFactory $configFactory,
-        \Psr\Log\LoggerInterface\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         array $data = []
     ) {
         $this->_configFactory = $configFactory;
-        $this->_logAdapterFactory = $logAdapterFactory;
+        $this->logger = $logger;
         $this->_curlFactory = $curlFactory;
         $this->_ipnRequest = $data;
     }
@@ -116,7 +111,7 @@ class AbstractIpn
         if ($response != 'VERIFIED') {
             $this->_addDebugData('postback', $postbackQuery);
             $this->_addDebugData('postback_result', $postbackResult);
-            throw new \Exception('PayPal IPN postback failure. See ' . self::DEFAULT_LOG_FILE . ' for details.');
+            throw new \Exception('PayPal IPN postback failure. See system.log for details.');
         }
     }
 
@@ -168,11 +163,7 @@ class AbstractIpn
     protected function _debug()
     {
         if ($this->_config && $this->_config->getConfigValue('debug')) {
-            $file = $this->_config
-                ->getMethodCode() ? "payment_{$this
-                ->_config
-                ->getMethodCode()}.log" : self::DEFAULT_LOG_FILE;
-            $this->_logAdapterFactory->create(['fileName' => $file])->log($this->_debugData);
+            $this->logger->debug($this->_debugData);
         }
     }
 

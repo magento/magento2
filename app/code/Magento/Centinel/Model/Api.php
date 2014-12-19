@@ -213,19 +213,17 @@ class Api extends \Magento\Framework\Object
     protected $_clientInstance = null;
 
     /**
-     * Log adapter factory
-     *
-     * @var \Psr\Log\LoggerInterface\AdapterFactory
+     * @var \Psr\Log\LoggerInterface
      */
-    protected $_logFactory;
+    protected $logger;
 
     /**
-     * @param \Psr\Log\LoggerInterface\AdapterFactory $logFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
-    public function __construct(\Psr\Log\LoggerInterface\AdapterFactory $logFactory, array $data = [])
+    public function __construct(\Psr\Log\LoggerInterface $logger, array $data = [])
     {
-        $this->_logFactory = $logFactory;
+        $this->logger = $logger;
         parent::__construct($data);
     }
 
@@ -419,13 +417,7 @@ class Api extends \Magento\Framework\Object
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->_logFactory->create(
-                ['fileName' => 'card_validation_3d_secure.log']
-            )->setFilterDataKeys(
-                $this->_debugReplacePrivateDataKeys
-            )->log(
-                $debugData
-            );
+            $this->logger->debug($debugData);
         }
     }
 }

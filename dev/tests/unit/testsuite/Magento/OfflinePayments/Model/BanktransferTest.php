@@ -17,20 +17,12 @@ class BanktransferTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $adapterFactoryMock = $this->getMock(
-            'Psr\Log\LoggerInterface\AdapterFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
         $this->_object = $objectManagerHelper->getObject(
             'Magento\OfflinePayments\Model\Banktransfer',
             [
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,
                 'scopeConfig' => $scopeConfig,
-                'logAdapterFactory' => $adapterFactoryMock
             ]
         );
     }
