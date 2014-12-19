@@ -147,7 +147,11 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($lastName, $customerAfter->getLastname());
         $this->assertEquals($defaultBilling, $customerAfter->getDefaultBilling());
         $this->assertEquals($defaultShipping, $customerAfter->getDefaultShipping());
-        $this->expectedDefaultShippingsInCustomerModelAttributes($existingCustomerId, $defaultBilling, $defaultShipping);
+        $this->expectedDefaultShippingsInCustomerModelAttributes(
+            $existingCustomerId,
+            $defaultBilling,
+            $defaultShipping
+        );
         $this->assertEquals('Admin', $customerAfter->getCreatedIn());
         $passwordFromFixture = 'password';
         $this->accountManagement->authenticate($customerAfter->getEmail(), $passwordFromFixture);
