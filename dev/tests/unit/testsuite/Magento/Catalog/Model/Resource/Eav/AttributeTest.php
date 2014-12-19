@@ -4,8 +4,6 @@
  */
 namespace Magento\Catalog\Model\Resource\Eav;
 
-use \Magento\Catalog\Model\Resource\Eav\Attribute;
-
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /**
