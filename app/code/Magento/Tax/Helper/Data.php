@@ -628,7 +628,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  null|string|bool|int|Store $store
      * @return string
      */
-    public function getCalculationAgorithm($store = null)
+    public function getCalculationAlgorithm($store = null)
     {
         return $this->_config->getAlgorithm($store);
     }

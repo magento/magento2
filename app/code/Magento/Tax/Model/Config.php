@@ -269,7 +269,7 @@ class Config
     }
 
     /**
-     * Get defined tax calculation agorithm
+     * Get defined tax calculation algorithm
      *
      * @param   null|string|bool|int|Store $store
      * @return  string
