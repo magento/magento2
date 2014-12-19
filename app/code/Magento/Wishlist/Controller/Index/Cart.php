@@ -114,7 +114,7 @@ class Cart extends Action\Action implements IndexInterface
                 $refererUrl = $this->_redirect->getRefererUrl();
                 if ($refererUrl &&
                     ($refererUrl != $this->_objectManager->get('Magento\Framework\UrlInterface')
-                            ->getUrl('*/*/configure/', ['id' => $item->getId()])
+                            ->getUrl('*/*/configure/', ['id' => $item->getId(), 'product_id' => $item->getProductId()])
                     )
                 ) {
                     $redirectUrl = $refererUrl;
@@ -126,10 +126,22 @@ class Cart extends Action\Action implements IndexInterface
                 $this->messageManager->addError(__('This product(s) is out of stock.'));
             } elseif ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_HAS_REQUIRED_OPTIONS) {
                 $this->messageManager->addNotice($e->getMessage());
-                $redirectUrl = $this->_url->getUrl('*/*/configure/', ['id' => $item->getId()]);
+                $redirectUrl = $this->_url->getUrl(
+                    '*/*/configure/',
+                    [
+                        'id' => $item->getId(),
+                        'product_id' => $item->getProductId(),
+                    ]
+                );
             } else {
                 $this->messageManager->addNotice($e->getMessage());
-                $redirectUrl = $this->_url->getUrl('*/*/configure/', ['id' => $item->getId()]);
+                $redirectUrl = $this->_url->getUrl(
+                    '*/*/configure/',
+                    [
+                        'id' => $item->getId(),
+                        'product_id' => $item->getProductId(),
+                    ]
+                );
             }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Cannot add item to shopping cart'));
