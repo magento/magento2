@@ -5,7 +5,7 @@
 
 namespace Magento\ConfigurableProduct\Model;
 
-use \Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class LinkManagementTest extends \PHPUnit_Framework_TestCase
 {
