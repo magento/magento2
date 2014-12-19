@@ -82,6 +82,11 @@ class Reader
 
         $config = [];
         $config['arguments'] = $this->getConfigForScope($definitionsCollection, $areaConfig);
+        foreach ($config['arguments'] as $key => $value) {
+            if ($value !== null) {
+                $config['arguments'][$key] = serialize($value);
+            }
+        }
         foreach ($definitionsCollection->getInstancesNamesList() as $instanceName) {
             if (!$areaConfig->isShared($instanceName)) {
                 $config['nonShared'][$instanceName] = true;
