@@ -46,7 +46,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->renderer = $objectManager->getObject(
-            '\Magento\Tax\Block\Adminhtml\Items\Price\Renderer',
+            'Magento\Tax\Block\Adminhtml\Items\Price\Renderer',
             [
                 'itemPriceRenderer' => $this->itemPriceRenderer,
                 'defaultColumnRenderer' => $this->defaultColumnRenderer,

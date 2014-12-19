@@ -144,7 +144,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         // SUT
         $this->model = $this->objectManager->getObject(
-            '\Magento\Checkout\Controller\Onepage\Index',
+            'Magento\Checkout\Controller\Onepage\Index',
             [
                 'context' => $this->contextMock,
                 'customerSession' => $this->sessionMock,
