@@ -185,7 +185,10 @@ class Save extends AbstractConfig
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath(
             'adminhtml/system_config/edit',
-            ['_current' => ['section', 'website', 'store']]
+            [
+                '_current' => ['section', 'website', 'store'],
+                '_nosid' => true
+            ]
         );
     }
 }
