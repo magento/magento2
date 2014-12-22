@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         fs          = require('fs');
 
     function canModify(url) {
-        return url.match(/^\/(\.grunt)|(dev)|(_SpecRunner\.html)/) === null;
+        return url.match(/^\/(\.grunt)|(dev\/tests)|(_SpecRunner\.html)/) === null;
     };
 
     grunt.registerMultiTask('specRunner', function(grunt) {
