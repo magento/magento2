@@ -29,10 +29,9 @@ class InstallerFactory
     /**
      * Factory method for installer object
      *
-     * @param LoggerInterface $log
      * @return Installer
      */
-    public function create(LoggerInterface $log)
+    public function create()
     {
         return new Installer(
             $this->serviceLocator->get('Magento\Setup\Model\FilePermissions'),
@@ -43,7 +42,7 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Framework\Module\ModuleList\Loader'),
             $this->serviceLocator->get('Magento\Framework\App\Filesystem\DirectoryList'),
             $this->serviceLocator->get('Magento\Setup\Model\AdminAccountFactory'),
-            $log,
+            new WebLogger($this->serviceLocator->get('Magento\Framework\Filesystem')),
             $this->serviceLocator->get('Magento\Framework\Math\Random'),
             $this->serviceLocator->get('Magento\Setup\Module\ConnectionFactory'),
             $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),

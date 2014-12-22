@@ -18,9 +18,9 @@ class WebLogger implements LoggerInterface
     /**
      * Log File
      *
-     * @var string
+     * @const string
      */
-    protected $logFile = 'install.log';
+    const LOG_WEB = 'install.log';
 
     /**
      * Currently open file resource
@@ -28,7 +28,6 @@ class WebLogger implements LoggerInterface
      * @var Filesystem
      */
     protected $filesystem;
-
 
     /**
      * Currently open file resource
@@ -68,14 +67,7 @@ class WebLogger implements LoggerInterface
     public function logError(\Exception $e)
     {
         $this->terminateLine();
-        $stackTrace =  $e->getTrace();
-        $this->writeToFile('<span class="text-danger">[ERROR] ' . $e->getMessage() . '<br/>');
-        foreach ($stackTrace as $errorLine) {
-            if (isset($errorLine['file'])) {
-                $this->writeToFile($errorLine['file'] . ' ' .  $errorLine['line'] . '<br/>');
-            }
-        }
-        $this->writeToFile('<span><br/>');
+        $this->writeToFile('<span class="text-danger">[ERROR] ' . $e . '<span><br/>');
     }
 
     /**
@@ -113,7 +105,7 @@ class WebLogger implements LoggerInterface
      */
     private function writeToFile($message)
     {
-        $this->directory->writeFile($this->logFile, $message, 'a+');
+        $this->directory->writeFile(self::LOG_WEB, $message, 'a+');
     }
 
     /**
@@ -123,7 +115,7 @@ class WebLogger implements LoggerInterface
      */
     public function get()
     {
-        $fileContents = explode('\n', $this->directory->readFile($this->logFile));
+        $fileContents = explode('\n', $this->directory->readFile(self::LOG_WEB));
         return $fileContents;
     }
 
@@ -134,8 +126,8 @@ class WebLogger implements LoggerInterface
      */
     public function clear()
     {
-        if ($this->directory->isExist($this->logFile)) {
-            $this->directory->delete($this->logFile);
+        if ($this->directory->isExist(self::LOG_WEB)) {
+            $this->directory->delete(self::LOG_WEB);
         }
     }
 
