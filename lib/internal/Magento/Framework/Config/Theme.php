@@ -45,7 +45,7 @@ class Theme
     }
 
     /**
-     * Extract configuration data from theme.xml and composer.json
+     * Extract configuration data from theme.xml
      *
      * @param string $configContent
      * @return array
