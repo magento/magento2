@@ -49,7 +49,7 @@ interface CheckoutAgreementsInterface
      *
      * @return bool Agreement status.
      */
-    public function isActive();
+    public function getIsActive();
 
     /**
      * Returns the agreement content type.
@@ -57,5 +57,5 @@ interface CheckoutAgreementsInterface
      * @return bool * true - HTML.
      * * false - plain text.
      */
-    public function isHtml();
+    public function getIsHtml();
 }
