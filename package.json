@@ -2,12 +2,17 @@
   "name": "Magento2",
   "description": "Magento2 node modules dependencies for local development",
   "devDependencies": {
+    "connect": "^3.3.3",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-jasmine": "^0.8.1",
     "grunt-contrib-less": "^0.12.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-styledocco": "^0.1.4",
+    "grunt-template-jasmine-requirejs": "^0.2.0",
     "load-grunt-tasks": "^1.0.0",
+    "morgan": "^1.5.0",
+    "serve-static": "^1.7.1",
     "time-grunt": "^1.0.0"
   },
   "engines": {
