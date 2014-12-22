@@ -5,7 +5,7 @@
 
 namespace Magento\Framework\Logger\Handler;
 
-use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\DriverInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -22,14 +22,14 @@ class System extends StreamHandler
     protected $loggerType = Logger::DEBUG;
 
     /**
-     * @var File
+     * @var DriverInterface
      */
     protected $filesystem;
 
     /**
-     * @param File $filesystem
+     * @param DriverInterface $filesystem
      */
-    public function __construct(File $filesystem)
+    public function __construct(DriverInterface $filesystem)
     {
         $this->filesystem = $filesystem;
         parent::__construct(BP . $this->fileName, $this->loggerType);
