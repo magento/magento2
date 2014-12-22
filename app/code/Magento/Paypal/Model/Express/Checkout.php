@@ -485,7 +485,7 @@ class Checkout
     {
         $this->_quote->collectTotals();
 
-        if (!$this->_quote->getGrandTotal() && !$this->_quote->hasNominalItems()) {
+        if (!$this->_quote->getGrandTotal()) {
             throw new \Magento\Framework\Model\Exception(
                 __(
                     'PayPal can\'t process orders with a zero balance due. '
@@ -563,7 +563,7 @@ class Checkout
             && $this->_config->getConfigValue('transferShippingOptions')
             && !empty($cartItems)
         ) {
-            if (!$this->_quote->getIsVirtual() && !$this->_quote->hasNominalItems()) {
+            if (!$this->_quote->getIsVirtual()) {
                 $options = $this->_prepareShippingOptions($address, true);
                 if ($options) {
                     $this->_api->setShippingOptionsCallbackUrl(
@@ -959,7 +959,7 @@ class Checkout
      */
     protected function _setBillingAgreementRequest()
     {
-        if (!$this->_customerId || $this->_quote->hasNominalItems()) {
+        if (!$this->_customerId) {
             return $this;
         }
 

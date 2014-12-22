@@ -470,12 +470,9 @@ class Payment extends Info implements OrderPaymentInterface
                 $invoice->setIsPaid(true);
                 $this->_updateTotals(['base_amount_paid_online' => $amountToCapture]);
             }
-            if ($order->isNominal()) {
-                $message = $this->_prependMessage(__('An order with subscription items was registered.'));
-            } else {
-                $message = $this->_prependMessage($message);
-                $message = $this->_appendTransactionToMessage($transaction, $message);
-            }
+            $message = $this->_prependMessage($message);
+            $message = $this->_appendTransactionToMessage($transaction, $message);
+
             $order->setState($state, $status, $message);
             $this->getMethodInstance()->processInvoice($invoice, $this);
             return $this;
@@ -1176,12 +1173,9 @@ class Payment extends Info implements OrderPaymentInterface
 
         // update transactions, order state and add comments
         $transaction = $this->_addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH);
-        if ($order->isNominal()) {
-            $message = $this->_prependMessage(__('An order with subscription items was registered.'));
-        } else {
-            $message = $this->_prependMessage($message);
-            $message = $this->_appendTransactionToMessage($transaction, $message);
-        }
+        $message = $this->_prependMessage($message);
+        $message = $this->_appendTransactionToMessage($transaction, $message);
+
         $order->setState($state, $status, $message);
 
         return $this;

@@ -30,9 +30,5 @@
                 <renderer name="frontend" instance="Magento\Tax\Block\Checkout\Grandtotal"/>
             </item>
         </group>
-        <group name="nominal_totals">
-            <item name="nominal_tax_subtotal" instance="Magento\Tax\Model\Sales\Total\Quote\Nominal\Subtotal" sort_order="500"/>
-            <item name="nominal_tax" instance="Magento\Tax\Model\Sales\Total\Quote\Nominal\Tax" sort_order="750"/>
-        </group>
     </section>
 </config>

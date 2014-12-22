@@ -68,7 +68,6 @@ return [
     'product' => null,
     'tax_class_id' => '0',
     'has_error' => false,
-    'is_nominal' => false,
     'base_calculation_price' => 8,
     'calculation_price' => 8,
     'converted_price' => 8,

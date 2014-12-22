@@ -74,7 +74,6 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     const BASE_HIDDEN_TAX_INVOICED = 'base_hidden_tax_invoiced';
     const HIDDEN_TAX_REFUNDED = 'hidden_tax_refunded';
     const BASE_HIDDEN_TAX_REFUNDED = 'base_hidden_tax_refunded';
-    const IS_NOMINAL = 'is_nominal';
     const TAX_CANCELED = 'tax_canceled';
     const HIDDEN_TAX_CANCELED = 'hidden_tax_canceled';
     const TAX_REFUNDED = 'tax_refunded';
@@ -463,13 +462,6 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return float
      */
     public function getHiddenTaxRefunded();
-
-    /**
-     * Returns is_nominal
-     *
-     * @return int
-     */
-    public function getIsNominal();
 
     /**
      * Returns is_qty_decimal

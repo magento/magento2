@@ -131,13 +131,12 @@ class CheckoutValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $isInCatalog = false;
         $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')->disableOriginalConstructor()
-            ->setMethods(['getGrandTotal', 'validateMinimumAmount', 'hasNominalItems', '__wakeup'])
+            ->setMethods(['getGrandTotal', 'validateMinimumAmount', '__wakeup'])
             ->getMock();
 
         $this->sessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quote));
         $quote->expects($this->once())->method('validateMinimumAmount')->will($this->returnValue(true));
         $quote->expects($this->once())->method('getGrandTotal')->will($this->returnValue(0));
-        $quote->expects($this->once())->method('hasNominalItems')->will($this->returnValue(false));
 
         $this->assertFalse($this->checkoutValidator->isQuoteSummaryValid($isInCatalog));
     }
@@ -146,7 +145,7 @@ class CheckoutValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $isInCatalog = false;
         $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')->disableOriginalConstructor()
-            ->setMethods(['getGrandTotal', 'validateMinimumAmount', 'hasNominalItems', '__wakeup'])
+            ->setMethods(['getGrandTotal', 'validateMinimumAmount', '__wakeup'])
             ->getMock();
 
         $this->sessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quote));

@@ -2001,4 +2001,8 @@ return [
     ['getScriptTranslation', 'Magento\Framework\LocaleInterface'],
     ['getCountryTranslation', 'Magento\Framework\LocaleInterface'],
     ['getTerritoryTranslation', 'Magento\Framework\LocaleInterface'],
+    ['getAllNonNominalItems', 'Magento\Sales\Model\Quote\Address'],
+    ['getAllNominalItems', 'Magento\Sales\Model\Quote\Address'],
+    ['isNominal', 'Magento\Sales\Model\Order\Item'],
+    ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem']
 ];

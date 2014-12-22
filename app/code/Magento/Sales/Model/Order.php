@@ -1490,21 +1490,6 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         return $this;
     }
 
-    /**
-     * Whether the order has nominal items only
-     *
-     * @return bool
-     */
-    public function isNominal()
-    {
-        foreach ($this->getAllVisibleItems() as $item) {
-            if ('0' == $item->getIsNominal()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     /*********************** PAYMENTS ***************************/
 
     /**

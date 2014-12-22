@@ -4,7 +4,7 @@
  */
 
 /**
- * Converts sales totals (incl. nominal, creditmemo, invoice) from \DOMDocument to array
+ * Converts sales totals (incl. creditmemo, invoice) from \DOMDocument to array
  */
 namespace Magento\Sales\Model\Config;
 
