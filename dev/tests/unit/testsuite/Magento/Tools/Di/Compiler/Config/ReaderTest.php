@@ -71,21 +71,17 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider generateCachePerScopeDataProvider
-     */
-    public function testGenerateCachePerScope($extendConfig)
+    public function testGenerateCachePerScopeExtends()
     {
         $definitionsCollection = $this->getMock('Magento\Tools\Di\Definition\Collection', [], [], '', false);
-        if ($extendConfig) {
-            $this->diContainerConfig->expects($this->once())
-                ->method('extend')
-                ->with([]);
-            $this->configLoader->expects($this->once())
-                ->method('load')
-                ->with('areaCode')
-                ->willReturn([]);
-        }
+        $this->diContainerConfig->expects($this->once())
+            ->method('extend')
+            ->with([]);
+        $this->configLoader->expects($this->once())
+            ->method('load')
+            ->with('areaCode')
+            ->willReturn([]);
+
         $this->argumentsResolverFactory->expects($this->once())
             ->method('create')
             ->with($this->diContainerConfig)
@@ -140,17 +136,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
                 ['instanceType1', 'instanceType1ss'],
                 ['instanceType2', 'instanceType2'],
             ]);
-        $this->model->generateCachePerScope($definitionsCollection, 'areaCode', $extendConfig);
-    }
-
-    /**
-     * @return array
-     */
-    public function generateCachePerScopeDataProvider()
-    {
-        return [
-            [true],
-            [false]
-        ];
+        $this->model->generateCachePerScope($definitionsCollection, 'areaCode');
     }
 }

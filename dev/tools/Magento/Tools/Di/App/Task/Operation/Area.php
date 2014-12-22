@@ -11,7 +11,6 @@ use Magento\Framework\App;
 use Magento\Tools\Di\Code\Reader\ClassesScanner;
 use Magento\Tools\Di\Compiler\Config;
 use Magento\Tools\Di\Definition\Collection as DefinitionsCollection;
-use Magento\Tools\Di\Code\Generator\InterceptionConfigurationBuilder;
 
 class Area implements OperationInterface
 {
@@ -31,11 +30,6 @@ class Area implements OperationInterface
     private $configReader;
 
     /**
-     * @var InterceptionConfigurationBuilder
-     */
-    private $interceptionConfigurationBuilder;
-
-    /**
      * @var Config\WriterInterface
      */
     private $configWriter;
@@ -49,7 +43,6 @@ class Area implements OperationInterface
      * @param App\AreaList $areaList
      * @param ClassesScanner $classesScanner
      * @param Config\Reader $configReader
-     * @param InterceptionConfigurationBuilder $interceptionConfigurationBuilder
      * @param Config\WriterInterface $configWriter
      * @param array $data
      */
@@ -57,7 +50,6 @@ class Area implements OperationInterface
         App\AreaList $areaList,
         ClassesScanner $classesScanner,
         Config\Reader $configReader,
-        InterceptionConfigurationBuilder $interceptionConfigurationBuilder,
         Config\WriterInterface $configWriter,
         $data = []
     ) {
@@ -65,7 +57,6 @@ class Area implements OperationInterface
         $this->classesScanner = $classesScanner;
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
-        $this->interceptionConfigurationBuilder = $interceptionConfigurationBuilder;
         $this->data = $data;
     }
 
@@ -83,16 +74,11 @@ class Area implements OperationInterface
             $definitionsCollection->addCollection($this->getDefinitionsCollection($path));
         }
 
-        $this->configWriter->write(
-            App\Area::AREA_GLOBAL,
-            $this->configReader->generateCachePerScope($definitionsCollection, App\Area::AREA_GLOBAL)
-        );
-        $this->interceptionConfigurationBuilder->addAreaCode(App\Area::AREA_GLOBAL);
-        foreach ($this->areaList->getCodes() as $areaCode) {
-            $this->interceptionConfigurationBuilder->addAreaCode($areaCode);
+        $areaCodes = [App\Area::AREA_GLOBAL] + $this->areaList->getCodes();
+        foreach ($areaCodes as $areaCode) {
             $this->configWriter->write(
                 $areaCode,
-                $this->configReader->generateCachePerScope($definitionsCollection, $areaCode, true)
+                $this->configReader->generateCachePerScope($definitionsCollection, $areaCode)
             );
         }
     }

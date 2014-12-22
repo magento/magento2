@@ -8,6 +8,7 @@ namespace Magento\Tools\Di\App\Task\Operation;
 
 use Magento\Tools\Di\App\Task\OperationInterface;
 use Magento\Tools\Di\Compiler\Config;
+use Magento\Framework\Interception;
 
 class Plugins implements OperationInterface
 {
@@ -22,19 +23,27 @@ class Plugins implements OperationInterface
     private $data = '';
 
     /**
+     * @var Interception\Definition\Runtime
+     */
+    private $definitionRuntime;
+
+    /**
      * Code
      */
     const CODE = 'plugins';
 
     /**
      * @param Config\WriterInterface $configWriter
+     * @param Interception\Definition\Runtime $definitionRuntime
      * @param string $data
      */
     public function __construct(
         Config\WriterInterface $configWriter,
+        Interception\Definition\Runtime $definitionRuntime,
         $data = ''
     ) {
         $this->configWriter = $configWriter;
+        $this->definitionRuntime = $definitionRuntime;
         $this->data = $data;
     }
 
@@ -56,10 +65,9 @@ class Plugins implements OperationInterface
         $pluginScanner->addChild(new \Magento\Tools\Di\Code\Scanner\PluginScanner(), 'di');
         $pluginDefinitions = [];
         $pluginList = $pluginScanner->collectEntities($files);
-        $pluginDefinitionList = new \Magento\Framework\Interception\Definition\Runtime();
         foreach ($pluginList as $type => $entityList) {
             foreach ($entityList as $entity) {
-                $pluginDefinitions[$entity] = $pluginDefinitionList->getMethodList($entity);
+                $pluginDefinitions[$entity] = $this->definitionRuntime->getMethodList($entity);
             }
         }
 

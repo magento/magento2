@@ -64,7 +64,10 @@ class OperationFactory
     public function create($operationAlias, $arguments = null)
     {
         if (!array_key_exists($operationAlias, $this->operationsDefinitions)) {
-            throw new OperationException('Unrecognized operation', OperationException::UNAVAILABLE_OPERATION);
+            throw new OperationException(
+                sprintf('Unrecognized operation "%s"', $operationAlias),
+                OperationException::UNAVAILABLE_OPERATION
+            );
         }
         return $this->objectManager->create($this->operationsDefinitions[$operationAlias], ['data' => $arguments]);
     }

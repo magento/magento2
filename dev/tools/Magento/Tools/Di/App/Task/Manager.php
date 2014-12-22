@@ -49,5 +49,6 @@ class Manager
         foreach ($this->operationsList as $operation) {
             $operation->doOperation();
         }
+        $this->operationsList = [];
     }
 }

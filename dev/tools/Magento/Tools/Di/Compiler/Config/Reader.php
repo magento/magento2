@@ -66,17 +66,15 @@ class Reader
      *
      * @param DefinitionsCollection $definitionsCollection
      * @param string $areaCode
-     * @param bool $extendConfig
      *
      * @return array
      */
     public function generateCachePerScope(
         DefinitionsCollection $definitionsCollection,
-        $areaCode,
-        $extendConfig = false
+        $areaCode
     ) {
         $areaConfig = clone $this->diContainerConfig;
-        if ($extendConfig) {
+        if ($areaCode !== App\Area::AREA_GLOBAL) {
             $areaConfig->extend($this->configLoader->load($areaCode));
         }
 

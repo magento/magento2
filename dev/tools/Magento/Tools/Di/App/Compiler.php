@@ -6,6 +6,8 @@
 namespace Magento\Tools\Di\App;
 
 use Magento\Framework\App;
+use Magento\Framework\App\Console\Response;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Compiler
@@ -15,7 +17,7 @@ use Magento\Framework\App;
 class Compiler implements \Magento\Framework\AppInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -25,15 +27,23 @@ class Compiler implements \Magento\Framework\AppInterface
     private $taskManager;
 
     /**
+     * @var Response
+     */
+    private $response;
+
+    /**
      * @param Task\Manager $taskManager
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
+     * @param Response $response
      */
     public function __construct(
         Task\Manager $taskManager,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        Response $response
     ) {
         $this->taskManager = $taskManager;
         $this->objectManager = $objectManager;
+        $this->response = $response;
     }
 
     /**
@@ -53,27 +63,36 @@ class Compiler implements \Magento\Framework\AppInterface
             ]
         );
 
-        $this->taskManager->addOperation(
-            Task\OperationFactory::AREA,
-            [BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation']
-        );
-        $this->taskManager->addOperation(
-            Task\OperationFactory::INTERCEPTION,
-            BP . '/var/generation'
-        );
-        $this->taskManager->addOperation(
-            Task\OperationFactory::RELATIONS,
-            [BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation']
-        );
-        $this->taskManager->addOperation(
-            Task\OperationFactory::PLUGINS,
-            BP . '/app'
-        );
-        $this->taskManager->process();
+        $operations = [
+            Task\OperationFactory::AREA => [
+                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+            ],
+            Task\OperationFactory::INTERCEPTION =>
+                BP . '/var/generation',
+            Task\OperationFactory::RELATIONS => [
+                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+            ],
+            Task\OperationFactory::PLUGINS =>
+                BP . '/app'
+        ];
 
-        $response = new \Magento\Framework\App\Console\Response();
-        $response->setCode(0);
-        return $response;
+        $responseCode = Response::SUCCESS;
+        try {
+            foreach ($operations as $operationCode => $arguments) {
+                $this->taskManager->addOperation(
+                    $operationCode,
+                    $arguments
+                );
+            }
+            $this->taskManager->process();
+
+        } catch (Task\OperationException $e) {
+            $responseCode = Response::ERROR;
+            $this->response->setBody($e->getMessage());
+        } finally {
+            $this->response->setCode($responseCode);
+            return $this->response;
+        }
     }
 
     /**

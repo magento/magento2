@@ -21,6 +21,16 @@ class Response implements \Magento\Framework\App\ResponseInterface
     protected $code = 0;
 
     /**
+     * Success code
+     */
+    const SUCCESS = 0;
+
+    /**
+     * Error code
+     */
+    const ERROR = 255;
+
+    /**
      * Text to output on send response
      *
      * @var string
