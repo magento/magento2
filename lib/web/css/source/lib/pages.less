@@ -127,9 +127,9 @@
             @_pager-gradient
         );
         .css(border, @_pager-border);
-        .css(padding, @_pager-item-padding);
         .css(color, @_pager-color);
         .css(display, @_pager-item-display);
+        .css(padding, @_pager-item-padding);
         .css(text-decoration, @_pager-text-decoration);
         &:visited {
             .css(background, @_pager-background-visited);
@@ -179,10 +179,10 @@
             @_pager-font-size: @_pager-font-size,
             @_pager-line-height: @_pager-line-height
         );
-        .css(padding, @_pager-item-padding);
         .css(color, @_pager-current-color);
         .css(display, @_pager-item-display);
         .css(font-weight, @_pager-current-font-weight);
+        .css(padding, @_pager-item-padding);
     }
     .action {
         .css(background, @_pager-action-background);
@@ -193,9 +193,9 @@
             @_pager-action-gradient
         );
         .css(border, @_pager-action-border);
-        .css(padding, @_pager-actions-padding);
         .css(color, @_pager-action-color);
         .css(display, @_pager-item-display);
+        .css(padding, @_pager-actions-padding);
         .css(text-decoration, @_pager-action-text-decoration);
         &:visited {
             .css(background, @_pager-action-background-visited);
@@ -339,7 +339,6 @@
     @_icon-font-position: @_pager-icon-font-position,
     @_icon-font-text-hide: @_pager-icon-font-text-hide
 ) when (@_pager-icon-use = true) and (@_icon-font-position = before) {
-
     &:visited:before {
         .css(color, @_icon-font-color-visited);
     }

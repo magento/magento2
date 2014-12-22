@@ -87,13 +87,13 @@
     overflow: hidden;
     ._rating-label-hide(@_label-hide);
     .rating-result {
-        width: (@_icon-font-size * @_icon-count) + ceil(@_icon-letter-spacing * (@_icon-count - 1));
+        .css(width, (@_icon-font-size * @_icon-count) + ceil(@_icon-letter-spacing * (@_icon-count - 1)));
         &:before {
             position: absolute;
-            z-index: 1;
             top: 0;
             left: 0;
             width: 100%;
+            z-index: 1;
             ._rating-summary-icon-default(
                 @_icon-font,
                 @_icon-font-size,
@@ -166,16 +166,16 @@
     @_icon-letter-spacing,
     @_icon-color
 ) {
-    letter-spacing: @_icon-letter-spacing;
-    font-family: @_icon-font;
+    .css(color, @_icon-color);
+    .css(font-family, @_icon-font);
     font-style: normal;
-    font-size: @_icon-font-size;
-    line-height: @_icon-font-size;
-    height: @_icon-font-size;
+    .css(font-size, @_icon-font-size);
+    .css(line-height, @_icon-font-size);
+    .css(letter-spacing, @_icon-letter-spacing);
+    .css(height, @_icon-font-size);
     speak: none;
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
-    color: @_icon-color;
     vertical-align: top;
 }
 
@@ -187,86 +187,86 @@
     @_icon-content,
     @_icon-color
 ) {
+    .css(color, @_icon-color);
     display: block;
-    font-family: @_icon-font;
+    .css(font-family, @_icon-font);
     .mixin-rating-icons-content(@_icon-count, @_icon-content);
     font-style: normal;
-    font-size: @_icon-font-size;
-    line-height: @_icon-font-size;
-    height: @_icon-font-size;
-    letter-spacing: @_icon-letter-spacing;
+    .css(font-size, @_icon-font-size);
+    .css(height, @_icon-font-size);
+    .css(line-height, @_icon-font-size);
+    .css(letter-spacing, @_icon-letter-spacing);
     speak: none;
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
-    color: @_icon-color;
 }
 
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
 ) when (@_icon-count = 10) {
-    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
 }
 
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
 ) when (@_icon-count = 9) {
-    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
 }
 
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
 ) when (@_icon-count = 8) {
-    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
 }
 
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
 ) when (@_icon-count = 7) {
-    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
 }
 
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
 ) when (@_icon-count = 6) {
-    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
 }
 
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
 ) when (@_icon-count = 5) {
-    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content);
 }
 
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
 ) when (@_icon-count = 4) {
-    content: @_icon-content @_icon-content @_icon-content @_icon-content;
+    .css(content, @_icon-content @_icon-content @_icon-content @_icon-content);
 }
 
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
 ) when (@_icon-count = 3) {
-    content: @_icon-content @_icon-content @_icon-content;
+    .css(content, @_icon-content @_icon-content @_icon-content);
 }
 
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
 ) when (@_icon-count = 2) {
-    content: @_icon-content @_icon-content;
+    .css(content, @_icon-content @_icon-content);
 }
 
 .mixin-rating-icons-content(
     @_icon-count: @rating-icon-count,
     @_icon-content: @rating-icon-content
 ) when (@_icon-count = 1) {
-    content: @_icon-content;
+    .css(content, @_icon-content);
 }

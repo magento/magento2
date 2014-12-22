@@ -88,12 +88,9 @@
     textarea:not([disabled]),
     select:not([disabled]) {
         &:focus {
-            box-shadow: @focus-box-shadow;
+            .css(box-shadow, @focus-box-shadow);
         }
     }
-
-
-
 }
 
 //
