@@ -54,6 +54,16 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     protected $msrpHelper;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateFactory
+     */
+    private $dateFactory;
+
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Catalog\Helper\Image $imageHelper
@@ -62,6 +72,8 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\Rss\Product\Special $rssModel
      * @param \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder
+     * @param \Magento\Framework\Stdlib\DateTime\DateFactory $dateFactory
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
@@ -73,6 +85,8 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\Rss\Product\Special $rssModel,
         \Magento\Framework\App\Rss\UrlBuilderInterface $rssUrlBuilder,
+        \Magento\Framework\Stdlib\DateTime\DateFactory $dateFactory,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = []
     ) {
         $this->outputHelper = $outputHelper;
@@ -84,6 +98,8 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
         $this->httpContext = $httpContext;
         $this->storeManager = $context->getStoreManager();
         parent::__construct($context, $data);
+        $this->dateFactory = $dateFactory;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -166,7 +182,12 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
                 $special = '';
                 if ($item->getUseSpecial()) {
                     $special = '<br />' . __('Special Expires On: %1', $this->formatDate(
-                        $item->getSpecialToDate(),
+                        $this->dateFactory->create(
+                            [
+                                'date' => $item->getSpecialToDate(),
+                                'locale' => $this->localeResolver->getLocaleCode()
+                            ]
+                        ),
                         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
                     ));
                 }
