@@ -92,9 +92,23 @@ class Observer
             null
         );
 
-        $block->setWelcome(__('Welcome, %1!', $escapedName));
-
+        $this->_applyAccountLinksPersistentData();
+        $welcomeMessage = __('Welcome, %1!', $escapedName)
+            . ' ' . $this->_layout->getBlock('header.additional')->toHtml();
+        $block->setWelcome($welcomeMessage);
         return $this;
+    }
+
+    /**
+     * Emulate 'account links' block with persistent data
+     *
+     * @return void
+     */
+    protected function _applyAccountLinksPersistentData()
+    {
+        if (!$this->_layout->getBlock('header.additional')) {
+            $this->_layout->addBlock('Magento\Persistent\Block\Header\Additional', 'header.additional');
+        }
     }
 
     /**
@@ -105,6 +119,7 @@ class Observer
      */
     public function emulateTopLinks($block)
     {
+        $this->_applyAccountLinksPersistentData();
         $block->removeLinkByUrl($this->_url->getUrl('customer/account/login'));
     }
 }
