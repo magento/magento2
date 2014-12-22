@@ -121,9 +121,9 @@
             &.empty {
                display: none;
             }
-            background: @color-active;
+            .css(background, @color-active);
             border-radius: 2px;
-            color: @page-bg-color;
+            .css(color, @page-bg-color);
             clip: none;
             display: inline-block;
             height: 24px;
@@ -166,7 +166,7 @@
             font-weight: @font-weight-base;
             margin-top: 0;
             a {
-                color: @link-color;
+                .css(color, @link-color);
             }
         }
         &-item-details {

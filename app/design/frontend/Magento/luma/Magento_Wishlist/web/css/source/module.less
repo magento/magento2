@@ -75,7 +75,7 @@
 
 .link.wishlist {
     .counter {
-        color: @text-color-muted;
+        .css(color, @text-color-muted);
         white-space: nowrap;
         &:before {
             content: "(";
@@ -306,7 +306,7 @@
             left: 0;
             right: -1px;
             z-index: 2;
-            background: @color-white;
+            .css(background, @color-white);
             padding: 0 9px 9px 9px;
             margin: 9px 0 0 -1px;
             border: 1px solid #bbb;

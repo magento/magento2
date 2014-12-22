@@ -52,7 +52,7 @@
 
     .block-bundle-summary {
         padding: @indent-s-base @indent-base;
-        background: @color-secondary;
+        .css(background, @color-secondary);
         &:extend(.abs-add-box-sizing all);
 
         > .title > strong {
@@ -94,7 +94,7 @@
         }
     }
     p.required {
-        color: @form-field-label-asterisk-color;
+        .css(color, @form-field-label-asterisk-color);
     }
 }
 

@@ -68,7 +68,7 @@ body {
 .page-wrapper {
     .ie9 & {
         min-height: 0;
-        background-color: @color-background-page;
+        .css(background-color, @color-background-page);
     }
 }
 
@@ -201,7 +201,7 @@ body {
             > li {
                 border-top: 1px solid @footer-links-separator-border-color;
                 font-size: 16px;
-                background: @footer-bg-color;
+                .css(background, @footer-bg-color);
                 margin: 0 -@layout-width-xs-indent;
                 padding: 0 @layout-width-xs-indent;
             }
@@ -212,7 +212,7 @@ body {
             }
             strong {
                 font-weight: normal;
-                color: @footer-links-color-current;
+                .css(color, @footer-links-color-current);
             }
             a {
                 .link(
@@ -233,9 +233,9 @@ body {
 .copyright {
     display: block;
     padding: @indent-s-base;
-    background-color: @color-background-copyright;
+    .css(background-color, @color-background-copyright);
     text-align: center;
-    color: @color-white;
+    .css(color, @color-white);
     .checkout-onepage-index & {
         margin-top: auto;
     }
@@ -303,7 +303,7 @@ body {
     }
     .page-footer .footer.content {
         .switcher-store {
-            background: @footer-bg-color;
+            .css(background, @footer-bg-color);
             font-size: 16px;
             margin: 0 -@layout-width-xs-indent;
             .switcher-options {
@@ -387,7 +387,7 @@ body {
 
     body {
         .ie9 & {
-            background-color: @color-background-copyright;
+            .css(background-color, @color-background-copyright);
         }
     }
 
@@ -542,7 +542,7 @@ body {
     .page-footer {
         margin-top: auto;
         padding-bottom: 25px;
-        background: @footer-bg-color;
+        .css(background, @footer-bg-color);
     }
 
     .footer {
@@ -595,7 +595,7 @@ body {
 
 .ui-tooltip {
     border: @tooltip-border-width solid @tooltip-border-color;
-    background: @tooltip-background;
+    .css(background, @tooltip-background);
     padding: 10px;
 }
 

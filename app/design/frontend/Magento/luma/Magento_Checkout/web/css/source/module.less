@@ -54,7 +54,7 @@
         }
         &.active {
             .step-title {
-                color: @color-primary;
+                .css(color, @color-primary);
             }
             .step-content {
                 display: block;
@@ -63,9 +63,9 @@
     }
     .step {
         &-title {
-            background: @sidebar-background;
+            .css(background, @sidebar-background);
             margin-bottom: 2px;
-            color: lighten(@color-primary, 40%);
+            .css(color, lighten(@color-primary, 40%));
             padding: 13px 25px;
             position: relative;
             h2 {
@@ -270,7 +270,7 @@
                 position: relative;
                 &:after {
                     content: "/";
-                    color: @color-primary-light;
+                    .css(color, @color-primary-light);
                     position: absolute;
                     right: -9px;
                     top: @indent-xs-base;
@@ -362,7 +362,7 @@
         display: block;
     }
     > .title {
-        background: @sidebar-background;
+        .css(background, @sidebar-background);
         .font-size(18);
         font-weight: @font-weight-light;
         margin: 0;
@@ -372,7 +372,7 @@
         }
     }
     > .content {
-        background: @sidebar-background;
+        .css(background, @sidebar-background);
         padding: 0 15px;
         .items {
             margin: 0;

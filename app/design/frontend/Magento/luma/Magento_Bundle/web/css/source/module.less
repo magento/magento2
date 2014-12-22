@@ -141,7 +141,7 @@
         }
     }
     p.required {
-        color: @form-field-label-asterisk-color;
+        .css(color, @form-field-label-asterisk-color);
     }
     .nested {
         .field.qty {
@@ -192,12 +192,12 @@
                     font-size: @price-size-desktop;
                     line-height: @price-size-desktop;
                     font-weight: @font-weight-semibold;
-                    color: @price-color;
+                    .css(color, @price-color);
                 }
             }
             .price-container {
                 .weee {
-                    color: @price-color;
+                    .css(color, @price-color);
                     .price {
                         .font-size(12);
                         font-weight: @font-weight-bold;

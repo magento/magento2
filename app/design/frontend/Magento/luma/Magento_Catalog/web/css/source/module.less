@@ -19,7 +19,7 @@
 //--------------------------------------
 .old-price,
 .old.price {
-    color: @text-color-muted;
+    .css(color, @text-color-muted);
 }
 
 .price-tier_price {
@@ -109,7 +109,7 @@
     }
     .notice {
         margin: @indent-s-base 0;
-        color: @text-color-muted;
+        .css(color, @text-color-muted);
         .font-size(@font-size-s);
     }
     .product.thumbs {
@@ -152,7 +152,7 @@
         border-bottom: 1px #c1c1c1 solid;
         display: table;
         width: 100%;
-        color: @product-info-price;
+        .css(color, @product-info-price);
         margin-bottom: @indent-s-base + @indent-xs-base;
         .price-box {
             display: table-cell;
@@ -250,7 +250,7 @@
 
 .product-options-bottom .price-box,
 .product-info-price .price-box {
-    color: @product-info-price;
+    .css(color, @product-info-price);
     display: table-cell;
     vertical-align: top;
     padding-bottom: @indent-s-base;
@@ -389,7 +389,7 @@
             margin-right: 8px;
         }
         .counter {
-            color: @color-primary-lighter;
+            .css(color, @color-primary-lighter);
             font-size: 12px;
             white-space: nowrap;
         }
@@ -821,7 +821,7 @@ body.catalog-product-compare-index {
     top: 0;
     left: 0;
     width: auto;
-    background: @color-white;
+    .css(background, @color-white);
 }
 
 .block-compare {
@@ -893,7 +893,7 @@ body.catalog-product-compare-index {
             );
         }
         .counter.qty {
-            color: @color-primary-lighter;
+            .css(color, @color-primary-lighter);
             &:before {
                 content: "(";
             }

@@ -36,7 +36,7 @@
     //  Summary block
     &-summary {
         &:extend(.abs-add-box-sizing all);
-        background: @sidebar-background;
+        .css(background, @sidebar-background);
         margin-bottom: 25px;
         padding: 1px 0 25px;
         > .title {
@@ -269,7 +269,7 @@
                 }
             }
             > .price {
-                color: @color-primary-lighter;
+                .css(color, @color-primary-lighter);
                 .font-size(18);
                 font-weight: @font-weight-bold;
             }

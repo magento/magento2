@@ -29,7 +29,7 @@
         &.active {
             .step {
                 &-title {
-                    color: @color-primary-darker;
+                    .css(color, @color-primary-darker);
                     cursor: default;
                 }
                 &-content {
@@ -40,7 +40,7 @@
     }
     .step {
         &-title {
-            color: @color-primary-lighter;
+            .css(color, @color-primary-lighter);
             line-height: 50px;
             h2,
             .number {
@@ -280,7 +280,7 @@
     &:extend(.abs-add-box-sizing all);
     margin-bottom: @indent-l-base;
     > .title {
-        background: @sidebar-background;
+        .css(background, @sidebar-background);
         .heading(h3);
         margin: 0;
         padding: 15px 15px @indent-base;
@@ -289,7 +289,7 @@
         }
     }
     > .content {
-        background: @sidebar-background;
+        .css(background, @sidebar-background);
         padding: 0 15px @indent-xs-base;
         .item-content.complete {
             margin: 0 0 15px;

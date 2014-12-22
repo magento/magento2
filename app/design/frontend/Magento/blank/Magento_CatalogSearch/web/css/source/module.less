@@ -72,11 +72,11 @@
         .list-reset-styles();
         li {
             &:not(:empty) {
-                background: @autocomplete-background;
-                border: @autocomplete-border;
+                .css(background, @autocomplete-background);
+                .css(border, @autocomplete-border);
                 border-top: 0;
             }
-            border-top: @autocomplete-item-border;
+            .css(border-top, @autocomplete-item-border);
             cursor: pointer;
             padding: @indent-xs-base @indent-xl-base @indent-xs-base @indent-s-base;
             margin: 0;
@@ -88,10 +88,10 @@
             }
             &:hover,
             &.selected {
-                background: @autocomplete-item-hover;
+                .css(background, @autocomplete-item-hover);
             }
             .amount {
-                color: @autocomplete-item-amount-color;
+                .css(color, @autocomplete-item-amount-color);
                 position: absolute;
                 right: 7px;
                 top: @indent-xs-base;
@@ -212,7 +212,7 @@
             .button-reset();
             &:focus {
                 &:before {
-                    color: @color-gray20;
+                    .css(color, @color-gray20);
                 }
             }
             padding: @indent-xs-base 0;

@@ -128,7 +128,7 @@
             float: left;
             border: 1px solid @border-color-base;
             font-weight: @font-weight-base;
-            color: @text-color-muted;
+            .css(color, @text-color-muted);
             text-align: center;
             padding: 7px 10px;
             line-height: 1;
@@ -136,13 +136,13 @@
             .icon-text-hide();
             &:not(.active):hover {
                 background: darken(@toolbar-element-background, 7%);
-                color: @text-color-muted;
+                .css(color, @text-color-muted);
             }
             &:last-child {
                 border-right: 1px solid @border-color-base;
             }
             &.active {
-                color: @color-primary-light;
+                .css(color, @color-primary-light);
             }
             .icon-font(
                 @icon-grid,

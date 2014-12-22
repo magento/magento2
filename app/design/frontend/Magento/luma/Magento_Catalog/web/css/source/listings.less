@@ -99,7 +99,7 @@
             }
             .price-label {
                 font-size: @font-size-s;
-                color: @text-color-muted;
+                .css(color, @text-color-muted);
             }
         }
 
@@ -240,7 +240,7 @@
             .css(box-shadow, @_shadow);
             position: relative;
             z-index: 2;
-            background: @color-white;
+            .css(background, @color-white);
             .product-item-inner {
                 display: block;
             }
@@ -252,7 +252,7 @@
         left: 0;
         right: -1px;
         z-index: 2;
-        background: @color-white;
+        .css(background, @color-white);
         padding: 0 9px 9px 9px;
         margin: 9px 0 0 -1px;
         border: 1px solid #bbb;
