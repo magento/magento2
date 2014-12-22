@@ -122,10 +122,10 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
         } catch (\Magento\Framework\Backup\Exception\FtpValidationFailed $e) {
             $errorMsg = __('Failed to validate FTP');
         } catch (\Magento\Framework\Backup\Exception\NotEnoughPermissions $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->log($e->getMessage());
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
             $errorMsg = __('Not enough permissions to perform rollback.');
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->log($e->getMessage());
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
             $errorMsg = __('Failed to rollback');
         }
 

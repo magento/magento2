@@ -4,7 +4,7 @@
  */
 namespace Magento\TestFramework\ErrorLog;
 
-class Logger extends \Psr\Log\LoggerInterface
+class Logger extends \Monolog\Logger
 {
     /** @var array */
     protected $messages = [];
@@ -21,6 +21,7 @@ class Logger extends \Psr\Log\LoggerInterface
     public function __construct()
     {
         $this->minimumErrorLevel = defined('TESTS_ERROR_LOG_LISTENER_LEVEL') ? TESTS_ERROR_LOG_LISTENER_LEVEL : -1;
+        parent::__construct('integration-test');
     }
 
     /**
@@ -37,14 +38,5 @@ class Logger extends \Psr\Log\LoggerInterface
     public function getMessages()
     {
         return $this->messages;
-    }
-
-    /**
-     * @param string $message
-     * @internal param int $level
-     */
-    public function info($message)
-    {
-        parent::info($message);
     }
 }

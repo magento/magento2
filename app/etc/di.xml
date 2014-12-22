@@ -85,24 +85,12 @@
     <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Null"/>
     <preference for="Magento\Framework\App\Resource\ConnectionAdapterInterface" type="Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
-    <virtualType name="Monolog\Handler\Stream\System" type="Monolog\Handler\StreamHandler">
-        <arguments>
-            <argument name="stream" xsi:type="string">var/log/system.log</argument>
-            <argument name="level" xsi:type="const">Monolog\Logger::DEBUG</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Monolog\Handler\Stream\Exception" type="Monolog\Handler\StreamHandler">
-        <arguments>
-            <argument name="stream" xsi:type="string">var/log/exception.log</argument>
-            <argument name="level" xsi:type="const">Monolog\Logger::CRITICAL</argument>
-        </arguments>
-    </virtualType>
     <type name="Monolog\Logger">
         <arguments>
             <argument name="name" xsi:type="string">main</argument>
             <argument name="handlers"  xsi:type="array">
-                <item name="exception" xsi:type="object">Monolog\Handler\Stream\Exception</item>
-                <item name="system" xsi:type="object">Monolog\Handler\Stream\System</item>
+                <item name="exception" xsi:type="object">Magento\Framework\Logger\Handler\Critical</item>
+                <item name="system" xsi:type="object">Magento\Framework\Logger\Handler\System</item>
             </argument>
         </arguments>
     </type>
