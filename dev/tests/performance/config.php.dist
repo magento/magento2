@@ -12,7 +12,7 @@ return array(
                 'language'                   => 'en_US',
                 'timezone'                   => 'America/Los_Angeles',
                 'currency'                   => 'USD',
-                'db_host'                    => 'localhost',
+                'db_host'                    => '127.0.0.1',
                 'db_name'                    => 'magento',
                 'db_user'                    => 'root',
                 'db_pass'                    => '',

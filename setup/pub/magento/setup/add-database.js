@@ -8,7 +8,7 @@ angular.module('add-database', ['ngStorage'])
         $scope.db = {
             useExistingDb: 1,
             useAccess: 1,
-            host: 'localhost',
+            host: '127.0.0.1',
             user: 'root',
             name: 'magento'
         };
