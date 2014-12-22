@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Minicart
@@ -222,13 +222,13 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-xs) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-xs) {
     .minicart-wrapper .block-minicart {
         width: 290px;
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .minicart-wrapper {
         margin-top: @indent-s-base;
     }
@@ -237,7 +237,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .minicart-wrapper {
         margin-left: 13px;
         .block-minicart {

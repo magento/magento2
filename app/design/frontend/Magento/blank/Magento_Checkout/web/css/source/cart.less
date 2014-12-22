@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Shopping cart
@@ -321,7 +321,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .cart {
         &.table-wrapper {
             thead {
@@ -361,7 +361,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .cart {
         &-container {
             &:extend(.abs-add-clearfix-desktop all);

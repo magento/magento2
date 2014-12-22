@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .bundle-actions {
     margin: 0 0 @indent-l-base;
@@ -165,7 +165,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .bundle-actions {
         .action.primary.customize {
             width: auto;

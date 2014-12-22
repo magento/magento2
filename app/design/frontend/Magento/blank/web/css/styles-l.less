@@ -1,8 +1,8 @@
-// /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
-//  */
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
 
-@import 'styles.less';
+@import "styles.less";
 
 //
 //    Magento Import instructions
@@ -13,22 +13,8 @@
 //@magento_import "source/extend.less"; // for minor customisation
 
 //
-//    Laptop styles collector
+//    Styles grouped by media queries
 //--------------------------------------
-
-.responsive-min-l(@break) {}
-
-@media all and (min-width: @screen-m),
-print {
-    .responsive-min-l(@screen-m);
-}
-
-@media all and (min-width: @screen-l),
-print {
-    .responsive-min-l(@screen-l);
-}
-
-@media all and (min-width: @screen-xl),
-print {
-    .responsive-min-l(@screen-xl);
-}
+@import "source/lib/responsive.less";
+@media-target: 'desktop'; // Sets target device for this file
+@media-common: false; // Sets not to output common styles

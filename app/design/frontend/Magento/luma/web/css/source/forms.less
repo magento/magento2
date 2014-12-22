@@ -9,7 +9,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .fieldset {
     .form-fieldset();
@@ -138,7 +138,7 @@ select:focus ~ .tooltip .tooltip-content {
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .legend {
         .css(border-bottom, @legend-border-bottom);
     }

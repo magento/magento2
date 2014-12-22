@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .data.switch .counter {
     .css(color, @text-color-muted);
@@ -200,7 +200,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .review {
         &-form {
             max-width: 500px;
@@ -242,7 +242,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .data.table.reviews {
     .rating-summary {
@@ -291,7 +291,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .product-reviews-summary {
         margin-bottom: @indent-s-base + @indent-xs-base;
         .products.wrapper.list & {
@@ -309,7 +309,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Account
@@ -356,7 +356,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .account {
         .table-reviews {
             .col.actions {
@@ -369,7 +369,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .block-reviews-dashboard {
         .product-name {
             &:extend(.abs-account-block-font-size all);
@@ -381,7 +381,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .customer-review {
     .product-details {
@@ -434,7 +434,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .customer-review {
         .product-name {
             .css(margin-bottom, @indent-xs-base);
@@ -451,7 +451,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .customer-review {
         .product-details {
             &:extend(.abs-margin-for-blocks-and-widgets-desktop all);

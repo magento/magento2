@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .table-wrapper {
     margin-bottom: @indent-base;
@@ -42,7 +42,7 @@ table {
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .table-wrapper {
         border-top: @table-border-width @table-border-style @table-border-color;
         .table-overflow();
@@ -101,7 +101,7 @@ table {
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .table {
         .table-bordered(
             @_table_type: horizontal_body

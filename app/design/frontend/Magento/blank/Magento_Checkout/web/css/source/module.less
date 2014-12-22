@@ -11,7 +11,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    One Page Checkout
@@ -361,7 +361,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .opc-wrapper {
         table.data.table {
             &:extend(.abs-checkout-order-review all);
@@ -372,7 +372,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .checkout-onepage-index .column.main {
         &:extend(.abs-add-clearfix-desktop-s all);
     }

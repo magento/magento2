@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .panel.header {
     .links,
@@ -42,7 +42,7 @@
 //    Mobile
 //--------------------------------------
 @active-nav-indent: 54px;
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .navigation {
         padding: 0;
         .parent .level-top {
@@ -226,7 +226,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .nav-toggle {
         display: none;
     }

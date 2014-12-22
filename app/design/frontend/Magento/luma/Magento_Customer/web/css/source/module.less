@@ -10,7 +10,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .login-container {
     .block {
@@ -180,7 +180,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .login-container {
         &:extend(.abs-add-clearfix-desktop all);
         .block {
@@ -298,7 +298,7 @@
 //
 //    Mobile @screen-s
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .account {
         .column.main,
         .sidebar-additional {
@@ -313,7 +313,7 @@
 //
 //    Mobile @screen-m
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .login-container {
         .fieldset {
             &:after {

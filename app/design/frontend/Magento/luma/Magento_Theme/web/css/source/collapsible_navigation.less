@@ -14,7 +14,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Collapsible navigation
@@ -40,7 +40,7 @@
             text-decoration: none;
             &:hover {
                 .css(background, @collapsible-nav-item-hover);
-            } 
+            }
         }
         &.current {
             a,
@@ -62,7 +62,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .block-collapsible-nav {
         .title {
             &:extend(.abs-visually-hidden-desktop all);
@@ -73,7 +73,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .block-collapsible-nav {
         position: absolute;
         top: -21px;

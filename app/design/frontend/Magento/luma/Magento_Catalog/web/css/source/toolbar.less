@@ -13,7 +13,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .page-products .columns {
     position: relative;
@@ -119,13 +119,13 @@
 //    Mobile
 //--------------------------------------
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .toolbar-products {
         margin-bottom: 0;
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .page-products .columns {
         position: relative;
         z-index: 1;

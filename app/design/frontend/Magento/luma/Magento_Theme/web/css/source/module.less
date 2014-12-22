@@ -58,7 +58,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 body {
     .css(background-color, @page-bg-color);
@@ -286,7 +286,7 @@ body {
 //
 //    Navigation
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .customer-name,
     .customer-welcome + .authorization-link {
         display: none;
@@ -336,7 +336,7 @@ body {
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .logo {
         margin-top: 4px;
         margin-bottom: 13px;
@@ -347,7 +347,7 @@ body {
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Layered navigation
@@ -378,7 +378,7 @@ body {
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
 
     html,
     body {
@@ -582,7 +582,7 @@ body {
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .no-display {
     &:extend(.abs-no-display all);

@@ -36,7 +36,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Category view
@@ -389,7 +389,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .catalog-product-view {
         .column.main {
             .vendor-prefix-display(flex);
@@ -417,7 +417,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .product-info-main,
     .product-options-bottom {
         .box-tocart {
@@ -473,7 +473,7 @@
 //
 //    Desktop large
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-xl) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-xl) {
     .sidebar {
         .product-items {
             .product-item {
@@ -497,7 +497,7 @@
 //
 //    Category page layout
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .product-info-main {
         float: right;
     }
@@ -529,7 +529,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Minimum Advertising Price

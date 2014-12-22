@@ -2,50 +2,63 @@
 //  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 //  */
 
-//    Common styles collector
-//--------------------------------------
+//
+//    Media variables, that can be used for splitting styles into several files
+//------------------------------------------------------------------------------
 
-.responsive-common() {}
-.responsive-common();
+@media-common: true; // Sets whether to output common styles  (true|false)
+@media-target: all; // Sets target device for styles output (all|desktop|mobile)
 
-//    Mobile styles collector
-//--------------------------------------
+//
+//    Media width mixin used to group styles output based on media queries
+//------------------------------------------------------------------------------
 
-.responsive-max-m(@break) {}
-.responsive-min-m(@break) {}
-
-@media only screen and (max-width: (@screen-xs - 1)) {
-    .responsive-max-m(@screen-xs);
+.media-width(@extremum, @break) when (@extremum = 'max')
+                                and  (@break = @screen-s) {
 }
 
-@media only screen and (max-width: (@screen-s - 1)) {
-    .responsive-max-m(@screen-s);
+//
+//    Style groups for 'mobile' devices
+//------------------------------------------------------------------------------
+
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+
+    @media only screen and (max-width: (@screen-xs - 1)) {
+        .media-width('max', @screen-xs);
+    }
+
+    @media only screen and (max-width: (@screen-s - 1)) {
+        .media-width('max', @screen-s);
+    }
+
+    @media only screen and (max-width: (@screen-m - 1)) {
+        .media-width('max', @screen-m);
+    }
+
+    @media all and (min-width: @screen-s) {
+        .media-width('min', @screen-s);
+    }
+
 }
 
-@media only screen and (max-width: (@screen-m - 1)) {
-    .responsive-max-m(@screen-m);
-}
+//
+//    Style groups for 'desktop' devices
+//------------------------------------------------------------------------------
 
-@media all and (min-width: @screen-s) {
-    .responsive-min-m(@screen-s);
-}
+& when (@media-target = 'desktop'), (@media-target = 'all') {
 
-//    Laptop styles collector
-//--------------------------------------
+    @media all and (min-width: @screen-m),
+    print {
+        .media-width('min', @screen-m);
+    }
 
-.responsive-min-l(@break) {}
+    @media all and (min-width: @screen-l),
+    print {
+        .media-width('min', @screen-l);
+    }
 
-@media all and (min-width: @screen-m),
-print {
-    .responsive-min-l(@screen-m);
-}
-
-@media all and (min-width: @screen-l),
-print {
-    .responsive-min-l(@screen-l);
-}
-
-@media all and (min-width: @screen-xl),
-print {
-    .responsive-min-l(@screen-xl);
+    @media all and (min-width: @screen-xl),
+    print {
+        .media-width('min', @screen-xl);
+    }
 }

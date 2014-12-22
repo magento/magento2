@@ -35,7 +35,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 body {
     .css(background-color, @page-bg-color);
@@ -219,7 +219,7 @@ body {
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
 
     html,
     body {
@@ -321,7 +321,7 @@ body {
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 
 .no-display {

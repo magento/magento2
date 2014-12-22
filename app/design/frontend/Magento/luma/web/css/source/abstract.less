@@ -104,7 +104,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-product-options-list-desktop {
         @abs-product-options-list();
     }
@@ -117,7 +117,7 @@
     .button-responsive();
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-button-desktop {
         width: auto;
     }
@@ -140,13 +140,13 @@
     }
 };
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-blocks-2columns {
         @abs-blocks-2columns();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-blocks-2columns-s {
         @abs-blocks-2columns();
     }
@@ -222,7 +222,7 @@
     margin-bottom: @indent-xl-base;
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-margin-for-blocks-and-widgets-desktop {
         margin-bottom: @indent-xl-base + @indent-s-base;
     }
@@ -274,13 +274,13 @@
     @abs-reset-left-margin();
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-reset-left-margin-desktop {
         @abs-reset-left-margin();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-reset-left-margin-desktop-s {
         @abs-reset-left-margin();
     }
@@ -302,7 +302,7 @@
 //
 //    Action with icon remove with text for desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-action-remove-desktop {
         margin-left: 90%;
     }
@@ -347,7 +347,7 @@
 //
 //    Add Recipient for desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-add-fields-desktop {
         .fieldset {
             .field {
@@ -367,7 +367,7 @@
 //
 //    Margin for forms
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-margin-for-forms-desktop {
         margin-left: @form-field-type-inline-label-width;
     }
@@ -395,25 +395,25 @@
     @abs-visually-hidden();
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-visually-hidden-mobile {
         @abs-visually-hidden();
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .abs-visually-hidden-mobile-m {
         @abs-visually-hidden();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-visually-hidden-desktop-s {
         @abs-visually-hidden();
     }
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-visually-hidden-desktop {
         @abs-visually-hidden();
     }
@@ -430,25 +430,25 @@
     @abs-add-clearfix();
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-add-clearfix-desktop {
         @abs-add-clearfix();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-add-clearfix-desktop-s {
         @abs-add-clearfix();
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-add-clearfix-mobile {
         @abs-add-clearfix();
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .abs-add-clearfix-mobile-m {
         @abs-add-clearfix();
     }
@@ -465,13 +465,13 @@
     @abs-add-box-sizing();
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-add-box-sizing-desktop {
         @abs-add-box-sizing();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-add-box-sizing-desktop-s {
         @abs-add-box-sizing();
     }
@@ -480,7 +480,7 @@
 //
 //    Revert field type
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-revert-field-type-desktop {
         .fieldset {
             > .field,
@@ -542,13 +542,13 @@
     }
 };
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-form-field-column-2 {
         @abs-form-field-column-2();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-form-field-column-2-s {
         @abs-form-field-column-2();
     }
@@ -561,13 +561,13 @@
     .form-field-column-number(@_column-number: 1);
 };
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-form-field-revert-column-1 {
         @abs-form-field-revert-column-1();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-form-field-revert-column-1-s {
         @abs-form-field-revert-column-1();
     }
@@ -585,7 +585,7 @@
 //
 //    Checkout order review
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-checkout-order-review {
         tbody > tr {
             &:extend(.abs-add-clearfix-mobile all);
@@ -656,7 +656,7 @@
 //
 //    General pages forms
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-forms-general-desktop {
         max-width: 500px;
         .legend {
@@ -671,7 +671,7 @@
 //
 //    Revert side paddings
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-revert-side-paddings {
         padding-left: 0;
         padding-right: 0;
@@ -707,7 +707,7 @@
     );
 }
 
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .abs-toggling-title-mobile {
         @abs-toggling-title();
         border-bottom: @border-width-base solid @border-color-base;
@@ -786,7 +786,7 @@
 //
 //    Mobile checkout order product name
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-product-items-summary {
         tbody {
             .col {
@@ -840,7 +840,7 @@
 //
 //    Account pages: block font size
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-account-block-font-size {
         .font-size(16);
     }
@@ -856,12 +856,12 @@
 //
 //    Account pages: margin for table
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-account-table-margin-mobile {
         .css(margin-top, -@indent-base);
     }
 }
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-account-table-margin-desktop {
         .css(margin-top, -@indent-m-base);
     }
@@ -870,7 +870,7 @@
 //
 //    Account pages: table col actions
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-col-no-prefix {
         &:before {
             .visually-hidden();
@@ -903,13 +903,13 @@
     }
 };
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-action-print {
         @abs-action-print();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-action-print-s {
         @abs-action-print();
     }
@@ -1070,7 +1070,7 @@
     );
 }
 
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .abs-icon-add-mobile {
         .icon-font(
             @_icon-font-content: @icon-expand,
@@ -1112,13 +1112,13 @@
     @abs-no-display();
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-no-display-s {
         @abs-no-display();
     }
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-no-display-desktop {
         @abs-no-display();
     }
@@ -1137,7 +1137,7 @@
     vertical-align: top;
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-status-desktop {
         margin-top: 6px;
         padding: 5px 10px;
@@ -1164,7 +1164,7 @@
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-title-orders-mobile {
         .page-main {
             .page-title {
@@ -1180,7 +1180,7 @@
     }
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-title-orders-desktop {
         .page-main {
             .page-title {
@@ -1205,7 +1205,7 @@
     );
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-table-striped-mobile {
         > tbody > tr > td:last-child {
             border: 0;
@@ -1216,7 +1216,7 @@
 //
 //    Table bordered desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-table-bordered-desktop {
         .table-bordered(
             @_table_type: light,
@@ -1228,7 +1228,7 @@
 //
 //    Pager toolbar for non-catalog pages desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-pager-toolbar {
         position: relative;
         .toolbar-amount,
@@ -1281,7 +1281,7 @@
     }
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-shopping-cart-items-desktop {
         .layout-column(2, 1, @layout-column-checkout-main-width);
         &:extend(.abs-add-box-sizing-desktop all);
@@ -1293,7 +1293,7 @@
 //
 //    Remove top border
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-no-border-top {
         border-top: 0;
     }
@@ -1302,7 +1302,7 @@
 //
 //    Remove bottom border
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-no-border-bottom {
         border-bottom: 0;
     }

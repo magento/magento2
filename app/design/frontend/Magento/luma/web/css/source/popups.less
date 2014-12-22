@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 // Popup working with dropdown dialog
 .ui-dialog.popup {
@@ -53,7 +53,7 @@
 //    Mobile
 //--------------------------------------
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .popup .popup-content {
         .fieldset .actions-toolbar {
             .secondary {

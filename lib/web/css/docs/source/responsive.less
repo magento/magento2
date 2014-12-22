@@ -3,7 +3,7 @@
 //  */
 
 //  # Responsive
-//  Magento UI library provides a strong approach for working with media queries. It`s based on recursive call of <nobr><code>.responsive-max-m()</code></nobr> and <code>.responsive-min-l()</code> mixins defined anywhere in project but invoked in one place in <nobr><code>lib/web/css/source/lib/responsive.less</code></nobr>. That's why in the resulting styles.css we have every media query only ones and all the rules there, not a multiple calls for the same query.
+//  Magento UI library provides a strong approach for working with media queries. It`s based on recursive call of <nobr><code>.media-width()</code></nobr> mixin defined anywhere in project but invoked in one place in <nobr><code>lib/web/css/source/lib/responsive.less</code></nobr>. That's why in the resulting styles.css we have every media query only ones and all the rules there, not a multiple calls for the same query.
 //
 //
 //  To see the media queries work resize window to understand which breakpoint is applied.
@@ -16,7 +16,9 @@
 .example-responsive-block {
     padding: 10px;
 }
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max')
+                                and  (@break = @screen-m) {
+
     .example-responsive-block {
         background: #ffc;
     }
@@ -25,7 +27,9 @@
         font-weight: bold;
     }
 }
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min')
+                                and  (@break = @screen-m) {
+
     .example-responsive-block {
         background: #ccf;
     }
@@ -38,28 +42,16 @@
 
 //  # Responsive mixins usage
 //
-//  For gathering media queries you can use responsive mixin collectors
-//
-//  ## Common
-//  For common styles every time you want to add some styles you should write:
-//  ```css
-//  .responsive-common() {
-//      your styles
-//  }
-//  ```
-//  It will be complied to:
-//  ```css
-//      your styles
-//  ```
-//  ## Mobile
-//  Every time you want to add some mobile media queries you can use one of:
-//  ```css
-//  .responsive-max-m(@break) {}
-//  .responsive-min-m(@break) {}
-//  ```
+//  For grouping style rules in certain media queries .media-width() mixin used.
+// ```css
+// .media-width(<@extremum>, <@break>)
+// ```
+// * <nobr><code>@extremum</code></nobr>:  <code>max|min</code> - sets whether to use min-width or max-width in media query condition
+// * <nobr><code>@break</code></nobr>: <code>value</code> - sets the value of breakpoint to compare with in media query condition
 //  As example
 //  ```css
-//  .responsive-max-m(@break) when (@break = @screen-s) {
+//  .media-width(@extremum, @break) when (@extremum = 'max')
+//                                  and  (@break = @screen-s) {
 //      your styles
 //  }
 //  ```
@@ -69,40 +61,38 @@
 //      your styles
 //  }
 //  ```
-//  ## Desktop
-//  Every time you want to add some mobile media queries you can use:
 //
+//  # Media query style groups separation variables
+//
+// *<code>@media-common</code>: <code>true|false</code> - Sets whether to output common styles
+//  For common styles every time you want to add some styles you should write:
 //  ```css
-//  .responsive-min-l(@break)) {}
-//  ```
-//  As example
-//  ```css
-//  .responsive-min-l(@break) when (@break = @screen-m) {
+//  & when (@media-common = true) {
 //      your styles
 //  }
 //  ```
-//  will be compiled to
-//  ```css
-//  @media only screen and (min-width: 768px) {
-//      your styles
-//  }
-//  ```
+// *<code>@media-target</code>: <code>all|desktop|mobile</code> - Sets target device for styles output
+// & when (@media-target = 'mobile'), (@media-target = 'all') {
+//
+//     @media only screen and (max-width: (@screen-xs - 1)) {
+//         .media-width('max', @screen-xs);
+//     }
+// }
 //  ## Gathering
 //  Everything that you include in collector mixins above will go in place where they declarated.
 //  As example all
 //  ```css
-//  .responsive-min-l(@break)) {
+//  .media-width(@extremum, @break) {
 //      your code
 //  }
 //  ```
 //  Will go to
 //  ```css
-//  .responsive-min-l(@break));
+//  .media-width(@extremum, @break));
 //  ```
 //  By default you can find it responsive.less file in lib
 //
 //  &nbsp;
-
 //  # Responsive breakpoints
 //  In Magento UI library there are predefined variables for breakpoints.
 //  ```css
