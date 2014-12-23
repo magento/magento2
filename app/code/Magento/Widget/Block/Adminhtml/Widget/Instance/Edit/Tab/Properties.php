@@ -14,6 +14,11 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
+     * Widget config parameter
+     */
+    const WIDGET_PARAMETER = 'template';
+
+    /**
      * Prepare label for tab
      *
      * @return string
@@ -46,11 +51,19 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Returns status flag about this tab hidden or not
      *
-     * @return true
+     * @return bool
      */
     public function isHidden()
     {
-        return false;
+        $parameters = $this->getWidgetInstance()->getWidgetConfigAsArray()['parameters'];
+
+        foreach ($parameters as $key => $parameter) {
+            if ($parameter['visible'] == 1 && $key != self::WIDGET_PARAMETER) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
