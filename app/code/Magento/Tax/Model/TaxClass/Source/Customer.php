@@ -68,7 +68,7 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
                 ];
             }
             if (empty($options)) {
-                throw new StateException('Customer tax class cannot does not exist.');
+                throw new StateException('At least one customer tax class should be present.');
             }
             $this->_options = $options;
         }
