@@ -247,18 +247,20 @@
         }
     }
     .product-item-inner {
-        display: none;
-        position: absolute;
-        left: 0;
-        right: -1px;
-        z-index: 2;
-        background: @color-white;
-        padding: 0 9px 9px 9px;
-        margin: 9px 0 0 -1px;
-        border: 1px solid #bbb;
-        border-top: none;
-        @_shadow: 3px 4px 4px 0 rgba(0, 0, 0, .3);
-        .css(box-shadow, @_shadow);
+        .products-grid & {
+            display: none;
+            position: absolute;
+            left: 0;
+            right: -1px;
+            z-index: 2;
+            background: @color-white;
+            padding: 0 9px 9px 9px;
+            margin: 9px 0 0 -1px;
+            border: 1px solid #bbb;
+            border-top: none;
+            @_shadow: 3px 4px 4px 0 rgba(0, 0, 0, .3);
+            .css(box-shadow, @_shadow);
+        }
     }
 
     .product-item-actions {
