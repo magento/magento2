@@ -7,7 +7,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
     <module name="Magento_Persistent" schema_version="2.0.0">
         <sequence>
-            <module name="Magento_PageCache"/>
             <module name="Magento_Checkout"/>
         </sequence>
     </module>
