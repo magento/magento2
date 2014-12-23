@@ -144,7 +144,6 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
                 );
 
                 $clearCondition = [
-//                    'entity_type_id =?' => $attribute->getEntityTypeId(),
                     'attribute_id =?' => $attribute->getId(),
                     'entity_id IN (?)' => $select,
                 ];
