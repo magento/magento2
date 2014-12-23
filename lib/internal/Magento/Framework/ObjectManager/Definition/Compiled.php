@@ -58,7 +58,7 @@ abstract class Compiled implements \Magento\Framework\ObjectManager\DefinitionIn
     public function getParameters($className)
     {
         // if the definition isn't found in the list gathered from the compiled file then  using reflection to find it
-        if (!array_key_exists($className,$this->_definitions)) {
+        if (!array_key_exists($className, $this->_definitions)) {
             return $this->reader->getConstructor($className);
         }
 
