@@ -113,7 +113,11 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
         $result = $domConfig->validate($schemaFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
-            $message .= "{$error->message} Line: {$error->line}\n";
+            if (is_string($error)) {
+                $message .= "$error\n";
+            } else {
+                $message .= "{$error->message} Line: {$error->line}\n";
+            }
         }
         $this->assertTrue($result, $message);
     }
