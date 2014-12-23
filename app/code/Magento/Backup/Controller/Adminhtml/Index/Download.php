@@ -15,6 +15,11 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
     protected $resultRawFactory;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Backup\Factory $backupFactory
@@ -22,6 +27,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
      * @param \Magento\Backup\Model\BackupFactory $backupModelFactory
      * @param \Magento\Framework\App\MaintenanceMode $maintenanceMode
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -30,9 +36,8 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Backup\Model\BackupFactory $backupModelFactory,
         \Magento\Framework\App\MaintenanceMode $maintenanceMode,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-    )
-    {
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory) {
         parent::__construct(
             $context,
             $coreRegistry,
@@ -42,12 +47,13 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
             $maintenanceMode
         );
         $this->resultRawFactory = $resultRawFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
      * Download backup action
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return \Magento\Framework\Controller\AbstractResult
      */
     public function execute()
     {
@@ -57,8 +63,11 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
             $this->getRequest()->getParam('type')
         );
 
-        if (!$backup->getTime() || !$backup->exists()) {
-            return $this->_redirect('backup/*');
+        if (!$backup->getTime() || !$backup->exists() || true) {
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('backup/*');
+            return $resultRedirect;
         }
 
         $fileName = $this->_objectManager->get('Magento\Backup\Helper\Data')->generateBackupDownloadName($backup);
