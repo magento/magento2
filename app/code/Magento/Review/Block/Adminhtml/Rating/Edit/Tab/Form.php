@@ -77,6 +77,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Add rating fieldset to form
+     *
      * @return void
      */
     protected function addRatingFieldset()
@@ -104,6 +106,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Set rating data to form
+     *
      * @return void
      */
     protected function setRatingData()
@@ -126,6 +130,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Set rating codes to form
+     *
      * @param array $ratingCodes
      * @return void
      */
@@ -140,6 +146,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Set rating options to form
+     *
      * @return void
      */
     protected function setRatingOptions()
@@ -175,6 +183,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Add visibility fieldset to form
+     *
      * @return void
      */
     protected function addVisibilityFieldset()
@@ -209,6 +219,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Initialize form fieldset
+     *
      * @param string $formId
      * @param array $config
      * @return void
@@ -223,6 +235,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Get fieldset by form id
+     *
      * @return \Magento\Framework\Data\Form\Element\Fieldset|null
      */
     protected function getFieldset($formId)
@@ -235,6 +249,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Prepare html output with the warning at the beginning
+     *
      * @return string
      */
     protected function _toHtml()
@@ -243,6 +259,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Get warning html code
+     *
      * @return string
      */
     protected function getWarningHtml()
