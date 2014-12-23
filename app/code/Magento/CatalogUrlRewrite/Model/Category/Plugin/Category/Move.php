@@ -6,7 +6,7 @@ namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
-use \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
+use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 
 class Move
 {
