@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Service\Quote
+     * @var \Magento\Quote\Model\Service\Quote
      */
     protected $_serviceQuote;
 
@@ -149,7 +149,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quoteFixture = $this->_prepareQuoteFixture($customerIsGuest);
         $quoteFixture->setCustomerEmail('admin@example.com');
         $this->_serviceQuote = Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Service\Quote',
+            'Magento\Quote\Model\Service\Quote',
             ['quote' => $quoteFixture]
         );
     }

@@ -181,7 +181,7 @@ class WriteService implements WriteServiceInterface
     public function order($cartId)
     {
         $quote = $this->quoteRepository->getActive($cartId);
-        /** @var \Magento\Sales\Model\Service\Quote $quoteService */
+        /** @var \Magento\Quote\Model\Service\Quote $quoteService */
         $quoteService = $this->quoteServiceFactory->create(['quote' => $quote]);
         $order = $quoteService->submitOrderWithDataObject();
         return $order->getId();

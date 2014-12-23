@@ -180,13 +180,13 @@ return [
     ['_sort', 'Magento\Backend\Model\Config\Structure\Converter'],
     [
         'submitOrder',
-        'Magento\Sales\Model\Service\Quote',
-        'Magento\Sales\Model\Service\Quote::submitOrderWithDataObject'
+        'Magento\Quote\Model\Service\Quote',
+        'Magento\Quote\Model\Service\Quote::submitOrderWithDataObject'
     ],
     [
         'submitAll',
-        'Magento\Sales\Model\Service\Quote',
-        'Magento\Sales\Model\Service\Quote::submitAllWithDataObject'
+        'Magento\Quote\Model\Service\Quote',
+        'Magento\Quote\Model\Service\Quote::submitAllWithDataObject'
     ],
     [
         'exportCustomerAddress',

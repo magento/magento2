@@ -412,7 +412,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     public function testOrder()
     {
         $cartId = 123;
-        $quoteService = $this->getMock('Magento\Sales\Model\Service\Quote', [], [], '', false);
+        $quoteService = $this->getMock('Magento\Quote\Model\Service\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)
             ->will($this->returnValue($this->quoteMock));
         $this->quoteServiceFactory->expects($this->once())->method('create')->with(['quote' => $this->quoteMock])

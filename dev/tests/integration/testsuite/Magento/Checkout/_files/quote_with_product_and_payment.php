@@ -15,5 +15,5 @@ $quote->collectTotals();
 $quote->save();
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$quoteService = $objectManager->create('Magento\Sales\Model\Service\Quote', ['quote' => $quote]);
+$quoteService = $objectManager->create('Magento\Quote\Model\Service\Quote', ['quote' => $quote]);
 $quoteService->getQuote()->getPayment()->setMethod('checkmo');

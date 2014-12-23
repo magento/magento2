@@ -66,9 +66,9 @@ $quote->collectTotals();
 $quote->save();
 
 $quote->setCustomerEmail('admin@example.com');
-/** @var $service \Magento\Sales\Model\Service\Quote */
+/** @var $service \Magento\Quote\Model\Service\Quote */
 $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Service\Quote',
+    'Magento\Quote\Model\Service\Quote',
     ['quote' => $quote]
 );
 $service->setOrderData(['increment_id' => '100000001']);

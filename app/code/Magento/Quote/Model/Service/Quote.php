@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Service;
+namespace Magento\Quote\Model\Service;
 
 /**
  * Class Quote

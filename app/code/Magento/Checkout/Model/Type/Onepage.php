@@ -917,7 +917,7 @@ class Onepage
                 break;
         }
 
-        /** @var \Magento\Sales\Model\Service\Quote $quoteService */
+        /** @var \Magento\Quote\Model\Service\Quote $quoteService */
         $quoteService = $this->_serviceQuoteFactory->create(['quote' => $this->getQuote()]);
         $quoteService->submitAllWithDataObject();
 

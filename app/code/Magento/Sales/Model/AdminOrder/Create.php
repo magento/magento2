@@ -1790,8 +1790,8 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $quote = $this->getQuote();
         $this->_prepareQuoteItems();
 
-        /** @var $service \Magento\Sales\Model\Service\Quote */
-        $service = $this->_objectManager->create('Magento\Sales\Model\Service\Quote', ['quote' => $quote]);
+        /** @var $service \Magento\Quote\Model\Service\Quote */
+        $service = $this->_objectManager->create('Magento\Quote\Model\Service\Quote', ['quote' => $quote]);
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
             $originalId = $oldOrder->getOriginalIncrementId();

@@ -13,7 +13,7 @@ use \Magento\Framework\App\State;
 use \Magento\Framework\Object;
 
 /**
- * Tests for Magento\Sales\Model\Service\Quote\Processor
+ * Tests for Magento\Quote\Model\Service\Quote\Processor
  */
 class ProcessorTest extends \PHPUnit_Framework_TestCase
 {

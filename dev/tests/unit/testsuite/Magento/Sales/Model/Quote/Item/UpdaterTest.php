@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Quote\Item;
 use Magento\TestFramework\Helper\ObjectManager;
 
 /**
- * Tests  for Magento\Sales\Model\Service\Quote\Updater
+ * Tests  for Magento\Quote\Model\Service\Quote\Updater
  *
  */
 class UpdaterTest extends \PHPUnit_Framework_TestCase
