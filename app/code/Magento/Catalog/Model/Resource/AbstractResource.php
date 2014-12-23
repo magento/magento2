@@ -256,7 +256,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
         $data = new \Magento\Framework\Object(
             [
-                'entity_type_id' => $attribute->getEntityTypeId(),
                 'attribute_id' => $attribute->getAttributeId(),
                 'store_id' => $storeId,
                 'entity_id' => $object->getEntityId(),
@@ -310,7 +309,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
                 $select = $this->_getReadAdapter()->select()
                     ->from($table)
-                    ->where('entity_type_id = ?', $attribute->getEntityTypeId())
                     ->where('attribute_id = ?', $attribute->getAttributeId())
                     ->where('store_id = ?', $this->getDefaultStoreId())
                     ->where('entity_id = ?', $object->getEntityId());
@@ -319,7 +317,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 if (!$row) {
                     $data = new \Magento\Framework\Object(
                         [
-                            'entity_type_id' => $attribute->getEntityTypeId(),
                             'attribute_id' => $attribute->getAttributeId(),
                             'store_id' => $this->getDefaultStoreId(),
                             'entity_id' => $object->getEntityId(),
@@ -365,12 +362,10 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $entityIdField = $attribute->getBackend()->getEntityIdField();
         $select = $adapter->select()
             ->from($table, 'value_id')
-            ->where('entity_type_id = :entity_type_id')
             ->where("$entityIdField = :entity_field_id")
             ->where('store_id = :store_id')
             ->where('attribute_id = :attribute_id');
         $bind = [
-            'entity_type_id' => $object->getEntityTypeId(),
             'entity_field_id' => $object->getId(),
             'store_id' => $storeId,
             'attribute_id' => $attribute->getId(),
@@ -387,7 +382,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         } else {
             $bind = [
                 $entityIdField => (int) $object->getId(),
-                'entity_type_id' => (int) $object->getEntityTypeId(),
                 'attribute_id' => (int) $attribute->getId(),
                 'value' => $this->_prepareValueForSave($value, $attribute),
                 'store_id' => (int) $storeId,
@@ -438,7 +432,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
         $condition = [
             $entityIdField . ' = ?' => $object->getId(),
-            'entity_type_id = ?' => $object->getEntityTypeId(),
         ];
 
         /**

@@ -238,16 +238,6 @@ class ProductAttributeDataBuilder extends \Magento\Framework\Api\Builder
     }
 
     /**
-     * @param string|null $entityTypeId
-     * @return $this
-     */
-    public function setEntityTypeId($entityTypeId)
-    {
-        $this->_set('entity_type_id', $entityTypeId);
-        return $this;
-    }
-
-    /**
      * @param bool $isRequired
      * @return $this
      */
