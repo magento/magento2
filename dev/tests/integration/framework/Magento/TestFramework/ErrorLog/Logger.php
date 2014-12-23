@@ -4,7 +4,7 @@
  */
 namespace Magento\TestFramework\ErrorLog;
 
-class Logger extends \Monolog\Logger
+class Logger extends \Magento\Framework\Logger\Monolog
 {
     /** @var array */
     protected $messages = [];
