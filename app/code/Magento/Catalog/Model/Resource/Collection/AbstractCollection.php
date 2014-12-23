@@ -97,6 +97,16 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     }
 
     /**
+     * {@inheritdoc}
+     * Redeclare method to disable entity_type_id filter
+     */
+    protected function _initSelect()
+    {
+        $this->getSelect()->from(['e' => $this->getEntity()->getEntityTable()]);
+        return $this;
+    }
+
+    /**
      * Return current store id
      *
      * @return int
@@ -132,39 +142,47 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $attributeIds = $this->_selectAttributes;
         }
         $storeId = $this->getStoreId();
+        $adapter = $this->getConnection();
+        $entityIdField = $this->getEntity()->getEntityIdField();
 
         if ($storeId) {
-            $adapter = $this->getConnection();
-            $entityIdField = $this->getEntity()->getEntityIdField();
             $joinCondition = [
                 't_s.attribute_id = t_d.attribute_id',
                 't_s.entity_id = t_d.entity_id',
                 $adapter->quoteInto('t_s.store_id = ?', $storeId),
             ];
+
             $select = $adapter->select()->from(
                 ['t_d' => $table],
                 [$entityIdField, 'attribute_id']
-            )->joinLeft(
-                ['t_s' => $table],
-                implode(' AND ', $joinCondition),
-                []
-            )->where(
-                't_d.entity_type_id = ?',
-                $this->getEntity()->getTypeId()
             )->where(
                 "t_d.{$entityIdField} IN (?)",
                 array_keys($this->_itemsById)
             )->where(
                 't_d.attribute_id IN (?)',
                 $attributeIds
+            )->joinLeft(
+                ['t_s' => $table],
+                implode(' AND ', $joinCondition),
+                []
             )->where(
                 't_d.store_id = ?',
                 $adapter->getIfNullSql('t_s.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
             );
         } else {
-            $select = parent::_getLoadAttributesSelect($table)->where('store_id = ?', $this->getDefaultStoreId());
+            $select = $adapter->select()->from(
+                $table,
+                [$entityIdField, 'attribute_id']
+            )->where(
+                "{$entityIdField} IN (?)",
+                array_keys($this->_itemsById)
+            )->where(
+                'attribute_id IN (?)',
+                $attributeIds
+            )->where(
+                'store_id = ?', $this->getDefaultStoreId()
+            );
         }
-
         return $select;
     }
 

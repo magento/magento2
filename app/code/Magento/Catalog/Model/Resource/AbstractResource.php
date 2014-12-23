@@ -653,4 +653,48 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $this->_attributes = [];
         return parent::load($object, $entityId, $attributes);
     }
+
+
+    /**
+     * @param \Magento\Framework\Object $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Object $object)
+    {
+        /**
+         * Direct deleted items to delete method
+         */
+        if ($object->isDeleted()) {
+            return $this->delete($object);
+        }
+        if (!$object->hasDataChanges()) {
+            return $this;
+        }
+        $this->beginTransaction();
+        try {
+            $object->validateBeforeSave();
+            $object->beforeSave();
+            if ($object->isSaveAllowed()) {
+                if (!$this->isPartialSave()) {
+                    $this->loadAllAttributes($object);
+                }
+
+                $object->setParentId((int)$object->getParentId());
+
+                $this->_beforeSave($object);
+                $this->_processSaveData($this->_collectSaveData($object));
+                $this->_afterSave($object);
+
+                $object->afterSave();
+            }
+            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
+            $object->setHasDataChanges(false);
+        } catch (\Exception $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw $e;
+        }
+        return $this;
+    }
 }
