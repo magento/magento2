@@ -164,11 +164,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 ->method('getItems')
                 ->willReturn($items);
             // checking exception
-            try {
-                $this->customer->getAllOptions();
-            } catch (\Exception $e) {
-                $this->assertInstanceOf('Magento\Framework\Exception\StateException', $e);
-            }
+            $this->assertEmpty($this->customer->getAllOptions());
         }
     }
 
@@ -181,7 +177,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['isEmpty' => false, 'expected' => [['value' => 10, 'label' => 'class-name']]],
-            ['isEmpty' => true, 'expected' => [['value' => '0', 'label' => __('None')]]]
+            ['isEmpty' => true, 'expected' => []]
         ];
     }
 }
