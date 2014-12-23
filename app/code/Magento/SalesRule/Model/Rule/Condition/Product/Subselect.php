@@ -133,17 +133,17 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     /**
      * Validate
      *
-     * @param \Magento\Framework\Object $object Quote
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
-    public function validate(\Magento\Framework\Object $object)
+    public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
         if (!$this->getConditions()) {
             return false;
         }
         $attr = $this->getAttribute();
         $total = 0;
-        foreach ($object->getQuote()->getAllVisibleItems() as $item) {
+        foreach ($model->getQuote()->getAllVisibleItems() as $item) {
             if (parent::validate($item)) {
                 $total += $item->getData($attr);
             }
