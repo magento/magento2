@@ -15,17 +15,14 @@ use Mtf\Fixture\InjectableFixture;
  */
 class AssertAddProductToWishlistSuccessMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Success add message
      */
     const SUCCESS_MESSAGE = "%s has been added to your wishlist. Click here to continue shopping.";
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that success message appears on My Wish List page after adding product to wishlist.

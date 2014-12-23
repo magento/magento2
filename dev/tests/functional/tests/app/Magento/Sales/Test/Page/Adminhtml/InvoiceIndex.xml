@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/invoice" module="Magento_Sales">
+    <blocks>
+        <invoicesGrid>
+            <class>Magento\Sales\Test\Block\Adminhtml\Invoice\Grid</class>
+            <locator>#sales_invoice_grid</locator>
+            <strategy>css selector</strategy>
+        </invoicesGrid>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+    </blocks>
+</page>

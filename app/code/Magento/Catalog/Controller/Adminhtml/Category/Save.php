@@ -185,12 +185,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             );
         }
 
+        $redirectParams = [
+            '_current' => true,
+            'id' => $category->getId()
+        ];
+        if ($storeId) {
+            $redirectParams['store'] = $storeId;
+        }
+
         return $resultRedirect->setPath(
             'catalog/*/edit',
-            [
-                '_current' => true,
-                'id' => $category->getId()
-            ]
+            $redirectParams
         );
     }
 }

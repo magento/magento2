@@ -14,14 +14,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertSitemapSuccessGenerateMessage extends AbstractConstraint
 {
-    const SUCCESS_GENERATE_MESSAGE = 'The sitemap "%s" has been generated.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const SUCCESS_GENERATE_MESSAGE = 'The sitemap "%s" has been generated.';
 
     /**
      * Assert that success message is displayed after sitemap generate

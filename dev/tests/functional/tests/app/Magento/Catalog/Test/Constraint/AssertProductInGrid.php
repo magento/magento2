@@ -15,12 +15,9 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductInGrid extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
     /**
      * Product fixture

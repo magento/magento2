@@ -16,12 +16,9 @@ use Mtf\Constraint\AbstractAssertForm;
  */
 class AssertGiftMessageInBackendOrder extends AbstractAssertForm
 {
-    /**
-     * Constraint severeness.
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
     /**
      * Skipped fields for verify data.

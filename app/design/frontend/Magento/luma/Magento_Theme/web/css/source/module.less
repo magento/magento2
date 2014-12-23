@@ -436,15 +436,19 @@ body {
             @_dropdown-toggle-active-icon-content: @icon-up,
             @_icon-font-text-hide: true,
             @_icon-font-size: 10px,
-            @_icon-font-line-height: 22px
+            @_icon-font-line-height: 22px,
+            @_dropdown-list-pointer-position: right,
+            @_dropdown-list-position-right: 0
         );
         .action.switch {
             .button-reset();
-            color: @color-white;
+            .css(color, @color-white);
+        }
+        .header.links {
+            min-width: 175px;
         }
         li {
             &:extend(.switcher li all);
-            min-width: 120px;
             a {
                 .link(
                       @_link-color: @color-gray20,

@@ -10,6 +10,8 @@ require([
 ], function(jQuery){
 
     var updater = new RegionUpdater('tax_country_id', 'tax_region', 'tax_region_id', <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>, 'disable');
+    updater.disableRegionValidation();
+
     (function ($) {
         $(document).ready(function () {
             'use strict';

@@ -13,7 +13,7 @@ use Magento\Framework\ObjectManager\Profiler\FactoryDecorator;
 abstract class AbstractEnvironment implements EnvironmentInterface
 {
     /**
-     * @var \Magento\Framework\Interception\ObjectManager\Config
+     * @var \Magento\Framework\Interception\ObjectManager\ConfigInterface
      */
     protected $config;
 

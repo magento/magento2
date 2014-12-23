@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="admin/integration/new" module="Magento_Integration">
+    <blocks>
+        <formPageActions>
+            <class>Magento\Integration\Test\Block\Adminhtml\Integration\Edit\IntegrationFormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </formPageActions>
+        <integrationForm>
+            <class>Magento\Integration\Test\Block\Adminhtml\Integration\Edit\IntegrationForm</class>
+            <locator>[id="page:main-container"]</locator>
+            <strategy>css selector</strategy>
+        </integrationForm>
+    </blocks>
+</page>

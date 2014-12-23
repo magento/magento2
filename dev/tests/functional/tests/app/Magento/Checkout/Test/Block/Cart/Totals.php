@@ -75,7 +75,7 @@ class Totals extends Block
      *
      * @var string
      */
-    protected $discount = '//tr[normalize-space(td)="Discount"]//span';
+    protected $discount = '//tr[normalize-space(th)="Discount"]//span';
 
     /**
      * Get shipping price including tax selector

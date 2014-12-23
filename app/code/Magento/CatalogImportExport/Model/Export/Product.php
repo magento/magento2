@@ -973,7 +973,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         $dataRow[self::COL_SKU] = null;
                         $dataRow[self::COL_ATTR_SET] = null;
                         $dataRow[self::COL_TYPE] = null;
-                        $dataRow[self::COL_VISIBILITY] = $productData[$defaultStoreId][self::COL_VISIBILITY];
+                        if (isset($productData[$defaultStoreId][self::COL_VISIBILITY])) {
+                            $dataRow[self::COL_VISIBILITY] = $productData[$defaultStoreId][self::COL_VISIBILITY];
+                        }
                     } else {
                         $dataRow[self::COL_STORE] = null;
                         if (isset($stockItemRows[$productId])) {

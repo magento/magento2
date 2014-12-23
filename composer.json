@@ -2,7 +2,7 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.1.0-alpha108",
+    "version": "0.42.0-beta1",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -29,7 +29,7 @@
         "zendframework/zend-serializer": "2.3.1",
         "zendframework/zend-log": "2.3.1",
         "zendframework/zend-http": "2.3.1",
-        "magento/zendframework1": "1.12.9",
+        "magento/zendframework1": "1.12.9-patch1",
         "composer/composer": "1.0.0-alpha8",
         "monolog/monolog": "1.11.0"
     },
@@ -53,7 +53,6 @@
     "replace": {
         "magento/module-admin-notification": "self.version",
         "magento/module-authorization": "self.version",
-        "magento/module-authorizenet": "self.version",
         "magento/module-backend": "self.version",
         "magento/module-backup": "self.version",
         "magento/module-bundle": "self.version",
@@ -102,10 +101,8 @@
         "magento/module-newsletter": "self.version",
         "magento/module-offline-payments": "self.version",
         "magento/module-offline-shipping": "self.version",
-        "magento/module-ogone": "self.version",
         "magento/module-page-cache": "self.version",
         "magento/module-payment": "self.version",
-        "magento/module-paypal": "self.version",
         "magento/module-persistent": "self.version",
         "magento/module-product-alert": "self.version",
         "magento/module-reports": "self.version",
@@ -198,7 +195,6 @@
         "psr-4": {
             "Magento\\Sniffs\\": "dev/tests/static/framework/Magento/Sniffs/",
             "Magento\\Tools\\": "dev/tools/Magento/Tools/",
-            "Magento\\Tools\\License\\": "dev/build/publication/license/",
             "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/",
             "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/",

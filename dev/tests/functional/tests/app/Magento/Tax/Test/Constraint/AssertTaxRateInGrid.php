@@ -14,12 +14,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertTaxRateInGrid extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
     /**
      * Assert tax rule availability in Tax Rate grid

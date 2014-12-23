@@ -15,17 +15,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertChildProductsInGrid extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Default status visibility on child products
      */
     const NOT_VISIBLE_INDIVIDUALLY = 'Not Visible Individually';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that child products generated during configurable product are present in products grid

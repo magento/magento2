@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="reviews.tab">
+            <block class="Magento\Review\Block\Form\Configure" name="product.review.form" as="review_form">
+                <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

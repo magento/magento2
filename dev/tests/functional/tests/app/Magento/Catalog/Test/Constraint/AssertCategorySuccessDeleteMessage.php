@@ -14,17 +14,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertCategorySuccessDeleteMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Message that displayed after delete url rewrite
      */
     const SUCCESS_DELETE_MESSAGE = 'You deleted the category.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that after delete a category "You deleted the category." successful message appears

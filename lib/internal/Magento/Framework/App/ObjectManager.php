@@ -21,9 +21,6 @@ class ObjectManager extends \Magento\Framework\ObjectManager\ObjectManager
     /**
      * Retrieve object manager
      *
-     * TODO: Temporary solution for serialization, should be removed when Serialization problem is resolved
-     *
-     * @deprecated
      * @return ObjectManager
      * @throws \RuntimeException
      */

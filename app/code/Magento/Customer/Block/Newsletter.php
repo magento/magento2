@@ -62,6 +62,6 @@ class Newsletter extends \Magento\Customer\Block\Account\Dashboard
      */
     public function getAction()
     {
-        return $this->getUrl('*/*/save');
+        return $this->getUrl('newsletter/manage/save');
     }
 }

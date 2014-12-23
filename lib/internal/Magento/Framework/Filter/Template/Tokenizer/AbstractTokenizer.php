@@ -75,7 +75,7 @@ abstract class AbstractTokenizer
      */
     public function setString($value)
     {
-        $this->_string = $value;
+        $this->_string = urldecode($value);
         $this->reset();
     }
 

@@ -125,7 +125,7 @@ class RequestGenerator
         $productAttributes = $this->productAttributeCollectionFactory->create();
         $productAttributes->addFieldToFilter(
             ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable'],
-            [1, 1, 1]
+            [1, 1, [1, 2]]
         );
 
         return $productAttributes;

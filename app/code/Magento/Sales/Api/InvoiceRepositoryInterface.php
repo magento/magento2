@@ -5,37 +5,41 @@
 namespace Magento\Sales\Api;
 
 /**
- * Interface RepositoryInterface
+ * Invoice repository interface.
+ *
+ * An invoice is a record of the receipt of payment for an order.
  */
 interface InvoiceRepositoryInterface
 {
     /**
-     * @param \Magento\Framework\Api\SearchCriteria $criteria
-     * @return \Magento\Sales\Api\Data\InvoiceSearchResultInterface
+     * Lists invoices that match specified search criteria.
+     *
+     * @param \Magento\Framework\Api\SearchCriteria $criteria The search criteria.
+     * @return \Magento\Sales\Api\Data\InvoiceSearchResultInterface Invoice search result interface.
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $criteria);
 
     /**
-     * Load entity
+     * Loads a specified invoice.
      *
-     * @param int $id
-     * @return \Magento\Sales\Api\Data\InvoiceInterface
+     * @param int $id The invoice ID.
+     * @return \Magento\Sales\Api\Data\InvoiceInterface Invoice interface.
      */
     public function get($id);
 
     /**
-     * Delete entity
+     * Deletes a specified invoice.
      *
-     * @param \Magento\Sales\Api\Data\InvoiceInterface $entity
+     * @param \Magento\Sales\Api\Data\InvoiceInterface $entity The invoice.
      * @return bool
      */
     public function delete(\Magento\Sales\Api\Data\InvoiceInterface $entity);
 
     /**
-     * Perform persist operations for one entity
+     * Performs persist operations for a specified invoice.
      *
-     * @param \Magento\Sales\Api\Data\InvoiceInterface $entity
-     * @return \Magento\Sales\Api\Data\InvoiceInterface
+     * @param \Magento\Sales\Api\Data\InvoiceInterface $entity The invoice.
+     * @return \Magento\Sales\Api\Data\InvoiceInterface Invoice interface.
      */
     public function save(\Magento\Sales\Api\Data\InvoiceInterface $entity);
 }

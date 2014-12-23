@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="catalog_rule/promo_catalog/new" module="Magento_CatalogRule">
+    <blocks>
+        <formPageActions>
+            <class>Magento\CatalogRule\Test\Block\Adminhtml\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </formPageActions>
+        <editForm>
+            <class>Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\PromoForm</class>
+            <locator>[id="page:main-container"]</locator>
+            <strategy>css selector</strategy>
+        </editForm>
+    </blocks>
+</page>

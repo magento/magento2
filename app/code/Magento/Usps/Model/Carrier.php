@@ -60,14 +60,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_code = self::CODE;
 
     /**
-     * Destination Zip Code required flag
-     *
-     * @var boolean
-     * @deprecated since 1.7.0 functionality implemented in \Magento\Shipping\Model\Carrier\AbstractCarrierOnline
-     */
-    protected $_isZipCodeRequired;
-
-    /**
      * Rate request data
      *
      * @var \Magento\Sales\Model\Quote\Address\RateRequest|null

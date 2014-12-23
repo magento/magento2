@@ -34,6 +34,7 @@
                         <argument name="header" xsi:type="string" translate="true">Product</argument>
                         <argument name="id" xsi:type="string">product_name</argument>
                         <argument name="index" xsi:type="string">product_name</argument>
+                        <argument name="filter" xsi:type="string">Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text</argument>
                         <argument name="renderer" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item</argument>
                         <argument name="column_css_class" xsi:type="string">col-name</argument>
                         <argument name="header_css_class" xsi:type="string">col-name</argument>
@@ -109,5 +110,6 @@
                 </arguments>
             </block>
         </block>
+        <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Configure" template="Magento_Catalog::catalog/product/composite/configure.phtml" name="configure.popup"/>
     </container>
 </layout>

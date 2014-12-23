@@ -11,41 +11,40 @@ class DbStatusValidatorTest extends \Magento\TestFramework\TestCase\AbstractCont
         $this->dispatch('index/index');
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     * @expectedException \Magento\Framework\Module\Exception
+     * @expectedExceptionMessage Please update your database
+     */
     public function testValidationOutdatedDb()
     {
-        $resourceName = 'adminnotification_setup';
-        /*reset versions*/
-        /** @var \Magento\Framework\Module\ResourceInterface $resource */
-        $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Module\ResourceInterface'
-        );
-        $dbVersion = $resource->getDbVersion($resourceName);
-        $dbDataVersion = $resource->getDataVersion($resourceName);
-        try {
-            $resource->setDbVersion($resourceName, '0.1');
-            $resource->setDataVersion($resourceName, '0.1');
-            /** @var \Magento\Framework\Cache\FrontendInterface $cache */
-            $cache = $this->_objectManager->get('Magento\Framework\App\Cache\Type\Config');
-            $cache->clean();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-            try {
-                /* This triggers plugin to be executed */
-                $this->dispatch('index/index');
-            } catch (\Magento\Framework\Module\Exception $e) {
-                if ($e->getMessage() != 'Looks like database is outdated. Please, use setup tool to perform update') {
-                    $failureMessage = "DB status validation doesn't work properly. Caught exception message is '"
-                        . $e->getMessage() . "'";
-                }
+        /** @var \Magento\Framework\Module\ModuleListInterface $moduleList */
+        $moduleList = $objectManager->get('Magento\Framework\Module\ModuleListInterface');
+
+        /** @var \Magento\Framework\Module\ResourceResolverInterface $resourceResolver */
+        $resourceResolver = $objectManager->get('\Magento\Framework\Module\ResourceResolverInterface');
+
+        // get first resource, we don't care which one it is.
+        foreach ($moduleList->getNames() as $moduleName) {
+            if ($resourceList = $resourceResolver->getResourceList($moduleName)) {
+                $resourceName = $resourceList[0];
+                break;
             }
-        } catch (\Exception $e) {
-            $failureMessage = "Impossible to continue other tests, because database is broken: {$e}";
         }
 
-        $resource->setDbVersion($resourceName, $dbVersion);
-        $resource->setDataVersion($resourceName, $dbDataVersion);
+        // Prepend '0.' to DB Version, to cause it to be an older version
+        /** @var \Magento\Framework\Module\ResourceInterface $resource */
+        $resource = $objectManager->create('Magento\Framework\Module\ResourceInterface');
+        $currentDbVersion = $resource->getDbVersion($resourceName);
+        $resource->setDbVersion($resourceName, '0.' . $currentDbVersion);
 
-        if (isset($failureMessage)) {
-            $this->fail($failureMessage);
-        }
+        /** @var \Magento\Framework\Cache\FrontendInterface $cache */
+        $cache = $this->_objectManager->get('Magento\Framework\App\Cache\Type\Config');
+        $cache->clean();
+
+        /* This triggers plugin to be executed */
+        $this->dispatch('index/index');
     }
 }

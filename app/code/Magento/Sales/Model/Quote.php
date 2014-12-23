@@ -746,7 +746,6 @@ class Quote extends \Magento\Framework\Model\AbstractModel
             ->setAddresses($addresses)
             ->create();
         $this->setCustomer($customer);
-
         return $this;
     }
 

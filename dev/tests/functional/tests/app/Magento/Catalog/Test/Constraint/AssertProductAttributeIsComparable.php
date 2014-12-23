@@ -17,12 +17,9 @@ use Mtf\Fixture\InjectableFixture;
  */
 class AssertProductAttributeIsComparable extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Check whether there is an opportunity to compare products using given attribute.

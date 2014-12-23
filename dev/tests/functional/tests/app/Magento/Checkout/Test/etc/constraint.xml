@@ -6,51 +6,51 @@
 -->
 <constraint>
     <assertCartIsEmpty module="Magento_Checkout">
-        <severeness>middle</severeness>
+        <severity>middle</severity>
     </assertCartIsEmpty>
     <assertPriceInShoppingCart module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertPriceInShoppingCart>
     <assertProductQtyInShoppingCart module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductQtyInShoppingCart>
     <assertProductQtyInMiniShoppingCart module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductQtyInMiniShoppingCart>
     <assertSubtotalInShoppingCart module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertSubtotalInShoppingCart>
     <assertOrderSuccessPlacedMessage module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertOrderSuccessPlacedMessage>
     <assertOrderTotalOnReviewPage module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertOrderTotalOnReviewPage>
     <assertGrandTotalInShoppingCart module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertGrandTotalInShoppingCart>
     <assertCartItemsOptions module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCartItemsOptions>
     <assertProductAbsentInMiniShoppingCart module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductAbsentInMiniShoppingCart>
     <assertProductPresentInMiniShoppingCart module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductPresentInMiniShoppingCart>
     <assertAddedProductToCartSuccessMessage module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertAddedProductToCartSuccessMessage>
     <assertProductPresentInShoppingCart module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductPresentInShoppingCart>
     <assertProductIsNotEditable module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductIsNotEditable>
     <assertProductsAbsentInShoppingCart module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductsAbsentInShoppingCart>
     <assertProductOptionsAbsentInShoppingCart module="Magento_Checkout">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertProductOptionsAbsentInShoppingCart>
 </constraint>

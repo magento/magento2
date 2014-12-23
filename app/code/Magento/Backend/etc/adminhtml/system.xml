@@ -401,7 +401,7 @@
                 <field id="password_reset_link_expiration_period" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Recovery Link Expiration Period (days)</label>
                     <comment>Please enter a number 1 or greater in this field.</comment>
-                    <validate>required-entry validate-digits validate-digits-range digits-range-1-</validate>
+                    <validate>required-entry integer validate-greater-than-zero</validate>
                     <backend_model>Magento\Backend\Model\Config\Backend\Admin\Password\Link\Expirationperiod</backend_model>
                 </field>
             </group>

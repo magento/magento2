@@ -4,6 +4,8 @@
  */
 namespace Magento\Framework\Module\Plugin;
 
+use Magento\Framework\Module\DbVersionInfo;
+
 class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -41,6 +43,11 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private $moduleManager;
 
+    /**
+     * @var \Magento\Framework\Module\DbVersionInfo|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dbVersionInfoMock;
+
     protected function setUp()
     {
         $this->_cacheMock = $this->getMock('\Magento\Framework\Cache\FrontendInterface');
@@ -61,11 +68,10 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
                 return ['resource_' . $moduleName];
             }));
         $this->moduleManager = $this->getMock('\Magento\Framework\Module\Manager', [], [], '', false);
+        $this->dbVersionInfoMock = $this->getMock('\Magento\Framework\Module\DbVersionInfo', [], [], '', false);
         $this->_model = new DbStatusValidator(
             $this->_cacheMock,
-            $moduleList,
-            $resourceResolver,
-            $this->moduleManager
+            $this->dbVersionInfoMock
         );
     }
 
@@ -109,26 +115,24 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $schemaValueMap
-     * @param array $dataValueMap
+     * @param array $dbVersionErrors
      *
      * @dataProvider aroundDispatchExceptionDataProvider
      * @expectedException \Magento\Framework\Module\Exception
-     * @expectedExceptionMessage Looks like database is outdated. Please, use setup tool to perform update
+     * @expectedExceptionMessage Please update your database:
      */
-    public function testAroundDispatchException(array $schemaValueMap, array $dataValueMap)
+    public function testAroundDispatchException(array $dbVersionErrors)
     {
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('db_is_up_to_date')
             ->will($this->returnValue(false));
         $this->_cacheMock->expects($this->never())->method('save');
-        $this->moduleManager->expects($this->any())
-            ->method('isDbSchemaUpToDate')
-            ->will($this->returnValueMap($schemaValueMap));
-        $this->moduleManager->expects($this->any())
-            ->method('isDbDataUpToDate')
-            ->will($this->returnValueMap($dataValueMap));
+
+        $this->dbVersionInfoMock->expects($this->any())
+            ->method('getDbVersionErrors')
+            ->will($this->returnValue($dbVersionErrors));
+
         $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock);
     }
 
@@ -140,32 +144,50 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
         return [
             'schema is outdated' => [
                 [
-                    ['Module_One', 'resource_Module_One', false],
-                    ['Module_Two', 'resource_Module_Two', true],
-                ],
-                [
-                    ['Module_One', 'resource_Module_One', true],
-                    ['Module_Two', 'resource_Module_Two', true],
+                     [
+                         DbVersionInfo::KEY_MODULE => 'Module_One',
+                         DbVersionInfo::KEY_TYPE => 'schema',
+                         DbVersionInfo::KEY_CURRENT => 'none',
+                         DbVersionInfo::KEY_REQUIRED => '1'
+                     ]
                 ],
             ],
             'data is outdated' => [
                 [
-                    ['Module_One', 'resource_Module_One', true],
-                    ['Module_Two', 'resource_Module_Two', true],
-                ],
-                [
-                    ['Module_One', 'resource_Module_One', true],
-                    ['Module_Two', 'resource_Module_Two', false],
+                     [
+                         DbVersionInfo::KEY_MODULE => 'Module_Two',
+                         DbVersionInfo::KEY_TYPE => 'data',
+                         DbVersionInfo::KEY_CURRENT => 'none',
+                         DbVersionInfo::KEY_REQUIRED => '1'
+                     ]
                 ],
             ],
             'both schema and data are outdated' => [
                 [
-                    ['Module_One', 'resource_Module_One', false],
-                    ['Module_Two', 'resource_Module_Two', false],
-                ],
-                [
-                    ['Module_One', 'resource_Module_One', false],
-                    ['Module_Two', 'resource_Module_Two', false],
+                     [
+                         DbVersionInfo::KEY_MODULE => 'Module_One',
+                         DbVersionInfo::KEY_TYPE => 'schema',
+                         DbVersionInfo::KEY_CURRENT => 'none',
+                         DbVersionInfo::KEY_REQUIRED => '1'
+                     ],
+                     [
+                         DbVersionInfo::KEY_MODULE => 'Module_Two',
+                         DbVersionInfo::KEY_TYPE => 'schema',
+                         DbVersionInfo::KEY_CURRENT => 'none',
+                         DbVersionInfo::KEY_REQUIRED => '1'
+                     ],
+                     [
+                         DbVersionInfo::KEY_MODULE => 'Module_One',
+                         DbVersionInfo::KEY_TYPE => 'data',
+                         DbVersionInfo::KEY_CURRENT => 'none',
+                         DbVersionInfo::KEY_REQUIRED => '1'
+                     ],
+                     [
+                         DbVersionInfo::KEY_MODULE => 'Module_Two',
+                         DbVersionInfo::KEY_TYPE => 'data',
+                         DbVersionInfo::KEY_CURRENT => 'none',
+                         DbVersionInfo::KEY_REQUIRED => '1'
+                     ]
                 ],
             ],
         ];

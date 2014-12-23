@@ -34,6 +34,8 @@ use Mtf\TestCase\Injectable;
  *
  * @group Customer_Account_(CS)
  * @ZephyrId MAGETWO-25925
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateCustomerFrontendEntity extends Injectable
 {

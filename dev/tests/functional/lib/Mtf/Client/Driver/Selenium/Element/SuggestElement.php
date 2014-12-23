@@ -15,6 +15,11 @@ use Mtf\Client\Element\Locator;
 class SuggestElement extends Element
 {
     /**
+     * "Backspace" key code.
+     */
+    const BACKSPACE = "\xEE\x80\x83";
+
+    /**
      * Selector suggest input
      *
      * @var string
@@ -45,9 +50,23 @@ class SuggestElement extends Element
     {
         $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
-        $this->find($this->suggest)->setValue($value);
+        $this->clear();
+        $this->find($this->suggest)->_getWrappedElement()->value($value);
         $this->waitResult();
         $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Clear value of element.
+     *
+     * @return void
+     */
+    protected function clear()
+    {
+        $element = $this->find($this->suggest);
+        while ($element->getValue() != '') {
+            $element->keys([self::BACKSPACE]);
+        }
     }
 
     /**

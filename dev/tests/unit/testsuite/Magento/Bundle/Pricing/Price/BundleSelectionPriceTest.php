@@ -168,9 +168,10 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupSelectionPrice($useRegularPrice);
         $priceCode = $useRegularPrice ? RegularPrice::PRICE_CODE : FinalPrice::PRICE_CODE;
-        $regularPrice = 100;
-        $discountedPrice = 70;
-        $expectedPrice = $useRegularPrice ? $regularPrice : $discountedPrice;
+        $regularPrice = 100.125;
+        $discountedPrice = 70.453;
+        $actualPrice = $useRegularPrice ? $regularPrice : $discountedPrice;
+        $expectedPrice = $useRegularPrice ? round($regularPrice, 2) : round($discountedPrice, 2);
 
         $this->bundleMock->expects($this->once())
             ->method('getPriceType')
@@ -181,18 +182,23 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->finalPriceMock));
         $this->finalPriceMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($regularPrice));
+            ->will($this->returnValue($actualPrice));
 
         if (!$useRegularPrice) {
             $this->discountCalculatorMock->expects($this->once())
                 ->method('calculateDiscount')
                 ->with(
                     $this->equalTo($this->bundleMock),
-                    $this->equalTo($regularPrice)
+                    $this->equalTo($actualPrice)
                 )
                 ->will($this->returnValue($discountedPrice));
         }
-        $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
+
+        $this->priceCurrencyMock->expects($this->once())
+            ->method('round')
+            ->with($actualPrice)
+            ->will($this->returnValue($expectedPrice));
+
         $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
     }
 
@@ -205,9 +211,10 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
     public function testGetValueTypeFixedWithSelectionPriceType($useRegularPrice)
     {
         $this->setupSelectionPrice($useRegularPrice);
-        $regularPrice = 100;
-        $discountedPrice = 70;
-        $expectedPrice = $useRegularPrice ? $regularPrice : $discountedPrice;
+        $regularPrice = 100.125;
+        $discountedPrice = 70.453;
+        $actualPrice = $useRegularPrice ? $regularPrice : $discountedPrice;
+        $expectedPrice = $useRegularPrice ? round($regularPrice, 2) : round($discountedPrice, 2);
 
         $this->bundleMock->expects($this->once())
             ->method('getPriceType')
@@ -221,7 +228,7 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->regularPriceMock));
         $this->regularPriceMock->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($regularPrice));
+            ->will($this->returnValue($actualPrice));
         $this->bundleMock->expects($this->once())
             ->method('setFinalPrice')
             ->will($this->returnSelf());
@@ -229,7 +236,8 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch');
         $this->bundleMock->expects($this->exactly(2))
             ->method('getData')
-            ->will($this->returnValueMap(
+            ->will(
+                $this->returnValueMap(
                     [
                         ['qty', null, 1],
                         ['final_price', null, 100],
@@ -241,17 +249,23 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->productMock->expects($this->any())
             ->method('getSelectionPriceValue')
-            ->will($this->returnValue($regularPrice));
+            ->will($this->returnValue($actualPrice));
 
         if (!$useRegularPrice) {
             $this->discountCalculatorMock->expects($this->once())
                 ->method('calculateDiscount')
                 ->with(
                     $this->equalTo($this->bundleMock),
-                    $this->equalTo($regularPrice)
+                    $this->equalTo($actualPrice)
                 )
                 ->will($this->returnValue($discountedPrice));
         }
+
+        $this->priceCurrencyMock->expects($this->once())
+            ->method('round')
+            ->with($actualPrice)
+            ->will($this->returnValue($expectedPrice));
+
         $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
     }
 
@@ -264,10 +278,11 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
     public function testGetValueTypeFixedWithoutSelectionPriceType($useRegularPrice)
     {
         $this->setupSelectionPrice($useRegularPrice);
-        $regularPrice = 100;
-        $discountedPrice = 70;
-        $convertedValue = 100.02;
-        $expectedPrice = $useRegularPrice ? $convertedValue : $discountedPrice;
+        $regularPrice = 100.125;
+        $discountedPrice = 70.453;
+        $convertedValue = 100.247;
+        $actualPrice = $useRegularPrice ? $convertedValue : $discountedPrice;
+        $expectedPrice = $useRegularPrice ? round($convertedValue, 2) : round($discountedPrice, 2);
 
         $this->bundleMock->expects($this->once())
             ->method('getPriceType')
@@ -280,7 +295,7 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($regularPrice));
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('convertAndRound')
+            ->method('convert')
             ->with($regularPrice)
             ->will($this->returnValue($convertedValue));
 
@@ -293,6 +308,12 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
                 )
                 ->will($this->returnValue($discountedPrice));
         }
+
+        $this->priceCurrencyMock->expects($this->once())
+            ->method('round')
+            ->with($actualPrice)
+            ->will($this->returnValue($expectedPrice));
+
         $this->assertEquals($expectedPrice, $this->selectionPrice->getValue());
     }
 

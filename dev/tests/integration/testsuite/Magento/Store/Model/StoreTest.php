@@ -68,10 +68,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCookie()
     {
+        $model = $this->getMock('Magento\Store\Model\Store', ['getStorePath'], $this->modelParams);
+        $model->expects($this->once())
+            ->method('getStorePath')
+            ->will($this->returnValue('/'));
         $storeCode = 'store code';
         $this->assertArrayNotHasKey(Store::COOKIE_NAME, $_COOKIE);
-        $this->model->setCode($storeCode);
-        $this->model->setCookie();
+        $model->setCode($storeCode);
+        $model->setCookie();
         $this->assertEquals($storeCode, $_COOKIE[Store::COOKIE_NAME]);
     }
 
@@ -452,7 +456,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store web/secure/offloader_header SSL_OFFLOADED
-     * @magentoConfigFixture current_store web/secure/base_url
+     * @magentoConfigFixture current_store web/secure/base_url 
      */
     public function testIsCurrentlySecureNoSecureBaseUrl()
     {

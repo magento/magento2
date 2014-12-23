@@ -786,6 +786,10 @@ class Onepage
 
         $customer = $quote->getCustomer();
         $customerBillingData = $billing->exportCustomerAddress();
+        $dataArray = $this->_objectCopyService->getDataFromFieldset('checkout_onepage_quote', 'to_customer', $quote);
+        $customer = $this->_customerBuilder->mergeDataObjectWithArray($customer, $dataArray);
+        $quote->setCustomer($customer->create())->setCustomerId(true);
+
         $customerBillingData = $this->_addressBuilder->populate(
             $customerBillingData
         )->setDefaultBilling(
@@ -813,10 +817,6 @@ class Onepage
                 ->create();
         }
         $billing->setCustomerAddressData($customerBillingData);
-
-        $dataArray = $this->_objectCopyService->getDataFromFieldset('checkout_onepage_quote', 'to_customer', $quote);
-        $customer = $this->_customerBuilder->mergeDataObjectWithArray($customer, $dataArray);
-        $quote->setCustomer($customer->create())->setCustomerId(true);
         // TODO : Eventually need to remove this legacy hack
         // Add billing address to quote since customer Data Object does not hold address information
         $quote->addCustomerAddress($customerBillingData);

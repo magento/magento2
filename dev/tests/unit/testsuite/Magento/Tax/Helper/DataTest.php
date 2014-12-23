@@ -4,7 +4,8 @@
  */
 namespace Magento\Tax\Helper;
 
-use Magento\Sales\Model\Quote\Address;
+use Magento\Framework\Object as MagentoObject;
+use Magento\TestFramework\Event\Magento;
 
 /**
  * Class DataTest
@@ -32,6 +33,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrencyMock = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->helper = $objectManager->getObject(
             'Magento\Tax\Helper\Data',
             [
@@ -114,52 +116,79 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($itemPercent, $result[0]['percent']);
     }
 
-    public function testGetCalculatedTaxesForOrderItems()
+    /**
+     * Creat OrderTaxDetails mock from array of data
+     *
+     * @param $inputArray
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Api\Data\OrderTaxDetailsInterface
+     */
+    protected function mapOrderTaxItemDetail($inputArray)
     {
-        $orderId = 1;
-        $itemShippingTaxAmount = 1;
-        $orderShippingTaxAmount = 1;
-        $itemCode = 'test_code';
-        $itemAmount = 1;
-        $itemBaseAmount = 2;
-        $itemTitle = 'Test title';
-        $itemPercent = 0.1;
-        $failedTaxAmount = "0.00000";
-
-        $expectedAmount = 2;
-        $expectedBaseAmount = 4;
-
-        $orderDetailsItemNormal = $this->getMockBuilder('Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface')
-            ->disableOriginalConstructor()
+        $orderTaxItemDetailsMock = $this->getMockBuilder('\Magento\Tax\Api\Data\OrderTaxDetailsInterface')
             ->getMock();
-        $orderDetailsItemNormal->expects($this->once())
-            ->method('getCode')
-            ->willReturn($itemCode);
-        $orderDetailsItemNormal->expects($this->once())
-            ->method('getAmount')
-            ->willReturn($itemAmount);
-        $orderDetailsItemNormal->expects($this->once())
-            ->method('getBaseAmount')
-            ->willReturn($itemBaseAmount);
-        $orderDetailsItemNormal->expects($this->once())
-            ->method('getTitle')
-            ->willReturn($itemTitle);
-        $orderDetailsItemNormal->expects($this->once())
-            ->method('getPercent')
-            ->willReturn($itemPercent);
+        $itemMocks = [];
+        foreach ($inputArray['items'] as $orderTaxDetailsItemData) {
+            $itemId = isset($orderTaxDetailsItemData['item_id']) ? $orderTaxDetailsItemData['item_id'] : null;
+            $associatedItemId = isset($orderTaxDetailsItemData['associated_item_id'])
+                ? $orderTaxDetailsItemData['associated_item_id']
+                : null;
+            $itemType = isset($orderTaxDetailsItemData['type']) ? $orderTaxDetailsItemData['type'] : null;
+            $appliedTaxesData = $orderTaxDetailsItemData['applied_taxes'];
+            $appliedTaxesMocks = [];
+            foreach ($appliedTaxesData as $appliedTaxData) {
+                $appliedTaxesMock = $this->getMockBuilder('\Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface')
+                    ->getMock();
+                $appliedTaxesMock->expects($this->any())
+                    ->method('getAmount')
+                    ->will($this->returnValue($appliedTaxData['amount']));
+                $appliedTaxesMock->expects($this->any())
+                    ->method('getBaseAmount')
+                    ->will($this->returnValue($appliedTaxData['base_amount']));
+                $appliedTaxesMock->expects($this->any())
+                    ->method('getCode')
+                    ->will($this->returnValue($appliedTaxData['code']));
+                $appliedTaxesMock->expects($this->any())
+                    ->method('getTitle')
+                    ->will($this->returnValue($appliedTaxData['title']));
+                $appliedTaxesMock->expects($this->any())
+                    ->method('getPercent')
+                    ->will($this->returnValue($appliedTaxData['percent']));
+                $appliedTaxesMocks[] = $appliedTaxesMock;
+            }
+            $orderTaxDetailsItemMock = $this->getMockBuilder('\Magento\Tax\Api\Data\OrderTaxDetailsItemInterface')
+                ->getMock();
+            $orderTaxDetailsItemMock->expects($this->any())
+                ->method('getItemId')
+                ->will($this->returnValue($itemId));
+            $orderTaxDetailsItemMock->expects($this->any())
+                ->method('getAssociatedItemId')
+                ->will($this->returnValue($associatedItemId));
+            $orderTaxDetailsItemMock->expects($this->any())
+                ->method('getType')
+                ->will($this->returnValue($itemType));
+            $orderTaxDetailsItemMock->expects($this->any())
+                ->method('getAppliedTaxes')
+                ->will($this->returnValue($appliedTaxesMocks));
 
-        $orderDetailsItemZeroAmount = $this->getMockBuilder('Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderDetailsItemZeroAmount->expects($this->once())
-            ->method('getAmount')
-            ->willReturn(0);
-        $orderDetailsItemZeroAmount->expects($this->once())
-            ->method('getBaseAmount')
-            ->willReturn(0);
+            $itemMocks[] = $orderTaxDetailsItemMock;
+        }
+        $orderTaxItemDetailsMock->expects($this->any())
+            ->method('getItems')
+            ->will($this->returnValue($itemMocks));
 
-        $appliedTaxes = [$orderDetailsItemNormal, $orderDetailsItemZeroAmount];
+        return $orderTaxItemDetailsMock;
+    }
 
+    /**
+     * @dataProvider getCalculatedTaxesForOrderItemsDataProvider
+     */
+    public function testGetCalculatedTaxesForOrderItems($orderData, $invoiceData, $expectedResults)
+    {
+        $orderId = $orderData['order_id'];
+        $orderShippingTaxAmount = isset($orderData['shipping_tax_amount']) ? $orderData['shipping_tax_amount'] : 0;
+        $orderTaxDetails = $orderData['order_tax_details'];
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order $orderMock */
         $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
             ->getMock();
@@ -170,46 +199,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingTaxAmount')
             ->willReturn($orderShippingTaxAmount);
 
-        $taxDetailsData = $this->getMockBuilder('Magento\Tax\Api\Data\OrderTaxDetailsItemInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $taxDetailsData->expects($this->once())
-            ->method('getType')
-            ->willReturn(Address::TYPE_SHIPPING);
-        $taxDetailsData->expects($this->once())
-            ->method('getAppliedTaxes')
-            ->willReturn($appliedTaxes);
-
-        $orderDetails = $this->getMockBuilder('Magento\Tax\Api\Data\OrderTaxDetailsInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderDetails->expects($this->once())
-            ->method('getItems')
-            ->willReturn([$taxDetailsData]);
-
-        $this->orderTaxManagementMock->expects($this->once())
+        $orderTaxDetailsMock = $this->mapOrderTaxItemDetail($orderTaxDetails);
+        $this->orderTaxManagementMock->expects($this->any())
             ->method('getOrderTaxDetails')
             ->with($orderId)
-            ->willReturn($orderDetails);
+            ->will($this->returnValue($orderTaxDetailsMock));
 
-        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderItemMock->expects($this->once())
-            ->method('getTaxAmount')
-            ->willReturn($failedTaxAmount);
-
-        $invoiceItemFailed = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice\Item')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $invoiceItemFailed->expects($this->once())
-            ->method('getOrderItem')
-            ->willReturn($orderItemMock);
-        $invoiceItemFailed->expects($this->once())
-            ->method('getTaxAmount')
-            ->willReturn(1);
-
-        $source = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
+        $invoiceShippingTaxAmount =
+            isset($invoiceData['shipping_tax_amount']) ? $invoiceData['shipping_tax_amount'] : 0;
+        $invoiceItems = $invoiceData['invoice_items'];
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Invoice $source */
+        $source = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
             ->getMock();
         $source->expects($this->once())
@@ -217,24 +217,156 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->willReturn($orderMock);
         $source->expects($this->once())
             ->method('getShippingTaxAmount')
-            ->willReturn($itemShippingTaxAmount);
+            ->willReturn($invoiceShippingTaxAmount);
         $source->expects($this->once())
-            ->method('getItemsCollection')
-            ->willReturn([$invoiceItemFailed]);
+            ->method('getItems')
+            ->willReturn($invoiceItems);
 
-        $roundValues = [
-            [$itemAmount, $expectedAmount],
-            [$itemBaseAmount, $expectedBaseAmount],
-        ];
-        $this->priceCurrencyMock->expects($this->exactly(2))
+        $this->priceCurrencyMock->expects($this->any())
             ->method('round')
-            ->will($this->returnValueMap($roundValues));
+            ->will($this->returnCallback(
+                    function ($arg) {
+                        return round($arg, 2);
+                    }
+                )
+            );
 
         $result = $this->helper->getCalculatedTaxes($source);
-        $this->assertCount(1, $result);
-        $this->assertEquals($expectedAmount, $result[0]['tax_amount']);
-        $this->assertEquals($expectedBaseAmount, $result[0]['base_tax_amount']);
-        $this->assertEquals($itemTitle, $result[0]['title']);
-        $this->assertEquals($itemPercent, $result[0]['percent']);
+        foreach ($result as $index => $appliedTax) {
+            $expectedTax = $expectedResults[$index];
+            foreach ($appliedTax as $attr => $value) {
+                $this->assertEquals($expectedTax[$attr], $value, "The ".$attr." of tax does not match");
+            }
+        }
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
+     */
+    public function getCalculatedTaxesForOrderItemsDataProvider()
+    {
+        $data = [
+            //Scenario 1: two items, one item with 0 tax
+            'two_items_with_one_zero_tax' => [
+                'order' => [
+                    'order_id' => 1,
+                    'shipping_tax_amount' => 0,
+                    'order_tax_details' => [
+                            'items' => [
+                                'itemTax1' => [
+                                    'item_id' => 1,
+                                    'applied_taxes' => [
+                                        [
+                                            'amount' => 5.0,
+                                            'base_amount' => 5.0,
+                                            'code' => 'US-CA',
+                                            'title' => 'US-CA-Sales-Tax',
+                                            'percent' => 20.0,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                ],
+                'invoice' => [
+                    'invoice_items' => [
+                        'item1' => new MagentoObject(
+                                [
+                                    'order_item' => new MagentoObject(
+                                            [
+                                                'id' => 1,
+                                                'tax_amount' => 5.00,
+                                            ]
+                                        ),
+                                    'tax_amount' => 2.50,
+                                ]
+                            ),
+                        'item2' => new MagentoObject(
+                                [
+                                    'order_item' => new MagentoObject(
+                                            [
+                                                'id' => 2,
+                                                'tax_amount' => 0.0,
+                                            ]
+                                        ),
+                                    'tax_amount' => 0.0,
+                                ]
+                            ),
+                    ],
+                ],
+                'expected_results' => [
+                    [
+                        'title' => 'US-CA-Sales-Tax',
+                        'percent' => 20.0,
+                        'tax_amount' => 2.5,
+                        'base_tax_amount' => 2.5,
+                    ],
+                ],
+            ],
+            //Scenario 2: one item with associated weee tax
+            'item_with_weee_tax_partial_invoice' => [
+                'order' => [
+                    'order_id' => 1,
+                    'shipping_tax_amount' => 0,
+                    'order_tax_details' => [
+                            'items' => [
+                                'itemTax1' => [
+                                    'item_id' => 1,
+                                    'applied_taxes' => [
+                                        [
+                                            'amount' => 5.0,
+                                            'base_amount' => 5.0,
+                                            'code' => 'US-CA',
+                                            'title' => 'US-CA-Sales-Tax',
+                                            'percent' => 20.0,
+                                        ],
+                                    ],
+                                ],
+                                'weeeTax1' => [
+                                    'associated_item_id' => 1,
+                                    'type' => 'weee',
+                                    'applied_taxes' => [
+                                        [
+                                            'amount' => 3.0,
+                                            'base_amount' => 3.0,
+                                            'code' => 'US-CA',
+                                            'title' => 'US-CA-Sales-Tax',
+                                            'percent' => 20.0,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                ],
+                'invoice' => [
+                    'invoice_items' => [
+                        'item1' => new MagentoObject(
+                                [
+                                    'order_item' => new MagentoObject(
+                                            [
+                                                'id' => 1,
+                                                'tax_amount' => 5.00,
+                                            ]
+                                        ),
+                                    'tax_amount' => 5.0,
+                                    //half of weee tax is invoiced
+                                    'tax_ratio' => serialize(['weee' => 0.5]),
+                                ]
+                            ),
+                    ],
+                ],
+                'expected_results' => [
+                    [
+                        'title' => 'US-CA-Sales-Tax',
+                        'percent' => 20.0,
+                        'tax_amount' => 6.5,
+                        'base_tax_amount' => 6.5,
+                    ],
+                ],
+            ],
+        ];
+
+        return $data;
     }
 }

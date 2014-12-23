@@ -18,12 +18,9 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that product quantity in the mini shopping cart is equals to expected quantity from data set

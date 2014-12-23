@@ -33,7 +33,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('ServiceType'));
         $country = $this->getMock(
             'Magento\Directory\Model\Country',
-            ['load', 'getIso2Code', '__wakeup'],
+            ['load', 'getData', '__wakeup'],
             [],
             '',
             false
