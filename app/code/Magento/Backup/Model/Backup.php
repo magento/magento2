@@ -377,7 +377,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
     /**
      * Print output
      *
-     * @return void
+     * @return string
      */
     public function output()
     {
@@ -389,7 +389,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
         $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $directory = $directory->readFile($this->_getFilePath());
 
-        echo $directory;
+        return $directory;
     }
 
     /**
