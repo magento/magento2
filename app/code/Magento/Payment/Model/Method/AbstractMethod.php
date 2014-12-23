@@ -196,6 +196,9 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      */
     protected $_eventManager;
 
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
     protected $logger;
 
     /**

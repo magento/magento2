@@ -39,6 +39,7 @@ class System extends StreamHandler
      * @{inerhitDoc}
      *
      * @param $record array
+     * @return void
      */
     public function write(array $record)
     {
