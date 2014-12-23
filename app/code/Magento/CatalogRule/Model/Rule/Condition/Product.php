@@ -8,26 +8,29 @@
  */
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
+/**
+ * Class Product
+ */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
     /**
      * Validate product attribute value for condition
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
-    public function validate(\Magento\Framework\Object $object)
+    public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
         $attrCode = $this->getAttribute();
         if ('category_ids' == $attrCode) {
-            return $this->validateAttribute($object->getAvailableInCategories());
+            return $this->validateAttribute($model->getAvailableInCategories());
         }
 
-        $oldAttrValue = $object->hasData($attrCode) ? $object->getData($attrCode) : null;
-        $this->_setAttributeValue($object);
+        $oldAttrValue = $model->hasData($attrCode) ? $model->getData($attrCode) : null;
+        $this->_setAttributeValue($model);
 
-        $result = $this->validateAttribute($object->getData($this->getAttribute()));
-        $this->_restoreOldAttrValue($object, $oldAttrValue);
+        $result = $this->validateAttribute($model->getData($this->getAttribute()));
+        $this->_restoreOldAttrValue($model, $oldAttrValue);
 
         return (bool)$result;
     }
@@ -35,36 +38,36 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Restore old attribute value
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @param mixed $oldAttrValue
      * @return void
      */
-    protected function _restoreOldAttrValue($object, $oldAttrValue)
+    protected function _restoreOldAttrValue(\Magento\Framework\Model\AbstractModel $model, $oldAttrValue)
     {
         $attrCode = $this->getAttribute();
         if (is_null($oldAttrValue)) {
-            $object->unsetData($attrCode);
+            $model->unsetData($attrCode);
         } else {
-            $object->setData($attrCode, $oldAttrValue);
+            $model->setData($attrCode, $oldAttrValue);
         }
     }
 
     /**
      * Set attribute value
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return $this
      */
-    protected function _setAttributeValue($object)
+    protected function _setAttributeValue(\Magento\Framework\Model\AbstractModel $model)
     {
-        $storeId = $object->getStoreId();
+        $storeId = $model->getStoreId();
         $defaultStoreId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
 
-        if (!isset($this->_entityAttributeValues[$object->getId()])) {
+        if (!isset($this->_entityAttributeValues[$model->getId()])) {
             return $this;
         }
 
-        $productValues  = $this->_entityAttributeValues[$object->getId()];
+        $productValues  = $this->_entityAttributeValues[$model->getId()];
 
         if (!isset($productValues[$storeId]) && !isset($productValues[$defaultStoreId])) {
             return $this;
@@ -72,10 +75,11 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
         $value = isset($productValues[$storeId]) ? $productValues[$storeId] : $productValues[$defaultStoreId];
 
-        $value = $this->_prepareDatetimeValue($value, $object);
-        $value = $this->_prepareMultiselectValue($value, $object);
+        $value = $this->_prepareDatetimeValue($value, $model);
+        $value = $this->_prepareMultiselectValue($value, $model);
 
-        $object->setData($this->getAttribute(), $value);
+        $model->setData($this->getAttribute(), $value);
+
         return $this;
     }
 
@@ -83,15 +87,16 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Prepare datetime attribute value
      *
      * @param mixed $value
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return mixed
      */
-    protected function _prepareDatetimeValue($value, $object)
+    protected function _prepareDatetimeValue($value, \Magento\Framework\Model\AbstractModel $model)
     {
-        $attribute = $object->getResource()->getAttribute($this->getAttribute());
+        $attribute = $model->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getBackendType() == 'datetime') {
             $value = strtotime($value);
         }
+
         return $value;
     }
 
@@ -99,15 +104,16 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * Prepare multiselect attribute value
      *
      * @param mixed $value
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return mixed
      */
-    protected function _prepareMultiselectValue($value, $object)
+    protected function _prepareMultiselectValue($value, \Magento\Framework\Model\AbstractModel $model)
     {
-        $attribute = $object->getResource()->getAttribute($this->getAttribute());
+        $attribute = $model->getResource()->getAttribute($this->getAttribute());
         if ($attribute && $attribute->getFrontendInput() == 'multiselect') {
             $value = strlen($value) ? explode(',', $value) : [];
         }
+
         return $value;
     }
 }
