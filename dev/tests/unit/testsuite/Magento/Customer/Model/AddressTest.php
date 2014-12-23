@@ -30,6 +30,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerFactory;
 
+    /**
+     * @var \Magento\Customer\Model\Resource\Address | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resource;
+
+
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -108,22 +114,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($resultValue));
 
         $this->assertEquals($resultValue, $this->address->getAttributes());
-    }
-
-    public function testGetEntityTypeId()
-    {
-        $mockEntityType = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mockEntityType->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(self::ORIG_CUSTOMER_ID));
-
-        $this->resource->expects($this->any())
-            ->method('getEntityType')
-            ->will($this->returnValue($mockEntityType));
-
-        $this->assertEquals(self::ORIG_CUSTOMER_ID, $this->address->getEntityTypeId());
     }
 
     public function testRegionId()

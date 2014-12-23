@@ -128,11 +128,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         $this->setIsDefaultBilling($address->isDefaultBilling());
         $this->setIsDefaultShipping($address->isDefaultShipping());
 
-        // Need to use attribute set or future updates can cause data loss
-        if (!$this->getAttributeSetId()) {
-            $this->setAttributeSetId(AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS);
-        }
-
         $customAttributes = $address->getCustomAttributes();
         if (!is_null($customAttributes)) {
             foreach ($customAttributes as $attribute) {
@@ -252,21 +247,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getEntityType()
     {
         return $this->_getResource()->getEntityType();
-    }
-
-    /**
-     * Return Entity Type ID
-     *
-     * @return int
-     */
-    public function getEntityTypeId()
-    {
-        $entityTypeId = $this->getData('entity_type_id');
-        if (!$entityTypeId) {
-            $entityTypeId = $this->getEntityType()->getId();
-            $this->setData('entity_type_id', $entityTypeId);
-        }
-        return $entityTypeId;
     }
 
     /**

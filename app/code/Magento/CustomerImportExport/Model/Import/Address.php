@@ -492,7 +492,6 @@ class Address extends AbstractCustomer
         // entity table data
         $entityRow = [
             'entity_id' => $addressId,
-            'entity_type_id' => $this->getEntityTypeId(),
             'parent_id' => $customerId,
             'created_at' => $this->dateTime->now(),
             'updated_at' => $this->dateTime->now(),

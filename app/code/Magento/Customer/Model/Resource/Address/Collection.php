@@ -38,4 +38,15 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
         }
         return $this;
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Redeclare method to disable entity_type_id filter
+     */
+    protected function _initSelect()
+    {
+        $this->getSelect()->from(['e' => $this->getEntity()->getEntityTable()]);
+        return $this;
+    }
 }
