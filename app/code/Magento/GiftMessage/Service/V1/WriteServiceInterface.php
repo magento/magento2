@@ -21,7 +21,7 @@ interface WriteServiceInterface
      * virtual products.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message could not be saved.
      * @deprecated
-     * @see \Magento\GiftMessage\Api\GiftMessageManagementInterface::assignToQuote
+     * @see \Magento\GiftMessage\Api\GiftMessageRepositoryInterface::save
      */
     public function setForQuote($cartId, \Magento\GiftMessage\Service\V1\Data\Message $giftMessage);
 
@@ -38,7 +38,7 @@ interface WriteServiceInterface
      * virtual products.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message could not be saved.
      * @deprecated
-     * @see \Magento\GiftMessage\Api\GiftMessageManagementInterface::assignToItem
+     * @see \Magento\GiftMessage\Api\GiftMessageItemRepositoryInterface::save
      */
     public function setForItem($cartId, \Magento\GiftMessage\Service\V1\Data\Message $giftMessage, $itemId);
 }

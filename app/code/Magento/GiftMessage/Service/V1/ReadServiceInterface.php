@@ -27,7 +27,7 @@ interface ReadServiceInterface
      * @return \Magento\GiftMessage\Service\V1\Data\Message Gift message.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified item does not exist in the cart.
      * @deprecated
-     * @see \Magento\GiftMessage\Api\GiftMessageManagementInterface::getItemMessage
+     * @see \Magento\GiftMessage\Api\GiftMessageItemRepositoryInterface::get
      */
     public function getItemMessage($cartId, $itemId);
 }
