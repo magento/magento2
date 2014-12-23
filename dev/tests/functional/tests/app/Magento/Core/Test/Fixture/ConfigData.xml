@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<fixture class="Magento\Core\Test\Fixture\ConfigData">
+    <module>Magento_Core</module>
+    <type>flat</type>
+    <entity_type>core_config_data</entity_type>
+    <collection>Magento\Core\Model\Resource\Config\Data\Collection</collection>
+    <fields>
+        <section>
+            <attribute_code>section</attribute_code>
+            <backend_type>virtual</backend_type>
+        </section>
+        <config_id>
+            <attribute_code>config_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value />
+            <input />
+        </config_id>
+        <scope>
+            <attribute_code>scope</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value>default</default_value>
+            <input />
+        </scope>
+        <scope_id>
+            <attribute_code>scope_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required />
+            <default_value>0</default_value>
+            <input />
+        </scope_id>
+        <path>
+            <attribute_code>path</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value>general</default_value>
+            <input />
+        </path>
+        <value>
+            <attribute_code>value</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </value>
+    </fields>
+    <repository_class>Magento\Core\Test\Repository\ConfigData</repository_class>
+    <handler_interface>Magento\Core\Test\Handler\ConfigData\ConfigDataInterface</handler_interface>
+</fixture>

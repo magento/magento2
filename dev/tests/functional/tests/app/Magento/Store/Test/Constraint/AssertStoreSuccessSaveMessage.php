@@ -14,17 +14,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertStoreSuccessSaveMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Success store view create message
      */
     const SUCCESS_MESSAGE = 'The store view has been saved';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that success message is displayed after Store View has been created

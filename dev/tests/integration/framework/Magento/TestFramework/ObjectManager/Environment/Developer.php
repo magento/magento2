@@ -10,10 +10,8 @@ class Developer extends \Magento\Framework\ObjectManager\Environment\Developer
     {
         if (!$this->config) {
             $this->config = new \Magento\TestFramework\ObjectManager\Config(
-                new \Magento\Framework\ObjectManager\Config\Config(
-                    $this->envFactory->getRelations(),
-                    $this->envFactory->getDefinitions()
-                )
+                $this->envFactory->getRelations(),
+                $this->envFactory->getDefinitions()
             );
         }
 

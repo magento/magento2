@@ -14,12 +14,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertRoleNotInGrid extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Asserts that role is not present in Role Grid.

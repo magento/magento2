@@ -92,6 +92,17 @@
             </argument>
         </arguments>
     </block>
+    <block class="Magento\Ui\Component\Form\Element\Select" name="multiselect">
+        <arguments>
+            <argument name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/multiselect</item>
+                <item name="config" xsi:type="array">
+                    <item name="input_type" xsi:type="string">multiselect</item>
+                    <item name="template" xsi:type="string">ui/form/element/multiselect</item>
+                </item>
+            </argument>
+        </arguments>
+    </block>
     <block class="Magento\Ui\Component\Form\Element\Textarea" name="textarea">
         <arguments>
             <argument name="js_config" xsi:type="array">

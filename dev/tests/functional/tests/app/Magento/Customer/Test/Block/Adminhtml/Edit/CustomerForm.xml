@@ -27,7 +27,7 @@
     </account_information>
     <addresses>
         <class>\Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses</class>
-        <selector>#customer_info_tabs_addresses</selector>
+        <selector>#tab_customer_address</selector>
         <strategy>css selector</strategy>
     </addresses>
 </tabs>

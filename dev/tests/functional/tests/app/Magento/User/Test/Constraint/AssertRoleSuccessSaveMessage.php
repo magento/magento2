@@ -13,14 +13,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertRoleSuccessSaveMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'You saved the role.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const SUCCESS_MESSAGE = 'You saved the role.';
 
     /**
      * Asserts that success message equals to expected message.

@@ -16,12 +16,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductAttributeAbsenceForExport extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
     /**
      * Assert that deleted attribute can't be used for Products' Export

@@ -17,12 +17,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertAddressDeletedBackend extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that deleted customers address is not displayed on backend during order creation

@@ -14,12 +14,9 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
  */
 class AssertSalesReportIntervalResult extends AbstractAssertSalesReportResult
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that sales info in report grid is actual

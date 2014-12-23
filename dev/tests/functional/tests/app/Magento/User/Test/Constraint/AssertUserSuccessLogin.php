@@ -15,12 +15,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserSuccessLogin extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Verify whether customer has logged in to the Backend
@@ -38,6 +35,7 @@ class AssertUserSuccessLogin extends AbstractConstraint
         Dashboard $dashboard,
         User $customAdmin = null
     ) {
+        $adminAuth->open();
         $adminUser = $customAdmin === null ? $user : $customAdmin;
         if ($dashboard->getAdminPanelHeader()->isVisible()) {
             $dashboard->getAdminPanelHeader()->logOut();

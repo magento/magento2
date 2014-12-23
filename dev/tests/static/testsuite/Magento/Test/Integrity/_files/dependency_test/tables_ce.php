@@ -106,7 +106,6 @@ return [
     'cms_page' => 'Magento_Cms',
     'cms_page_store' => 'Magento_Cms',
     'core_cache' => 'Magento_Core',
-    'core_cache_option' => 'Magento_Core',
     'core_cache_tag' => 'Magento_Core',
     'core_config_data' => 'Magento_Core',
     'core_config_field' => 'Magento_Core',

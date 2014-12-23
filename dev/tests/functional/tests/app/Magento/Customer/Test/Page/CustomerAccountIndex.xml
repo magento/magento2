@@ -33,7 +33,7 @@
         </infoBlock>
         <compareProductsBlock>
             <class>Magento\Catalog\Test\Block\Product\Compare\Sidebar</class>
-            <locator>.block.compare</locator>
+            <locator>.block-compare</locator>
             <strategy>css selector</strategy>
         </compareProductsBlock>
         <additionalAddressBlock>

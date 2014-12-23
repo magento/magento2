@@ -10,6 +10,8 @@ $attributes = [
     'country_of_manufacture',
     'group_price',
     'minimal_price',
+    'msrp',
+    'msrp_display_actual_price_type',
     'price',
     'special_price',
     'special_from_date',

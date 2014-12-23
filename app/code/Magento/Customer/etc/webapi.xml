@@ -178,12 +178,6 @@
             <resource ref="Magento_Customer::manage"/>
         </resources>
     </route>
-    <route url="/V1/customers/login" method="POST">
-        <service class="Magento\Customer\Api\AccountManagementInterface" method="authenticate"/>
-        <resources>
-            <resource ref="Magento_Customer::customer"/>
-        </resources>
-    </route>
     <route url="/V1/customers/me/password" method="PUT">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="changePasswordById"/>
         <resources>
@@ -196,13 +190,13 @@
     <route url="/V1/customers/:customerId/password/resetLinkToken/:resetPasswordLinkToken" method="GET">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="validateResetPasswordLinkToken"/>
         <resources>
-            <resource ref="Magento_Customer::customer"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/customers/password" method="PUT">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="initiatePasswordReset"/>
         <resources>
-            <resource ref="Magento_Customer::manage"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/customers/:customerId/password" method="PUT">
@@ -244,7 +238,7 @@
     <route url="/V1/customers/isEmailAvailable" method="POST">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="isEmailAvailable"/>
         <resources>
-            <resource ref="Magento_Customer::manage"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
 

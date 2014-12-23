@@ -42,7 +42,11 @@ try {
     $relationsFile = $diDir . '/relations.php';
     $pluginDefFile = $diDir . '/plugins.php';
 
-    $compilationDirs = [$rootDir . '/app/code', $rootDir . '/lib/internal/Magento'];
+    $compilationDirs = [
+        $rootDir . '/app/code',
+        $rootDir . '/lib/internal/Magento',
+        $rootDir . '/dev/tools/Magento/Tools/View'
+    ];
 
     /** @var Writer\WriterInterface $logWriter Writer model for success messages */
     $logWriter = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();

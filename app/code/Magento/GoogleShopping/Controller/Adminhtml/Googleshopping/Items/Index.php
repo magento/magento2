@@ -5,8 +5,32 @@
  */
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items;
 
+use Magento\Backend\App\Action;
+use Magento\Framework\Notification\NotifierInterface;
+
 class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items
 {
+    /**
+     * @var \Magento\Framework\Url\DecoderInterface
+     */
+    protected $urlDecoder;
+
+    /**
+     * @param Action\Context $context
+     * @param NotifierInterface $notifier
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
+     */
+    public function __construct(
+        Action\Context $context,
+        NotifierInterface $notifier,
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        \Magento\Framework\Url\DecoderInterface $urlDecoder
+    ) {
+        parent::__construct($context, $notifier, $urlEncoder);
+        $this->urlDecoder = $urlDecoder;
+    }
+
     /**
      * Initialize general settings for action
      *
@@ -58,16 +82,12 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
 
         if ($this->getRequest()->getParam('captcha_token') && $this->getRequest()->getParam('captcha_url')) {
             $contentBlock->setGcontentCaptchaToken(
-                $this->_objectManager->get(
-                    'Magento\Core\Helper\Data'
-                )->urlDecode(
+                $this->urlDecoder->decode(
                     $this->getRequest()->getParam('captcha_token')
                 )
             );
             $contentBlock->setGcontentCaptchaUrl(
-                $this->_objectManager->get(
-                    'Magento\Core\Helper\Data'
-                )->urlDecode(
+                $this->urlDecoder->decode(
                     $this->getRequest()->getParam('captcha_url')
                 )
             );

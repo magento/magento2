@@ -385,6 +385,7 @@
         <type_id>
             <attribute_code>type_id</attribute_code>
             <backend_type>virtual</backend_type>
+            <group />
         </type_id>
         <attribute_set_id>
             <attribute_code>attribute_set_id</attribute_code>
@@ -451,6 +452,7 @@
         <is_virtual>
             <attribute_code>is_virtual</attribute_code>
             <backend_type>virtual</backend_type>
+            <group>product-details</group>
         </is_virtual>
         <attributes>
             <attribute_code>attributes</attribute_code>

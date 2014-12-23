@@ -13,17 +13,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertReviewCreationSuccessMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * Text of success message after review created
      */
     const SUCCESS_MESSAGE = 'Your review has been accepted for moderation.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Assert that success message is displayed after review created

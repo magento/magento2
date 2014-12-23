@@ -25,7 +25,7 @@ class EditAddress extends \Magento\Multishipping\Controller\Checkout\Address
                 $this->_url->getUrl('*/*/selectBilling')
             );
             $this->_view->getPage()->getConfig()->getTitle()->set(
-                $addressForm->getTitle() . ' - ' . $this->_view->getPage()->getConfig()->getDefaultTitle()
+                $addressForm->getTitle() . ' - ' . $this->_view->getPage()->getConfig()->getTitle()->getDefault()
             );
         }
         $this->_view->renderLayout();

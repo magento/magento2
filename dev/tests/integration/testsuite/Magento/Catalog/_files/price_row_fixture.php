@@ -12,6 +12,7 @@ $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
  */
 /** @var $category \Magento\Catalog\Model\Category */
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(
     9
 )->setName(

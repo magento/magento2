@@ -22,20 +22,28 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_helper;
 
     /**
+     * @var \Magento\Core\Helper\PostData
+     */
+    protected $coreHelper;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\ProductAlert\Helper\Data $helper
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Core\Helper\PostData $coreHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\ProductAlert\Helper\Data $helper,
         \Magento\Framework\Registry $registry,
+        \Magento\Core\Helper\PostData $coreHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_registry = $registry;
         $this->_helper = $helper;
+        $this->coreHelper = $coreHelper;
     }
 
     /**
@@ -50,5 +58,15 @@ class View extends \Magento\Framework\View\Element\Template
             return $product;
         }
         return false;
+    }
+
+    /**
+     * Retrieve post action config
+     *
+     * @return string
+     */
+    public function getPostAction()
+    {
+        return $this->coreHelper->getPostData($this->getSignupUrl());
     }
 }

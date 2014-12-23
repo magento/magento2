@@ -13,14 +13,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserDuplicateMessage extends AbstractConstraint
 {
-    const ERROR_MESSAGE = 'A user with the same user name or email already exists.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const ERROR_MESSAGE = 'A user with the same user name or email already exists.';
 
     /**
      * Asserts that error message equals to expected message.

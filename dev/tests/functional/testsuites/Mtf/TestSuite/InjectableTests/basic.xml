@@ -6,10 +6,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../vendor/magento/mtf/Mtf/TestRunner/etc/testRunner.xsd">
-    <suiteRule>
+    <rule scope="testsuite">
         <allow>
-            <namespace>Magento</namespace>
-            <type>injectable</type>
+            <namespace value="Magento" />
+            <type value="injectable" />
         </allow>
-    </suiteRule>
+    </rule>
 </config>

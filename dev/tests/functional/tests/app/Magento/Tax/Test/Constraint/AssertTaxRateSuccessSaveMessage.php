@@ -13,14 +13,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertTaxRateSuccessSaveMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'The tax rate has been saved.';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    const SUCCESS_MESSAGE = 'The tax rate has been saved.';
 
     /**
      * Assert that success message is displayed after tax rate saved
