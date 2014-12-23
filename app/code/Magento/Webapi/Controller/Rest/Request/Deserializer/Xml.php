@@ -41,7 +41,7 @@ class Xml implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterfa
      * @param string $xmlRequestBody XML document
      * @return array Data converted from XML document to array. Root node is excluded from response.
      * @throws \InvalidArgumentException In case of invalid argument type.
-     * @throws \Magento\Webapi\Exception If decoding error occurs or in case of empty argument type
+     * @throws \Magento\Webapi\Exception If decoding error occurs.
      */
     public function deserialize($xmlRequestBody)
     {
@@ -49,9 +49,6 @@ class Xml implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterfa
             throw new \InvalidArgumentException(
                 sprintf('"%s" data type is invalid. String is expected.', gettype($xmlRequestBody))
             );
-        }
-        if (empty($xmlRequestBody)) {
-            throw new \Magento\Webapi\Exception(__('Request body is expected.'));
         }
         /** Disable external entity loading to prevent possible vulnerability */
         $previousLoaderState = libxml_disable_entity_loader(true);

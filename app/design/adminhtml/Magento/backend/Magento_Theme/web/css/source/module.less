@@ -27,6 +27,13 @@ body {
     font-weight: @baseFontWeight;
     .font-size(@baseFontSize);
     background: @primary7;
+    .vendor-prefix-display(flex);
+    .vendor-prefix-flex-direction(column);
+    & > * {
+        .vendor-prefix-flex-grow(0);
+        .vendor-prefix-flex-shrink(0);
+        .vendor-prefix-flex-basis(auto);
+    }
 }
 
 .page-wrapper {
@@ -36,18 +43,20 @@ body {
     width: 100%;
     max-width: 100%;
     min-width: @layout-min-width + 2 * @layout-indent;
-    .ie10 &,
-    .ie11 & {
-        height: 100%;
+    & > * {
+        .vendor-prefix-flex-grow(0);
+        .vendor-prefix-flex-shrink(0);
+        .vendor-prefix-flex-basis(auto);
     }
 }
+
 .page-header {
     &-wrapper {
         background-color: @color-dark;
     }
     &:extend(._layout-width all);
     text-align: right;
-    .clearer();
+     .clearer();
     .logo {
         margin-top: 5px;
         float: left;
@@ -229,6 +238,9 @@ body {
             }
             .dropdown-menu {
                 text-align: left;
+                .item {
+                    display: block;
+                }
             }
         }
         // Fixed page actions
@@ -237,7 +249,7 @@ body {
             top: 0;
             left: 0;
             right: 0;
-            z-index: 998;
+            z-index: 10;
             padding: 0;
             background: -webkit-linear-gradient(top, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); // Use in 4.3 Android
             background: -ms-linear-gradient(top, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); // Use in 10 IE
@@ -299,6 +311,7 @@ body {
             .button-reset();
             color: @color-link;
             line-height: normal;
+            margin-top: 2px;
             vertical-align: middle;
         }
         ul.dropdown-menu {
@@ -481,25 +494,25 @@ button {
 }
 
 .footer-legal {
-    float:right;
+    float: right;
     width: 550px;
     .link-report,
     .magento-version,
     .copyright {
-        font-size:13px;
+        font-size: 13px;
     }
     &:before {
         content:"";
         display: inline-block;
         vertical-align: middle;
-        position:absolute;
+        position: absolute;
         z-index: 1;
         margin-top: 2px;
         margin-left: -35px;
         width: 30px;
         height: 35px;
         background-size: 109px 70px;
-        background: url("@{baseDir}images/logo.svg") no-repeat 0 -35px;
+        background: url("@{baseDir}images/logo.svg") no-repeat 0 -21px;
     }
 }
 

@@ -14,17 +14,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertStoreGroupSuccessDeleteMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Success store group delete message
      */
     const SUCCESS_DELETE_MESSAGE = 'The store has been deleted.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that success message is displayed after deleting store group

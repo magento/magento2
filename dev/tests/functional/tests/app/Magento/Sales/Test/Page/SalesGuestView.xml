@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/guest/view" module="Magento_Sales">
+    <blocks>
+        <actionsToolbar>
+            <class>Magento\Sales\Test\Block\Order\View\ActionsToolbar</class>
+            <locator>.actions-toolbar</locator>
+            <strategy>css selector</strategy>
+        </actionsToolbar>
+        <viewBlock>
+            <class>Magento\Sales\Test\Block\Order\View</class>
+            <locator>.column.main</locator>
+            <strategy>css selector</strategy>
+        </viewBlock>
+    </blocks>
+</page>

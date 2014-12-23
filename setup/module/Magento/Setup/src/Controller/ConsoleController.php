@@ -13,9 +13,11 @@ use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\Lists;
 use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
+
 
 /**
  * Controller that handles all setup commands via command line interface.
@@ -242,7 +244,7 @@ class ConsoleController extends AbstractActionController
                 'usage_desc' => 'Set maintenance mode, optionally for specified addresses',
             ],
             self::CMD_HELP => [
-                'route' => self::CMD_HELP . ' (' . implode('|', self::$helpOptions) . '):type',
+                'route' => self::CMD_HELP . ' [' . implode('|', self::$helpOptions) . ']:type',
                 'usage' => '<' . implode('|', self::$helpOptions) . '>',
                 'usage_short' => self::CMD_HELP . ' <topic>',
                 'usage_desc' => 'Help about particular command or topic:',
@@ -307,7 +309,6 @@ class ConsoleController extends AbstractActionController
      * Controller for Install Command
      *
      * @return void
-     * @throws \Exception
      */
     public function installAction()
     {
@@ -320,7 +321,6 @@ class ConsoleController extends AbstractActionController
      * Creates the config.php file
      *
      * @return void
-     * @throws \Exception
      */
     public function installDeploymentConfigAction()
     {
@@ -334,7 +334,6 @@ class ConsoleController extends AbstractActionController
      * Installs and updates database schema
      *
      * @return void
-     * @throws \Exception
      */
     public function installSchemaAction()
     {
@@ -345,11 +344,9 @@ class ConsoleController extends AbstractActionController
      * Installs and updates data fixtures
      *
      * @return void
-     * @throws \Exception
      */
     public function installDataAction()
     {
-        $this->installer->checkInstallationFilePermissions();
         $this->installer->installDataFixtures();
     }
 
@@ -357,11 +354,9 @@ class ConsoleController extends AbstractActionController
      * Updates database schema and data
      *
      * @return void
-     * @throws \Exception
      */
     public function updateAction()
     {
-        $this->installer->checkInstallationFilePermissions();
         $this->installer->installSchema();
         $this->installer->installDataFixtures();
     }
@@ -394,7 +389,6 @@ class ConsoleController extends AbstractActionController
      * Controller for Uninstall Command
      *
      * @return void
-     * @throws \Exception
      */
     public function uninstallAction()
     {
@@ -436,11 +430,17 @@ class ConsoleController extends AbstractActionController
      * Shows necessary information for installing Magento
      *
      * @return string
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function helpAction()
     {
         $type = $this->getRequest()->getParam('type');
+        if ($type === false) {
+            $usageInfo = $this->formatConsoleFullUsageInfo(
+                array_merge(self::getConsoleUsage(), InitParamListener::getConsoleUsage())
+            );
+            return $usageInfo;
+        }
         $usages = self::getCommandUsage();
         switch($type) {
             case UserConfig::KEY_LANGUAGE:
@@ -459,6 +459,35 @@ class ConsoleController extends AbstractActionController
                 }
                 throw new \InvalidArgumentException("Unknown type: {$type}");
         }
+    }
+
+    /**
+     * Formats full usage info for console when user inputs 'help' command with no type
+     *
+     * @param array $usageInfo
+     * @return string
+     */
+    private function formatConsoleFullUsageInfo($usageInfo)
+    {
+        $result = "\n==-------------------==\n"
+            . "   Magento Setup CLI   \n"
+            . "==-------------------==\n";
+        $mask = "%-50s %-30s\n";
+        $script = 'index.php';
+        foreach ($usageInfo as $key => $value) {
+            if ($key === 0) {
+                $result .= sprintf($mask, "\n$value", '');
+            } elseif (is_numeric($key)) {
+                if (is_array($value)) {
+                    $result .= sprintf($mask, "  " . $value[0], $value[1]);
+                } else {
+                    $result .= sprintf($mask, '', $value);
+                }
+            } else {
+                $result .= sprintf($mask, "  $script " . $key, $value);
+            }
+        }
+        return $result;
     }
 
     /**

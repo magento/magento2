@@ -15,12 +15,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertTaxRateForm extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
     /**
      * Assert that tax rate form filled correctly
@@ -69,6 +66,7 @@ class AssertTaxRateForm extends AbstractConstraint
         } else {
             unset($data['zip_from'], $data['zip_to']);
         }
+        $data['rate'] = number_format($data['rate'], 4);
 
         return $data;
     }

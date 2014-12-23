@@ -4,7 +4,6 @@
  */
 namespace Magento\Weee\Model\Total\Invoice;
 
-
 class WeeeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -135,6 +134,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     }
                     $roundedPrice = round($price + $roundingDelta[$type], 2);
                     $roundingDelta[$type] = $price - $roundedPrice;
+
                     return $roundedPrice;
                 }
             ));
@@ -143,17 +143,23 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
 
         //verify invoice data
         foreach ($expectedResults['invoice_data'] as $key => $value) {
-            $this->assertEquals($value, $this->invoice->getData($key), 'Invoice data field ' . $key . ' is incorrect');
+            $this->assertEquals($value, $this->invoice->getData($key), 'Invoice data field '.$key.' is incorrect');
         }
         //verify invoice item data
         foreach ($expectedResults['invoice_items'] as $itemKey => $itemData) {
             $invoiceItem = $invoiceItems[$itemKey];
             foreach ($itemData as $key => $value) {
-                $this->assertEquals(
-                    $value,
-                    $invoiceItem->getData($key),
-                    'Invoice item field ' . $key . ' is incorrect'
-                );
+                if ($key == 'tax_ratio') {
+                    $taxRatio = unserialize($invoiceItem->getData($key));
+                    $expectedTaxRatio = unserialize($itemData[$key]);
+                    $this->assertEquals($expectedTaxRatio['weee'], $taxRatio['weee'], "Tax ratio is incorrect");
+                } else {
+                    $this->assertEquals(
+                        $value,
+                        $invoiceItem->getData($key),
+                        'Invoice item field '.$key.' is incorrect'
+                    );
+                }
             }
         }
     }
@@ -250,7 +256,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                         ],
                         'weee_tax_applied_row_amount' => 30,
                         'base_weee_tax_applied_row_amount' => 30,
-
+                        'tax_ratio' => serialize(['weee' => 1.0]),
                     ],
                 ],
                 'invoice_data' => [
@@ -350,6 +356,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                 'row_amount_incl_tax' => 21.65,
                             ],
                         ],
+                        'tax_ratio' => serialize(['weee' => 1.65 / 2.47]),
                         'weee_tax_applied_row_amount' => 20,
                         'base_weee_tax_applied_row_amount' => 20,
 
@@ -453,6 +460,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                 'row_amount_incl_tax' => 10.82,
                             ],
                         ],
+                        'tax_ratio' => serialize(['weee' => 0.82 / 2.47]),
                         'weee_tax_applied_row_amount' => 10,
                         'base_weee_tax_applied_row_amount' => 10,
 
@@ -556,6 +564,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                                 'row_amount_incl_tax' => 10.82,
                             ],
                         ],
+                        'tax_ratio' => serialize(['weee' => 0.83 / 2.47]),
                         'weee_tax_applied_row_amount' => 10,
                         'base_weee_tax_applied_row_amount' => 10,
 
@@ -574,6 +583,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+
         return $result;
     }
 

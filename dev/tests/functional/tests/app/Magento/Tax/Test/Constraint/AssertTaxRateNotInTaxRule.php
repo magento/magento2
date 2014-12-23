@@ -14,12 +14,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertTaxRateNotInTaxRule extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
     /**
      * Assert that tax rate is absent in tax rule form

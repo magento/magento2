@@ -186,18 +186,22 @@ Bundle.Option.prototype = {
 
     remove : function(event){
         var element = Event.findElement(event, 'div').up('.option-box');
+        if (element) {
+            var idInput = Element.select(element, '[name$="[option_id]"]')[0];
+            if (idInput.value == '') {
+                element.remove();
+            } else {
+                Element.select(element, '[data-state="deleted"]').each(function (elem) {
+                    elem.value = '1';
+                });
 
-        if(element){
-            Element.select(element, '[data-state="deleted"]').each(function(elem) {
-                elem.value = '1';
-            });
+                Element.select(element, ['input', 'select']).each(function (elem) {
+                    elem.hide();
+                    elem.className = '';
+                });
 
-            Element.select(element, ['input', 'select']).each(function(elem) {
-                elem.hide();
-                elem.className = '';
-            });
-
-            Element.hide(element);
+                Element.hide(element);
+            }
         }
     },
 

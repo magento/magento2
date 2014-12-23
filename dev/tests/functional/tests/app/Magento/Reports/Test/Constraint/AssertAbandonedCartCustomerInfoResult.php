@@ -15,12 +15,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertAbandonedCartCustomerInfoResult extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert customer info in Abandoned Carts report (Reports > Abandoned carts):

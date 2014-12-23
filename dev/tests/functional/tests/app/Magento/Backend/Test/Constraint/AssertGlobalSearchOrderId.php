@@ -15,12 +15,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertGlobalSearchOrderId extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that order Id is present in search results

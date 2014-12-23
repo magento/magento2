@@ -13,14 +13,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertCustomerInfoSuccessSavedMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'The account information has been saved.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const SUCCESS_MESSAGE = 'The account information has been saved.';
 
     /**
      * Asserts that success message equals to expected message

@@ -56,10 +56,11 @@
 <script type="text/javascript">
 require([
     "jquery",
+    "underscore",
     "mage/mage",
     "Magento_Catalog/catalog/type-switcher",
     "mage/backend/tabs",
-    "underscore"
+    "domReady"
 ], function($){
     var $form = $('[data-form=edit-product]');
     $form.data('typeSwitcher', new TypeSwitcher(<?php echo $this->getTypeSwitcherData();?>).bindAll());

@@ -14,17 +14,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertOrderSuccessPlacedMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * Message of success checkout
      */
     const SUCCESS_MESSAGE = 'Thank you for your purchase!';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Assert that success message is correct

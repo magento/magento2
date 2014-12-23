@@ -84,6 +84,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      *
      * @return object
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      *
      */
     protected function createObject($type, $args)
@@ -142,6 +143,57 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
                     $args[10],
                     $args[11]
                 );
+            case 13:
+                return new $type(
+                    $args[0],
+                    $args[1],
+                    $args[2],
+                    $args[3],
+                    $args[4],
+                    $args[5],
+                    $args[6],
+                    $args[7],
+                    $args[8],
+                    $args[9],
+                    $args[10],
+                    $args[11],
+                    $args[12]
+                );
+            case 14:
+                return new $type(
+                    $args[0],
+                    $args[1],
+                    $args[2],
+                    $args[3],
+                    $args[4],
+                    $args[5],
+                    $args[6],
+                    $args[7],
+                    $args[8],
+                    $args[9],
+                    $args[10],
+                    $args[11],
+                    $args[12],
+                    $args[13]
+                );
+            case 15:
+                return new $type(
+                    $args[0],
+                    $args[1],
+                    $args[2],
+                    $args[3],
+                    $args[4],
+                    $args[5],
+                    $args[6],
+                    $args[7],
+                    $args[8],
+                    $args[9],
+                    $args[10],
+                    $args[11],
+                    $args[12],
+                    $args[13],
+                    $args[14]
+                );
             default:
                 $reflection = new \ReflectionClass($type);
                 return $reflection->newInstanceArgs($args);
@@ -164,22 +216,33 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected function resolveArgument(&$argument, $paramType, $paramDefault, $paramName, $requestedType)
     {
         if ($paramType && $argument !== $paramDefault && !is_object($argument)) {
-            if (!isset($argument['instance']) || !is_array($argument)) {
+            $argumentType = $argument['instance'];
+            if (!isset($argument['instance']) || $argument !== (array)$argument) {
                 throw new \UnexpectedValueException(
                     'Invalid parameter configuration provided for $' . $paramName . ' argument of ' . $requestedType
                 );
             }
-            $argumentType = $argument['instance'];
-            $isShared = (isset($argument['shared']) ? $argument['shared'] : $this->config->isShared($argumentType));
-            $argument = $isShared
-                ? $this->objectManager->get($argumentType)
-                : $this->objectManager->create($argumentType);
-        } elseif (is_array($argument)) {
+
+            if (isset($argument['shared'])) {
+                $isShared = $argument['shared'];
+            } else {
+                $isShared = $this->config->isShared($argumentType);
+            }
+
+            if ($isShared) {
+                $argument = $this->objectManager->get($argumentType);
+            } else {
+                $argument = $this->objectManager->create($argumentType);
+            }
+
+        } else if ($argument === (array)$argument) {
             if (isset($argument['argument'])) {
-                $argument = isset($this->globalArguments[$argument['argument']])
-                    ? $this->globalArguments[$argument['argument']]
-                    : $paramDefault;
-            } elseif (!empty($argument)) {
+                if (isset($this->globalArguments[$argument['argument']])) {
+                    $argument = $this->globalArguments[$argument['argument']];
+                } else {
+                    $argument = $paramDefault;
+                }
+            } else if (!empty($argument)) {
                 $this->parseArray($argument);
             }
         }
@@ -195,17 +258,26 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
     protected function parseArray(&$array)
     {
         foreach ($array as $key => $item) {
-            if (is_array($item)) {
+            if ($item === (array)$item) {
                 if (isset($item['instance'])) {
-                    $itemType = $item['instance'];
-                    $isShared = (isset($item['shared'])) ? $item['shared'] : $this->config->isShared($itemType);
-                    $array[$key] = $isShared
-                        ? $this->objectManager->get($itemType)
-                        : $this->objectManager->create($itemType);
+                    if (isset($item['shared'])) {
+                        $isShared = $item['shared'];
+                    } else {
+                        $isShared = $this->config->isShared($item['instance']);
+                    }
+
+                    if ($isShared) {
+                        $array[$key] = $this->objectManager->get($item['instance']);
+                    } else {
+                        $array[$key] = $this->objectManager->create($item['instance']);
+                    }
+
                 } elseif (isset($item['argument'])) {
-                    $array[$key] = isset($this->globalArguments[$item['argument']])
-                        ? $this->globalArguments[$item['argument']]
-                        : null;
+                    if (isset($this->globalArguments[$item['argument']])) {
+                        $array[$key] = $this->globalArguments[$item['argument']];
+                    } else {
+                        $array[$key] = null;
+                    }
                 } else {
                     $this->parseArray($array[$key]);
                 }

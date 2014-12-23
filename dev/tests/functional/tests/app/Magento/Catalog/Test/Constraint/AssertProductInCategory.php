@@ -16,12 +16,9 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductInCategory extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Checking the product in the page of its price

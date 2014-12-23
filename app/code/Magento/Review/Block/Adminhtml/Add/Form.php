@@ -134,7 +134,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'detail',
                 'title' => __('Review'),
                 'label' => __('Review'),
-                'style' => 'height: 600px;',
                 'required' => true
             ]
         );

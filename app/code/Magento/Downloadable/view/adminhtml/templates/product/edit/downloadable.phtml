@@ -12,9 +12,10 @@
 <script type="text/javascript">
 require([
     'jquery',
+    'Magento_Ui/js/lib/registry/registry',
     'mage/mage',
     'prototype'
-], function(jQuery){
+], function(jQuery, registry){
 
 //<![CDATA[>
 var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
@@ -196,6 +197,8 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     window.uploaderTemplate = uploaderTemplate;
 
     window.alertAlreadyDisplayed = alertAlreadyDisplayed;
+
+    registry.set('downloadable', Downloadable);
 //]]>
 
 });

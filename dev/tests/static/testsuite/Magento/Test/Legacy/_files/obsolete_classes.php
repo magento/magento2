@@ -2819,6 +2819,15 @@ return [
     ['Magento\Customer\Model\Converter'],
     ['Magento\CatalogRule\Plugin\Indexer\Product\PriceIndexer'],
     ['Magento\CatalogRule\Plugin\Indexer\Product\PriceIndexerTest'],
+    [
+        'Magento\Framework\Interception\ObjectManager\Compiled\Config',
+        'Magento\Framework\Interception\ObjectManager\Config\Compiled'
+    ],
+    [
+        'Magento\Framework\Interception\ObjectManager\Config',
+        'Magento\Framework\Interception\ObjectManager\Config\Developer'
+    ],
+    ['Magento\Framework\ObjectManager\Config\ProxyConfig'],
     ['Magento\Catalog\Block\Product\Send'],
     ['Magento\Catalog\Helper\Product\Options'],
     ['Magento\Cms\Model\Resource\Page\Service'],
@@ -2826,6 +2835,10 @@ return [
     ['Magento\GiftMessage\Helper\Url'],
     ['Magento\Rss\Helper\Data'],
     ['Magento\Sales\Model\ConverterInterface'],
+    ['Magento\Paypal\Block\System\Config\Fieldset\Location'],
+    ['Magento\Paypal\Block\Payflow\Advanced\Review'],
+    ['Magento\Paypal\Block\Payflow\Link\Review'],
+    ['Magento\Paypal\Model\System\Config\Source\AuthorizationAmounts'],
     ['Magento\Rule\Model\Rule', 'Magento\Rule\Model\AbstractModel'],
     ['Magento\Framework\App\Cache\State\Options', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\App\Cache\State\OptionsInterface', 'Magento\Framework\App\Cache\State'],

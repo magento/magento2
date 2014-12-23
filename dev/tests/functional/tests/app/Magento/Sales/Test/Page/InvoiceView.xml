@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/order/invoice" module="Magento_Sales">
+    <blocks>
+        <invoiceBlock>
+            <class>Magento\Sales\Test\Block\Order\View</class>
+            <locator>.order-details-items</locator>
+            <strategy>css selector</strategy>
+        </invoiceBlock>
+    </blocks>
+</page>

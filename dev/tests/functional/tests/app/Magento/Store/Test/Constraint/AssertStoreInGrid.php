@@ -15,12 +15,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertStoreInGrid extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that created Store View can be found in Stores grid by name

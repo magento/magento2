@@ -2,19 +2,12 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 define([
-    'mage/utils',
-    'Magento_Ui/js/form/component',
     'underscore',
-    'Magento_Ui/js/lib/registry/registry'
-], function (utils, Component, _, registry) {
+    'mage/utils',
+    'Magento_Ui/js/lib/registry/registry',
+    'Magento_Ui/js/form/component',
+], function (_, utils, registry, Component) {
     'use strict';
-
-    var __super__ = Component.prototype;
-
-    var defaults = {
-        lastIndex: 0,
-        template: 'ui/form/components/collection'
-    };
 
     var childTemplate = {
         template:   "{name}.{itemTemplate}",
@@ -24,17 +17,20 @@ define([
     };
 
     return Component.extend({
+        defaults: {
+            lastIndex: 0,
+            template: 'ui/form/components/collection'
+        },
 
         /**
          * Extends instance with default config, calls initialize of parent
          * class, calls initChildren method.
          */
         initialize: function () {
-            _.extend(this, defaults);
+            this._super()
+                .initChildren();
 
-            __super__.initialize.apply(this, arguments);
-
-            this.initChildren();
+            return this;
         },
 
         /**
@@ -42,12 +38,14 @@ define([
          *
          * @param {Object} elem - Incoming child.
          */
-        initElement: function (elem) {
-            __super__.initElement.apply(this, arguments);
+        initElement: function(elem) {
+            this._super();
 
             elem.activate();
 
             this.trigger('update');
+
+            return this;
         },
 
         /**
@@ -56,19 +54,18 @@ define([
          *
          * @returns {Collection} Chainable.
          */
-        initChildren: function () {
+        initChildren: function() {
             var data     = this.provider.data,
                 children = data.get(this.dataScope),
                 initial  = this.initialItems = [];
-                        
-            _.each(children, function(item, index){
+
+            _.each(children, function(item, index) {
                 initial.push(index);
                 this.addChild(index);
             }, this);
 
             return this;
         },
-
         /**
          * Creates new item of collection, based on incoming 'index'.
          * If not passed creates one with 'new_' prefix.

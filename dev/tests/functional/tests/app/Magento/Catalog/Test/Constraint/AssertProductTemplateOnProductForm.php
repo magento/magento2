@@ -20,12 +20,9 @@ use Mtf\Fixture\FixtureFactory;
  */
 class AssertProductTemplateOnProductForm extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
     /**
      * Assert that created product template:

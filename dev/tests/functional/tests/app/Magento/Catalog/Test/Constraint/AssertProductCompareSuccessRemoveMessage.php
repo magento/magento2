@@ -15,14 +15,11 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductCompareSuccessRemoveMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'You removed product %s from the comparison list.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const SUCCESS_MESSAGE = 'You removed product %s from the comparison list.';
 
     /**
      * Assert message is appeared on "Compare Products" block on myAccount page

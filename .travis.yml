@@ -10,30 +10,42 @@ env:
   - TEST_SUITE=static_annotation
 matrix:
   exclude:
-    - php: 5.5
+    - php: 5.4
       env: TEST_SUITE=static_phpcs
-    - php: 5.5
+    - php: 5.4
       env: TEST_SUITE=static_annotation
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
 before_script:
-  # mock mail
+  # Mock mail
   - sudo service postfix stop
   - smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
   - echo -e '#!/usr/bin/env bash\nexit 0' | sudo tee /usr/sbin/sendmail
-  - echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' | sudo tee "/home/travis/.phpenv/versions/`php -i | grep "PHP Version" | head -n 1 | grep -o -P '\d+\.\d+\.\d+.*'`/etc/conf.d/sendmail.ini"
+  - >
+      echo 'sendmail_path = "/usr/sbin/sendmail -t -i "'
+      | sudo tee "/home/travis/.phpenv/versions/`php -i
+      | grep "PHP Version"
+      | head -n 1
+      | grep -o -P '\d+\.\d+\.\d+.*'`/etc/conf.d/sendmail.ini"
   # Disable xDebug
   - echo '' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
-  # Create DB for Integration tests
-  - sh -c "if [ '$TEST_SUITE' = 'integration' ] || [ '$TEST_SUITE' = 'integration_integrity' ]; then mysql -e 'create database magento_integration_tests;'; mv dev/tests/integration/etc/install-config-mysql.travis.php.dist dev/tests/integration/etc/install-config-mysql.php; fi"
-  # Install tools for static tests
-  - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ] || [ '$TEST_SUITE' = 'static_annotation' ]; then pear install pear/PHP_CodeSniffer-1.5.2; fi"
-  # Change memmory_limit for travis server
+  # Install MySQL 5.6, create DB for integration tests
+  - >
+      sh -c "if [ '$TEST_SUITE' = 'integration' ] || [ '$TEST_SUITE' = 'integration_integrity' ]; then
+      sudo apt-get remove --purge mysql-common mysql-server-5.5 mysql-server-core-5.5 mysql-client-5.5 mysql-client-core-5.5;
+      sudo apt-get autoremove;
+      sudo apt-get autoclean;
+      sudo apt-add-repository ppa:ondrej/mysql-5.6 -y;
+      sudo apt-get update;
+      sudo apt-get install mysql-server-5.6 mysql-client-5.6;
+      mysql -uroot -e 'SET @@global.sql_mode = NO_ENGINE_SUBSTITUTION; CREATE DATABASE magento_integration_tests;';
+      mv dev/tests/integration/etc/install-config-mysql.travis.php.dist dev/tests/integration/etc/install-config-mysql.php;
+      fi"
+  # Change memory_limit for travis
   - echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv rehash;
-  - composer install --no-interaction --prefer-source --dev
-  - cd ..
+  - composer install --no-interaction --dev
 script:
   # Unit tests
   - sh -c "if [ '$TEST_SUITE' = 'unit' ]; then ./vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist; fi"

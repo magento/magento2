@@ -249,7 +249,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             );
         }
 
-        $rowRequest->setOrigCountry($this->_countryFactory->create()->load($origCountry)->getIso2Code());
+        $rowRequest->setOrigCountry($this->_countryFactory->create()->load($origCountry)->getData('iso2_code'));
 
         if ($request->getOrigRegionCode()) {
             $origRegionCode = $request->getOrigRegionCode();
@@ -307,7 +307,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $destCountry = self::GUAM_COUNTRY_ID;
         }
 
-        $rowRequest->setDestCountry($this->_countryFactory->create()->load($destCountry)->getIso2Code());
+        $rowRequest->setDestCountry($this->_countryFactory->create()->load($destCountry)->getData('iso2_code'));
 
         $rowRequest->setDestRegionCode($request->getDestRegionCode());
 

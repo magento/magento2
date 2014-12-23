@@ -16,12 +16,9 @@ use Mtf\Fixture\InjectableFixture;
  */
 class AssertProductAttributeIsFilterableInSearch extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Check out if the attribute in the navigation bar on the search results page in Layered navigation.

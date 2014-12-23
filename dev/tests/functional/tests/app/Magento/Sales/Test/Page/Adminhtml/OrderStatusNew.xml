@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/order_status/new" module="Magento_Sales">
+    <blocks>
+        <formPageActions>
+            <class>Magento\Backend\Test\Block\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </formPageActions>
+        <orderStatusForm>
+            <class>Magento\Backend\Test\Block\Widget\Form</class>
+            <locator>#edit_form</locator>
+            <strategy>css selector</strategy>
+        </orderStatusForm>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+    </blocks>
+</page>
