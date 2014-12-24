@@ -18,7 +18,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\HTTP\ZendClient */
     protected $_httpClientMock;
 
-    /** @var \Magento\Integration\Model\Oauth\Token\Factory */
+    /** @var \Magento\Integration\Model\Oauth\TokenFactory */
     protected $_tokenFactory;
 
     /** @var \Magento\Integration\Model\Oauth\Token */
@@ -53,8 +53,8 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_tokenFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Token\Factory'
-        )->disableOriginalConstructor()->getMock();
+            'Magento\Integration\Model\Oauth\TokenFactory'
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder(
             'Magento\Integration\Model\Oauth\Token'
         )->disableOriginalConstructor()->getMock();
