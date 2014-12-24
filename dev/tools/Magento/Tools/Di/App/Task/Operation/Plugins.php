@@ -8,7 +8,7 @@ namespace Magento\Tools\Di\App\Task\Operation;
 
 use Magento\Tools\Di\App\Task\OperationInterface;
 use Magento\Tools\Di\Compiler\Config;
-use Magento\Framework\Interception;
+use Magento\Framework\Interception\Definition;
 
 class Plugins implements OperationInterface
 {
@@ -23,7 +23,7 @@ class Plugins implements OperationInterface
     private $data = '';
 
     /**
-     * @var Interception\Definition\Runtime
+     * @var Definition\Runtime
      */
     private $definitionRuntime;
 
@@ -34,12 +34,12 @@ class Plugins implements OperationInterface
 
     /**
      * @param Config\WriterInterface $configWriter
-     * @param Interception\Definition\Runtime $definitionRuntime
+     * @param Definition\Runtime $definitionRuntime
      * @param string $data
      */
     public function __construct(
         Config\WriterInterface $configWriter,
-        Interception\Definition\Runtime $definitionRuntime,
+        Definition\Runtime $definitionRuntime,
         $data = ''
     ) {
         $this->configWriter = $configWriter;

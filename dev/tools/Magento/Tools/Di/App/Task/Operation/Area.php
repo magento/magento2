@@ -74,7 +74,7 @@ class Area implements OperationInterface
             $definitionsCollection->addCollection($this->getDefinitionsCollection($path));
         }
 
-        $areaCodes = [App\Area::AREA_GLOBAL] + $this->areaList->getCodes();
+        $areaCodes = array_merge([App\Area::AREA_GLOBAL], $this->areaList->getCodes());
         foreach ($areaCodes as $areaCode) {
             $this->configWriter->write(
                 $areaCode,
