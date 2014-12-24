@@ -232,7 +232,9 @@ class Category extends AbstractResource
         }
 
         if (!$object->getId()) {
-            $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
+            if (is_null($object->getPosition())) {
+                $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
+            }
             $path = explode('/', $object->getPath());
             $level = count($path);
             $object->setLevel($level);
