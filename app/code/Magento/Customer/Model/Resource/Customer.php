@@ -9,7 +9,7 @@ use Magento\Framework\Exception\InputException;
 /**
  * Customer entity resource model
  */
-class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
+class Customer extends \Magento\Customer\Model\Resource\AbstractResource
 {
     /**
      * @var \Magento\Core\Model\Validator\Factory
@@ -76,8 +76,6 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _getDefaultAttributes()
     {
         return [
-            'entity_type_id',
-            'attribute_set_id',
             'created_at',
             'updated_at',
             'increment_id',

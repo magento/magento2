@@ -9,7 +9,7 @@ namespace Magento\Customer\Model\Resource\Address;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
+class Collection extends \Magento\Customer\Model\Resource\Collection\AbstractCollection
 {
     /**
      * Resource initialization
@@ -37,41 +37,5 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
             $this->addAttributeToFilter('parent_id', '-1');
         }
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Redeclare method to disable entity_type_id filter
-     */
-    protected function _initSelect()
-    {
-        $this->getSelect()->from(['e' => $this->getEntity()->getEntityTable()]);
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Redeclare method to disable entity_type_id filter
-     */
-    protected function _getLoadAttributesSelect($table, $attributeIds = [])
-    {
-        if (empty($attributeIds)) {
-            $attributeIds = $this->_selectAttributes;
-        }
-        $entityIdField = $this->getEntity()->getEntityIdField();
-        $select = $this->getConnection()->select()->from(
-            $table,
-            [$entityIdField, 'attribute_id']
-
-        )->where(
-            "{$entityIdField} IN (?)",
-            array_keys($this->_itemsById)
-        )->where(
-            'attribute_id IN (?)',
-            $attributeIds
-        );
-        return $select;
     }
 }
