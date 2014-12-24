@@ -4,6 +4,7 @@
  */
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Framework\Model\Exception;
 
 class TypeTest extends \PHPUnit_Framework_TestCase
@@ -32,14 +33,21 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Bundle\Model\OptionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $bundleOptionFactory;
+
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockRegistry;
+
     /**
      * @var \Magento\CatalogInventory\Api\StockStateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockState;
+
+    /**
+     * @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $catalogProduct;
 
     protected function setUp()
     {
@@ -65,6 +73,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getStockQty'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->catalogProduct = $this->getMockBuilder('Magento\Catalog\Helper\Product')
+            ->setMethods(['getSkipSaleableCheck'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $bundleModelSelection = $this->getMockBuilder('\Magento\Bundle\Model\SelectionFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -83,12 +95,13 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'catalogData' => $this->catalogData,
                 'storeManager' => $this->storeManager,
                 'stockRegistry' => $this->stockRegistry,
-                'stockState' => $this->stockState
+                'stockState' => $this->stockState,
+                'catalogProduct' => $this->catalogProduct
             ]
         );
     }
 
-    public function testPrepareForCartAdvancedPaertClassReturnString()
+    public function testPrepareForCartAdvancedParentClassReturnString()
     {
         $exceptedResult = 'String message';
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object $buyRequest */
@@ -101,10 +114,50 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getOptions'])
             ->disableOriginalConstructor()
             ->getMock();
-        $product->expects($this->at(0))->method('getOptions')->willThrowException(new Exception($exceptedResult));
+        $product->expects($this->at(0))
+            ->method('getOptions')
+            ->willThrowException(new Exception($exceptedResult));
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals($exceptedResult, $result);
+    }
+
+    public function testPrepareForCartAdvancedSpecifyProductOptions()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        $group = $this->getMockBuilder('Magento\Catalog\Model\Product\Option\Type\DefaultType')
+            ->setMethods(
+                ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object $buyRequest */
+        $buyRequest = $this->getMockBuilder('Magento\Framework\Object')
+            ->setMethods(['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        $option = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+            ->setMethods(['groupFactory', 'getType', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->setMethods(['getOptions', 'prepareCustomOptions', 'addCustomOption', 'setCartQty', 'setQty', 'getSkipCheckRequiredOption'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->parentClass($group, $option, $buyRequest, $product);
+
+        $product->expects($this->once())
+            ->method('getSkipCheckRequiredOption')
+            ->willReturn(true);
+        $buyRequest->expects($this->once())
+            ->method('getBundleOption')
+            ->willReturn([0, '', 'str']);
+
+        $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
+        $this->assertEquals('Please specify product option(s).', $result);
     }
 
     public function testHasWeightTrue()
@@ -925,5 +978,71 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $result->method('getManageStock')->willReturn($isManageStock);
         return $result;
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject|DefaultType $group
+     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option $option
+     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object $buyRequest
+     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product
+     */
+    protected function parentClass($group, $option, $buyRequest, $product)
+    {
+        $group->expects($this->once())
+            ->method('setOption')
+            ->willReturnSelf();
+        $group->expects($this->once())
+            ->method('setProduct')
+            ->willReturnSelf();
+        $group->expects($this->once())
+            ->method('setRequest')
+            ->willReturnSelf();
+        $group->expects($this->once())
+            ->method('setProcessMode')
+            ->willReturnSelf();
+        $group->expects($this->once())
+            ->method('validateUserValue')
+            ->willReturnSelf();
+        $group->expects($this->once())
+            ->method('prepareForCart')
+            ->willReturn('someString');
+
+        $option->expects($this->once())
+            ->method('getType');
+        $option->expects($this->once())
+            ->method('groupFactory')
+            ->willReturn($group);
+        $option->expects($this->once())
+            ->method('getId')
+            ->willReturn(333);
+
+        $buyRequest->expects($this->once())
+            ->method('getData');
+        $buyRequest->expects($this->once())
+            ->method('getOptions');
+        $buyRequest->expects($this->once())
+            ->method('getSuperProductConfig')
+            ->willReturn([]);
+        $buyRequest->expects($this->any())
+            ->method('unsetData')
+            ->willReturnSelf();
+        $buyRequest->expects($this->any())
+            ->method('getQty');
+
+        $product->expects($this->once())
+            ->method('getOptions')
+            ->willReturn([$option]);
+        $product->expects($this->once())
+            ->method('prepareCustomOptions');
+        $product->expects($this->any())
+            ->method('addCustomOption');
+        $product->expects($this->once())
+            ->method('setCartQty');
+        $product->expects($this->once())
+            ->method('setQty');
+
+        $this->catalogProduct->expects($this->once())
+            ->method('getSkipSaleableCheck')
+            ->willReturn(false);
     }
 }
