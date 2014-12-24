@@ -7,7 +7,7 @@ namespace Magento\CheckoutAgreements\Api\Data;
 /**
  * @see \Magento\CheckoutAgreements\Service\V1\Data\Agreement
  */
-interface CheckoutAgreementsInterface
+interface AgreementInterface
 {
     /**
      * Returns the agreement ID.

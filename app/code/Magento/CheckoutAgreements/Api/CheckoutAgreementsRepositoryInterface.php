@@ -9,7 +9,7 @@ interface CheckoutAgreementsRepositoryInterface
     /**
      * Lists active checkout agreements.
      *
-     * @return \Magento\CheckoutAgreements\Api\Data\CheckoutAgreementsInterface[]
+     * @return \Magento\CheckoutAgreements\Api\Data\AgreementInterface[]
      * @see \Magento\CheckoutAgreements\Service\V1\Agreement\ReadServiceInterface::getList
      */
     public function getList();
