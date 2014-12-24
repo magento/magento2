@@ -47,18 +47,4 @@ class Comment extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         return $this->escapeHtml($this->getQuote()->getCustomerNote());
     }
-
-    /**
-     * Get note notification
-     *
-     * @return bool
-     */
-    public function getNoteNotify()
-    {
-        $notify = $this->getQuote()->getCustomerNoteNotify();
-        if (is_null($notify) || $notify) {
-            return true;
-        }
-        return false;
-    }
 }
