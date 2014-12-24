@@ -684,12 +684,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $options = $buyRequest->getBundleOption();
             if (is_array($options)) {
                 $options = array_filter($options, 'intval');
-                $qtys = $buyRequest->getBundleOptionQty();
-                foreach ($options as $_optionId => $_selections) {
-                    if (empty($_selections)) {
-                        unset($options[$_optionId]);
-                    }
-                }
                 $optionIds = array_keys($options);
 
                 if (empty($optionIds) && $isStrictProcessMode) {
@@ -775,6 +769,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             if (count($selections) > 0 || !$isStrictProcessMode) {
                 $uniqueKey = [$product->getId()];
                 $selectionIds = [];
+                $qtys = $buyRequest->getBundleOptionQty();
 
                 // Shuffle selection array by option position
                 usort($selections, [$this, 'shakeSelections']);
