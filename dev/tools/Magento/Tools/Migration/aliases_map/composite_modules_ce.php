@@ -18,4 +18,4 @@ require_once realpath(
 ) . '/app/code/Magento/Core/Model/Resource/Setup/Migration.php';
 
 $objectManager = new \Magento\Framework\App\ObjectManager();
-return $objectManager->create('\Magento\Framework\Module\Setup\Migration')->getCompositeModules();
+return $objectManager->create('Magento\Framework\Module\Setup\Migration')->getCompositeModules();

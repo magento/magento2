@@ -107,7 +107,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->adapter = $this->objectManager->getObject(
-            '\Magento\Framework\Search\Adapter\Mysql\Adapter',
+            'Magento\Framework\Search\Adapter\Mysql\Adapter',
             [
                 'mapper' => $this->mapper,
                 'responseFactory' => $this->responseFactory,
