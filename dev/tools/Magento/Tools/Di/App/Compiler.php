@@ -65,12 +65,12 @@ class Compiler implements \Magento\Framework\AppInterface
 
         $operations = [
             Task\OperationFactory::AREA => [
-                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+                BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
             ],
             Task\OperationFactory::INTERCEPTION =>
                 BP . '/var/generation',
             Task\OperationFactory::RELATIONS => [
-                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+                BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
             ],
             Task\OperationFactory::PLUGINS =>
                 BP . '/app'

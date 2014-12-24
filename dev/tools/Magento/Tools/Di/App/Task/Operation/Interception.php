@@ -30,6 +30,7 @@ class Interception implements OperationInterface
 
     /**
      * @param InterceptionConfigurationBuilder $interceptionConfigurationBuilder
+     * @param App\AreaList $areaList
      * @param string $data
      */
     public function __construct(
