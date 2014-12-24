@@ -127,8 +127,8 @@ class WriteService implements WriteServiceInterface
 
         try {
             $this->quoteRepository->getActiveForCustomer($this->userContext->getUserId());
-            throw new CouldNotSaveException('Cannot create quote');
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            throw new CouldNotSaveException('Cannot create quote');
         }
 
         /** @var \Magento\Sales\Model\Quote $quote */

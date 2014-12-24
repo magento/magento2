@@ -9,11 +9,12 @@ interface CartManagementInterface
     /**
      * Enables an administrative or guest user to create an empty cart and quote for an anonymous customer.
      *
+     * @param int $storeId
      * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
      * @return int Cart ID.
      * @see \Magento\Checkout\Service\V1\Cart\WriteServiceInterface::create
      */
-    public function createEmptyCart();
+    public function createEmptyCart($storeId);
 
     /**
      * Returns information for the cart for a specified customer.
@@ -30,10 +31,11 @@ interface CartManagementInterface
      *
      * @param int $cartId The cart ID.
      * @param int $customerId The customer ID.
+     * @param int $storeId
      * @return boolean
      * @see \Magento\Checkout\Service\V1\Cart\WriteServiceInterface::assignCustomer
      */
-    public function assignCustomer($cartId, $customerId);
+    public function assignCustomer($cartId, $customerId, $storeId);
 
     /**
      * Returns information for a coupon in a specified cart.

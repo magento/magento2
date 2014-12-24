@@ -17,13 +17,6 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getId();
 
     /**
-     * Returns the store ID for the store where the cart was created.
-     *
-     * @return int|null Store ID. Otherwise, null.
-     */
-    public function getStoreId();
-
-    /**
      * Returns the cart creation date and time.
      *
      * @return string|null Cart creation date and time. Otherwise, null.
