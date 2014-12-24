@@ -39,6 +39,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateCustomerFrontendEntity extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Factory for Fixtures
      *

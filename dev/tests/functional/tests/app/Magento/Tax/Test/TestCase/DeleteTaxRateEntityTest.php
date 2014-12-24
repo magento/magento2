@@ -28,6 +28,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteTaxRateEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Tax Rate grid page.
      *

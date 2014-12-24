@@ -31,6 +31,11 @@ use Mtf\TestCase\Injectable;
  */
 class MassDeleteCustomerBackendEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Customer Index page
      *

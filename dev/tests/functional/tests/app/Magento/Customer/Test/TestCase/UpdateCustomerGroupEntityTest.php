@@ -29,6 +29,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateCustomerGroupEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Page CustomerGroupIndex
      *

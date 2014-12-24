@@ -32,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateTaxRuleEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Tax Rule grid page.
      *

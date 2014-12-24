@@ -28,6 +28,11 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple\CrossSellProducts;
  */
 class AddCrossSellEntityTest extends AbstractAddRelatedProductsEntityTest
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Run test add cross sell products entity
      *

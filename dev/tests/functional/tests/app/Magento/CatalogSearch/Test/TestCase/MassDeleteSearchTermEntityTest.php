@@ -31,6 +31,11 @@ use Mtf\TestCase\Injectable;
  */
 class MassDeleteSearchTermEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Search term page
      *

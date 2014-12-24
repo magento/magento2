@@ -31,6 +31,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteAttributeSetTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog Product Set index page
      *

@@ -26,11 +26,16 @@ use Mtf\TestCase\Injectable;
  * 4. Click "Delete User" button
  * 5. Perform all assertions
  *
- * @group ACL_(MX)
+ * @group ACL_(PS)
  * @ZephyrId MAGETWO-23416
  */
 class DeleteAdminUserEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * @var UserIndex
      */

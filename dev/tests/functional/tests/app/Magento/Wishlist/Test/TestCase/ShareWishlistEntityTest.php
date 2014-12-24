@@ -41,6 +41,11 @@ use Mtf\TestCase\Injectable;
  */
 class ShareWishlistEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Cms index page
      *

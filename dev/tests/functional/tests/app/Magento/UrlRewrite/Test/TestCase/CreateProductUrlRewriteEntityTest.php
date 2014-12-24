@@ -29,11 +29,16 @@ use Mtf\TestCase\Injectable;
  * 7. Fill data according to dataSet
  * 8. Perform all assertions
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites_(PS)
  * @ZephyrId MAGETWO-25150
  */
 class CreateProductUrlRewriteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Url rewrite index page
      *

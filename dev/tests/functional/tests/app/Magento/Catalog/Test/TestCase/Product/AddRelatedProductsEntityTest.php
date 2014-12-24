@@ -29,6 +29,11 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple\RelatedProducts;
  */
 class AddRelatedProductsEntityTest extends AbstractAddRelatedProductsEntityTest
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Run test add related products entity
      *

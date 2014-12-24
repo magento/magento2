@@ -32,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteUsedInConfigurableProductAttributeTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog product attribute index page
      *

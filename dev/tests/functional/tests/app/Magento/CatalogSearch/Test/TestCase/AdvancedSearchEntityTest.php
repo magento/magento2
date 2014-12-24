@@ -27,6 +27,11 @@ use Mtf\TestCase\Injectable;
  */
 class AdvancedSearchEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Prepare data.
      *

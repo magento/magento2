@@ -34,6 +34,11 @@ use Mtf\TestCase\Injectable;
  */
 class MassActionsProductReviewEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Backend rating grid page
      *

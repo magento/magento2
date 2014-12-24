@@ -26,6 +26,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateCustomerBackendEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * @var CustomerIndex
      */

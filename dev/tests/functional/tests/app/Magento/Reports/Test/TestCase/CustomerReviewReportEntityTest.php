@@ -40,6 +40,11 @@ use Mtf\TestCase\Injectable;
  */
 class CustomerReviewReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Customer frontend logout page
      *

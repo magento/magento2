@@ -21,11 +21,16 @@ use Mtf\TestCase\Injectable;
  * 5. Save role
  * 6. Perform assertions
  *
- * @group ACL_(MX)
+ * @group ACL_(PS)
  * @ZephyrId MAGETWO-23413
  */
 class CreateAdminUserRoleEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * @var UserRoleIndex
      */

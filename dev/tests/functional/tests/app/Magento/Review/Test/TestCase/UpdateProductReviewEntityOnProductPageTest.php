@@ -38,6 +38,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateProductReviewEntityOnProductPageTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog product index page
      *

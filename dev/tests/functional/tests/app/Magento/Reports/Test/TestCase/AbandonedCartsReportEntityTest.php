@@ -32,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class AbandonedCartsReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog Product View page.
      *

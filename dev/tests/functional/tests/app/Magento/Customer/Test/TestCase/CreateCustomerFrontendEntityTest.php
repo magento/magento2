@@ -26,6 +26,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateCustomerFrontendEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * @var CustomerAccountCreate
      */

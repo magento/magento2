@@ -29,6 +29,11 @@ use Magento\CatalogRule\Test\Fixture\CatalogRule;
  */
 class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Update catalog price rule
      *

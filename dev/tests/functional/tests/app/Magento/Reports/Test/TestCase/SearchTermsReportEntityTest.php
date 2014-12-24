@@ -26,6 +26,11 @@ use Mtf\TestCase\Injectable;
  */
 class SearchTermsReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Index page.
      *
@@ -72,6 +77,7 @@ class SearchTermsReportEntityTest extends Injectable
      */
     public function test($product, $countProducts, $countSearch)
     {
+        $this->markTestIncomplete('MAGETWO-30246');
         // Preconditions
         $productName = $this->createProducts($product, $countProducts);
 

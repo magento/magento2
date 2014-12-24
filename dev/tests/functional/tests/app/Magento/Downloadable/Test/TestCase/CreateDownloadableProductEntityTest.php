@@ -23,11 +23,16 @@ use Mtf\TestCase\Injectable;
  * 6. Save product.
  * 7. Verify created product.
  *
- * @group Downloadable_Product_(CS)
+ * @group Downloadable_Product_(MX)
  * @ZephyrId MAGETWO-23425
  */
 class CreateDownloadableProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Fixture category
      *

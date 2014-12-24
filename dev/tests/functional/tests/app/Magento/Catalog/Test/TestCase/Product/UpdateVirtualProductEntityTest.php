@@ -29,11 +29,16 @@ use Mtf\TestCase\Injectable;
  * 5. Click "Save".
  * 6. Perform asserts.
  *
- * @group Products_(CS)
+ * @group Products_(MX)
  * @ZephyrId MAGETWO-26204
  */
 class UpdateVirtualProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Virtual product fixture
      *
