@@ -4,6 +4,7 @@
  */
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
+use Magento\Bundle\Model\Option;
 use Magento\Catalog\Model\Product;
 
 /**
@@ -122,7 +123,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     public function getJsonConfig()
     {
-        /** @var \Magento\Bundle\Model\Option[] $optionsArray */
+        /** @var Option[] $optionsArray */
         $optionsArray = $this->getOptions();
         $options = [];
         $currentProduct = $this->getProduct();
@@ -134,7 +135,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 
         $position = 0;
         foreach ($optionsArray as $optionItem) {
-            /* @var $optionItem \Magento\Bundle\Model\Option */
+            /* @var $optionItem Option */
             if (!$optionItem->getSelections()) {
                 continue;
             }
@@ -162,10 +163,10 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Get html for option
      *
-     * @param \Magento\Bundle\Api\Data\OptionInterface $option
+     * @param Option $option
      * @return string
      */
-    public function getOptionHtml(\Magento\Bundle\Api\Data\OptionInterface $option)
+    public function getOptionHtml(Option $option)
     {
         $optionBlock = $this->getChildBlock($option->getType());
         if (!$optionBlock) {
@@ -175,6 +176,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Get formed data from option selection item
+     *
      * @param Product $product
      * @param Product $selection
      * @return array
@@ -212,6 +215,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
+     * Get tier prices from option selection item
+     *
      * @param Product $product
      * @param Product $selection
      * @return array
@@ -250,11 +255,13 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * @param $option
-     * @param $product
+     * Get formed data from selections of option
+     *
+     * @param Option $option
+     * @param Product $product
      * @return array
      */
-    private function getSelections($option, $product)
+    private function getSelections(Option $option, Product $product)
     {
         $selections = [];
         $selectionCount = count($option->getSelections());
@@ -273,22 +280,26 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * @param $optionItem
-     * @param $product
-     * @param $position
+     * Get formed data from option
+     *
+     * @param Option $option
+     * @param Product $product
+     * @param int $position
      * @return array
      */
-    private function getOptionItemData($optionItem, $product, $position)
+    private function getOptionItemData(Option $option, Product $product, $position)
     {
         return [
-            'selections' => $this->getSelections($optionItem, $product),
-            'title' => $optionItem->getTitle(),
-            'isMulti' => in_array($optionItem->getType(), ['multi', 'checkbox']),
+            'selections' => $this->getSelections($option, $product),
+            'title' => $option->getTitle(),
+            'isMulti' => in_array($option->getType(), ['multi', 'checkbox']),
             'position' => $position
         ];
     }
 
     /**
+     * Get formed config data from calculated options data
+     *
      * @param Product $product
      * @param array $options
      * @return array
