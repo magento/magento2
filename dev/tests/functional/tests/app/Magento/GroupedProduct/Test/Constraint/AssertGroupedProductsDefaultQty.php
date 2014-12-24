@@ -16,12 +16,9 @@ use Mtf\Constraint\AbstractAssertForm;
  */
 class AssertGroupedProductsDefaultQty extends AbstractAssertForm
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that default qty for sub products in grouped product displays according to dataset on product page

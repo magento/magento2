@@ -849,10 +849,6 @@ body.catalog-product-compare-index {
     }
 }
 
-.compare.wrapper {
-    display: none;
-}
-
 }
 
 //
@@ -869,13 +865,18 @@ body.catalog-product-compare-index {
         }
     }
 }
+.responsive-max-m(@break) when (@break = @screen-m) {
+    .compare.wrapper,
+    [class*="block-compare"] {
+        display: none;
+    }
+}
 
 //
 //    Desktop
 //--------------------------------------
 .responsive-min-l(@break) when (@break = @screen-m) {
     .compare.wrapper {
-        display: block;
         float: right;
         .list-reset-styles();
         .action.compare {
@@ -900,9 +901,6 @@ body.catalog-product-compare-index {
                 content: ")";
             }
         }
-    }
-    .table-wrapper.comparison {
-        .table-overflow();
     }
 }
 

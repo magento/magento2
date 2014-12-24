@@ -8,6 +8,9 @@ use Magento\Catalog\Model\Category;
 
 class ChildrenCategoriesProvider
 {
+    /** @var array */
+    protected $childrenIds = [];
+
     /**
      * @param \Magento\Catalog\Model\Category $category
      * @param boolean $recursive
@@ -15,7 +18,7 @@ class ChildrenCategoriesProvider
      */
     public function getChildren(Category $category, $recursive = false)
     {
-        return $category->getResourceCollection()
+        return $category->isObjectNew() ? [] : $category->getResourceCollection()
             ->addAttributeToSelect('url_path')
             ->addAttributeToSelect('url_key')
             ->addAttributeToSelect('name')
@@ -29,16 +32,19 @@ class ChildrenCategoriesProvider
      */
     public function getChildrenIds(Category $category, $recursive = false)
     {
-        $connection = $category->getResource()->getReadConnection();
-        $select = $connection->select()
-            ->from($category->getResource()->getEntityTable(), 'entity_id')
-            ->where($connection->quoteIdentifier('path') . ' LIKE :c_path');
-        $bind = ['c_path' => $category->getPath() . '/%'];
-        if (!$recursive) {
-            $select->where($connection->quoteIdentifier('level') . ' <= :c_level');
-            $bind['c_level'] = $category->getLevel() + 1;
+        $cacheKey = $category->getId() . '_' . (int)$recursive;
+        if (!isset($this->childrenIds[$cacheKey])) {
+            $connection = $category->getResource()->getReadConnection();
+            $select = $connection->select()
+                ->from($category->getResource()->getEntityTable(), 'entity_id')
+                ->where($connection->quoteIdentifier('path') . ' LIKE :c_path');
+            $bind = ['c_path' => $category->getPath() . '/%'];
+            if (!$recursive) {
+                $select->where($connection->quoteIdentifier('level') . ' <= :c_level');
+                $bind['c_level'] = $category->getLevel() + 1;
+            }
+            $this->childrenIds[$cacheKey] = $connection->fetchCol($select, $bind);
         }
-
-        return $connection->fetchCol($select, $bind);
+        return $this->childrenIds[$cacheKey];
     }
 }

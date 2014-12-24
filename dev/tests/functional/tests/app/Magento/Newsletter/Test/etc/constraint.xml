@@ -6,21 +6,21 @@
 -->
 <constraint>
     <assertNewsletterSuccessCreateMessage module="Magento_Newsletter">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertNewsletterSuccessCreateMessage>
     <assertNewsletterInGrid module="Magento_Newsletter">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertNewsletterInGrid>
     <assertNewsletterPreview module="Magento_Newsletter">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertNewsletterPreview>
     <assertNewsletterQueue module="Magento_Newsletter">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertNewsletterQueue>
     <assertCustomerIsSubscribedToNewsletter module="Magento_Newsletter">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertCustomerIsSubscribedToNewsletter>
     <assertNewsletterForm module="Magento_Newsletter">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertNewsletterForm>
 </constraint>

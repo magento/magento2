@@ -1,4 +1,0 @@
-"order/dataSet";"bestsellerReport/period_type";"bestsellerReport/from";"bestsellerReport/to";"bestsellerReport/show_empty_rows";"date";"constraint"
-"simple_big_qty";"Year";"m/d/Y -1 year";"m/d/Y";"No";"Y";"assertBestsellerReportResult"
-"virtual_big_qty";"Month";"m/d/Y -1 month";"m/d/Y";"Yes";"n/Y";"assertBestsellerReportResult"
-"simple_big_qty";"Day";"m/d/Y -1 day";"m/d/Y +1 day";"No";"M d, Y";"assertBestsellerReportResult"

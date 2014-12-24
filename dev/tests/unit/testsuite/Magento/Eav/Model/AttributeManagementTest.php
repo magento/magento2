@@ -125,6 +125,40 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
         $this->model->assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder);
     }
 
+    /**
+     *
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Attribute group does not belong to attribute set
+     */
+    public function testAssignInputExceptionGroupInSet()
+    {
+        $entityTypeCode = 1;
+        $attributeSetId = 2;
+        $attributeGroupId = 3;
+        $attributeCode = 4;
+        $sortOrder = 5;
+        $attributeSetMock = $this->getMock('Magento\Eav\Api\Data\AttributeSetInterface', [], [], '', false);
+        $this->setRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($attributeSetId)
+            ->willReturn($attributeSetMock);
+        $this->entityTypeFactoryMock->expects($this->once())->method('create')->willReturn($this->eavConfigMock);
+        $attributeSetMock->expects($this->once())->method('getEntityTypeId')->willReturn(66);
+        $entityTypeMock = $this->getMock('Magento\Eav\Model\Entity\Type', [], [], '', false);
+        $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(66)->willReturn($entityTypeMock);
+        $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn($entityTypeCode);
+
+        $attributeGroup = $this->getMockBuilder('Magento\Eav\Api\Data\AttributeGroupInterface')
+            ->setMethods(['getAttributeSetId'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->groupRepositoryMock->expects($this->once())->method('get')->willReturn($attributeGroup);
+        $attributeGroup->expects($this->once())->method('getAttributeSetId')->willReturn($attributeSetId + 1);
+
+        $this->model->assign($entityTypeCode, $attributeSetId, $attributeGroupId, $attributeCode, $sortOrder);
+    }
+
     public function testAssign()
     {
         $entityTypeCode = 1;
@@ -142,7 +176,6 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
         $entityTypeMock = $this->getMock('Magento\Eav\Model\Entity\Type', [], [], '', false);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(66)->willReturn($entityTypeMock);
         $entityTypeMock->expects($this->once())->method('getEntityTypeCode')->willReturn($entityTypeCode);
-        $this->groupRepositoryMock->expects($this->once())->method('get')->with($attributeGroupId);
         $attributeMock = $this->getMock('Magento\Eav\Model\Attribute', [], [], '', false);
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')
@@ -161,6 +194,14 @@ class AttributeManagementTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->once())->method('setAttributeSetId')->with($attributeSetId)->willReturnSelf();
         $attributeMock->expects($this->once())->method('loadEntityAttributeIdBySet')->willReturnSelf();
         $attributeMock->expects($this->once())->method('getData')->with('entity_attribute_id')->willReturnSelf();
+
+        $attributeGroup = $this->getMockBuilder('Magento\Eav\Api\Data\AttributeGroupInterface')
+            ->setMethods(['getAttributeSetId'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->groupRepositoryMock->expects($this->once())->method('get')->willReturn($attributeGroup);
+        $attributeGroup->expects($this->once())->method('getAttributeSetId')->willReturn($attributeSetId);
 
         $this->assertEquals(
             $attributeMock,

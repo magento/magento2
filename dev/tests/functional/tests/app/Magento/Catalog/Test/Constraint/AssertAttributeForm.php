@@ -15,12 +15,9 @@ use Mtf\Constraint\AbstractAssertForm;
  */
 class AssertAttributeForm extends AbstractAssertForm
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that displayed attribute data on edit page equals passed from fixture.

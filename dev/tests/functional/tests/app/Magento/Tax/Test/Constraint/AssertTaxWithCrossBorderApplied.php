@@ -11,12 +11,9 @@ namespace Magento\Tax\Test\Constraint;
  */
 class AssertTaxWithCrossBorderApplied extends AbstractAssertTaxWithCrossBorderApplying
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert prices on category, product and cart pages are equal for both customers

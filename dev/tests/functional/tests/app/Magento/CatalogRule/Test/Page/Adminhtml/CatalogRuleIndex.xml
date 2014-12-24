@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="catalog_rule/promo_catalog/index" module="Magento_CatalogRule">
+    <blocks>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages .messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <gridPageActions>
+            <class>Magento\CatalogRule\Test\Block\Adminhtml\Promo\GridPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </gridPageActions>
+        <catalogRuleGrid>
+            <class>Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog</class>
+            <locator>#promo_catalog_grid</locator>
+            <strategy>css selector</strategy>
+        </catalogRuleGrid>
+    </blocks>
+</page>

@@ -17,6 +17,10 @@ use Mtf\Constraint\AbstractAssertForm;
  */
 class AssertDownloadableLinksData extends AbstractAssertForm
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * List downloadable link fields for verify
      *
@@ -37,13 +41,6 @@ class AssertDownloadableLinksData extends AbstractAssertForm
         'links_purchased_separately',
         'price',
     ];
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert Link block for downloadable product on front-end

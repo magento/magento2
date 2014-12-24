@@ -301,7 +301,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $request->getStoreId()
             );
         }
-        $r->setOrigCountry($this->_countryFactory->create()->load($origCountry)->getIso2Code());
+        $r->setOrigCountry($this->_countryFactory->create()->load($origCountry)->getData('iso2_code'));
 
         if ($request->getOrigPostcode()) {
             $r->setOrigPostal($request->getOrigPostcode());
@@ -320,7 +320,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         } else {
             $destCountry = self::USA_COUNTRY_ID;
         }
-        $r->setDestCountry($this->_countryFactory->create()->load($destCountry)->getIso2Code());
+        $r->setDestCountry($this->_countryFactory->create()->load($destCountry)->getData('iso2_code'));
 
         if ($request->getDestPostcode()) {
             $r->setDestPostal($request->getDestPostcode());

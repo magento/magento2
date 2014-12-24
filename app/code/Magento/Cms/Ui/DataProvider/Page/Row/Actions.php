@@ -16,7 +16,7 @@ class Actions implements RowInterface
     /**
      * Url path
      */
-    const URL_PATH = '*/*/edit';
+    const URL_PATH = 'adminhtml/cms_page/edit';
 
     /**
      * @var UrlBuilder

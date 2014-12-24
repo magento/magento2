@@ -14,12 +14,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 abstract class AbstractAssertCustomerOrderReportResult extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Prepare filter

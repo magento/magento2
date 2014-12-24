@@ -16,11 +16,11 @@ use Mtf\Client\Element\Locator;
 class Tree extends Block
 {
     /**
-     * Locator value for  skip category button
+     * Locator value for skip category button
      *
      * @var string
      */
-    protected $skipCategoryButton = '[data-ui-id="catalog-product-edit-skip-categories"]';
+    protected $skipCategoryButton = '[data-ui-id$="skip-categories"]';
 
     /**
      * Select category by its name

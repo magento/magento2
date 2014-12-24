@@ -96,7 +96,7 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
             $bundleProduct
         );
 
-        $priceOptions = $optionCollection->appendSelections($selectionCollection, false, false);
+        $priceOptions = $optionCollection->appendSelections($selectionCollection, true, false);
         return $priceOptions;
     }
 

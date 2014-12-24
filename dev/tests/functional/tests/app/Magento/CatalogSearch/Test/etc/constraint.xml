@@ -6,21 +6,21 @@
 -->
 <constraint>
     <assertSuggestSearchingResult module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <catalogSearch class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
         </require>
     </assertSuggestSearchingResult>
     <assertAdvancedSearchProductsResult module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <resultPage class="Magento\CatalogSearch\Test\Page\Advanced\Result" />
             <productSearch class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
         </require>
     </assertAdvancedSearchProductsResult>
     <assertCatalogSearchResult module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <catalogSearch class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
@@ -28,7 +28,7 @@
         </require>
     </assertCatalogSearchResult>
     <assertSearchTermForm module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
@@ -36,14 +36,14 @@
         </require>
     </assertSearchTermForm>
     <assertSearchTermInGrid module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
         </require>
     </assertSearchTermInGrid>
     <assertSearchTermOnFrontend module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
@@ -51,13 +51,13 @@
         </require>
     </assertSearchTermOnFrontend>
     <assertSearchTermSuccessSaveMessage  module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
         </require>
     </assertSearchTermSuccessSaveMessage>
     <assertSearchTermSynonymOnFrontend  module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
@@ -65,20 +65,20 @@
         </require>
     </assertSearchTermSynonymOnFrontend>
     <assertSearchTermSuccessDeleteMessage module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
         </require>
     </assertSearchTermSuccessDeleteMessage>
     <assertSearchTermNotInGrid module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
         </require>
     </assertSearchTermNotInGrid>
     <assertSearchTermNotOnFrontend module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
@@ -86,7 +86,7 @@
         </require>
     </assertSearchTermNotOnFrontend>
     <assertSearchSynonymNotOnFrontend module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
@@ -94,26 +94,26 @@
         </require>
     </assertSearchSynonymNotOnFrontend>
     <assertSearchTermSuccessMassDeleteMessage module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
         </require>
     </assertSearchTermSuccessMassDeleteMessage>
     <assertSearchTermMassActionsNotInGrid module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
         </require>
     </assertSearchTermMassActionsNotInGrid>
     <assertSearchTermMassActionNotOnFrontend module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <browser class="Mtf\Client\Browser" />
         </require>
     </assertSearchTermMassActionNotOnFrontend>
     <assertSearchSynonymMassActionNotOnFrontend module="Magento_CatalogSearch">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <browser class="Mtf\Client\Browser" />

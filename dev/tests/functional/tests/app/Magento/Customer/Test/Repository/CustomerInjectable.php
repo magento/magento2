@@ -64,6 +64,7 @@ class CustomerInjectable extends AbstractRepository
         ];
 
         $this->_data['defaultBackend'] = [
+            'website_id' => 'Main Website',
             'firstname' => 'John',
             'lastname' => 'Doe',
             'email' => 'JohnDoe_%isolation%@example.com',

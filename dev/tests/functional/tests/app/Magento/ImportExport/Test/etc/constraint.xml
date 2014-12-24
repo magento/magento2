@@ -6,6 +6,6 @@
 -->
 <constraint>
     <assertProductAttributeAbsenceForExport module="Magento_ImportExport">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertProductAttributeAbsenceForExport>
 </constraint>

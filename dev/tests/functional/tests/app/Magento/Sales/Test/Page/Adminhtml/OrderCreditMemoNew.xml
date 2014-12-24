@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/order_creditmemo/new" module="Magento_Sales">
+    <blocks>
+        <actionsBlock>
+            <class>Magento\Sales\Test\Block\Adminhtml\Order\Actions</class>
+            <locator>.order-totals-bottom .actions</locator>
+            <strategy>css selector</strategy>
+        </actionsBlock>
+        <formBlock>
+            <class>Magento\Sales\Test\Block\Adminhtml\Order\Creditmemo\Form</class>
+            <locator>#edit_form</locator>
+            <strategy>css selector</strategy>
+        </formBlock>
+    </blocks>
+</page>

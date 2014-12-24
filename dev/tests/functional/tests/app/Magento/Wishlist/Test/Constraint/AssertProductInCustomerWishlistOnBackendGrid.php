@@ -16,12 +16,9 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductInCustomerWishlistOnBackendGrid extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that product is present in grid on customer's wish list tab with configure option and qty

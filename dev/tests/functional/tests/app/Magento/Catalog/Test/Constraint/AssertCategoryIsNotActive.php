@@ -16,14 +16,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertCategoryIsNotActive extends AbstractConstraint
 {
-    const NOT_FOUND_MESSAGE = 'Whoops, our bad...';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const NOT_FOUND_MESSAGE = 'Whoops, our bad...';
 
     /**
      * Assert that the category cannot be accessed from the navigation bar in the frontend
