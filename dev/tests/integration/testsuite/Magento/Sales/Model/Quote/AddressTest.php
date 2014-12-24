@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Quote;
+namespace Magento\Quote\Model\Quote;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -12,13 +12,13 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Sales\Model\Quote $quote */
+    /** @var \Magento\Quote\Model\Quote $quote */
     protected $_quote;
 
     /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
     protected $_customer;
 
-    /** @var \Magento\Sales\Model\Quote\Address */
+    /** @var \Magento\Quote\Model\Quote\Address */
     protected $_address;
 
     /**@var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
@@ -30,7 +30,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Quote'
+            'Magento\Quote\Model\Quote'
         );
         $this->_quote->load('test01', 'reserved_order_id');
         $this->_quote->setIsMultiShipping('0');
@@ -42,7 +42,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Sales\Model\Order\Address $address */
         $this->_address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Quote\Address'
+            'Magento\Quote\Model\Quote\Address'
         );
         $this->_address->setId(1);
         $this->_address->load($this->_address->getId());

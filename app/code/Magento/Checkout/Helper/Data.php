@@ -5,7 +5,7 @@
 namespace Magento\Checkout\Helper;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Store\Model\Store;
 
 /**
@@ -99,7 +99,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve checkout quote model object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {
@@ -202,7 +202,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Send email id payment was failed
      *
-     * @param \Magento\Sales\Model\Quote $checkout
+     * @param \Magento\Quote\Model\Quote $checkout
      * @param string $message
      * @param string $checkoutType
      * @return $this
@@ -266,7 +266,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $items = '';
         foreach ($checkout->getAllVisibleItems() as $_item) {
-            /* @var $_item \Magento\Sales\Model\Quote\Item */
+            /* @var $_item \Magento\Quote\Model\Quote\Item */
             $items .=
                 $_item->getProduct()->getName() . '  x ' . $_item->getQty() . '  ' . $checkout->getStoreCurrencyCode()
                 . ' ' . $_item->getProduct()->getFinalPrice(
@@ -339,11 +339,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check is allowed Guest Checkout
      * Use config settings and observer
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param int|Store $store
      * @return bool
      */
-    public function isAllowedGuestCheckout(\Magento\Sales\Model\Quote $quote, $store = null)
+    public function isAllowedGuestCheckout(\Magento\Quote\Model\Quote $quote, $store = null)
     {
         if ($store === null) {
             $store = $quote->getStoreId();

@@ -4,7 +4,7 @@
  */
 namespace Magento\Checkout\Block\Onepage;
 
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * One page checkout status

@@ -23,7 +23,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
     public function testSetItem()
     {
-        $item = $this->getMockBuilder('Magento\Sales\Model\Quote\Item\AbstractItem')
+        $item = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\AbstractItem')
             ->disableOriginalConstructor()
             ->getMock();
 

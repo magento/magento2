@@ -17,7 +17,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -45,13 +45,13 @@ class WriteService implements WriteServiceInterface
     /**
      * Constructs a gift message write service data object.
      *
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager.
      * @param \Magento\GiftMessage\Model\GiftMessageManager $giftMessageManager Gift message manager.
      * @param \Magento\GiftMessage\Helper\Message $helper Message helper.
      */
     public function __construct(
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\GiftMessage\Model\GiftMessageManager $giftMessageManager,
         \Magento\GiftMessage\Helper\Message $helper
@@ -77,7 +77,7 @@ class WriteService implements WriteServiceInterface
         /**
          * Quote.
          *
-         * @var \Magento\Sales\Model\Quote $quote
+         * @var \Magento\Quote\Model\Quote $quote
          */
         $quote = $this->quoteRepository->getActive($cartId);
 
@@ -106,7 +106,7 @@ class WriteService implements WriteServiceInterface
      */
     public function setForItem($cartId, \Magento\GiftMessage\Service\V1\Data\Message $giftMessage, $itemId)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
 
         if (!$item = $quote->getItemById($itemId)) {
@@ -124,7 +124,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Sets the gift message to item or quote.
      *
-     * @param \Magento\Sales\Model\Quote $quote The quote.
+     * @param \Magento\Quote\Model\Quote $quote The quote.
      * @param string $type The type.
      * @param \Magento\GiftMessage\Service\V1\Data\Message $giftMessage The gift message.
      * @param null|int $entityId The entity ID.
@@ -132,7 +132,7 @@ class WriteService implements WriteServiceInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message is not available.
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException The billing or shipping address is not set.
      */
-    protected function setMessage(\Magento\Sales\Model\Quote $quote, $type, $giftMessage, $entityId = null)
+    protected function setMessage(\Magento\Quote\Model\Quote $quote, $type, $giftMessage, $entityId = null)
     {
         if (is_null($quote->getBillingAddress()->getCountryId())) {
             throw new InvalidTransitionException('Billing address is not set');

@@ -14,10 +14,10 @@ class Frontend extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
     /**
      * Fetch totals
      *
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return array
      */
-    public function fetchTotals(\Magento\Sales\Model\Quote\Address $address)
+    public function fetchTotals(\Magento\Quote\Model\Quote\Address $address)
     {
         $arr = [];
 

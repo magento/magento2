@@ -50,10 +50,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->addressFactoryMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\AddressFactory', ['create', '__wakeup'], [], '', false
+            '\Magento\Quote\Model\Quote\AddressFactory', ['create', '__wakeup'], [], '', false
         );
         $this->quoteAddressMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             ['getCustomerId', 'load', 'getId', '__wakeup'],
             [],
             '',

@@ -45,7 +45,7 @@ class Multishipping extends \Magento\Framework\Object
     protected $_storeManager;
 
     /**
-     * @var \Magento\Sales\Model\Quote\AddressFactory
+     * @var \Magento\Quote\Model\Quote\AddressFactory
      */
     protected $_addressFactory;
 
@@ -97,7 +97,7 @@ class Multishipping extends \Magento\Framework\Object
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -119,14 +119,14 @@ class Multishipping extends \Magento\Framework\Object
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Session\Generic $session
-     * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
+     * @param \Magento\Quote\Model\Quote\AddressFactory $addressFactory
      * @param \Magento\Sales\Model\Convert\Quote $quote
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
      * @param \Magento\Multishipping\Helper\Data $helper
      * @param OrderSender $orderSender
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder,
      * @param array $data
@@ -139,14 +139,14 @@ class Multishipping extends \Magento\Framework\Object
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Session\Generic $session,
-        \Magento\Sales\Model\Quote\AddressFactory $addressFactory,
+        \Magento\Quote\Model\Quote\AddressFactory $addressFactory,
         \Magento\Sales\Model\Convert\Quote $quote,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification,
         \Magento\Multishipping\Helper\Data $helper,
         OrderSender $orderSender,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         array $data = []
@@ -288,7 +288,7 @@ class Multishipping extends \Magento\Framework\Object
     public function removeAddressItem($addressId, $itemId)
     {
         $address = $this->getQuote()->getAddressById($addressId);
-        /* @var $address \Magento\Sales\Model\Quote\Address */
+        /* @var $address \Magento\Quote\Model\Quote\Address */
         if ($address) {
             $item = $address->getValidItemById($itemId);
             if ($item) {
@@ -561,11 +561,11 @@ class Multishipping extends \Magento\Framework\Object
     /**
      * Prepare order based on quote address
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  \Magento\Sales\Model\Order
      * @throws  \Magento\Checkout\Exception
      */
-    protected function _prepareOrder(\Magento\Sales\Model\Quote\Address $address)
+    protected function _prepareOrder(\Magento\Quote\Model\Quote\Address $address)
     {
         $quote = $this->getQuote();
         $quote->unsReservedOrderId();
@@ -858,7 +858,7 @@ class Multishipping extends \Magento\Framework\Object
     /**
      * Retrieve quote model
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {
@@ -868,7 +868,7 @@ class Multishipping extends \Magento\Framework\Object
     /**
      * Retrieve quote items
      *
-     * @return \Magento\Sales\Model\Quote\Item[]
+     * @return \Magento\Quote\Model\Quote\Item[]
      */
     public function getQuoteItems()
     {

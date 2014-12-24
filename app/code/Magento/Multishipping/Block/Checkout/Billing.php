@@ -97,7 +97,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
     /**
      * Retrieve billing address
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return \Magento\Quote\Model\Quote\Address
      */
     public function getAddress()
     {
@@ -112,7 +112,7 @@ class Billing extends \Magento\Payment\Block\Form\Container
     /**
      * Retrieve quote model object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {

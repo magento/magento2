@@ -2,19 +2,19 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Quote\Address\Total;
+namespace Magento\Quote\Model\Quote\Address\Total;
 
 class ShippingTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Quote\Address\Total\Shipping
+     * @var \Magento\Quote\Model\Quote\Address\Total\Shipping
      */
     protected $shippingModel;
 
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->shippingModel = $objectManager->getObject('Magento\Sales\Model\Quote\Address\Total\Shipping');
+        $this->shippingModel = $objectManager->getObject('Magento\Quote\Model\Quote\Address\Total\Shipping');
     }
 
     /**
@@ -23,7 +23,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testFetch($shippingAmount, $shippingDescription, $expectedTotal)
     {
         $address = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             ['getShippingAmount', 'getShippingDescription', 'addTotal', '__wakeup'],
             [],
             '',

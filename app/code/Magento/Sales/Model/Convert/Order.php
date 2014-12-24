@@ -18,22 +18,22 @@ class Order extends \Magento\Framework\Object
     protected $_eventManager = null;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory
+     * @var \Magento\Quote\Model\QuoteFactory
      */
     protected $_quoteFactory;
 
     /**
-     * @var \Magento\Sales\Model\Quote\AddressFactory
+     * @var \Magento\Quote\Model\Quote\AddressFactory
      */
     protected $_quoteAddressFactory;
 
     /**
-     * @var \Magento\Sales\Model\Quote\PaymentFactory
+     * @var \Magento\Quote\Model\Quote\PaymentFactory
      */
     protected $_quotePaymentFactory;
 
     /**
-     * @var \Magento\Sales\Model\Quote\ItemFactory
+     * @var \Magento\Quote\Model\Quote\ItemFactory
      */
     protected $_quoteItemFactory;
 
@@ -69,10 +69,10 @@ class Order extends \Magento\Framework\Object
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
-     * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory
-     * @param \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory
-     * @param \Magento\Sales\Model\Quote\ItemFactory $quoteItemFactory
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
+     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory
+     * @param \Magento\Quote\Model\Quote\PaymentFactory $quotePaymentFactory
+     * @param \Magento\Quote\Model\Quote\ItemFactory $quoteItemFactory
      * @param \Magento\Sales\Model\Order\InvoiceFactory $orderInvoiceFactory
      * @param \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory
      * @param \Magento\Sales\Model\Order\ShipmentFactory $orderShipmentFactory
@@ -86,10 +86,10 @@ class Order extends \Magento\Framework\Object
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory,
-        \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory,
-        \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory,
-        \Magento\Sales\Model\Quote\ItemFactory $quoteItemFactory,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
+        \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
+        \Magento\Quote\Model\Quote\PaymentFactory $quotePaymentFactory,
+        \Magento\Quote\Model\Quote\ItemFactory $quoteItemFactory,
         \Magento\Sales\Model\Order\InvoiceFactory $orderInvoiceFactory,
         \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory,
         \Magento\Sales\Model\Order\ShipmentFactory $orderShipmentFactory,
@@ -118,12 +118,12 @@ class Order extends \Magento\Framework\Object
      * Converting order object to quote object
      *
      * @param \Magento\Sales\Model\Order $order
-     * @param null|\Magento\Sales\Model\Quote $quote
-     * @return \Magento\Sales\Model\Quote
+     * @param null|\Magento\Quote\Model\Quote $quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function toQuote(\Magento\Sales\Model\Order $order, $quote = null)
     {
-        if (!$quote instanceof \Magento\Sales\Model\Quote) {
+        if (!$quote instanceof \Magento\Quote\Model\Quote) {
             $quote = $this->_quoteFactory->create();
         }
 
@@ -139,7 +139,7 @@ class Order extends \Magento\Framework\Object
      * Convert order to shipping address
      *
      * @param   \Magento\Sales\Model\Order $order
-     * @return  \Magento\Sales\Model\Quote\Address
+     * @return  \Magento\Quote\Model\Quote\Address
      */
     public function toQuoteShippingAddress(\Magento\Sales\Model\Order $order)
     {
@@ -153,7 +153,7 @@ class Order extends \Magento\Framework\Object
      * Convert order address to quote address
      *
      * @param   \Magento\Sales\Model\Order\Address $address
-     * @return  \Magento\Sales\Model\Quote\Address
+     * @return  \Magento\Quote\Model\Quote\Address
      */
     public function addressToQuoteAddress(\Magento\Sales\Model\Order\Address $address)
     {
@@ -180,12 +180,12 @@ class Order extends \Magento\Framework\Object
      * Convert order payment to quote payment
      *
      * @param \Magento\Sales\Model\Order\Payment $payment
-     * @param null|\Magento\Sales\Model\Quote\Payment $quotePayment
-     * @return \Magento\Sales\Model\Quote\Payment
+     * @param null|\Magento\Quote\Model\Quote\Payment $quotePayment
+     * @return \Magento\Quote\Model\Quote\Payment
      */
     public function paymentToQuotePayment(\Magento\Sales\Model\Order\Payment $payment, $quotePayment = null)
     {
-        if (!$quotePayment instanceof \Magento\Sales\Model\Quote\Payment) {
+        if (!$quotePayment instanceof \Magento\Quote\Model\Quote\Payment) {
             $quotePayment = $this->_quotePaymentFactory->create();
         }
 
@@ -204,7 +204,7 @@ class Order extends \Magento\Framework\Object
      * Retrieve
      *
      * @param \Magento\Sales\Model\Order\Item $item
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return \Magento\Quote\Model\Quote\Item
      */
     public function itemToQuoteItem(\Magento\Sales\Model\Order\Item $item)
     {

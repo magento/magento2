@@ -62,7 +62,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
     {
         if ($item->getOrderItem()) {
             $type = $item->getOrderItem()->getProductType();
-        } elseif ($item instanceof \Magento\Sales\Model\Quote\Address\Item) {
+        } elseif ($item instanceof \Magento\Quote\Model\Quote\Address\Item) {
             $type = $item->getQuoteItem()->getProductType();
         } else {
             $type = $item->getProductType();

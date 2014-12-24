@@ -4,7 +4,7 @@
  */
 namespace Magento\Checkout\Model\Cart;
 
-use Magento\Sales\Model\Quote;
+use Magento\Quote\Model\Quote;
 
 /**
  * Shopping cart interface

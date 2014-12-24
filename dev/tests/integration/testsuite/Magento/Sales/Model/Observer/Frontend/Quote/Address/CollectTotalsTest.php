@@ -42,8 +42,8 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
         $customerData = $customerRepository->getById($customer->getId());
 
-        /** @var $quote \Magento\Sales\Model\Quote */
-        $quote = $objectManager->create('Magento\Sales\Model\Quote');
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
         $quote->setCustomer($customerData);
 
@@ -86,8 +86,8 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
         $customerData = $customerRepository->getById($customer->getId());
 
-        /** @var $quote \Magento\Sales\Model\Quote */
-        $quote = $objectManager->create('Magento\Sales\Model\Quote');
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
         $quote->setCustomer($customerData);
 

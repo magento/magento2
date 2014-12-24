@@ -4,7 +4,7 @@
  */
 namespace Magento\SalesRule\Model;
 
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Class RulesApplier
@@ -42,7 +42,7 @@ class RulesApplier
     /**
      * Apply rules to current order item
      *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Resource\Rule\Collection $rules
      * @param bool $skipValidation
      * @param mixed $couponCode
@@ -103,9 +103,9 @@ class RulesApplier
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @param mixed $couponCode
      * @return $this
      */
@@ -121,7 +121,7 @@ class RulesApplier
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return \Magento\SalesRule\Model\Rule\Action\Discount\Data
      */
@@ -148,7 +148,7 @@ class RulesApplier
 
     /**
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
      */
     protected function setDiscountData($discountData, $item)
@@ -186,14 +186,14 @@ class RulesApplier
      * Fire event to allow overwriting of discount amounts
      *
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param float $qty
      * @return $this
      */
     protected function eventFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
-        \Magento\Sales\Model\Quote\Item\AbstractItem $item,
+        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
         \Magento\SalesRule\Model\Rule $rule,
         $qty
     ) {
@@ -216,11 +216,11 @@ class RulesApplier
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param int[] $appliedRuleIds
      * @return $this
      */
-    public function setAppliedRuleIds(\Magento\Sales\Model\Quote\Item\AbstractItem $item, array $appliedRuleIds)
+    public function setAppliedRuleIds(\Magento\Quote\Model\Quote\Item\AbstractItem $item, array $appliedRuleIds)
     {
         $address = $item->getAddress();
         $quote = $item->getQuote();

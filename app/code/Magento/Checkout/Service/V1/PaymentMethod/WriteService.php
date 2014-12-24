@@ -7,7 +7,7 @@ namespace Magento\Checkout\Service\V1\PaymentMethod;
 use Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Builder;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Payment\Model\Checks\ZeroTotal;
-use Magento\Sales\Model\QuoteRepository;
+use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Payment method write service object.
@@ -17,7 +17,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Quote repository.
      *
-     * @var QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -38,7 +38,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Constructs a payment method write service object.
      *
-     * @param QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
      * @param Builder $paymentMethodBuilder Payment method builder.
      * @param ZeroTotal $zeroTotalValidator Zero total validator.
      */

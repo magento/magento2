@@ -167,7 +167,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * Get active or custom quote
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {

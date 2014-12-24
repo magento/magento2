@@ -6,7 +6,7 @@ namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Customer\Api\Data\AddressDataBuilder as CustomerAddressBuilder;
 use Magento\Customer\Api\Data\RegionDataBuilder as CustomerAddressRegionBuilder;
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\Calculation;
 

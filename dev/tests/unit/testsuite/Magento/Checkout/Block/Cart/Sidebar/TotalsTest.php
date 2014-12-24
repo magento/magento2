@@ -16,7 +16,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     protected $totalsObj;
 
     /**
-     * @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quote;
 
@@ -25,7 +25,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $this->quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->setMethods(['getTotals', '__wakeup'])
             ->getMock();

@@ -158,15 +158,15 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * Prepare quote data
      *
      * @param bool $customerIsGuest
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     private function _prepareQuoteFixture($customerIsGuest)
     {
         $method = 'freeshipping_freeshipping';
-        /** @var $quoteFixture \Magento\Sales\Model\Quote */
-        $quoteFixture = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var $quoteFixture \Magento\Quote\Model\Quote */
+        $quoteFixture = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quoteFixture->load('test01', 'reserved_order_id');
-        $rate = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote\Address\Rate');
+        $rate = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote\Address\Rate');
         $rate->setCode($method);
         $quoteFixture->getShippingAddress()->addShippingRate($rate);
         $quoteFixture->getShippingAddress()->setShippingMethod($method);

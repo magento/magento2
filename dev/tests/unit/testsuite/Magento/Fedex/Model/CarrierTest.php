@@ -58,12 +58,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 }
             );
         $rateMethod = $this->getMock(
-            'Magento\Sales\Model\Quote\Address\RateResult\Method',
+            'Magento\Quote\Model\Quote\Address\RateResult\Method',
             null,
             ['priceCurrency' => $priceCurrency]
         );
         $rateMethodFactory = $this->getMock(
-            'Magento\Sales\Model\Quote\Address\RateResult\MethodFactory',
+            'Magento\Quote\Model\Quote\Address\RateResult\MethodFactory',
             ['create'],
             [],
             '',
@@ -76,7 +76,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             [
                 'scopeConfig' => $scopeConfig,
                 'rateErrorFactory' =>
-                    $this->getMock('Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory', [], [], '', false),
+                    $this->getMock('Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory', [], [], '', false),
                 'logAdapterFactory' => $this->getMock('Magento\Framework\Logger\AdapterFactory', [], [], '', false),
                 'xmlElFactory' => $this->getMock('Magento\Shipping\Model\Simplexml\ElementFactory', [], [], '', false),
                 'rateFactory' => $rateFactory,
@@ -128,7 +128,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $this->_model->expects($this->any())->method('_getCachedQuotes')->will(
             $this->returnValue(serialize($response))
         );
-        $request = $this->getMock('Magento\Sales\Model\Quote\Address\RateRequest', [], [], '', false);
+        $request = $this->getMock('Magento\Quote\Model\Quote\Address\RateRequest', [], [], '', false);
         foreach ($this->_model->collectRates($request)->getAllRates() as $allRates) {
             $this->assertEquals($expected, $allRates->getData('cost'));
         }

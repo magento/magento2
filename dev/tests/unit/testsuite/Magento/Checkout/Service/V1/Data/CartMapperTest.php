@@ -108,8 +108,8 @@ class CartMapperTest extends \PHPUnit_Framework_TestCase
         $methods = ['getId', 'getStoreId', 'getCreatedAt','getUpdatedAt', 'getConvertedAt', 'getIsActive',
             'getIsVirtual', 'getItemsCount', 'getItemsQty', 'getCheckoutMethod', 'getReservedOrderId', 'getOrigOrderId',
             'getAllItems', '__wakeUp', ];
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', $methods, [], '', false);
-        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', $methods, [], '', false);
+        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$itemMock]));
         $expected = [
             Cart::ID => 12,

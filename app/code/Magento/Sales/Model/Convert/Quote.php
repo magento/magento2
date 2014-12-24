@@ -72,11 +72,11 @@ class Quote extends \Magento\Framework\Object
     /**
      * Convert quote model to order model
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param null|\Magento\Sales\Model\Order $order
      * @return \Magento\Sales\Model\Order
      */
-    public function toOrder(\Magento\Sales\Model\Quote $quote, $order = null)
+    public function toOrder(\Magento\Quote\Model\Quote $quote, $order = null)
     {
         if (!$order instanceof \Magento\Sales\Model\Order) {
             $order = $this->_orderFactory->create();
@@ -96,11 +96,11 @@ class Quote extends \Magento\Framework\Object
     /**
      * Convert quote address model to order
      *
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @param null|\Magento\Sales\Model\Order $order
      * @return  \Magento\Sales\Model\Order
      */
-    public function addressToOrder(\Magento\Sales\Model\Quote\Address $address, $order = null)
+    public function addressToOrder(\Magento\Quote\Model\Quote\Address $address, $order = null)
     {
         if (!$order instanceof \Magento\Sales\Model\Order) {
             $order = $this->toOrder($address->getQuote());
@@ -118,10 +118,10 @@ class Quote extends \Magento\Framework\Object
     /**
      * Convert quote address to order address
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  \Magento\Sales\Model\Order\Address
      */
-    public function addressToOrderAddress(\Magento\Sales\Model\Quote\Address $address)
+    public function addressToOrderAddress(\Magento\Quote\Model\Quote\Address $address)
     {
         $orderAddress = $this->_orderAddressFactory->create()
             ->setStoreId($address->getStoreId())
@@ -147,10 +147,10 @@ class Quote extends \Magento\Framework\Object
     /**
      * Convert quote payment to order payment
      *
-     * @param   \Magento\Sales\Model\Quote\Payment $payment
-     * @return  \Magento\Sales\Model\Quote\Payment
+     * @param   \Magento\Quote\Model\Quote\Payment $payment
+     * @return  \Magento\Quote\Model\Quote\Payment
      */
-    public function paymentToOrderPayment(\Magento\Sales\Model\Quote\Payment $payment)
+    public function paymentToOrderPayment(\Magento\Quote\Model\Quote\Payment $payment)
     {
         /** @var \Magento\Sales\Model\Order\Payment $orderPayment */
         $orderPayment = $this->_orderPaymentFactory->create()->setStoreId($payment->getStoreId());
@@ -173,10 +173,10 @@ class Quote extends \Magento\Framework\Object
     /**
      * Convert quote item to order item
      *
-     * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  \Magento\Sales\Model\Order\Item
      */
-    public function itemToOrderItem(\Magento\Sales\Model\Quote\Item\AbstractItem $item)
+    public function itemToOrderItem(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
         $orderItem = $this->_orderItemFactory->create()
             ->setStoreId($item->getStoreId())

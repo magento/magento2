@@ -25,14 +25,14 @@ class QuoteItem
     /**
      * @param \Magento\Sales\Model\Convert\Quote $subject
      * @param Closure $proceed
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundItemToOrderItem(
         \Magento\Sales\Model\Convert\Quote $subject,
         Closure $proceed,
-        \Magento\Sales\Model\Quote\Item\AbstractItem $item
+        \Magento\Quote\Model\Quote\Item\AbstractItem $item
     ) {
         /** @var $orderItem Item */
         $orderItem = $proceed($item);

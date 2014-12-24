@@ -26,7 +26,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->cartMock = $this->getMock('Magento\Checkout\Model\Cart', [], [], '', false);
         $this->quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             ['__wakeUp', 'setIsMultiShipping'],
             [],
             '',

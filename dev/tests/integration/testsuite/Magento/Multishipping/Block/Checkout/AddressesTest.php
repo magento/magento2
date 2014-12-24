@@ -38,7 +38,7 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Sales\Model\Resource\Quote\Collection $quoteCollection */
         $quoteCollection = $this->_objectManager->get('Magento\Sales\Model\Resource\Quote\Collection');
-        /** @var $quote \Magento\Sales\Model\Quote */
+        /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $quoteCollection->getLastItem();
 
         /** @var $checkoutSession \Magento\Checkout\Model\Session */

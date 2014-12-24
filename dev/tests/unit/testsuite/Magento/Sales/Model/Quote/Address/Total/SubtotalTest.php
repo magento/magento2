@@ -2,11 +2,11 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Quote\Address\Total;
+namespace Magento\Quote\Model\Quote\Address\Total;
 
 /**
  * Class SubtotalTest
- * @package Magento\Sales\Model\Quote\Address\Total
+ * @package Magento\Quote\Model\Quote\Address\Total
  * TODO refactor me
  */
 class SubtotalTest extends \PHPUnit_Framework_TestCase
@@ -17,7 +17,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address\Total\Subtotal
+     * @var \Magento\Quote\Model\Quote\Address\Total\Subtotal
      */
     protected $subtotalModel;
 
@@ -32,7 +32,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->subtotalModel = $this->objectManager->getObject('Magento\Sales\Model\Quote\Address\Total\Subtotal');
+        $this->subtotalModel = $this->objectManager->getObject('Magento\Quote\Model\Quote\Address\Total\Subtotal');
     }
 
     public function collectDataProvider()
@@ -82,17 +82,17 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1231313);
             //@todo this is a wrong test and it does not check methods. Any digital value will be correct
 
-        /** @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItem */
+        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItem */
         $quoteItem = $this->objectManager->getObject(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             [
                 'stockRegistry' => $this->stockRegistry,
                 'priceCurrency' => $priceCurrency,
             ]
         );
-        /** @var \Magento\Sales\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
         $address = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             [],
             [],
             '',
@@ -111,9 +111,9 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             false
         );
         $product->expects($this->any())->method('getPrice')->will($this->returnValue($originalPrice));
-        /** @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
+        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
         $quote = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             [],
             [],
             '',
@@ -143,7 +143,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $parentQuoteItem = false;
         if ($itemHasParent) {
             $parentQuoteItem = $this->getMock(
-                'Magento\Sales\Model\Quote\Item',
+                'Magento\Quote\Model\Quote\Item',
                 [],
                 [],
                 '',

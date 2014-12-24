@@ -62,7 +62,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Check whether method is available
      *
-     * @param \Magento\Sales\Model\Quote|null $quote
+     * @param \Magento\Quote\Model\Quote|null $quote
      * @return bool
      */
     public function isAvailable($quote = null)

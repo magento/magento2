@@ -32,7 +32,7 @@ class QuoteConfigProductAttributesTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterGetProductAttributes()
     {
-        $subject = $this->getMock('Magento\Sales\Model\Quote\Config', [], [], '', false);
+        $subject = $this->getMock('Magento\Quote\Model\Quote\Config', [], [], '', false);
         $attributeCode = 'code of the attribute';
         $expected = [0 => $attributeCode];
 

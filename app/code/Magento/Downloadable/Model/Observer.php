@@ -351,7 +351,7 @@ class Observer
             return $this;
         }
 
-        /* @var $quote \Magento\Sales\Model\Quote */
+        /* @var $quote \Magento\Quote\Model\Quote */
         $quote = $observer->getEvent()->getQuote();
 
         foreach ($quote->getAllItems() as $item) {

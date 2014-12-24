@@ -17,7 +17,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -45,7 +45,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Quote factory.
      *
-     * @var \Magento\Sales\Model\Service\QuoteFactory
+     * @var \Magento\Quote\Model\Service\QuoteFactory
      */
     protected $quoteServiceFactory;
 
@@ -57,19 +57,19 @@ class WriteService implements WriteServiceInterface
     /**
      * Constructs a cart write service object.
      *
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager.
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository Customer registry.
      * @param UserContextInterface $userContext User context.
-     * @param \Magento\Sales\Model\Service\QuoteFactory $quoteServiceFactory Quote service factory.
+     * @param \Magento\Quote\Model\Service\QuoteFactory $quoteServiceFactory Quote service factory.
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
      */
     public function __construct(
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         UserContextInterface $userContext,
-        \Magento\Sales\Model\Service\QuoteFactory $quoteServiceFactory,
+        \Magento\Quote\Model\Service\QuoteFactory $quoteServiceFactory,
         \Magento\Customer\Model\CustomerFactory $customerModelFactory
     ) {
         $this->quoteRepository = $quoteRepository;
@@ -103,12 +103,12 @@ class WriteService implements WriteServiceInterface
     /**
      * Creates an anonymous cart.
      *
-     * @return \Magento\Sales\Model\Quote Cart object.
+     * @return \Magento\Quote\Model\Quote Cart object.
      */
     protected function createAnonymousCart()
     {
         $storeId = $this->storeManager->getStore()->getId();
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->create();
         $quote->setStoreId($storeId);
         return $quote;
@@ -117,7 +117,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Creates a cart for the currently logged-in customer.
      *
-     * @return \Magento\Sales\Model\Quote Cart object.
+     * @return \Magento\Quote\Model\Quote Cart object.
      * @throws CouldNotSaveException The cart could not be created.
      */
     protected function createCustomerCart()
@@ -131,7 +131,7 @@ class WriteService implements WriteServiceInterface
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
 
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->create();
         $quote->setStoreId($storeId);
         $quote->setCustomer($customer);

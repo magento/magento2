@@ -29,7 +29,7 @@ class QtyProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->qtyProcessor = new QtyProcessor($this->quoteItemQtyList);
-        $this->itemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $this->itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getParentItem', 'getProduct', '__wakeup'])
             ->getMock();
@@ -37,7 +37,7 @@ class QtyProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testSetItem()
     {
-        $itemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,10 +51,10 @@ class QtyProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $qty = 1;
 
-        $itemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
-        $parentItemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $parentItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock->expects($this->any())
@@ -82,7 +82,7 @@ class QtyProcessorTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())
             ->method('getId')
             ->willReturn($productId);
-        $itemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $itemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
         $itemMock->expects($this->any())
@@ -109,7 +109,7 @@ class QtyProcessorTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())
             ->method('getId')
             ->willReturn($productId);
-        $parentItemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $parentItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
         $this->itemMock->expects($this->any())

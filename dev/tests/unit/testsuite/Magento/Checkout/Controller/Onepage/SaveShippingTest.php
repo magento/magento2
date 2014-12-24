@@ -37,7 +37,7 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
     protected $response;
 
     /**
-     * @var \Magento\Sales\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $quote;
 
@@ -86,7 +86,7 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->view = $this->getMock('Magento\Framework\App\View', [], [], '', false);
         $this->quote = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             ['__wakeup', 'getHasError', 'hasItems', 'validateMinimumAmount', 'isVirtual', 'getStoreId'],
             [],
             '',

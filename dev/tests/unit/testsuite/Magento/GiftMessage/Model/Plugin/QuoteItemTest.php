@@ -46,7 +46,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->quoteItemMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             ['getGiftMessageId', 'getStoreId', '__wakeup'],
             [],
             '',

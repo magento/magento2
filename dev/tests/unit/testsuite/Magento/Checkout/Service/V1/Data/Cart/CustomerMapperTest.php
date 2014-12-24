@@ -22,7 +22,7 @@ class CustomerMapperTest extends \PHPUnit_Framework_TestCase
             'getCustomerPrefix', 'getCustomerFirstname', 'getCustomerMiddlename', 'getCustomerLastname',
             'getCustomerSuffix', 'getCustomerDob', 'getCustomerNote', 'getCustomerNoteNotify',
             'getCustomerIsGuest', 'getCustomerGender', 'getCustomerTaxvat', '__wakeUp', ];
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', $methods, [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', $methods, [], '', false);
         $expected = [
             Customer::ID => 10,
             Customer::EMAIL => 'customer@example.com',

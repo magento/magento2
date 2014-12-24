@@ -40,7 +40,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory
+     * @var \Magento\Quote\Model\QuoteFactory
      */
     protected $_quoteFactory;
 
@@ -63,7 +63,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param \Magento\Wishlist\Model\WishlistFactory $wishListFactory
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemsCompareFactory
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
@@ -73,7 +73,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
         \Magento\Wishlist\Model\WishlistFactory $wishListFactory,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemsCompareFactory,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
@@ -208,7 +208,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     protected function _createQuote()
     {

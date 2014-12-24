@@ -4,7 +4,7 @@
  */
 namespace Magento\Shipping\Model\Carrier;
 
-use Magento\Sales\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
@@ -73,7 +73,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
         $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $product->expects($this->any())->method('getId')->will($this->returnValue($this->productId));
 
-        $item = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
+        $item = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getProduct', 'getQty', 'getWeight', '__wakeup', 'getStore'])
             ->getMock();

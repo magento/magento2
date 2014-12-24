@@ -16,7 +16,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -30,11 +30,11 @@ class WriteService implements WriteServiceInterface
     /**
      * Constructs a write service object.
      *
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->quoteRepository = $quoteRepository;
@@ -57,7 +57,7 @@ class WriteService implements WriteServiceInterface
         if (!is_numeric($qty) || $qty <= 0) {
             throw InputException::invalidFieldValue('qty', $qty);
         }
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
 
         $product = $this->productRepository->get($data->getSku());
@@ -88,7 +88,7 @@ class WriteService implements WriteServiceInterface
         if (!is_numeric($qty) || $qty <= 0) {
             throw InputException::invalidFieldValue('qty', $qty);
         }
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $quoteItem = $quote->getItemById($itemId);
         if (!$quoteItem) {
@@ -118,7 +118,7 @@ class WriteService implements WriteServiceInterface
         /**
          * Quote.
          *
-         * @var \Magento\Sales\Model\Quote $quote
+         * @var \Magento\Quote\Model\Quote $quote
          */
         $quote = $this->quoteRepository->getActive($cartId);
         $quoteItem = $quote->getItemById($itemId);

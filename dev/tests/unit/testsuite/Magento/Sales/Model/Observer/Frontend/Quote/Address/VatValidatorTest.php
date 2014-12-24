@@ -55,7 +55,7 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
 
         $this->quoteAddressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             [
                 'getCountryId',
                 'getVatId',

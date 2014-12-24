@@ -18,7 +18,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\AddressRepositoryInterface */
     protected $_addressRepository;
 
-    /** @var \Magento\Sales\Model\Quote\AddressFactory */
+    /** @var \Magento\Quote\Model\Quote\AddressFactory */
     protected $_quoteAddressFactory;
 
     /** @var  \Magento\Customer\Api\Data\CustomerDataBuilder */
@@ -52,11 +52,11 @@ class BillingTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Sales\Model\Resource\Quote\Collection $quoteCollection */
         $quoteCollection = $objectManager->get('Magento\Sales\Model\Resource\Quote\Collection');
-        /** @var $quote \Magento\Sales\Model\Quote */
+        /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $quoteCollection->getLastItem();
         $quote->setCustomer($customer);
-        /** @var $quoteAddressFactory \Magento\Sales\Model\Quote\AddressFactory */
-        $this->_quoteAddressFactory = $objectManager->get('Magento\Sales\Model\Quote\AddressFactory');
+        /** @var $quoteAddressFactory \Magento\Quote\Model\Quote\AddressFactory */
+        $this->_quoteAddressFactory = $objectManager->get('Magento\Quote\Model\Quote\AddressFactory');
         $billingAddress = $this->_quoteAddressFactory->create()->importCustomerAddressData($address);
         $quote->setBillingAddress($billingAddress);
         $quote->save();
@@ -122,7 +122,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
      */
     protected function _updateQuoteCustomerName()
     {
-        /** @var $emptyAddress \Magento\Sales\Model\Quote\Address */
+        /** @var $emptyAddress \Magento\Quote\Model\Quote\Address */
         $emptyAddress = $this->_quoteAddressFactory->create();
         $emptyAddress->setFirstname(null);
         $emptyAddress->setLastname(null);

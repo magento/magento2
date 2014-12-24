@@ -16,17 +16,17 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $comparedMock;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Item\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\Option|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $optionMock;
 
@@ -36,21 +36,21 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->itemMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             ['__wakeup', 'getProductId', 'getOptions'],
             [],
             '',
             false
         );
         $this->comparedMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             ['__wakeup', 'getProductId', 'getOptions'],
             [],
             '',
             false
         );
         $this->optionMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item\Option',
+            'Magento\Quote\Model\Quote\Item\Option',
             ['__wakeup', 'getCode', 'getValue'],
             [],
             '',

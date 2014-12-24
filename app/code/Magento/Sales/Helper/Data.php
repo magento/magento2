@@ -21,11 +21,11 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * Check quote amount
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param float $amount
      * @return $this
      */
-    public function checkQuoteAmount(\Magento\Sales\Model\Quote $quote, $amount)
+    public function checkQuoteAmount(\Magento\Quote\Model\Quote $quote, $amount)
     {
         if (!$quote->getHasError() && $amount >= self::MAXIMUM_AVAILABLE_NUMBER) {
             $quote->setHasError(true);

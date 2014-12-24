@@ -65,7 +65,7 @@ class Quote extends AbstractDb
     /**
      * Load quote data by customer identifier
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param int $customerId
      * @return $this
      */
@@ -99,7 +99,7 @@ class Quote extends AbstractDb
     /**
      * Load only active quote
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param int $quoteId
      * @return $this
      */
@@ -121,7 +121,7 @@ class Quote extends AbstractDb
     /**
      * Load quote data by identifier without store
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param int $quoteId
      * @return $this
      */
@@ -145,7 +145,7 @@ class Quote extends AbstractDb
     /**
      * Get reserved order id
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return string
      */
     public function getReservedOrderId($quote)

@@ -66,7 +66,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
     public function testPaymentToOrderPayment()
     {
-        $payment = $this->getMock('Magento\Sales\Model\Quote\Payment', [], [], '', false);
+        $payment = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
         $title = new \Magento\Framework\Object(['title' => 'some title']);
         $payment->expects($this->any())->method('getMethodInstance')->will($this->returnValue($title));
         $this->assertEquals(

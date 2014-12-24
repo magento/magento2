@@ -2,12 +2,12 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Quote\Item;
+namespace Magento\Quote\Model\Quote\Item;
 
 class RelatedProductsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Quote\Item\RelatedProducts
+     * @var \Magento\Quote\Model\Quote\Item\RelatedProducts
      */
     protected $model;
 
@@ -19,7 +19,7 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->relatedProductTypes = ['type1', 'type2', 'type3'];
-        $this->model = new \Magento\Sales\Model\Quote\Item\RelatedProducts($this->relatedProductTypes);
+        $this->model = new \Magento\Quote\Model\Quote\Item\RelatedProducts($this->relatedProductTypes);
     }
 
     /**
@@ -27,14 +27,14 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
      * @param int|bool $productId
      * @param array $expectedResult
      *
-     * @covers \Magento\Sales\Model\Quote\Item\RelatedProducts::getRelatedProductIds
+     * @covers \Magento\Quote\Model\Quote\Item\RelatedProducts::getRelatedProductIds
      * @dataProvider getRelatedProductIdsDataProvider
      */
     public function testGetRelatedProductIds($optionValue, $productId, $expectedResult)
     {
-        $quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $quoteItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
         $itemOptionMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Item\Option',
+            '\Magento\Quote\Model\Quote\Item\Option',
             ['getValue', 'getProductId', '__wakeup'],
             [],
             '',
@@ -74,11 +74,11 @@ class RelatedProductsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Sales\Model\Quote\Item\RelatedProducts::getRelatedProductIds
+     * @covers \Magento\Quote\Model\Quote\Item\RelatedProducts::getRelatedProductIds
      */
     public function testGetRelatedProductIdsNoOptions()
     {
-        $quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $quoteItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
 
         $quoteItemMock->expects(
             $this->once()

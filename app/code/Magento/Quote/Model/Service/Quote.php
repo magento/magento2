@@ -13,7 +13,7 @@ class Quote
     /**
      * Quote object
      *
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Quote\Model\Quote
      */
     protected $_quote;
 
@@ -100,7 +100,7 @@ class Quote
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Sales\Model\Convert\QuoteFactory $convertQuoteFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
@@ -113,7 +113,7 @@ class Quote
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Quote $quote,
+        \Magento\Quote\Model\Quote $quote,
         \Magento\Sales\Model\Convert\QuoteFactory $convertQuoteFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
@@ -152,7 +152,7 @@ class Quote
     /**
      * Get assigned quote object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {
@@ -172,10 +172,10 @@ class Quote
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return void
      */
-    protected function prepareCustomerData(\Magento\Sales\Model\Quote $quote)
+    protected function prepareCustomerData(\Magento\Quote\Model\Quote $quote)
     {
         $customer = $quote->getCustomer();
 

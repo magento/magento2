@@ -14,10 +14,10 @@ class Subtotal extends \Magento\Sales\Model\Resource\Quote\Address\Attribute\Fro
     /**
      * Add total
      *
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
      */
-    public function fetchTotals(\Magento\Sales\Model\Quote\Address $address)
+    public function fetchTotals(\Magento\Quote\Model\Quote\Address $address)
     {
         $address->addTotal(['code' => 'subtotal', 'title' => __('Subtotal'), 'value' => $address->getSubtotal()]);
 

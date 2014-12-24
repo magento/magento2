@@ -16,7 +16,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteMock;
 
@@ -46,7 +46,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             ['addProduct', '__wakeup', 'getStore'],
             [],
             '',
@@ -105,7 +105,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
     public function testInitWithDecimalQty()
     {
         $quoteItemMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Item',
+            '\Magento\Quote\Model\Quote\Item',
             ['getStockId', 'getIsQtyDecimal', '__wakeup'],
             [],
             '',
@@ -140,7 +140,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quoteItemMock));
 
         $this->assertInstanceOf(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             $this->model->init(
                 $this->quoteMock,
                 $this->productMock,
@@ -152,7 +152,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
     public function testInitWithNonDecimalQty()
     {
         $quoteItemMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Item',
+            '\Magento\Quote\Model\Quote\Item',
             ['getStockId', 'getIsQtyDecimal', '__wakeup'],
             [],
             '',
@@ -183,7 +183,7 @@ class InitializerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quoteItemMock));
 
         $this->assertInstanceOf(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             $this->model->init(
                 $this->quoteMock,
                 $this->productMock,

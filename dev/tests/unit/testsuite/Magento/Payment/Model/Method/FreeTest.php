@@ -63,7 +63,7 @@ class FreeTest extends \PHPUnit_Framework_TestCase
     {
         $quote = null;
         if ($notEmptyQuote) {
-            $quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+            $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
             $quote->expects($this->any())
                 ->method('__call')
                 ->with($this->equalTo('getGrandTotal'))

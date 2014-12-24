@@ -112,7 +112,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->quoteAddressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             ['getCountryId', 'getVatId', 'getQuote', 'setPrevQuoteCustomerGroupId', '__wakeup'],
             [],
             '',
@@ -121,7 +121,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             ['setCustomerGroupId', 'getCustomerGroupId', 'getCustomer', '__wakeup', 'setCustomer'],
             [],
             '',

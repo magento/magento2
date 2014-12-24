@@ -4,7 +4,7 @@
  */
 namespace Magento\Sales\Helper\Quote\Item;
 
-use Magento\Sales\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Class Compare

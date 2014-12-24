@@ -14,10 +14,10 @@ class Backend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     /**
      * Collect totals
      *
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
      */
-    public function collectTotals(\Magento\Sales\Model\Quote\Address $address)
+    public function collectTotals(\Magento\Quote\Model\Quote\Address $address)
     {
         return $this;
     }

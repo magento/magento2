@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Quote\Item;
+namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
@@ -13,12 +13,12 @@ use Magento\TestFramework\Helper\ObjectManager;
 class UpdaterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Quote\Item\Updater |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\Updater |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $object;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Item |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemMock;
 
@@ -63,7 +63,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->itemMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             [
                 'updateItem',
                 'getProduct',
@@ -96,7 +96,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 
         $this->object = (new ObjectManager($this))
             ->getObject(
-                'Magento\Sales\Model\Quote\Item\Updater',
+                'Magento\Quote\Model\Quote\Item\Updater',
                 [
                     'localeFormat' => $this->localeFormat
                 ]

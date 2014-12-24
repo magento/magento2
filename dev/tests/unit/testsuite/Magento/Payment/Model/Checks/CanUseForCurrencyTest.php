@@ -35,7 +35,7 @@ class CanUseForCurrencyTest extends \PHPUnit_Framework_TestCase
             self::EXPECTED_CURRENCY_CODE
         )->will($this->returnValue($expectation));
 
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')->disableOriginalConstructor()->setMethods(
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
         $store = $this->getMockBuilder(

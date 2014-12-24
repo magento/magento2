@@ -36,7 +36,7 @@ class Create extends \Magento\Backend\App\Action
     /**
      * Retrieve quote object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     protected function _getQuote()
     {

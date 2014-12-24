@@ -489,7 +489,7 @@ Mixed,Mélangé
 "This is the wrong quote item id to update configuration.","This is the wrong quote item id to update configuration."
 "This shipping method is not available. To use this shipping method, please contact us.","This shipping method is not available. To use this shipping method, please contact us."
 "The address model is not defined.","The address model is not defined."
-"The address total model should be extended from \Magento\Sales\Model\Quote\Address\Total\AbstractTotal.","Le modèle total de l'adresse devrait être étendu à partir de \Magento\Sales\Model\Quote\Address\Total\AbstractTotal."
+"The address total model should be extended from \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.","Le modèle total de l'adresse devrait être étendu à partir de \Magento\Quote\Model\Quote\Address\Total\AbstractTotal."
 "Subscription Items","Subscription Items"
 "Regular Payment","Paiement régulier"
 "Shipping & Handling (%1)","Shipping & Handling (%1)"

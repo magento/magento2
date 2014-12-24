@@ -24,7 +24,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $item;
 
@@ -52,7 +52,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['format'])
             ->getMock();
 
-        $this->item = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
+        $this->item = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods([
                 '__wakeup',

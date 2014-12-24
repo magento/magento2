@@ -28,7 +28,7 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order\Item', [], [], '', false);
-        $this->quoteItemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $orderItem = $this->orderItemMock;
         $this->subjectMock = $this->getMock('Magento\Sales\Model\Convert\Quote', [], [], '', false);
         $this->closureMock = function () use ($orderItem) {
@@ -48,7 +48,7 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
     public function testAroundItemToOrderItemWithOptions()
     {
         $itemOption = $this->getMock(
-            'Magento\Sales\Model\Quote\Item\Option',
+            'Magento\Quote\Model\Quote\Item\Option',
             ['getCode', '__wakeup'],
             [],
             '',

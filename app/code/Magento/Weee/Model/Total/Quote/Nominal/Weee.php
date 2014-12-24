@@ -27,10 +27,10 @@ class Weee extends \Magento\Weee\Model\Total\Quote\Weee
     /**
      * Get nominal items only
      *
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return array
      */
-    protected function _getAddressItems(\Magento\Sales\Model\Quote\Address $address)
+    protected function _getAddressItems(\Magento\Quote\Model\Quote\Address $address)
     {
         return $address->getAllNominalItems();
     }

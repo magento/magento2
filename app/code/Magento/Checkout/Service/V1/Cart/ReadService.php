@@ -8,8 +8,8 @@ use Magento\Checkout\Service\V1\Data;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Exception\InputException;
-use Magento\Sales\Model\Quote;
-use Magento\Sales\Model\QuoteRepository;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteRepository;
 use Magento\Sales\Model\Resource\Quote\Collection as QuoteCollection;
 
 /**
@@ -71,7 +71,7 @@ class ReadService implements ReadServiceInterface
     /**
      * Constructs a cart read service object.
      *
-     * @param QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
      * @param QuoteCollection $quoteCollection Quote collection.
      * @param Data\CartSearchResultsBuilder $searchResultsBuilder Search results builder.
      * @param Data\CartMapper $cartMapper Cart mapper.

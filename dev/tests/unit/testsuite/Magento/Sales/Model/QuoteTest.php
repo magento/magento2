@@ -4,7 +4,7 @@
  */
 namespace Magento\Sales\Model;
 
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
@@ -16,12 +16,12 @@ use Magento\TestFramework\Helper\ObjectManager;
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Quote\AddressFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\AddressFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteAddressFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteAddressMock;
 
@@ -61,7 +61,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $groupRepositoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Quote\Model\Quote
      */
     protected $quote;
 
@@ -81,7 +81,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $quoteItemCollectionFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Quote\PaymentFactory
+     * @var \Magento\Quote\Model\Quote\PaymentFactory
      */
     protected $paymentFactoryMock;
 
@@ -141,14 +141,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->quoteAddressFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Quote\AddressFactory',
+            'Magento\Quote\Model\Quote\AddressFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->quoteAddressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             [
                 'isDeleted', 'getCollection', 'getId', 'getCustomerAddressId',
                 '__wakeup', 'getAddressType', 'getDeleteImmediately', 'validateMinimumAmount'
@@ -240,7 +240,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->paymentFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Quote\PaymentFactory',
+            'Magento\Quote\Model\Quote\PaymentFactory',
             ['create'],
             [],
             '',
@@ -276,7 +276,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->quote = (new ObjectManager($this))
             ->getObject(
-                'Magento\Sales\Model\Quote',
+                'Magento\Quote\Model\Quote',
                 [
                     'quoteAddressFactory' => $this->quoteAddressFactoryMock,
                     'storeManager' => $this->storeManagerMock,
@@ -375,7 +375,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected function getAddressMock($type)
     {
         $shippingAddressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             ['getAddressType', '__wakeup'],
             [],
             '',
@@ -440,7 +440,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($storeId));
 
         $result = $this->quote->setStore($storeMock);
-        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+        $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
     }
 
     public function testGetSharedWebsiteStoreIds()
@@ -504,7 +504,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch');
 
         $result = $this->quote->loadActive($quoteId);
-        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+        $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
     }
 
     public function testloadByIdWithoutStore()
@@ -519,7 +519,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch');
 
         $result = $this->quote->loadByIdWithoutStore($quoteId);
-        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+        $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
     }
 
     public function testSetCustomerAddressData()
@@ -578,7 +578,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->with('customer_account', 'to_quote', 'return-value', $this->quote);
 
         $result = $this->quote->setCustomerAddressData([$addressMock]);
-        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+        $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
         $this->assertEquals($customerResultMock, $this->quote->getCustomer());
     }
 
@@ -766,7 +766,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->setId($id);
 
         $result = $this->quote->removeAddress($id);
-        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+        $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
     }
 
     public function testRemoveAllAddresses()
@@ -803,7 +803,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->setId($id);
 
         $result = $this->quote->removeAllAddresses();
-        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+        $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
     }
 
     /**
@@ -848,7 +848,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testAddProductItemPreparation()
     {
         $itemMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Item',
+            '\Magento\Quote\Model\Quote\Item',
             [],
             [],
             '',
@@ -974,7 +974,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         $this->quote->setId(1);
         $payment = $this->getMock(
-            'Magento\Sales\Model\Quote\Payment',
+            'Magento\Quote\Model\Quote\Payment',
             ['setQuote', 'isDeleted', '__wakeup'],
             [],
             '',
@@ -1003,14 +1003,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($quotePaymentCollectionMock);
 
-        $this->assertInstanceOf('\Magento\Sales\Model\Quote\Payment', $this->quote->getPayment());
+        $this->assertInstanceOf('\Magento\Quote\Model\Quote\Payment', $this->quote->getPayment());
     }
 
     public function testGetPaymentIsDeleted()
     {
         $this->quote->setId(1);
         $payment = $this->getMock(
-            'Magento\Sales\Model\Quote\Payment',
+            'Magento\Quote\Model\Quote\Payment',
             ['setQuote', 'isDeleted', 'getId', '__wakeup'],
             [],
             '',
@@ -1046,6 +1046,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($payment);
 
-        $this->assertInstanceOf('\Magento\Sales\Model\Quote\Payment', $this->quote->getPayment());
+        $this->assertInstanceOf('\Magento\Quote\Model\Quote\Payment', $this->quote->getPayment());
     }
 }

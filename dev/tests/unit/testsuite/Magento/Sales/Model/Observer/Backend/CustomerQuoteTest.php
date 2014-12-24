@@ -22,7 +22,7 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
     protected $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\\Magento\Sales\Model\QuoteRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject|\\Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepositoryMock;
 
@@ -44,7 +44,7 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
         $this->configMock = $this->getMockBuilder('Magento\Customer\Model\Config\Share')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quoteRepositoryMock = $this->getMockBuilder('\Magento\Sales\Model\QuoteRepository')
+        $this->quoteRepositoryMock = $this->getMockBuilder('\Magento\Quote\Model\QuoteRepository')
             ->disableOriginalConstructor()
             ->setMethods(['getForCustomer', 'save'])
             ->getMock();
@@ -136,9 +136,9 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
         $this->eventMock->expects($this->any())
             ->method('getOrigCustomerDataObject')
             ->will($this->returnValue($origCustomerDataObjectMock));
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote $quoteMock */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote $quoteMock */
         $quoteMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Quote'
+            'Magento\Quote\Model\Quote'
         )->setMethods(
                 [
                     'setWebsite',

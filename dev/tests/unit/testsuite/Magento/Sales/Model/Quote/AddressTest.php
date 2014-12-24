@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Quote;
+namespace Magento\Quote\Model\Quote;
 
 use Magento\Store\Model\ScopeInterface;
 
@@ -17,7 +17,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     private $address;
 
     /**
-     * @var \Magento\Sales\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
      */
     private $quote;
 
@@ -33,12 +33,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
 
         $this->address = $objectManager->getObject(
-                'Magento\Sales\Model\Quote\Address',
+                'Magento\Quote\Model\Quote\Address',
                 [
                     'scopeConfig' => $this->scopeConfig
                 ]
             );
-        $this->quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $this->quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $this->address->setQuote($this->quote);
     }
 

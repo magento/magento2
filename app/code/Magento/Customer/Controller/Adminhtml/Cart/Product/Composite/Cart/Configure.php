@@ -21,7 +21,7 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Comp
             $quoteItem = $this->_quoteItem;
 
             $optionCollection = $this->_objectManager->create(
-                'Magento\Sales\Model\Quote\Item\Option'
+                'Magento\Quote\Model\Quote\Item\Option'
             )->getCollection()->addItemFilter(
                 $quoteItem
             );

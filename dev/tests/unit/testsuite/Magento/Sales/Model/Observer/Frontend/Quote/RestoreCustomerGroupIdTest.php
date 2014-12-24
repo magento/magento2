@@ -37,7 +37,7 @@ class RestoreCustomerGroupIdTest extends \PHPUnit_Framework_TestCase
     public function testExecute($configAddressType)
     {
         $quoteAddress = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             [
                 'getQuote', 'setCustomerGroupId', 'getPrevQuoteCustomerGroupId',
                 'unsPrevQuoteCustomerGroupId', 'hasPrevQuoteCustomerGroupId'

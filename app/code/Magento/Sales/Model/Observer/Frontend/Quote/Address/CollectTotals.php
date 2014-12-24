@@ -64,10 +64,10 @@ class CollectTotals
      */
     public function dispatch(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Sales\Model\Quote\Address $quoteAddress */
+        /** @var \Magento\Quote\Model\Quote\Address $quoteAddress */
         $quoteAddress = $observer->getQuoteAddress();
 
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $quoteAddress->getQuote();
         $customer = $quote->getCustomer();
         $storeId = $customer->getStoreId();

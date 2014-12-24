@@ -12,7 +12,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Collection quote instance
      *
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Quote\Model\Quote
      */
     protected $_quote;
 
@@ -34,7 +34,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Config
+     * @var \Magento\Quote\Model\Quote\Config
      */
     protected $_quoteConfig;
 
@@ -45,7 +45,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Sales\Model\Quote\Config $quoteConfig
+     * @param \Magento\Quote\Model\Quote\Config $quoteConfig
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -56,7 +56,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Sales\Model\Quote\Config $quoteConfig,
+        \Magento\Quote\Model\Quote\Config $quoteConfig,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
@@ -73,7 +73,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Quote\Item', 'Magento\Sales\Model\Resource\Quote\Item');
+        $this->_init('Magento\Quote\Model\Quote\Item', 'Magento\Sales\Model\Resource\Quote\Item');
     }
 
     /**
@@ -89,7 +89,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Set Quote object to Collection
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      */
     public function setQuote($quote)

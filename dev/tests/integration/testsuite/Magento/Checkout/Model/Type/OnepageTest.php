@@ -15,7 +15,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Checkout\Model\Type\Onepage */
     protected $_model;
 
-    /** @var \Magento\Sales\Model\Quote */
+    /** @var \Magento\Quote\Model\Quote */
     protected $_currentQuote;
 
     protected function setUp()
@@ -24,7 +24,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->_model = Bootstrap::getObjectManager()->create('Magento\Checkout\Model\Type\Onepage');
         /** @var \Magento\Sales\Model\Resource\Quote\Collection $quoteCollection */
         $quoteCollection = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Resource\Quote\Collection');
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $this->_currentQuote = $quoteCollection->getLastItem();
         $this->_model->setQuote($this->_currentQuote);
     }
@@ -508,7 +508,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     protected function _getQuote()
     {
@@ -518,13 +518,13 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare Quote
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      */
     protected function _prepareQuote($quote)
     {
-        /** @var $rate \Magento\Sales\Model\Quote\Address\Rate */
+        /** @var $rate \Magento\Quote\Model\Quote\Address\Rate */
         $rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Quote\Address\Rate'
+            'Magento\Quote\Model\Quote\Address\Rate'
         );
         $rate->setCode('freeshipping_freeshipping');
         $rate->getPrice(1);

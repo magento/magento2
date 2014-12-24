@@ -52,7 +52,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->cardId = 13;
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->messageFactoryMock = $this->getMock(
             '\Magento\GiftMessage\Model\MessageFactory',
             [
@@ -73,7 +73,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             false);
         $this->messageMock = $this->getMock('\Magento\GiftMessage\Model\Message', [], [], '', false);
         $this->quoteItemMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Item',
+            '\Magento\Quote\Model\Quote\Item',
             [
                 'getGiftMessageId',
                 '__wakeup'
@@ -82,7 +82,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false);
         $this->quoteMock = $this->getMock(
-            '\Magento\Sales\Model\Quote',
+            '\Magento\Quote\Model\Quote',
             [
                 'getGiftMessageId',
                 'getItemById',

@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Magento\Sales\Model\Quote\Address;
+namespace Magento\Quote\Model\Quote\Address;
 
 use Magento\TestFramework\Helper\ObjectManager;
 
@@ -35,7 +35,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->countryFactoryMock = $this->getMock('\Magento\Directory\Model\CountryFactory', [], [], '', false);
         $this->countryMock = $this->getMock('\Magento\Directory\Model\Country', [], [], '', false);
         $this->itemMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             ['getCountryId', 'getEmail'],
             [],
             '',
@@ -46,7 +46,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->countryMock));
         $this->model = $objectManager->getObject(
-            '\Magento\Sales\Model\Quote\Address\Validator',
+            '\Magento\Quote\Model\Quote\Address\Validator',
             [
                 'countryFactory' => $this->countryFactoryMock,
             ]

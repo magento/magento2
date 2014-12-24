@@ -28,11 +28,11 @@ class CanUseForCountryTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsApplicable($expectation)
     {
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')->disableOriginalConstructor()->setMethods(
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
         $billingAddressMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Quote\Address'
+            'Magento\Quote\Model\Quote\Address'
         )->disableOriginalConstructor()->setMethods([])->getMock();
         $billingAddressMock->expects($this->once())->method('getCountry')->will(
             $this->returnValue(self::EXPECTED_COUNTRY_ID)

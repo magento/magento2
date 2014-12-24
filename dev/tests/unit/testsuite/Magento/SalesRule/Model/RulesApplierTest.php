@@ -111,13 +111,13 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Sales\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Quote\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPreparedItem()
     {
-        /** @var \Magento\Sales\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
+        /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
         $address = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             [
                 'getQuote',
                 'setCouponCode',
@@ -128,9 +128,9 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        /** @var \Magento\Sales\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
+        /** @var \Magento\Quote\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject $item */
         $item = $this->getMock(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             [
                 'setDiscountAmount',
                 'setBaseDiscountAmount',
@@ -143,7 +143,7 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $quote = $this->getMock('Magento\Sales\Model\Quote', ['getStore', '__wakeUp'], [], '', false);
+        $quote = $this->getMock('Magento\Quote\Model\Quote', ['getStore', '__wakeUp'], [], '', false);
         $item->expects($this->any())->method('getAddress')->will($this->returnValue($address));
         $address->expects($this->any())
             ->method('getQuote')

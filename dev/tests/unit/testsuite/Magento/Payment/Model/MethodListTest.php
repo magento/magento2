@@ -46,11 +46,11 @@ class MethodListTest extends \PHPUnit_Framework_TestCase
     public function testGetAvailableMethods()
     {
         $storeId = 1;
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
         $quoteMock->expects($this->atLeastOnce())
             ->method('getPayment')
-            ->will($this->returnValue($this->getMock('\Magento\Sales\Model\Quote\Payment', [], [], '', false)));
+            ->will($this->returnValue($this->getMock('\Magento\Quote\Model\Quote\Payment', [], [], '', false)));
 
         $methodMock = $this->getMock('Magento\Payment\Model\Method\AbstractMethod', ['setInfoInstance'], [], '', false);
 
@@ -73,7 +73,7 @@ class MethodListTest extends \PHPUnit_Framework_TestCase
 
         $methodMock->expects($this->atLeastOnce())
             ->method('setInfoInstance')
-            ->with($this->getMock('\Magento\Sales\Model\Quote\Payment', [], [], '', false))
+            ->with($this->getMock('\Magento\Quote\Model\Quote\Payment', [], [], '', false))
             ->will($this->returnSelf());
 
         $this->assertEquals([$methodMock], $this->methodList->getAvailableMethods($quoteMock));

@@ -2,12 +2,12 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Quote;
+namespace Magento\Quote\Model\Quote;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Quote\Config
+     * @var \Magento\Quote\Model\Quote\Config
      */
     protected $_model;
 
@@ -25,7 +25,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_model = new \Magento\Sales\Model\Quote\Config($this->_attributeConfig);
+        $this->_model = new \Magento\Quote\Model\Quote\Config($this->_attributeConfig);
     }
 
     public function testGetProductAttributes()

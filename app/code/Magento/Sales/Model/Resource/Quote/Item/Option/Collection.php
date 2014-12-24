@@ -4,7 +4,7 @@
  */
 namespace Magento\Sales\Model\Resource\Quote\Item\Option;
 
-use Magento\Sales\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Item option collection
@@ -34,7 +34,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Quote\Item\Option', 'Magento\Sales\Model\Resource\Quote\Item\Option');
+        $this->_init('Magento\Quote\Model\Quote\Item\Option', 'Magento\Sales\Model\Resource\Quote\Item\Option');
     }
 
     /**

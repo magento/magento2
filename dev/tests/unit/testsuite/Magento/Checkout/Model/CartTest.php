@@ -35,7 +35,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteMock;
 
@@ -83,7 +83,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
             ->will($this->returnValue($this->stockItemMock));
-        $this->quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -205,7 +205,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
                 return false;
         }
 
-        $quoteItem = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $quoteItem = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $quoteItem->expects($this->once())
             ->method('getProduct')
             ->will($this->returnValue($product));
@@ -221,7 +221,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $quoteId = 1;
         $itemsCount = 1;
         $quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             ['getItemsCount', 'getItemsQty', '__wakeup'],
             [],
             '',

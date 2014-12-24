@@ -26,7 +26,7 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
     protected $coupon;
 
     /**
-     * @var \Magento\Sales\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $quote;
 
@@ -41,7 +41,7 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
     protected $customer;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $address;
 
@@ -56,7 +56,7 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
     protected $objectFactory;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Item\AbstractItem | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\AbstractItem | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $item;
 
@@ -102,7 +102,7 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->quote = $this->getMock('Magento\Sales\Model\Quote', ['__wakeup', 'getStore'], [], '', false);
+        $this->quote = $this->getMock('Magento\Quote\Model\Quote', ['__wakeup', 'getStore'], [], '', false);
         $this->customer = $this->getMock(
             'Magento\SalesRule\Model\Rule\Customer',
             ['loadByCustomerRule', '__wakeup'],
@@ -126,7 +126,7 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->address = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             [
                 'isObjectNew',
                 'getQuote',
@@ -142,7 +142,7 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
         $this->address->setQuote($this->quote);
 
         $this->item = $this->getMock(
-            'Magento\Sales\Model\Quote\Item\AbstractItem',
+            'Magento\Quote\Model\Quote\Item\AbstractItem',
             [
                 'getDiscountCalculationPrice',
                 'getCalculationPrice',

@@ -125,7 +125,7 @@ return [
     ['_messageFactory', 'Magento\Core\Model\Session\Context', 'messagesFactory'],
     ['_sessionQuote', 'Magento\Sales\Block\Adminhtml\Order\Create\Messages', 'sessionQuote'],
     ['_coreRegistry', 'Magento\Sales\Block\Adminhtml\Order\View\Messages', 'coreRegistry'],
-    ['_message', 'Magento\Sales\Model\Quote', 'messageFactory'],
+    ['_message', 'Magento\Quote\Model\Quote', 'messageFactory'],
     ['_encryptedSessionId', '\Magento\Core\Model\Session\AbstractSession'],
     ['_skipSessionIdFlag', '\Magento\Core\Model\Session\AbstractSession'],
     ['_url', '\Magento\Core\Model\Session\AbstractSession'],

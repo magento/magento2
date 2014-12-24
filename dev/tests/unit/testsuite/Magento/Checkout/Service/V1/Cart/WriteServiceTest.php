@@ -67,12 +67,12 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->userContextMock = $this->getMock('\Magento\Authorization\Model\UserContextInterface');
 
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->quoteMock =
-            $this->getMock('\Magento\Sales\Model\Quote',
+            $this->getMock('\Magento\Quote\Model\Quote',
                 [
                     'setStoreId',
                     'getId',
@@ -97,7 +97,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->quoteServiceFactory = $this->getMock(
-            'Magento\Sales\Model\Service\QuoteFactory',
+            'Magento\Quote\Model\Service\QuoteFactory',
             ['create'],
             [],
             '',
@@ -164,7 +164,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->storeMock));
         $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
 
-        $customerQuoteMock = $this->getMock('\Magento\Sales\Model\Quote',
+        $customerQuoteMock = $this->getMock('\Magento\Quote\Model\Quote',
             [
                 'getIsActive',
                 'getId',
@@ -352,7 +352,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getCustomerId')->will($this->returnValue(null));
 
-        $customerQuoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $customerQuoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getForCustomer')
             ->with($customerId)

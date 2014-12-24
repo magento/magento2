@@ -21,7 +21,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollectTotalsWithVirtual()
     {
-        $quote = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
 
         $product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
@@ -37,8 +37,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomerData()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
         $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerDataBuilder');
         $expected = $this->_getCustomerDataArray();
@@ -55,8 +55,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateCustomerData()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerDataBuilder');
         $expected = $this->_getCustomerDataArray();
         //For save in repository
@@ -95,8 +95,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerDataBuilder');
         $customerGroupId = 3;
         $customerData = $customerBuilder->setId(1)->setGroupId($customerGroupId)->create();
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->setCustomer($customerData);
         $quote->unsetData('customer_group_id');
 
@@ -117,8 +117,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Customer\Model\Group $group */
         $group = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Group');
         $fixtureGroupId = $group->load($fixtureGroupCode, 'customer_group_code')->getId();
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->setCustomerGroupId($fixtureGroupId);
 
         /** Execute SUT */
@@ -138,8 +138,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
          * Customer with two addresses created
          * First address is default billing, second is default shipping.
          */
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $customerData = $this->_prepareQuoteForTestAssignCustomerWithAddressChange($quote);
 
         /** Execute SUT */
@@ -203,11 +203,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
          * Customer with two addresses created
          * First address is default billing, second is default shipping.
          */
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $objectManager = Bootstrap::getObjectManager();
-        $quote = $objectManager->create('Magento\Sales\Model\Quote');
+        $quote = $objectManager->create('Magento\Quote\Model\Quote');
         $customerData = $this->_prepareQuoteForTestAssignCustomerWithAddressChange($quote);
-        /** @var \Magento\Sales\Model\Quote\Address $quoteBillingAddress */
+        /** @var \Magento\Quote\Model\Quote\Address $quoteBillingAddress */
         $expectedBillingAddressData = [
             'street' => 'Billing str, 67',
             'telephone' => 16546757,
@@ -218,7 +218,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'firstname' => 'FirstBilling',
             'region_id' => 1
         ];
-        $quoteBillingAddress = $objectManager->create('Magento\Sales\Model\Quote\Address');
+        $quoteBillingAddress = $objectManager->create('Magento\Quote\Model\Quote\Address');
         $quoteBillingAddress->setData($expectedBillingAddressData);
 
         $expectedShippingAddressData = [
@@ -231,7 +231,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'firstname' => 'FirstShipping',
             'region_id' => 1
         ];
-        $quoteShippingAddress = $objectManager->create('Magento\Sales\Model\Quote\Address');
+        $quoteShippingAddress = $objectManager->create('Magento\Quote\Model\Quote\Address');
         $quoteShippingAddress->setData($expectedShippingAddressData);
 
         /** Execute SUT */
@@ -264,7 +264,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      *
      * Customer with two addresses created. First address is default billing, second is default shipping.
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     protected function _prepareQuoteForTestAssignCustomerWithAddressChange($quote)

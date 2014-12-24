@@ -35,7 +35,7 @@ return [
     ['_getIsActiveAttributeId', 'Magento\Catalog\Model\Resource\Category\Tree', 'Magento\Catalog\Model\Resource\Category::getIsActiveAttributeId'],
     ['_getIsActiveAttributeId', 'Magento\Catalog\Model\Resource\Category', 'Magento\Catalog\Model\Resource\Category::getIsActiveAttributeId'],
     ['_bytesToMbytes', 'Magento\Catalog\Model\Product\Option\Type\File'],
-    ['_calculatePrice', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
+    ['_calculatePrice', 'Magento\Quote\Model\Quote\Item\AbstractItem'],
     ['_canBeStoreCodeInUrl', 'Magento\Framework\App\Request\Http'],
     ['_canShowField', 'Magento\Backend\Block\System\Config\Form'],
     ['_canUseCacheForInit', 'Magento\Core\Model\Config'],
@@ -190,8 +190,8 @@ return [
     ],
     [
         'exportCustomerAddress',
-        'Magento\Sales\Model\Quote\Address',
-        'Magento\Sales\Model\Quote\Address::exportCustomerAddressData'
+        'Magento\Quote\Model\Quote\Address',
+        'Magento\Quote\Model\Quote\Address::exportCustomerAddressData'
     ],
     ['_toHtml', 'Magento\Backend\Block\Widget\Container'],
     ['_unhookQueries', 'Magento\Core\Model\Resource\Setup'],
@@ -272,7 +272,7 @@ return [
     ['authFrontend'],
     ['authValidate', '', '\Magento\Framework\HTTP\Authentication::getCredentials'],
     ['bundlesAction', 'Magento\Catalog\Controller\Adminhtml\Product'],
-    ['calcTaxAmount', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
+    ['calcTaxAmount', 'Magento\Quote\Model\Quote\Item\AbstractItem'],
     ['callbackQueryHook', 'Magento\Core\Model\Resource\Setup'],
     ['canCreateUser', 'Magento\User\Model\Resource\User'],
     ['canPrint', 'Magento\Checkout\Block\Onepage\Success'],
@@ -380,7 +380,7 @@ return [
     ['getAttributeDataModelFactory', 'Magento\Eav\Model\Validator\Attribute\Data'],
     ['getAttributes', 'Magento\Customer\Helper\Address'],
     ['getAttributesJson', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config', 'getAttributes'],
-    ['getBaseTaxAmount', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
+    ['getBaseTaxAmount', 'Magento\Quote\Model\Quote\Item\AbstractItem'],
     ['getBlockClassName', 'Magento\Core\Model\Config'],
     ['getButtonsHtml', 'Magento_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search'],
     ['getCache', 'Magento\Core\Model\Config'],
@@ -608,7 +608,7 @@ return [
         'Magento\Framework\App\CacheInterface',
         'Magento_Cache_Frontend_Decorator_TagScope::getTag()'
     ],
-    ['getTaxAmount', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
+    ['getTaxAmount', 'Magento\Quote\Model\Quote\Item\AbstractItem'],
     ['getTaxRatesByProductClass', '', '_getAllRatesByProductClass'],
     ['getAllRatesByProductClass', 'Magento\Tax\Helper\Data'],
     [
@@ -624,9 +624,9 @@ return [
         'Magento\Core\Model\Design\Source\Design',
         'Magento_Core_Model_Theme::getThemeCollectionOptionArray'
     ],
-    ['getTotalModels', 'Magento\Sales\Model\Quote\Address'],
-    ['importCustomerAddress', 'Magento\Sales\Model\Quote\Address'],
-    ['getTotalModels', 'Magento\Sales\Model\Quote\Config'],
+    ['getTotalModels', 'Magento\Quote\Model\Quote\Address'],
+    ['importCustomerAddress', 'Magento\Quote\Model\Quote\Address'],
+    ['getTotalModels', 'Magento\Quote\Model\Quote\Config'],
     ['getTrackId', 'Magento\Shipping\Block\Tracking\Popup'],
     ['getTrackingInfoByOrder', 'Magento\Shipping\Block\Tracking\Popup'],
     ['getTrackingInfoByShip', 'Magento\Shipping\Block\Tracking\Popup'],
@@ -680,7 +680,7 @@ return [
     ['insertProductPrice', 'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice'],
     ['isAbsolutePath'],
     ['isAdmin', 'Magento\Store\Model\Store'],
-    ['isAllowedGuestCheckout', 'Magento\Sales\Model\Quote'],
+    ['isAllowedGuestCheckout', 'Magento\Quote\Model\Quote'],
     ['isApplicableToQuote', 'Magento\Payment\Model\Method\AbstractMethod'],
     ['isCheckoutAvailable', 'Magento\Multishipping\Model\Checkout\Type\Multishipping'],
     ['isDirectOutput', 'Magento\Framework\View\Layout'],
@@ -1726,7 +1726,7 @@ return [
         'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
         'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::getFlatColumns'
     ],
-    ['addProductAdvanced', '\Magento\Sales\Model\Quote'],
+    ['addProductAdvanced', '\Magento\Quote\Model\Quote'],
     ['translateArray', 'Magento\Framework\App\Helper\AbstractHelper'],
     ['getCalculator', '\Magento\Tax\Helper\Data'],
     ['getRatesForAllProductTaxClasses', 'Magento\Tax\Model\Calculation'],
@@ -1952,7 +1952,7 @@ return [
     ['getModule', 'Magento\Framework\Module\ModuleListInterface', 'getOne'],
     ['_getNewConditionModelInstance', 'Magento\Rule\Model\Condition\Combine'],
     ['getItemsRandomCollection', 'Magento\Sales\Model\Order'],
-    ['importOrderAddress', 'Magento\Sales\Model\Quote\Address', 'Magento\Sales\Model\Quote\Address::importCustomerAddressData'],
+    ['importOrderAddress', 'Magento\Quote\Model\Quote\Address', 'Magento\Quote\Model\Quote\Address::importCustomerAddressData'],
     ['_getUsedAttributes', 'Magento\SalesRule\Model\Rule'],
     ['getDefaultCustomerGroupId', 'Magento\Customer\Model\Vat', 'Magento\Customer\Api\GroupManagementInterface::getDefaultGroup'],
     [

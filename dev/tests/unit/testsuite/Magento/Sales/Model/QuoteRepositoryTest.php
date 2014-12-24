@@ -6,6 +6,8 @@
 
 namespace Magento\Sales\Model;
 
+use Magento\Quote\Model\QuoteRepository;
+
 class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,10 +39,10 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->quoteFactoryMock = $this->getMock('\Magento\Sales\Model\QuoteFactory', ['create'], [], '', false);
+        $this->quoteFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteFactory', ['create'], [], '', false);
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->quoteMock = $this->getMock(
-            '\Magento\Sales\Model\Quote',
+            '\Magento\Quote\Model\Quote',
             ['load', 'loadByCustomer', 'getIsActive', 'getId', '__wakeup', 'setSharedStoreIds', 'save', 'delete',
                 'getCustomerId'],
             [],
@@ -49,7 +51,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->model = $objectManager->getObject(
-            'Magento\Sales\Model\QuoteRepository',
+            'Magento\Quote\Model\QuoteRepository',
             [
                 'quoteFactory' => $this->quoteFactoryMock,
                 'storeManager' => $this->storeManagerMock,

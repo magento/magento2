@@ -44,7 +44,7 @@ class StockItem
      * Initialize stock item
      *
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem
-     * @param \Magento\Sales\Model\Quote\Item $quoteItem
+     * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @param int $qty
      *
      * @return \Magento\Framework\Object
@@ -52,7 +52,7 @@ class StockItem
      */
     public function initialize(
         \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem,
-        \Magento\Sales\Model\Quote\Item $quoteItem,
+        \Magento\Quote\Model\Quote\Item $quoteItem,
         $qty
     ) {
         /**

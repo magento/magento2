@@ -35,7 +35,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Quote\Payment', 'Magento\Sales\Model\Resource\Quote\Payment');
+        $this->_init('Magento\Quote\Model\Quote\Payment', 'Magento\Sales\Model\Resource\Quote\Payment');
     }
 
     /**

@@ -23,7 +23,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
+     * @param \Magento\Quote\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -32,7 +32,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
+        \Magento\Quote\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
@@ -47,7 +47,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Quote\Address\Rate', 'Magento\Sales\Model\Resource\Quote\Address\Rate');
+        $this->_init('Magento\Quote\Model\Quote\Address\Rate', 'Magento\Sales\Model\Resource\Quote\Address\Rate');
     }
 
     /**
@@ -82,7 +82,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Don't add item to the collection if only fixed are allowed and its carrier is not fixed
      *
-     * @param \Magento\Sales\Model\Quote\Address\Rate $rate
+     * @param \Magento\Quote\Model\Quote\Address\Rate $rate
      * @return $this
      */
     public function addItem(\Magento\Framework\Object $rate)

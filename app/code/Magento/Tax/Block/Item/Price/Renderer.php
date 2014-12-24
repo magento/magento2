@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
-use Magento\Sales\Model\Quote\Item\AbstractItem as QuoteItem;
+use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**

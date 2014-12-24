@@ -18,7 +18,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Quote\Address\Item', 'Magento\Sales\Model\Resource\Quote\Address\Item');
+        $this->_init('Magento\Quote\Model\Quote\Address\Item', 'Magento\Sales\Model\Resource\Quote\Address\Item');
     }
 
     /**

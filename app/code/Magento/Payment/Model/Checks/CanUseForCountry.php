@@ -4,7 +4,7 @@
  */
 namespace Magento\Payment\Model\Checks;
 
-use Magento\Sales\Model\Quote;
+use Magento\Quote\Model\Quote;
 
 class CanUseForCountry implements SpecificationInterface
 {

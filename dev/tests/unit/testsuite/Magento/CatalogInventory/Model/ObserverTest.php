@@ -330,7 +330,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $itemsToReindex = [];
 
         $quote = $this->getMock(
-            '\Magento\Sales\Model\Quote',
+            '\Magento\Quote\Model\Quote',
             ['getInventoryProcessed', 'setInventoryProcessed', 'getAllItems', 'getStore', '__wakeup'],
             [],
             '',

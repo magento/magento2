@@ -14,10 +14,10 @@ class Custbalance extends \Magento\Sales\Model\Resource\Quote\Address\Attribute\
     /**
      * Fetch customer balance
      *
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
      */
-    public function fetchTotals(\Magento\Sales\Model\Quote\Address $address)
+    public function fetchTotals(\Magento\Quote\Model\Quote\Address $address)
     {
         $custbalance = $address->getCustbalanceAmount();
         if ($custbalance != 0) {

@@ -60,7 +60,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $this->quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->setMethods(['getHasError', 'setHasError', 'addMessage', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();

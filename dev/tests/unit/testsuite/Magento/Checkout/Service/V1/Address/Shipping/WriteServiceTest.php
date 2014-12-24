@@ -45,14 +45,14 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->addressFactoryMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\AddressFactory', ['create', '__wakeup'], [], '', false
+            '\Magento\Quote\Model\Quote\AddressFactory', ['create', '__wakeup'], [], '', false
         );
 
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->quoteAddressMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             ['getCustomerId', 'load', 'getData', 'setData', 'setStreet', 'setRegionId', 'setRegion', '__wakeup'],
             [],
             '',
@@ -87,7 +87,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddressValidationFailed()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart654')
@@ -101,7 +101,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAddress()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart867')
@@ -134,7 +134,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
 
         $addressId = 1;
-        $shippingAddressMock = $this->getMock('\Magento\Sales\Model\Quote\Address', [], [], '', false);
+        $shippingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
         $shippingAddressMock->expects($this->once())->method('getId')->will($this->returnValue($addressId));
         $quoteMock->expects($this->once())->method('getShippingAddress')
             ->will($this->returnValue($shippingAddressMock));
@@ -148,7 +148,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddressForVirtualProduct()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart867')
@@ -182,7 +182,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart867')

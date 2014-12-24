@@ -5,7 +5,7 @@
 namespace Magento\Payment\Helper;
 
 use Magento\Payment\Model\Method\Substitution;
-use Magento\Sales\Model\Quote;
+use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\Payment\Block\Form;
 use Magento\Payment\Model\Info;

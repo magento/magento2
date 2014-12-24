@@ -150,7 +150,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $priceModel =
             $this->getMock('Magento\Bundle\Model\Product\Price', ['getSelectionFinalTotalPrice'], [], '', false);
         $selectionQty =
-            $this->getMock('Magento\Sales\Model\Quote\Item\Option', ['getValue', '__wakeup'], [], '', false);
+            $this->getMock('Magento\Quote\Model\Quote\Item\Option', ['getValue', '__wakeup'], [], '', false);
         $bundleOption =
             $this->getMock('Magento\Bundle\Model\Option', ['getSelections', 'getTitle', '__wakeup'], [], '', false);
         $selectionOption =

@@ -75,12 +75,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         // rate method factory
         $rateMethodFactory = $this->getMockBuilder(
-            '\Magento\Sales\Model\Quote\Address\RateResult\MethodFactory'
+            '\Magento\Quote\Model\Quote\Address\RateResult\MethodFactory'
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
         $rateMethod = $this->getMockBuilder(
-            'Magento\Sales\Model\Quote\Address\RateResult\Method'
+            'Magento\Quote\Model\Quote\Address\RateResult\Method'
         )->disableOriginalConstructor()->setMethods(
             ['setPrice']
         )->getMock();
@@ -238,7 +238,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         );
         // for setRequest
         $request = $this->_helper->getObject(
-            'Magento\Sales\Model\Quote\Address\RateRequest',
+            'Magento\Quote\Model\Quote\Address\RateRequest',
             require __DIR__ . '/_files/rates_request_data_dhl.php'
         );
         $this->assertNotEmpty($this->_model->collectRates($request)->getAllRates());

@@ -2,11 +2,11 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Quote\Item;
+namespace Magento\Quote\Model\Quote\Item;
 
 use \Magento\Catalog\Model\Product;
-use \Magento\Sales\Model\Quote\ItemFactory;
-use \Magento\Sales\Model\Quote\Item;
+use Magento\Quote\Model\Quote\ItemFactory;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\StoreManagerInterface;
 use \Magento\Store\Model\Store;
 use \Magento\Framework\App\State;
@@ -60,7 +60,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->quoteItemFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Quote\ItemFactory',
+            'Magento\Quote\Model\Quote\ItemFactory',
             ['create'],
             [],
             '',
@@ -68,7 +68,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->itemMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             ['getId', 'setOptions', '__wakeup', 'setProduct', 'addQty', 'setCustomPrice', 'setOriginalCustomPrice'],
             [],
             '',

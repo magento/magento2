@@ -59,7 +59,7 @@ class QuantityValidator
      */
     public function validate(\Magento\Framework\Event\Observer $observer)
     {
-        /* @var $quoteItem \Magento\Sales\Model\Quote\Item */
+        /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $observer->getEvent()->getItem();
 
         if (!$quoteItem ||
@@ -196,7 +196,7 @@ class QuantityValidator
     /**
      * Removes error statuses from quote and item, set by this observer
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item $item
      * @param int $code
      * @return void
      */

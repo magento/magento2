@@ -28,7 +28,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order\Item', [], [], '', false);
-        $this->quoteItemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $orderItem = $this->orderItemMock;
         $this->closureMock = function () use ($orderItem) {
             return $orderItem;

@@ -96,7 +96,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
         $i = 0;
         $allItems = array_reverse($this->getItems());
         foreach ($allItems as $item) {
-            /* @var $item \Magento\Sales\Model\Quote\Item */
+            /* @var $item \Magento\Quote\Model\Quote\Item */
             if (!$item->getProduct()->isVisibleInSiteVisibility()) {
                 $productId = $item->getProduct()->getId();
                 $products = $this->_catalogUrl->getRewriteByProductStore([$productId => $item->getStoreId()]);
@@ -271,7 +271,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
     public function getIdentities()
     {
         $identities = [];
-        /** @var $item \Magento\Sales\Model\Quote\Item */
+        /** @var $item \Magento\Quote\Model\Quote\Item */
         foreach ($this->getItems() as $item) {
             $identities = array_merge($identities, $item->getProduct()->getIdentities());
         }

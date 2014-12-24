@@ -114,7 +114,7 @@ class Observer extends \Magento\Framework\Object
             return $this;
         }
 
-        /** @var $quoteItem \Magento\Sales\Model\Quote\Item */
+        /** @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $observer->getEvent()->getQuoteItem();
         if ($giftMessageId = $orderItem->getGiftMessageId()) {
             $giftMessage = $this->_messageFactory->create()->load($giftMessageId)->setId(null)->save();

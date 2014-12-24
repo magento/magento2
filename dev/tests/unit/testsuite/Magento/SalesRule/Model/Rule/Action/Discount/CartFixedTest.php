@@ -12,7 +12,7 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
     protected $rule;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\AbstractItem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $item;
 
@@ -27,12 +27,12 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
     protected $data;
 
     /**
-     * @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quote;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $address;
 
@@ -49,12 +49,12 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->rule = $this->getMock('Magento\Framework\Object', null, [], 'Rule', true);
-        $this->item = $this->getMock('Magento\Sales\Model\Quote\Item\AbstractItem', [], [], '', false);
+        $this->item = $this->getMock('Magento\Quote\Model\Quote\Item\AbstractItem', [], [], '', false);
         $this->data = $this->getMock('Magento\SalesRule\Model\Rule\Action\Discount\Data', null);
 
-        $this->quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $this->quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $this->address = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             ['getCartFixedRules', 'setCartFixedRules', '__wakeup'],
             [],
             '',
