@@ -8,12 +8,8 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Model\bool;
-use Magento\Sales\Model\float;
-use Magento\Sales\Model\int;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
-use Magento\Sales\Model\string;
 
 /**
  * Quote model
