@@ -39,8 +39,8 @@ class EndToEndCETests
         $suite->addTestSuite('Magento\CatalogSearch\Test\TestCase\AdvancedSearchTest');
 
         // Url rewrites
-        $suite->addTestSuite('Magento\Urlrewrite\Test\TestCase\ProductTest');
-        $suite->addTestSuite('Magento\Urlrewrite\Test\TestCase\CategoryTest');
+        $suite->addTestSuite('Magento\UrlRewrite\Test\TestCase\ProductTest');
+        $suite->addTestSuite('Magento\UrlRewrite\Test\TestCase\CategoryTest');
 
         // Customer
         $suite->addTestSuite('Magento\Customer\Test\TestCase\BackendCustomerCreateTest');
