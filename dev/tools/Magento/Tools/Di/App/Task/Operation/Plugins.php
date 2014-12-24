@@ -65,7 +65,7 @@ class Plugins implements OperationInterface
         $pluginScanner->addChild(new \Magento\Tools\Di\Code\Scanner\PluginScanner(), 'di');
         $pluginDefinitions = [];
         $pluginList = $pluginScanner->collectEntities($files);
-        foreach ($pluginList as $type => $entityList) {
+        foreach ($pluginList as $entityList) {
             foreach ($entityList as $entity) {
                 $pluginDefinitions[$entity] = $this->definitionRuntime->getMethodList($entity);
             }

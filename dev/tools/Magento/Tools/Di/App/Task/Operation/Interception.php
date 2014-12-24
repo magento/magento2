@@ -70,5 +70,4 @@ class Interception implements OperationInterface
         $configuration = $this->interceptionConfigurationBuilder->getInterceptionConfiguration(get_declared_classes());
         $generator->generateList($configuration);
     }
-
 }
