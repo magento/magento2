@@ -430,7 +430,7 @@ class Onepage
             $address = $this->getQuote()->getBillingAddress();
         }
 
-        if (!$this->getQuote()->getCustomerId() && self::METHOD_REGISTER == $this->getQuote()->getCheckoutMethod()) {
+        if (!$this->getQuote()->getCustomerId() && $this->isCheckoutMethodRegister()) {
             if ($this->_customerEmailExists($address->getEmail(), $this->_storeManager->getWebsite()->getId())) {
                 return [
                     'error' => 1,
