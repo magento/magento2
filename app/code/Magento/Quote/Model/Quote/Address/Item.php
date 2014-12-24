@@ -7,8 +7,8 @@ namespace Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote;
 
 /**
- * @method \Magento\Sales\Model\Resource\Quote\Address\Item _getResource()
- * @method \Magento\Sales\Model\Resource\Quote\Address\Item getResource()
+ * @method \Magento\Quote\Model\Resource\Quote\Address\Item _getResource()
+ * @method \Magento\Quote\Model\Resource\Quote\Address\Item getResource()
  * @method int getParentItemId()
  * @method \Magento\Quote\Model\Quote\Address\Item setParentItemId(int $value)
  * @method int getQuoteAddressId()
@@ -104,7 +104,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Quote\Address\Item');
+        $this->_init('Magento\Quote\Model\Resource\Quote\Address\Item');
     }
 
     /**

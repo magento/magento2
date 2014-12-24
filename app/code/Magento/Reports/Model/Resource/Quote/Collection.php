@@ -10,7 +10,7 @@
  */
 namespace Magento\Reports\Model\Resource\Quote;
 
-class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
+class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
 {
     const SELECT_COUNT_SQL_TYPE_CART = 1;
 

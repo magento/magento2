@@ -201,7 +201,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $_addressItemFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory
+     * @var \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
 
@@ -211,7 +211,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $_rateCollector;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory
+     * @var \Magento\Quote\Model\Resource\Quote\Address\Rate\CollectionFactory
      */
     protected $_rateCollectionFactory;
 
@@ -255,10 +255,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param RegionDataBuilder $regionBuilder
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Address\ItemFactory $addressItemFactory
-     * @param \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory
+     * @param \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory
      * @param Address\RateFactory $addressRateFactory
      * @param Address\RateCollectorInterfaceFactory $rateCollector
-     * @param \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory
+     * @param \Magento\Quote\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory
      * @param Address\RateRequestFactory $rateRequestFactory
      * @param \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
      * @param Address\TotalFactory $addressTotalFactory
@@ -285,10 +285,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         RegionDataBuilder $regionBuilder,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\ItemFactory $addressItemFactory,
-        \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory,
+        \Magento\Quote\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Quote\Model\Quote\Address\RateFactory $addressRateFactory,
         \Magento\Quote\Model\Quote\Address\RateCollectorInterfaceFactory $rateCollector,
-        \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory,
+        \Magento\Quote\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory,
         \Magento\Quote\Model\Quote\Address\RateRequestFactory $rateRequestFactory,
         \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory,
         \Magento\Quote\Model\Quote\Address\TotalFactory $addressTotalFactory,
@@ -340,7 +340,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Quote\Address');
+        $this->_init('Magento\Quote\Model\Resource\Quote\Address');
     }
 
     /**

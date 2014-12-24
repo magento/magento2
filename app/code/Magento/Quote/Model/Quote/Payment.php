@@ -9,8 +9,8 @@ use Magento\Framework\Api\AttributeDataBuilder;
 /**
  * Quote payment information
  *
- * @method \Magento\Sales\Model\Resource\Quote\Payment _getResource()
- * @method \Magento\Sales\Model\Resource\Quote\Payment getResource()
+ * @method \Magento\Quote\Model\Resource\Quote\Payment _getResource()
+ * @method \Magento\Quote\Model\Resource\Quote\Payment getResource()
  * @method int getQuoteId()
  * @method \Magento\Quote\Model\Quote\Payment setQuoteId(int $value)
  * @method string getCreatedAt()
@@ -111,7 +111,7 @@ class Payment extends \Magento\Payment\Model\Info
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Quote\Payment');
+        $this->_init('Magento\Quote\Model\Resource\Quote\Payment');
     }
 
     /**

@@ -7,8 +7,8 @@ namespace Magento\Quote\Model\Quote\Item;
 /**
  * Item option model
  *
- * @method \Magento\Sales\Model\Resource\Quote\Item\Option _getResource()
- * @method \Magento\Sales\Model\Resource\Quote\Item\Option getResource()
+ * @method \Magento\Quote\Model\Resource\Quote\Item\Option _getResource()
+ * @method \Magento\Quote\Model\Resource\Quote\Item\Option getResource()
  * @method int getItemId()
  * @method \Magento\Quote\Model\Quote\Item\Option setItemId(int $value)
  * @method int getProductId()
@@ -37,7 +37,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Quote\Item\Option');
+        $this->_init('Magento\Quote\Model\Resource\Quote\Item\Option');
     }
 
     /**

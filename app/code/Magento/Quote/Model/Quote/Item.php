@@ -7,8 +7,8 @@ namespace Magento\Quote\Model\Quote;
 /**
  * Sales Quote Item Model
  *
- * @method \Magento\Sales\Model\Resource\Quote\Item _getResource()
- * @method \Magento\Sales\Model\Resource\Quote\Item getResource()
+ * @method \Magento\Quote\Model\Resource\Quote\Item _getResource()
+ * @method \Magento\Quote\Model\Resource\Quote\Item getResource()
  * @method int getQuoteId()
  * @method \Magento\Quote\Model\Quote\Item setQuoteId(int $value)
  * @method string getCreatedAt()
@@ -229,7 +229,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Quote\Item');
+        $this->_init('Magento\Quote\Model\Resource\Quote\Item');
     }
 
     /**
