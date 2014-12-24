@@ -561,7 +561,6 @@ class Address extends AbstractCustomer
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = [
                         'entity_id' => $addressId,
-                        'entity_type_id' => $this->getEntityTypeId(),
                         'attribute_id' => $attributeId,
                         'value' => $value,
                     ];
