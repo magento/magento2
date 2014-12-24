@@ -1616,14 +1616,8 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         $backend = $attribute->getBackend();
         $table = $backend->getTable();
         $entity = $attribute->getEntity();
-        $entityIdField = $entity->getEntityIdField();
         $adapter = $this->_getWriteAdapter();
-
-        $row = [
-            'entity_type_id' => $entity->getTypeId(),
-            'attribute_id' => $attribute->getId(),
-            $entityIdField => $object->getData($entityIdField),
-        ];
+        $row = $this->getAttributeRow($entity, $object, $attribute);
 
         $newValue = $object->getData($attributeCode);
         if ($attribute->isValueEmpty($newValue)) {
@@ -1657,6 +1651,23 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         }
 
         return $this;
+    }
+
+    /**
+     * Return attribute row to prepare where statement
+     *
+     * @param $entity
+     * @param $object
+     * @param $attribute
+     * @return array
+     */
+    protected function getAttributeRow($entity, $object, $attribute)
+    {
+        return [
+            'entity_type_id' => $entity->getTypeId(),
+            'attribute_id' => $attribute->getId(),
+            $entity->getEntityIdField() => $object->getData($entity->getEntityIdField()),
+        ];
     }
 
     /**
