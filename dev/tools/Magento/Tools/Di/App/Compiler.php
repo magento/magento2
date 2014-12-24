@@ -89,10 +89,10 @@ class Compiler implements \Magento\Framework\AppInterface
         } catch (Task\OperationException $e) {
             $responseCode = Response::ERROR;
             $this->response->setBody($e->getMessage());
-        } finally {
-            $this->response->setCode($responseCode);
-            return $this->response;
         }
+
+        $this->response->setCode($responseCode);
+        return $this->response;
     }
 
     /**
