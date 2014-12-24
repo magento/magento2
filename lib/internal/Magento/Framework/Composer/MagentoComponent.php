@@ -4,7 +4,8 @@
  */
 namespace Magento\Framework\Composer;
 
-class MagentoComponent {
+class MagentoComponent
+{
     /**
      * Get matched Magento component or empty array, if it's not a Magento component
      *

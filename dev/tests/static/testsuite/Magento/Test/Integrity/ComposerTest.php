@@ -414,5 +414,14 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 "The {$component} is specified in 'extra->component_paths', but missing in 'replace' section"
             );
         }
+        foreach (array_keys(self::$rootJson['replace']) as $replace) {
+            if (!MagentoComponent::matchMagentoComponent($replace)) {
+                $this->assertArrayHasKey(
+                    $replace,
+                    self::$rootJson['extra']['component_paths'],
+                    "The {$replace} is specified in 'replace', but missing in 'extra->component_paths' section"
+                );
+            }
+        }
     }
 }
