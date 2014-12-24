@@ -4,6 +4,8 @@
  */
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Framework\Model\Exception;
+
 class TypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -84,6 +86,25 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'stockState' => $this->stockState
             ]
         );
+    }
+
+    public function testPrepareForCartAdvancedPaertClassReturnString()
+    {
+        $exceptedResult = 'String message';
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object $buyRequest */
+        $buyRequest = $this->getMockBuilder('Magento\Framework\Object')
+            ->setMethods(['getItems', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->setMethods(['getOptions'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $product->expects($this->at(0))->method('getOptions')->willThrowException(new Exception($exceptedResult));
+
+        $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
+        $this->assertEquals($exceptedResult, $result);
     }
 
     public function testHasWeightTrue()
