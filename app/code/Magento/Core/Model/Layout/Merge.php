@@ -133,6 +133,27 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected $cacheSuffix;
 
     /**
+     * Status for new added handle
+     *
+     * @var int
+     */
+    protected $handleAdded = 1;
+
+    /**
+     * Status for handle being processed
+     *
+     * @var int
+     */
+    protected $handleProcessing = 2;
+
+    /**
+     * Status for processed handle
+     *
+     * @var int
+     */
+    protected $handleProcessed = 3;
+
+    /**
      * Init merge model
      *
      * @param \Magento\Framework\View\DesignInterface $design
@@ -217,10 +238,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     {
         if (is_array($handleName)) {
             foreach ($handleName as $name) {
-                $this->_handles[$name] = 1;
+                $this->_handles[$name] = $this->handleAdded;
             }
         } else {
-            $this->_handles[$handleName] = 1;
+            $this->_handles[$handleName] = $this->handleAdded;
         }
         return $this;
     }
@@ -476,8 +497,17 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     protected function _merge($handle)
     {
-        $this->_fetchPackageLayoutUpdates($handle);
-        $this->_fetchDbLayoutUpdates($handle);
+        if (!isset($this->_handles[$handle]) || $this->_handles[$handle] == $this->handleAdded) {
+            $this->_handles[$handle] = $this->handleProcessing;
+            $this->_fetchPackageLayoutUpdates($handle);
+            $this->_fetchDbLayoutUpdates($handle);
+            $this->_handles[$handle] = $this->handleProcessed;
+        } elseif ($this->_handles[$handle] == $this->handleProcessing
+            && $this->_appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER
+        ) {
+            $this->_logger->addStreamLog(\Magento\Framework\Logger::LOGGER_SYSTEM);
+            $this->_logger->log('Cyclic dependency in merged layout for handle: ' . $handle, \Zend_Log::ERR);
+        }
         return $this;
     }
 
@@ -572,8 +602,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         foreach ($updateXml->children() as $child) {
             if (strtolower($child->getName()) == 'update' && isset($child['handle'])) {
                 $this->_merge((string)$child['handle']);
-                // Adding merged layout handle to the list of applied handles
-                $this->addHandle((string)$child['handle']);
             }
         }
         if (isset($updateXml['layout'])) {
