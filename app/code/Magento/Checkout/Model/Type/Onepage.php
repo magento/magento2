@@ -491,13 +491,19 @@ class Onepage
                     )->setCollectShippingRates(
                         true
                     )->collectTotals();
-                    $shipping->save();
+                    if ($this->getQuote()->getCheckoutMethod() != self::METHOD_REGISTER) {
+                        $shipping->save();
+                    }
                     $this->getCheckout()->setStepData('shipping', 'complete', true);
                     break;
             }
         }
 
-        $address->save();
+        if ($this->getQuote()->getCheckoutMethod() == self::METHOD_REGISTER) {
+            $this->quoteRepository->save($this->getQuote());
+        } else {
+            $address->save();
+        }
 
         $this->getCheckout()->setStepData(
             'billing',
