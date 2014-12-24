@@ -119,7 +119,7 @@
             <browser class="Mtf\Client\Browser" />
         </require>
     </assertSearchSynonymMassActionNotOnFrontend>
-    <assertProductCanBeOpenedFromSearchResult>
+    <assertProductCanBeOpenedFromSearchResult module="Magento_CatalogSearch">
         <severity>high</severity>
         <require>
             <catalogSearch class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
