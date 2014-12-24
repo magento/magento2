@@ -95,7 +95,7 @@ class ManagerApp implements AppInterface
             $this->cacheManager->clean($types);
             $output[] = 'Cleaned cache types:';
             $output[] = join("\n", $types);
-        } elseif (isset($this->requestArgs[self::KEY_STATUS])){
+        } elseif (isset($this->requestArgs[self::KEY_STATUS])) {
             $output[] = 'Current status:';
             foreach ($this->cacheManager->getStatus() as $cache => $status) {
                 $output[] = sprintf('%30s: %d', $cache, $status);
