@@ -93,7 +93,7 @@ $this->getConnection()->insertArray(
     $data
 );
 
-$entitiesToAlter = ['quote_address', 'order_address'];
+$entitiesToAlter = ['order_address'];
 
 $attributes = [
     'vat_id' => ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT],
