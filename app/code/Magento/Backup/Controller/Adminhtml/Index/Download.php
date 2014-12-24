@@ -63,7 +63,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
             $this->getRequest()->getParam('type')
         );
 
-        if (!$backup->getTime() || !$backup->exists() || true) {
+        if (!$backup->getTime() || !$backup->exists()) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('backup/*');
