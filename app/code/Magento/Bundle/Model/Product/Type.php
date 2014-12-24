@@ -672,7 +672,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         try {
             if (is_string($result)) {
-                throw new \Magento\Catalog\Exception($result);
+                throw new \Magento\Framework\Model\Exception($result);
             }
 
             $selections = [];
@@ -693,7 +693,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $optionIds = array_keys($options);
 
                 if (empty($optionIds) && $isStrictProcessMode) {
-                    throw new \Magento\Catalog\Exception(__('Please specify product option(s).'));
+                    throw new \Magento\Framework\Model\Exception(__('Please specify product option(s).'));
                 }
 
                 $product->getTypeInstance()
@@ -702,7 +702,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if (!$product->getSkipCheckRequiredOption() && $isStrictProcessMode) {
                     foreach ($optionsCollection->getItems() as $option) {
                         if ($option->getRequired() && !isset($options[$option->getId()])) {
-                            throw new \Magento\Catalog\Exception(__('Please select all required options.'));
+                            throw new \Magento\Framework\Model\Exception(__('Please select all required options.'));
                         }
                     }
                 }
@@ -737,7 +737,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                             if ($_option->getRequired() && (!$_option->isMultiSelection() ||
                                     $_option->isMultiSelection() && !$moreSelections)
                             ) {
-                                throw new \Magento\Catalog\Exception(
+                                throw new \Magento\Framework\Model\Exception(
                                     __('The required options you selected are not available.')
                                 );
                             }
@@ -817,11 +817,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $_result = $selection->getTypeInstance()
                         ->prepareForCart($buyRequest, $selection);
                     if (is_string($_result) && !is_array($_result)) {
-                        throw new \Magento\Catalog\Exception($_result);
+                        throw new \Magento\Framework\Model\Exception($_result);
                     }
 
                     if (!isset($_result[0])) {
-                        throw new \Magento\Catalog\Exception(__('We cannot add this item to your shopping cart.'));
+                        throw new \Magento\Framework\Model\Exception(__('We cannot add this item to your shopping cart.'));
                     }
 
                     $result[] = $_result[0]->setParentProductId($product->getId())
@@ -847,7 +847,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 return $result;
             }
-        } catch (\Magento\Catalog\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             return $e->getMessage();
         }
 
