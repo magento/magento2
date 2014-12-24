@@ -491,7 +491,7 @@ class Onepage
                     )->setCollectShippingRates(
                         true
                     )->collectTotals();
-                    if ($this->getQuote()->getCheckoutMethod() != self::METHOD_REGISTER) {
+                    if (!$this->isCheckoutMethodRegister()) {
                         $shipping->save();
                     }
                     $this->getCheckout()->setStepData('shipping', 'complete', true);
@@ -499,7 +499,7 @@ class Onepage
             }
         }
 
-        if ($this->getQuote()->getCheckoutMethod() == self::METHOD_REGISTER) {
+        if ($this->isCheckoutMethodRegister()) {
             $this->quoteRepository->save($this->getQuote());
         } else {
             $address->save();
@@ -520,6 +520,16 @@ class Onepage
         );
 
         return [];
+    }
+
+    /**
+     * Check whether checkout method is "register"
+     *
+     * @return bool
+     */
+    protected function isCheckoutMethodRegister()
+    {
+        return $this->getQuote()->getCheckoutMethod() == self::METHOD_REGISTER;
     }
 
     /**
