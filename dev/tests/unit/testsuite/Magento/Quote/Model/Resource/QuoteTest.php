@@ -9,51 +9,51 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Quote\Model\Resource\Quote
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \Magento\Framework\App\Resource
      */
-    protected $_resourceMock;
+    protected $resourceMock;
 
     /**
      * @var \Magento\Eav\Model\Config
      */
-    protected $_configMock;
+    protected $configMock;
 
     /**
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected $_adapterMock;
+    protected $adapterMock;
 
     /**
      * @var \Magento\Framework\DB\Select
      */
-    protected $_selectMock;
+    protected $selectMock;
 
     protected function setUp()
     {
-        $this->_selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
-        $this->_selectMock->expects($this->any())->method('from')->will($this->returnSelf());
-        $this->_selectMock->expects($this->any())->method('where');
+        $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
+        $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->selectMock->expects($this->any())->method('where');
 
-        $this->_adapterMock = $this->getMock('\Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $this->_adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->_selectMock));
+        $this->adapterMock = $this->getMock('\Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $this->adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
 
-        $this->_resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);
-        $this->_resourceMock->expects(
+        $this->resourceMock = $this->getMock('\Magento\Framework\App\Resource', [], [], '', false);
+        $this->resourceMock->expects(
             $this->any()
         )->method(
             'getConnection'
         )->will(
-            $this->returnValue($this->_adapterMock)
+            $this->returnValue($this->adapterMock)
         );
 
-        $this->_configMock = $this->getMock('\Magento\Eav\Model\Config', [], [], '', false);
+        $this->configMock = $this->getMock('\Magento\Eav\Model\Config', [], [], '', false);
 
-        $this->_model = new \Magento\Quote\Model\Resource\Quote(
-            $this->_resourceMock,
-            $this->_configMock
+        $this->model = new \Magento\Quote\Model\Resource\Quote(
+            $this->resourceMock,
+            $this->configMock
         );
     }
 
@@ -64,8 +64,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testIsOrderIncrementIdUsed($value)
     {
         $expectedBind = [':increment_id' => $value];
-        $this->_adapterMock->expects($this->once())->method('fetchOne')->with($this->_selectMock, $expectedBind);
-        $this->_model->isOrderIncrementIdUsed($value);
+        $this->adapterMock->expects($this->once())->method('fetchOne')->with($this->selectMock, $expectedBind);
+        $this->model->isOrderIncrementIdUsed($value);
     }
 
     /**
