@@ -1151,13 +1151,14 @@ class Payment extends Info implements OrderPaymentInterface
 
         // similar logic of "payment review" order as in capturing
         if ($this->getIsTransactionPending()) {
+            $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
             $message = __(
                 'We will authorize %1 after the payment is approved at the payment gateway.',
                 $this->_formatPrice($amount)
             );
-            $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
         } else {
             if ($this->getIsFraudDetected()) {
+                $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
                 $message = __(
                     'Order is suspended as its authorizing amount %1 is suspected to be fraudulent.',
                     $this->_formatPrice($amount, $this->getCurrencyCode())
@@ -1167,7 +1168,6 @@ class Payment extends Info implements OrderPaymentInterface
             }
         }
         if ($this->getIsFraudDetected()) {
-            $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
             $status = \Magento\Sales\Model\Order::STATUS_FRAUD;
         }
 
