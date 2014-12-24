@@ -13,7 +13,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout">
-        <plugin name="customer-session-depersonalize"
+        <plugin name="persistent-session-depersonalize"
                 type="Magento\Persistent\Model\Layout\DepersonalizePlugin"
                 sortOrder="10"
         />
