@@ -505,8 +505,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         } elseif ($this->_handles[$handle] == $this->handleProcessing
             && $this->_appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER
         ) {
-            $this->_logger->addStreamLog(\Magento\Framework\Logger::LOGGER_SYSTEM);
-            $this->_logger->log('Cyclic dependency in merged layout for handle: ' . $handle, \Zend_Log::ERR);
+            $this->_logger->info('Cyclic dependency in merged layout for handle: ' . $handle);
         }
         return $this;
     }
