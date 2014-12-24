@@ -1171,7 +1171,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     foreach ($storeValues as $storeId => $storeValue) {
                         $tableData[] = [
                             'entity_id' => $productId,
-                            'entity_type_id' => $this->_entityTypeId,
                             'attribute_id' => $attributeId,
                             'store_id' => $storeId,
                             'value' => $storeValue,
@@ -1191,9 +1190,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ) . $this->_connection->quoteInto(
                         ' AND entity_id = ?',
                         $productId
-                    ) . $this->_connection->quoteInto(
-                        ' AND entity_type_id = ?',
-                        $this->_entityTypeId
                     );
                     $this->_connection->delete($tableName, $where);
                 }
@@ -1324,7 +1320,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         // new row
                         if (!$productLimit || $productsQty < $productLimit) {
                             $entityRowsIn[$rowSku] = [
-                                'entity_type_id' => $this->_entityTypeId,
                                 'attribute_set_id' => $this->_newSku[$rowSku]['attr_set_id'],
                                 'type_id' => $this->_newSku[$rowSku]['type_id'],
                                 'sku' => $rowSku,

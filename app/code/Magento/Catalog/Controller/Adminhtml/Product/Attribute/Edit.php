@@ -45,8 +45,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         /** @var $model \Magento\Catalog\Model\Resource\Eav\Attribute */
         $model = $this->_objectManager->create(
             'Magento\Catalog\Model\Resource\Eav\Attribute'
-        )->setEntityTypeId(
-            $this->_entityTypeId
         );
         if ($id) {
             $model->load($id);
