@@ -683,7 +683,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             $options = $buyRequest->getBundleOption();
             if (is_array($options)) {
-                $options = array_filter($options, 'intval');
+                $options = $this->recursiveIntval($options);
                 $optionIds = array_keys($options);
 
                 if (empty($optionIds) && $isStrictProcessMode) {
@@ -700,21 +700,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                         }
                     }
                 }
-                $selectionIds = [];
 
-                foreach ($options as $selectionId) {
-                    if (!is_array($selectionId)) {
-                        if ($selectionId != '') {
-                            $selectionIds[] = (int)$selectionId;
-                        }
-                    } else {
-                        foreach ($selectionId as $id) {
-                            if ($id != '') {
-                                $selectionIds[] = (int)$id;
-                            }
-                        }
-                    }
-                }
+                $selectionIds = $this->multiToOFlatArray($options);
                 // If product has not been configured yet then $selections array should be empty
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
@@ -723,13 +710,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     foreach ($selections->getItems() as $selection) {
                         if (!$selection->isSalable() && !$skipSaleableCheck) {
                             $_option = $optionsCollection->getItemById($selection->getOptionId());
-                            if (is_array($options[$_option->getId()]) && count($options[$_option->getId()]) > 1) {
+                            $optionId = $_option->getId();
+                            if (is_array($options[$optionId]) && count($options[$optionId]) > 1) {
                                 $moreSelections = true;
                             } else {
                                 $moreSelections = false;
                             }
-                            if ($_option->getRequired() && (!$_option->isMultiSelection() ||
-                                    $_option->isMultiSelection() && !$moreSelections)
+                            $isMultiSelection = $_option->isMultiSelection();
+                            if ($_option->getRequired() && (!$isMultiSelection || !$moreSelections)
                             ) {
                                 throw new \Magento\Framework\Model\Exception(
                                     __('The required options you selected are not available.')
@@ -816,7 +804,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     }
 
                     if (!isset($_result[0])) {
-                        throw new \Magento\Framework\Model\Exception(__('We cannot add this item to your shopping cart.'));
+                        throw new \Magento\Framework\Model\Exception(
+                            __('We cannot add this item to your shopping cart.')
+                        );
                     }
 
                     $result[] = $_result[0]->setParentProductId($product->getId())
@@ -850,6 +840,41 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * @param array $array
+     * @return int[]|int[][]
+     */
+    public function recursiveIntval(array $array)
+    {
+        foreach($array as $key => $value) {
+            if (is_array($value)) {
+                $array[$key] = $this->recursiveIntval($value);
+            } elseif (is_numeric($value) && (int)$value != 0) {
+                $array[$key] = (int) $value;
+            } else {
+                unset($array[$key]);
+            }
+        }
+        return $array;
+    }
+
+    /**
+     * @param array $array
+     * @return int[]
+     */
+    public function multiToOFlatArray(array $array)
+    {
+        $flatArray = [];
+        foreach($array as $key => $value) {
+            if (is_array($value)) {
+                $flatArray = array_merge($flatArray, $this->multiToOFlatArray($value));
+            } else {
+                $flatArray[$key] = $value;
+            }
+        }
+        return $flatArray;
+    }
+
+    /**
      * Retrieve message for specify option(s)
      *
      * @return string
@@ -873,7 +898,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $usedSelections = $product->getData($this->_keyUsedSelections);
         $usedSelectionsIds = $product->getData($this->_keyUsedSelectionsIds);
 
-        if (!$usedSelections || serialize($usedSelectionsIds) != serialize($selectionIds)) {
+        if (!$usedSelections || $usedSelectionsIds !== $selectionIds) {
             $storeId = $product->getStoreId();
             $usedSelections = $this->_bundleCollection
                 ->create()
