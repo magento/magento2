@@ -771,8 +771,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     }
                     $qty = (float)$qty;
 
-                    $product->addCustomOption('selection_qty_' . $selection->getSelectionId(), $qty, $selection);
-                    $selection->addCustomOption('selection_id', $selection->getSelectionId());
+                    $selectionId = $selection->getSelectionId();
+                    $product->addCustomOption('selection_qty_' . $selectionId, $qty, $selection);
+                    $selection->addCustomOption('selection_id', $selectionId);
 
                     $beforeQty = 0;
                     $customOption = $product->getCustomOption('product_qty_' . $selection->getId());
@@ -800,7 +801,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                     $_result = $selection->getTypeInstance()
                         ->prepareForCart($buyRequest, $selection);
-                    if (is_string($_result) && !is_array($_result)) {
+                    if (is_string($_result)) {
                         throw new \Magento\Framework\Model\Exception($_result);
                     }
 
