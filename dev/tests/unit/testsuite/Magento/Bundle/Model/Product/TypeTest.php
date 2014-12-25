@@ -1076,6 +1076,103 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($exceptedResult, $result);
     }
 
+    public function testPrepareForCartAdvancedAllrequiredOption()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
+        $group = $this->getMockBuilder('Magento\Catalog\Model\Product\Option\Type\DefaultType')
+            ->setMethods(
+                ['setOption', 'setProduct', 'setRequest', 'setProcessMode', 'validateUserValue', 'prepareForCart']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object $buyRequest */
+        $buyRequest = $this->getMockBuilder('Magento\Framework\Object')
+            ->setMethods(
+                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
+        $option = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+            ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
+        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->setMethods(
+                [
+                    'getOptions',
+                    'prepareCustomOptions',
+                    'addCustomOption',
+                    'setCartQty',
+                    'setQty',
+                    'getSkipCheckRequiredOption',
+                    'getTypeInstance',
+                    'getStoreId',
+                    'hasData',
+                    'getData'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Product\Type $productType */
+        $productType = $this->getMockBuilder('\Magento\Bundle\Model\Product\Type')
+            ->setMethods(['setStoreFilter'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
+        $optionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Option\Collection')
+            ->setMethods(['getItems'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->parentClass($group, $option, $buyRequest, $product);
+
+        $product->expects($this->any())
+            ->method('getSkipCheckRequiredOption')
+            ->willReturn(false);
+        $product->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($productType);
+        $product->expects($this->once())
+            ->method('hasData')
+            ->willReturn(true);
+        $product->expects($this->any())
+            ->method('getData')
+            ->willReturnCallback(
+                function ($key) use ($optionCollection) {
+                    $resultValue = null;
+                    switch ($key) {
+                        case '_cache_instance_options_collection':
+                            $resultValue = $optionCollection;
+                            break;
+                        case '_cache_instance_used_selections_ids':
+                            $resultValue = [0 => 5];
+                            break;
+                    }
+
+                    return $resultValue;
+                }
+            );
+        $optionCollection->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$option]);
+        $productType->expects($this->once())
+            ->method('setStoreFilter');
+        $buyRequest->expects($this->once())
+            ->method('getBundleOption')
+            ->willReturn([3 => 5]);
+        $option->expects($this->at(3))
+            ->method('getId')
+            ->willReturn(3);
+        $option->expects($this->once())
+            ->method('getRequired')
+            ->willReturn(true);
+
+        $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
+        $this->assertEquals('Please select all required options.', $result);
+    }
+
     public function testPrepareForCartAdvancedSpecifyProductOptions()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
