@@ -85,6 +85,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->storeMock);
         $this->productCompFactoryMock = $this->getMockBuilder('Magento\Reports\Model\Product\Index\ComparedFactory')
             ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'create'
+                ]
+            )
             ->getMock();
         $this->productCompModelMock = $this->getMockBuilder('Magento\Reports\Model\Product\Index\Compared')
             ->disableOriginalConstructor()
