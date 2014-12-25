@@ -23,6 +23,6 @@ class StubProduct extends \Magento\CatalogImportExport\Model\Export\Product
      */
     public function updateDataWithCategoryColumns(&$dataRow, &$rowCategories, $productId)
     {
-        return $this->_updateDataWithCategoryColumns($dataRow, $rowCategories, $productId);
+        return $this->updateDataWithCategoryColumns($dataRow, $rowCategories, $productId);
     }
 }

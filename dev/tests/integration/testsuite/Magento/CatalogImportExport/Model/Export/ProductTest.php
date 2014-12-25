@@ -49,7 +49,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/ImportExport/_files/product.php
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
      */
     public function testExport()
     {
@@ -65,7 +65,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * Verify that all stock item attribute values are exported (aren't equal to empty string)
      *
      * @covers \Magento\CatalogImportExport\Model\Export\Product::export
-     * @magentoDataFixture Magento/ImportExport/_files/product.php
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
      */
     public function testExportStockItemAttributesAreFilled()
     {
