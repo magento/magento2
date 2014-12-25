@@ -23,10 +23,8 @@
 
 //  Rem font size
 .font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) {
-    @value: unit(@sizeValue);
-    @remValue: (@value / @font-rem-ratio);
-    @pxValue: @value;
-    font-size: ~"@{remValue}rem";
+    .to-rem(@sizeValue);
+    font-size: @valueRem;
 }
 
 .font-size(@sizeValue) when (ispercentage(@sizeValue)) and not (@sizeValue = false) {
@@ -35,10 +33,8 @@
 
 //  Rem line height
 .line-height(@heightValue) when not (@heightValue = false) and not (ispercentage(@heightValue)) {
-    @value: unit(@heightValue);
-    @remValue: (@value / @font-rem-ratio);
-    @pxValue: @value;
-    line-height: ~"@{remValue}rem";
+    .to-rem(@heightValue);
+    line-height: @valueRem;
 }
 
 .line-height(@heightValue) when (ispercentage(@heightValue)) and not (@heightValue = false) {
@@ -147,7 +143,14 @@
         @@_line-height,
         @@_font-style
     );
-    .margin-vertical-rem(@@_margin-top, @@_margin-bottom);
+    & {
+        .to-rem(@@_margin-top);
+        margin-top: @valueRem;
+    }
+    & {
+        .to-rem(@@_margin-bottom);
+        margin-bottom: @valueRem;
+    }
 }
 
 //
@@ -165,7 +168,14 @@
     }
 
     p {
-        .margin-vertical-rem(@p-margin-top, @p-margin-bottom);
+        & {
+            .to-rem(@p-margin-top);
+            margin-top: @valueRem;
+        }
+        & {
+            .to-rem(@p-margin-bottom);
+            margin-bottom: @valueRem;
+        }
     }
 
     // Abbreviations and acronyms
@@ -279,10 +289,24 @@
 .typography-lists() {
     ul,
     ol {
-        .margin-vertical-rem(@list-margin-top, @list-margin-bottom);
+        & {
+            .to-rem(@list-margin-top);
+            margin-top: @valueRem;
+        }
+        & {
+            .to-rem(@list-margin-bottom);
+            margin-bottom: @valueRem;
+        }
         //.typography(@list-font-size-base, @list-color-base);
         > li {
-            .margin-vertical-rem(@list-item-margin-top, @list-item-margin-bottom);
+            & {
+                .to-rem(@list-item-margin-top);
+                margin-top: @valueRem;
+            }
+            & {
+                .to-rem(@list-item-margin-bottom);
+                margin-bottom: @valueRem;
+            }
         }
         ul,
         ol {

@@ -2,42 +2,11 @@
 //  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 //  */
 
-.margin-top-rem(
-    @value
-) when not (@value = false) and not (@value = '') {
-    @_value: unit(@value);
-    margin-top: @_value * 1rem / @font-rem-ratio;
-}
-
-.margin-bottom-rem(
-    @value
-) when not (@value = false) and not (@value = '') {
-    @_value: unit(@value);
-    margin-bottom: @_value * 1rem / @font-rem-ratio;
-}
-
-.margin-vertical-rem(@val-top, @val-bottom) {
-    .margin-top-rem(@val-top);
-    .margin-bottom-rem(@val-bottom);
-}
-
-.padding-top-rem(
-    @value
-) when not (@value = false) and not (@value = '') {
-    @_value: unit(@value);
-    padding-top: @_value * 1rem / @font-rem-ratio;
-}
-
-.padding-bottom-rem(
-    @value
-) when not (@value = false) and not (@value = '') {
-    @_value: unit(@value);
-    padding-bottom: @_value * 1rem / @font-rem-ratio;
-}
-
-.padding-vertical-rem(@val-top, @val-bottom) {
-    .padding-top-rem(@val-top);
-    .padding-bottom-rem(@val-bottom);
+// convert to rem
+.to-rem(
+    @_value
+) when not (@_value = false) and not (@_value = '') {
+    @valueRem: (unit(@_value) * 1rem) / @font-rem-ratio;
 }
 
 .visibility-hidden() {
