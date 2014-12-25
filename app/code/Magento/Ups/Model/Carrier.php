@@ -515,7 +515,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
                         $message = __(
                             'Sorry, something went wrong. Please try again or contact us and we\'ll try to help.'
                         );
-                        $this->_logger->info($message . ': ' . $errorTitle);
+                        $this->_logger->debug($message . ': ' . $errorTitle);
                         break;
                     case 6:
                         if (in_array($row[3], $allowedMethods)) {

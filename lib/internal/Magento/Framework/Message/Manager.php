@@ -258,7 +258,7 @@ class Manager implements ManagerInterface
             $exception->getTraceAsString()
         );
 
-        $this->logger->debug($message);
+        $this->logger->critical($message);
         $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_ERROR, $alternativeText), $group);
         return $this;
     }

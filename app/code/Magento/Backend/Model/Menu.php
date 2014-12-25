@@ -55,7 +55,7 @@ class Menu extends \ArrayObject
             $index = intval($index);
             if (!isset($this[$index])) {
                 $this->offsetSet($index, $item);
-                $this->_logger->debug(
+                $this->_logger->info(
                     sprintf('Add of item with id %s was processed', $item->getId())
                 );
             } else {
@@ -120,7 +120,7 @@ class Menu extends \ArrayObject
             if ($item->getId() == $itemId) {
                 unset($this[$key]);
                 $result = true;
-                $this->_logger->debug(
+                $this->_logger->info(
                     sprintf('Remove on item with id %s was processed', $item->getId())
                 );
                 break;

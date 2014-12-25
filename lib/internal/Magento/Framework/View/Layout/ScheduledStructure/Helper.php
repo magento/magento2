@@ -185,7 +185,7 @@ class Helper
                 try {
                     $structure->setAsChild($name, $parentName, $alias);
                 } catch (\Exception $e) {
-                    $this->logger->info($e->getMessage());
+                    $this->logger->critical($e);
                 }
             } else {
                 $this->logger->info(

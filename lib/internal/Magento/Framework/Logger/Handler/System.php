@@ -19,7 +19,7 @@ class System extends StreamHandler
     /**
      * @var int
      */
-    protected $loggerType = Logger::DEBUG;
+    protected $loggerType = Logger::INFO;
 
     /**
      * @var DriverInterface
