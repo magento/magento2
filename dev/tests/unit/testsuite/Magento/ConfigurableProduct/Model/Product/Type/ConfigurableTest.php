@@ -11,6 +11,15 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
+    public static $attributeData = [1 => [
+        'id' => 1,
+        'code' => 'someattr',
+        'attribute_id' => 111,
+        'position' => 0,
+        'label' => 'Some Super Attribute',
+        'values' => [],
+    ]];
+
     /**
      * @var Configurable
      */
@@ -121,15 +130,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
-        $attributeData = [1 => [
-            'id' => 1,
-            'code' => 'someattr',
-            'attribute_id' => 111,
-            'position' => 0,
-            'label' => 'Some Super Attribute',
-            'values' => [],
-        ]];
-
         $product = $this->getMockBuilder('\Magento\Catalog\Model\Product')
             ->setMethods(['getIsDuplicate', 'dataHasChangedFor', 'getConfigurableAttributesData', 'getStoreId',
                 'getId', 'getData', 'hasData', 'getAssociatedProductIds', '__wakeup', '__sleep',
@@ -137,7 +137,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $product->expects($this->any())->method('dataHasChangedFor')->will($this->returnValue('false'));
         $product->expects($this->any())->method('getConfigurableAttributesData')
-            ->will($this->returnValue($attributeData));
+            ->will($this->returnValue(self::$attributeData));
         $product->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(true));
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
         $product->expects($this->any())->method('getId')->will($this->returnValue(1));
@@ -151,7 +151,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['addData', 'setStoreId', 'setProductId', 'save', '__wakeup', '__sleep'])
             ->getMock();
-        $expectedAttributeData = $attributeData[1];
+        $expectedAttributeData = self::$attributeData[1];
         unset($expectedAttributeData['id']);
         $attribute->expects($this->once())->method('addData')->with($expectedAttributeData)->will($this->returnSelf());
         $attribute->expects($this->once())->method('setStoreId')->with(1)->will($this->returnSelf());
@@ -234,16 +234,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                           'getId', 'getData', 'hasData', 'getAssociatedProductIds', '__wakeup', '__sleep',
             ])->disableOriginalConstructor()
             ->getMock();
-        $attributeData = [1 => [
-            'id' => 1,
-            'code' => 'someattr',
-            'attribute_id' => 111,
-            'position' => 0,
-            'label' => 'Some Super Attribute',
-            'values' => [],
-        ]];
         $product->expects($this->any())->method('getConfigurableAttributesData')
-            ->will($this->returnValue($attributeData));
+            ->will($this->returnValue(self::$attributeData));
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue(5));
         $product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $product->expects($this->any())->method('getAssociatedProductIds')->will($this->returnValue([2]));
@@ -347,5 +339,303 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             [5, 5],
             [null, 0],
         ];
+    }
+
+    public function testHasOptions()
+    {
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getOptions'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productMock->expects($this->once())->method('getOptions')->willReturn([true]);
+
+        $this->assertTrue($this->_model->hasOptions($productMock));
+    }
+
+    public function testHasOptionsConfigurableAttribute()
+    {
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getAttributeCode', 'getOptions', 'hasData', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute')
+            ->setMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->once())->method('getOptions')->willReturn([]);
+        $productMock->expects($this->once())
+            ->method('hasData')
+            ->with('_cache_instance_configurable_attributes')->willReturn(1);
+        $productMock->expects($this->once())
+            ->method('getData')
+            ->with('_cache_instance_configurable_attributes')->willReturn([$attributeMock]);
+        $attributeMock->expects($this->once())->method('getData')->with('prices')->willReturn(5);
+
+        $this->assertTrue($this->_model->hasOptions($productMock));
+    }
+
+    public function testHasOptionsFalse()
+    {
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getOptions', 'hasData', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->once())->method('getOptions')->willReturn([]);
+        $productMock->expects($this->once())
+            ->method('hasData')
+            ->with('_cache_instance_configurable_attributes')->willReturn(1);
+        $productMock->expects($this->once())
+            ->method('getData')
+            ->with('_cache_instance_configurable_attributes')->willReturn([]);
+
+        $this->assertFalse($this->_model->hasOptions($productMock));
+    }
+
+    public function testIsSalable()
+    {
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getStatus', 'hasData', 'getData', 'getStoreId', 'setData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $childProductMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'isSalable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->once())->method('getStatus')->willReturn(1);
+        $productMock->expects($this->any())->method('hasData')->willReturn(true);
+        $productMock->expects($this->at(2))->method('getData')->with('is_salable')->willReturn(true);
+        $productMock->expects($this->once())->method('getStoreId')->willReturn(1);
+        $productMock->expects($this->once())->method('setData')->willReturnSelf();
+        $productMock->expects($this->at(6))->method('getData')->willReturn([$childProductMock]);
+        $childProductMock->expects($this->once())->method('isSalable')->willReturn(true);
+
+        $this->assertTrue($this->_model->isSalable($productMock));
+    }
+
+    public function testGetSelectedAttributesInfo()
+    {
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getCustomOption', 'hasData', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $optionMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface')
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $usedAttributeMock = $this->getMockBuilder(
+            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute'
+        )
+            ->setMethods(['getProductAttribute'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
+            ->setMethods(['getStoreLabel', 'getSourceModel'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $optionMock->expects($this->once())->method('getValue')->willReturn(serialize(self::$attributeData));
+        $productMock->expects($this->once())->method('getCustomOption')->with('attributes')->willReturn($optionMock);
+        $productMock->expects($this->once())->method('hasData')->willReturn(true);
+        $productMock->expects($this->at(2))->method('getData')->willReturn(true);
+        $productMock->expects($this->at(3))->method('getData')->willReturn([1 => $usedAttributeMock]);
+        $usedAttributeMock->expects($this->once())->method('getProductAttribute')->willReturn($attributeMock);
+        $attributeMock->expects($this->once())->method('getStoreLabel')->willReturn('attr_store_label');
+        $attributeMock->expects($this->once())->method('getSourceModel')->willReturn(false);
+
+        $this->assertEquals(
+            $this->_model->getSelectedAttributesInfo($productMock),
+            [['label' => 'attr_store_label', 'value' => '']]
+        );
+    }
+
+    public function testCheckProductBuyState()
+    {
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getCustomOption', 'getSkipCheckRequiredOption'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $optionMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item\Option')
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->once())->method('getSkipCheckRequiredOption')->willReturn(true);
+        $productMock->expects($this->once())
+            ->method('getCustomOption')
+            ->with('info_buyRequest')
+            ->willReturn($optionMock);
+        $optionMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn(serialize(['super_attribute' => ['test_key' => 'test_value', 'empty_key' => '']]));
+
+        $this->assertEquals($this->_model, $this->_model->checkProductBuyState($productMock));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedExceptionMessage Please specify the product's option(s).
+     */
+    public function testCheckProductBuyStateException()
+    {
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getCustomOption', 'getSkipCheckRequiredOption'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $optionMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item\Option')
+            ->setMethods(['getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->once())->method('getSkipCheckRequiredOption')->willReturn(true);
+        $productMock->expects($this->once())
+            ->method('getCustomOption')
+            ->with('info_buyRequest')
+            ->willReturn($optionMock);
+        $optionMock->expects($this->once())->method('getValue')->willReturn(serialize([]));
+
+        $this->_model->checkProductBuyState($productMock);
+    }
+
+    public function testGetProductByAttributesReturnUsedProduct()
+    {
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'hasData', 'getData', 'getResource', 'getAttributeSetId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $firstItemMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $usedProductMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $eavAttributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['getId', 'getAttributeCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productResource = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product')
+            ->setMethods(['__wakeup', 'loadAllAttributes', 'getSortedAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productCollection = $this->getMockBuilder(
+            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection'
+        )
+            ->setMethods(
+                [
+                    'setFlag',
+                    'setProductFilter',
+                    'addStoreFilter',
+                    'addAttributeToSelect',
+                    'addAttributeToFilter',
+                    'getFirstItem',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->_productCollectionFactory->expects($this->any())->method('create')
+            ->will($this->returnValue($productCollection));
+        $productCollection->expects($this->any())->method('setProductFilter')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('setFlag')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('addAttributeToFilter')->will($this->returnSelf());
+        $productCollection->expects($this->once())->method('getFirstItem')->willReturn($firstItemMock);
+        $firstItemMock->expects($this->once())->method('getId')->willReturn(false);
+        $productMock->expects($this->at(0))
+            ->method('getData')
+            ->with('_cache_instance_store_filter')
+            ->willReturn('some_filter');
+        $productMock->expects($this->once())->method('hasData')->willReturn(true);
+        $productMock->expects($this->at(3))->method('getData')->willReturn([$usedProductMock]);
+        $productMock->expects($this->once())->method('getResource')->willReturn($productResource);
+        $productMock->expects($this->once())->method('getAttributeSetId')->willReturn(5);
+        $productResource->expects($this->once())->method('loadAllAttributes')->with($productMock)->willReturnSelf();
+        $productResource->expects($this->once())
+            ->method('getSortedAttributes')
+            ->with(5)
+            ->willReturn([$eavAttributeMock]);
+        $eavAttributeMock->expects($this->once())->method('getId')->willReturn(1);
+        $eavAttributeMock->expects($this->once())->method('getAttributeCode')->willReturn('attr_code');
+        $usedProductMock->expects($this->once())
+            ->method('getData')->with('attr_code')
+            ->willReturn(self::$attributeData[1]);
+
+        $this->assertEquals(
+            $usedProductMock,
+            $this->_model->getProductByAttributes(self::$attributeData, $productMock)
+        );
+    }
+
+    public function testGetProductByAttributesReturnFirstItem()
+    {
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'hasData', 'getData', 'getResource', 'getAttributeSetId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $firstItemMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productCollection = $this->getMockBuilder(
+            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection'
+        )
+            ->setMethods(
+                [
+                    'setFlag',
+                    'setProductFilter',
+                    'addStoreFilter',
+                    'addAttributeToSelect',
+                    'addAttributeToFilter',
+                    'getFirstItem',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->_productCollectionFactory->expects($this->any())->method('create')
+            ->will($this->returnValue($productCollection));
+        $productCollection->expects($this->any())->method('setProductFilter')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('setFlag')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('addAttributeToFilter')->will($this->returnSelf());
+        $productCollection->expects($this->once())->method('getFirstItem')->willReturn($firstItemMock);
+        $firstItemMock->expects($this->once())->method('getId')->willReturn(3);
+        $productMock->expects($this->at(0))
+            ->method('getData')
+            ->with('_cache_instance_store_filter')
+            ->willReturn('some_filter');
+
+        $this->assertEquals(
+            $firstItemMock,
+            $this->_model->getProductByAttributes(self::$attributeData, $productMock)
+        );
+    }
+
+    public function testSetImageFromChildProduct()
+    {
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'hasData', 'getData', 'setImage'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $childProductMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['__wakeup', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->at(0))->method('getData')->with('image')->willReturn('no_selection');
+        $productMock->expects($this->at(1))->method('getData')->with('image')->willReturn('no_selection');
+        $productMock->expects($this->once())->method('hasData')->with('_cache_instance_products')->willReturn(true);
+        $productMock->expects($this->at(3))
+            ->method('getData')
+            ->with('_cache_instance_products')
+            ->willReturn([$childProductMock]);
+        $childProductMock->expects($this->any())->method('getData')->with('image')->willReturn('image_data');
+        $productMock->expects($this->once())->method('setImage')->with('image_data')->willReturnSelf();
+
+        $this->_model->setImageFromChildProduct($productMock);
     }
 }
