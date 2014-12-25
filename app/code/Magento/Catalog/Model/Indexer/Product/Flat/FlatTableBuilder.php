@@ -208,7 +208,6 @@ class FlatTableBuilder
         $statusTable = $this->_getTemporaryTableName($status->getBackendTable());
         $statusConditions = [
             'e.entity_id = dstatus.entity_id',
-            'dstatus.entity_type_id = ' . (int)$status->getEntityTypeId(),
             'dstatus.store_id = ' . (int)$storeId,
             'dstatus.attribute_id = ' . (int)$status->getId(),
         ];
@@ -290,8 +289,6 @@ class FlatTableBuilder
                 $attributeCode = $attribute->getAttributeCode();
                 if ($attribute->getBackend()->getType() != 'static') {
                     $joinCondition = 't.entity_id = e.entity_id' .
-                        ' AND t.entity_type_id = ' .
-                        $attribute->getEntityTypeId() .
                         ' AND t.attribute_id=' .
                         $attribute->getId() .
                         ' AND t.store_id = ' .
