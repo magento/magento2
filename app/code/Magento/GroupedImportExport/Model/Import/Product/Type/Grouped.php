@@ -16,23 +16,23 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     protected $_specialAttributes = ['_associated_sku', '_associated_default_qty', '_associated_position'];
 
     /**
-     * @var Grouped\DbHelper
+     * @var Grouped\Links
      */
-    protected $dbHelper;
+    protected $links;
 
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param array $params
-     * @param Grouped\DbHelper $dbHelper
+     * @param Grouped\Links $links
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
         array $params,
-        Grouped\DbHelper $dbHelper
+        Grouped\Links $links
     ) {
-        $this->dbHelper = $dbHelper;
+        $this->links = $links;
         parent::__construct($attrSetColFac, $prodAttrColFac, $params);
     }
 
@@ -48,7 +48,8 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     {
         $newSku = $this->_entityModel->getNewSku();
         $oldSku = $this->_entityModel->getOldSku();
-        $attributes = $this->dbHelper->getAttributes();
+        $attributes = $this->links->getAttributes();
+        $productData = [];
         while ($bunch = $this->_entityModel->getNextBunch()) {
             $linksData = [
                 'product_ids' => [],
@@ -58,14 +59,14 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                 'relation' => []
             ];
             foreach ($bunch as $rowNum => $rowData) {
-                if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum) || empty($rowData['_associated_sku'])
-                ) {
+                $associatedSku = $rowData['_associated_sku'];
+                if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum) || empty($associatedSku)) {
                     continue;
                 }
-                if (isset($newSku[$rowData['_associated_sku']])) {
-                    $linkedProductId = $newSku[$rowData['_associated_sku']]['entity_id'];
-                } elseif (isset($oldSku[$rowData['_associated_sku']])) {
-                    $linkedProductId = $oldSku[$rowData['_associated_sku']]['entity_id'];
+                if (isset($newSku[$associatedSku])) {
+                    $linkedProductId = $newSku[$associatedSku]['entity_id'];
+                } elseif (isset($oldSku[$associatedSku])) {
+                    $linkedProductId = $oldSku[$associatedSku]['entity_id'];
                 } else {
                     continue;
                 }
@@ -102,7 +103,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                     ];
                 }
             }
-            $this->dbHelper->saveLinksData($linksData);
+            $this->links->saveLinksData($linksData);
         }
         return $this;
     }

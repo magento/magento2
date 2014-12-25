@@ -7,10 +7,10 @@ namespace Magento\GroupedImportExport\Model\Import\Product\Type\Grouped;
 
 use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
-class DbHelperTest extends \PHPUnit_Framework_TestCase
+class LinksTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\DbHelper */
-    protected $dbHelper;
+    /** @var \Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links */
+    protected $links;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -44,8 +44,8 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
         $this->importFactory->expects($this->any())->method('create')->will($this->returnValue($this->import));
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->dbHelper = $this->objectManagerHelper->getObject(
-            'Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\DbHelper',
+        $this->links = $this->objectManagerHelper->getObject(
+            'Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links',
             [
                 'productLink' => $this->link,
                 'resource' => $this->resource,
@@ -54,7 +54,7 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function dataProviderLinks()
+    public function linksDataProvider()
     {
         return [
             [
@@ -70,20 +70,21 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $linksData
      *
-     * @dataProvider dataProviderLinks
+     * @dataProvider linksDataProvider
      */
     public function testSaveLinksDataNoProductsAttrs($linksData)
     {
         $this->processBehaviorGetter('append');
-        $attributes = $this->dataProviderAttributes();
+        $attributes = $this->attributesDataProvider();
         $this->processAttributeGetter($attributes[2]['dbAttributes']);
         $this->connection->expects($this->exactly(2))->method('insertOnDuplicate');
-        $this->dbHelper->saveLinksData($linksData);
+        $this->links->saveLinksData($linksData);
     }
+
     /**
      * @param array $linksData
      *
-     * @dataProvider dataProviderLinks
+     * @dataProvider linksDataProvider
      */
     public function testSaveLinksDataWithProductsAttrs($linksData)
     {
@@ -100,15 +101,10 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
             $this->returnValue([])
         );
         $this->connection->expects($this->exactly(4))->method('insertOnDuplicate');
-        $this->dbHelper->saveLinksData($linksData);
+        $this->links->saveLinksData($linksData);
     }
 
-    protected function getTypeTable()
-    {
-        return 'table_name';
-    }
-
-    public function dataProviderAttributes()
+    public function attributesDataProvider()
     {
         return [
             [
@@ -120,7 +116,7 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
                     ['code' => 2, 'id' => 6, 'type' => 'sometable']
                 ],
                 'returnedAttibutes' => [
-                    2 => ['id' => 6, 'table' => $this->getTypeTable()]
+                    2 => ['id' => 6, 'table' => 'table_name']
                 ]
             ],
             [
@@ -129,8 +125,8 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
                     ['code' => 4, 'id' => 7, 'type' => 'sometable2']
                 ],
                 'returnedAttibutes' => [
-                    4 => ['id' => 7, 'table' => $this->getTypeTable()],
-                    8 => ['id' => 11, 'table' => $this->getTypeTable()]
+                    4 => ['id' => 7, 'table' => 'table_name'],
+                    8 => ['id' => 11, 'table' => 'table_name']
                 ]
             ]
         ];
@@ -146,7 +142,7 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($dbAttributes)
         );
         $this->link->expects($this->any())->method('getAttributeTypeTable')->will(
-            $this->returnValue($this->getTypeTable())
+            $this->returnValue('table_name')
         );
     }
 
@@ -154,12 +150,12 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
      * @param array $dbAttributes
      * @param array $returnedAttibutes
      *
-     * @dataProvider dataProviderAttributes
+     * @dataProvider attributesDataProvider
      */
     public function testGetAttributes($dbAttributes, $returnedAttibutes)
     {
         $this->processAttributeGetter($dbAttributes);
-        $actualAttributes = $this->dbHelper->getAttributes();
+        $actualAttributes = $this->links->getAttributes();
         $this->assertEquals($returnedAttibutes, $actualAttributes);
     }
 
@@ -168,13 +164,5 @@ class DbHelperTest extends \PHPUnit_Framework_TestCase
         $dataSource = $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false);
         $dataSource->expects($this->once())->method('getBehavior')->will($this->returnValue($behavior));
         $this->import->expects($this->once())->method('getDataSourceModel')->will($this->returnValue($dataSource));
-    }
-
-    public function testGetBehavior()
-    {
-        $expectedBehavior = 'append';
-        $this->processBehaviorGetter($expectedBehavior);
-        $actualBehavior = $this->dbHelper->getBehavior();
-        $this->assertEquals($expectedBehavior, $actualBehavior);
     }
 }

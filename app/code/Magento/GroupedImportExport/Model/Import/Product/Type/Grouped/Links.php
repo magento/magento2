@@ -1,12 +1,13 @@
 <?php
 /**
- * Processing db operations for import entity of grouped product type
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\GroupedImportExport\Model\Import\Product\Type\Grouped;
 
-class DbHelper
+/**
+ * Processing db operations for import entity of grouped product type
+ */
+class Links
 {
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Link
@@ -66,7 +67,7 @@ class DbHelper
                 $mainData[] = [
                     'product_id' => $productData['parent_id'],
                     'linked_product_id' => $productData['child_id'],
-                    'link_type_id' => $this->getLinkId()
+                    'link_type_id' => $this->getLinkTypeId()
                 ];
             }
             $this->connection->insertOnDuplicate($mainTable, $mainData);
@@ -81,7 +82,7 @@ class DbHelper
                     $mainTable,
                     array(new \Zend_Db_Expr('CONCAT_WS(" ", product_id, linked_product_id)'), 'link_id')
                 )->where(
-                    'product_id IN (?) AND link_type_id = ' . $this->getLinkId(),
+                    'product_id IN (?) AND link_type_id = ' . $this->connection->quote($this->getLinkTypeId()),
                     array_keys($linksData['attr_product_ids'])
                 )
             );
@@ -93,10 +94,10 @@ class DbHelper
                     $linksData['qty'][$pseudoKey]['link_id'] = $linkId;
                 }
             }
-            if ($linksData['position']) {
+            if (!empty($linksData['position'])) {
                 $this->connection->insertOnDuplicate($attributes['position']['table'], $linksData['position']);
             }
-            if ($linksData['qty']) {
+            if (!empty($linksData['qty'])) {
                 $this->connection->insertOnDuplicate($attributes['qty']['table'], $linksData['qty']);
             }
         }
@@ -113,7 +114,7 @@ class DbHelper
             $this->connection->delete(
                 $this->productLink->getMainTable(),
                 $this->connection->quoteInto(
-                    'product_id IN (?) AND link_type_id = ' . $this->getLinkId(),
+                    'product_id IN (?) AND link_type_id = ' . $this->getLinkTypeId(),
                     $productIds
                 )
             );
@@ -129,7 +130,7 @@ class DbHelper
             $select = $this->connection->select()->from(
                 $this->productLink->getTable('catalog_product_link_attribute'),
                 ['id' => 'product_link_attribute_id', 'code' => 'product_link_attribute_code', 'type' => 'data_type']
-            )->where('link_type_id = ?', $this->getLinkId());
+            )->where('link_type_id = ?', $this->getLinkTypeId());
             foreach ($this->connection->fetchAll($select) as $row) {
                 $this->attributes[$row['code']] = array(
                     'id' => $row['id'],
@@ -143,7 +144,7 @@ class DbHelper
     /**
      * @return int
      */
-    protected function getLinkId()
+    protected function getLinkTypeId()
     {
         return \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED;
     }
@@ -153,7 +154,7 @@ class DbHelper
      *
      * @return string
      */
-    public function getBehavior()
+    protected function getBehavior()
     {
         if (is_null($this->behavior)) {
             $this->behavior = $this->importFactory->create()->getDataSourceModel()->getBehavior();

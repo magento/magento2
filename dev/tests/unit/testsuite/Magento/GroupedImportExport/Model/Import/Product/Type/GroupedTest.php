@@ -31,15 +31,19 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      */
     protected $attrCollectionFactory;
 
-    /** @var \SafeReflectionClass|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var []
+     */
     protected $params;
 
     /**
-     * @var GroupedImportExport\Model\Import\Product\Type\Grouped\DbHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupedImportExport\Model\Import\Product\Type\Grouped\Links|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dbHelper;
+    protected $links;
 
-    /** @var  \Magento\CatalogImportExport\Model\Import\Product */
+    /**
+     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $entityModel;
 
     protected function setUp()
@@ -83,8 +87,8 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             0 => $this->entityModel,
             1 => 'grouped'
         ];
-        $this->dbHelper = $this->getMock(
-            'Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\DbHelper',
+        $this->links = $this->getMock(
+            'Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links',
             [],
             [],
             '',
@@ -98,7 +102,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
                 'attrSetColFac' => $this->setCollectionFactory,
                 'prodAttrColFac' => $this->attrCollectionFactory,
                 'params' => $this->params,
-                'dbHelper' => $this->dbHelper
+                'links' => $this->links
             ]
         );
     }
@@ -111,10 +115,16 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             $associatedSku => ['entity_id' => 1],
             $productSku => ['entity_id' => 2]
         ]));
-        $attributes = [];
-        $this->dbHelper->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
+        $attributes = ['position' => ['id' => 0], 'qty' => ['id' => 0]];
+        $this->links->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
 
-        $bunch = [['_associated_sku' => $associatedSku, 'sku' => $productSku, '_type' => 'grouped']];
+        $bunch = [[
+            '_associated_sku' => $associatedSku,
+            'sku' => $productSku,
+            '_type' => 'grouped',
+            '_associated_default_qty' => 4,
+            '_associated_position' => 6
+        ]];
         $this->entityModel->expects($this->at(0))->method('getNextBunch')->will($this->returnValue($bunch));
         $this->entityModel->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(true));
@@ -122,7 +132,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             \Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT
         ));
 
-        $this->dbHelper->expects($this->once())->method("saveLinksData");
+        $this->links->expects($this->once())->method("saveLinksData");
         $this->grouped->saveData();
     }
 }
