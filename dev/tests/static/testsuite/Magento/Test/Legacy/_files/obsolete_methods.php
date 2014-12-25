@@ -2001,6 +2001,11 @@ return [
     ['getScriptTranslation', 'Magento\Framework\LocaleInterface'],
     ['getCountryTranslation', 'Magento\Framework\LocaleInterface'],
     ['getTerritoryTranslation', 'Magento\Framework\LocaleInterface'],
+    [
+        'getNoteNotify',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Comment',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Totals'
+    ],
     ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
     ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
     ['cleanTransactions', 'Magento\Paypal\Model\Observer']

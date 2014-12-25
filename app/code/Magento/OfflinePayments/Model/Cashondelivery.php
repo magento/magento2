@@ -31,6 +31,13 @@ class Cashondelivery extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_infoBlockType = 'Magento\Payment\Block\Info\Instructions';
 
     /**
+     * Availability option
+     *
+     * @var bool
+     */
+    protected $_isOffline = true;
+
+    /**
      * Get instructions text from config
      *
      * @return string
