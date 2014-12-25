@@ -28,7 +28,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->string = $this->getMock('Magento\Framework\Stdlib\String');
-        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManager', ['getStore'], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->data = $this->objectManagerHelper->getObject(
@@ -47,19 +47,24 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("2_5", $result);
     }
 
-    public function dataProviderGDataMessage()
+    public function gdataMessageDataProvider()
     {
         return [
-            ['message' => 'Some string', 'expectedResult' => 'Some string'],
+            [
+                'message' => 'Some string',
+                'expectedResult' => 'Some string'
+            ],
             [
                 'message' => '<tag>insidetag</tag>outsidetag',
                 'expectedResult' => ''
             ],
             [
-                'message' => 'multiline
-
-message',
+                'message' => "multiline\n\nmessage",
                 'expectedResult' => 'multiline. message'
+            ],
+            [
+                'message' => '<tag reason="anyreason" type="anutype"></tag>>',
+                'expectedResult' => 'Reason: anyreason. Type: anutype'
             ]
         ];
     }
@@ -68,7 +73,7 @@ message',
      * @param string $message
      * @param string $expectedResult
      *
-     * @dataProvider dataProviderGDataMessage
+     * @dataProvider gdataMessageDataProvider
      */
     public function testParseGdataExceptionMessage($message, $expectedResult)
     {
@@ -76,7 +81,7 @@ message',
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dataProviderName()
+    public function nameDataProvider()
     {
         return [
             ['name' => 'somename', 'normalizedName' => 'somename'],
@@ -89,11 +94,31 @@ message',
      * @param string $name
      * @param string $normalizedName
      *
-     * @dataProvider dataProviderName
+     * @dataProvider nameDataProvider
      */
     public function testNormalizeName($name, $normalizedName)
     {
         $resultingName = $this->data->normalizeName($name);
         $this->assertEquals($normalizedName, $resultingName);
+    }
+
+    public function testParseGdataExceptionMessageWithProduct()
+    {
+        $message = "some message\n\nother message";
+        $product = $this->getMock('Magento\Catalog\Model\Product', ['getName', 'getStoreId'], [], '', false);
+        $product->expects($this->any())->method('getName')->will($this->returnValue("product name"));
+        $storeId = 1;
+        $product->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
+        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->storeManagerInterface->expects($this->any())->method('getStore')->with($storeId)->will(
+            $this->returnValue($store)
+        );
+        $store->expects($this->any())->method('getName')->will($this->returnValue('store name'));
+        $result = $this->data->parseGdataExceptionMessage($message, $product);
+        $this->assertEquals(
+            "some message for product 'product name' (in 'store name' store). " .
+            "other message for product 'product name' (in 'store name' store)",
+            $result
+        );
     }
 }
