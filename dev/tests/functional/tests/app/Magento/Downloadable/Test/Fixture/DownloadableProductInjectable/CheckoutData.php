@@ -79,6 +79,23 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     ],
                 ],
             ],
+
+            'one_custom_option_and_downloadable_link' => [
+                'options' => [
+                    'custom_options' => [
+                        [
+                            'title' => 'attribute_key_0',
+                            'value' => 'option_key_0'
+                        ],
+                    ],
+                    'links' => [
+                        [
+                            'label' => 'link_1',
+                            'value' => 'Yes'
+                        ]
+                    ],
+                ]
+            ],
         ];
         return isset($presets[$name]) ? $presets[$name] : [];
     }

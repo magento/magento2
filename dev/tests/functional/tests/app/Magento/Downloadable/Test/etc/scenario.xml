@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<scenarios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Config/etc/scenario.xsd">
+    <scenario name="DownloadableTaxCalculationTest" module="Magento_Downloadable">
+        <methods>
+            <method name="test">
+                <steps>
+                    <first>setupConfiguration</first>
+                    <step name="setupConfiguration" module="Magento_Core">
+                        <next>createSalesRule</next>
+                    </step>
+                    <step name="createSalesRule" module="Magento_SalesRule">
+                        <next>createCatalogRule</next>
+                    </step>
+                    <step name="createCatalogRule" module="Magento_CatalogRule">
+                        <next>createTaxRule</next>
+                    </step>
+                    <step name="createTaxRule" module="Magento_Tax">
+                        <next>createProduct</next>
+                    </step>
+                    <step name="createProduct" module="Magento_Catalog">
+                        <next>createCustomer</next>
+                    </step>
+                    <step name="createCustomer" module="Magento_Customer">
+                        <next>loginCustomerOnFrontend</next>
+                    </step>
+                    <step name="loginCustomerOnFrontend" module="Magento_Customer" />
+                </steps>
+            </method>
+        </methods>
+    </scenario>
+</scenarios>

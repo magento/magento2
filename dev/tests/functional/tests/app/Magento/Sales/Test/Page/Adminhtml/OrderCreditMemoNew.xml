@@ -16,5 +16,10 @@
             <locator>#edit_form</locator>
             <strategy>css selector</strategy>
         </formBlock>
+        <totalsBlock>
+            <class>Magento\Sales\Test\Block\Adminhtml\Order\Creditmemo\Totals</class>
+            <locator>.creditmemo-totals</locator>
+            <strategy>css selector</strategy>
+        </totalsBlock>
     </blocks>
 </page>

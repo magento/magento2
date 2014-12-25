@@ -5,14 +5,13 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Invoice;
 
-use Mtf\Block\Block;
 use Mtf\Client\Element\Locator;
 
 /**
  * Class Totals
  * Invoice totals block
  */
-class Totals extends Block
+class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\AbstractForm\Totals
 {
     /**
      * Submit invoice button selector
