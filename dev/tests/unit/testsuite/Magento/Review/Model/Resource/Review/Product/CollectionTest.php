@@ -7,7 +7,7 @@ namespace Magento\Review\Model\Resource\Review\Product;
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
+     * @var \Magento\Review\Model\Resource\Review\Product\Collection
      */
     protected $model;
 
@@ -31,7 +31,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->dbSelect->expects($this->any())->method('join')->will($this->returnSelf());
         $this->readAdapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['prepareSqlCondition', 'select'],
+            ['prepareSqlCondition', 'select', 'quoteInto'],
             [],
             '',
             false
@@ -56,6 +56,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
         $storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $fetchStrategy = $this->getMock(
+            '\Magento\Framework\Data\Collection\Db\FetchStrategy\Query',
+            ['fetchAll'],
+            [],
+            '',
+            false
+        );
+        $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
         $this->model = (new \Magento\TestFramework\Helper\ObjectManager($this))
             ->getObject(
                 '\Magento\Review\Model\Resource\Review\Product\Collection',
@@ -63,6 +71,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                     'universalFactory' => $universalFactory,
                     'storeManager' => $storeManager,
                     'eavConfig' => $eavConfig,
+                    'fetchStrategy' => $fetchStrategy
                 ]
             );
     }
@@ -70,81 +79,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider addAttributeToFilterDataProvider
      * @param $attribute
-     * @param $condition
      */
-    public function testAddAttributeToFilter($attribute, $condition)
+    public function testAddAttributeToFilter($attribute)
     {
         $conditionSqlQuery = 'sqlQuery';
-        switch ($attribute) {
-            case 'rt.review_id':
-            case 'rt.created_at':
-            case 'rt.status_id':
-            case 'rdt.title':
-            case 'rdt.nickname':
-            case 'rdt.detail':
-                $this->readAdapter
-                    ->expects($this->once())
-                    ->method('prepareSqlCondition')
-                    ->with($attribute, $condition)
-                    ->will($this->returnValue($conditionSqlQuery));
-                $this->dbSelect
-                    ->expects($this->once())
-                    ->method('where')
-                    ->with($conditionSqlQuery)
-                    ->will($this->returnSelf());
-                break;
-            case 'stores':
-                break;
-            case 'type':
-                switch ($condition) {
-                    case 1:
-                        $this->readAdapter
-                            ->expects($this->at(0))
-                            ->method('prepareSqlCondition')
-                            ->with('rdt.customer_id', ['is' => new \Zend_Db_Expr('NULL')])
-                            ->will($this->returnValue($conditionSqlQuery));
-                        $this->readAdapter
-                            ->expects($this->at(1))->method('prepareSqlCondition')
-                            ->with('rdt.store_id', ['eq' => \Magento\Store\Model\Store::DEFAULT_STORE_ID])
-                            ->will($this->returnValue($conditionSqlQuery));
-                        $this->dbSelect
-                            ->expects($this->once())
-                            ->method('where')
-                            ->with($conditionSqlQuery . ' AND ' . $conditionSqlQuery)
-                            ->will($this->returnSelf());
-                        break;
-                    case 2:
-                        $this->readAdapter
-                            ->expects($this->at(0))
-                            ->method('prepareSqlCondition')
-                            ->with('rdt.customer_id', ['gt' => 0])
-                            ->will($this->returnValue($conditionSqlQuery));
-                        $this->dbSelect
-                            ->expects($this->once())
-                            ->method('where')
-                            ->with($conditionSqlQuery)
-                            ->will($this->returnSelf());
-                        break;
-                    default:
-                        $this->readAdapter
-                            ->expects($this->at(0))
-                            ->method('prepareSqlCondition')
-                            ->with('rdt.customer_id', ['is' => new \Zend_Db_Expr('NULL')])
-                            ->will($this->returnValue($conditionSqlQuery));
-                        $this->readAdapter
-                            ->expects($this->at(1))
-                            ->method('prepareSqlCondition')
-                            ->with('rdt.store_id', ['neq' => \Magento\Store\Model\Store::DEFAULT_STORE_ID])
-                            ->will($this->returnValue($conditionSqlQuery));
-                        $this->dbSelect
-                            ->expects($this->once())
-                            ->method('where')
-                            ->with($conditionSqlQuery . ' AND ' . $conditionSqlQuery)
-                            ->will($this->returnSelf());
-                        break;
-                }
-                break;
-        }
+        $condition = ['eq' => 'value'];
+        $this->readAdapter
+            ->expects($this->once())
+            ->method('prepareSqlCondition')
+            ->with($attribute, $condition)
+            ->will($this->returnValue($conditionSqlQuery));
+        $this->dbSelect
+            ->expects($this->once())
+            ->method('where')
+            ->with($conditionSqlQuery)
+            ->will($this->returnSelf());
         $this->model->addAttributeToFilter($attribute, $condition);
     }
 
@@ -154,16 +103,76 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function addAttributeToFilterDataProvider()
     {
         return [
-            ['rt.review_id', ['eq' => 'value']],
-            ['rt.created_at', ['eq' => 'value']],
-            ['rt.status_id', ['eq' => 'value']],
-            ['rdt.title', ['eq' => 'value']],
-            ['rdt.nickname', ['eq' => 'value']],
-            ['rdt.detail', ['eq' => 'value']],
-            ['stores', ['eq' => 'value']],
-            ['type', 1],
-            ['type', 2],
-            ['type', null],
+            ['rt.review_id'],
+            ['rt.created_at'],
+            ['rt.status_id'],
+            ['rdt.title'],
+            ['rdt.nickname'],
+            ['rdt.detail'],
+
+        ];
+    }
+
+    public function testAddAttributeToFilterWithAttributeStore()
+    {
+        $storeId = 1;
+        $this->readAdapter
+            ->expects($this->at(0))
+            ->method('quoteInto')
+            ->with('rt.review_id=store.review_id AND store.store_id = ?', $storeId)
+            ->will($this->returnValue('sqlQuery'));
+        $this->model->addAttributeToFilter('stores', ['eq' => $storeId]);
+        $this->model->load();
+    }
+
+    /**
+     * @dataProvider addAttributeToFilterWithAttributeTypeDataProvider
+     * @param $condition
+     * @param $sqlConditionWith
+     * @param $sqlConditionWithSec
+     * @param $doubleConditionSqlQuery
+     */
+    public function testAddAttributeToFilterWithAttributeType(
+        $condition,
+        $sqlConditionWith,
+        $sqlConditionWithSec,
+        $doubleConditionSqlQuery
+    ) {
+        $conditionSqlQuery = 'sqlQuery';
+        $this->readAdapter
+            ->expects($this->at(0))
+            ->method('prepareSqlCondition')
+            ->with('rdt.customer_id', $sqlConditionWith)
+            ->will($this->returnValue($conditionSqlQuery));
+        if ($sqlConditionWithSec) {
+            $this->readAdapter
+                ->expects($this->at(1))
+                ->method('prepareSqlCondition')
+                ->with('rdt.store_id', $sqlConditionWithSec)
+                ->will($this->returnValue($conditionSqlQuery));
+        }
+        $conditionSqlQuery = $doubleConditionSqlQuery
+            ? $conditionSqlQuery . ' AND ' . $conditionSqlQuery
+            : $conditionSqlQuery;
+        $this->dbSelect
+            ->expects($this->once())
+            ->method('where')
+            ->with($conditionSqlQuery)
+            ->will($this->returnSelf());
+        $this->model->addAttributeToFilter('type', $condition);
+    }
+
+    /**
+     * @return array
+     */
+    public function addAttributeToFilterWithAttributeTypeDataProvider()
+    {
+        $exprNull = new \Zend_Db_Expr('NULL');
+        $defaultStore = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        return [
+            [1, ['is' => $exprNull], ['eq' => $defaultStore], true],
+            [2, ['gt' => 0], null, false],
+            [null, ['is' => $exprNull], ['neq' => $defaultStore], true]
         ];
     }
 }
