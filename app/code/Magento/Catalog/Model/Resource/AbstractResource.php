@@ -587,11 +587,10 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 $select = $adapter->select()
                     ->from(['default_value' => $table], ['attribute_id'])
                     ->where('default_value.attribute_id IN (?)', array_keys($_attributes))
-                    ->where('default_value.entity_type_id = :entity_type_id')
                     ->where('default_value.entity_id = :entity_id')
                     ->where('default_value.store_id = ?', 0);
 
-                $bind = ['entity_type_id' => $this->getTypeId(), 'entity_id' => $entityId];
+                $bind = ['entity_id' => $entityId];
 
                 if ($store != $this->getDefaultStoreId()) {
                     $valueExpr = $adapter->getCheckSql(
@@ -601,7 +600,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     );
                     $joinCondition = [
                         $adapter->quoteInto('store_value.attribute_id IN (?)', array_keys($_attributes)),
-                        'store_value.entity_type_id = :entity_type_id',
                         'store_value.entity_id = :entity_id',
                         'store_value.store_id = :store_id',
                     ];
