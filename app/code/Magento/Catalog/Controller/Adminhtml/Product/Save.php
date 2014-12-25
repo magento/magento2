@@ -63,6 +63,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         $storeId = $this->getRequest()->getParam('store');
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
+        $resultRedirect = $this->resultRedirectFactory->create();
 
         $data = $this->getRequest()->getPost();
         if ($data) {
@@ -121,9 +122,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $this->_session->setProductData($data);
                 $redirectBack = $productId ? true : 'new';
             }
+        } else {
+            $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
+            $this->messageManager->addError('No data to save');
+            return $resultRedirect;
         }
 
-        $resultRedirect = $this->resultRedirectFactory->create();
         if ($redirectBack === 'new') {
             $resultRedirect->setPath(
                 'catalog/*/new',
