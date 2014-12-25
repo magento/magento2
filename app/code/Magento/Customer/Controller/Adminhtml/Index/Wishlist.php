@@ -23,7 +23,7 @@ class Wishlist extends \Magento\Customer\Controller\Adminhtml\Index
             try {
                 $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId)->delete();
             } catch (\Exception $exception) {
-                $this->_objectManager->get('Magento\Framework\Logger')->logException($exception);
+                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($exception);
             }
         }
 
