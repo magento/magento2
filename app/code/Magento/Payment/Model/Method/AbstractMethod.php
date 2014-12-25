@@ -204,33 +204,29 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     protected $_eventManager;
 
     /**
-     * Log adapter factory
-     *
-     * @var \Magento\Framework\Logger\AdapterFactory
+     * @var \Psr\Log\LoggerInterface
      */
-    protected $_logAdapterFactory;
+    protected $logger;
 
     /**
-     * Construct
-     *
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         array $data = []
     ) {
         parent::__construct($data);
+        $this->logger = $logger;
         $this->_eventManager = $eventManager;
         $this->_paymentData = $paymentData;
         $this->_scopeConfig = $scopeConfig;
-        $this->_logAdapterFactory = $logAdapterFactory;
     }
 
     /**
@@ -790,13 +786,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->_logAdapterFactory->create(
-                ['fileName' => 'payment_' . $this->getCode() . '.log']
-            )->setFilterDataKeys(
-                $this->_debugReplacePrivateDataKeys
-            )->log(
-                $debugData
-            );
+            $this->logger->debug($debugData);
         }
     }
 

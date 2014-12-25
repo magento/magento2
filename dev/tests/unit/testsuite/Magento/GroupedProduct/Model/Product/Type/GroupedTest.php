@@ -40,7 +40,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
         $this->catalogProductLink = $this->getMock(
             '\Magento\GroupedProduct\Model\Resource\Product\Link',

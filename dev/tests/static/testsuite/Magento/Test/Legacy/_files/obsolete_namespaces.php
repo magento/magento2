@@ -28,7 +28,7 @@ return [
     ['Magento\Phrase', 'Magento\Framework\Phrase'],
     ['Magento\Locale', 'Magento\Framework\Locale'],
     ['Magento\Message', 'Magento\Framework\Message'],
-    ['Magento\Logger', 'Magento\Framework\Logger'],
+    ['Magento\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Error', 'Magento\Framework\Error'],
     ['Magento\Filter', 'Magento\Framework\Filter'],
     ['Magento\DomDocument', 'Magento\Framework\DomDocument'],

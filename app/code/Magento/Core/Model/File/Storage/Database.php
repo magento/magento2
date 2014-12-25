@@ -233,7 +233,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
                 $this->_getResource()->saveFile($file);
             } catch (\Exception $e) {
                 $this->_errors[] = $e->getMessage();
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
 

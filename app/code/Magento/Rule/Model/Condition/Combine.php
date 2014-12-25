@@ -12,7 +12,7 @@ class Combine extends AbstractCondition
     protected $_conditionFactory;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -215,7 +215,7 @@ class Combine extends AbstractCondition
                     $this->addCondition($condition);
                     $condition->loadArray($conditionArr, $key);
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                 }
             }
         }
