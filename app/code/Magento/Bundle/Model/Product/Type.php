@@ -819,8 +819,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                         $_result[0]->setCartQty($qty);
                     }
 
-                    $selectionIds[] = $_result[0]->getSelectionId();
-                    $uniqueKey[] = $_result[0]->getSelectionId();
+                    $resultSelectionId = $_result[0]->getSelectionId();
+                    $selectionIds[] = $resultSelectionId;
+                    $uniqueKey[] = $resultSelectionId;
                     $uniqueKey[] = $qty;
                 }
 
