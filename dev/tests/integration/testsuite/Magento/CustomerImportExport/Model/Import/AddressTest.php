@@ -244,7 +244,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $entityData = [
             'entity_id' => $addressId,
-            'entity_type_id' => $addressModel->getEntityTypeId(),
             'parent_id' => $customerId,
             'created_at' => $dateTime->now(),
             'updated_at' => $dateTime->now(),

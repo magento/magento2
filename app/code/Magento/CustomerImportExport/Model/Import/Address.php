@@ -589,7 +589,6 @@ class Address extends AbstractCustomer
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = [
                         'entity_id' => $customerId,
-                        'entity_type_id' => $entityTypeId,
                         'attribute_id' => $attributeId,
                         'value' => $value,
                     ];

@@ -177,14 +177,14 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     public function importDataDataProvider()
     {
         $filesDirectory = __DIR__ . '/_files/';
-        $sourceData = [
-            'delete_behavior' => [
-                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
-                '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
-                '$dataBefore' => $this->_beforeImport,
-                '$dataAfter' => [],
-            ],
-        ];
+//        $sourceData = [
+//            'delete_behavior' => [
+//                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+//                '$sourceFile' => $filesDirectory . self::DELETE_FILE_NAME,
+//                '$dataBefore' => $this->_beforeImport,
+//                '$dataAfter' => [],
+//            ],
+//        ];
 
         $sourceData['add_update_behavior'] = [
             '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
