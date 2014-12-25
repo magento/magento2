@@ -102,6 +102,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
         $this->_validator->add(new \Magento\Framework\Code\Validator\TypeDuplication());
         $this->_validator->add(new \Magento\Framework\Code\Validator\ArgumentSequence());
+        $this->_validator->add(new \Magento\Framework\Code\Validator\ConstructorArgumentTypes());
         $this->pluginValidator = new \Magento\Framework\Interception\Code\InterfaceValidator();
     }
 
