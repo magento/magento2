@@ -176,21 +176,24 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $product->expects($this->any())
             ->method('getData')
-            ->willReturnCallback(function($key) use ($optionCollection, $selectionCollection){
-                $resultValue = null;
-                switch($key) {
-                    case '_cache_instance_options_collection':
-                        $resultValue = $optionCollection;
-                        break;
-                    case '_cache_instance_used_selections':
-                        $resultValue = $selectionCollection;
-                        break;
-                    case '_cache_instance_used_selections_ids':
-                        $resultValue = [0 => 5];
-                        break;
+            ->willReturnCallback(
+                function ($key) use ($optionCollection, $selectionCollection) {
+                    $resultValue = null;
+                    switch ($key) {
+                        case '_cache_instance_options_collection':
+                            $resultValue = $optionCollection;
+                            break;
+                        case '_cache_instance_used_selections':
+                            $resultValue = $selectionCollection;
+                            break;
+                        case '_cache_instance_used_selections_ids':
+                            $resultValue = [0 => 5];
+                            break;
+                    }
+
+                    return $resultValue;
                 }
-                return $resultValue;
-            });
+            );
         $optionCollection->expects($this->once())
             ->method('getItemById')
             ->willReturn($option);
