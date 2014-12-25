@@ -14,13 +14,24 @@ use Magento\Backend\App\Action;
 class Create extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param \Magento\Framework\Escaper $escaper
      */
-    public function __construct(Action\Context $context, \Magento\Catalog\Helper\Product $productHelper)
+    public function __construct(
+        Action\Context $context,
+        \Magento\Catalog\Helper\Product $productHelper,
+        \Magento\Framework\Escaper $escaper
+    )
     {
         parent::__construct($context);
         $productHelper->setSkipSaleableCheck(true);
+        $this->escaper = $escaper;
     }
 
     /**
@@ -280,10 +291,11 @@ class Create extends \Magento\Backend\App\Action
                 }
             }
             if (!$isApplyDiscount) {
+                $rr = $this->escaper->escapeHtml($couponCode);
                 $this->messageManager->addError(
                     __(
-                        '"%1" coupon code for item(s) selected do not apply discount',
-                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                        '"%1" coupon code was not applied. Do not apply discount is selected for item(s)',
+                        $rr
                     )
                 );
             } else {
@@ -291,7 +303,7 @@ class Create extends \Magento\Backend\App\Action
                     $this->messageManager->addError(
                         __(
                             '"%1" coupon code is not valid.',
-                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                            $this->escaper->escapeHtml($couponCode)
                         )
                     );
                 } else {
