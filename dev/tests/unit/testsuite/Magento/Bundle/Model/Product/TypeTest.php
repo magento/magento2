@@ -145,7 +145,18 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
-            ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection', 'getProduct', 'getValue', 'getTitle'])
+            ->setMethods(
+                [
+                    'groupFactory',
+                    'getType',
+                    'getId',
+                    'getRequired',
+                    'isMultiSelection',
+                    'getProduct',
+                    'getValue',
+                    'getTitle'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
@@ -155,7 +166,19 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object $buyRequest */
         $selection = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(['__wakeup', 'isSalable', 'getOptionId', 'getSelectionCanChangeQty', 'getSelectionId', 'addCustomOption', 'getId', 'getOption', 'getTypeInstance'])
+            ->setMethods(
+                [
+                    '__wakeup',
+                    'isSalable',
+                    'getOptionId',
+                    'getSelectionCanChangeQty',
+                    'getSelectionId',
+                    'addCustomOption',
+                    'getId',
+                    'getOption',
+                    'getTypeInstance'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
@@ -181,7 +204,16 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Product\Type $productType */
         $productType = $this->getMockBuilder('\Magento\Bundle\Model\Product\Type')
-            ->setMethods(['setStoreFilter', 'prepareForCart', 'setParentProductId', 'addCustomOption', 'setCartQty', 'getSelectionId'])
+            ->setMethods(
+                [
+                    'setStoreFilter',
+                    'prepareForCart',
+                    'setParentProductId',
+                    'addCustomOption',
+                    'setCartQty',
+                    'getSelectionId'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|Collection $optionCollection */
@@ -349,7 +381,18 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
-            ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection', 'getProduct', 'getValue', 'getTitle'])
+            ->setMethods(
+                [
+                    'groupFactory',
+                    'getType',
+                    'getId',
+                    'getRequired',
+                    'isMultiSelection',
+                    'getProduct',
+                    'getValue',
+                    'getTitle'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
@@ -359,7 +402,19 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object $buyRequest */
         $selection = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(['__wakeup', 'isSalable', 'getOptionId', 'getSelectionCanChangeQty', 'getSelectionId', 'addCustomOption', 'getId', 'getOption', 'getTypeInstance'])
+            ->setMethods(
+                [
+                    '__wakeup',
+                    'isSalable',
+                    'getOptionId',
+                    'getSelectionCanChangeQty',
+                    'getSelectionId',
+                    'addCustomOption',
+                    'getId',
+                    'getOption',
+                    'getTypeInstance'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
@@ -541,7 +596,18 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /* @var $option \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Option */
         $option = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
-            ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection', 'getProduct', 'getValue', 'getTitle'])
+            ->setMethods(
+                [
+                    'groupFactory',
+                    'getType',
+                    'getId',
+                    'getRequired',
+                    'isMultiSelection',
+                    'getProduct',
+                    'getValue',
+                    'getTitle'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
@@ -551,7 +617,19 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object $buyRequest */
         $selection = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(['__wakeup', 'isSalable', 'getOptionId', 'getSelectionCanChangeQty', 'getSelectionId', 'addCustomOption', 'getId', 'getOption', 'getTypeInstance'])
+            ->setMethods(
+                [
+                    '__wakeup',
+                    'isSalable',
+                    'getOptionId',
+                    'getSelectionCanChangeQty',
+                    'getSelectionId',
+                    'addCustomOption',
+                    'getId',
+                    'getOption',
+                    'getTypeInstance'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
