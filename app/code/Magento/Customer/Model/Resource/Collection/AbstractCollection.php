@@ -31,7 +31,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         $select = $this->getConnection()->select()->from(
             $table,
             [$entityIdField, 'attribute_id']
-
         )->where(
             "{$entityIdField} IN (?)",
             array_keys($this->_itemsById)

@@ -1656,9 +1656,9 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     /**
      * Return attribute row to prepare where statement
      *
-     * @param $entity
-     * @param $object
-     * @param $attribute
+     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\Object $object
+     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return array
      */
     protected function getAttributeRow($entity, $object, $attribute)

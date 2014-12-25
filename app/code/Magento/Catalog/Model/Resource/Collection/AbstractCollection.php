@@ -180,7 +180,8 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 'attribute_id IN (?)',
                 $attributeIds
             )->where(
-                'store_id = ?', $this->getDefaultStoreId()
+                'store_id = ?',
+                $this->getDefaultStoreId()
             );
         }
         return $select;
