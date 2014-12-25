@@ -763,8 +763,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 usort($selections, [$this, 'shakeSelections']);
 
                 foreach ($selections as $selection) {
-                    if ($selection->getSelectionCanChangeQty() && isset($qtys[$selection->getOptionId()])) {
-                        $qty = (float)$qtys[$selection->getOptionId()] > 0 ? $qtys[$selection->getOptionId()] : 1;
+                    $selectionOptionId = $selection->getOptionId();
+                    if ($selection->getSelectionCanChangeQty() && isset($qtys[$selectionOptionId])) {
+                        $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
                     } else {
                         $qty = (float)$selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
                     }
