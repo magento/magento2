@@ -5,7 +5,7 @@
 namespace Magento\Weee\Model\Resource;
 
 /**
- * Setup Model of Sales Module
+ * Setup Model of Weee Module
  */
 class Setup extends \Magento\Framework\Module\DataSetup
 {
@@ -46,7 +46,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     }
 
     /**
-     * Create Sales Setup Factory for Quote
+     * Create Sales Setup
      *
      * @param array $data
      * @return \Magento\Sales\Model\Resource\Setup
@@ -57,7 +57,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     }
 
     /**
-     * Create Quote Setup Factory for Quote
+     * Create Quote Setup
      *
      * @param array $data
      * @return \Magento\Quote\Model\Resource\Setup

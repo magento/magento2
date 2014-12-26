@@ -78,7 +78,7 @@ $table = $installer->getConnection()->newTable(
 $installer->getConnection()->createTable($table);
 
 /**
- * Alter sales_quote table with is_persistent flag
+ * Alter quote table with is_persistent flag
  *
  */
 $installer->getConnection()->addColumn(
