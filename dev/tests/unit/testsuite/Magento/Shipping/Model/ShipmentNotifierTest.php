@@ -61,13 +61,7 @@ class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->loggerMock = $this->getMock(
-            'Magento\Framework\Logger',
-            ['logException'],
-            [],
-            '',
-            false
-        );
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->notifier = new ShipmentNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -139,7 +133,7 @@ class ShipmentNotifierTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->shipment))
             ->will($this->throwException($exception));
         $this->loggerMock->expects($this->once())
-            ->method('logException')
+            ->method('critical')
             ->with($this->equalTo($exception));
         $this->assertFalse($this->notifier->notify($this->shipment));
     }

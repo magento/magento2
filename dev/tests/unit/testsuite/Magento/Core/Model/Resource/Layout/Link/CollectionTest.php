@@ -28,7 +28,7 @@ class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCas
 
         return new \Magento\Core\Model\Resource\Layout\Link\Collection(
             $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false),
-            $this->getMock('Magento\Framework\Logger', [], [], '', false),
+            $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface'),
             $eventManager,
             $this->getMock('Magento\Framework\Stdlib\DateTime', null, [], '', true),

@@ -42,7 +42,7 @@ class CatalogSearchQuery extends InjectableFixture
         'is_required' => '',
         'default_value' => '',
         'input' => '',
-        'source' => 'Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\SearchData',
+        'source' => 'Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\QueryText',
     ];
 
     protected $num_results = [

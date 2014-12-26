@@ -8,7 +8,7 @@ use Magento\Framework\Api\CriteriaInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\ObjectFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Object;
 
 /**

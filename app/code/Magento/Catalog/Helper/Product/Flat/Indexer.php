@@ -304,7 +304,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
                     $attribute->getBackend();
                     $this->_attributes[$attributeCode] = $attribute;
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                 }
             }
         }

@@ -52,7 +52,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $menuMock = $this->getMock(
             'Magento\Backend\Model\Menu',
             [],
-            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+            [$this->getMock('Psr\Log\LoggerInterface')]
         );
         $menuItemMock = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false, false);
         $urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false, false);

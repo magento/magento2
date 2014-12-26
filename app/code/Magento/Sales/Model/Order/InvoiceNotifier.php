@@ -5,7 +5,7 @@
 
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory;
 
@@ -21,7 +21,7 @@ class InvoiceNotifier extends \Magento\Sales\Model\AbstractNotifier
     protected $historyCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
