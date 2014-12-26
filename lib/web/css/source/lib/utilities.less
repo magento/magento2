@@ -184,8 +184,15 @@
     @_property,
     @_value,
     @_prefix: 0
-) when (@_prefix = 1) {
-    -webkit-@{_property}: @_value;
+) when (@_prefix = 1)
+  and not (@_value = '')
+  and not (@_value = false)
+  and not (extract(@_value, 1) = false)
+  and not (extract(@_value, 2) = false)
+  and not (extract(@_value, 3) = false)
+  and not (extract(@_value, 4) = false)
+  and not (extract(@_value, 5) = false) {
+  -webkit-@{_property}: @_value;
        -moz-@{_property}: @_value;
         -ms-@{_property}: @_value;
 }
@@ -193,7 +200,13 @@
     @_property,
     @_value,
     @_prefix: 0
-) when not (@_value = false) and not (@_value = '') {
+) when not (@_value = '')
+  and not (@_value = false)
+  and not (extract(@_value, 1) = false)
+  and not (extract(@_value, 2) = false)
+  and not (extract(@_value, 3) = false)
+  and not (extract(@_value, 4) = false)
+  and not (extract(@_value, 5) = false) {
     @{_property}: @_value;
 }
 
