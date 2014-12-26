@@ -61,13 +61,7 @@ class InvoiceNotifierTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->loggerMock = $this->getMock(
-            'Magento\Framework\Logger',
-            ['logException'],
-            [],
-            '',
-            false
-        );
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->notifier = new InvoiceNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -139,7 +133,7 @@ class InvoiceNotifierTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->invoice))
             ->will($this->throwException($exception));
         $this->loggerMock->expects($this->once())
-            ->method('logException')
+            ->method('critical')
             ->with($this->equalTo($exception));
         $this->assertFalse($this->notifier->notify($this->invoice));
     }

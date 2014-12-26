@@ -165,7 +165,7 @@ class AclRetrieverTest extends \PHPUnit_Framework_TestCase
             $aclBuilderMock,
             $roleCollectionFactoryMock,
             $rulesCollectionFactoryMock,
-            $this->getMock('Magento\Framework\Logger', [], [], '', false)
+            $this->getMock('Psr\Log\LoggerInterface')
         );
     }
 }
