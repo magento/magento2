@@ -107,4 +107,18 @@ class Filter extends \Magento\Cms\Model\Template\Filter
 
         return $widget->toHtml();
     }
+
+    /**
+    * Generate translatable text
+    *
+    * @param array $construction
+    * @return string
+    */
+    public function translateDirective($construction)
+    {
+        $params = $this->_getIncludeParameters($construction[2]);
+        $text = $params['text'];
+        return __($text);
+    }
+
 }
