@@ -139,11 +139,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Object $buyRequest */
-        $selection = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(['__wakeup', 'isSalable', 'getOptionId'])
-            ->disableOriginalConstructor()
-            ->getMock();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(
