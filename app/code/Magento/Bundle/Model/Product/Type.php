@@ -693,13 +693,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $product->getTypeInstance()
                     ->setStoreFilter($product->getStoreId(), $product);
                 $optionsCollection = $this->getOptionsCollection($product);
-                if (!$product->getSkipCheckRequiredOption() && $isStrictProcessMode) {
-                    foreach ($optionsCollection->getItems() as $option) {
-                        if ($option->getRequired() && !isset($options[$option->getId()])) {
-                            throw new \Magento\Framework\Model\Exception(__('Please select all required options.'));
-                        }
-                    }
-                }
+                $this->checkIsAllRequiredOptions(
+                    $product,
+                    $isStrictProcessMode,
+                    $optionsCollection,
+                    $options
+                );
 
                 $selectionIds = $this->multiToOFlatArray($options);
                 // If product has not been configured yet then $selections array should be empty
@@ -707,24 +706,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
 
                     // Check if added selections are still on sale
-                    foreach ($selections->getItems() as $selection) {
-                        if (!$selection->isSalable() && !$skipSaleableCheck) {
-                            $_option = $optionsCollection->getItemById($selection->getOptionId());
-                            $optionId = $_option->getId();
-                            if (is_array($options[$optionId]) && count($options[$optionId]) > 1) {
-                                $moreSelections = true;
-                            } else {
-                                $moreSelections = false;
-                            }
-                            $isMultiSelection = $_option->isMultiSelection();
-                            if ($_option->getRequired() && (!$isMultiSelection || !$moreSelections)
-                            ) {
-                                throw new \Magento\Framework\Model\Exception(
-                                    __('The required options you selected are not available.')
-                                );
-                            }
-                        }
-                    }
+                    $this->checkSelectionsIsSale(
+                        $selections,
+                        $skipSaleableCheck,
+                        $optionsCollection,
+                        $options
+                    );
 
                     $optionsCollection->appendSelections($selections, false, $_appendAllSelections);
 
@@ -745,14 +732,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     ->getSelectionsCollection($optionIds, $product);
                 $options = $optionCollection->appendSelections($selectionCollection, false, $_appendAllSelections);
 
-                foreach ($options as $option) {
-                    if ($option->getRequired() && count($option->getSelections()) == 1) {
-                        $selections = array_merge($selections, $option->getSelections());
-                    } else {
-                        $selections = [];
-                        break;
-                    }
-                }
+                $selections = $this->mergeSelectionsWithOptions($options, $selections);
             }
             if (count($selections) > 0 || !$isStrictProcessMode) {
                 $uniqueKey = [$product->getId()];
@@ -764,24 +744,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                 foreach ($selections as $selection) {
                     $selectionOptionId = $selection->getOptionId();
-                    if ($selection->getSelectionCanChangeQty() && isset($qtys[$selectionOptionId])) {
-                        $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
-                    } else {
-                        $qty = (float)$selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
-                    }
-                    $qty = (float)$qty;
+                    $qty = $this->getQty($selection, $qtys, $selectionOptionId);
 
                     $selectionId = $selection->getSelectionId();
                     $product->addCustomOption('selection_qty_' . $selectionId, $qty, $selection);
                     $selection->addCustomOption('selection_id', $selectionId);
 
-                    $beforeQty = 0;
-                    $customOption = $product->getCustomOption('product_qty_' . $selection->getId());
-                    if ($customOption && $customOption->getProduct()
-                            ->getId() == $selection->getId()
-                    ) {
-                        $beforeQty = (float)$customOption->getValue();
-                    }
+                    $beforeQty = $this->getBeforeQty($product, $selection);
                     $product->addCustomOption('product_qty_' . $selection->getId(), $qty + $beforeQty, $selection);
 
                     /*
@@ -801,15 +770,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                     $_result = $selection->getTypeInstance()
                         ->prepareForCart($buyRequest, $selection);
-                    if (is_string($_result)) {
-                        throw new \Magento\Framework\Model\Exception($_result);
-                    }
-
-                    if (!isset($_result[0])) {
-                        throw new \Magento\Framework\Model\Exception(
-                            __('We cannot add this item to your shopping cart.')
-                        );
-                    }
+                    $this->checkIsResult($_result);
 
                     $result[] = $_result[0]->setParentProductId($product->getId())
                         ->addCustomOption('bundle_option_ids', serialize(array_map('intval', $optionIds)))
@@ -1247,5 +1208,129 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return $identities;
+    }
+
+    /**
+     * @param \Magento\Framework\Object $selection
+     * @param int[] $qtys
+     * @param int $selectionOptionId
+     * @return float
+     */
+    protected function getQty($selection, $qtys, $selectionOptionId)
+    {
+        if ($selection->getSelectionCanChangeQty() && isset($qtys[$selectionOptionId])) {
+            $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
+        } else {
+            $qty = (float)$selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
+        }
+        $qty = (float)$qty;
+
+        return $qty;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Framework\Object $selection
+     * @return float|int
+     */
+    protected function getBeforeQty($product, $selection)
+    {
+        $beforeQty = 0;
+        $customOption = $product->getCustomOption('product_qty_' . $selection->getId());
+        if ($customOption && $customOption->getProduct()
+                ->getId() == $selection->getId()
+        ) {
+            $beforeQty = (float)$customOption->getValue();
+
+            return $beforeQty;
+        }
+
+        return $beforeQty;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param bool $isStrictProcessMode
+     * @param \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection
+     * @param int[] $options
+     * @return void
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function checkIsAllRequiredOptions($product, $isStrictProcessMode, $optionsCollection, $options)
+    {
+        if (!$product->getSkipCheckRequiredOption() && $isStrictProcessMode) {
+            foreach ($optionsCollection->getItems() as $option) {
+                if ($option->getRequired() && !isset($options[$option->getId()])) {
+                    throw new \Magento\Framework\Model\Exception(__('Please select all required options.'));
+                }
+            }
+        }
+    }
+
+    /**
+     * @param \Magento\Bundle\Model\Resource\Selection\Collection $selections
+     * @param bool $skipSaleableCheck
+     * @param \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection
+     * @param int[] $options
+     * @return void
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function checkSelectionsIsSale($selections, $skipSaleableCheck, $optionsCollection, $options)
+    {
+        foreach ($selections->getItems() as $selection) {
+            if (!$selection->isSalable() && !$skipSaleableCheck) {
+                $_option = $optionsCollection->getItemById($selection->getOptionId());
+                $optionId = $_option->getId();
+                if (is_array($options[$optionId]) && count($options[$optionId]) > 1) {
+                    $moreSelections = true;
+                } else {
+                    $moreSelections = false;
+                }
+                $isMultiSelection = $_option->isMultiSelection();
+                if ($_option->getRequired() && (!$isMultiSelection || !$moreSelections)
+                ) {
+                    throw new \Magento\Framework\Model\Exception(
+                        __('The required options you selected are not available.')
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $_result
+     * @return void
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function checkIsResult($_result)
+    {
+        if (is_string($_result)) {
+            throw new \Magento\Framework\Model\Exception($_result);
+        }
+
+        if (!isset($_result[0])) {
+            throw new \Magento\Framework\Model\Exception(
+                __('We cannot add this item to your shopping cart.')
+            );
+        }
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product\Option[] $options
+     * @param \Magento\Framework\Object[] $selections
+     * @return \Magento\Framework\Object[]
+     */
+    protected function mergeSelectionsWithOptions($options, $selections)
+    {
+        foreach ($options as $option) {
+            if ($option->getRequired() && count($option->getSelections()) == 1) {
+                $selections = array_merge($selections, $option->getSelections());
+            } else {
+                $selections = [];
+                break;
+            }
+        }
+
+        return $selections;
     }
 }
