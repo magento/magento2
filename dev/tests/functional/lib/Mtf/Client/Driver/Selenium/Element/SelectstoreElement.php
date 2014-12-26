@@ -9,27 +9,26 @@ use Mtf\Client\Driver\Selenium\Element;
 use Mtf\Client\Element\Locator;
 
 /**
- * Class SelectstoreElement
- * Typified element class for option group selectors
+ * Typified element class for option group selectors.
  */
 class SelectstoreElement extends SelectElement
 {
     /**
-     * Store option group selector
+     * Store option group selector.
      *
      * @var string
      */
     protected $storeGroup = 'optgroup[option[contains(.,"%s")]]';
 
     /**
-     * Website option group selector
+     * Website option group selector.
      *
      * @var string
      */
     protected $website = 'optgroup[following-sibling::optgroup[option[contains(.,"%s")]]]';
 
     /**
-     * Get the value of form element
+     * Get the value of form element.
      *
      * @return string
      */
@@ -48,7 +47,7 @@ class SelectstoreElement extends SelectElement
     }
 
     /**
-     * Select value in dropdown which has option groups
+     * Select value in dropdown which has option groups.
      *
      * @param string $value
      * @throws \Exception
@@ -56,14 +55,20 @@ class SelectstoreElement extends SelectElement
      */
     public function setValue($value)
     {
-        $group = explode('/', $value);
-        $optionLocator = './/optgroup[contains(@label,"'
-            . $group[0] . '")]/following-sibling::optgroup[contains(@label,"'
-            . $group[1] . '")]/option[contains(text(), "'
-            . $group[2] . '")]';
+        $pieces = explode('/', $value);
+
+        if (1 == count($pieces)) {
+            $optionLocator = './/option[contains(text(),"' . $pieces[0] . '")]';
+        } else {
+            $optionLocator = './/optgroup[contains(@label,"'
+                . $pieces[0] . '")]/following-sibling::optgroup[contains(@label,"'
+                . $pieces[1] . '")]/option[contains(text(), "'
+                . $pieces[2] . '")]';
+        }
+
         $option = $this->_context->find($optionLocator, Locator::SELECTOR_XPATH);
         if (!$option->isVisible()) {
-            throw new \Exception('[' . implode('/', $value) . '] option is not visible in store switcher.');
+            throw new \Exception('[' . implode('/', $pieces) . '] option is not visible in store switcher.');
         }
         $option->click();
     }
