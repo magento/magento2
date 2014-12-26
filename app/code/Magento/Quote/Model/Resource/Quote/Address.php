@@ -20,6 +20,6 @@ class Address extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('sales_quote_address', 'address_id');
+        $this->_init('quote_address', 'address_id');
     }
 }

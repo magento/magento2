@@ -36,7 +36,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getAttributeNames'
         )->with(
-            'sales_quote_item'
+            'quote_item'
         )->will(
             $this->returnValue($attributes)
         );

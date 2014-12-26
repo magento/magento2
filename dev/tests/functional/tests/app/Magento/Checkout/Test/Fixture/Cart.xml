@@ -7,7 +7,7 @@
 <fixture class="Magento\Checkout\Test\Fixture\Cart">
     <module>Magento_Checkout</module>
     <type>flat</type>
-    <entity_type>sales_quote</entity_type>
+    <entity_type>quote</entity_type>
     <collection>Magento\Checkout\Model\Resource\Cart</collection>
     <fields>
         <entity_id>

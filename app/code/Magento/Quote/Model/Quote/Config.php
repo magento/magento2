@@ -24,6 +24,6 @@ class Config
      */
     public function getProductAttributes()
     {
-        return $this->_attributeConfig->getAttributeNames('sales_quote_item');
+        return $this->_attributeConfig->getAttributeNames('quote_item');
     }
 }

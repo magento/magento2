@@ -35,7 +35,7 @@ class Quote extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('sales_quote', 'entity_id');
+        $this->_init('quote', 'entity_id');
     }
 
     /**
@@ -181,9 +181,9 @@ class Quote extends AbstractDb
      */
     public function markQuotesRecollectOnCatalogRules()
     {
-        $tableQuote = $this->getTable('sales_quote');
+        $tableQuote = $this->getTable('quote');
         $subSelect = $this->_getReadAdapter()->select()->from(
-            ['t2' => $this->getTable('sales_quote_item')],
+            ['t2' => $this->getTable('quote_item')],
             ['entity_id' => 'quote_id']
         )->from(
             ['t3' => $this->getTable('catalogrule_product_price')],
@@ -231,7 +231,7 @@ class Quote extends AbstractDb
                 'items_count' => new \Zend_Db_Expr($adapter->quoteIdentifier('q.items_count') . ' - 1')
             ]
         )->join(
-            ['qi' => $this->getTable('sales_quote_item')],
+            ['qi' => $this->getTable('quote_item')],
             implode(
                 ' AND ',
                 [
@@ -243,7 +243,7 @@ class Quote extends AbstractDb
             []
         );
 
-        $updateQuery = $adapter->updateFromSelect($subSelect, ['q' => $this->getTable('sales_quote')]);
+        $updateQuery = $adapter->updateFromSelect($subSelect, ['q' => $this->getTable('quote')]);
 
         $adapter->query($updateQuery);
 
@@ -258,8 +258,8 @@ class Quote extends AbstractDb
      */
     public function markQuotesRecollect($productIds)
     {
-        $tableQuote = $this->getTable('sales_quote');
-        $tableItem = $this->getTable('sales_quote_item');
+        $tableQuote = $this->getTable('quote');
+        $tableItem = $this->getTable('quote_item');
         $subSelect = $this->_getReadAdapter()->select()->from(
             $tableItem,
             ['entity_id' => 'quote_id']

@@ -82,7 +82,7 @@ $installer->getConnection()->createTable($table);
  *
  */
 $installer->getConnection()->addColumn(
-    $installer->getTable('sales_quote'),
+    $installer->getTable('quote'),
     'is_persistent',
     [
         'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,

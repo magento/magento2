@@ -34,6 +34,6 @@ class Payment extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('sales_quote_payment', 'payment_id');
+        $this->_init('quote_payment', 'payment_id');
     }
 }

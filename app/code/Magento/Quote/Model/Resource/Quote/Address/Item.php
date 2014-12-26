@@ -20,6 +20,6 @@ class Item extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('sales_quote_address_item', 'address_item_id');
+        $this->_init('quote_address_item', 'address_item_id');
     }
 }

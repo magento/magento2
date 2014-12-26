@@ -18,6 +18,6 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('sales_quote_item_option', 'option_id');
+        $this->_init('quote_item_option', 'option_id');
     }
 }

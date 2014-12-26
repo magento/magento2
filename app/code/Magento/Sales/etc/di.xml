@@ -95,7 +95,7 @@
     <type name="Magento\Catalog\Helper\Product\Flat\Indexer">
         <arguments>
             <argument name="flatAttributeGroups" xsi:type="array">
-                <item name="sales_quote_item" xsi:type="string">sales_quote_item</item>
+                <item name="quote_item" xsi:type="string">quote_item</item>
             </argument>
         </arguments>
     </type>
