@@ -11,6 +11,7 @@
       "magento/module-core": "0.42.0-beta1",
       "magento/module-checkout": "0.42.0-beta1",
       "magento/module-theme": "0.42.0-beta1",
+      "magento/module-sales": "0.42.0-beta1",
       "magento/module-sales-rule": "0.42.0-beta1",
       "magento/module-backend": "0.42.0-beta1",
       "magento/module-widget": "0.42.0-beta1",

@@ -5,6 +5,7 @@
         "php": "~5.4.11|~5.5.0",
         "magento/module-store": "0.42.0-beta1",
         "magento/module-sales": "0.42.0-beta1",
+        "magento/module-quote": "0.42.0-beta1",
         "magento/module-authorization": "0.42.0-beta1",
         "magento/module-catalog-inventory": "0.42.0-beta1",
         "magento/module-core": "0.42.0-beta1",

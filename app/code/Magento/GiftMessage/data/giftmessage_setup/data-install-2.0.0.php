@@ -8,19 +8,25 @@ $installer = $this;
 /**
  * Add 'gift_message_id' attributes for entities
  */
-$entities = ['quote', 'quote_address', 'quote_item', 'quote_address_item', 'order', 'order_item'];
+
 $options = ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER, 'visible' => false, 'required' => false];
+$entities = ['quote', 'quote_address', 'quote_item', 'quote_address_item'];
 foreach ($entities as $entity) {
-    $installer->addAttribute($entity, 'gift_message_id', $options);
+    $installer->createQuoteSetup(
+        ['resourceName' => 'quote_setup']
+    )->addAttribute($entity, 'gift_message_id', $options);
 }
 
+$salesSetup = $installer->createSalesSetup(['resourceName' => 'sales_setup']);
+$salesSetup->addAttribute('order', 'gift_message_id', $options);
+$salesSetup->addAttribute('order_item', 'gift_message_id', $options);
 /**
  * Add 'gift_message_available' attributes for entities
  */
-$installer->addAttribute('order_item', 'gift_message_available', $options);
-$installer->createGiftMessageSetup(
-    ['resourceName' => 'catalog_setup']
-)->addAttribute(
+$salesSetup->addAttribute('order_item', 'gift_message_available', $options);
+
+$catalogSetup = $installer->createCatalogSetup(['resourceName' => 'catalog_setup']);
+$catalogSetup->addAttribute(
     \Magento\Catalog\Model\Product::ENTITY,
     'gift_message_available',
     [
@@ -44,14 +50,14 @@ $installer->createGiftMessageSetup(
 /** @var $this \Magento\GiftMessage\Model\Resource\Setup */
 
 $groupName = 'Autosettings';
-$entityTypeId = $this->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
-$attributeSetId = $this->getAttributeSetId($entityTypeId, 'Default');
+$entityTypeId = $catalogSetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
+$attributeSetId = $catalogSetup->getAttributeSetId($entityTypeId, 'Default');
 
-$attribute = $this->getAttribute($entityTypeId, 'gift_message_available');
+$attribute = $catalogSetup->getAttribute($entityTypeId, 'gift_message_available');
 if ($attribute) {
-    $this->addAttributeToGroup($entityTypeId, $attributeSetId, $groupName, $attribute['attribute_id'], 60);
+    $catalogSetup->addAttributeToGroup($entityTypeId, $attributeSetId, $groupName, $attribute['attribute_id'], 60);
 }
 
-if (!$this->getAttributesNumberInGroup($entityTypeId, $attributeSetId, 'Gift Options')) {
-    $this->removeAttributeGroup($entityTypeId, $attributeSetId, 'Gift Options');
+if (!$catalogSetup->getAttributesNumberInGroup($entityTypeId, $attributeSetId, 'Gift Options')) {
+    $catalogSetup->removeAttributeGroup($entityTypeId, $attributeSetId, 'Gift Options');
 }

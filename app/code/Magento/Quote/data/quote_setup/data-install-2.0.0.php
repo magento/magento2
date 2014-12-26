@@ -8,9 +8,6 @@
 /**
  * Install eav entity types to the eav/entity_type table
  */
-$this->installEntities();
-
-$entitiesToAlter = ['quote_address'];
 
 $attributes = [
     'vat_id' => ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT],
@@ -20,8 +17,6 @@ $attributes = [
     'vat_request_success' => ['type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT],
 ];
 
-foreach ($entitiesToAlter as $entityName) {
-    foreach ($attributes as $attributeCode => $attributeParams) {
-        $this->addAttribute($entityName, $attributeCode, $attributeParams);
-    }
+foreach ($attributes as $attributeCode => $attributeParams) {
+    $this->addAttribute('quote_address', $attributeCode, $attributeParams);
 }

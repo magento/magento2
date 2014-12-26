@@ -8,6 +8,7 @@
         "magento/module-checkout": "0.42.0-beta1",
         "magento/module-multishipping": "0.42.0-beta1",
         "magento/module-sales": "0.42.0-beta1",
+        "magento/module-quote": "0.42.0-beta1",
         "magento/module-backend": "0.42.0-beta1",
         "magento/module-core": "0.42.0-beta1",
         "magento/module-customer": "0.42.0-beta1",
