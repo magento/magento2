@@ -63,7 +63,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             $result['goto_section'] = 'payment';
             $result['update_section'] = ['name' => 'payment-method', 'html' => $this->_getPaymentMethodsHtml()];
         } catch (\Magento\Framework\Model\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_objectManager->get(
                 'Magento\Checkout\Helper\Data'
             )->sendPaymentFailedEmail(
@@ -91,7 +91,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
                 $this->getOnepage()->getCheckout()->setUpdateSection(null);
             }
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_objectManager->get(
                 'Magento\Checkout\Helper\Data'
             )->sendPaymentFailedEmail(

@@ -25,8 +25,8 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $loggerMock = $this->getMockBuilder('Magento\\Framework\\Logger')->disableOriginalConstructor()->getMock();
-        $loggerMock->expects($this->any())->method('logException')->will($this->returnSelf());
+        $loggerMock = $this->getMockBuilder('Psr\\Log\\LoggerInterface')->disableOriginalConstructor()->getMock();
+        $loggerMock->expects($this->any())->method('critical')->will($this->returnSelf());
         $this->_service = $objectManager->create(
             'Magento\Integration\Service\V1\AuthorizationService',
             [

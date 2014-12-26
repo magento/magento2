@@ -27,7 +27,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->_menuMock = $this->getMock(
             'Magento\Backend\Model\Menu',
             [],
-            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+            [$this->getMock('Psr\Log\LoggerInterface')]
         );
 
         $this->_model = new \Magento\Backend\Model\Menu\Builder($this->_factoryMock, $this->_menuMock);
