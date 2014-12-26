@@ -809,15 +809,16 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function recursiveIntval(array $array)
     {
-        foreach($array as $key => $value) {
+        foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $array[$key] = $this->recursiveIntval($value);
             } elseif (is_numeric($value) && (int)$value != 0) {
-                $array[$key] = (int) $value;
+                $array[$key] = (int)$value;
             } else {
                 unset($array[$key]);
             }
         }
+
         return $array;
     }
 
@@ -828,13 +829,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function multiToOFlatArray(array $array)
     {
         $flatArray = [];
-        foreach($array as $key => $value) {
+        foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $flatArray = array_merge($flatArray, $this->multiToOFlatArray($value));
             } else {
                 $flatArray[$key] = $value;
             }
         }
+
         return $flatArray;
     }
 
