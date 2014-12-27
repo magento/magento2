@@ -136,25 +136,25 @@ class Variable extends \Magento\Framework\Model\AbstractModel
         return __('Validation has failed.');
     }
 
-     /* Retrieve translation option
-     *
+    /** 
+     * Retrieve translation option
      * @param bool $withGroup
      * @return array
      */
-     public function getTranslateVariablesOptionArray($withGroup = false)
-     {
-        $optionArray[] = array(
+    public function getTranslateVariablesOptionArray($withGroup = false)
+    {
+        $optionArray[] = [
             'value' => '{{translate text=""}}',
             'label' => "Translate string"
-        );
+        ];
         if ($withGroup && $optionArray) {
-            $optionArray = array(
+            $optionArray = [
                 'label' => __('Translation'),
                 'value' => $optionArray
-            );
+            ];
         }
         return $optionArray;
-     }
+    }
 
     /**
      * Retrieve variables option array

@@ -120,5 +120,4 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         $text = $params['text'];
         return __($text);
     }
-
 }
