@@ -13,7 +13,7 @@ class WysiwygPlugin extends \Magento\Backend\Controller\Adminhtml\System\Variabl
      * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
-    {   
+    {
         $objectManager = $this->_objectManager->create('Magento\Core\Model\Variable');
         $customVariables = $objectManager->getVariablesOptionArray(true);
         $storeContactVariabls = $this->_objectManager->create(
