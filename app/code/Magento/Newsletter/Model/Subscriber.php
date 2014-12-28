@@ -583,7 +583,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
                 }
             } catch (MailException $e) {
                 // If we are not able to send a new account email, this should be ignored
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
         return $this;

@@ -53,7 +53,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomerFieldFromSession($field, $value)
     {
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
         /** @var $session \Magento\Customer\Model\Session */
         $session = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session', [$logger]);
         /** @var \Magento\Customer\Api\AccountManagementInterface $service */

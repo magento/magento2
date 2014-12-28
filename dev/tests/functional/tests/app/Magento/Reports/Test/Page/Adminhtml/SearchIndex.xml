@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<page mca="reports/index/search" module="Magento_Reports">
+<page mca="search/term/report/" module="Magento_Reports">
     <blocks>
         <searchGrid>
             <class>Magento\Reports\Test\Block\Adminhtml\SearchTermsGrid</class>

@@ -4,7 +4,7 @@
  */
 namespace Magento\TestFramework\ErrorLog;
 
-class Logger extends \Magento\Framework\Logger
+class Logger extends \Magento\Framework\Logger\Monolog
 {
     /** @var array */
     protected $messages = [];
@@ -18,14 +18,10 @@ class Logger extends \Magento\Framework\Logger
      */
     protected $minimumErrorLevel;
 
-    /**
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param string $defaultFile
-     */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, $defaultFile = '')
+    public function __construct()
     {
-        parent::__construct($filesystem, $defaultFile);
         $this->minimumErrorLevel = defined('TESTS_ERROR_LOG_LISTENER_LEVEL') ? TESTS_ERROR_LOG_LISTENER_LEVEL : -1;
+        parent::__construct('integration-test');
     }
 
     /**
@@ -42,22 +38,5 @@ class Logger extends \Magento\Framework\Logger
     public function getMessages()
     {
         return $this->messages;
-    }
-
-    /**
-     * @param string $message
-     * @param int $level
-     * @param string $loggerKey
-     */
-    public function log($message, $level = \Zend_Log::DEBUG, $loggerKey = \Magento\Framework\Logger::LOGGER_SYSTEM)
-    {
-        if ($level <= $this->minimumErrorLevel) {
-            $this->messages[] = [
-                'logger' => $loggerKey,
-                'level' => $level,
-                'message' => $message,
-            ];
-        }
-        parent::log($message, $level, $loggerKey);
     }
 }

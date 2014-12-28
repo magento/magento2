@@ -21,7 +21,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Data\Collection\EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $entityFactoryMock;
 
-    /** @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $loggerMock;
 
     /** @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -45,7 +45,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactoryInterface');
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->fetchStrategyMock = $this->getMock('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
         $this->managerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);

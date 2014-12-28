@@ -33,7 +33,7 @@ class FinalPriceBox extends BasePriceBox
             /** @var MsrpPrice $msrpPriceType */
             $msrpPriceType = $this->getSaleableItem()->getPriceInfo()->getPrice('msrp_price');
         } catch (\InvalidArgumentException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             return $this->wrapResult($result);
         }
 

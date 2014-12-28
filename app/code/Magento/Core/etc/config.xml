@@ -19,11 +19,6 @@
             <debug>
                 <profiler>0</profiler>
             </debug>
-            <log>
-                <active>0</active>
-                <file>system.log</file>
-                <exception_file>exception.log</exception_file>
-            </log>
             <js>
                 <merge_files>0</merge_files>
                 <minify_files>0</minify_files>

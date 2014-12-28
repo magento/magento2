@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+
+<fixture>
+    <install module="Magento_Install">
+        <type>virtual</type>
+        <entity_type>install</entity_type>
+        <fields>
+            <dbHost>
+                <attribute_code>dbHost</attribute_code>
+                <backend_type>virtual</backend_type>
+            </dbHost>
+            <dbUser>
+                <attribute_code>dbUser</attribute_code>
+                <backend_type>virtual</backend_type>
+            </dbUser>
+            <dbPassword>
+                <attribute_code>dbPassword</attribute_code>
+                <backend_type>virtual</backend_type>
+            </dbPassword>
+            <dbname>
+                <attribute_code>dbname</attribute_code>
+                <backend_type>virtual</backend_type>
+            </dbname>
+            <web>
+                <attribute_code>web</attribute_code>
+                <backend_type>virtual</backend_type>
+            </web>
+        </fields>
+    </install>
+</fixture>

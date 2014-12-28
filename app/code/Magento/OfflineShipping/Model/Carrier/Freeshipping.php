@@ -36,7 +36,7 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param array $data
@@ -44,14 +44,14 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         array $data = []
     ) {
         $this->_rateResultFactory = $rateResultFactory;
         $this->_rateMethodFactory = $rateMethodFactory;
-        parent::__construct($scopeConfig, $rateErrorFactory, $logAdapterFactory, $data);
+        parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
     }
 
     /**
