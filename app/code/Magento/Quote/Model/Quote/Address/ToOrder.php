@@ -23,6 +23,10 @@ class ToOrder
      */
     protected $orderBuilder;
 
+    /**
+     * @param OrderBuilder $orderBuilder
+     * @param \Magento\Framework\Object\Copy $objectCopyService
+     */
     public function __construct(
         OrderBuilder $orderBuilder,
         \Magento\Framework\Object\Copy $objectCopyService
@@ -38,7 +42,7 @@ class ToOrder
     public function convert(\Magento\Quote\Model\Quote\Address $object, $data = [])
     {
         $orderData = $this->objectCopyService->getDataFromFieldset(
-            'sales_convert_quote_address',
+            'quote_convert_address',
             'to_order',
             $object
         );

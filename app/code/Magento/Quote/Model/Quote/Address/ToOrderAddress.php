@@ -13,20 +13,26 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
  */
 class ToOrderAddress
 {
-    protected $fields = [
-        'prefix', 'firstname', 'middlename', 'lastname', 'suffix', 'company', 'street', 'street', 'city',
-        'region', 'region_id', 'postcode', 'country_id', 'telephone', 'fax', 'email', 'customer_address_id'
-    ];
+    /**
+     * @var \Magento\Framework\Object\Copy
+     */
+    protected $objectCopyService;
 
     /**
      * @var OrderAddressBuilder|\Magento\Framework\Api\Builder
      */
     protected $orderAddressBuilder;
 
+    /**
+     * @param OrderAddressBuilder $orderAddressBuilder
+     * @param \Magento\Framework\Object\Copy $objectCopyService
+     */
     public function __construct(
-        OrderAddressBuilder $orderAddressBuilder
+        OrderAddressBuilder $orderAddressBuilder,
+        \Magento\Framework\Object\Copy $objectCopyService
     ) {
         $this->orderAddressBuilder = $orderAddressBuilder;
+        $this->objectCopyService = $objectCopyService;
     }
 
     /**
@@ -35,8 +41,14 @@ class ToOrderAddress
      */
     public function convert(\Magento\Quote\Model\Quote\Address $object, $data = [])
     {
+        $orderAddressData = $this->objectCopyService->getDataFromFieldset(
+            'quote_convert_address',
+            'to_order_address',
+            $object
+        );
+
         return $this->orderAddressBuilder
-            ->populateWithArray(array_merge(array_intersect_key($object->getData(), array_flip($this->fields)), $data))
+            ->populateWithArray($orderAddressData, $data)
             ->create();
     }
 }
