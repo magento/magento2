@@ -159,9 +159,19 @@ class QuoteManagement
      */
     protected function resolveItems(QuoteEntity $quote)
     {
+////        $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item_id' => $parentItem]);
+//
+//        foreach ($quote->getAllItems() as $item) {
+//            $orderItem = $this->_convertor->itemToOrderItem($item);
+//            if ($item->getParentItem()) {
+//                $orderItem->setParentItem($order->getItemByQuoteItemId($item->getParentItem()->getId()));
+//            }
+//            $order->addItem($orderItem);
+//        }
+//
         $quoteItems = $quote->getAllItems();
         for($i = 0; $i < count($quoteItems) - 1; $i++) {
-            for ($j = 0; $i < count($quoteItems) - $i - 1; $j++) {
+            for ($j = 0; $j < count($quoteItems) - $i - 1; $j++) {
                 if ($quoteItems[$i]->getId() == $quoteItems[$j]->getParentItemId()) {
                     $quote = $quoteItems[$i];
                     $quoteItems[$i] = $quoteItems[$j];
