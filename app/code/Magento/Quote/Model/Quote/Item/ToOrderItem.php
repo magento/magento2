@@ -5,6 +5,7 @@
 
 namespace Magento\Quote\Model\Quote\Item;
 
+use Magento\Framework\Object\Copy;
 use Magento\Sales\Api\Data\OrderItemDataBuilder as OrderItemBuilder;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
@@ -13,13 +14,10 @@ use Magento\Sales\Api\Data\OrderItemInterface;
  */
 class ToOrderItem
 {
-    protected $fields = [
-        'sku', 'name', 'description', 'weight', 'is_qty_decimal', 'qty', 'is_virtual', 'original_price',
-        'applied_rule_ids', 'additional_data', 'calculation_price', 'base_calculation_price', 'tax_percent',
-        'tax_amount', 'tax_before_discount', 'base_tax_before_discount',  'tax_string',  'row_weight',  'row_total',
-        'base_original_price', 'base_tax_amount', 'base_row_total', 'discount_percent', 'discount_amount',
-        'base_discount_amount', 'base_cost', 'store_id', 'hidden_tax_amount', 'base_hidden_tax_amount', 'is_nominal'
-    ];
+    /**
+     * @var Copy
+     */
+    protected $objectCopyService;
 
     /**
      * @var OrderItemBuilder|\Magento\Framework\Api\Builder
@@ -28,11 +26,14 @@ class ToOrderItem
 
     /**
      * @param OrderItemBuilder $orderItemBuilder
+     * @param Copy $objectCopyService
      */
     public function __construct(
-        OrderItemBuilder $orderItemBuilder
+        OrderItemBuilder $orderItemBuilder,
+        Copy $objectCopyService
     ) {
         $this->orderItemBuilder = $orderItemBuilder;
+        $this->objectCopyService = $objectCopyService;
     }
 
     /**
@@ -41,11 +42,14 @@ class ToOrderItem
      */
     public function convert(\Magento\Quote\Model\Quote\Item $object, $data = [])
     {
+        $orderItemData = $this->objectCopyService->getDataFromFieldset(
+            'quote_convert_item',
+            'to_order_item',
+            $object
+        );
+
         return $this->orderItemBuilder
-            ->populateWithArray(array_merge(array_intersect_key($object->getData(), array_flip($this->fields)), $data))
-            ->setQtyOrdered($object->getQty())
-            ->setPrice($object->getCalculationPrice())
-            ->setBasePrice($object->getBaseCalculationPrice())
+            ->populateWithArray(array_merge($orderItemData, $data))
             ->create();
     }
 }
