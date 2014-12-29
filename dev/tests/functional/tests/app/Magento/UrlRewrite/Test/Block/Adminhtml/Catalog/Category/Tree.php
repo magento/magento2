@@ -29,7 +29,7 @@ class Tree extends Block
      */
     public function selectCategory($category)
     {
-        if ($category && $category->hasData('name')) {
+        if ($category != null && $category->hasData('name')) {
             $this->_rootElement->find("//a[contains(text(),'{$category->getName()}')]", Locator::SELECTOR_XPATH)->click();
         } else {
             $this->skipCategorySelection();

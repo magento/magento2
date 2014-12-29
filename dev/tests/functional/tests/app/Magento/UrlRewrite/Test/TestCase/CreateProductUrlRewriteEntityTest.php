@@ -78,8 +78,9 @@ class CreateProductUrlRewriteEntityTest extends Injectable
         $this->urlRewriteIndex->getPageActionsBlock()->addNew();
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getProductGridBlock()->searchAndOpen($filter);
-        $category = is_object($product->getDataFieldConfig('category_ids')['source']) ?
-            $product->getDataFieldConfig('category_ids')['source']->getCategories()[0] : null;
+        $category = $product->hasData('category_ids')
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
+            : null;
         $this->urlRewriteEdit->getTreeBlock()->selectCategory($category);
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getPageMainActions()->save();
