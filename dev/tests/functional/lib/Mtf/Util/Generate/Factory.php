@@ -6,7 +6,7 @@
 namespace Mtf\Util\Generate;
 
 use Magento\Framework\App;
-use Magento\Framework\ObjectManagerInterface;
+use Mtf\ObjectManagerInterface;
 
 /**
  * Class Factory
@@ -17,7 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 class Factory extends AbstractGenerate
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Mtf\ObjectManagerInterface
      */
     protected $objectManager;
 
