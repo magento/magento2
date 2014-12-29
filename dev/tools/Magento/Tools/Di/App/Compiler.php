@@ -73,7 +73,10 @@ class Compiler implements \Magento\Framework\AppInterface
                 BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
             ],
             Task\OperationFactory::PLUGINS =>
-                BP . '/app'
+                BP . '/app',
+            Task\OperationFactory::INTERCEPTION_CACHE => [
+                BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
+            ]
         ];
 
         $responseCode = Response::SUCCESS;

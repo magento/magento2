@@ -34,6 +34,11 @@ class OperationFactory
     const PLUGINS = 'plugins';
 
     /**
+     * Interception cache
+     */
+    const INTERCEPTION_CACHE = 'interception_cache';
+
+    /**
      * Operations definitions
      *
      * @var array
@@ -43,6 +48,7 @@ class OperationFactory
         self::INTERCEPTION => 'Magento\Tools\Di\App\Task\Operation\Interception',
         self::RELATIONS => 'Magento\Tools\Di\App\Task\Operation\Relations',
         self::PLUGINS => 'Magento\Tools\Di\App\Task\Operation\Plugins',
+        self::INTERCEPTION_CACHE => 'Magento\Tools\Di\App\Task\Operation\InterceptionCache',
     ];
 
     /**
