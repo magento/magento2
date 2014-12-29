@@ -6,7 +6,7 @@
 namespace Mtf\Util\Generate\Fixture;
 
 use Magento\Framework\App\Resource;
-use Mtf\ObjectManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class FieldsProvider
@@ -26,7 +26,7 @@ class FieldsProvider implements FieldsProviderInterface
 
     /**
      * @constructor
-     * @param \Mtf\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
