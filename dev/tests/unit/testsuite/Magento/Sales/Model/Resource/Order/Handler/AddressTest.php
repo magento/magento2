@@ -86,8 +86,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->orderMock->expects($this->exactly(2))
             ->method('getAddresses')
-            ->willReturn([$this->addressCollectionMock]);
-        $this->addressCollectionMock->expects($this->once())
+            ->willReturn([$this->addressMock]);
+        $this->addressMock->expects($this->once())
             ->method('save')
             ->will($this->returnSelf());
         $this->orderMock->expects($this->once())
@@ -119,8 +119,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->orderMock->expects($this->exactly(2))
             ->method('getAddresses')
-            ->willReturn([$this->addressCollectionMock]);
-        $this->addressCollectionMock->expects($this->once())
+            ->willReturn([$this->addressMock]);
+        $this->addressMock->expects($this->once())
             ->method('save')
             ->will($this->returnSelf());
         $this->orderMock->expects($this->once())
