@@ -1929,7 +1929,7 @@ return [
     ['setTablePrefix', 'Magento\Framework\App\Magento\Framework\App\Resource', 'Can be passed through constructor only'],
     ['_debugTimer', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\LoggerAbstract::startTimer'],
     ['_debugStat', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::logStats'],
-    ['_debugException', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::logException'],
+    ['_debugException', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::critical'],
     ['_debugWriteToFile', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::log'],
     ['applyDataUpdates', 'Magento\Framework\Module\Setup', 'Magento\Framework\Module\DataSetup::applyDataUpdates'],
     ['_installData', 'Magento\Framework\Module\Setup', 'Magento\Framework\Module\DataSetup::_installData'],
@@ -2001,6 +2001,11 @@ return [
     ['getScriptTranslation', 'Magento\Framework\LocaleInterface'],
     ['getCountryTranslation', 'Magento\Framework\LocaleInterface'],
     ['getTerritoryTranslation', 'Magento\Framework\LocaleInterface'],
+    [
+        'getNoteNotify',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Comment',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Totals'
+    ],
     ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
     ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
     ['cleanTransactions', 'Magento\Paypal\Model\Observer']

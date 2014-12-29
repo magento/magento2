@@ -19,18 +19,18 @@ class Structure extends DataStructure
     protected $_nameIncrement = [];
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $elements
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         array $elements = null
     ) {
         $this->logger = $logger;
@@ -108,10 +108,9 @@ class Structure extends DataStructure
             if ($childName !== $sibling) {
                 $siblingParentName = $this->getParentId($sibling);
                 if ($parentName !== $siblingParentName) {
-                    $this->logger->log(
+                    $this->logger->info(
                         "Broken reference: the '{$childName}' tries to reorder itself towards '{$sibling}', but " .
-                        "their parents are different: '{$parentName}' and '{$siblingParentName}' respectively.",
-                        \Zend_Log::CRIT
+                        "their parents are different: '{$parentName}' and '{$siblingParentName}' respectively."
                     );
                     return;
                 }

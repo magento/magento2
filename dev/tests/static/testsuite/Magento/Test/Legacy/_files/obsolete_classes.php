@@ -1724,7 +1724,7 @@ return [
     ['Magento\Adminhtml\Block\Report\Wishlist', 'Magento\Reports\Block\Adminhtml\Wishlist'],
     ['Magento\Backend\Helper\Addresses'],
     ['Magento\Core\Model\Cookie', 'Magento\Framework\Stdlib\Cookie'],
-    ['Magento\Core\Model\Logger', 'Magento\Framework\Logger'],
+    ['Magento\Core\Model\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Core\Block\Template\Context', 'Magento\Framework\View\Element\Template\Context'],
     ['Magento\Page\Block\Template\Container'],
     ['Magento\Page\Block\Redirect', 'Magento\Framework\View\Element\Redirect'],
@@ -2331,7 +2331,7 @@ return [
     ['Magento\LocaleFactory', 'Magento\Framework\LocaleFactory'],
     ['Magento\Integration\Model\Oauth\Token\Factory', 'Magento\Integration\Model\Oauth\TokenFactory'],
     ['Magento\LocaleInterface', 'Magento\Framework\LocaleInterface'],
-    ['Magento\Logger', 'Magento\Framework\Logger'],
+    ['Magento\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Phrase', 'Magento\Framework\Phrase'],
     ['Magento\Pear', 'Magento\Framework\Pear'],
     [
@@ -2843,4 +2843,5 @@ return [
     ['Magento\Rule\Model\Rule', 'Magento\Rule\Model\AbstractModel'],
     ['Magento\Framework\App\Cache\State\Options', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\App\Cache\State\OptionsInterface', 'Magento\Framework\App\Cache\State'],
+    ['Magento\Framework\Logger', 'Psr\Log\LoggerInterface'],
 ];

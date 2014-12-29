@@ -119,7 +119,6 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_logMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
         $this->_sidResolverMock = $this->getMock(
             '\Magento\Framework\Session\SidResolverInterface',
             [],
@@ -138,7 +137,6 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->helper->getObject('Magento\Store\Model\StorageFactory', [
             'objectManager' => $this->_objectManagerMock,
             'eventManager' => $this->_eventManagerMock,
-            'logger' => $this->_logMock,
             'sidResolver' => $this->_sidResolverMock,
             'appState' => $this->_appStateMock,
             'httpContext' => $this->_httpContext,
@@ -183,7 +181,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
 
-        $this->_storeManager->expects($this->exactly(3))->method('getStore')->will($this->returnValue($store));
+        $this->_storeManager->expects($this->exactly(2))->method('getStore')->will($this->returnValue($store));
 
         $this->_scopeConfig->expects(
             $this->at(0)
@@ -191,17 +189,6 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             'isSetFlag'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue(true)
-        );
-
-        $this->_scopeConfig->expects(
-            $this->at(1)
-        )->method(
-            'isSetFlag'
-        )->with(
-            'dev/log/active',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue(true)
@@ -225,8 +212,6 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             'core_app_init_current_store_after'
         );
 
-        $this->_logMock->expects($this->once())->method('unsetLoggers');
-        $this->_logMock->expects($this->exactly(2))->method('addStreamLog');
 
         $this->_sidResolverMock->expects($this->once())->method('setUseSessionInUrl')->with(true);
 
@@ -255,7 +240,6 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
-        $this->_logMock->expects($this->never())->method('initForStore');
         $this->_sidResolverMock->expects($this->never())->method('setUseSessionInUrl');
 
         /** test create instance */
