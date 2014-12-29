@@ -245,5 +245,52 @@
                 <aspect name="to_order_item" />
             </field>
         </fieldset>
+        <fieldset id="quote_convert_payment">
+            <field name="method">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="additional_data">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="additional_information">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="po_number">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_type">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_number_enc">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_last_4">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_owner">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_exp_month">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_exp_year">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_number">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_cid">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_ss_issue">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_ss_start_month">
+                <aspect name="to_order_payment" />
+            </field>
+            <field name="cc_ss_start_year">
+                <aspect name="to_order_payment" />
+            </field>
+        </fieldset>
     </scope>
 </config>

@@ -6,6 +6,7 @@
 namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Framework\Object\Copy;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Api\Data\OrderItemDataBuilder as OrderItemBuilder;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
@@ -37,10 +38,11 @@ class ToOrderItem
     }
 
     /**
+     * @param Item $object
      * @param array $data
      * @return OrderItemInterface
      */
-    public function convert(\Magento\Quote\Model\Quote\Item $object, $data = [])
+    public function convert(Item $object, $data = [])
     {
         $orderItemData = $this->objectCopyService->getDataFromFieldset(
             'quote_convert_item',

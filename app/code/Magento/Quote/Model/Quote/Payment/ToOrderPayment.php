@@ -5,39 +5,53 @@
 
 namespace Magento\Quote\Model\Quote\Payment;
 
+use Magento\Quote\Model\Quote\Payment;
 use Magento\Sales\Api\Data\OrderPaymentDataBuilder as OrderPaymentBuilder;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Framework\Object\Copy;
 
 /**
  * Class ToOrderPayment
  */
 class ToOrderPayment
 {
-    protected $fields = [
-        'method', 'additional_data', 'additional_information', 'po_number', 'cc_type', 'cc_number_enc', 'cc_last_4',
-        'cc_owner', 'cc_exp_month', 'cc_exp_year', 'cc_number', 'cc_cid', 'cc_ss_issue', 'cc_ss_start_month',
-        'cc_ss_start_year'
-    ];
+    /**
+     * @var Copy
+     */
+    protected $objectCopyService;
 
     /**
      * @var OrderPaymentBuilder|\Magento\Framework\Api\Builder
      */
     protected $orderPaymentBuilder;
 
+    /**
+     * @param OrderPaymentBuilder $orderPaymentBuilder
+     * @param Copy $objectCopyService
+     */
     public function __construct(
-        OrderPaymentBuilder $orderPaymentBuilder
+        OrderPaymentBuilder $orderPaymentBuilder,
+        Copy $objectCopyService
     ) {
         $this->orderPaymentBuilder = $orderPaymentBuilder;
+        $this->objectCopyService = $objectCopyService;
     }
 
     /**
+     * @param Payment $object
      * @param array $data
      * @return OrderPaymentInterface
      */
-    public function convert(\Magento\Quote\Model\Quote\Payment $object, $data = [])
+    public function convert(Payment $object, $data = [])
     {
+        $paymentData = $this->objectCopyService->getDataFromFieldset(
+            'quote_convert_payment',
+            'to_order_payment',
+            $object
+        );
+
         return $this->orderPaymentBuilder
-            ->populateWithArray(array_merge(array_intersect_key($object->getData(), array_flip($this->fields)), $data))
+            ->populateWithArray(array_merge($paymentData, $data))
             ->create();
     }
 }

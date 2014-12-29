@@ -5,6 +5,8 @@
 
 namespace Magento\Quote\Model\Quote\Address;
 
+use Magento\Framework\Object\Copy;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Api\Data\OrderAddressDataBuilder as OrderAddressBuilder;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 
@@ -14,7 +16,7 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
 class ToOrderAddress
 {
     /**
-     * @var \Magento\Framework\Object\Copy
+     * @var Copy
      */
     protected $objectCopyService;
 
@@ -25,21 +27,22 @@ class ToOrderAddress
 
     /**
      * @param OrderAddressBuilder $orderAddressBuilder
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param Copy $objectCopyService
      */
     public function __construct(
         OrderAddressBuilder $orderAddressBuilder,
-        \Magento\Framework\Object\Copy $objectCopyService
+        Copy $objectCopyService
     ) {
         $this->orderAddressBuilder = $orderAddressBuilder;
         $this->objectCopyService = $objectCopyService;
     }
 
     /**
+     * @param Address $object
      * @param array $data
      * @return OrderAddressInterface
      */
-    public function convert(\Magento\Quote\Model\Quote\Address $object, $data = [])
+    public function convert(Address $object, $data = [])
     {
         $orderAddressData = $this->objectCopyService->getDataFromFieldset(
             'quote_convert_address',
