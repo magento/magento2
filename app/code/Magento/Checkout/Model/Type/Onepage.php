@@ -927,6 +927,8 @@ class Onepage
             $this->getQuote()->getId()
         )->setLastSuccessQuoteId(
             $this->getQuote()->getId()
+        )->setLastOrderId(
+            $order->getIncrementId()
         )->clearHelperData();
 
         if ($order) {
