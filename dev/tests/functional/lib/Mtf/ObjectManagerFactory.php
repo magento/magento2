@@ -5,11 +5,9 @@
 
 namespace Mtf;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Mtf\ObjectManagerInterface as MagentoObjectManager;
 use Mtf\Stdlib\BooleanUtils;
 use Mtf\ObjectManager\Factory;
-use Mtf\System\Config as SystemConfig;
 
 /**
  * Class ObjectManagerFactory
