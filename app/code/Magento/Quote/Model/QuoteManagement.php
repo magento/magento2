@@ -185,7 +185,7 @@ class QuoteManagement
             $parentItem = (isset($orderItems[$quoteItem->getParentItemId()])) ?
                 $orderItems[$quoteItem->getParentItemId()] : null;
             $orderItems[$quoteItem->getId()] =
-                $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item_id' => $parentItem]);
+                $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item' => $parentItem]);
         }
         return array_values($orderItems);
     }
