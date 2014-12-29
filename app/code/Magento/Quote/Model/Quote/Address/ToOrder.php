@@ -1,15 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: akaplya
- * Date: 23.12.14
- * Time: 19:30
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Quote\Model\Quote\Address;
 
 use Magento\Sales\Api\Data\OrderDataBuilder as OrderBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
+
 /**
  * Class ToOrder converter
  */

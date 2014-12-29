@@ -1,9 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: akaplya
- * Date: 23.12.14
- * Time: 20:53
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Quote\Model\Quote\Payment;
@@ -11,6 +8,9 @@ namespace Magento\Quote\Model\Quote\Payment;
 use Magento\Sales\Api\Data\OrderPaymentDataBuilder as OrderPaymentBuilder;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
+/**
+ * Class ToOrderPayment
+ */
 class ToOrderPayment
 {
     protected $fields = [

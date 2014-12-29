@@ -1,9 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: akaplya
- * Date: 23.12.14
- * Time: 20:53
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Quote\Model\Quote\Item;
@@ -11,6 +8,9 @@ namespace Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Api\Data\OrderItemDataBuilder as OrderItemBuilder;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
+/**
+ * Class ToOrderItem
+ */
 class ToOrderItem
 {
     protected $fields = [
@@ -26,6 +26,9 @@ class ToOrderItem
      */
     protected $orderItemBuilder;
 
+    /**
+     * @param OrderItemBuilder $orderItemBuilder
+     */
     public function __construct(
         OrderItemBuilder $orderItemBuilder
     ) {

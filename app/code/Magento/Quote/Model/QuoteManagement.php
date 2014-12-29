@@ -61,11 +61,17 @@ class QuoteManagement
         $this->quotePaymentToOrderPayment = $quotePaymentToOrderPayment;
     }
 
+    /**
+     * @param Quote $quote
+     */
     protected function inactivateQuote(QuoteEntity $quote)
     {
         $quote->setIsActive(false);
     }
 
+    /**
+     * @param Quote $quote
+     */
     protected function deleteNominalItems(QuoteEntity $quote)
     {
         foreach ($quote->getAllVisibleItems() as $item) {
@@ -75,6 +81,10 @@ class QuoteManagement
         }
     }
 
+    /**
+     * @param Quote $quote
+     * @throws \Magento\Framework\Model\Exception
+     */
     public function submitNominalItems(QuoteEntity $quote)
     {
         $this->quoteValidator->validateBeforeSubmit($quote);
@@ -87,6 +97,12 @@ class QuoteManagement
         $this->deleteNominalItems($quote);
     }
 
+    /**
+     * @param Quote $quote
+     * @param array $orderData
+     * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object|void
+     * @throws \Exception
+     */
     public function submit(QuoteEntity $quote, $orderData = [])
     {
         try {
@@ -101,6 +117,10 @@ class QuoteManagement
         return $this->submitOrder($quote, $orderData);
     }
 
+    /**
+     * @param Quote $quote
+     * @return array
+     */
     protected function resolveItems(QuoteEntity $quote)
     {
         $quoteItems = $quote->getAllItems();
@@ -124,6 +144,13 @@ class QuoteManagement
         return array_values($orderItems);
     }
 
+    /**
+     * @param Quote $quote
+     * @param array $orderData
+     * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object
+     * @throws \Exception
+     * @throws \Magento\Framework\Model\Exception
+     */
     protected function submitOrder(QuoteEntity $quote, $orderData = [])
     {
         $this->deleteNominalItems($quote);

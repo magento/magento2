@@ -1,9 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: akaplya
- * Date: 23.12.14
- * Time: 20:30
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Quote\Model\Quote\Address;
@@ -11,6 +8,9 @@ namespace Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Api\Data\OrderAddressDataBuilder as OrderAddressBuilder;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 
+/**
+ * Class ToOrderAddress
+ */
 class ToOrderAddress
 {
     protected $fields = [
