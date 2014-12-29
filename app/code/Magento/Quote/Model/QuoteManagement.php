@@ -7,38 +7,74 @@ namespace Magento\Quote\Model;
 
 use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Framework\Event\ManagerInterface as EventManager;
-use Magento\Quote\Model\Quote\Address\ToOrderAddress;
-use Magento\Quote\Model\QuoteValidator;
 use Magento\Sales\Api\Data\OrderDataBuilder as OrderBuilder;
-use Magento\Sales\Api\Data\OrderItemDataBuilder as OrderItemBuilder;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Quote\Model\Quote\Address\ToOrder as ToOrderConverter;
 use Magento\Quote\Model\Quote\Address\ToOrderAddress as ToOrderAddressConverter;
 use Magento\Quote\Model\Quote\Item\ToOrderItem as ToOrderItemConverter;
-use Magento\Quote\Model\Quote\Payment\ToOrderPayment as ToOrderPaymentCoverter;
-use Magento\Quote\Model\CustomerManagement;
+use Magento\Quote\Model\Quote\Payment\ToOrderPayment as ToOrderPaymentConverter;
 
 /**
  * Class QuoteManagement
  */
 class QuoteManagement
 {
+    /**
+     * @var EventManager
+     */
     protected $eventManager;
+
+    /**
+     * @var QuoteValidator
+     */
     protected $quoteValidator;
+
     /**
      * @var OrderBuilder|\Magento\Framework\Api\Builder
      */
     protected $orderBuilder;
 
+    /**
+     * @var OrderManagement
+     */
     protected $orderManagement;
+
+    /**
+     * @var CustomerManagement
+     */
     protected $customerManagement;
 
+    /**
+     * @var ToOrderConverter
+     */
     protected $quoteAddressToOrder;
+
+    /**
+     * @var ToOrderAddressConverter
+     */
     protected $quoteAddressToOrderAddress;
+
+    /**
+     * @var ToOrderItemConverter
+     */
     protected $quoteItemToOrderItem;
+
+    /**
+     * @var ToOrderPaymentConverter
+     */
     protected $quotePaymentToOrderPayment;
 
-
+    /**
+     * @param EventManager $eventManagement
+     * @param QuoteValidator $quoteValidator
+     * @param OrderBuilder $orderBuilder
+     * @param OrderManagement $orderManagement
+     * @param CustomerManagement $customerManagement
+     * @param ToOrderConverter $quoteAddressToOrder
+     * @param ToOrderAddressConverter $quoteAddressToOrderAddress
+     * @param ToOrderItemConverter $quoteItemToOrderItem
+     * @param ToOrderPaymentConverter $quotePaymentToOrderPayment
+     */
     public function __construct(
         EventManager $eventManagement,
         QuoteValidator $quoteValidator,
@@ -48,7 +84,7 @@ class QuoteManagement
         ToOrderConverter $quoteAddressToOrder,
         ToOrderAddressConverter $quoteAddressToOrderAddress,
         ToOrderItemConverter $quoteItemToOrderItem,
-        ToOrderPaymentCoverter $quotePaymentToOrderPayment
+        ToOrderPaymentConverter $quotePaymentToOrderPayment
     ) {
         $this->eventManager = $eventManagement;
         $this->quoteValidator = $quoteValidator;
