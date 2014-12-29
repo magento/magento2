@@ -161,7 +161,7 @@ class QuoteManagement
     {
         $quoteItems = $quote->getAllItems();
         for($i = 0; $i < count($quoteItems) - 1; $i++) {
-            for ($j = 0; $i < count($quoteItems) - $i - 1; $j++) {
+            for ($j = 0; $j < count($quoteItems) - $i - 1; $j++) {
                 if ($quoteItems[$i]->getId() == $quoteItems[$j]->getParentItemId()) {
                     $quote = $quoteItems[$i];
                     $quoteItems[$i] = $quoteItems[$j];
@@ -175,7 +175,7 @@ class QuoteManagement
             $parentItem = (isset($orderItems[$quoteItem->getParentItemId()])) ?
                 $orderItems[$quoteItem->getParentItemId()] : null;
             $orderItems[$quoteItem->getId()] =
-                $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item_id' => $parentItem]);
+                $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item' => $parentItem]);
         }
         return array_values($orderItems);
     }
