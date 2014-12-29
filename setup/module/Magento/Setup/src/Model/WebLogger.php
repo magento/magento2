@@ -18,9 +18,9 @@ class WebLogger implements LoggerInterface
     /**
      * Log File
      *
-     * @const string
+     * @var string
      */
-    const LOG_WEB = 'install.log';
+    protected $logFile = 'install.log';
 
     /**
      * Currently open file resource
@@ -46,10 +46,14 @@ class WebLogger implements LoggerInterface
     /**
      * Constructor
      * @param Filesystem $filesystem
+     * @param string $logFile
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Filesystem $filesystem, $logFile = null)
     {
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::LOG);
+        if ($logFile) {
+            $this->logFile = $logFile;
+        }
     }
 
     /**
@@ -105,7 +109,7 @@ class WebLogger implements LoggerInterface
      */
     private function writeToFile($message)
     {
-        $this->directory->writeFile(self::LOG_WEB, $message, 'a+');
+        $this->directory->writeFile($this->logFile, $message, 'a+');
     }
 
     /**
@@ -115,7 +119,7 @@ class WebLogger implements LoggerInterface
      */
     public function get()
     {
-        $fileContents = explode('\n', $this->directory->readFile(self::LOG_WEB));
+        $fileContents = explode('\n', $this->directory->readFile($this->logFile));
         return $fileContents;
     }
 
@@ -126,8 +130,8 @@ class WebLogger implements LoggerInterface
      */
     public function clear()
     {
-        if ($this->directory->isExist(self::LOG_WEB)) {
-            $this->directory->delete(self::LOG_WEB);
+        if ($this->directory->isExist($this->logFile)) {
+            $this->directory->delete($this->logFile);
         }
     }
 
