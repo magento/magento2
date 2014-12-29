@@ -156,7 +156,7 @@ class OrderService implements OrderManagementInterface
         try {
 //            $order = $this->orderRepository->save($order);
             $order->place();
-            $this->orderRepository->save($order);
+            return $this->orderRepository->save($order);
 
             //commit
         } catch (\Exception $e) {
