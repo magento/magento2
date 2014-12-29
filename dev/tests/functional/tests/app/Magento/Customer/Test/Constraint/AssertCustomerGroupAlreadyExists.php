@@ -13,14 +13,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertCustomerGroupAlreadyExists extends AbstractConstraint
 {
-    const ERROR_MESSAGE = 'Customer Group already exists.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const ERROR_MESSAGE = 'Customer Group already exists.';
 
     /**
      * Assert that customer group already exist

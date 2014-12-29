@@ -6,8 +6,6 @@ define([
 ], function (Abstract) {
     'use strict';
 
-    var __super__ = Abstract.prototype;
-
     return Abstract.extend({
         /**
          * Converts the result of parent 'getInitialValue' call to boolean
@@ -15,9 +13,7 @@ define([
          * @return {Boolean}
          */
         getInititalValue: function(){
-            var value = __super__.getInititalValue.apply(this, arguments);
-
-            return !!+value;
+            return !!+this._super();
         },
 
         /**
@@ -28,7 +24,7 @@ define([
          * @return {Object} - reference to instance
          */
         store: function() {
-            __super__.store.apply(this, arguments);
+            this._super();
 
             if (this.hasUnique) {
                 this.setUnique();

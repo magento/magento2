@@ -64,6 +64,7 @@ class DeleteCategoryEntityTest extends Injectable
      */
     public function test(CatalogCategory $category)
     {
+        $this->markTestIncomplete('MAGETWO-31723');
         $category->persist();
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($category);

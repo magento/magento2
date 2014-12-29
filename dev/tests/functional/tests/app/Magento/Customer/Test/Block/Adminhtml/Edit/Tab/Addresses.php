@@ -22,14 +22,14 @@ class Addresses extends Tab
      *
      * @var string
      */
-    protected $addNewAddress = '#add_address_button';
+    protected $addNewAddress = '.address-list-actions .add';
 
     /**
      * Open customer address
      *
      * @var string
      */
-    protected $customerAddress = '//*[@id="address_list"]/li[%d]/a';
+    protected $customerAddress = '//*[contains(@class, "address-list-item")][%d]';
 
     /**
      * Magento loader

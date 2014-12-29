@@ -504,7 +504,7 @@ Developer,Developer
 "Translate, blocks and other output caches should be disabled for both frontend and admin inline translations.","Translate, blocks and other output caches should be disabled for both frontend and admin inline translations."
 "Log Settings","Log Settings"
 "System Log File Name","System Log File Name"
-"Logging from \Magento\Framework\Logger. File is located in {{base_dir}}/var/log","Logging from \Magento\Framework\Logger. File is located in {{base_dir}}/var/log"
+"Logging from \Psr\Log\LoggerInterface. File is located in {{base_dir}}/var/log","Logging from \Psr\Log\LoggerInterface. File is located in {{base_dir}}/var/log"
 "Exceptions Log File Name","Exceptions Log File Name"
 "JavaScript Settings","JavaScript Settings"
 "Merge JavaScript Files","Merge JavaScript Files"

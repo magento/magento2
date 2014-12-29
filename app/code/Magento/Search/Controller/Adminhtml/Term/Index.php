@@ -13,7 +13,7 @@ class Index extends \Magento\Search\Controller\Adminhtml\Term
     public function execute()
     {
         $resultPage = $this->createPage();
-        $resultPage->getPage()->getConfig()->getTitle()->prepend(__('Search Terms'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Search Terms'));
         $resultPage->addBreadcrumb(__('Search'), __('Search'));
         return $resultPage;
     }

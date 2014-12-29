@@ -16,6 +16,11 @@
             <locator>.page-title</locator>
             <strategy>css selector</strategy>
         </titleBlock>
+        <mainBlock>
+            <class>Magento\Backend\Test\Block\Page\Main</class>
+            <locator>.dashboard-main</locator>
+            <strategy>css selector</strategy>
+        </mainBlock>
         <menuBlock>
             <class>Magento\Backend\Test\Block\Menu</class>
             <locator>.navigation</locator>

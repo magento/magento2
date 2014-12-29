@@ -43,6 +43,13 @@ class Main extends Block
     protected $addGroupButton = '[data-ui-id="adminhtml-catalog-product-set-edit-add-group-button"]';
 
     /**
+     * Selector for note block element.
+     *
+     * @var string
+     */
+    protected $noteBlock = '.attribute-set .title';
+
+    /**
      * Move Attribute to Attribute Group
      *
      * @param array $attributeData
@@ -59,6 +66,9 @@ class Main extends Block
 
         $attributeGroupLocator = sprintf($this->groups, $attributeGroup);
         $target = $this->_rootElement->find($attributeGroupLocator, Locator::SELECTOR_XPATH);
+
+        $target->click(); // Handle small resolution screen issue
+        $this->browser->find($this->noteBlock)->click();
 
         $attributeLabelLocator = sprintf($this->attribute, $attribute);
         $this->_rootElement->find($attributeLabelLocator, Locator::SELECTOR_XPATH)->dragAndDrop($target);

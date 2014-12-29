@@ -9,6 +9,7 @@
 namespace Magento\Core\Model\Theme\Image;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Design\Theme\Image\PathInterface;
 
 class PathTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,11 +48,6 @@ class PathTest extends \PHPUnit_Framework_TestCase
         $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
 
         $this->mediaDirectory->expects($this->any())
-            ->method('getAbsolutePath')
-            ->with(\Magento\Framework\View\Design\Theme\Image\PathInterface::PREVIEW_DIRECTORY_PATH)
-            ->will($this->returnValue('/theme/preview'));
-
-        $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
             ->with('/theme/origin')
             ->will($this->returnValue('/theme/origin'));
@@ -69,33 +65,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
         $this->_model = new Path($this->filesystem, $this->_assetRepo, $this->_storeManager);
     }
 
-    public function testGetPreviewImageUrlPhysicalTheme()
-    {
-        $theme = $this->getGetTheme(true);
-
-        $this->_assetRepo->expects($this->any())
-            ->method('getUrlWithParams')
-            ->with($theme->getPreviewImage(), ['area' => $theme->getData('area'), 'themeModel' => $theme])
-            ->will($this->returnValue('http://localhost/theme/preview/image.png'));
-
-        $this->assertEquals('http://localhost/theme/preview/image.png', $this->model->getPreviewImageUrl($theme));
-    }
-
-    public function testGetPreviewImageUrlVirtualTheme()
-    {
-        $theme = $this->getGetTheme(false);
-
-        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/'));
-        $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
-        $this->assertEquals('http://localhost/theme/preview/image.png', $this->model->getPreviewImageUrl($theme));
-    }
-
-    /**
-     * @param bool $isPhysical
-     * @return \Magento\Core\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getGetTheme($isPhysical)
+    public function testGetPreviewImageUrl()
     {
         /** @var $theme \Magento\Core\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
         $theme = $this->getMock(
@@ -105,18 +75,42 @@ class PathTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
-        $theme->setData('area', 'frontend');
-
-        $theme->expects($this->any())
-            ->method('isPhysical')
-            ->will($this->returnValue($isPhysical));
-
         $theme->expects($this->any())
             ->method('getPreviewImage')
             ->will($this->returnValue('image.png'));
 
-        return $theme;
+        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/'));
+        $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $this->assertEquals('http://localhost/theme/preview/image.png', $this->model->getPreviewImageUrl($theme));
+    }
+
+    public function testGetPreviewImagePath()
+    {
+        $previewImage = 'preview.jpg';
+        $expectedPath = 'theme/preview/preview.jpg';
+
+        /** @var $theme \Magento\Core\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
+        $theme = $this->getMock(
+            'Magento\Core\Model\Theme',
+            ['getPreviewImage', 'isPhysical', '__wakeup'],
+            [],
+            '',
+            false
+        );
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with(PathInterface::PREVIEW_DIRECTORY_PATH . '/' . $previewImage)
+            ->willReturn($expectedPath);
+
+        $theme->expects($this->once())
+            ->method('getPreviewImage')
+            ->will($this->returnValue($previewImage));
+
+        $result = $this->model->getPreviewImagePath($theme);
+
+        $this->assertEquals($expectedPath, $result);
     }
 
     /**
@@ -134,6 +128,10 @@ class PathTest extends \PHPUnit_Framework_TestCase
      */
     public function testImagePreviewDirectoryGetter()
     {
+        $this->mediaDirectory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->with(\Magento\Framework\View\Design\Theme\Image\PathInterface::PREVIEW_DIRECTORY_PATH)
+            ->will($this->returnValue('/theme/preview'));
         $this->assertEquals(
             '/theme/preview',
             $this->model->getImagePreviewDirectory()

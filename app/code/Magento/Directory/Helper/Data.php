@@ -182,7 +182,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     ];
                 }
                 $json = $this->_coreHelper->jsonEncode($regions);
-
+                if ($json === false) {
+                    $json = 'false';
+                }
                 $this->_configCacheType->save($json, $cacheKey);
             }
             $this->_regionJson = $json;

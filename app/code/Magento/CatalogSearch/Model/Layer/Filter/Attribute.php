@@ -79,7 +79,8 @@ class Attribute extends AbstractFilter
     {
         $attribute = $this->getAttributeModel();
         /** @var \Magento\CatalogSearch\Model\Resource\Fulltext\Collection $productCollection */
-        $productCollection = $this->getLayer()->getProductCollection();
+        $productCollection = $this->getLayer()
+            ->getProductCollection();
         $optionsFacetedData = $productCollection->getFacetedData($attribute->getAttributeCode());
 
         $productSize = $productCollection->getSize();
@@ -91,9 +92,9 @@ class Attribute extends AbstractFilter
                 continue;
             }
             // Check filter type
-            if ($this->getAttributeIsFilterable($attribute) == static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
-                && (empty($optionsFacetedData[$option['value']]['count'])
-                    || !$this->isOptionReducesResults($optionsFacetedData[$option['value']]['count'], $productSize))
+            if (empty($optionsFacetedData[$option['value']]['count'])
+                || ($this->getAttributeIsFilterable($attribute) == static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
+                    && !$this->isOptionReducesResults($optionsFacetedData[$option['value']]['count'], $productSize))
             ) {
                 continue;
             }

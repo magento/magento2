@@ -2,7 +2,7 @@
     "name": "magento/framework",
     "description": "N/A",
     "type": "magento2-library",
-    "version": "0.1.0-alpha108",
+    "version": "0.42.0-beta1",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

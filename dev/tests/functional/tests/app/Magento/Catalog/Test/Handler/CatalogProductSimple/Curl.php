@@ -231,6 +231,9 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             $fields += $fields['attributes'];
             unset($fields['attributes']);
         }
+        if (isset($fields['custom_attribute'])) {
+            $fields[$fields['custom_attribute']['code']] = $fields['custom_attribute']['value'];
+        }
 
         $fields = $this->prepareStockData($fields);
         $fields = $prefix ? [$prefix => $fields] : $fields;

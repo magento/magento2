@@ -5,59 +5,80 @@
 namespace Magento\Sales\Api\Data;
 
 /**
- * Interface ShipmentCommentInterface
+ * Shipment comment interface.
+ *
+ * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
+ * document lists the products and their quantities in the delivery package. A shipment document can contain comments.
  */
 interface ShipmentCommentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
+     * Constants for keys of data array. Identical to the name of the getter in snake case.
+     */
+    /*
+     * Entity ID.
      */
     const ENTITY_ID = 'entity_id';
+    /*
+     * Parent ID.
+     */
     const PARENT_ID = 'parent_id';
+    /*
+     * Is-customer-notified flag.
+     */
     const IS_CUSTOMER_NOTIFIED = 'is_customer_notified';
+    /*
+     * Is-visible-on-storefront flag.
+     */
     const IS_VISIBLE_ON_FRONT = 'is_visible_on_front';
+    /*
+     * Comment.
+     */
     const COMMENT = 'comment';
+    /*
+     * Created-at timestamp.
+     */
     const CREATED_AT = 'created_at';
 
     /**
-     * Returns comment
+     * Gets the comment for the shipment.
      *
-     * @return string
+     * @return string Comment.
      */
     public function getComment();
 
     /**
-     * Returns created_at
+     * Gets the created-at timestamp for the shipment comment.
      *
-     * @return string
+     * @return string Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
-     * Returns entity_id
+     * Gets the ID for the shipment comment.
      *
-     * @return int
+     * @return int Shipment comment ID.
      */
     public function getEntityId();
 
     /**
-     * Returns is_customer_notified
+     * Gets the is-customer-notified flag value for the shipment comment.
      *
-     * @return int
+     * @return int Is-customer-notified flag value.
      */
     public function getIsCustomerNotified();
 
     /**
-     * Returns is_visible_on_front
+     * Gets the is-visible-on-storefront flag value for the shipment comment.
      *
-     * @return int
+     * @return int Is-visible-on-storefront flag value.
      */
     public function getIsVisibleOnFront();
 
     /**
-     * Returns parent_id
+     * Gets the parent ID for the shipment comment.
      *
-     * @return int
+     * @return int Parent ID.
      */
     public function getParentId();
 }

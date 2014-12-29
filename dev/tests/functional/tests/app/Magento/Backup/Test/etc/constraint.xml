@@ -6,6 +6,6 @@
 -->
 <constraint>
     <assertBackupInGrid module="Magento_Backup">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertBackupInGrid>
 </constraint>

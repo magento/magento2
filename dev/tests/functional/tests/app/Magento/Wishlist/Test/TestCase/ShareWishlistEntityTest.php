@@ -155,7 +155,6 @@ class ShareWishlistEntityTest extends Injectable
         CatalogProductSimple $product,
         array $sharingInfo
     ) {
-        $this->markTestIncomplete("Bug: MAGETWO-30105");
         //Steps
         $this->loginCustomer($customer);
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');

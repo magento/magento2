@@ -7,6 +7,7 @@
 @import "../less/styles/vars.less";
 @import "../less/styles/base.less";
 @import "../less/lib/buttons.less";
+@import 'source/lib/utilities.less';
 
 .dont-use-this-class-big-size {
     font-size: 18px;
@@ -636,9 +637,9 @@ textarea[readonly] {
     color: #999;
 }
 
-select[disabled].multiselect > option[selected] {
+select[disabled] option[selected] {
     color: #fff;
-    background: #6d6d6d;
+    background: #aaa;
 }
 
 textarea:-moz-placeholder,
@@ -708,6 +709,11 @@ fieldset.field [class^='fields-group-'] .field .control {
 .form-inline .field-service .checkbox {
     margin: 0;
     vertical-align: middle;
+}
+
+.form-inline > form > div > .message {
+    margin-left: 18px;
+    margin-right: 18px;
 }
 
 .control > input {
@@ -1399,8 +1405,8 @@ address {
     background-image: url(../images/fam_application_form_delete.png);
 }
 
-.x-tree-node-ct {
-    overflow: hidden;
+.x-tree-node {
+    overflow: auto;
 }
 
 /*
@@ -1426,7 +1432,7 @@ address {
     color: #be0a0a;
     font-size: 16px;
     font-weight: 500;
-    margin: 0 0 6px 0;
+    margin: 0 0 6px;
 }
 
 .tipsy-inner .error p {
@@ -1787,7 +1793,8 @@ address {
     width: 262px;
     height: 64px;
     text-indent: -999em;
-    background: url(Magento_Backend::images/logo-magento.png) no-repeat;
+    .url('images/logo-magento.png', 'Magento_Backend');
+    background: url("@{url}") no-repeat;
 }
 
 .page-login {
@@ -3643,3 +3650,5 @@ tr.dynamic-grid input.input-text {
 .fieldset-wrapper-title:after {
     clear: both;
 }
+@baseDir: "../"; //default
+

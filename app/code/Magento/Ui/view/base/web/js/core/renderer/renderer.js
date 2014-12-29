@@ -12,6 +12,8 @@ define([
         initialize: function(data){
             this.types = new Types(data.types);
             this.layout = new Layout(data.layout, this.types);
+
+            return this;
         },
 
         render: function(data){

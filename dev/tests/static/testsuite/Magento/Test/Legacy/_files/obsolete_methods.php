@@ -1664,6 +1664,8 @@ return [
     ['_detectTheme', 'Magento\Core\Helper\Theme'],
     ['_detectGroup', 'Magento\Core\Helper\Theme'],
     ['_sortThemesByHierarchy', 'Magento\Core\Helper\Theme'],
+    ['set', 'Magento\Framework\Api\ExtensibleObjectBuilder'],
+    ['toFlatArrayStatic', 'Magento\Framework\Api\ExtensibleDataObjectConverter'],
     ['_sortArrayByArray', 'Magento\Core\Helper\Theme'],
     ['_getGroupLabels', 'Magento\Core\Helper\Theme'],
     ['_sortGroupFilesCallback', 'Magento\Core\Helper\Theme'],
@@ -1927,7 +1929,7 @@ return [
     ['setTablePrefix', 'Magento\Framework\App\Magento\Framework\App\Resource', 'Can be passed through constructor only'],
     ['_debugTimer', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\LoggerAbstract::startTimer'],
     ['_debugStat', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::logStats'],
-    ['_debugException', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::logException'],
+    ['_debugException', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::critical'],
     ['_debugWriteToFile', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::log'],
     ['applyDataUpdates', 'Magento\Framework\Module\Setup', 'Magento\Framework\Module\DataSetup::applyDataUpdates'],
     ['_installData', 'Magento\Framework\Module\Setup', 'Magento\Framework\Module\DataSetup::_installData'],
@@ -1967,7 +1969,6 @@ return [
     ['urlDecode', 'Magento\Framework\App\Helper\AbstractHelper', 'Magento\Framework\Url\DecoderInterface::decode'],
     ['isModuleEnabled', 'Magento\Framework\App\Helper\AbstractHelper', 'Magento\Framework\Module\Manager::isEnabled()'],
     ['isModuleOutputEnabled', 'Magento\Framework\App\Helper\AbstractHelper', 'Magento\Framework\Module\Manager::isOutputEnabled()'],
-    ['toFlatArrayStatic', 'Magento\Framework\Api\ExtensibleDataObjectConverter'],
     ['_packToTar', 'Magento\Framework\Archive\Tar'],
     ['_parseHeader', 'Magento\Framework\Archive\Tar'],
     ['getIdentities', 'Magento\Wishlist\Block\Link'],
@@ -1987,7 +1988,6 @@ return [
     ['getEnv', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
     ['setActiveFilter', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
     ['process', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
-    ['set', 'Magento\Framework\Api\ExtensibleObjectBuilder'],
     [
         'isAutomaticCleaningAvailable',
         'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator',
@@ -2001,4 +2001,12 @@ return [
     ['getScriptTranslation', 'Magento\Framework\LocaleInterface'],
     ['getCountryTranslation', 'Magento\Framework\LocaleInterface'],
     ['getTerritoryTranslation', 'Magento\Framework\LocaleInterface'],
+    [
+        'getNoteNotify',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Comment',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Totals'
+    ],
+    ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
+    ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
+    ['cleanTransactions', 'Magento\Paypal\Model\Observer']
 ];

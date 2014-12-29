@@ -6,20 +6,20 @@
 -->
 <constraint>
     <assertTaxRuleSuccessSaveMessage module="Magento_Tax">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <taxRuleIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex" />
         </require>
     </assertTaxRuleSuccessSaveMessage>
     <assertTaxRuleInGrid module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <taxRuleIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex" />
             <taxRule class="Magento\Tax\Test\Fixture\TaxRule" />
         </require>
     </assertTaxRuleInGrid>
     <assertTaxRuleForm module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <taxRuleIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex" />
             <taxRuleNew class="Magento\Tax\Test\Page\Adminhtml\TaxRuleNew" />
@@ -27,20 +27,20 @@
         </require>
     </assertTaxRuleForm>
     <assertTaxRateSuccessSaveMessage module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <taxRateIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRateIndex" />
         </require>
     </assertTaxRateSuccessSaveMessage>
     <assertTaxRateInGrid module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <taxRateIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRateIndex" />
             <taxRate class="Magento\Tax\Test\Fixture\TaxRate" />
         </require>
     </assertTaxRateInGrid>
     <assertTaxRateForm module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <taxRateIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRateIndex" />
             <taxRateNew class="Magento\Tax\Test\Page\Adminhtml\TaxRateNew" />
@@ -48,54 +48,54 @@
         </require>
     </assertTaxRateForm>
     <assertTaxRateIsInCorrectRange module="Magento_Tax">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertTaxRateIsInCorrectRange>
     <assertTaxRateInTaxRule module="Magento_Tax">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertTaxRateInTaxRule>
     <assertTaxRuleIsApplied module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertTaxRuleIsApplied>
     <assertTaxRuleIsAppliedToAllPrices module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertTaxRuleIsAppliedToAllPrices>
     <assertTaxWithCrossBorderApplied module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertTaxWithCrossBorderApplied>
     <assertTaxRuleIsNotApplied module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertTaxRuleIsNotApplied>
     <assertTaxWithCrossBorderNotApplied module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
     </assertTaxWithCrossBorderNotApplied>
     <assertTaxRuleSuccessDeleteMessage module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <taxRuleIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex" />
         </require>
     </assertTaxRuleSuccessDeleteMessage>
     <assertTaxRuleNotInGrid module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <taxRuleIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex" />
             <taxRule class="Magento\Tax\Test\Fixture\TaxRule" />
         </require>
     </assertTaxRuleNotInGrid>
     <assertTaxRateSuccessDeleteMessage module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <taxRateIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRateIndex" />
         </require>
     </assertTaxRateSuccessDeleteMessage>
     <assertTaxRateNotInGrid module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <taxRateIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRateIndex" />
             <taxRate class="Magento\Tax\Test\Fixture\TaxRate" />
         </require>
     </assertTaxRateNotInGrid>
     <assertTaxRateNotInTaxRule module="Magento_Tax">
-        <severeness>high</severeness>
+        <severity>high</severity>
         <require>
             <taxRate class="Magento\Tax\Test\Fixture\TaxRate" />
             <taxRule class="Magento\Tax\Test\Fixture\TaxRule" />

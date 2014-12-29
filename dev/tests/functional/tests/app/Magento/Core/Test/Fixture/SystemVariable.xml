@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<fixture class="Magento\Core\Test\Fixture\SystemVariable">
+    <module>Magento_Core</module>
+    <type>composite</type>
+    <entities>
+        <core_variable>core_variable</core_variable>
+        <core_variable_value>core_variable_value</core_variable_value>
+    </entities>
+    <collection>Magento\Core\Model\Resource\Variable\Collection</collection>
+    <fields>
+        <variable_id>
+            <attribute_code>variable_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required />
+            <default_value>0</default_value>
+            <input />
+        </variable_id>
+        <code>
+            <attribute_code>code</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </code>
+        <name>
+            <attribute_code>name</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </name>
+        <value_id>
+            <attribute_code>value_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value />
+            <input />
+        </value_id>
+        <store_id>
+            <attribute_code>store_id</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required />
+            <default_value>0</default_value>
+            <input />
+        </store_id>
+        <plain_value>
+            <attribute_code>plain_value</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </plain_value>
+        <html_value>
+            <attribute_code>html_value</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required />
+            <default_value />
+            <input />
+        </html_value>
+        <use_default_value>
+            <attribute_code>use_default_value</attribute_code>
+            <backend_type>virtual</backend_type>
+            <input>select</input>
+        </use_default_value>
+    </fields>
+    <handler_interface>Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface</handler_interface>
+</fixture>

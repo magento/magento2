@@ -46,7 +46,6 @@ class AddNewAttributeFromProductPageStep implements TestStepInterface
     public function run()
     {
         $productForm = $this->catalogProductEdit->getProductForm();
-        /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab $productDetailsTab */
         $productForm->addNewAttribute($this->tabName);
     }
 }

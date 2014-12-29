@@ -38,6 +38,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
             'getId',
             'formatUrlKey',
             'getName',
+            'isObjectNew'
         ];
         $this->category = $this->getMock('Magento\Catalog\Model\Category', $categoryMethods, [], '', false);
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
@@ -55,29 +56,13 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return array
-     */
-    public function getUrlPathDataProvider()
-    {
-        $noGenerationLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING - 1;
-        $requireGenerationLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING;
-        return [
-            [Category::TREE_ROOT_ID, 'url-path', $noGenerationLevel, '', false, false, ''],
-            ['parent_id', 'url-path', $noGenerationLevel, '', false, false, 'url-path'],
-            ['parent_id', 'url-path', $noGenerationLevel, 'url-key', true, false, 'url-key'],
-            ['parent_id', 'url-path', $noGenerationLevel, 'url-key', false, true, 'url-key'],
-            [null, 'url-path', $requireGenerationLevel, 'url-key', false, true, 'url-key'],
-        ];
-    }
-
-    /**
      * @dataProvider getUrlPathDataProvider
      * @param int $parentId
      * @param string $urlPath
      * @param int $level
      * @param string $urlKey
      * @param bool $dataChangedForUrlKey
-     * @param bool $dataChangedForPathIds
+     * @param bool $dataChangedForParentId
      * @param string $result
      */
     public function testGetUrlPath(
@@ -86,15 +71,16 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $level,
         $urlKey,
         $dataChangedForUrlKey,
-        $dataChangedForPathIds,
+        $dataChangedForParentId,
         $result
     ) {
         $this->category->expects($this->any())->method('getParentId')->will($this->returnValue($parentId));
+        $this->category->expects($this->any())->method('isObjectNew')->will($this->returnValue(false));
         $this->category->expects($this->any())->method('getLevel')->will($this->returnValue($level));
         $this->category->expects($this->any())->method('getUrlPath')->will($this->returnValue($urlPath));
         $this->category->expects($this->any())->method('getUrlKey')->will($this->returnValue($urlKey));
         $this->category->expects($this->any())->method('dataHasChangedFor')
-            ->will($this->returnValueMap([['url_key', $dataChangedForUrlKey], ['path_ids', $dataChangedForPathIds]]));
+            ->will($this->returnValueMap([['url_key', $dataChangedForUrlKey], ['parent_id', $dataChangedForParentId]]));
 
         $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));
     }
@@ -102,31 +88,58 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
+    public function getUrlPathDataProvider()
+    {
+        $noGenerationLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING - 1;
+        return [
+            [Category::TREE_ROOT_ID, 'url-path', $noGenerationLevel, '', false, false, ''],
+            ['parent_id', 'url-path', $noGenerationLevel, '', false, false, 'url-path'],
+            ['parent_id', 'url-path', $noGenerationLevel, 'url-key', true, false, 'url-key'],
+            ['parent_id', 'url-path', $noGenerationLevel, 'url-key', false, true, 'url-key'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function getUrlPathWithParentDataProvider()
     {
+        $requireGenerationLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING;
+        $noGenerationLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING - 1;
         return [
-            ['url-key', 'parent_id', 'parent-category-path', 'parent-category-path/url-key'],
-            ['url-key', Category::TREE_ROOT_ID, null, 'url-key'],
+            ['url-key', false, $requireGenerationLevel, 'parent_id', 'parent-path', 'parent-path/url-key'],
+            ['url-key', false, $requireGenerationLevel, Category::TREE_ROOT_ID, null, 'url-key'],
+            ['url-key', true, $noGenerationLevel, Category::TREE_ROOT_ID, null, 'url-key'],
         ];
     }
 
     /**
      * @dataProvider getUrlPathWithParentDataProvider
      * @param string $urlKey
+     * @param bool $isCategoryNew
+     * @param bool $level
      * @param int $parentCategoryParentId
      * @param string $parentUrlPath
      * @param string $result
      */
-    public function testGetUrlPathWithParent($urlKey, $parentCategoryParentId, $parentUrlPath, $result)
-    {
+    public function testGetUrlPathWithParent(
+        $urlKey,
+        $isCategoryNew,
+        $level,
+        $parentCategoryParentId,
+        $parentUrlPath,
+        $result
+    ) {
         $urlPath = null;
         $parentLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING - 1;
         $this->category->expects($this->any())->method('getParentId')
             ->will($this->returnValue('parent_id'));
         $this->category->expects($this->any())->method('getLevel')
-            ->will($this->returnValue(CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING));
+            ->will($this->returnValue($level));
         $this->category->expects($this->any())->method('getUrlPath')->will($this->returnValue($urlPath));
         $this->category->expects($this->any())->method('getUrlKey')->will($this->returnValue($urlKey));
+        $this->category->expects($this->any())->method('isObjectNew')->will($this->returnValue($isCategoryNew));
+
         $methods = ['__wakeup', 'getUrlPath', 'getParentId', 'getLevel', 'dataHasChangedFor', 'load'];
         $parentCategory = $this->getMock('Magento\Catalog\Model\Category', $methods, [], '', false);
         $parentCategory->expects($this->any())->method('getParentId')

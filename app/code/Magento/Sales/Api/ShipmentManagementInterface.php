@@ -5,29 +5,33 @@
 namespace Magento\Sales\Api;
 
 /**
- * Interface ShipmentManagementInterface
+ * Shipment management interface.
+ *
+ * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
+ * document lists the products and their quantities in the delivery package.
  */
 interface ShipmentManagementInterface
 {
     /**
-     * Returns shipment label
+     * Gets a specified shipment label.
      *
-     * @param int $id
-     * @return string
+     * @param int $id The shipment label ID.
+     * @return string Shipment label.
      */
     public function getLabel($id);
 
     /**
-     * Returns list of comments attached to shipment
-     * @param int $id
-     * @return \Magento\Sales\Api\Data\ShipmentCommentSearchResultInterface
+     * Lists comments for a specified shipment.
+     *
+     * @param int $id The shipment ID.
+     * @return \Magento\Sales\Api\Data\ShipmentCommentSearchResultInterface Shipment comment search result interface.
      */
     public function getCommentsList($id);
 
     /**
-     * Notify user
+     * Emails user a specified shipment.
      *
-     * @param int $id
+     * @param int $id The shipment ID.
      * @return bool
      */
     public function notify($id);

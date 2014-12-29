@@ -5,379 +5,519 @@
 namespace Magento\Sales\Api\Data;
 
 /**
- * Interface InvoiceInterface
+ * Invoice interface.
+ *
+ * An invoice is a record of the receipt of payment for an order.
  */
 interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
+    /*
+     * Entity ID.
+     */
     const ENTITY_ID = 'entity_id';
+    /*
+     * Store ID.
+     */
     const STORE_ID = 'store_id';
+    /*
+     * Base grand total.
+     */
     const BASE_GRAND_TOTAL = 'base_grand_total';
+    /*
+     * Shipping tax amount.
+     */
     const SHIPPING_TAX_AMOUNT = 'shipping_tax_amount';
+    /*
+     * Tax amount.
+     */
     const TAX_AMOUNT = 'tax_amount';
+    /*
+     * Base tax amount.
+     */
     const BASE_TAX_AMOUNT = 'base_tax_amount';
+    /*
+     * Store-to-order rate.
+     */
     const STORE_TO_ORDER_RATE = 'store_to_order_rate';
+    /*
+     * Base shipping tax amount.
+     */
     const BASE_SHIPPING_TAX_AMOUNT = 'base_shipping_tax_amount';
+    /*
+     * Base discount amount.
+     */
     const BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
+    /*
+     * Base-to-order rate.
+     */
     const BASE_TO_ORDER_RATE = 'base_to_order_rate';
+    /*
+     * Grand total.
+     */
     const GRAND_TOTAL = 'grand_total';
+    /*
+     * Shipping amount.
+     */
     const SHIPPING_AMOUNT = 'shipping_amount';
+    /*
+     * Subtotal including tax.
+     */
     const SUBTOTAL_INCL_TAX = 'subtotal_incl_tax';
+    /*
+     * Base subtotal including tax.
+     */
     const BASE_SUBTOTAL_INCL_TAX = 'base_subtotal_incl_tax';
+    /*
+     * Store-to-base rate.
+     */
     const STORE_TO_BASE_RATE = 'store_to_base_rate';
+    /*
+     * Base shipping amount.
+     */
     const BASE_SHIPPING_AMOUNT = 'base_shipping_amount';
+    /*
+     * Total quantity.
+     */
     const TOTAL_QTY = 'total_qty';
+    /*
+     * Base-to-global rate.
+     */
     const BASE_TO_GLOBAL_RATE = 'base_to_global_rate';
+    /*
+     * Subtotal.
+     */
     const SUBTOTAL = 'subtotal';
+    /*
+     * Base subtotal.
+     */
     const BASE_SUBTOTAL = 'base_subtotal';
+    /*
+     * Discount amount.
+     */
     const DISCOUNT_AMOUNT = 'discount_amount';
+    /*
+     * Billing address ID.
+     */
     const BILLING_ADDRESS_ID = 'billing_address_id';
+    /*
+     * Is used for refund.
+     */
     const IS_USED_FOR_REFUND = 'is_used_for_refund';
+    /*
+     * Order ID.
+     */
     const ORDER_ID = 'order_id';
+    /*
+     * Email sent flag.
+     */
     const EMAIL_SENT = 'email_sent';
+    /*
+     * Can void flag.
+     */
     const CAN_VOID_FLAG = 'can_void_flag';
+    /*
+     * State.
+     */
     const STATE = 'state';
+    /*
+     * Shipping address ID.
+     */
     const SHIPPING_ADDRESS_ID = 'shipping_address_id';
+    /*
+     * Store currency code.
+     */
     const STORE_CURRENCY_CODE = 'store_currency_code';
+    /*
+     * Transaction ID.
+     */
     const TRANSACTION_ID = 'transaction_id';
+    /*
+     * Order currency code.
+     */
     const ORDER_CURRENCY_CODE = 'order_currency_code';
+    /*
+     * Base currency code.
+     */
     const BASE_CURRENCY_CODE = 'base_currency_code';
+    /*
+     * Global currency code.
+     */
     const GLOBAL_CURRENCY_CODE = 'global_currency_code';
+    /*
+     * Increment ID.
+     */
     const INCREMENT_ID = 'increment_id';
+    /*
+     * Created-at timestamp.
+     */
     const CREATED_AT = 'created_at';
+    /*
+     * Updated-at timestamp.
+     */
     const UPDATED_AT = 'updated_at';
+    /*
+     * Hidden tax amount.
+     */
     const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    /*
+     * Base hidden tax amount.
+     */
     const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    /*
+     * Shipping hidden tax amount.
+     */
     const SHIPPING_HIDDEN_TAX_AMOUNT = 'shipping_hidden_tax_amount';
+    /*
+     * Base shipping hidden tax amount.
+     */
     const BASE_SHIPPING_HIDDEN_TAX_AMNT = 'base_shipping_hidden_tax_amnt';
+    /*
+     * Shipping including tax.
+     */
     const SHIPPING_INCL_TAX = 'shipping_incl_tax';
+    /*
+     * Base shipping including tax.
+     */
     const BASE_SHIPPING_INCL_TAX = 'base_shipping_incl_tax';
+    /*
+     * Base total refunded.
+     */
     const BASE_TOTAL_REFUNDED = 'base_total_refunded';
+    /*
+     * Discount description.
+     */
     const DISCOUNT_DESCRIPTION = 'discount_description';
+    /*
+     * Items.
+     */
     const ITEMS = 'items';
+    /*
+     * Comments.
+     */
     const COMMENTS = 'comments';
 
     /**
-     * Returns base_currency_code
+     * Gets the base currency code for the invoice.
      *
-     * @return string
+     * @return string Base currency code.
      */
     public function getBaseCurrencyCode();
 
     /**
-     * Returns base_discount_amount
+     * Gets the base discount amount for the invoice.
      *
-     * @return float
+     * @return float Base discount amount.
      */
     public function getBaseDiscountAmount();
 
     /**
-     * Returns base_grand_total
+     * Gets the base grand total for the invoice.
      *
-     * @return float
+     * @return float Base grand total.
      */
     public function getBaseGrandTotal();
 
     /**
-     * Returns base_hidden_tax_amount
+     * Gets the base hidden tax amount for the invoice.
      *
-     * @return float
+     * @return float Base hidden tax amount.
      */
     public function getBaseHiddenTaxAmount();
 
     /**
-     * Returns base_shipping_amount
+     * Gets the base shipping amount for the invoice.
      *
-     * @return float
+     * @return float Base shipping amount.
      */
     public function getBaseShippingAmount();
 
     /**
-     * Returns base_shipping_hidden_tax_amnt
+     * Gets the base shipping hidden tax amount for the invoice.
      *
-     * @return float
+     * @return float Base shipping hidden tax amount.
      */
     public function getBaseShippingHiddenTaxAmnt();
 
     /**
-     * Returns base_shipping_incl_tax
+     * Gets the base shipping including tax for the invoice.
      *
-     * @return float
+     * @return float Base shipping including tax.
      */
     public function getBaseShippingInclTax();
 
     /**
-     * Returns base_shipping_tax_amount
+     * Gets the base shipping tax amount for the invoice.
      *
-     * @return float
+     * @return float Base shipping tax amount.
      */
     public function getBaseShippingTaxAmount();
 
     /**
-     * Returns base_subtotal
+     * Gets the base subtotal for the invoice.
      *
-     * @return float
+     * @return float Base subtotal.
      */
     public function getBaseSubtotal();
 
     /**
-     * Returns base_subtotal_incl_tax
+     * Gets the base subtotal including tax for the invoice.
      *
-     * @return float
+     * @return float Base subtotal including tax.
      */
     public function getBaseSubtotalInclTax();
 
     /**
-     * Returns base_tax_amount
+     * Gets the base tax amount for the invoice.
      *
-     * @return float
+     * @return float Base tax amount.
      */
     public function getBaseTaxAmount();
 
     /**
-     * Returns base_total_refunded
+     * Gets the base total refunded for the invoice.
      *
-     * @return float
+     * @return float Base total refunded.
      */
     public function getBaseTotalRefunded();
 
     /**
-     * Returns base_to_global_rate
+     * Gets the base-to-global rate for the invoice.
      *
-     * @return float
+     * @return float Base-to-global rate.
      */
     public function getBaseToGlobalRate();
 
     /**
-     * Returns base_to_order_rate
+     * Gets the base-to-order rate for the invoice.
      *
-     * @return float
+     * @return float Base-to-order rate.
      */
     public function getBaseToOrderRate();
 
     /**
-     * Returns billing_address_id
+     * Gets the billing address ID for the invoice.
      *
-     * @return int
+     * @return int Billing address ID.
      */
     public function getBillingAddressId();
 
     /**
-     * Returns can_void_flag
+     * Gets the can void flag value for the invoice.
      *
-     * @return int
+     * @return int Can void flag value.
      */
     public function getCanVoidFlag();
 
     /**
-     * Returns created_at
+     * Gets the created-at timestamp for the invoice.
      *
-     * @return string
+     * @return string Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
-     * Returns discount_amount
+     * Gets the discount amount for the invoice.
      *
-     * @return float
+     * @return float Discount amount.
      */
     public function getDiscountAmount();
 
     /**
-     * Returns discount_description
+     * Gets the discount description for the invoice.
      *
-     * @return string
+     * @return string Discount description.
      */
     public function getDiscountDescription();
 
     /**
-     * Returns email_sent
+     * Gets the email-sent flag value for the invoice.
      *
-     * @return int
+     * @return int Email-sent flag value.
      */
     public function getEmailSent();
 
     /**
-     * Returns entity_id
+     * Gets the ID for the invoice.
      *
-     * @return int
+     * @return int Invoice ID.
      */
     public function getEntityId();
 
     /**
-     * Returns global_currency_code
+     * Gets the global currency code for the invoice.
      *
-     * @return string
+     * @return string Global currency code.
      */
     public function getGlobalCurrencyCode();
 
     /**
-     * Returns grand_total
+     * Gets the grand total for the invoice.
      *
-     * @return float
+     * @return float Grand total.
      */
     public function getGrandTotal();
 
     /**
-     * Returns hidden_tax_amount
+     * Gets the hidden tax amount for the invoice.
      *
-     * @return float
+     * @return float Hidden tax amount.
      */
     public function getHiddenTaxAmount();
 
     /**
-     * Returns increment_id
+     * Gets the increment ID for the invoice.
      *
-     * @return string
+     * @return string Increment ID.
      */
     public function getIncrementId();
 
     /**
-     * Returns is_used_for_refund
+     * Gets the is-used-for-refund flag value for the invoice.
      *
-     * @return int
+     * @return int Is-used-for-refund flag value.
      */
     public function getIsUsedForRefund();
 
     /**
-     * Returns order_currency_code
+     * Gets the order currency code for the invoice.
      *
-     * @return string
+     * @return string Order currency code.
      */
     public function getOrderCurrencyCode();
 
     /**
-     * Returns order_id
+     * Gets the order ID for the invoice.
      *
-     * @return int
+     * @return int Order ID.
      */
     public function getOrderId();
 
     /**
-     * Returns shipping_address_id
+     * Gets the shipping address ID for the invoice.
      *
-     * @return int
+     * @return int Shipping address ID.
      */
     public function getShippingAddressId();
 
     /**
-     * Returns shipping_amount
+     * Gets the shipping amount for the invoice.
      *
-     * @return float
+     * @return float Shipping amount.
      */
     public function getShippingAmount();
 
     /**
-     * Returns shipping_hidden_tax_amount
+     * Gets the shipping hidden tax amount for the invoice.
      *
-     * @return float
+     * @return float Shipping hidden tax amount.
      */
     public function getShippingHiddenTaxAmount();
 
     /**
-     * Returns shipping_incl_tax
+     * Gets the shipping including tax for the invoice.
      *
-     * @return float
+     * @return float Shipping including tax.
      */
     public function getShippingInclTax();
 
     /**
-     * Returns shipping_tax_amount
+     * Gets the shipping tax amount for the invoice.
      *
-     * @return float
+     * @return float Shipping tax amount.
      */
     public function getShippingTaxAmount();
 
     /**
-     * Returns state
+     * Gets the state for the invoice.
      *
-     * @return int
+     * @return int State.
      */
     public function getState();
 
     /**
-     * Returns store_currency_code
+     * Gets the store currency code for the invoice.
      *
-     * @return string
+     * @return string Store currency code.
      */
     public function getStoreCurrencyCode();
 
     /**
-     * Returns store_id
+     * Gets the store ID for the invoice.
      *
-     * @return int
+     * @return int Store ID.
      */
     public function getStoreId();
 
     /**
-     * Returns store_to_base_rate
+     * Gets the store-to-base rate for the invoice.
      *
-     * @return float
+     * @return float Store-to-base rate.
      */
     public function getStoreToBaseRate();
 
     /**
-     * Returns store_to_order_rate
+     * Gets the store-to-order rate for the invoice.
      *
-     * @return float
+     * @return float Store-to-order rate.
      */
     public function getStoreToOrderRate();
 
     /**
-     * Returns subtotal
+     * Gets the subtotal for the invoice.
      *
-     * @return float
+     * @return float Subtotal.
      */
     public function getSubtotal();
 
     /**
-     * Returns subtotal_incl_tax
+     * Gets the subtotal including tax for the invoice.
      *
-     * @return float
+     * @return float Subtotal including tax.
      */
     public function getSubtotalInclTax();
 
     /**
-     * Returns tax_amount
+     * Gets the tax amount for the invoice.
      *
-     * @return float
+     * @return float Tax amount.
      */
     public function getTaxAmount();
 
     /**
-     * Returns total_qty
+     * Gets the total quantity for the invoice.
      *
-     * @return float
+     * @return float Total quantity.
      */
     public function getTotalQty();
 
     /**
-     * Returns transaction_id
+     * Gets the transaction ID for the invoice.
      *
-     * @return string
+     * @return string Transaction ID.
      */
     public function getTransactionId();
 
     /**
-     * Returns updated_at
+     * Gets the updated-at timestamp for the invoice.
      *
-     * @return string
+     * @return string Updated-at timestamp.
      */
     public function getUpdatedAt();
 
     /**
-     * Returns invoice items
+     * Gets the items in the invoice.
      *
-     * @return \Magento\Sales\Api\Data\InvoiceItemInterface[]
+     * @return \Magento\Sales\Api\Data\InvoiceItemInterface[] Array of invoice items.
      */
     public function getItems();
 
     /**
-     * Return invoice comments
+     * Gets the comments, if any, for the invoice.
      *
-     * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[]|null
+     * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[]|null Array of any invoice comments. Otherwise, null.
      */
     public function getComments();
 }

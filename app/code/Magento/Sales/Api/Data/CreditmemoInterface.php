@@ -5,408 +5,562 @@
 namespace Magento\Sales\Api\Data;
 
 /**
- * Interface CreditmemoInterface
+ * Credit memo interface.
+ *
+ * After a customer places and pays for an order and an invoice has been issued, the merchant can create a credit memo
+ * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
+ * customer account so that the customer can make future purchases.
  */
 interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
+     * Constants for keys of data array. Identical to the name of the getter in snake case.
+     */
+    /*
+     * Entity ID.
      */
     const ENTITY_ID = 'entity_id';
+    /*
+     * Store ID.
+     */
     const STORE_ID = 'store_id';
+    /*
+     * Positive adjustment.
+     */
     const ADJUSTMENT_POSITIVE = 'adjustment_positive';
+    /*
+     * Base shipping tax amount.
+     */
     const BASE_SHIPPING_TAX_AMOUNT = 'base_shipping_tax_amount';
+    /*
+     * Store-to-order rate.
+     */
     const STORE_TO_ORDER_RATE = 'store_to_order_rate';
+    /*
+     * Base discount rate.
+     */
     const BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
+    /*
+     * Base-to-order rate.
+     */
     const BASE_TO_ORDER_RATE = 'base_to_order_rate';
+    /*
+     * Grand total.
+     */
     const GRAND_TOTAL = 'grand_total';
+    /*
+     * Negative base adjustment.
+     */
     const BASE_ADJUSTMENT_NEGATIVE = 'base_adjustment_negative';
+    /*
+     * Base subtotal including tax.
+     */
     const BASE_SUBTOTAL_INCL_TAX = 'base_subtotal_incl_tax';
+    /*
+     * Shipping amount.
+     */
     const SHIPPING_AMOUNT = 'shipping_amount';
+    /*
+     * Subtotal including tax.
+     */
     const SUBTOTAL_INCL_TAX = 'subtotal_incl_tax';
+    /*
+     * Negative adjustment.
+     */
     const ADJUSTMENT_NEGATIVE = 'adjustment_negative';
+    /*
+     * Base shipping amount.
+     */
     const BASE_SHIPPING_AMOUNT = 'base_shipping_amount';
+    /*
+     * Store-to-base rate.
+     */
     const STORE_TO_BASE_RATE = 'store_to_base_rate';
+    /*
+     * Base-to-global rate.
+     */
     const BASE_TO_GLOBAL_RATE = 'base_to_global_rate';
+    /*
+     * Base adjustment.
+     */
     const BASE_ADJUSTMENT = 'base_adjustment';
+    /*
+     * Base subtotal.
+     */
     const BASE_SUBTOTAL = 'base_subtotal';
+    /*
+     * Discount amount.
+     */
     const DISCOUNT_AMOUNT = 'discount_amount';
+    /*
+     * Subtotal.
+     */
     const SUBTOTAL = 'subtotal';
+    /*
+     * Subtotal.
+     */
     const ADJUSTMENT = 'adjustment';
+    /*
+     * Base grand total.
+     */
     const BASE_GRAND_TOTAL = 'base_grand_total';
+    /*
+     * Positive base adjustment.
+     */
     const BASE_ADJUSTMENT_POSITIVE = 'base_adjustment_positive';
+    /*
+     * Base tax amount.
+     */
     const BASE_TAX_AMOUNT = 'base_tax_amount';
+    /*
+     * Shipping tax amount.
+     */
     const SHIPPING_TAX_AMOUNT = 'shipping_tax_amount';
+    /*
+     * Tax amount.
+     */
     const TAX_AMOUNT = 'tax_amount';
+    /*
+     * Order ID.
+     */
     const ORDER_ID = 'order_id';
+    /*
+     * Email sent flag.
+     */
     const EMAIL_SENT = 'email_sent';
+    /*
+     * Credit memo status.
+     */
     const CREDITMEMO_STATUS = 'creditmemo_status';
+    /*
+     * Credit memo state.
+     */
     const STATE = 'state';
+    /*
+     * Shipping address ID.
+     */
     const SHIPPING_ADDRESS_ID = 'shipping_address_id';
+    /*
+     * Billing address ID.
+     */
     const BILLING_ADDRESS_ID = 'billing_address_id';
+    /*
+     * Invoice ID.
+     */
     const INVOICE_ID = 'invoice_id';
+    /*
+     * Store currency code.
+     */
     const STORE_CURRENCY_CODE = 'store_currency_code';
+    /*
+     * Order currency code.
+     */
     const ORDER_CURRENCY_CODE = 'order_currency_code';
+    /*
+     * Base currency code.
+     */
     const BASE_CURRENCY_CODE = 'base_currency_code';
+    /*
+     * Global currency code.
+     */
     const GLOBAL_CURRENCY_CODE = 'global_currency_code';
+    /*
+     * Transaction ID.
+     */
     const TRANSACTION_ID = 'transaction_id';
+    /*
+     * Increment ID.
+     */
     const INCREMENT_ID = 'increment_id';
+    /*
+     * Created-at timestamp.
+     */
     const CREATED_AT = 'created_at';
+    /*
+     * Updated-at timestamp.
+     */
     const UPDATED_AT = 'updated_at';
+    /*
+     * Hidden tax amount.
+     */
     const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    /*
+     * Base hidden tax amount.
+     */
     const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    /*
+     * Shipping hidden tax amount.
+     */
     const SHIPPING_HIDDEN_TAX_AMOUNT = 'shipping_hidden_tax_amount';
+    /*
+     * Base shipping hidden tax amount.
+     */
     const BASE_SHIPPING_HIDDEN_TAX_AMNT = 'base_shipping_hidden_tax_amnt';
+    /*
+     * Shipping including tax.
+     */
     const SHIPPING_INCL_TAX = 'shipping_incl_tax';
+    /*
+     * Base shipping including tax.
+     */
     const BASE_SHIPPING_INCL_TAX = 'base_shipping_incl_tax';
+    /*
+     * Discount description.
+     */
     const DISCOUNT_DESCRIPTION = 'discount_description';
+    /*
+     * Credit memo items.
+     */
     const ITEMS = 'items';
+    /*
+     * Credit memo comments.
+     */
     const COMMENTS = 'comments';
 
     /**
-     * Returns adjustment
+     * Gets the credit memo adjustment.
      *
-     * @return float
+     * @return float Credit memo adjustment.
      */
     public function getAdjustment();
 
     /**
-     * Returns adjustment_negative
+     * Gets the credit memo negative adjustment.
      *
-     * @return float
+     * @return float Credit memo negative adjustment.
      */
     public function getAdjustmentNegative();
 
     /**
-     * Returns adjustment_positive
+     * Gets the credit memo positive adjustment.
      *
-     * @return float
+     * @return float Credit memo positive adjustment.
      */
     public function getAdjustmentPositive();
 
     /**
-     * Returns base_adjustment
+     * Gets the credit memo base adjustment.
      *
-     * @return float
+     * @return float Credit memo base adjustment.
      */
     public function getBaseAdjustment();
 
     /**
-     * Returns base_adjustment_negative
+     * Gets the credit memo negative base adjustment.
      *
-     * @return float
+     * @return float Credit memo negative base adjustment.
      */
     public function getBaseAdjustmentNegative();
 
     /**
-     * Returns base_adjustment_positive
+     * Gets the credit memo positive base adjustment.
      *
-     * @return float
+     * @return float Credit memo positive base adjustment.
      */
     public function getBaseAdjustmentPositive();
 
     /**
-     * Returns base_currency_code
+     * Gets the credit memo base currency code.
      *
-     * @return string
+     * @return string Credit memo base currency code.
      */
     public function getBaseCurrencyCode();
 
     /**
-     * Returns base_discount_amount
+     * Gets the credit memo base discount amount.
      *
-     * @return float
+     * @return float Credit memo base discount amount.
      */
     public function getBaseDiscountAmount();
 
     /**
-     * Returns base_grand_total
+     * Gets the credit memo base grand total.
      *
-     * @return float
+     * @return float Credit memo base grand total.
      */
     public function getBaseGrandTotal();
 
     /**
-     * Returns base_hidden_tax_amount
+     * Gets the credit memo base hidden tax amount.
      *
-     * @return float
+     * @return float Credit memo base hidden tax amount.
      */
     public function getBaseHiddenTaxAmount();
 
     /**
-     * Returns base_shipping_amount
+     * Gets the credit memo base shipping amount.
      *
-     * @return float
+     * @return float Credit memo base shipping amount.
      */
     public function getBaseShippingAmount();
 
     /**
-     * Returns base_shipping_hidden_tax_amnt
+     * Gets the credit memo base shipping hidden tax amount.
      *
-     * @return float
+     * @return float Credit memo base shipping hidden tax amount.
      */
     public function getBaseShippingHiddenTaxAmnt();
 
     /**
-     * Returns base_shipping_incl_tax
+     * Gets the credit memo base shipping including tax.
      *
-     * @return float
+     * @return float Credit memo base shipping including tax.
      */
     public function getBaseShippingInclTax();
 
     /**
-     * Returns base_shipping_tax_amount
+     * Gets the credit memo base shipping tax amount.
      *
-     * @return float
+     * @return float Credit memo base shipping tax amount.
      */
     public function getBaseShippingTaxAmount();
 
     /**
-     * Returns base_subtotal
+     * Gets the credit memo base subtotal.
      *
-     * @return float
+     * @return float Credit memo base subtotal.
      */
     public function getBaseSubtotal();
 
     /**
-     * Returns base_subtotal_incl_tax
+     * Gets the credit memo base subtotal including tax.
      *
-     * @return float
+     * @return float Credit memo base subtotal including tax.
      */
     public function getBaseSubtotalInclTax();
 
     /**
-     * Returns base_tax_amount
+     * Gets the credit memo base tax amount.
      *
-     * @return float
+     * @return float Credit memo base tax amount.
      */
     public function getBaseTaxAmount();
 
     /**
-     * Returns base_to_global_rate
+     * Gets the credit memo base-to-global rate.
      *
-     * @return float
+     * @return float Credit memo base-to-global rate.
      */
     public function getBaseToGlobalRate();
 
     /**
-     * Returns base_to_order_rate
+     * Gets the credit memo base-to-order rate.
      *
-     * @return float
+     * @return float Credit memo base-to-order rate.
      */
     public function getBaseToOrderRate();
 
     /**
-     * Returns billing_address_id
+     * Gets the credit memo billing address ID.
      *
-     * @return int
+     * @return int Credit memo billing address ID.
      */
     public function getBillingAddressId();
 
     /**
-     * Returns created_at
+     * Gets the credit memo created-at timestamp.
      *
-     * @return string
+     * @return string Credit memo created-at timestamp.
      */
     public function getCreatedAt();
     /**
-     * Returns creditmemo_status
+     * Gets the credit memo status.
      *
-     * @return int
+     * @return int Credit memo status.
      */
     public function getCreditmemoStatus();
 
     /**
-     * Returns discount_amount
+     * Gets the credit memo discount amount.
      *
-     * @return float
+     * @return float Credit memo discount amount.
      */
     public function getDiscountAmount();
 
     /**
-     * Returns discount_description
+     * Gets the credit memo discount description.
      *
-     * @return string
+     * @return string Credit memo discount description.
      */
     public function getDiscountDescription();
 
     /**
-     * Returns email_sent
+     * Gets the credit memo email sent flag value.
      *
-     * @return int
+     * @return int Credit memo email sent flag value.
      */
     public function getEmailSent();
 
     /**
-     * Returns entity_id
+     * Gets the credit memo ID.
      *
-     * @return int
+     * @return int Credit memo ID.
      */
     public function getEntityId();
     /**
-     * Returns global_currency_code
+     * Gets the credit memo global currency code.
      *
-     * @return string
+     * @return string Credit memo global currency code.
      */
     public function getGlobalCurrencyCode();
 
     /**
-     * Returns grand_total
+     * Gets the credit memo grand total.
      *
-     * @return float
+     * @return float Credit memo grand total.
      */
     public function getGrandTotal();
 
     /**
-     * Returns hidden_tax_amount
+     * Gets the credit memo hidden tax amount.
      *
-     * @return float
+     * @return float Credit memo hidden tax amount.
      */
     public function getHiddenTaxAmount();
 
     /**
-     * Returns increment_id
+     * Gets the credit memo increment ID.
      *
-     * @return string
+     * @return string Credit memo increment ID.
      */
     public function getIncrementId();
 
     /**
-     * Returns invoice_id
+     * Gets the credit memo invoice ID.
      *
-     * @return int
+     * @return int Credit memo invoice ID.
      */
     public function getInvoiceId();
 
     /**
-     * Returns order_currency_code
+     * Gets the credit memo order currency code.
      *
-     * @return string
+     * @return string Credit memo order currency code.
      */
     public function getOrderCurrencyCode();
 
     /**
-     * Returns order_id
+     * Gets the credit memo order ID.
      *
-     * @return int
+     * @return int Credit memo order ID.
      */
     public function getOrderId();
 
     /**
-     * Returns shipping_address_id
+     * Gets the credit memo shipping address ID.
      *
-     * @return int
+     * @return int Credit memo shipping address ID.
      */
     public function getShippingAddressId();
     /**
-     * Returns shipping_amount
+     * Gets the credit memo shipping amount.
      *
-     * @return float
+     * @return float Credit memo shipping amount.
      */
     public function getShippingAmount();
 
     /**
-     * Returns shipping_hidden_tax_amount
+     * Gets the credit memo shipping hidden tax amount.
      *
-     * @return float
+     * @return float Credit memo shipping hidden tax amount.
      */
     public function getShippingHiddenTaxAmount();
 
     /**
-     * Returns shipping_incl_tax
+     * Gets the credit memo shipping including tax.
      *
-     * @return float
+     * @return float Credit memo shipping including tax.
      */
     public function getShippingInclTax();
 
     /**
-     * Returns shipping_tax_amount
+     * Gets the credit memo shipping tax amount.
      *
-     * @return float
+     * @return float Credit memo shipping tax amount.
      */
     public function getShippingTaxAmount();
 
     /**
-     * Returns state
+     * Gets the credit memo state.
      *
-     * @return int
+     * @return int Credit memo state.
      */
     public function getState();
 
     /**
-     * Returns store_currency_code
+     * Gets the credit memo store currency code.
      *
-     * @return string
+     * @return string Credit memo store currency code.
      */
     public function getStoreCurrencyCode();
 
     /**
-     * Returns store_id
+     * Gets the credit memo store ID.
      *
-     * @return int
+     * @return int Credit memo store ID.
      */
     public function getStoreId();
 
     /**
-     * Returns store_to_base_rate
+     * Gets the credit memo store-to-base rate.
      *
-     * @return float
+     * @return float Credit memo store-to-base rate.
      */
     public function getStoreToBaseRate();
 
     /**
-     * Returns store_to_order_rate
+     * Gets the credit memo store-to-order rate.
      *
-     * @return float
+     * @return float Credit memo store-to-order rate.
      */
     public function getStoreToOrderRate();
 
     /**
-     * Returns subtotal
+     * Gets the credit memo subtotal.
      *
-     * @return float
+     * @return float Credit memo subtotal.
      */
     public function getSubtotal();
 
     /**
-     * Returns subtotal_incl_tax
+     * Gets the credit memo subtotal including tax.
      *
-     * @return float
+     * @return float Credit memo subtotal including tax.
      */
     public function getSubtotalInclTax();
 
     /**
-     * Returns tax_amount
+     * Gets the credit memo tax amount.
      *
-     * @return float
+     * @return float Credit memo tax amount.
      */
     public function getTaxAmount();
 
     /**
-     * Returns transaction_id
+     * Gets the credit memo transaction ID.
      *
-     * @return string
+     * @return string Credit memo transaction ID.
      */
     public function getTransactionId();
 
     /**
-     * Returns updated_at
+     * Gets the credit memo updated-at timestamp.
      *
-     * @return string
+     * @return string Credit memo updated-at timestamp.
      */
     public function getUpdatedAt();
 
     /**
-     * Return creditmemo items
+     * Gets credit memo items.
      *
-     * @return \Magento\Sales\Api\Data\CreditmemoItemInterface[]
+     * @return \Magento\Sales\Api\Data\CreditmemoItemInterface[] Array of credit memo items.
      */
     public function getItems();
 
     /**
-     * Return creditmemo comments
+     * Gets credit memo comments.
      *
-     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null
+     * @return \Magento\Sales\Api\Data\CreditmemoCommentInterface[]|null Array of any credit memo comments. Otherwise, null.
      */
     public function getComments();
 }

@@ -31,7 +31,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
                     }
                 } catch (\Exception $e) {
                     $this->messageManager->addException($e, __('We cannot add this item to your shopping cart'));
-                    $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                    $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                     $this->_goBack();
                 }
             }
