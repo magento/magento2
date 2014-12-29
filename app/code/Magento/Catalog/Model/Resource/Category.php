@@ -962,20 +962,4 @@ class Category extends AbstractResource
         $select->from($this->getEntityTable(), 'COUNT(*)')->where('parent_id != ?', 0);
         return (int)$adapter->fetchOne($select);
     }
-
-    /**
-     * Return attribute row to prepare where statement
-     *
-     * @param \Magento\Framework\Object $entity
-     * @param \Magento\Framework\Object $object
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @return array
-     */
-    protected function getAttributeRow($entity, $object, $attribute)
-    {
-        return [
-            'attribute_id' => $attribute->getId(),
-            $entity->getEntityIdField() => $object->getData($entity->getEntityIdField()),
-        ];
-    }
 }

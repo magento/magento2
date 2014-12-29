@@ -9,7 +9,7 @@ use Magento\Framework\Exception\InputException;
 /**
  * Customer entity resource model
  */
-class Customer extends \Magento\Customer\Model\Resource\AbstractResource
+class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
      * @var \Magento\Core\Model\Validator\Factory

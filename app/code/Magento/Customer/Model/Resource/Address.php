@@ -8,7 +8,7 @@ namespace Magento\Customer\Model\Resource;
 
 use Magento\Framework\Exception\InputException;
 
-class Address extends \Magento\Customer\Model\Resource\AbstractResource
+class Address extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
      * @var \Magento\Core\Model\Validator\Factory

@@ -930,13 +930,11 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         $select = $adapter->select();
         if ($attribute->getBackend()->getType() === 'static') {
             $value = $object->getData($attribute->getAttributeCode());
-            $bind = ['entity_type_id' => $this->getTypeId(), 'attribute_code' => trim($value)];
+            $bind = ['attribute_code' => trim($value)];
 
             $select->from(
                 $this->getEntityTable(),
                 $this->getEntityIdField()
-            )->where(
-                'entity_type_id = :entity_type_id'
             )->where(
                 $attribute->getAttributeCode() . ' = :attribute_code'
             );
@@ -947,7 +945,6 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
                 $value = $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
             }
             $bind = [
-                'entity_type_id' => $this->getTypeId(),
                 'attribute_id' => $attribute->getId(),
                 'value' => trim($value),
             ];
@@ -955,13 +952,17 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
                 $attribute->getBackend()->getTable(),
                 $attribute->getBackend()->getEntityIdField()
             )->where(
-                'entity_type_id = :entity_type_id'
-            )->where(
                 'attribute_id = :attribute_id'
             )->where(
                 'value = :value'
             );
         }
+
+        if (!$this->getEntityTable()) {
+            $bind['entity_type_id'] = $this->getTypeId();
+            $select->where('entity_type_id = :entity_type_id');
+        }
+
         $data = $adapter->fetchCol($select, $bind);
 
         if ($object->getId()) {
@@ -1517,11 +1518,14 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         $entityIdField = $attribute->getBackend()->getEntityIdField();
 
         $data = [
-            'entity_type_id' => $object->getEntityTypeId(),
             $entityIdField => $object->getId(),
             'attribute_id' => $attribute->getId(),
             'value' => $this->_prepareValueForSave($value, $attribute),
         ];
+
+        if (!$this->getEntityTable()) {
+            $data['entity_type_id'] = $object->getEntityTypeId();
+        }
 
         $this->_attributeValuesToSave[$table][] = $data;
 
@@ -1663,11 +1667,16 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     protected function getAttributeRow($entity, $object, $attribute)
     {
-        return [
-            'entity_type_id' => $entity->getTypeId(),
+        $data = [
             'attribute_id' => $attribute->getId(),
             $entity->getEntityIdField() => $object->getData($entity->getEntityIdField()),
         ];
+
+        if (!$this->getEntityTable()) {
+            $data['entity_type_id'] = $entity->getTypeId();
+        }
+
+        return $data;
     }
 
     /**
