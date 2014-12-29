@@ -72,7 +72,7 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
             'store_id' => $storeId,
             'cid' => $customerGroupId,
         ]);
-        $title = __('%1 - Discounts and Coupons', $storeModel->getName());
+        $title = __('%1 - Discounts and Coupons', $storeModel->getFrontendName());
         $lang = $this->_scopeConfig->getValue(
             'general/locale/code',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,

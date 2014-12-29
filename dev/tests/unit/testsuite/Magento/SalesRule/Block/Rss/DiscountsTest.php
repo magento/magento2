@@ -92,7 +92,8 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
                 '__wakeUp',
                 'getId',
                 'getWebsiteId',
-                'getName'
+                'getName',
+                'getFrontendName'
             ],
             [],
             '',
@@ -129,8 +130,8 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
             'name' => 'Rule Name',
         ];
         $rssData = [
-            'title' => 'Store Name - Discounts and Coupons',
-            'description' => 'Store Name - Discounts and Coupons',
+            'title' => 'Frontend Name - Discounts and Coupons',
+            'description' => 'Frontend Name - Discounts and Coupons',
             'link' => 'http://rss.magento.com/discount',
             'charset' => 'UTF-8',
             'language' => 'en_US',
@@ -164,7 +165,9 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->storeModel->expects($this->once())->method('getWebsiteId')->will($this->returnValue(1));
-        $this->storeModel->expects($this->once())->method('getName')->will($this->returnValue('Store Name'));
+        $this->storeModel->expects($this->never())->method('getName');
+        $this->storeModel->expects($this->atLeastOnce())->method('getFrontendName')->willReturn('Frontend Name');
+
         $this->requestInterface->expects($this->any())->method('getParam')->will($this->returnValue(1));
         $this->urlBuilderInterface->expects($this->any())->method('getUrl')->will($this->returnValue($url));
         $this->rssBuilderInterface->expects($this->any())->method('getUrl')->will($this->returnValue($rssUrl));
