@@ -1,0 +1,11 @@
+<?php
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+?>
+<form action="<?php echo $this->getUrl('*/*/refreshStatistics'); ?>" method="post">
+    <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+    <button type="submit" style="float:right; margin: 15px"  title="Refresh data">
+        <?php echo __('Refresh data') ?>
+    </button>
+</form>

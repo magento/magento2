@@ -28,14 +28,24 @@ class Statistics extends \Magento\Backend\App\Action
     protected $_dateFilter;
 
     /**
+     * Codes for Refresh Statistics
+     *
+     * @var []
+     */
+    protected $reportTypes;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param [] $reportTypes
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        array $reportTypes
     ) {
         $this->_dateFilter = $dateFilter;
+        $this->reportTypes = $reportTypes;
         parent::__construct($context);
     }
 
@@ -71,16 +81,7 @@ class Statistics extends \Magento\Backend\App\Action
             $codes = explode(',', $codes);
         }
 
-        $aliases = [
-            'sales' => 'Magento\Sales\Model\Resource\Report\Order',
-            'tax' => 'Magento\Tax\Model\Resource\Report\Tax',
-            'shipping' => 'Magento\Sales\Model\Resource\Report\Shipping',
-            'invoiced' => 'Magento\Sales\Model\Resource\Report\Invoiced',
-            'refunded' => 'Magento\Sales\Model\Resource\Report\Refunded',
-            'coupons' => 'Magento\SalesRule\Model\Resource\Report\Rule',
-            'bestsellers' => 'Magento\Sales\Model\Resource\Report\Bestsellers',
-            'viewed' => 'Magento\Reports\Model\Resource\Report\Product\Viewed',
-        ];
+        $aliases = $this->reportTypes;
         $out = [];
         foreach ($codes as $code) {
             $out[] = $aliases[$code];

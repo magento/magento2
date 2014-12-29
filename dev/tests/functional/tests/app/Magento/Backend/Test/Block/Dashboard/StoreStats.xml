@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<tabs>
+    <bestsellers>
+        <class>\Magento\Backend\Test\Block\Dashboard\Tab\Products</class>
+        <selector>#grid_tab_ordered_products</selector>
+        <strategy>css selector</strategy>
+    </bestsellers>
+</tabs>
