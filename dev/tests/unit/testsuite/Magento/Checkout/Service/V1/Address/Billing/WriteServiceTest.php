@@ -69,7 +69,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             '\Magento\Checkout\Service\V1\Address\Converter', [], [], '', false
         );
 
-        $this->loggerMock = $this->getMock('\Magento\Framework\Logger', [], [], '', false);
+        $this->loggerMock = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
 
         $this->service = new \Magento\Checkout\Service\V1\Address\Billing\WriteService(
             $this->quoteRepositoryMock,

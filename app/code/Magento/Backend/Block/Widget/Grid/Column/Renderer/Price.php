@@ -48,7 +48,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      */
     public function render(\Magento\Framework\Object $row)
     {
-        if ($data = $row->getData($this->getColumn()->getIndex())) {
+        if ($data = $this->_getValue($row)) {
             $currencyCode = $this->_getCurrencyCode($row);
 
             if (!$currencyCode) {

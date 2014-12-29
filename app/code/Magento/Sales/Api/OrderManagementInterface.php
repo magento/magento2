@@ -69,4 +69,11 @@ interface OrderManagementInterface
      * @return bool
      */
     public function unHold($id);
+
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @return \Magento\Sales\Api\Data\OrderInterface
+     */
+    public function place(\Magento\Sales\Api\Data\OrderInterface $order);
+
 }

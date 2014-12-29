@@ -25,7 +25,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Logger | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $logger;
 
@@ -62,7 +62,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', ['isOn'], [], '', false);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
 
-        $this->logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
 
@@ -71,7 +71,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             ['Magento\Framework\App\MaintenanceMode', $this->maintenanceMode],
             ['Magento\Framework\Filesystem', $filesystem],
             ['Magento\Framework\App\DeploymentConfig', $this->deploymentConfig],
-            ['Magento\Framework\Logger', $this->logger],
+            ['Psr\Log\LoggerInterface', $this->logger],
         ];
 
         $this->objectManager->expects($this->any())->method('get')

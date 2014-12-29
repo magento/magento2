@@ -952,6 +952,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     {
         foreach ($this->getPayments() as $payment) {
             if (!$payment->isDeleted()) {
+                $payment->setOrder($this);
                 return $payment;
             }
         }
@@ -3389,7 +3390,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         if ($this->getData(ApiOrderInterface::STATUS_HISTORIES) == null) {
             $this->setData(
                 ApiOrderInterface::STATUS_HISTORIES,
-                $this->getPaymentsCollection()->getItems()
+                $this->getStatusHistoryCollection()->getItems()
             );
         }
         return $this->getData(ApiOrderInterface::STATUS_HISTORIES);

@@ -59,7 +59,18 @@ class RulesApplier
             }
 
             if (!$skipValidation && !$rule->getActions()->validate($item)) {
-                continue;
+                $childItems = $item->getChildren();
+                $isContinue = true;
+                if (!empty($childItems)) {
+                    foreach ($childItems as $childItem) {
+                        if ($rule->getActions()->validate($childItem)) {
+                            $isContinue = false;
+                        }
+                    }
+                }
+                if ($isContinue) {
+                    continue;
+                }
             }
 
             $this->applyRule($item, $rule, $address, $couponCode);

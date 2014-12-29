@@ -5,7 +5,7 @@
 namespace Magento\Framework\Message;
 
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Message manager model
@@ -258,7 +258,7 @@ class Manager implements ManagerInterface
             $exception->getTraceAsString()
         );
 
-        $this->logger->logFile($message, \Zend_Log::DEBUG, Logger::LOGGER_EXCEPTION);
+        $this->logger->critical($message);
         $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_ERROR, $alternativeText), $group);
         return $this;
     }

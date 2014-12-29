@@ -9,7 +9,7 @@ use Magento\Checkout\Service\V1\Address\Validator;
 use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /** Quote billing address write service object. */
 class WriteService implements WriteServiceInterface
@@ -105,7 +105,7 @@ class WriteService implements WriteServiceInterface
         try {
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             throw new InputException('Unable to save address. Please, check input data.');
         }
         return $quote->getBillingAddress()->getId();

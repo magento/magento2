@@ -13,7 +13,7 @@
 <div class="divider"></div>
 <div class="order-totals-bottom">
     <div class="field choice field-append-comments">
-        <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]" value="1" <?php if ($this->getNoteNotify()): ?>checked="true"<?php endif; ?>/>
+        <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]" value="1"<?php if ($this->getNoteNotify()): ?> checked="checked"<?php endif; ?>/>
         <label for="notify_customer" class="normal"><?php echo __('Append Comments') ?></label>
     </div>
     <?php if ($this->canSendNewOrderConfirmationEmail()): ?>

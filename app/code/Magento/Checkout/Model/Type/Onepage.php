@@ -51,7 +51,7 @@ class Onepage
     protected $_helper;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -165,10 +165,15 @@ class Onepage
     protected $extensibleDataObjectConverter;
 
     /**
+     * @var \Magento\Quote\Model\QuoteManagement
+     */
+    protected $quoteManagement;
+
+    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Checkout\Helper\Data $helper
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -196,7 +201,7 @@ class Onepage
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Checkout\Helper\Data $helper,
         \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -218,7 +223,8 @@ class Onepage
         OrderSender $orderSender,
         CustomerRepositoryInterface $customerRepository,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        \Magento\Quote\Model\QuoteManagement $quoteManagement
     ) {
         $this->_eventManager = $eventManager;
         $this->_customerUrl = $customerUrl;
@@ -246,6 +252,7 @@ class Onepage
         $this->customerRepository = $customerRepository;
         $this->quoteRepository = $quoteRepository;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->quoteManagement = $quoteManagement;
     }
 
     /**
@@ -918,14 +925,15 @@ class Onepage
         }
 
         /** @var \Magento\Quote\Model\Service\Quote $quoteService */
-        $quoteService = $this->_serviceQuoteFactory->create(['quote' => $this->getQuote()]);
-        $quoteService->submitAllWithDataObject();
+//        $quoteService = $this->_serviceQuoteFactory->create(['quote' => $this->getQuote()]);
+//        $quoteService->submitAllWithDataObject();
+        $order = $this->quoteManagement->submit($this->getQuote());
 
         if ($isNewCustomer) {
             try {
                 $this->_involveNewCustomer();
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
 
@@ -935,7 +943,7 @@ class Onepage
             $this->getQuote()->getId()
         )->clearHelperData();
 
-        $order = $quoteService->getOrder();
+//        $order = $quoteService->getOrder();
         if ($order) {
             $this->_eventManager->dispatch(
                 'checkout_type_onepage_save_order_after',
@@ -953,7 +961,7 @@ class Onepage
                 try {
                     $this->orderSender->send($order);
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                 }
             }
 

@@ -31,7 +31,7 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setQuoteId($quote->getId());
 
         $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
 
         /** @var $session \Magento\Customer\Model\Session */
         $session = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session', [$logger]);
