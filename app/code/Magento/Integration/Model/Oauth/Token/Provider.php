@@ -127,14 +127,17 @@ class Provider implements TokenProviderInterface
      */
     public function getAccessToken($consumer)
     {
-        $token = $this->getIntegrationTokenByConsumerId($consumer->getId());
-        $this->logger->log('Request token: ' . $token->getToken());
+        $consumerId = $consumer->getId();
+        $token = $this->getIntegrationTokenByConsumerId($consumerId);
         if (Token::TYPE_REQUEST != $token->getType()) {
             throw new \Magento\Framework\Oauth\Exception(
                 'Cannot get access token because consumer token is not a request token'
             );
         }
         $accessToken = $token->convertToAccess();
+        $this->logger->log(
+            'Request token ' . $token->getToken() . ' was exchanged to obtain access token for consumer ' . $consumerId
+        );
         return ['oauth_token' => $accessToken->getToken(), 'oauth_token_secret' => $accessToken->getSecret()];
     }
 
