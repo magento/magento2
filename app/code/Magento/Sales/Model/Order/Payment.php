@@ -377,7 +377,7 @@ class Payment extends Info implements OrderPaymentInterface
                 $this->_order($baseTotalDue);
                 break;
             case \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE:
-                $this->_authorize(true, $baseTotalDue);
+                $this->authorize(true, $baseTotalDue);
                 // base amount will be set inside
                 $this->setAmountAuthorized($totalDue);
                 break;
@@ -571,7 +571,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function registerAuthorizationNotification($amount)
     {
-        return $this->_isTransactionExists() ? $this : $this->_authorize(false, $amount);
+        return $this->_isTransactionExists() ? $this : $this->authorize(false, $amount);
     }
 
     /**
@@ -1125,9 +1125,10 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param bool $isOnline
      * @param float $amount
+     *
      * @return $this
      */
-    protected function _authorize($isOnline, $amount)
+    public function authorize($isOnline, $amount)
     {
         // check for authorization amount to be equal to grand total
         $this->setShouldCloseParentTransaction(false);
@@ -1179,18 +1180,6 @@ class Payment extends Info implements OrderPaymentInterface
         $order->setState($state, $status, $message);
 
         return $this;
-    }
-
-    /**
-     * Public access to _authorize method
-     *
-     * @param bool $isOnline
-     * @param float $amount
-     * @return $this
-     */
-    public function authorize($isOnline, $amount)
-    {
-        return $this->_authorize($isOnline, $amount);
     }
 
     /**

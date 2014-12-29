@@ -1652,6 +1652,7 @@ return [
     ['_isDataChanged', 'Magento\Catalog\Model\Product'],
     ['getVisibleOnFrontStates', 'Magento\Sales\Model\Order\Config', 'getVisibleOnFrontStatuses'],
     ['getInvisibleOnFrontStates', 'Magento\Sales\Model\Order\Config', 'getInvisibleOnFrontStatuses'],
+    ['_authorize', 'Magento\Sales\Model\Order\Payment'],
     ['_shouldBeConverted', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_beforeSave', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_afterSave', 'Magento\Sales\Model\Resource\AbstractResource'],
