@@ -394,6 +394,12 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     const BASE_WEEE_TAX_ROW_DISPOSITION = 'base_weee_tax_row_disposition';
 
     /**
+     * Parent Item
+     */
+    const PARENT_ITEM = 'parent_item';
+
+
+    /**
      * Gets the additional data for the order item.
      *
      * @return string Additional data.
@@ -1050,4 +1056,10 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return float Weight.
      */
     public function getWeight();
+
+    /**
+     * @return OrderItemInterface
+     */
+    public function getParentItem();
+
 }

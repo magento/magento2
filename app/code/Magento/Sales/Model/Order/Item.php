@@ -149,11 +149,6 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     protected $_order = null;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|null
-     */
-    protected $_parentItem = null;
-
-    /**
      * @var array
      */
     protected $_children = [];
@@ -232,7 +227,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     public function setParentItem($item)
     {
         if ($item) {
-            $this->_parentItem = $item;
+            $this->setData(OrderItemInterface::PARENT_ITEM, $item);
             $item->setHasChildren(true);
             $item->addChildItem($this);
         }
@@ -246,7 +241,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      */
     public function getParentItem()
     {
-        return $this->_parentItem;
+        return $this->getData(OrderItemInterface::PARENT_ITEM);
     }
 
     /**
