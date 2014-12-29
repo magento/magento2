@@ -1137,6 +1137,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param   \Magento\Framework\Object $object
      * @return $this
+     * @throws \Exception
      */
     public function save(\Magento\Framework\Object $object)
     {
@@ -1158,7 +1159,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
                     $this->loadAllAttributes($object);
                 }
 
-                if (!$object->getEntityTypeId()) {
+                if (!$this->getEntityTable() && !$object->getEntityTypeId()) {
                     $object->setEntityTypeId($this->getTypeId());
                 }
 

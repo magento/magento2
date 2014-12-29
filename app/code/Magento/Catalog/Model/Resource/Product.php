@@ -4,8 +4,6 @@
  */
 namespace Magento\Catalog\Model\Resource;
 
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-
 /**
  * Product entity resource model
  *
