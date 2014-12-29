@@ -55,7 +55,7 @@ class Refresh extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
                     'One or more products were not deleted from google shopping account. Refer to the log file for details.'
                 )
             );
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             return;
         }
 

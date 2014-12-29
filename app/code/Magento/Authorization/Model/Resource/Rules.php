@@ -29,21 +29,21 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_aclBuilder;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Acl\Builder $aclBuilder
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\CacheInterface $aclCache
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Acl\Builder $aclBuilder,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\Acl\CacheInterface $aclCache
     ) {
@@ -116,7 +116,7 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
             throw $e;
         } catch (\Exception $e) {
             $adapter->rollBack();
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
     }
 }

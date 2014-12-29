@@ -25,12 +25,12 @@ abstract class AbstractDirector
      *
      * @param array $config
      * @param \Magento\Backend\Model\Menu\Builder $builder
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @return void
      */
     abstract public function direct(
         array $config,
         \Magento\Backend\Model\Menu\Builder $builder,
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     );
 }
