@@ -30,8 +30,7 @@ class Tree extends Block
      */
     public function selectCategory($category)
     {
-        //TODO Remove this line after old fixture was deleted
-        $categoryName = $category instanceof CatalogCategory ? $category->getName() : $category;
+        $categoryName = $category->getName();
         if ($categoryName) {
             $this->_rootElement->find("//a[contains(text(),'{$categoryName}')]", Locator::SELECTOR_XPATH)->click();
         } else {
