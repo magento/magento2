@@ -10,7 +10,6 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
-use Magento\Sales\Model\string;
 
 /**
  * Quote model
@@ -233,7 +232,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     protected $groupRepository;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory
+     * @var \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory
      */
     protected $_quoteItemCollectionFactory;
 
@@ -263,7 +262,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     protected $_quotePaymentFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory
+     * @var \Magento\Quote\Model\Resource\Quote\Payment\CollectionFactory
      */
     protected $_quotePaymentCollectionFactory;
 
@@ -372,13 +371,13 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
+        \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
         \Magento\Quote\Model\Quote\ItemFactory $quoteItemFactory,
         \Magento\Framework\Message\Factory $messageFactory,
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Quote\Model\Quote\PaymentFactory $quotePaymentFactory,
-        \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory,
+        \Magento\Quote\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory,
         \Magento\Framework\Object\Copy $objectCopyService,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Quote\Model\Quote\Item\Processor $itemProcessor,
@@ -430,7 +429,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Quote');
+        $this->_init('Magento\Quote\Model\Resource\Quote');
     }
 
     /**

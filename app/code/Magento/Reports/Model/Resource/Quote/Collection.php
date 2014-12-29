@@ -10,7 +10,7 @@
  */
 namespace Magento\Reports\Model\Resource\Quote;
 
-class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
+class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
 {
     const SELECT_COUNT_SQL_TYPE_CART = 1;
 
@@ -137,7 +137,7 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
         )->reset(
             \Zend_Db_Select::COLUMNS
         )->joinInner(
-            ['quote_items' => $this->getTable('sales_quote_item')],
+            ['quote_items' => $this->getTable('quote_item')],
             'quote_items.quote_id = main_table.entity_id',
             null
         )->joinInner(

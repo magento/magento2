@@ -22,8 +22,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_model = Bootstrap::getObjectManager()->create('Magento\Checkout\Model\Type\Onepage');
-        /** @var \Magento\Sales\Model\Resource\Quote\Collection $quoteCollection */
-        $quoteCollection = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Resource\Quote\Collection');
+        /** @var \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection */
+        $quoteCollection = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Resource\Quote\Collection');
         /** @var \Magento\Quote\Model\Quote $quote */
         $this->_currentQuote = $quoteCollection->getLastItem();
         $this->_model->setQuote($this->_currentQuote);
