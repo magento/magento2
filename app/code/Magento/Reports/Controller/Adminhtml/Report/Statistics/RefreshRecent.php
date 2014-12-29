@@ -28,7 +28,7 @@ class RefreshRecent extends \Magento\Reports\Controller\Adminhtml\Report\Statist
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t refresh recent statistics.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
 
         if ($this->_getSession()->isFirstPageAfterLogin()) {

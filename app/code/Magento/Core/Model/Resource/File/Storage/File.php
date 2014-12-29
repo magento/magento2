@@ -17,15 +17,15 @@ class File
     protected $_filesystem;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Logger $log
+     * @param \Psr\Log\LoggerInterface $log
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, \Magento\Framework\Logger $log)
+    public function __construct(\Magento\Framework\Filesystem $filesystem, \Psr\Log\LoggerInterface $log)
     {
         $this->_logger = $log;
         $this->_filesystem = $filesystem;
@@ -98,7 +98,7 @@ class File
         try {
             $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA)->create($path);
         } catch (\Exception $e) {
-            $this->_logger->log($e->getMessage());
+            $this->_logger->info($e->getMessage());
             throw new \Magento\Framework\Model\Exception(
                 __('Unable to create directory: %1', DirectoryList::MEDIA . '/' . $path)
             );
@@ -125,7 +125,7 @@ class File
                 return true;
             }
         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
-            $this->_logger->log($e->getMessage());
+            $this->_logger->info($e->getMessage());
             throw new \Magento\Framework\Model\Exception(__('Unable to save file: %1', $filePath));
         }
 

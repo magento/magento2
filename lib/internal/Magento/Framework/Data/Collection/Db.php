@@ -7,7 +7,7 @@ namespace Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Base items collection class
@@ -709,7 +709,7 @@ class Db extends \Magento\Framework\Data\Collection
      */
     protected function _logQuery($sql)
     {
-        $this->_logger->log(is_null($sql) ? $this->getSelect()->__toString() : $sql);
+        $this->_logger->info(is_null($sql) ? $this->getSelect()->__toString() : $sql);
     }
 
     /**

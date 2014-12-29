@@ -48,7 +48,7 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
                 __('An error has occurred while adding products to google shopping account.'),
                 $e->getMessage()
             );
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             return;
         }
 

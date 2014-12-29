@@ -94,7 +94,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             $this->_tokenFactoryMock,
             $this->getMock('Magento\Integration\Helper\Oauth\Data', [], [], '', false),
             $this->getMock('Magento\Framework\HTTP\ZendClient', [], [], '', false),
-            $this->getMock('Magento\Framework\Logger', [], [], '', false),
+            $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMock('Magento\Framework\Oauth\Helper\Oauth', [], [], '', false),
             $this->_tokenProviderMock
         );
