@@ -581,7 +581,6 @@ class Address extends AbstractCustomer
     {
         /** @var $entity \Magento\Customer\Model\Customer */
         $entity = $this->_customerFactory->create();
-        $entityTypeId = $entity->getEntityTypeId();
 
         foreach ($defaults as $tableName => $data) {
             $tableData = [];

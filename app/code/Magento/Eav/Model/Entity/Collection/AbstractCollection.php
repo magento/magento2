@@ -114,6 +114,13 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
     protected $_universalFactory;
 
     /**
+     * Specific entity types which not required "entity_type_id" for select
+     *
+     * @var array
+     */
+    protected $entityTypes = ['customer', 'customer_address'];
+
+    /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -191,7 +198,8 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
     protected function _initSelect()
     {
         $this->getSelect()->from(['e' => $this->getEntity()->getEntityTable()]);
-        if ($this->getEntity()->getTypeId()) {
+        $entity = $this->getEntity();
+        if ($entity->getTypeId() && !in_array($entity->getType(), $this->entityTypes)) {
             $this->addAttributeToFilter('entity_type_id', $this->getEntity()->getTypeId());
         }
         return $this;
@@ -1166,15 +1174,20 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
             $table,
             [$entityIdField, 'attribute_id']
         )->where(
-            'entity_type_id =?',
-            $this->getEntity()->getTypeId()
-        )->where(
             "{$entityIdField} IN (?)",
             array_keys($this->_itemsById)
         )->where(
             'attribute_id IN (?)',
             $attributeIds
         );
+
+        if(!in_array($this->getEntity()->getType(), $this->entityTypes))
+        {
+            $select->where(
+                'entity_type_id =?',
+                $this->getEntity()->getTypeId()
+            );
+        }
         return $select;
     }
 
