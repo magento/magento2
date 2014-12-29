@@ -199,7 +199,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                     $this->getMock('Magento\Framework\Registry'),
                     $this->getMock('Magento\Core\Helper\Data', [], [], '', false, false),
                     $this->getMock('Magento\Eav\Model\Config', [], [], '', false, false),
-                    $this->getMock('Magento\Eav\Model\Entity\TypeFactory'),
+                    $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false),
                     $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
                     $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false, false),
                     $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false, false)

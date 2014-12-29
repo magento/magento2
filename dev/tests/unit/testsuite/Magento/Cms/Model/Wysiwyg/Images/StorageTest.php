@@ -176,7 +176,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->_directoryDatabaseFactoryMock = $this->getMock(
             'Magento\Core\Model\File\Storage\Directory\DatabaseFactory'
         );
-        $this->_uploaderFactoryMock = $this->getMock('Magento\Core\Model\File\UploaderFactory');
+        $this->_uploaderFactoryMock = $this->getMock('Magento\Core\Model\File\UploaderFactory', [], [], '', false);
         $this->_sessionMock = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
         $this->_backendUrlMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
 
