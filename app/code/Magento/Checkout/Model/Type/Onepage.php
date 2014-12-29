@@ -165,6 +165,11 @@ class Onepage
     protected $extensibleDataObjectConverter;
 
     /**
+     * @var \Magento\Quote\Model\QuoteManagement
+     */
+    protected $quoteManagement;
+
+    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Checkout\Helper\Data $helper
      * @param \Magento\Customer\Model\Url $customerUrl
@@ -218,7 +223,8 @@ class Onepage
         OrderSender $orderSender,
         CustomerRepositoryInterface $customerRepository,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        \Magento\Quote\Model\QuoteManagement $quoteManagement
     ) {
         $this->_eventManager = $eventManager;
         $this->_customerUrl = $customerUrl;
@@ -246,6 +252,7 @@ class Onepage
         $this->customerRepository = $customerRepository;
         $this->quoteRepository = $quoteRepository;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->quoteManagement = $quoteManagement;
     }
 
     /**
@@ -918,8 +925,9 @@ class Onepage
         }
 
         /** @var \Magento\Quote\Model\Service\Quote $quoteService */
-        $quoteService = $this->_serviceQuoteFactory->create(['quote' => $this->getQuote()]);
-        $quoteService->submitAllWithDataObject();
+//        $quoteService = $this->_serviceQuoteFactory->create(['quote' => $this->getQuote()]);
+//        $quoteService->submitAllWithDataObject();
+        $order = $this->quoteManagement->submit($this->getQuote());
 
         if ($isNewCustomer) {
             try {
@@ -935,7 +943,7 @@ class Onepage
             $this->getQuote()->getId()
         )->clearHelperData();
 
-        $order = $quoteService->getOrder();
+//        $order = $quoteService->getOrder();
         if ($order) {
             $this->_eventManager->dispatch(
                 'checkout_type_onepage_save_order_after',

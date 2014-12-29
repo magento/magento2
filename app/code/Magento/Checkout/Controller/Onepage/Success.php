@@ -15,7 +15,7 @@ class Success extends \Magento\Checkout\Controller\Onepage
     public function execute()
     {
         $session = $this->getOnepage()->getCheckout();
-        if (!$this->_objectManager->get('Magento\Checkout\Model\Session\SuccessValidator')->isValid($session)) {
+        if (!$this->_objectManager->get('Magento\Checkout\Model\Session\SuccessValidator')->isValid()) {
             $this->_redirect('checkout/cart');
             return;
         }
