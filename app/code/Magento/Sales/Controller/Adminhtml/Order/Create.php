@@ -291,11 +291,10 @@ class Create extends \Magento\Backend\App\Action
                 }
             }
             if (!$isApplyDiscount) {
-                $rr = $this->escaper->escapeHtml($couponCode);
                 $this->messageManager->addError(
                     __(
                         '"%1" coupon code was not applied. Do not apply discount is selected for item(s)',
-                        $rr
+                        $this->escaper->escapeHtml($couponCode)
                     )
                 );
             } else {
