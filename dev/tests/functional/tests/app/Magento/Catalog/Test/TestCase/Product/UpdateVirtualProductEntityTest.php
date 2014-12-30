@@ -35,7 +35,7 @@ use Mtf\TestCase\Injectable;
 class UpdateVirtualProductEntityTest extends Injectable
 {
     /* tags */
-    const MVP = 'yes';
+    const MVP = 'no';
     const DOMAIN = 'MX';
     /* end tags */
 

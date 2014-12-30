@@ -34,7 +34,7 @@ use Mtf\TestCase\Injectable;
 class UpdateBundleProductEntityTest extends Injectable
 {
     /* tags */
-    const MVP = 'no';
+    const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
 
