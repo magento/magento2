@@ -66,8 +66,7 @@ class OperationFactoryTest extends \PHPUnit_Framework_TestCase
         return  [
             [OperationFactory::AREA, [], 'Magento\Tools\Di\App\Task\Operation\Area'],
             [OperationFactory::INTERCEPTION, null, 'Magento\Tools\Di\App\Task\Operation\Interception'],
-            [OperationFactory::RELATIONS, 1, 'Magento\Tools\Di\App\Task\Operation\Relations'],
-            [OperationFactory::PLUGINS, 'argument', 'Magento\Tools\Di\App\Task\Operation\Plugins'],
+            [OperationFactory::INTERCEPTION_CACHE, 1, 'Magento\Tools\Di\App\Task\Operation\InterceptionCache'],
         ];
     }
 

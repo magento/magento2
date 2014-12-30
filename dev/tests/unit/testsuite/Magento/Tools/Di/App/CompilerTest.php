@@ -120,11 +120,9 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             ],
             Task\OperationFactory::INTERCEPTION =>
                 BP . '/var/generation',
-            Task\OperationFactory::RELATIONS => [
+            Task\OperationFactory::INTERCEPTION_CACHE => [
                 BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
-            ],
-            Task\OperationFactory::PLUGINS =>
-                BP . '/app'
+            ]
         ];
     }
 }
