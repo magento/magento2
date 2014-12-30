@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Observer\Frontend\Quote\Address;
+namespace Magento\Quote\Model\Observer\Frontend\Quote\Address;
 
 /**
  * Class CollectTotalsTest
@@ -10,7 +10,7 @@ namespace Magento\Sales\Model\Observer\Frontend\Quote\Address;
 class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals
+     * @var \Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals
      */
     protected $model;
 
@@ -97,7 +97,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->vatValidatorMock = $this->getMock(
-            'Magento\Sales\Model\Observer\Frontend\Quote\Address\VatValidator',
+            'Magento\Quote\Model\Observer\Frontend\Quote\Address\VatValidator',
             [],
             [],
             '',
@@ -164,7 +164,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         $this->customerMock->expects($this->any())->method('getStoreId')->will($this->returnValue($this->storeId));
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals',
+            'Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals',
             [
                 'customerAddressHelper' => $this->customerAddressMock,
                 'customerVat' => $this->customerVatMock,

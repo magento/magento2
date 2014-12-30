@@ -2,19 +2,19 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Observer\Frontend\Quote\Address;
+namespace Magento\Quote\Model\Observer\Frontend\Quote\Address;
 
 class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals
+     * @var \Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals
      */
     protected $model;
 
     protected function setUp()
     {
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals'
+            'Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals'
         );
     }
 
@@ -24,7 +24,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
      *
-     * @covers \Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch
+     * @covers \Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch
      */
     public function testChangeQuoteCustomerGroupIdForCustomerWithDisabledAutomaticGroupChange()
     {
@@ -64,7 +64,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
      *
-     * @covers \Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch
+     * @covers \Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch
      */
     public function testChangeQuoteCustomerGroupIdForCustomerWithEnabledAutomaticGroupChange()
     {

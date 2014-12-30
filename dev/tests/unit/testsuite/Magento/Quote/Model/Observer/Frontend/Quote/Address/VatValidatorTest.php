@@ -2,12 +2,12 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Observer\Frontend\Quote\Address;
+namespace Magento\Quote\Model\Observer\Frontend\Quote\Address;
 
 class VatValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Observer\Frontend\Quote\Address\VatValidator
+     * @var \Magento\Quote\Model\Observer\Frontend\Quote\Address\VatValidator
      */
     protected $model;
 
@@ -115,7 +115,7 @@ class VatValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->validationResult = new \Magento\Framework\Object($this->testData);
 
-        $this->model = new \Magento\Sales\Model\Observer\Frontend\Quote\Address\VatValidator(
+        $this->model = new \Magento\Quote\Model\Observer\Frontend\Quote\Address\VatValidator(
             $this->customerAddressMock,
             $this->customerVatMock
         );
