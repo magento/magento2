@@ -184,6 +184,9 @@
             <field name="qty">
                 <aspect name="to_order_item" targetField="qty_ordered" />
             </field>
+            <field name="id">
+                <aspect name="to_order_item" targetField="quote_item_id" />
+            </field>
             <field name="is_virtual">
                 <aspect name="to_order_item" />
             </field>
