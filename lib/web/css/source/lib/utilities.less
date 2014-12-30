@@ -230,16 +230,18 @@
 .url (@_path) {
     @url: "@{baseDir}@{_path}";
 }
+
 .url (
     @_path,
     @_module
-) when not (@_module = false) and not (@_module = '') and  (@urls-resolved = false) {
+) when not (@_module = false) and not (@_module = '') and (@urls-resolved = false) {
     @url: "@{_module}::@{_path}";
 }
+
 .url (
     @_path,
     @_module
-) when not (@_module = false) and not (@_module = '') and  (@urls-resolved = true) {
+) when not (@_module = false) and not (@_module = '') and (@urls-resolved = true) {
     @url: "@{baseDir}@{_module}/@{_path}";
 }
 

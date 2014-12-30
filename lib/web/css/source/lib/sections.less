@@ -74,8 +74,7 @@
 ) {
     .data-tabs-base();
     > .item.title {
-        margin: 0;
-        .css(margin-right, @_tab-control-margin-right);
+        .css(margin, 0 @_tab-control-margin-right 0 0);
         > .switch {
             .typography(
                 @_color: @_tab-control-color,
@@ -99,10 +98,7 @@
             .css(border, @_tab-content-border);
             border-bottom: none;
             .css(height, @_tab-control-height);
-            .css(padding-top, @_tab-control-padding-top);
-            .css(padding-right, @_tab-control-padding-right);
-            .css(padding-bottom, @_tab-control-padding-bottom);
-            .css(padding-left, @_tab-control-padding-left);
+            .css(padding, @_tab-control-padding-top @_tab-control-padding-right @_tab-control-padding-bottom @_tab-control-padding-left);
         }
         &:not(.disabled) > .switch:focus,
         &:not(.disabled) > .switch:hover {
@@ -219,8 +215,7 @@
     }
     & when not (@_accordion-control-margin-bottom = 0) {
         > .item.title {
-            margin: 0;
-            .css(margin-bottom, @_accordion-control-margin-bottom);
+            .css(margin, 0 0 @_accordion-control-margin-bottom);
         }
     }
     > .item.title {
@@ -231,10 +226,7 @@
             .css(border-bottom,@_accordion-control-border-bottom);
             .css(border-left,@_accordion-control-border-left);
             .css(height, @_accordion-control-height);
-            .css(padding-top, @_accordion-control-padding-top);
-            .css(padding-right, @_accordion-control-padding-right);
-            .css(padding-bottom,@_accordion-control-padding-bottom);
-            .css(padding-left, @_accordion-control-padding-left);
+            .css(padding, @_accordion-control-padding-top @_accordion-control-padding-right @_accordion-control-padding-bottom @_accordion-control-padding-left);
             .typography(
                 @_color: @_accordion-control-color,
                 @_font-family: @_accordion-control-font-family,

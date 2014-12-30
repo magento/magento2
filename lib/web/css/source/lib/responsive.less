@@ -6,15 +6,14 @@
 //    Media variables, that can be used for splitting styles into several files
 //------------------------------------------------------------------------------
 
-@media-common: true; // Sets whether to output common styles  (true|false)
+@media-common: true; // Sets whether to output common styles (true|false)
 @media-target: all; // Sets target device for styles output (all|desktop|mobile)
 
 //
 //    Media width mixin used to group styles output based on media queries
 //------------------------------------------------------------------------------
 
-.media-width(@extremum, @break) when (@extremum = 'max')
-                                and  (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
 }
 
 //
