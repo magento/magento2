@@ -24,16 +24,6 @@ class OperationFactory
     const INTERCEPTION = 'interception';
 
     /**
-     * Relations
-     */
-    const RELATIONS = 'relations';
-
-    /**
-     * Plugins
-     */
-    const PLUGINS = 'plugins';
-
-    /**
      * Interception cache
      */
     const INTERCEPTION_CACHE = 'interception_cache';
@@ -46,8 +36,6 @@ class OperationFactory
     private $operationsDefinitions = [
         self::AREA => 'Magento\Tools\Di\App\Task\Operation\Area',
         self::INTERCEPTION => 'Magento\Tools\Di\App\Task\Operation\Interception',
-        self::RELATIONS => 'Magento\Tools\Di\App\Task\Operation\Relations',
-        self::PLUGINS => 'Magento\Tools\Di\App\Task\Operation\Plugins',
         self::INTERCEPTION_CACHE => 'Magento\Tools\Di\App\Task\Operation\InterceptionCache',
     ];
 

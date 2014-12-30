@@ -69,11 +69,6 @@ class Compiler implements \Magento\Framework\AppInterface
             ],
             Task\OperationFactory::INTERCEPTION =>
                 BP . '/var/generation',
-            Task\OperationFactory::RELATIONS => [
-                BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
-            ],
-            Task\OperationFactory::PLUGINS =>
-                BP . '/app',
             Task\OperationFactory::INTERCEPTION_CACHE => [
                 BP . '/' . 'app/code', BP . '/' . 'lib/internal/Magento/Framework', BP . '/' . 'var/generation'
             ]
