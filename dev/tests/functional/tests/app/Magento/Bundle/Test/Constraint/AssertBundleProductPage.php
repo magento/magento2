@@ -16,6 +16,8 @@ class AssertBundleProductPage extends AssertProductPage
      * Verify displayed product price on product page(front-end) equals passed from fixture.
      *
      * @return string|null
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function verifyPrice()
     {
