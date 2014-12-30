@@ -35,7 +35,7 @@ class MethodListTest extends \PHPUnit_Framework_TestCase
             '\Magento\Payment\Model\Checks\SpecificationFactory', [], [], '', false
         );
         $this->methodList = $this->objectManager->getObject(
-            '\Magento\Payment\Model\MethodList',
+            'Magento\Payment\Model\MethodList',
             [
                 'paymentHelper' => $this->paymentHelperMock,
                 'specificationFactory' => $this->specificationFactoryMock

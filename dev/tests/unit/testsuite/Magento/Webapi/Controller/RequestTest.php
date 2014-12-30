@@ -29,7 +29,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->cookieReader = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface');
 
         $this->request = $objectManager->getObject(
-            '\Magento\Webapi\Controller\Request',
+            'Magento\Webapi\Controller\Request',
             ['cookieReader' => $this->cookieReader]
         );
     }
@@ -46,4 +46,4 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $this->request->getCookie($key, $default);
     }
-} 
+}

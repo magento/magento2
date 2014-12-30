@@ -2329,6 +2329,7 @@ return [
     ['Magento\TranslateInterface', 'Magento\Framework\TranslateInterface'],
     ['Magento\Locale', 'Magento\Framework\Locale'],
     ['Magento\LocaleFactory', 'Magento\Framework\LocaleFactory'],
+    ['Magento\Integration\Model\Oauth\Token\Factory', 'Magento\Integration\Model\Oauth\TokenFactory'],
     ['Magento\LocaleInterface', 'Magento\Framework\LocaleInterface'],
     ['Magento\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Phrase', 'Magento\Framework\Phrase'],
