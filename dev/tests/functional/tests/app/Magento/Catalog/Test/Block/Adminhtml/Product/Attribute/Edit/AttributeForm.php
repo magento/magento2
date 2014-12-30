@@ -5,10 +5,11 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit;
 
-use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Backend\Test\Block\Widget\FormTabs;
+use Mtf\Client\Element\SimpleElement;
 use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
 
@@ -35,14 +36,14 @@ class AttributeForm extends FormTabs
      * Get data of the tabs.
      *
      * @param FixtureInterface $fixture
-     * @param Element $element
+     * @param SimpleElement $element
      * @return array
      * @throws \Exception
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getData(FixtureInterface $fixture = null, Element $element = null)
+    public function getData(FixtureInterface $fixture = null, SimpleElement $element = null)
     {
         $this->waitForElementVisible($this->propertiesTab);
         $data = [];
@@ -78,7 +79,7 @@ class AttributeForm extends FormTabs
      */
     protected function expandAllToggles()
     {
-        $closedToggles = $this->_rootElement->find($this->closedToggle, Locator::SELECTOR_XPATH)->getElements();
+        $closedToggles = $this->_rootElement->getElements($this->closedToggle, Locator::SELECTOR_XPATH);
         foreach ($closedToggles as $toggle) {
             $toggle->click();
         }

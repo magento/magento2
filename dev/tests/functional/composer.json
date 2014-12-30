@@ -1,6 +1,17 @@
 {
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.corp.ebay.com/magento-firedrakes/mtf.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/giorgiosironi/phpunit-selenium.git"
+        }
+    ],
     "require": {
-        "magento/mtf": "1.0.0-rc10",
+        "magento/mtf": "dev-MAGETWO-32079-2",
+        "facebook/webdriver": "dev-master",
         "php": ">=5.4.0",
         "phpunit/phpunit": "4.1.0",
         "phpunit/phpunit-selenium": ">=1.2",

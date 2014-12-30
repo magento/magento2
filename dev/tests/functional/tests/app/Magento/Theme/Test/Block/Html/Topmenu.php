@@ -7,7 +7,7 @@
 namespace Magento\Theme\Test\Block\Html;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Topmenu

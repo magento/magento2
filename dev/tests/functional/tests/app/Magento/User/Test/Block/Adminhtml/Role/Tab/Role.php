@@ -6,7 +6,7 @@
 namespace Magento\User\Test\Block\Adminhtml\Role\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element;
+use Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Role
@@ -18,10 +18,10 @@ class Role extends Tab
      * Fills username in user grid
      *
      * @param array $fields
-     * @param Element $element
+     * @param SimpleElement $element
      * @return void
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         $users = (is_array($fields['in_role_users']['value']))
             ? $fields['in_role_users']['value']

@@ -190,7 +190,8 @@ abstract class AbstractFactory
     {
         $filename = str_replace('\\', '/', $filename);
 
-        $classPath = str_replace(MTF_BP . '/' . $path . '/', '', $filename);
+        $classPath = substr($filename, strpos($filename, $path . '/') + strlen($path . '/'));
+
         $classPath = str_replace('.php', '', $classPath);
         $className = str_replace('/', '\\', $classPath);
 

@@ -5,11 +5,12 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
-use Magento\Backend\Test\Block\Widget\FormTabs;
 use Mtf\Client\Element;
 use Mtf\Fixture\DataFixture;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
+use Magento\Backend\Test\Block\Widget\FormTabs;
+use Mtf\Client\Element\SimpleElement;
 
 /**
  * Class ProductForm
@@ -21,11 +22,11 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
      * Fill the product form
      *
      * @param FixtureInterface $product
-     * @param Element|null $element [optional]
+     * @param SimpleElement|null $element [optional]
      * @param FixtureInterface|null $category [optional]
      * @return FormTabs
      */
-    public function fill(FixtureInterface $product, Element $element = null, FixtureInterface $category = null)
+    public function fill(FixtureInterface $product, SimpleElement $element = null, FixtureInterface $category = null)
     {
         $tabs = $this->getFieldsByTabs($product);
         ksort($tabs);
@@ -100,6 +101,7 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
             ],
         ];
         unset($tabs['variations']['variations-matrix']);
+
         return $tabs;
     }
 }

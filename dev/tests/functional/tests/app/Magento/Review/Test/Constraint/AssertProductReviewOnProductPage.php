@@ -8,7 +8,7 @@ namespace Magento\Review\Test\Constraint;
 use Magento\Backend\Test\Page\Adminhtml\AdminCache;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Review\Test\Fixture\ReviewInjectable;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureInterface;
 
@@ -28,7 +28,7 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
      * @param CatalogProductView $catalogProductView
      * @param ReviewInjectable $review
      * @param FixtureInterface $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param AdminCache $cachePage
      * @return void
      */
@@ -36,7 +36,7 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
         CatalogProductView $catalogProductView,
         ReviewInjectable $review,
         FixtureInterface $product,
-        Browser $browser,
+        BrowserInterface $browser,
         AdminCache $cachePage
     ) {
         $errors = [];

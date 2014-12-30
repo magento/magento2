@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureFactory;
 
@@ -28,7 +28,7 @@ class AssertCategoryPage extends AbstractConstraint
      * @param CatalogCategory $initialCategory
      * @param FixtureFactory $fixtureFactory
      * @param CatalogCategoryView $categoryView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
     public function processAssert(
@@ -36,7 +36,7 @@ class AssertCategoryPage extends AbstractConstraint
         CatalogCategory $initialCategory,
         FixtureFactory $fixtureFactory,
         CatalogCategoryView $categoryView,
-        Browser $browser
+        BrowserInterface $browser
     ) {
         $product = $fixtureFactory->createByCode(
             'catalogProductSimple',

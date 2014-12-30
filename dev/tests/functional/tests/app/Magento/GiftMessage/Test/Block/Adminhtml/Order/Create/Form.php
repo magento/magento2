@@ -5,8 +5,8 @@
 
 namespace Magento\GiftMessage\Test\Block\Adminhtml\Order\Create;
 
+use Mtf\Client\Element\SimpleElement;
 use Mtf\Block\Form as ParentForm;
-use Mtf\Client\Element;
 use Mtf\Fixture\FixtureInterface;
 
 /**
@@ -26,10 +26,10 @@ class Form extends ParentForm
      * Fill backend GiftMessage item form.
      *
      * @param FixtureInterface $fixture
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fill(FixtureInterface $fixture, Element $element = null)
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         parent::fill($fixture, $element);
         $this->_rootElement->find($this->okButton)->click();

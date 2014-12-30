@@ -28,6 +28,6 @@ class PageActions extends FormPageActions
     public function forceSignIn()
     {
         $this->_rootElement->find($this->forceSignIn)->click();
-        $this->_rootElement->acceptAlert();
+        $this->browser->acceptAlert();
     }
 }

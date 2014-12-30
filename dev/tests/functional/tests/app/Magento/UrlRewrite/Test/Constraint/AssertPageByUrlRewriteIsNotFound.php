@@ -7,7 +7,7 @@ namespace Magento\UrlRewrite\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -28,13 +28,13 @@ class AssertPageByUrlRewriteIsNotFound extends AbstractConstraint
     /**
      * Checking the server response 404 page on frontend
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
      * @param UrlRewrite $productRedirect
      * @return void
      */
     public function processAssert(
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductView $catalogProductView,
         UrlRewrite $productRedirect
     ) {

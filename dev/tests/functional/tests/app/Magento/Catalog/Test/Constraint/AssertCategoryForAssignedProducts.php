@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -25,11 +25,14 @@ class AssertCategoryForAssignedProducts extends AbstractConstraint
      *
      * @param CatalogCategory $category
      * @param CatalogCategoryView $categoryView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
-    public function processAssert(CatalogCategory $category, CatalogCategoryView $categoryView, Browser $browser)
-    {
+    public function processAssert(
+        CatalogCategory $category,
+        CatalogCategoryView $categoryView,
+        BrowserInterface $browser
+    ) {
         $browser->open($_ENV['app_frontend_url'] . strtolower($category->getUrlKey()) . '.html');
         $products = $category->getDataFieldConfig('category_products')['source']->getProducts();
         foreach ($products as $productFixture) {

@@ -7,7 +7,7 @@ namespace Magento\Shipping\Test\Block\Adminhtml\Order;
 
 use Magento\Shipping\Test\Block\Adminhtml\Order\Tracking\Item;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Tracking

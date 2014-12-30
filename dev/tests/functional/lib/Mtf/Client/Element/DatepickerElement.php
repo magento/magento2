@@ -3,15 +3,14 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * General class for datepicker elements.
  */
-class DatepickerElement extends Element
+class DatepickerElement extends SimpleElement
 {
     /**
      * DatePicker button.

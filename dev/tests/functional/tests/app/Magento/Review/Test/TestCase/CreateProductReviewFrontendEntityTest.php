@@ -9,7 +9,7 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Review\Test\Fixture\ReviewInjectable;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\TestCase\Injectable;
 
 /**
@@ -84,10 +84,10 @@ class CreateProductReviewFrontendEntityTest extends Injectable
      * Run create frontend product rating test
      *
      * @param ReviewInjectable $review
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return array
      */
-    public function test(ReviewInjectable $review, Browser $browser)
+    public function test(ReviewInjectable $review, BrowserInterface $browser)
     {
         // Prepare for tear down
         $this->review = $review;

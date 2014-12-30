@@ -3,10 +3,9 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class SelectstoreElement
@@ -35,14 +34,11 @@ class SelectstoreElement extends SelectElement
      */
     public function getValue()
     {
-        $selectedLabel = trim($this->_getWrappedElement()->selectedLabel());
-        $value = trim(
-            $this->_getWrappedElement()->byXPath(sprintf($this->website, $selectedLabel))->attribute('label')
-        );
-        $value .= '/' . trim(
-            $this->_getWrappedElement()->byXPath(sprintf($this->storeGroup, $selectedLabel))->attribute('label'),
-            chr(0xC2) . chr(0xA0)
-        );
+        $selectedLabel = trim(parent::getValue());
+        $element = $this->find(sprintf($this->website, $selectedLabel), Locator::SELECTOR_XPATH);
+        $value = trim($element->getAttribute('label'));
+        $element = $this->find(sprintf($this->storeGroup, $selectedLabel), Locator::SELECTOR_XPATH);
+        $value .= '/' . trim($element->getAttribute('label'), chr(0xC2) . chr(0xA0));
         $value .= '/' . $selectedLabel;
         return $value;
     }
@@ -61,7 +57,7 @@ class SelectstoreElement extends SelectElement
             . $group[0] . '")]/following-sibling::optgroup[contains(@label,"'
             . $group[1] . '")]/option[contains(text(), "'
             . $group[2] . '")]';
-        $option = $this->_context->find($optionLocator, Locator::SELECTOR_XPATH);
+        $option = $this->find($optionLocator, Locator::SELECTOR_XPATH);
         if (!$option->isVisible()) {
             throw new \Exception('[' . implode('/', $value) . '] option is not visible in store switcher.');
         }

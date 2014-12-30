@@ -5,10 +5,11 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
 
-use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Backend\Test\Block\Widget\FormTabs;
+use Mtf\Client\Element\SimpleElement;
 use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 
 /**
@@ -34,10 +35,10 @@ class AttributeForm extends FormTabs
      * Fill the attribute form.
      *
      * @param FixtureInterface $fixture
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fill(FixtureInterface $fixture, Element $element = null)
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         $this->browser->switchToFrame(new Locator($this->iFrame));
         $browser = $this->browser;

@@ -5,7 +5,7 @@
 
 namespace Magento\Reports\Test\TestCase;
 
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\TestCase\Injectable;
 use Mtf\Fixture\FixtureFactory;
 use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
@@ -49,7 +49,7 @@ class ViewedProductsReportEntityTest extends Injectable
     /**
      * Browser interface
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -70,13 +70,13 @@ class ViewedProductsReportEntityTest extends Injectable
      *
      * @param ProductReportView $productReportView
      * @param FixtureFactory $fixtureFactory
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
     public function __inject(
         ProductReportView $productReportView,
         FixtureFactory $fixtureFactory,
-        Browser $browser
+        BrowserInterface $browser
     ) {
         $this->productReportView = $productReportView;
         $this->fixtureFactory = $fixtureFactory;

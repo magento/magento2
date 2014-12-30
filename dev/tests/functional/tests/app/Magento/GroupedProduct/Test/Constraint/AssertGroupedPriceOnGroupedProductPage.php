@@ -8,7 +8,7 @@ namespace Magento\GroupedProduct\Test\Constraint;
 use Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 
 /**
  * Class AssertGroupedPriceOnGroupedProductPage
@@ -40,14 +40,14 @@ class AssertGroupedPriceOnGroupedProductPage extends AbstractAssertPriceOnGroupe
      * @param CatalogProductView $catalogProductView
      * @param GroupedProductInjectable $product
      * @param AssertProductGroupedPriceOnProductPage $groupedPrice
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         GroupedProductInjectable $product,
         AssertProductGroupedPriceOnProductPage $groupedPrice,
-        Browser $browser
+        BrowserInterface $browser
     ) {
         $this->processAssertPrice($product, $catalogProductView, $groupedPrice, $browser);
     }

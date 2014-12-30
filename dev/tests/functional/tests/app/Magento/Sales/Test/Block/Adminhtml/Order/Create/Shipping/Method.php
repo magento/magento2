@@ -6,7 +6,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\Shipping;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Method

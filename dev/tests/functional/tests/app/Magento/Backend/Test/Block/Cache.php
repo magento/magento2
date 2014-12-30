@@ -6,7 +6,7 @@
 namespace Magento\Backend\Test\Block;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Factory\Factory;
 
 /**
@@ -61,7 +61,7 @@ class Cache extends Block
     public function flushCacheStorage()
     {
         $this->_rootElement->find($this->flushCacheStorageButton)->click();
-        $this->_rootElement->acceptAlert();
+        $this->browser->acceptAlert();
     }
 
     /**

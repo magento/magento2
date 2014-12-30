@@ -3,16 +3,21 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Element\Locator;
-use Mtf\Client\Driver\Selenium\Element;
+use Mtf\Client\Locator;
+use Mtf\Client\ElementInterface;
 
 /**
  * Typified element class for global search element.
  */
-class GlobalsearchElement extends Element
+class GlobalsearchElement extends SimpleElement
 {
+    /**
+     * "Backspace" key code.
+     */
+    const BACKSPACE = "\xEE\x80\x83";
+
     /**
      * Search icon selector.
      *
@@ -49,11 +54,6 @@ class GlobalsearchElement extends Element
     protected $resultItem = 'li';
 
     /**
-     * "Backspace" key code.
-     */
-    const BACKSPACE = "\xEE\x80\x83";
-
-    /**
      * Set value.
      *
      * @param string $value
@@ -61,7 +61,7 @@ class GlobalsearchElement extends Element
      */
     public function setValue($value)
     {
-        $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
+        $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
         $this->waitInitElement();
 
@@ -70,7 +70,7 @@ class GlobalsearchElement extends Element
         }
         $this->selectWindow();
         $this->clear();
-        $this->find($this->searchInput)->_getWrappedElement()->value($value);
+        $this->find($this->searchInput)->setValue($value);
         $this->selectWindow();
 
         $this->waitResult();
@@ -85,7 +85,7 @@ class GlobalsearchElement extends Element
     {
         $element = $this->find($this->searchInput);
         while ('' != $element->getValue()) {
-            $element->keys([self::BACKSPACE]);
+            $element->setValue([self::BACKSPACE]);
         }
     }
 
@@ -96,8 +96,7 @@ class GlobalsearchElement extends Element
      */
     protected function selectWindow()
     {
-        $windowHandles = $this->_driver->windowHandles();
-        $this->_driver->window(end($windowHandles));
+        $this->driver->closeWindow();
     }
 
     /**
@@ -108,10 +107,10 @@ class GlobalsearchElement extends Element
      */
     protected function waitInitElement()
     {
-        $browser = clone $this;
         $selector = $this->initializedSuggest;
 
-        $browser->waitUntil(
+        $browser = $this->driver;
+        $this->driver->waitUntil(
             function () use ($browser, $selector) {
                 return $browser->find($selector, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
             }
@@ -125,10 +124,10 @@ class GlobalsearchElement extends Element
      */
     public function waitResult()
     {
-        $browser = clone $this;
         $selector = $this->searchResult;
+        $browser = $this->driver;
 
-        $browser->waitUntil(
+        $this->driver->waitUntil(
             function () use ($browser, $selector) {
                 if ($browser->find($selector)->isVisible()) {
                     return true;
@@ -173,12 +172,12 @@ class GlobalsearchElement extends Element
      */
     protected function getSearchResults()
     {
-        /** @var Element $searchResult */
+        /** @var ElementInterface $searchResult */
         $searchResult = $this->find($this->searchResult);
-        $resultItems = $searchResult->find($this->resultItem)->getElements();
+        $resultItems = $searchResult->getElements($this->resultItem);
         $resultArray = [];
 
-        /** @var Element $resultItem */
+        /** @var SimpleElement $resultItem */
         foreach ($resultItems as $resultItem) {
             $resultItemLink = $resultItem->find('a');
             $resultText = $resultItemLink->isVisible()

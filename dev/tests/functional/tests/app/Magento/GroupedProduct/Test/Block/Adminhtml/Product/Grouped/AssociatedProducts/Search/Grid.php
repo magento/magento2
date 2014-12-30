@@ -6,7 +6,6 @@
 namespace Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped\AssociatedProducts\Search;
 
 use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
-use Mtf\Client\Element;
 
 /**
  * Class Grid

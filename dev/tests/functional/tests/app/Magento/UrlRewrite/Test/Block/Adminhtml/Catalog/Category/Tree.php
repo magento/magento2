@@ -7,7 +7,7 @@ namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category;
 
 use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Tree

@@ -3,15 +3,11 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
-
-use Mtf\Client\Element;
+namespace Mtf\Client\Element;
 
 /**
  * Class JquerytreeElement
  * Typified element class for JqueryTree elements
- *
- * @package Mtf\Client\Element
  */
 class JquerytreeElement extends Tree
 {
@@ -63,11 +59,11 @@ class JquerytreeElement extends Tree
     /**
      *  Recursive walks tree
      *
-     * @param Element $node
+     * @param SimpleElement $node
      * @param string $parentCssClass
      * @return array
      */
-    protected function _getNodeContent($node, $parentCssClass)
+    protected function _getNodeContent(SimpleElement $node, $parentCssClass)
     {
         $counter = 1;
         $nextNodeSelector = $parentCssClass . " > " . $this->nodeSelector . ":nth-of-type($counter)";

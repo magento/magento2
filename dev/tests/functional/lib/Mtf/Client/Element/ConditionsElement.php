@@ -3,12 +3,10 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Driver\Selenium\Element as AbstractElement;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
 use Mtf\ObjectManager;
+use Mtf\Client\Locator;
 
 /**
  * Class ConditionsElement
@@ -36,7 +34,7 @@ use Mtf\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ConditionsElement extends AbstractElement
+class ConditionsElement extends SimpleElement
 {
     /**
      * Main condition
@@ -186,10 +184,10 @@ class ConditionsElement extends AbstractElement
      * Add condition combination
      *
      * @param string $condition
-     * @param Element $context
-     * @return Element
+     * @param SimpleElement $context
+     * @return SimpleElement
      */
-    protected function addConditionsCombination($condition, Element $context)
+    protected function addConditionsCombination($condition, SimpleElement $context)
     {
         $condition = $this->parseCondition($condition);
         $newCondition = $context->find($this->newCondition, Locator::SELECTOR_XPATH);
@@ -209,10 +207,10 @@ class ConditionsElement extends AbstractElement
      * Add conditions
      *
      * @param array $conditions
-     * @param Element $context
+     * @param SimpleElement $context
      * @return void
      */
-    protected function addMultipleCondition(array $conditions, Element $context)
+    protected function addMultipleCondition(array $conditions, SimpleElement $context)
     {
         foreach ($conditions as $key => $condition) {
             $elementContext = is_numeric($key) ? $context : $this->addConditionsCombination($key, $context);
@@ -228,10 +226,10 @@ class ConditionsElement extends AbstractElement
      * Add single Condition
      *
      * @param string $condition
-     * @param Element $context
+     * @param SimpleElement $context
      * @return void
      */
-    protected function addSingleCondition($condition, Element $context)
+    protected function addSingleCondition($condition, SimpleElement $context)
     {
         $condition = $this->parseCondition($condition);
 
@@ -255,14 +253,15 @@ class ConditionsElement extends AbstractElement
      * Fill single condition
      *
      * @param array $rules
-     * @param Element $element
+     * @param SimpleElement $element
      * @return void
      * @throws \Exception
      */
-    protected function fillCondition(array $rules, Element $element)
+    protected function fillCondition(array $rules, SimpleElement $element)
     {
         $this->resetKeyParam();
         foreach ($rules as $rule) {
+            /** @var SimpleElement $param */
             $param = $this->findNextParam($element);
             $param->find('a')->click();
 
@@ -286,13 +285,13 @@ class ConditionsElement extends AbstractElement
                     return $element->isVisible() ? true : null;
                 }
             );
-            $value = $param->find('select', Locator::SELECTOR_CSS, 'select');
+            $value = $param->find('select', Locator::SELECTOR_TAG_NAME, 'select');
             if ($value->isVisible()) {
                 $value->setValue($rule);
                 $this->click();
                 continue;
             }
-            $value = $param->find('input');
+            $value = $param->find('input', Locator::SELECTOR_TAG_NAME);
             if ($value->isVisible()) {
                 $value->setValue($rule);
 
@@ -355,11 +354,11 @@ class ConditionsElement extends AbstractElement
     /**
      * Find next param of condition for fill
      *
-     * @param Element $context
-     * @return Element
+     * @param SimpleElement $context
+     * @return SimpleElement
      * @throws \Exception
      */
-    protected function findNextParam(Element $context)
+    protected function findNextParam(SimpleElement $context)
     {
         do {
             if (!isset($this->mapParams[$this->findKeyParam])) {

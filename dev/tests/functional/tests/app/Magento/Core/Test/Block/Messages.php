@@ -6,7 +6,7 @@
 namespace Magento\Core\Test\Block;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Global messages block
@@ -67,7 +67,7 @@ class Messages extends Block
     public function getSuccessMessages()
     {
         $this->waitForElementVisible($this->successMessage);
-        $elements = $this->_rootElement->find($this->successMessage)->getElements();
+        $elements = $this->_rootElement->getElements($this->successMessage);
 
         $messages = [];
         foreach ($elements as $key => $element) {

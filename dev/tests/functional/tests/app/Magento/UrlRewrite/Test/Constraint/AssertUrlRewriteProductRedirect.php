@@ -7,7 +7,7 @@ namespace Magento\UrlRewrite\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\InjectableFixture;
 
@@ -26,14 +26,14 @@ class AssertUrlRewriteProductRedirect extends AbstractConstraint
      *
      * @param UrlRewrite $urlRewrite
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param InjectableFixture $product
      * @return void
      */
     public function processAssert(
         UrlRewrite $urlRewrite,
         CatalogProductView $catalogProductView,
-        Browser $browser,
+        BrowserInterface $browser,
         InjectableFixture $product = null
     ) {
         $browser->open($_ENV['app_frontend_url'] . $urlRewrite->getRequestPath());

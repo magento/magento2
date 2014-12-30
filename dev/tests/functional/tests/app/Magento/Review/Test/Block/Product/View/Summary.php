@@ -31,7 +31,7 @@ class Summary extends Block
     /**
      * Get add review link
      *
-     * @return \Mtf\Client\Element
+     * @return \Mtf\Client\ElementInterface
      */
     public function getAddReviewLink()
     {
@@ -41,7 +41,7 @@ class Summary extends Block
     /**
      * Get view review link
      *
-     * @return \Mtf\Client\Element
+     * @return \Mtf\Client\ElementInterface
      */
     public function getViewReviewLink()
     {

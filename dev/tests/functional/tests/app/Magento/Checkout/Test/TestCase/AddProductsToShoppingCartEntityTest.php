@@ -7,7 +7,7 @@ namespace Magento\Checkout\Test\TestCase;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\ObjectManager;
 use Mtf\TestCase\Injectable;
@@ -34,7 +34,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     /**
      * Browser interface
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -62,14 +62,14 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     /**
      * Prepare test data
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param FixtureFactory $fixtureFactory
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $cartPage
      * @return void
      */
     public function __prepare(
-        Browser $browser,
+        BrowserInterface $browser,
         FixtureFactory $fixtureFactory,
         CatalogProductView $catalogProductView,
         CheckoutCart $cartPage
