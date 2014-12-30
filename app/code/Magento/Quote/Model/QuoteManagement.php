@@ -150,7 +150,7 @@ class QuoteManagement
             $this->inactivateQuote($quote);
             return;
         }
-        return $this->submitOrder($quote, $orderData);
+        return $this->submitQuote($quote, $orderData);
     }
 
     /**
@@ -181,13 +181,15 @@ class QuoteManagement
     }
 
     /**
+     * Submit quote
+     *
      * @param Quote $quote
      * @param array $orderData
      * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object
      * @throws \Exception
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function submitOrder(QuoteEntity $quote, $orderData = [])
+    protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {
         $this->deleteNominalItems($quote);
         $this->quoteValidator->validateBeforeSubmit($quote);
