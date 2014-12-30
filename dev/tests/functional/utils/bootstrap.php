@@ -13,9 +13,5 @@ $appRoot = dirname(dirname(dirname(dirname(__DIR__))));
 require $appRoot . '/app/bootstrap.php';
 require __DIR__ . '/../vendor/autoload.php';
 
-
 $objectManager = \Mtf\ObjectManagerFactory::getObjectManager();
-//@TODO Remove below
-//$objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
-//$objectManager = $objectManagerFactory->create($_SERVER);
 \Mtf\ObjectManagerFactory::configure($objectManager);
