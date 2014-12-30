@@ -6,8 +6,9 @@
 namespace Magento\Catalog\Test\Block\Product\Compare;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
+use Mtf\Client\Element\SimpleElement;
 
 /**
  * Compare list product block.
@@ -115,7 +116,7 @@ class ListCompare extends Block
      * Get item compare product info.
      *
      * @param int $index
-     * @return Element
+     * @return SimpleElement
      */
     protected function getCompareProductInfo($index)
     {
@@ -138,7 +139,7 @@ class ListCompare extends Block
         );
 
         $data = [];
-        $attributes = $this->_rootElement->find($this->attribute)->getElements();
+        $attributes = $this->_rootElement->getElements($this->attribute);
         foreach ($attributes as $attribute) {
             $data[] = $attribute->getText();
         }
@@ -149,7 +150,7 @@ class ListCompare extends Block
      * Get item compare product attribute.
      *
      * @param string $key
-     * @return Element
+     * @return SimpleElement
      */
     public function getCompareProductAttribute($key)
     {
@@ -206,7 +207,6 @@ class ListCompare extends Block
         while ($this->isProductVisible()) {
             $this->removeProduct();
             $messageBlock->waitSuccessMessage();
-            $this->reinitRootElement();
         }
     }
 

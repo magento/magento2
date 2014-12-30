@@ -29,8 +29,8 @@
     </listeners>
 
     <php>
-        <env name="app_frontend_url" value="http://localhost/index.php/" />
-        <env name="app_backend_url" value="http://localhost/index.php/backend/" />
+        <env name="app_frontend_url" value="http://magento.loc/" />
+        <env name="app_backend_url" value="http://magento.loc/admin/" />
         <env name="app_config_path" value="config/application.yml.dist" />
         <env name="server_config_path" value="config/server.yml.dist" />
         <env name="isolation_config_path" value="config/isolation.yml.dist" />

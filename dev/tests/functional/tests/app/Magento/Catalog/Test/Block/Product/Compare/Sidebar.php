@@ -5,8 +5,6 @@
 
 namespace Magento\Catalog\Test\Block\Product\Compare;
 
-use Mtf\Client\Element;
-
 /**
  * Compare product block on cms page.
  */
@@ -50,7 +48,7 @@ class Sidebar extends ListCompare
                     return $rootElement->find($selector)->isVisible() ? true : null;
                 }
             );
-            $elements = $this->_rootElement->find($this->productName)->getElements();
+            $elements = $this->_rootElement->getElements($this->productName);
             foreach ($elements as $element) {
                 $result[] = $element->getText();
             }
@@ -73,6 +71,6 @@ class Sidebar extends ListCompare
     public function clickClearAll()
     {
         $this->_rootElement->find($this->clearAll)->click();
-        $this->_rootElement->acceptAlert();
+        $this->browser->acceptAlert();
     }
 }

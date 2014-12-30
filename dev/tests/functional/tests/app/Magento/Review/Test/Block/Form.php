@@ -5,12 +5,12 @@
 
 namespace Magento\Review\Test\Block;
 
+use Mtf\Client\Locator;
+use Mtf\Fixture\FixtureInterface;
+use Mtf\Client\Element\SimpleElement;
 use Magento\Review\Test\Fixture\Rating;
 use Magento\Review\Test\Fixture\ReviewInjectable;
 use Mtf\Block\Form as AbstractForm;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Form
@@ -59,7 +59,7 @@ class Form extends AbstractForm
     /**
      * Get legend
      *
-     * @return Element
+     * @return SimpleElement
      */
     public function getLegend()
     {
@@ -81,7 +81,7 @@ class Form extends AbstractForm
      * Get single product rating
      *
      * @param Rating $rating
-     * @return Element
+     * @return SimpleElement
      */
     protected function getRating(Rating $rating)
     {
@@ -92,10 +92,10 @@ class Form extends AbstractForm
      * Fill the review form
      *
      * @param FixtureInterface $review
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fill(FixtureInterface $review, Element $element = null)
+    public function fill(FixtureInterface $review, SimpleElement $element = null)
     {
         if ($review instanceof ReviewInjectable) {
             $this->fillRatings($review);

@@ -5,8 +5,8 @@
 namespace Magento\Catalog\Test\Block\Product;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
+use Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Price
@@ -266,7 +266,7 @@ class Price extends Block
      * Get specify type price element
      *
      * @param string $type
-     * @return Element
+     * @return SimpleElement
      */
     protected function getTypePriceElement($type)
     {

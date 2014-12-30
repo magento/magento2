@@ -5,10 +5,11 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
-use Magento\Backend\Test\Block\Widget\Form as ParentForm;
 use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
+use Mtf\Client\Element\SimpleElement;
+use Magento\Backend\Test\Block\Widget\Form as ParentForm;
 
 /**
  * Class AffectedAttributeSet
@@ -34,10 +35,10 @@ class AffectedAttributeSet extends ParentForm
      * Fill popup form
      *
      * @param FixtureInterface $product
-     * @param Element|null $element [optional]
+     * @param SimpleElement|null $element [optional]
      * @return $this
      */
-    public function fill(FixtureInterface $product, Element $element = null)
+    public function fill(FixtureInterface $product, SimpleElement $element = null)
     {
         $affectedAttributeSet = $product->getData('affected_attribute_set');
 

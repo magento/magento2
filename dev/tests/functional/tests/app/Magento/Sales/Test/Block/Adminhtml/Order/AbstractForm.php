@@ -80,7 +80,6 @@ abstract class AbstractForm extends Form
                 return $element->isVisible() == false ? true : null;
             }
         );
-        $this->reinitRootElement();
         $this->_rootElement->find($this->send)->click();
     }
 

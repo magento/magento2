@@ -3,12 +3,11 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
 /**
  * Class TreeElement
  * Typified element class for Tree elements
- *
  */
 class TreeElement extends Tree
 {

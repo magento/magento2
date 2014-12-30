@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\AdvancedPricingTab;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options\AbstractOptions;
-use Mtf\Client\Element;
+use Mtf\Client\Element\SimpleElement;
 
 /**
  * Class OptionField
@@ -25,10 +25,10 @@ class OptionGroup extends AbstractOptions
      * Fill the form 'Extended price'
      *
      * @param array $fields
-     * @param Element $element
+     * @param SimpleElement $element
      * @return $this
      */
-    public function fillOptions(array $fields, Element $element = null)
+    public function fillOptions(array $fields, SimpleElement $element = null)
     {
         $this->_rootElement->find($this->buttonFormLocator)->click();
         return parent::fillOptions($fields, $element);

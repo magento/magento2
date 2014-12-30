@@ -9,7 +9,6 @@ use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
 
 /**
  * Class Grid
- *
  */
 class Grid extends GridInterface
 {
@@ -36,6 +35,8 @@ class Grid extends GridInterface
 
     /**
      * Initialize block elements
+     * 
+     * @return void
      */
     protected function _init()
     {
@@ -45,6 +46,8 @@ class Grid extends GridInterface
 
     /**
      * Press 'Add Selected Products' button
+     * 
+     * @return void
      */
     public function addProducts()
     {

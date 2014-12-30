@@ -7,7 +7,7 @@ namespace Magento\Bundle\Test\Constraint;
 
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -23,13 +23,13 @@ class AssertBundlePriceView extends AbstractConstraint
      * Assert that displayed price view for bundle product on product page equals passed from fixture.
      *
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param BundleProduct $product
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        Browser $browser,
+        BrowserInterface $browser,
         BundleProduct $product
     ) {
         //Open product view page

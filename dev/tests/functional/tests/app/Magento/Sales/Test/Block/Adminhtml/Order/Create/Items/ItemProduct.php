@@ -6,7 +6,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\Items;
 
 use Mtf\Block\Form;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class ItemProduct

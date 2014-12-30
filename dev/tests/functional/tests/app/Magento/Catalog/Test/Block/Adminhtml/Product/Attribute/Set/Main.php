@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Main
@@ -122,7 +122,7 @@ class Main extends Block
     public function addAttributeSetGroup($groupName)
     {
         $this->_rootElement->find($this->addGroupButton)->click();
-        $this->_rootElement->setAlertText($groupName);
-        $this->_rootElement->acceptAlert();
+        $this->browser->setAlertText($groupName);
+        $this->browser->acceptAlert();
     }
 }

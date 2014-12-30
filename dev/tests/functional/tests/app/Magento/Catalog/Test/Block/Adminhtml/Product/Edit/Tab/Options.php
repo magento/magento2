@@ -6,9 +6,10 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
+use Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options\Search\Grid;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\ObjectManager;
+use Mtf\Client\Locator;
 
 /**
  * Class Options
@@ -55,10 +56,10 @@ class Options extends Tab
      * Fill custom options form on tab
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         $fields = reset($fields);
         if (empty($fields['value']) || !is_array($fields['value'])) {
@@ -135,10 +136,10 @@ class Options extends Tab
      * Get data of tab
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, Element $element = null)
+    public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
         $fields = reset($fields);
         $formData = [];
@@ -195,6 +196,7 @@ class Options extends Tab
         $importOptions = $options['import']['options'];
         $options = array_merge($options, $importOptions);
         unset($options['import']);
+
         return $options;
     }
 
@@ -210,6 +212,7 @@ class Options extends Tab
         if ($end = strpos($str, '-')) {
             $str = substr($str, 0, $end) . ucfirst(substr($str, ($end + 1)));
         }
+
         return $str;
     }
 }

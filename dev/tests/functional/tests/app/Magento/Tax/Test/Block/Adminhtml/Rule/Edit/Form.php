@@ -5,11 +5,11 @@
 
 namespace Magento\Tax\Test\Block\Adminhtml\Rule\Edit;
 
-use Magento\Tax\Test\Fixture\TaxRule;
-use Mtf\Block\Form as FormInterface;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
+use Magento\Tax\Test\Fixture\TaxRule;
+use Mtf\Client\Element\SimpleElement;
+use Mtf\Block\Form as FormInterface;
 
 /**
  * Form for tax rule creation.
@@ -111,12 +111,12 @@ class Form extends FormInterface
      * Fill the root form.
      *
      * @param FixtureInterface $fixture
-     * @param Element $element
+     * @param SimpleElement $element
      * @return $this|void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fill(FixtureInterface $fixture, Element $element = null)
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         $this->openAdditionalSettings();
         $this->_rootElement->click();
@@ -161,14 +161,12 @@ class Form extends FormInterface
         $taxRateDefaultMultiSelect = $this->taxRateDefaultMultiSelect;
         $this->browser->waitUntil(
             function () use ($rootForm, $taxRateDefaultMultiSelect) {
-                $rootForm->reinitRootElement();
                 $element = $rootForm->browser->find($taxRateDefaultMultiSelect);
                 return $element->isVisible() ? null : true;
             }
         );
         $this->browser->waitUntil(
             function () use ($rootForm, $taxRateMultiSelectList) {
-                $rootForm->reinitRootElement();
                 $element = $rootForm->browser->find($taxRateMultiSelectList);
                 return $element->isVisible() ? true : null;
             }
@@ -205,10 +203,10 @@ class Form extends FormInterface
      * Method to add new tax classes.
      *
      * @param array $taxClasses
-     * @param Element $element
+     * @param SimpleElement $element
      * @return void
      */
-    protected function addNewTaxClass(array $taxClasses, Element $element)
+    protected function addNewTaxClass(array $taxClasses, SimpleElement $element)
     {
         foreach ($taxClasses as $taxClass) {
             $option = $element->find(sprintf($this->optionMaskElement, $taxClass), Locator::SELECTOR_XPATH);
@@ -231,7 +229,7 @@ class Form extends FormInterface
     /**
      * Waiting until option in list is visible.
      *
-     * @param Element $element
+     * @param SimpleElement $element
      * @param string $value
      * @return void
      */
@@ -277,18 +275,19 @@ class Form extends FormInterface
                 return $element->isVisible() ? true : null;
             }
         );
-        /** @var \Mtf\Client\Driver\Selenium\Element\MultiselectlistElement $taxRates */
+        /** @var \Mtf\Client\Element\MultiselectlistElement $taxRates */
         $taxRates = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
+
         return $taxRates->getAllValues();
     }
 
     /**
      * Click 'Add New' button.
      *
-     * @param Element $element
+     * @param SimpleElement $element
      * @return void
      */
-    protected function clickAddNewButton(Element $element)
+    protected function clickAddNewButton(SimpleElement $element)
     {
         $addNewButton = $this->addNewButton;
         $element->waitUntil(

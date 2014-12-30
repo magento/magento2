@@ -7,7 +7,7 @@ namespace Magento\CatalogSearch\Test\Constraint;
 
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -24,11 +24,11 @@ class AssertSearchTermSynonymOnFrontend extends AbstractConstraint
      * Assert that you will be redirected to url from dataset
      *
      * @param CmsIndex $cmsIndex
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogSearchQuery $searchTerm
      * @return void
      */
-    public function processAssert(CmsIndex $cmsIndex, Browser $browser, CatalogSearchQuery $searchTerm)
+    public function processAssert(CmsIndex $cmsIndex, BrowserInterface $browser, CatalogSearchQuery $searchTerm)
     {
         $cmsIndex->open()->getSearchBlock()->search($searchTerm->getSynonymFor());
         $windowUrl = $browser->getUrl();

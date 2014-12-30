@@ -7,7 +7,7 @@
 namespace Magento\Downloadable\Test\Block\Customer\Products;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class ListProducts

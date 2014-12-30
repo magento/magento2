@@ -9,7 +9,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Review\Test\Fixture\Rating;
 use Magento\Review\Test\Fixture\ReviewInjectable;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -26,7 +26,7 @@ class AssertProductRatingInProductPage extends AbstractConstraint
      * Assert that product rating is displayed on product review(frontend)
      *
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductSimple $product
      * @param ReviewInjectable|null $review [optional]
      * @param Rating|null $productRating [optional]
@@ -34,7 +34,7 @@ class AssertProductRatingInProductPage extends AbstractConstraint
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductSimple $product,
         ReviewInjectable $review = null,
         Rating $productRating = null

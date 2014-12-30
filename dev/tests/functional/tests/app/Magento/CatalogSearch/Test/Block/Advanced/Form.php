@@ -7,8 +7,9 @@ namespace Magento\CatalogSearch\Test\Block\Advanced;
 
 use Mtf\Block\Form as ParentForm;
 use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
+use Mtf\Client\Element\SimpleElement;
 
 /**
  * Advanced search form.
@@ -57,10 +58,10 @@ class Form extends ParentForm
      * Fill the root form.
      *
      * @param FixtureInterface $fixture
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fill(FixtureInterface $fixture, Element $element = null)
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         // Prepare price data
         $data = $fixture->getData();
@@ -82,9 +83,9 @@ class Form extends ParentForm
      *
      * @param FixtureInterface $fixture
      * @param array $fields
-     * @param Element $element
+     * @param SimpleElement $element
      */
-    public function fillCustom(FixtureInterface $fixture, array $fields, Element $element = null)
+    public function fillCustom(FixtureInterface $fixture, array $fields, SimpleElement $element = null)
     {
         $data = $fixture->getData('fields');
         $dataForMapping = array_intersect_key($data, array_flip($fields));
@@ -100,7 +101,7 @@ class Form extends ParentForm
     public function getFormLabels()
     {
         $labels = [];
-        $elements = $this->_rootElement->find($this->fieldSelector, Locator::SELECTOR_XPATH)->getElements();
+        $elements = $this->_rootElement->getElements($this->fieldSelector, Locator::SELECTOR_XPATH);
         foreach ($elements as $element) {
             $labels[] = $element->find($this->labelSelector)->getText();
         }

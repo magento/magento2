@@ -6,11 +6,12 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Category;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
+use Mtf\Client\Element\TreeElement;
+use Magento\Catalog\Test\Fixture\CatalogCategory;
 
 /**
  * Class Tree
@@ -161,7 +162,9 @@ class Tree extends Block
     public function isCategoryVisible(CatalogCategory $category)
     {
         $categoryPath = $this->prepareFullCategoryPath($category);
-        $structure = $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree')->getStructure();
+        /** @var TreeElement $treeElement */
+        $treeElement = $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree');
+        $structure = $treeElement->getStructure();
         $result = false;
         $element = array_shift($categoryPath);
         foreach ($structure as $item) {

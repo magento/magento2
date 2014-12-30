@@ -45,7 +45,7 @@ class Samples extends Block
      */
     public function getLinks()
     {
-        $links = $this->_rootElement->find($this->linkTitle)->getElements();
+        $links = $this->_rootElement->getElements($this->linkTitle);
         $linksData = [];
 
         foreach ($links as $link) {

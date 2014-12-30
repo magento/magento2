@@ -6,7 +6,7 @@
 namespace Magento\Reports\Test\Block\Adminhtml\Review\Products;
 
 use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Grid

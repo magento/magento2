@@ -11,7 +11,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\TestCase\Injectable;
 
 /**
@@ -103,14 +103,14 @@ class ProductsInCartReportEntity extends Injectable
      * @param CustomerInjectable $customer
      * @param CatalogProductSimple $product
      * @param string $isGuest
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
     public function test(
         CustomerInjectable $customer,
         CatalogProductSimple $product,
         $isGuest,
-        Browser $browser
+        BrowserInterface $browser
     ) {
         // Preconditions
         $product->persist();

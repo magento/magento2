@@ -6,7 +6,7 @@ namespace Magento\Checkout\Test\Block\Cart;
 
 use Magento\Checkout\Test\Block\Cart\Sidebar\Item;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 
 /**

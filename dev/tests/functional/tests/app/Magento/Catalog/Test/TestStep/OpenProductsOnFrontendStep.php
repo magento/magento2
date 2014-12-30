@@ -5,7 +5,7 @@
 
 namespace Magento\Catalog\Test\TestStep;
 
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\TestStep\TestStepInterface;
 
 /**
@@ -23,7 +23,7 @@ class OpenProductsOnFrontendStep implements TestStepInterface
     /**
      * Browser.
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -32,9 +32,9 @@ class OpenProductsOnFrontendStep implements TestStepInterface
      *
      * @constructor
      * @param array $products
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      */
-    public function __construct(array $products, Browser $browser)
+    public function __construct(array $products, BrowserInterface $browser)
     {
         $this->products = $products;
         $this->browser = $browser;

@@ -35,7 +35,7 @@ class Item extends Sidebar
     public function removeItemFromMiniCart()
     {
         $this->_rootElement->find($this->removeItem)->click();
-        $this->_rootElement->acceptAlert();
+        $this->browser->acceptAlert();
     }
 
     /**

@@ -13,7 +13,7 @@ use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Tax\Test\Fixture\TaxRule;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureFactory;
 
@@ -88,7 +88,7 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
      * @param CheckoutCart $checkoutCart
      * @param AddressInjectable $address
      * @param array $shipping
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param TaxRule $initialTaxRule
      * @return void
      *
@@ -104,7 +104,7 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         CheckoutCart $checkoutCart,
         AddressInjectable $address,
         array $shipping,
-        Browser $browser,
+        BrowserInterface $browser,
         TaxRule $initialTaxRule = null
     ) {
         $this->initialTaxRule = $initialTaxRule;

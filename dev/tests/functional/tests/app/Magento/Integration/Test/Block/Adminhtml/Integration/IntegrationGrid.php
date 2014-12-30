@@ -8,7 +8,7 @@ namespace Magento\Integration\Test\Block\Adminhtml\Integration;
 use Magento\Backend\Test\Block\Widget\Grid;
 use Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\ResourcesPopup;
 use Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid\TokensPopup;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class IntegrationGrid

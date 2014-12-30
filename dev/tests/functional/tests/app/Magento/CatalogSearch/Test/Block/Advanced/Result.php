@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Test\Block\Advanced;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Result

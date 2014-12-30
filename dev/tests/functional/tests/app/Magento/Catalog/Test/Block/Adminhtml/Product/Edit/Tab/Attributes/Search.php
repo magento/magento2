@@ -5,8 +5,8 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes;
 
+use Mtf\Client\Element\SuggestElement;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Mtf\Client\Driver\Selenium\Element\SuggestElement;
 
 /**
  * Class FormAttributeSearch
@@ -71,6 +71,7 @@ class Search extends SuggestElement
         if ($this->find($this->searchResult)->getText() == $productAttribute->getFrontendLabel()) {
             return true;
         }
+
         return false;
     }
 }

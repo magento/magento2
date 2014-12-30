@@ -5,14 +5,14 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Websites;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
+use Mtf\Client\Element\SimpleElement;
 
 /**
  * Class StoreTree
  * Typified element class for store tree element
  */
-class StoreTree extends Element
+class StoreTree extends SimpleElement
 {
     /**
      * Selector for website checkbox

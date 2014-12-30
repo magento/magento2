@@ -5,7 +5,7 @@
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Factory\Factory;
 use Mtf\Fixture\DataFixture;
 
