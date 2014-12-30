@@ -51,7 +51,7 @@ class ToOrderAddress
         );
 
         return $this->orderAddressBuilder
-            ->populateWithArray($orderAddressData, $data)
+            ->populateWithArray(array_merge($orderAddressData, $data))
             ->create();
     }
 }
