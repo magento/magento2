@@ -627,5 +627,4 @@ class Product extends AbstractResource
 
         return parent::validate($object);
     }
-
 }

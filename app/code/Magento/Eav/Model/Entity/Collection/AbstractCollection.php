@@ -1181,8 +1181,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
             $attributeIds
         );
 
-        if(!in_array($this->getEntity()->getType(), $this->entityTypes))
-        {
+        if (!in_array($this->getEntity()->getType(), $this->entityTypes)) {
             $select->where(
                 'entity_type_id =?',
                 $this->getEntity()->getTypeId()
