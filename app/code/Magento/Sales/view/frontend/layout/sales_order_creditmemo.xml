@@ -18,7 +18,7 @@
             </container>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Order\Creditmemo" name="sales.order.creditmemo" cacheable="false">
+            <block class="Magento\Sales\Block\Order\Creditmemo" name="sales.order.creditmemo" cacheable="false" after="sales.order.info.links">
                 <block class="Magento\Sales\Block\Order\Creditmemo\Items" name="creditmemo_items" template="order/creditmemo/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.creditmemo.renderers" as="renderer.list"/>
                     <block class="Magento\Sales\Block\Order\Creditmemo\Totals" name="creditmemo_totals" template="order/totals.phtml">

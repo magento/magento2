@@ -18,7 +18,7 @@
             </container>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Order\Invoice" name="sales.order.invoice" cacheable="false">
+            <block class="Magento\Sales\Block\Order\Invoice" name="sales.order.invoice" cacheable="false" after="sales.order.info.links">
                 <block class="Magento\Sales\Block\Order\Invoice\Items" name="invoice_items" template="order/invoice/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.invoice.renderers" as="renderer.list"/>
                     <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml">
