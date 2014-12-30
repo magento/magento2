@@ -17,7 +17,7 @@ class Provider implements TokenProviderInterface
     protected $_consumerFactory;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Token\Factory
+     * @var \Magento\Integration\Model\Oauth\TokenFactory
      */
     protected $_tokenFactory;
 
@@ -27,26 +27,18 @@ class Provider implements TokenProviderInterface
     protected $_dataHelper;
 
     /**
-     * @var Token
-     */
-    protected $token;
-
-    /**
      * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
-     * @param \Magento\Integration\Model\Oauth\Token\Factory $tokenFactory
+     * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
      * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
-     * @param Token $token
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
-        \Magento\Integration\Model\Oauth\Token\Factory $tokenFactory,
-        \Magento\Integration\Helper\Oauth\Data $dataHelper,
-        Token $token
+        \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory,
+        \Magento\Integration\Helper\Oauth\Data $dataHelper
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_tokenFactory = $tokenFactory;
         $this->_dataHelper = $dataHelper;
-        $this->token = $token;
     }
 
     /**
@@ -284,7 +276,9 @@ class Provider implements TokenProviderInterface
      */
     public function getIntegrationTokenByConsumerId($consumerId)
     {
-        $token = $this->token->loadByConsumerIdAndUserType($consumerId, UserContextInterface::USER_TYPE_INTEGRATION);
+        /** @var \Magento\Integration\Model\Oauth\Token $token */
+        $token = $this->_tokenFactory->create();
+        $token->loadByConsumerIdAndUserType($consumerId, UserContextInterface::USER_TYPE_INTEGRATION);
 
         if (!$token->getId()) {
             throw new \Magento\Framework\Oauth\Exception(

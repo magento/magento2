@@ -57,7 +57,7 @@ class AbstractOnepageTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Checkout\Block\Onepage\AbstractOnepage $onepage */
         $onepage = $this->objectManager->getObject(
-            '\Magento\Checkout\Block\Cart\Shipping',
+            'Magento\Checkout\Block\Cart\Shipping',
             ['context' => $contextMock]
         );
 

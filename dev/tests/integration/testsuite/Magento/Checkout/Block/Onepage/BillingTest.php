@@ -43,7 +43,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         $this->_customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
         $customer = $this->_customerRepository->getById(self::FIXTURE_CUSTOMER_ID);
 
-        $customerSession = $objectManager->get('\Magento\Customer\Model\Session');
+        $customerSession = $objectManager->get('Magento\Customer\Model\Session');
         $customerSession->setCustomerData($customer);
 
         $this->_addressRepository = $objectManager->get('Magento\Customer\Api\AddressRepositoryInterface');
