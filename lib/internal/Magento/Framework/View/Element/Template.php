@@ -251,7 +251,7 @@ class Template extends AbstractBlock
             $html = $templateEngine->render($this->templateContext, $fileName, $this->_viewVars);
         } else {
             $html = '';
-            $this->_logger->log("Invalid template file: '{$fileName}'", \Zend_Log::CRIT);
+            $this->_logger->info("Invalid template file: '{$fileName}'");
         }
 
         \Magento\Framework\Profiler::stop('TEMPLATE:' . $fileName);

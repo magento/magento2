@@ -23,7 +23,7 @@ class Null implements \Magento\Framework\DB\LoggerInterface
     /**
      * {@inheritdoc}
      */
-    public function logException(\Exception $e)
+    public function critical(\Exception $e)
     {
     }
 

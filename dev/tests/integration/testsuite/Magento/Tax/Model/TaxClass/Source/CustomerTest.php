@@ -27,7 +27,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $source = Bootstrap::getObjectManager()->get('Magento\Tax\Model\TaxClass\Source\Customer');
         $this->assertEquals(
             $expectedResult,
-            $source->getAllOptions(false),
+            $source->getAllOptions(),
             'Tax Class options are invalid.'
         );
     }
@@ -46,7 +46,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         if (empty($expectedResult)) {
             $this->fail('Preconditions failed: At least one tax class should be available.');
         }
-        $expectedResult = array_merge([['value' => '0', 'label' => __('None')]], $expectedResult);
         /** @var \Magento\Tax\Model\TaxClass\Source\Product $source */
         $source = Bootstrap::getObjectManager()->get('Magento\Tax\Model\TaxClass\Source\Customer');
         $this->assertEquals(

@@ -84,7 +84,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Convert dom Container node to magneto array
+     * Convert dom Container node to Magento array
      *
      * @param \DOMNode $source
      * @return array
@@ -240,7 +240,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Convert dom Renderer node to magneto array
+     * Convert dom Renderer node to Magento array
      *
      * @param \DOMNode $source
      * @return array
@@ -265,7 +265,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Convert dom Data node to magneto array
+     * Convert dom Data node to Magento array
      *
      * @param \DOMElement $source
      * @return array
@@ -289,7 +289,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * Convert dom Option node to magneto array
+     * Convert dom Option node to Magento array
      *
      * @param \DOMNode $source
      * @return array
