@@ -256,9 +256,6 @@
             <field name="is_nominal">
                 <aspect name="to_order_item" />
             </field>
-            <field name="id">
-                <aspect name="to_order_item" targetField="order_item_id" />
-            </field>
             <field name="product_id">
                 <aspect name="to_order_item" />
             </field>
