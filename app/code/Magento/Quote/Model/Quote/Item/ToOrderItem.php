@@ -21,7 +21,7 @@ class ToOrderItem
     protected $objectCopyService;
 
     /**
-     * @var OrderItemBuilder|\Magento\Framework\Api\Builder
+     * @var OrderItemBuilder
      */
     protected $orderItemBuilder;
 
@@ -38,20 +38,40 @@ class ToOrderItem
     }
 
     /**
-     * @param Item $object
+     * @param Item $quoteItem
      * @param array $data
      * @return OrderItemInterface
      */
-    public function convert(Item $object, $data = [])
+    public function convert(Item $quoteItem, $data = [])
     {
+        $options = $quoteItem->getProductOrderOptions();
+        if (!$options) {
+            $options = $quoteItem->getProduct()->getTypeInstance()->getOrderOptions($quoteItem->getProduct());
+        }
+        $this->orderItemBuilder->setProductOptions($options);
         $orderItemData = $this->objectCopyService->getDataFromFieldset(
             'quote_convert_item',
             'to_order_item',
-            $object
+            $quoteItem
         );
+        if (!$quoteItem->getNoDiscount()) {
+            $data = array_merge(
+                $data,
+                $this->objectCopyService->getDataFromFieldset(
+                    'quote_convert_item',
+                    'to_order_item_discount',
+                    $quoteItem
+                )
+            );
+        }
+        $this->orderItemBuilder->populateWithArray(array_merge($orderItemData, $data));
 
-        return $this->orderItemBuilder
-            ->populateWithArray(array_merge($orderItemData, $data))
-            ->create();
+        if ($quoteItem->getParentItem()) {
+            $this->orderItemBuilder->setQtyOrdered(
+                $orderItemData[OrderItemInterface::QTY_ORDERED] * $quoteItem->getParentItem()->getQty()
+            );
+        }
+
+        return $this->orderItemBuilder->create();
     }
 }
