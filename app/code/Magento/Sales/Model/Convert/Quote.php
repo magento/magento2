@@ -173,6 +173,7 @@ class Quote extends \Magento\Framework\Object
     /**
      * Convert quote item to order item
      *
+     * @deprecated please use Magento\Quote\Model\Quote\Item\ToOrderItem
      * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  \Magento\Sales\Model\Order\Item
      */
