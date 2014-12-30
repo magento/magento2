@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/guest/print" module="Magento_Sales">
+    <blocks>
+        <viewBlock>
+            <class>Magento\Sales\Test\Block\Order\View</class>
+            <locator>.order-details-items</locator>
+            <strategy>css selector</strategy>
+        </viewBlock>
+        <infoBlock>
+            <class>Magento\Sales\Test\Block\Order\Info</class>
+            <locator>.block-order-details-view</locator>
+            <strategy>css selector</strategy>
+        </infoBlock>
+    </blocks>
+</page>

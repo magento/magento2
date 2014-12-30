@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page module="Magento_CatalogRule">
+    <catalogRuleNew>
+        <mca>catalog_rule/promo_catalog/new</mca>
+        <area>adminhtml</area>
+        <class>Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew</class>
+    </catalogRuleNew>
+    <catalogRuleIndex>
+        <mca>catalog_rule/promo_catalog/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex</class>
+    </catalogRuleIndex>
+</page>

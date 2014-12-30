@@ -28,7 +28,7 @@ class Delete extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->remove('save');
         $this->buttonList->remove('reset');
 
-        $this->buttonList->update('delete', 'region', 'footer');
+        $this->buttonList->update('delete', 'region', 'toolbar');
         $this->buttonList->update('delete', 'onclick', null);
         $this->buttonList->update(
             'delete',
@@ -41,7 +41,7 @@ class Delete extends \Magento\Backend\Block\Widget\Form\Container
             ['label' => __('Cancel'), 'onclick' => 'setLocation(\'' . $this->getBackUrl() . '\')'],
             2,
             100,
-            'footer'
+            'toolbar'
         );
     }
 

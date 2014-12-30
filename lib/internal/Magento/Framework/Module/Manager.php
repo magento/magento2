@@ -8,6 +8,7 @@
  */
 namespace Magento\Framework\Module;
 
+use Magento\Framework\Module\Plugin\DbStatusValidator;
 use Magento\Framework\Module\Updater\SetupInterface;
 
 class Manager
@@ -28,26 +29,18 @@ class Manager
     private $_outputConfigPaths;
 
     /**
-     * @var ResourceInterface
-     */
-    private $_moduleResource;
-
-    /**
      * @param Output\ConfigInterface $outputConfig
      * @param ModuleListInterface $moduleList
-     * @param ResourceInterface $moduleResource
      * @param array $outputConfigPaths
      */
     public function __construct(
         Output\ConfigInterface $outputConfig,
         ModuleListInterface $moduleList,
-        ResourceInterface $moduleResource,
         array $outputConfigPaths = []
     ) {
         $this->_outputConfig = $outputConfig;
         $this->_moduleList = $moduleList;
         $this->_outputConfigPaths = $outputConfigPaths;
-        $this->_moduleResource = $moduleResource;
     }
 
     /**
@@ -97,48 +90,5 @@ class Manager
             return $this->_outputConfig->isSetFlag($configPath);
         }
         return true;
-    }
-
-    /**
-     * Check if DB schema is up to date
-     *
-     * @param string $moduleName
-     * @param string $resourceName
-     * @return bool
-     */
-    public function isDbSchemaUpToDate($moduleName, $resourceName)
-    {
-        $dbVer = $this->_moduleResource->getDbVersion($resourceName);
-        return $this->isModuleVersionEqual($moduleName, $dbVer);
-    }
-
-    /**
-     * @param string $moduleName
-     * @param string $resourceName
-     * @return bool
-     */
-    public function isDbDataUpToDate($moduleName, $resourceName)
-    {
-        $dataVer = $this->_moduleResource->getDataVersion($resourceName);
-        return $this->isModuleVersionEqual($moduleName, $dataVer);
-    }
-
-    /**
-     * Check if DB data is up to date
-     *
-     * @param string $moduleName
-     * @param string|bool $version
-     * @return bool
-     * @throws \UnexpectedValueException
-     */
-    private function isModuleVersionEqual($moduleName, $version)
-    {
-        $module = $this->_moduleList->getOne($moduleName);
-        if (empty($module['schema_version'])) {
-            throw new \UnexpectedValueException("Schema version for module '$moduleName' is not specified");
-        }
-        $configVer = $module['schema_version'];
-
-        return ($version !== false && version_compare($configVer, $version) === SetupInterface::VERSION_COMPARE_EQUAL);
     }
 }

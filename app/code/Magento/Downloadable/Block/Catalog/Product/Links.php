@@ -5,41 +5,40 @@
 namespace Magento\Downloadable\Block\Catalog\Product;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Pricing\Price\LinkPrice;
+use Magento\Framework\Json\EncoderInterface;
 
 /**
  * Downloadable Product Links part block
- *
  */
 class Links extends \Magento\Catalog\Block\Product\AbstractProduct
 {
-    /**
-     * @var \Magento\Framework\Json\EncoderInterface
-     */
-    protected $jsonEncoder;
-
     /**
      * @var \Magento\Core\Helper\Data
      */
     protected $coreData;
 
     /**
+     * @var EncoderInterface
+     */
+    protected $encoder;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Core\Helper\Data $coreData
+     * @param EncoderInterface $encoder
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Core\Helper\Data $coreData,
+        EncoderInterface $encoder,
         array $data = []
     ) {
         $this->coreData = $coreData;
-        parent::__construct(
-            $context,
-            $data
-        );
+        $this->encoder = $encoder;
+        parent::__construct($context, $data);
     }
 
     /**
@@ -93,38 +92,18 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getJsonConfig()
     {
-        $priceInfo = $this->getProduct()->getPriceInfo();
-        $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
-        $regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE);
-        $config = [
-            'price' => $finalPrice->getAmount()->getValue(),
-            'oldPrice' => $regularPrice->getValue(),
-        ];
-        $config['links'] = $this->getLinksConfig();
+        $finalPrice = $this->getProduct()->getPriceInfo()
+            ->getPrice(FinalPrice::PRICE_CODE);
 
-        return json_encode($config);
-    }
-
-    /**
-     * Get links price config
-     *
-     * @return array
-     */
-    protected function getLinksConfig()
-    {
-        $finalPrice = $this->getProduct()->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
         $linksConfig = [];
         foreach ($this->getLinks() as $link) {
             $amount = $finalPrice->getCustomAmount($link->getPrice());
-            $price = $this->coreData->currency($link->getPrice(), false, false);
             $linksConfig[$link->getId()] = [
-                'price' => $price,
-                'oldPrice' => $price,
-                'inclTaxPrice' => $amount->getValue(),
-                'exclTaxPrice' => $amount->getBaseAmount(),
+                'finalPrice' => $amount->getValue(),
             ];
         }
-        return $linksConfig;
+
+        return $this->encoder->encode(['links' => $linksConfig]);
     }
 
     /**

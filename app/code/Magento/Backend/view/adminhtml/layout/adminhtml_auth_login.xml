@@ -6,6 +6,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="empty" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
+        <remove name="legal"/>
         <referenceContainer name="main.content">
             <block class="Magento\Backend\Block\Template" name="content" template="admin/login.phtml">
                 <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>

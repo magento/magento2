@@ -123,7 +123,6 @@ return [
     'cms/page_store' => 'cms_page_store',
     'compiler/configuration' => 'compiler_configuration',
     'core/cache' => 'core_cache',
-    'core/cache_option' => 'core_cache_option',
     'core/cache_tag' => 'core_cache_tag',
     'core/config_data' => 'core_config_data',
     'core/config_field' => 'core_config_field',

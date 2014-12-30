@@ -24,7 +24,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
      * attributes This behavior may change in child classes
      *
      * @param \Magento\Weee\Helper\Data $weeeData
-     * @param array $data
+     * @param array                     $data
      */
     public function __construct(\Magento\Weee\Helper\Data $weeeData, array $data = [])
     {
@@ -35,7 +35,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
     /**
      * Collect Weee amounts for the credit memo
      *
-     * @param Creditmemo $creditmemo
+     * @param  Creditmemo $creditmemo
      * @return $this
      */
     public function collect(Creditmemo $creditmemo)
@@ -113,12 +113,12 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
             //Set the ratio of the tax amount in invoice item compared to tax amount in order item
             //This information is needed to calculate tax per tax rate later
             if ($orderItemTaxAmount != 0) {
-                if (!$item->getTaxRatio()) {
-                    $item->setTaxRatio([]);
+                $taxRatio = [];
+                if ($item->getTaxRatio()) {
+                    $taxRatio = unserialize($item->getTaxRatio());
                 }
-                $taxRatio = $item->getTaxRatio();
                 $taxRatio[\Magento\Weee\Model\Total\Quote\Weee::ITEM_TYPE] = $itemTaxAmount / $orderItemTaxAmount;
-                $item->setTaxRatio($taxRatio);
+                $item->setTaxRatio(serialize($taxRatio));
             }
 
             $totalWeeeAmountInclTax += $weeeAmountInclTax;
@@ -128,11 +128,11 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
             $applied = $this->_weeeData->getApplied($orderItem);
             foreach ($applied as $one) {
                 $title = $one['title'];
-                $one['base_row_amount'] = $creditmemo->roundPrice($one['base_row_amount'] * $ratio, $title . '_base');
+                $one['base_row_amount'] = $creditmemo->roundPrice($one['base_row_amount'] * $ratio, $title.'_base');
                 $one['row_amount'] = $creditmemo->roundPrice($one['row_amount'] * $ratio, $title);
                 $one['base_row_amount_incl_tax'] = $creditmemo->roundPrice(
                     $one['base_row_amount_incl_tax'] * $ratio,
-                    $title . '_base'
+                    $title.'_base'
                 );
                 $one['row_amount_incl_tax'] = $creditmemo->roundPrice($one['row_amount_incl_tax'] * $ratio, $title);
 

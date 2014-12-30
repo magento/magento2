@@ -15,17 +15,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductReviewMassActionSuccessMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * Message that appears after updates via mass actions
      */
     const SUCCESS_MESSAGE = 'A total of %d record(s) have been updated.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Assert that success message is displayed after updated via mass actions

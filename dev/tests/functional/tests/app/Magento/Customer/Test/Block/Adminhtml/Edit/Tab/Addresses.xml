@@ -7,65 +7,65 @@
 <mapping strict="0">
     <fields>
         <prefix>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[prefix]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[prefix]"]</selector>
             <strategy>css selector</strategy>
         </prefix>
         <firstname>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[firstname]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[firstname]"]</selector>
             <strategy>css selector</strategy>
         </firstname>
         <middlename>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[middlename]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[middlename]"]</selector>
             <strategy>css selector</strategy>
         </middlename>
         <lastname>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[lastname]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[lastname]"]</selector>
             <strategy>css selector</strategy>
         </lastname>
         <suffix>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[suffix]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[suffix]"]</selector>
             <strategy>css selector</strategy>
         </suffix>
         <company>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[company]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[company]"]</selector>
             <strategy>css selector</strategy>
         </company>
         <street>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[street][0]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[street][0]"]</selector>
             <strategy>css selector</strategy>
         </street>
         <city>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[city]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[city]"]</selector>
             <strategy>css selector</strategy>
         </city>
         <country_id>
             <input>select</input>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[country_id]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[country_id]"]</selector>
             <strategy>css selector</strategy>
         </country_id>
         <region_id>
             <input>select</input>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[region_id]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[region_id]"]</selector>
             <strategy>css selector</strategy>
         </region_id>
         <region>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[region]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[region]"]</selector>
             <strategy>css selector</strategy>
         </region>
         <postcode>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[postcode]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[postcode]"]</selector>
             <strategy>css selector</strategy>
         </postcode>
         <telephone>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[telephone]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[telephone]"]</selector>
             <strategy>css selector</strategy>
         </telephone>
         <fax>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[fax]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[fax]"]</selector>
             <strategy>css selector</strategy>
         </fax>
         <vat_id>
-            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[vat_id]"]</selector>
+            <selector>.address-item-edit:not([style="display: none;"]) [name$="[vat_id]"]</selector>
             <strategy>css selector</strategy>
         </vat_id>
         <default_billing>

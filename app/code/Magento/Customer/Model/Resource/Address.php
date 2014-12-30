@@ -149,4 +149,22 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
         $object->setData([]);
         return $result;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _afterDelete(\Magento\Framework\Object $address)
+    {
+        if ($address->getId()) {
+            $customer = $this->_createCustomer()->load($address->getCustomerId());
+            if ($customer->getDefaultBilling() == $address->getId()) {
+                $customer->setDefaultBilling(null);
+            }
+            if ($customer->getDefaultShipping() == $address->getId()) {
+                $customer->setDefaultShipping(null);
+            }
+            $customer->save();
+        }
+        return parent::_afterDelete($address);
+    }
 }

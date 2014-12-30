@@ -62,10 +62,6 @@
             <word>overriden</word>
         </item>
         <item>
-            <path>app/code/Magento/Paypal/view/frontend/templates/express/shortcut.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
             <path>app/code/Magento/Bundle/view/adminhtml/templates/product/edit/bundle.phtml</path>
             <word>head.js</word>
         </item>

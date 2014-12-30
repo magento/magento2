@@ -49,196 +49,197 @@ $this->getConfigJson();
 <script type="text/javascript">
 require([
     'jquery',
+    'Magento_Ui/js/lib/registry/registry',
     'jquery/file-uploader',
     'prototype'
-], function(jQuery){
-
-//<![CDATA[>
-var sampleTemplate = '<tr>'+
-                        '<td>'+
-                            '<input type="hidden" class="__delete__" name="downloadable[sample][{{id}}][is_delete]" value="" />'+
-                            '<input type="hidden" name="downloadable[sample][{{id}}][sample_id]" value="{{sample_id}}" />'+
-                            '<input type="text" class="required-entry input-text" name="downloadable[sample][{{id}}][title]" value="{{title}}" />'+
-                            '<?php echo $_product->getStoreId() ? '<br /><input type="checkbox" id="downloadable_sample_{{id}}_title" name="downloadable[sample][{{id}}][use_default_title]" value="1" /><label class="normal" for="downloadable_sample_{{id}}_title">Use Default Value</label>' : '' ?>'+
-                        '</td>'+
-                        '<td>'+
-                            '<div class="files-wide">'+
-                                '<div class="row">'+
-                                    '<label for="downloadable_sample_{{id}}_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_{{id}}_file_type" name="downloadable[sample][{{id}}][type]" value="file"{{file_checked}} /> File:</label>'+
-                                    '<input type="hidden" class="validate-downloadable-file" id="downloadable_sample_{{id}}_file_save" name="downloadable[sample][{{id}}][file]" value="{{file_save}}" />'+
-                                    '<div id="downloadable_sample_{{id}}_file" class="uploader">'+
-                                        '<div id="downloadable_sample_{{id}}_file-old" class="file-row-info"></div>'+
-                                        '<div id="downloadable_sample_{{id}}_file-new" class="file-row-info new-file"></div>'+
-                                        '<div class="fileinput-button form-buttons">'+
-                                            '<span><?php echo __('Browse Files...') ?></span>' +
-                                            '<input id="downloadable_sample_{{id}}_file" type="file" name="<?php echo $this->getConfig()->getFileField() ?>" data-url="<?php echo $this->getConfig()->getUrl() ?>">' +
-                                            '<script type="text/javascript">' +
-                                            '/*<![CDATA[*/' +
-                                                'sampleUploader("#downloadable_sample_{{id}}_file"); ' +
-                                            '/*]]>*/' +
-                                            '</scr'+'ipt>'+
+], function(jQuery, registry){
+    registry.get('downloadable', function (Downloadable) {
+        var sampleTemplate = '<tr>'+
+                            '<td>'+
+                                '<input type="hidden" class="__delete__" name="downloadable[sample][{{id}}][is_delete]" value="" />'+
+                                '<input type="hidden" name="downloadable[sample][{{id}}][sample_id]" value="{{sample_id}}" />'+
+                                '<input type="text" class="required-entry input-text" name="downloadable[sample][{{id}}][title]" value="{{title}}" />'+
+                                '<?php echo $_product->getStoreId() ? '<br /><input type="checkbox" id="downloadable_sample_{{id}}_title" name="downloadable[sample][{{id}}][use_default_title]" value="1" /><label class="normal" for="downloadable_sample_{{id}}_title">Use Default Value</label>' : '' ?>'+
+                            '</td>'+
+                            '<td>'+
+                                '<div class="files-wide">'+
+                                    '<div class="row">'+
+                                        '<label for="downloadable_sample_{{id}}_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_{{id}}_file_type" name="downloadable[sample][{{id}}][type]" value="file"{{file_checked}} /> File:</label>'+
+                                        '<input type="hidden" class="validate-downloadable-file" id="downloadable_sample_{{id}}_file_save" name="downloadable[sample][{{id}}][file]" value="{{file_save}}" />'+
+                                        '<div id="downloadable_sample_{{id}}_file" class="uploader">'+
+                                            '<div id="downloadable_sample_{{id}}_file-old" class="file-row-info"></div>'+
+                                            '<div id="downloadable_sample_{{id}}_file-new" class="file-row-info new-file"></div>'+
+                                            '<div class="fileinput-button form-buttons">'+
+                                                '<span><?php echo __('Browse Files...') ?></span>' +
+                                                '<input id="downloadable_sample_{{id}}_file" type="file" name="<?php echo $this->getConfig()->getFileField() ?>" data-url="<?php echo $this->getConfig()->getUrl() ?>">' +
+                                                '<script type="text/javascript">' +
+                                                '/*<![CDATA[*/' +
+                                                    'sampleUploader("#downloadable_sample_{{id}}_file"); ' +
+                                                '/*]]>*/' +
+                                                '</scr'+'ipt>'+
+                                            '</div>'+
+                                            '<div class="clear"></div>'+
                                         '</div>'+
-                                        '<div class="clear"></div>'+
+                                    '</div>'+
+                                    '<div class="row">'+
+                                        '<label for="downloadable_sample_{{id}}_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_{{id}}_url_type" name="downloadable[sample][{{id}}][type]" value="url"{{url_checked}} /> URL:</label> <input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[sample][{{id}}][sample_url]" value="{{sample_url}}" />'+
+                                    '</div>'+
+                                    '<div>'+
+                                        '<span id="downloadable_sample_{{id}}_container"></span>'+
                                     '</div>'+
                                 '</div>'+
-                                '<div class="row">'+
-                                    '<label for="downloadable_sample_{{id}}_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_{{id}}_url_type" name="downloadable[sample][{{id}}][type]" value="url"{{url_checked}} /> URL:</label> <input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[sample][{{id}}][sample_url]" value="{{sample_url}}" />'+
-                                '</div>'+
-                                '<div>'+
-                                    '<span id="downloadable_sample_{{id}}_container"></span>'+
-                                '</div>'+
-                            '</div>'+
 
-                        '</td>'+
-                        '<td><input type="text" name="downloadable[sample][{{id}}][sort_order]" value="{{sort_order}}" class="input-text sort" /></td>'+
-                        '<td class="col-delete">'+
-                            '<button type="button" class="action- scalable delete icon-btn delete-sample-item"><span>Delete</span></button>'+
-                        '</td>'+
-                    '</tr>';
-sampleItems = {
-    tbody: $('sample_items_body'),
-    templateSyntax: /(^|.|\r|\n)({{(\w+)}})/,
-    templateText: sampleTemplate,
-    itemCount: 0,
-    add: function(data) {
-        alertAlreadyDisplayed = false;
-        this.template = new Template(this.templateText, this.templateSyntax);
+                            '</td>'+
+                            '<td><input type="text" name="downloadable[sample][{{id}}][sort_order]" value="{{sort_order}}" class="input-text sort" /></td>'+
+                            '<td class="col-delete">'+
+                                '<button type="button" class="action- scalable delete icon-btn delete-sample-item"><span>Delete</span></button>'+
+                            '</td>'+
+                        '</tr>';
+        sampleItems = {
+            tbody: $('sample_items_body'),
+            templateSyntax: /(^|.|\r|\n)({{(\w+)}})/,
+            templateText: sampleTemplate,
+            itemCount: 0,
+            add: function(data) {
+                alertAlreadyDisplayed = false;
+                this.template = new Template(this.templateText, this.templateSyntax);
 
-        if(!data.sample_id) {
-            data = {};
-            data.sample_type = 'file';
-            data.sample_id  = 0;
-        }
-
-        data.id = this.itemCount;
-
-        if (data.sample_type == 'url') {
-            data.url_checked = ' checked="checked"';
-        } else if (data.sample_type == 'file') {
-            data.file_checked = ' checked="checked"';
-        }
-
-        Element.insert(this.tbody, {'bottom':this.template.evaluate(data)});
-
-        scopeTitle = $('downloadable_sample_'+data.id+'_title');
-        if (scopeTitle) {
-            Event.observe(scopeTitle, 'click', function(event){
-                scopeElm = $(Event.findElement(event, 'input'));
-                titleField = scopeElm.up(0).down('input[type="text"]');
-                if (scopeElm.checked == true) {
-                    titleField.disabled = true;
-                } else {
-                    titleField.disabled = false;
+                if(!data.sample_id) {
+                    data = {};
+                    data.sample_type = 'file';
+                    data.sample_id  = 0;
                 }
-            });
-        }
-        if (!data.store_title && scopeTitle) {
-            scopeTitle.up(0).down('input[type="text"]').disabled = true;
-            scopeTitle.checked = true;
-        }
 
-        sampleUrl = $('downloadable_sample_'+data.id+'_url_type');
+                data.id = this.itemCount;
 
-        if (!data.file_save) {
-            data.file_save = [];
-        }
-        new Downloadable.FileUploader(
-            'samples',
-            data.id,
-            sampleUrl.up('td').down('div.uploader'),
-            'downloadable[sample]['+data.id+']',
-            data.file_save,
-            'downloadable_sample_'+data.id+'_file',
-            <?php echo $this->getConfigJson() ?>
-        );
-        sampleUrl.advaiceContainer = 'downloadable_sample_'+data.id+'_container';
-        sampleFile = $('downloadable_sample_'+data.id+'_file_type');
-        sampleFile.advaiceContainer = 'downloadable_sample_'+data.id+'_container';
-        $('downloadable_sample_'+data.id+'_file_save').advaiceContainer = 'downloadable_sample_'+data.id+'_container';
+                if (data.sample_type == 'url') {
+                    data.url_checked = ' checked="checked"';
+                } else if (data.sample_type == 'file') {
+                    data.file_checked = ' checked="checked"';
+                }
 
-        this.itemCount++;
-        this.bindRemoveButtons();
-    },
-    remove: function(event) {
-        var element = $(Event.findElement(event, 'tr'));
-        alertAlreadyDisplayed = false;
-        if(element){
-            element.down('input[type="hidden"].__delete__').value = '1';
-            element.addClassName('no-display');
-            element.addClassName('ignore-validate');
-            element.hide();
-        }
-    },
-    bindRemoveButtons: function() {
-        var buttons = $$('tbody#sample_items_body .delete-sample-item');
-        for(var i=0;i<buttons.length;i++){
-            if(!$(buttons[i]).binded){
-                $(buttons[i]).binded = true;
-                Event.observe(buttons[i], 'click', this.remove.bind(this));
-            }
-        }
-    }
-}
+                Element.insert(this.tbody, {'bottom':this.template.evaluate(data)});
 
-sampleItems.bindRemoveButtons();
+                scopeTitle = $('downloadable_sample_'+data.id+'_title');
+                if (scopeTitle) {
+                    Event.observe(scopeTitle, 'click', function(event){
+                        scopeElm = $(Event.findElement(event, 'input'));
+                        titleField = scopeElm.up(0).down('input[type="text"]');
+                        if (scopeElm.checked == true) {
+                            titleField.disabled = true;
+                        } else {
+                            titleField.disabled = false;
+                        }
+                    });
+                }
+                if (!data.store_title && scopeTitle) {
+                    scopeTitle.up(0).down('input[type="text"]').disabled = true;
+                    scopeTitle.checked = true;
+                }
 
-sampleUploader = function (id) {
-    (function ($, id) {
-        $(id).fileupload({
-            dataType: 'json',
-            url: '<?php echo $this->getConfig()->getUrl() ?>',
-            sequentialUploads: true,
-            maxFileSize: 2000000,
-            add: function (e, data) {
-                $.each(data.files, function (index, file) {
-                    data.fileId = Math.random().toString(36).substr(2, 9);
-                    var progressTmpl = $(id + '-template').children(':first').clone();
-                    progressTmpl.attr('id', data.fileId);
-                    var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
-                            .replace('{{name}}', file.name);
-                    progressTmpl.html(fileInfoHtml);
-                    progressTmpl.appendTo(id);
-                });
-                $(this).fileupload('process', data).done(function () {
-                    data.submit();
-                });
+                sampleUrl = $('downloadable_sample_'+data.id+'_url_type');
+
+                if (!data.file_save) {
+                    data.file_save = [];
+                }
+                new Downloadable.FileUploader(
+                    'samples',
+                    data.id,
+                    sampleUrl.up('td').down('div.uploader'),
+                    'downloadable[sample]['+data.id+']',
+                    data.file_save,
+                    'downloadable_sample_'+data.id+'_file',
+                    <?php echo $this->getConfigJson() ?>
+                );
+                sampleUrl.advaiceContainer = 'downloadable_sample_'+data.id+'_container';
+                sampleFile = $('downloadable_sample_'+data.id+'_file_type');
+                sampleFile.advaiceContainer = 'downloadable_sample_'+data.id+'_container';
+                $('downloadable_sample_'+data.id+'_file_save').advaiceContainer = 'downloadable_sample_'+data.id+'_container';
+
+                this.itemCount++;
+                this.bindRemoveButtons();
             },
-            done: function (e, data) {
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-                $(progressSelector).css('width', '100%');
-                if (data.result && !data.result.hasOwnProperty('errorcode')) {
-                    $(progressSelector).removeClass('upload-progress').addClass('upload-success');
-                    new Downloadable.FileList(id.substr(1), null).handleUploadComplete(data.result);
-                } else {
-                    $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-                    var errorMsg = '<span class="file-info-error">' + data.result.error + '</span>';
-                    $('#' + data.fileId + ' .file-info').append(errorMsg);
+            remove: function(event) {
+                var element = $(Event.findElement(event, 'tr'));
+                alertAlreadyDisplayed = false;
+                if(element){
+                    element.down('input[type="hidden"].__delete__').value = '1';
+                    element.addClassName('no-display');
+                    element.addClassName('ignore-validate');
+                    element.hide();
                 }
             },
-            progress: function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-                $(progressSelector).css('width', progress + '%');
-            },
-            fail: function (e, data) {
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-                if (data.result && data.result.hasOwnProperty('errorcode')) {
-                    var errorMsg = '<span class="file-info-error">' + data.result.error + '</span>';
-                    $('#' + data.fileId + ' .file-info').append(errorMsg);
+            bindRemoveButtons: function() {
+                var buttons = $$('tbody#sample_items_body .delete-sample-item');
+                for(var i=0;i<buttons.length;i++){
+                    if(!$(buttons[i]).binded){
+                        $(buttons[i]).binded = true;
+                        Event.observe(buttons[i], 'click', this.remove.bind(this));
+                    }
                 }
             }
-        });
-    })(jQuery, id);
-};
+        }
 
-if($('add_sample_item')){
-    Event.observe('add_sample_item', 'click', sampleItems.add.bind(sampleItems));
-}
+        sampleItems.bindRemoveButtons();
 
-<?php foreach ($this->getSampleData() as $item): ?>
-    sampleItems.add(<?php echo $item->toJson() ?>);
-<?php endforeach; ?>
+        sampleUploader = function (id) {
+            (function ($, id) {
+                $(id).fileupload({
+                    dataType: 'json',
+                    url: '<?php echo $this->getConfig()->getUrl() ?>',
+                    sequentialUploads: true,
+                    maxFileSize: 2000000,
+                    add: function (e, data) {
+                        $.each(data.files, function (index, file) {
+                            data.fileId = Math.random().toString(36).substr(2, 9);
+                            var progressTmpl = $(id + '-template').children(':first').clone();
+                            progressTmpl.attr('id', data.fileId);
+                            var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
+                                    .replace('{{name}}', file.name);
+                            progressTmpl.html(fileInfoHtml);
+                            progressTmpl.appendTo(id);
+                        });
+                        $(this).fileupload('process', data).done(function () {
+                            data.submit();
+                        });
+                    },
+                    done: function (e, data) {
+                        var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                        $(progressSelector).css('width', '100%');
+                        if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                            $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+                            new Downloadable.FileList(id.substr(1), null).handleUploadComplete(data.result);
+                        } else {
+                            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                            var errorMsg = '<span class="file-info-error">' + data.result.error + '</span>';
+                            $('#' + data.fileId + ' .file-info').append(errorMsg);
+                        }
+                    },
+                    progress: function (e, data) {
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                        var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                        $(progressSelector).css('width', progress + '%');
+                    },
+                    fail: function (e, data) {
+                        var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                        $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+                        if (data.result && data.result.hasOwnProperty('errorcode')) {
+                            var errorMsg = '<span class="file-info-error">' + data.result.error + '</span>';
+                            $('#' + data.fileId + ' .file-info').append(errorMsg);
+                        }
+                    }
+                });
+            })(jQuery, id);
+        };
 
+        if($('add_sample_item')){
+            Event.observe('add_sample_item', 'click', sampleItems.add.bind(sampleItems));
+        }
+
+        <?php foreach ($this->getSampleData() as $item): ?>
+            sampleItems.add(<?php echo $item->toJson() ?>);
+        <?php endforeach; ?>
+
+    });
 });
 </script>

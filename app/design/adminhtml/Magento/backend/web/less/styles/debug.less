@@ -301,8 +301,11 @@
     border: 0;
 }
 
-.accordion .config .comment a {
-    .style3();
+.accordion .config {
+    .comment a,
+    .link-more {
+        .style3();
+    }
 }
 
 .accordion .config legend {
@@ -367,7 +370,25 @@
 
 .accordion .config .value {
     width: 50%;
-    padding-right:40px;
+    padding-right: 40px;
+    .checkboxes {
+        list-style: none;
+        padding: 0;
+        margin: -3px 0 0;
+
+        li {
+            margin: 7px 0;
+        }
+
+        input,
+        label {
+            vertical-align: middle;
+        }
+
+        label {
+            margin-left: 5px;
+        }
+    }
 }
 
 .accordion .config .value.with-tooltip {

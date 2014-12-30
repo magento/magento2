@@ -6,7 +6,7 @@
 -->
 <constraint>
     <assertUserSuccessLogin module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <dashboard class="Magento\Backend\Test\Page\Adminhtml\Dashboard" />
             <adminAuth class="Magento\Backend\Test\Page\AdminAuthLogin" />
@@ -15,102 +15,102 @@
         </require>
     </assertUserSuccessLogin>
     <assertUserSuccessLogOut module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <adminAuth class="Magento\Backend\Test\Page\AdminAuthLogin" />
             <dashboard class="Magento\Backend\Test\Page\Adminhtml\Dashboard" />
         </require>
     </assertUserSuccessLogOut>
     <assertUserWrongCredentialsMessage module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <adminAuth class="Magento\Backend\Test\Page\AdminAuthLogin" />
             <customAdmin class="Magento\User\Test\Fixture\User" />
         </require>
     </assertUserWrongCredentialsMessage>
     <assertUserRoleSalesRestrictedAccess module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <userIndex class="Magento\User\Test\Page\Adminhtml\UserIndex" />
             <dashboard class="Magento\Backend\Test\Page\Adminhtml\Dashboard" />
         </require>
     </assertUserRoleSalesRestrictedAccess>
     <assertRoleSuccessSaveMessage module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
         </require>
     </assertRoleSuccessSaveMessage>
     <assertRoleInGrid module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
         </require>
     </assertRoleInGrid>
     <assertUserInGrid module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <userIndex class="Magento\User\Test\Page\Adminhtml\UserIndex" />
             <user class="Magento\User\Test\Fixture\User" />
         </require>
     </assertUserInGrid>
     <assertUserSuccessSaveMessage module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <userIndex class="Magento\User\Test\Page\Adminhtml\UserIndex" />
         </require>
     </assertUserSuccessSaveMessage>
     <assertImpossibleDeleteYourOwnRole module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleEditRole" />
         </require>
     </assertImpossibleDeleteYourOwnRole>
     <assertRoleSuccessDeleteMessage module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
         </require>
     </assertRoleSuccessDeleteMessage>
     <assertRoleNotInGrid module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
         </require>
     </assertRoleNotInGrid>
     <assertImpossibleDeleteYourOwnAccount module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <userEdit class="Magento\User\Test\Page\Adminhtml\UserEdit" />
         </require>
     </assertImpossibleDeleteYourOwnAccount>
     <assertUserSuccessDeleteMessage module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <userIndex class="Magento\User\Test\Page\Adminhtml\UserIndex" />
         </require>
     </assertUserSuccessDeleteMessage>
     <assertUserNotInGrid module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <userIndex class="Magento\User\Test\Page\Adminhtml\UserIndex" />
         </require>
     </assertUserNotInGrid>
     <assertUserDuplicateMessage module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <userEdit class="Magento\User\Test\Page\Adminhtml\UserEdit" />
         </require>
     </assertUserDuplicateMessage>
     <assertUserInvalidEmailMessage module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <userEdit class="Magento\User\Test\Page\Adminhtml\UserEdit" />
             <user class="Magento\User\Test\Fixture\User" />
         </require>
     </assertUserInvalidEmailMessage>
     <assertAccessTokensErrorRevokeMessage module="Magento_User">
-        <severeness>low</severeness>
+        <severity>low</severity>
         <require>
             <userEdit class="Magento\User\Test\Page\Adminhtml\UserEdit" />
         </require>

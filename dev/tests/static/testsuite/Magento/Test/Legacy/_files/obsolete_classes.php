@@ -1724,7 +1724,7 @@ return [
     ['Magento\Adminhtml\Block\Report\Wishlist', 'Magento\Reports\Block\Adminhtml\Wishlist'],
     ['Magento\Backend\Helper\Addresses'],
     ['Magento\Core\Model\Cookie', 'Magento\Framework\Stdlib\Cookie'],
-    ['Magento\Core\Model\Logger', 'Magento\Framework\Logger'],
+    ['Magento\Core\Model\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Core\Block\Template\Context', 'Magento\Framework\View\Element\Template\Context'],
     ['Magento\Page\Block\Template\Container'],
     ['Magento\Page\Block\Redirect', 'Magento\Framework\View\Element\Redirect'],
@@ -2330,7 +2330,7 @@ return [
     ['Magento\Locale', 'Magento\Framework\Locale'],
     ['Magento\LocaleFactory', 'Magento\Framework\LocaleFactory'],
     ['Magento\LocaleInterface', 'Magento\Framework\LocaleInterface'],
-    ['Magento\Logger', 'Magento\Framework\Logger'],
+    ['Magento\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Phrase', 'Magento\Framework\Phrase'],
     ['Magento\Pear', 'Magento\Framework\Pear'],
     [
@@ -2819,6 +2819,15 @@ return [
     ['Magento\Customer\Model\Converter'],
     ['Magento\CatalogRule\Plugin\Indexer\Product\PriceIndexer'],
     ['Magento\CatalogRule\Plugin\Indexer\Product\PriceIndexerTest'],
+    [
+        'Magento\Framework\Interception\ObjectManager\Compiled\Config',
+        'Magento\Framework\Interception\ObjectManager\Config\Compiled'
+    ],
+    [
+        'Magento\Framework\Interception\ObjectManager\Config',
+        'Magento\Framework\Interception\ObjectManager\Config\Developer'
+    ],
+    ['Magento\Framework\ObjectManager\Config\ProxyConfig'],
     ['Magento\Catalog\Block\Product\Send'],
     ['Magento\Catalog\Helper\Product\Options'],
     ['Magento\Cms\Model\Resource\Page\Service'],
@@ -2826,7 +2835,12 @@ return [
     ['Magento\GiftMessage\Helper\Url'],
     ['Magento\Rss\Helper\Data'],
     ['Magento\Sales\Model\ConverterInterface'],
+    ['Magento\Paypal\Block\System\Config\Fieldset\Location'],
+    ['Magento\Paypal\Block\Payflow\Advanced\Review'],
+    ['Magento\Paypal\Block\Payflow\Link\Review'],
+    ['Magento\Paypal\Model\System\Config\Source\AuthorizationAmounts'],
     ['Magento\Rule\Model\Rule', 'Magento\Rule\Model\AbstractModel'],
     ['Magento\Framework\App\Cache\State\Options', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\App\Cache\State\OptionsInterface', 'Magento\Framework\App\Cache\State'],
+    ['Magento\Framework\Logger', 'Psr\Log\LoggerInterface'],
 ];

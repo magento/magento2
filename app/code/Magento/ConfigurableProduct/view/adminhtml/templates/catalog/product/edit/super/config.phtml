@@ -14,7 +14,7 @@ use \Magento\ConfigurableProduct\Model\Product\Type\Configurable;
             </strong>
         </div>
 
-        <div class="fieldset-wrapper-content collapse" id="<?php echo $this->getId() ?>-content">
+        <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php echo $this->getId() ?>-content">
             <fieldset class="fieldset">
                 <div class="field" id="variations-search-field">
                     <label class="label" for="configurable-attribute-selector"><span>Search</span></label>
@@ -81,7 +81,6 @@ require([
 
             attributesInput.prop('disabled', false);
 
-            stockAvailabilityField.val(1);
             inventoryQty.prop('disabled', true);
             inventoryAvailabilityField.removeProp('disabled');
             disableElement(qtyField);

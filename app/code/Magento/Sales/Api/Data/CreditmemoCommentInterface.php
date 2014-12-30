@@ -5,59 +5,82 @@
 namespace Magento\Sales\Api\Data;
 
 /**
- * Interface CreditmemoCommentInterface
+ * Credit memo comment interface.
+ *
+ * After a customer places and pays for an order and an invoice has been issued, the merchant can create a credit memo
+ * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
+ * customer account so that the customer can make future purchases. A credit memo usually includes comments that detail
+ * why the credit memo amount was credited to the customer.
  */
 interface CreditmemoCommentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
+     * Constants for keys of data array. Identical to the name of the getter in snake case.
+     */
+    /*
+     * Entity ID.
      */
     const ENTITY_ID = 'entity_id';
+    /*
+     * Parent ID.
+     */
     const PARENT_ID = 'parent_id';
+    /*
+     * Is-customer-notified flag.
+     */
     const IS_CUSTOMER_NOTIFIED = 'is_customer_notified';
+    /*
+     * Is-visible-on-storefront flag.
+     */
     const IS_VISIBLE_ON_FRONT = 'is_visible_on_front';
+    /*
+     * Comment.
+     */
     const COMMENT = 'comment';
+    /*
+     * Created-at timestamp.
+     */
     const CREATED_AT = 'created_at';
 
     /**
-     * Returns comment
+     * Gets the credit memo comment.
      *
-     * @return string
+     * @return string Comment.
      */
     public function getComment();
 
     /**
-     * Returns created_at
+     * Gets the credit memo created-at timestamp.
      *
-     * @return string
+     * @return string Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
-     * Returns entity_id
+     * Gets the credit memo ID.
      *
-     * @return int
+     * @return int Credit memo ID.
      */
     public function getEntityId();
 
     /**
-     * Returns is_customer_notified
+     * Gets the is-customer-notified flag value for the credit memo.
      *
-     * @return int
+     * @return int Is-customer-notified flag value.
      */
     public function getIsCustomerNotified();
 
     /**
-     * Returns is_visible_on_front
+     * Gets the is-visible-on-storefront flag value for the credit memo.
      *
-     * @return int
+     * @return int Is-visible-on-storefront flag value.
      */
     public function getIsVisibleOnFront();
 
     /**
-     * Returns parent_id
+     * Gets the parent ID for the credit memo.
      *
-     * @return int
+     * @return int Parent ID.
      */
     public function getParentId();
 }

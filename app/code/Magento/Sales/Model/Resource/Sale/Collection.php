@@ -8,7 +8,7 @@ use Magento\Core\Model\EntityFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Sales\Model\Resource\Order;
 
 /**

@@ -121,9 +121,11 @@ class Tree extends Block
     protected function prepareFullCategoryPath(CatalogCategory $category)
     {
         $path = [];
-        $parentCategory = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
+        $parentCategory = $category->hasData('parent_id')
+            ? $category->getDataFieldConfig('parent_id')['source']->getParentCategory()
+            : null;
 
-        if ($parentCategory != null) {
+        if ($parentCategory !== null) {
             $path = $this->prepareFullCategoryPath($parentCategory);
         }
         return array_filter(array_merge($path, [$category->getPath(), $category->getName()]));

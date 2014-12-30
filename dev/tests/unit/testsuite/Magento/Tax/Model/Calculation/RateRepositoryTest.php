@@ -5,6 +5,8 @@
 namespace Magento\Tax\Model\Calculation;
 
 use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Api\SearchCriteria;
 
 class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -271,5 +273,167 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         }
 
         return $taxRateMock;
+    }
+
+    /**
+     * @param ModelException $expectedException
+     * @param string $exceptionType
+     * @param string $exceptionMessage
+     * @throws ModelException
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\InputException
+     * @dataProvider saveThrowsExceptionIfCannotSaveTitlesDataProvider
+     */
+    public function testSaveThrowsExceptionIfCannotSaveTitles($expectedException, $exceptionType, $exceptionMessage)
+    {
+        $countryCode = 'US';
+        $countryMock = $this->getMock('Magento\Directory\Model\Country', [], [], '', false);
+        $countryMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $countryMock->expects($this->any())->method('loadByCode')->with($countryCode)->will($this->returnSelf());
+        $this->countryFactoryMock->expects($this->once())->method('create')->will($this->returnValue($countryMock));
+
+        $regionId = 2;
+        $regionMock = $this->getMock('Magento\Directory\Model\Region', [], [], '', false);
+        $regionMock->expects($this->any())->method('getId')->will($this->returnValue($regionId));
+        $regionMock->expects($this->any())->method('load')->with($regionId)->will($this->returnSelf());
+        $this->regionFactoryMock->expects($this->once())->method('create')->will($this->returnValue($regionMock));
+
+        $rateTitles = ['Label 1', 'Label 2'];
+        $rateMock = $this->getTaxRateMock(
+            [
+                'id' => null,
+                'tax_country_id' => $countryCode,
+                'tax_region_id' => $regionId,
+                'region_name' => null,
+                'tax_postcode' => null,
+                'zip_is_range' => true,
+                'zip_from' => 90000,
+                'zip_to' => 90005,
+                'rate' => 7.5,
+                'code' => 'Tax Rate Code',
+                'titles' => $rateTitles,
+            ]
+        );
+        $this->rateConverterMock->expects($this->once())->method('createTitleArrayFromServiceObject')
+            ->with($rateMock)->will($this->returnValue($rateTitles));
+        $this->rateResourceMock->expects($this->once())->method('save')->with($rateMock);
+        $rateMock
+            ->expects($this->once())
+            ->method('saveTitles')
+            ->with($rateTitles)
+            ->willThrowException($expectedException);
+        $this->rateRegistryMock->expects($this->never())->method('registerTaxRate')->with($rateMock);
+        $this->setExpectedException($exceptionType, $exceptionMessage);
+        $this->model->save($rateMock);
+    }
+
+    public function saveThrowsExceptionIfCannotSaveTitlesDataProvider()
+    {
+        return [
+            'entity_already_exists' => [
+                new ModelException(
+                    'Cannot save titles',
+                    ModelException::ERROR_CODE_ENTITY_ALREADY_EXISTS
+                ),
+                'Magento\Framework\Exception\InputException',
+                'Cannot save titles'
+            ],
+            'cannot_save_title' => [
+                new ModelException(
+                    'Cannot save titles'
+                ),
+                'Magento\Framework\Model\Exception',
+                'Cannot save titles'
+            ]
+        ];
+    }
+
+    public function testGetListWhenFilterGroupExists()
+    {
+        $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteriaInterface');
+        $filterGroupMock = $this->getMock('Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
+        $searchCriteriaMock
+            ->expects($this->any())
+            ->method('getFilterGroups')
+            ->will($this->returnValue([$filterGroupMock]));
+        $filterMock = $this->getMock('Magento\Framework\Api\Filter', [], [], '', false);
+        $filterGroupMock->expects($this->once())->method('getFilters')->willReturn([$filterMock]);
+        $filterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('like');
+        $filterMock->expects($this->once())->method('getField')->willReturn('region_name');
+        $filterMock->expects($this->once())->method('getValue')->willReturn('condition_value');
+        $objectManager = new ObjectManager($this);
+        $rateMock = $this->getTaxRateMock([]);
+        $items = [$rateMock];
+        $collectionMock = $objectManager->getCollectionMock(
+            'Magento\Tax\Model\Resource\Calculation\Rate\Collection',
+            $items
+        );
+        $collectionMock
+            ->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with(['region_table.code'], [['like' => 'condition_value']]);
+        $sortOrderMock = $this->getMock('Magento\Framework\Api\SortOrder', [], [], '', false);
+        $searchCriteriaMock
+            ->expects($this->any())
+            ->method('getSortOrders')
+            ->will($this->returnValue([$sortOrderMock]));
+        $sortOrderMock->expects($this->once())->method('getField')->willReturn('field_name');
+        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SearchCriteria::SORT_ASC);
+        $collectionMock->expects($this->once())->method('addOrder')->with('main_table.field_name', 'ASC');
+        $currentPage = 1;
+        $pageSize = 100;
+        $searchCriteriaMock->expects($this->any())->method('getCurrentPage')->will($this->returnValue($currentPage));
+        $searchCriteriaMock->expects($this->any())->method('getPageSize')->will($this->returnValue($pageSize));
+        $rateMock = $this->getTaxRateMock([]);
+
+
+        $collectionMock->expects($this->once())->method('joinRegionTable');
+        $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
+        $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
+        $collectionMock->expects($this->once())->method('getSize')->will($this->returnValue(count($items)));
+
+        $this->rateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($rateMock));
+        $rateMock->expects($this->any())->method('getCollection')->will($this->returnValue($collectionMock));
+
+
+
+        $this->searchResultBuilder->expects($this->once())->method('setItems')->with($items)->willReturnSelf();
+        $this->searchResultBuilder->expects($this->once())->method('setTotalCount')->with(count($items))
+            ->willReturnSelf();
+        $this->searchResultBuilder->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock)
+            ->willReturnSelf();
+        $this->searchResultBuilder->expects($this->once())->method('create');
+
+        $this->model->getList($searchCriteriaMock);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage One or more input exceptions have occurred.
+     */
+    public function testValidate()
+    {
+        $regionId = 2;
+        $rateTitles = ['Label 1', 'Label 2'];
+        $regionMock = $this->getMock('Magento\Directory\Model\Region', [], [], '', false);
+        $regionMock->expects($this->any())->method('getId')->will($this->returnValue(''));
+        $regionMock->expects($this->any())->method('load')->with($regionId)->will($this->returnSelf());
+        $this->regionFactoryMock->expects($this->once())->method('create')->will($this->returnValue($regionMock));
+        $rateMock = $this->getTaxRateMock(
+            [
+                'id' => null,
+                'tax_country_id' => '',
+                'tax_region_id' => $regionId,
+                'region_name' => null,
+                'tax_postcode' => null,
+                'zip_is_range' => true,
+                'zip_from' => -90000,
+                'zip_to' => '',
+                'rate' => '',
+                'code' => '',
+                'titles' => $rateTitles,
+            ]
+        );
+        $this->model->save($rateMock);
     }
 }

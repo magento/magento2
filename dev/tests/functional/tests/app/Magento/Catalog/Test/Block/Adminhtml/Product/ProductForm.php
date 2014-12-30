@@ -181,7 +181,7 @@ class ProductForm extends FormTabs
         if (!$this->checkAttributeLabel($attribute)) {
             /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab $tab */
             $tab = $this->openTab($tabName);
-            $tab->addNewAttribute();
+            $tab->addNewAttribute($tabName);
             $this->fillAttributeForm($attribute);
             $this->reinitRootElement();
         }
@@ -223,7 +223,6 @@ class ProductForm extends FormTabs
     public function openTab($tabName)
     {
         $this->showAdvancedSettings();
-
         return parent::openTab($tabName);
     }
 

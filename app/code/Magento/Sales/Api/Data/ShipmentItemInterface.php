@@ -5,107 +5,146 @@
 namespace Magento\Sales\Api\Data;
 
 /**
- * Interface ShipmentItemInterface
+ * Shipment item interface.
+ *
+ * A shipment is a delivery package that contains products. A shipment document accompanies the shipment. This
+ * document lists the products and their quantities in the delivery package. A product is an item in a shipment.
  */
 interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
+    /*
+     * Entity ID.
+     */
     const ENTITY_ID = 'entity_id';
+    /*
+     * Parent ID.
+     */
     const PARENT_ID = 'parent_id';
+    /*
+     * Row total.
+     */
     const ROW_TOTAL = 'row_total';
+    /*
+     * Price.
+     */
     const PRICE = 'price';
+    /*
+     * Weight.
+     */
     const WEIGHT = 'weight';
+    /*
+     * Quantity.
+     */
     const QTY = 'qty';
+    /*
+     * Product ID.
+     */
     const PRODUCT_ID = 'product_id';
+    /*
+     * Order item ID.
+     */
     const ORDER_ITEM_ID = 'order_item_id';
+    /*
+     * Additional data.
+     */
     const ADDITIONAL_DATA = 'additional_data';
+    /*
+     * Description.
+     */
     const DESCRIPTION = 'description';
+    /*
+     * Name.
+     */
     const NAME = 'name';
+    /*
+     * SKU.
+     */
     const SKU = 'sku';
 
     /**
-     * Returns additional_data
+     * Gets the additional data for the shipment item.
      *
-     * @return string
+     * @return string Additional data.
      */
     public function getAdditionalData();
 
     /**
-     * Returns description
+     * Gets the description for the shipment item.
      *
-     * @return string
+     * @return string Description.
      */
     public function getDescription();
 
     /**
-     * Returns entity_id
+     * Gets the ID for the shipment item.
      *
-     * @return int
+     * @return int Shipment item ID.
      */
     public function getEntityId();
 
     /**
-     * Returns name
+     * Gets the name for the shipment item.
      *
-     * @return string
+     * @return string Name.
      */
     public function getName();
 
     /**
-     * Returns order_item_id
+     * Gets the order item ID for the shipment item.
      *
-     * @return int
+     * @return int Order item ID.
      */
     public function getOrderItemId();
 
     /**
-     * Returns parent_id
+     * Gets the parent ID for the shipment item.
      *
-     * @return int
+     * @return int Parent ID.
      */
     public function getParentId();
 
     /**
-     * Returns price
+     * Gets the price for the shipment item.
      *
-     * @return float
+     * @return float Price.
      */
     public function getPrice();
 
     /**
-     * Returns product_id
+     * Gets the product ID for the shipment item.
      *
-     * @return int
+     * @return int Product ID.
      */
     public function getProductId();
 
     /**
-     * Returns qty
+     * Gets the quantity for the shipment item.
      *
-     * @return float
+     * @return float Quantity.
      */
     public function getQty();
 
     /**
-     * Returns row_total
+     * Gets the row total for the shipment item.
      *
-     * @return float
+     * @return float Row total.
      */
     public function getRowTotal();
 
     /**
-     * Returns sku
+     * Gets the SKU for the shipment item.
      *
-     * @return string
+     * @return string SKU.
      */
     public function getSku();
 
     /**
-     * Returns weight
+     * Gets the weight for the shipment item.
      *
-     * @return float
+     * @return float Weight.
      */
     public function getWeight();
 }

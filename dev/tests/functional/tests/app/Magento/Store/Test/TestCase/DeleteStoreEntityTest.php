@@ -100,6 +100,6 @@ class DeleteStoreEntityTest extends Injectable
         $this->storeIndex->getStoreGrid()->searchAndOpenStore($store);
         $this->editStore->getFormPageActions()->delete();
         $this->storeDelete->getStoreForm()->fillForm(['create_backup' => $createBackup]);
-        $this->storeDelete->getFormPageFooterActions()->delete();
+        $this->storeDelete->getFormPageActions()->delete();
     }
 }

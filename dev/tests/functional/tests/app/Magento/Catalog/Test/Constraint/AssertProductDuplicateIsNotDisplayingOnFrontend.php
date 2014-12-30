@@ -12,12 +12,9 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductDuplicateIsNotDisplayingOnFrontend extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
     /**
      * Assert that product duplicate is not displayed on front-end

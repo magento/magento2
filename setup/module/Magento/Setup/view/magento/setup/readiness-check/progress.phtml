@@ -28,6 +28,12 @@
                 </div>
             </div>
             <div ng-switch-default ng-init="updateOnError(version)">
+                <div ng-switch="version.data.error">
+                    <div ng-switch-when="phpVersionError" class="animate-show text-danger">
+                        <span class="glyphicon glyphicon-remove-sign"></span>&nbsp;{{version.data.message}} <br/> <br/>
+                    </div>
+
+                <div ng-switch-default ng-init="updateOnError(version)">
                 <div class="rediness-check-panel-right">
                     <p>Need Help?</p>
                     <p><a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a></p>
@@ -43,9 +49,11 @@
                         </a>
                     </p>
                     <div class="rediness-check-block" ng-show="version.expanded">
-                        <p>Donwload and install PHP version {{version.data.required}} from <a href="http://www.php.net" target="_blank">www.php.net</a> using this <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>.</p>
+                        <p>Download and install PHP version {{version.data.required}} from <a href="http://www.php.net" target="_blank">www.php.net</a> using this <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>.</p>
                         <p>If you need more help please call your hosting provider.</p>
                     </div>
+                </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -78,6 +86,12 @@
                 </div>
             </div>
             <div ng-switch-default ng-init="updateOnError(extensions)">
+                <div ng-switch="extensions.data.error">
+                    <div ng-switch-when="phpExtensionError" class="animate-show text-danger">
+                        <span class="glyphicon glyphicon-remove-sign"></span>&nbsp;{{extensions.data.message}}<br/>
+                        <br/>
+                    </div>
+                    <div ng-switch-default>
                 <div class="rediness-check-panel-right">
                     <p>Need Help?</p>
                     <p><a href="#" target="_blank">PHP Extension Help</a></p>
@@ -92,7 +106,7 @@
                             <span ng-show="extensions.expanded">Less detail</span>
                         </a>
                     </p>
-                    <p>The best way to resolve this is to install the correct missing extensions. The exact fix depends on our server, your host, and other system variables.</br>Our <a href="#">PHP Extension Help</a> can get you started.</p>
+                    <p>The best way to resolve this is to install the correct missing extensions. The exact fix depends on your server, your host, and other system variables.</br>Our <a href="#">PHP Extension Help</a> can get you started.</p>
                     <p>If you need more help, please call your hosting provider.</p>
                     <div class="rediness-check-block" ng-show="extensions.expanded">
                         <ul class="list-unstyled">
@@ -104,8 +118,10 @@
                         </ul>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
+    </div>
     </div>
 
     <div id="php-permissions" ng-show="permissions.visible">

@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<constraint>
+    <assertNoShipButton module="Magento_Shipping">
+        <severity>low</severity>
+    </assertNoShipButton>
+    <assertShipmentInShipmentsTab module="Magento_Shipping">
+        <severity>low</severity>
+    </assertShipmentInShipmentsTab>
+    <assertShipmentSuccessCreateMessage module="Magento_Shipping">
+        <severity>low</severity>
+    </assertShipmentSuccessCreateMessage>
+    <assertShipmentInShipmentsGrid module="Magento_Shipping">
+        <severity>low</severity>
+    </assertShipmentInShipmentsGrid>
+    <assertShipTotalQuantity module="Magento_Shipping">
+        <severity>low</severity>
+    </assertShipTotalQuantity>
+    <assertShipmentItems module="Magento_Shipping">
+        <severity>low</severity>
+    </assertShipmentItems>
+    <assertShippingMethodOnPrintOrder module="Magento_Shipping">
+        <severity>low</severity>
+    </assertShippingMethodOnPrintOrder>
+</constraint>

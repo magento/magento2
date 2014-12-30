@@ -16,12 +16,9 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductNotSearchableBySku extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that product cannot be found via Quick Search using searchable product attributes.

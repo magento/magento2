@@ -15,6 +15,10 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductForm extends AbstractAssertForm
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * List skipped fixture fields in verify
      *
@@ -43,13 +47,6 @@ class AssertProductForm extends AbstractAssertForm
      * @var array
      */
     protected $specialArray = [];
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert form data equals fixture data

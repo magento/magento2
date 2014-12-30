@@ -218,9 +218,7 @@ define([
                     }
                     if ($.type(response) === 'object' && !$.isEmptyObject(response)) {
                         if (response.error) {
-                            var msg = response.message || response.error_messages || response.error,
-                                billingEmailId,
-                                hasBillingEmail;
+                            var msg = response.message || response.error_messages || response.error;
 
                             if (msg) {
                                 if (Array.isArray(msg)) {
@@ -233,17 +231,6 @@ define([
                                 }
 
                                 $(this.options.countrySelector).trigger('change');
-
-                                billingEmailId = this.options.billing.emailAddressName;
-                                hasBillingEmail = $('[name="' + billingEmailId + '"]').length;
-
-                                if (hasBillingEmail) {
-                                    var emailAddress = {};
-                                    emailAddress[billingEmailId] = msg;
-
-                                    var billingFormValidator = $(this.options.billing.form).validate();
-                                    billingFormValidator.showErrors(emailAddress);
-                                }
 
                                 alert(msg);
                             }

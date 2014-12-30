@@ -15,12 +15,9 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertTierPriceOnBundleProductPage extends AssertProductTierPriceOnProductPage
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Tier price block

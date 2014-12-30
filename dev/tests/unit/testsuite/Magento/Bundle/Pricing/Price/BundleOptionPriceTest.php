@@ -145,7 +145,7 @@ class BundleOptionPriceTest extends \PHPUnit_Framework_TestCase
         $collection = $this->getMock('Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
         $collection->expects($this->atLeastOnce())
             ->method('appendSelections')
-            ->with($this->equalTo($selectionCollection), $this->equalTo(false), $this->equalTo(false))
+            ->with($this->equalTo($selectionCollection), $this->equalTo(true), $this->equalTo(false))
             ->will($this->returnValue($selectionCollection));
 
         $priceTypeMock->expects($this->atLeastOnce())

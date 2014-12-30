@@ -16,12 +16,9 @@ use Mtf\Client\Browser;
  */
 class AssertTierPriceOnGroupedProductPage extends AbstractAssertPriceOnGroupedProductPage
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Format error message

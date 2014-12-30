@@ -14,12 +14,9 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
  */
 class AssertSalesReportTotalResult extends AbstractAssertSalesReportResult
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that total sales info in report grid is actual

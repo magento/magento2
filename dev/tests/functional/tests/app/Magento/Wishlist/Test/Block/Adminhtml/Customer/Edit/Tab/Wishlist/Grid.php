@@ -105,9 +105,6 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
         }
         $location = '//div[@class="grid"]//tr[';
         $rowTemplate = 'td[contains(.,normalize-space("%s"))]';
-        if ($isStrict) {
-            $rowTemplate = 'td[text()[normalize-space()="%s"]]';
-        }
         $rows = [];
         foreach ($filter as $value) {
             $rows[] = sprintf($rowTemplate, $value);
