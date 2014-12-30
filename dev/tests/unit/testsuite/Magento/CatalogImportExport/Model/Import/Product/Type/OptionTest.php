@@ -381,7 +381,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
             ['fetchAll']
         );
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
 
         $optionCollection = $this->getMock(

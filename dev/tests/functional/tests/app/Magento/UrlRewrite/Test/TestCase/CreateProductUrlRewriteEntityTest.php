@@ -67,7 +67,7 @@ class CreateProductUrlRewriteEntityTest extends Injectable
     }
 
     /**
-     * Create product URL Rewrite
+     * Create product URL Rewrite.
      *
      * @param CatalogProductSimple $product
      * @param UrlRewrite $urlRewrite
@@ -83,7 +83,10 @@ class CreateProductUrlRewriteEntityTest extends Injectable
         $this->urlRewriteIndex->getPageActionsBlock()->addNew();
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getProductGridBlock()->searchAndOpen($filter);
-        $this->urlRewriteEdit->getTreeBlock()->selectCategory($product->getCategoryIds());
+        $category = $product->hasData('category_ids')
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
+            : null;
+        $this->urlRewriteEdit->getTreeBlock()->selectCategory($category);
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getPageMainActions()->save();
     }

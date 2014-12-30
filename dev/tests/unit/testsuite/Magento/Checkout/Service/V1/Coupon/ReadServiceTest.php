@@ -33,7 +33,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             '\Magento\Checkout\Service\V1\Data\Cart\CouponBuilder', [], [], '', false
         );
         $this->service = $objectManager->getObject(
-            '\Magento\Checkout\Service\V1\Coupon\ReadService',
+            'Magento\Checkout\Service\V1\Coupon\ReadService',
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'couponBuilder' => $this->couponBuilderMock,

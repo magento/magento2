@@ -11,7 +11,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $cacheManager = $this->getMock('Magento\Framework\App\CacheInterface');
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $actionValidatorMock = $this->getMock(
             'Magento\Framework\Model\ActionValidator\RemoveAction',
             [],

@@ -7,5 +7,5 @@
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$quote = $objectManager->create('\Magento\Sales\Model\Quote');
+$quote = $objectManager->create('Magento\Sales\Model\Quote');
 $quote->load('test_order_1_with_payment', 'reserved_order_id')->delete();

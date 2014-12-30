@@ -310,7 +310,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function searchTaxRulesDataProvider()
     {
-        $filterBuilder = Bootstrap::getObjectManager()->create('\Magento\Framework\Api\FilterBuilder');
+        $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
 
         return [
             'code eq "Default Rule"' => [

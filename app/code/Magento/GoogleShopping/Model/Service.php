@@ -33,13 +33,6 @@ class Service extends \Magento\Framework\Object
     protected $_config;
 
     /**
-     * Log adapter factory
-     *
-     * @var \Magento\Framework\Logger\AdapterFactory
-     */
-    protected $_logAdapterFactory;
-
-    /**
      * Service
      * @var \Magento\Framework\Gdata\Gshopping\Content
      */
@@ -52,25 +45,25 @@ class Service extends \Magento\Framework\Object
     protected $_contentFactory;
 
     /**
-     * Constructor
-     *
-     * By default is looking for first argument as array and assigns it as object
-     * attributes This behavior may change in child classes
-     *
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\GoogleShopping\Model\Config $config
+     * @param Config $config
      * @param \Magento\Framework\Gdata\Gshopping\ContentFactory $contentFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\Framework\Gdata\Gshopping\ContentFactory $contentFactory,
         array $data = []
     ) {
-        $this->_logAdapterFactory = $logAdapterFactory;
+        $this->logger = $logger;
         $this->_coreRegistry = $coreRegistry;
         $this->_config = $config;
         $this->_contentFactory = $contentFactory;
@@ -149,12 +142,7 @@ class Service extends \Magento\Framework\Object
             $this->_service = $this->_connect($storeId);
 
             if ($this->getConfig()->getIsDebug($storeId)) {
-                $this->_service->setLogAdapter(
-                    $this->_logAdapterFactory->create(['fileName' => 'googleshopping.log']),
-                    'log'
-                )->setDebug(
-                    true
-                );
+                $this->_service->setLogAdapter($this->logger, 'debug')->setDebug(true);
             }
         }
         return $this->_service;

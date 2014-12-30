@@ -6,7 +6,7 @@ namespace Magento\Directory\Model;
 
 use Magento\Framework\App\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Store\Model\Store;
 
 /**
@@ -135,7 +135,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
                 $scope = $this->storeManager->getStore($scope);
             }
         } catch (\Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             $scope = $this->storeManager->getStore();
         }
 

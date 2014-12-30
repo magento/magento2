@@ -52,7 +52,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $factory = new \Magento\Framework\ObjectManager\Factory\Dynamic\Developer($config);
         $realObjectManager = new \Magento\Framework\ObjectManager\ObjectManager($factory, $config);
         $factory->setObjectManager($realObjectManager);
-        $universalFactory = $realObjectManager->get('\Magento\Framework\Validator\UniversalFactory');
+        $universalFactory = $realObjectManager->get('Magento\Framework\Validator\UniversalFactory');
         $this->_config = $this->_objectManager->getObject(
             'Magento\Framework\Validator\Config',
             ['configFiles' => $configFiles, 'builderFactory' => $universalFactory]

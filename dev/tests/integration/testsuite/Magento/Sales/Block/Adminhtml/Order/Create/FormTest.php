@@ -86,8 +86,8 @@ ORDER_DATA_JSON;
 
     private function setUpMockAddress()
     {
-        $regionBuilder1 = $this->_objectManager->create('\Magento\Customer\Api\Data\RegionDataBuilder');
-        $regionBuilder2 = $this->_objectManager->create('\Magento\Customer\Api\Data\RegionDataBuilder');
+        $regionBuilder1 = $this->_objectManager->create('Magento\Customer\Api\Data\RegionDataBuilder');
+        $regionBuilder2 = $this->_objectManager->create('Magento\Customer\Api\Data\RegionDataBuilder');
 
         /** @var \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder */
         $addressBuilder = $this->_objectManager->create('Magento\Customer\Api\Data\AddressDataBuilder');

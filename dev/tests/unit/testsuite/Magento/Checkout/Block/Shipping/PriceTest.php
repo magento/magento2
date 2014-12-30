@@ -36,7 +36,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
 
         $this->priceObj = $objectManager->getObject(
-            '\Magento\Checkout\Block\Shipping\Price',
+            'Magento\Checkout\Block\Shipping\Price',
             ['priceCurrency'   => $this->priceCurrency]
         );
     }

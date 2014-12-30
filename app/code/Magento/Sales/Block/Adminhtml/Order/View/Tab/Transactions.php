@@ -18,17 +18,37 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
     protected $_authorization;
 
     /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
+    protected $_coreRegistry = null;
+
+    /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\AuthorizationInterface $authorization,
+        \Magento\Framework\Registry $registry,
         array $data = []
     ) {
         $this->_authorization = $authorization;
+        $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
+    }
+
+    /**
+     * Retrieve order model instance
+     *
+     * @return \Magento\Sales\Model\Order
+     */
+    public function getOrder()
+    {
+        return $this->_coreRegistry->registry('current_order');
     }
 
     /**
@@ -52,7 +72,7 @@ class Transactions extends \Magento\Framework\View\Element\Text\ListText impleme
      */
     public function canShowTab()
     {
-        return true;
+        return !$this->getOrder()->getPayment()->getMethodInstance()->isOffline();
     }
 
     /**

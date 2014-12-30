@@ -14,7 +14,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->model = $this->objectManager->getObject('\Magento\CheckoutAgreements\Model\Agreement');
+        $this->model = $this->objectManager->getObject('Magento\CheckoutAgreements\Model\Agreement');
     }
 
     /**

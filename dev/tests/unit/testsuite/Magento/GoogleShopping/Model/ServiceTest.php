@@ -43,7 +43,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $coreRegistryMock->expects($this->any())->method('registry')->will($this->returnValue(1));
 
         $arguments = ['contentFactory' => $contentFactoryMock, 'coreRegistry' => $coreRegistryMock];
-        $this->_model = $this->_helper->getObject('\Magento\GoogleShopping\Model\Service', $arguments);
+        $this->_model = $this->_helper->getObject('Magento\GoogleShopping\Model\Service', $arguments);
     }
 
     public function testGetService()

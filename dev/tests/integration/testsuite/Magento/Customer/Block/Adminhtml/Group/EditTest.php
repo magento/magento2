@@ -80,7 +80,7 @@ class EditTest extends AbstractController
      */
     public function testDeleteButtonExistInCustomGroup()
     {
-        $builder = Bootstrap::getObjectManager()->create('\Magento\Framework\Api\FilterBuilder');
+        $builder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteria */
         $searchCriteria = Bootstrap::getObjectManager()
             ->create('Magento\Framework\Api\SearchCriteriaBuilder')

@@ -77,7 +77,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->_menuMock = $this->getMock(
             'Magento\Backend\Model\Menu',
             [],
-            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+            [$this->getMock('Psr\Log\LoggerInterface')]
         );
 
         $this->_menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', [], [], '', false);

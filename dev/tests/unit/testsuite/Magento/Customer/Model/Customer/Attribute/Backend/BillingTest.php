@@ -13,8 +13,8 @@ class BillingTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $logger = $this->getMockBuilder('Magento\Framework\Logger')->disableOriginalConstructor()->getMock();
-        /** @var \Magento\Framework\Logger $logger */
+        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        /** @var \Psr\Log\LoggerInterface $logger */
         $this->testable = new Billing($logger);
     }
 

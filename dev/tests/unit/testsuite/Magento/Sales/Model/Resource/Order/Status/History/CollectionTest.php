@@ -97,7 +97,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->historyItemMock));
 
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->collection = new \Magento\Sales\Model\Resource\Order\Status\History\Collection(
             $this->entityFactoryMock,
             $logger,

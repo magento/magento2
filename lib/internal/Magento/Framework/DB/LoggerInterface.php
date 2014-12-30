@@ -43,5 +43,5 @@ interface LoggerInterface
      * @param \Exception $e
      * @return void
      */
-    public function logException(\Exception $e);
+    public function critical(\Exception $e);
 }
