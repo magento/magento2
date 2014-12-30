@@ -65,7 +65,7 @@ class QuoteManagement
     protected $quotePaymentToOrderPayment;
 
     /**
-     * @param EventManager $eventManagement
+     * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderBuilder $orderBuilder
      * @param OrderManagement $orderManagement
@@ -76,7 +76,7 @@ class QuoteManagement
      * @param ToOrderPaymentConverter $quotePaymentToOrderPayment
      */
     public function __construct(
-        EventManager $eventManagement,
+        EventManager $eventManager,
         QuoteValidator $quoteValidator,
         OrderBuilder $orderBuilder,
         OrderManagement $orderManagement,
@@ -86,7 +86,7 @@ class QuoteManagement
         ToOrderItemConverter $quoteItemToOrderItem,
         ToOrderPaymentConverter $quotePaymentToOrderPayment
     ) {
-        $this->eventManager = $eventManagement;
+        $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
         $this->orderBuilder = $orderBuilder;
         $this->orderManagement = $orderManagement;
@@ -95,14 +95,6 @@ class QuoteManagement
         $this->quoteAddressToOrderAddress = $quoteAddressToOrderAddress;
         $this->quoteItemToOrderItem = $quoteItemToOrderItem;
         $this->quotePaymentToOrderPayment = $quotePaymentToOrderPayment;
-    }
-
-    /**
-     * @param Quote $quote
-     */
-    protected function inactivateQuote(QuoteEntity $quote)
-    {
-        $quote->setIsActive(false);
     }
 
     /**
@@ -124,12 +116,13 @@ class QuoteManagement
     public function submitNominalItems(QuoteEntity $quote)
     {
         $this->quoteValidator->validateBeforeSubmit($quote);
-        $this->eventManager->dispatch('sales_model_service_quote_submit_nominal_items',
+        $this->eventManager->dispatch(
+            'sales_model_service_quote_submit_nominal_items',
             [
                 'quote' => $quote
             ]
         );
-        $this->inactivateQuote($quote);
+        $quote->setIsActive(false);
         $this->deleteNominalItems($quote);
     }
 
@@ -138,18 +131,21 @@ class QuoteManagement
      * @param array $orderData
      * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object|void
      * @throws \Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function submit(QuoteEntity $quote, $orderData = [])
     {
-        try {
-            $this->submitNominalItems($quote);
-        } catch (\Exception $e) {
-            throw $e;
-        }
         if (!$quote->getAllVisibleItems()) {
-            $this->inactivateQuote($quote);
+            $quote->setIsActive(false);
             return;
         }
+        $this->eventManager->dispatch(
+            'sales_model_service_quote_submit_nominal_items',
+            [
+                'quote' => $quote
+            ]
+        );
+        $this->deleteNominalItems($quote);
         return $this->submitQuote($quote, $orderData);
     }
 
@@ -163,15 +159,14 @@ class QuoteManagement
         for($i = 0; $i < count($quoteItems) - 1; $i++) {
             for ($j = 0; $j < count($quoteItems) - $i - 1; $j++) {
                 if ($quoteItems[$i]->getId() == $quoteItems[$j]->getParentItemId()) {
-                    $quote = $quoteItems[$i];
+                    $tempItem = $quoteItems[$i];
                     $quoteItems[$i] = $quoteItems[$j];
-                    $quoteItems[$j] = $quote;
+                    $quoteItems[$j] = $tempItem;
                 }
             }
         }
         $orderItems = [];
         foreach ($quoteItems as $quoteItem) {
-            $parentItem = null;
             $parentItem = (isset($orderItems[$quoteItem->getParentItemId()])) ?
                 $orderItems[$quoteItem->getParentItemId()] : null;
             $orderItems[$quoteItem->getId()] =
@@ -191,7 +186,6 @@ class QuoteManagement
      */
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {
-        $this->deleteNominalItems($quote);
         $this->quoteValidator->validateBeforeSubmit($quote);
         if (!$quote->getCustomerIsGuest()) {
             $this->customerManagement->populateCustomerInfo($quote);
@@ -235,7 +229,7 @@ class QuoteManagement
         );
         try {
             $order = $this->orderManagement->place($order);
-            $this->inactivateQuote($quote);
+            $quote->setIsActive(false);
             $this->eventManager->dispatch('sales_model_service_quote_submit_success',
                 [
                     'order' => $order,
