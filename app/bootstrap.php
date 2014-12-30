@@ -19,8 +19,8 @@ if (version_compare(phpversion(), '5.4.11', '<') === true) {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
     <p>Magento supports PHP 5.4.11 or later. Please read
-    <a href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html">
-    http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html</a>.
+    <a target="_blank" href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html">
+    Magento System Requirements</a>.
 </div>
 HTML;
     }
