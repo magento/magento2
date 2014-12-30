@@ -167,7 +167,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     public function testNewCustomer()
     {
         /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
-        $customerBuilder = $this->objectManager->get('\Magento\Customer\Api\Data\CustomerDataBuilder');
+        $customerBuilder = $this->objectManager->get('Magento\Customer\Api\Data\CustomerDataBuilder');
         $customerData = $this->dataObjectProcessor
             ->buildOutputDataArray($customerBuilder->create(), '\Magento\Customer\Api\Data\CustomerInterface');
         $this->backendSession->setCustomerData(

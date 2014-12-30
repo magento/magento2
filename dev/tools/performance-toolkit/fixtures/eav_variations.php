@@ -11,7 +11,7 @@ $model = $this->getObjectManager()->create('Magento\Catalog\Model\Resource\Eav\A
 /* @var $helper \Magento\Catalog\Helper\Product */
 $helper = $this->getObjectManager()->get('Magento\Catalog\Helper\Product');
 /** @var \Magento\Store\Model\StoreManager $storeManager */
-$storeManager = $this->getObjectManager()->create('\Magento\Store\Model\StoreManager');
+$storeManager = $this->getObjectManager()->create('Magento\Store\Model\StoreManager');
 $stores = $storeManager->getStores();
 $storeViewsCount = count($stores);
 

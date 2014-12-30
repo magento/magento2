@@ -49,11 +49,11 @@ class DocumentFactory
             if ($rawField['name'] == $entityId) {
                 $documentId = $rawField['value'];
             } else {
-                $fields[] = $this->objectManager->create('\Magento\Framework\Search\DocumentField', $rawField);
+                $fields[] = $this->objectManager->create('Magento\Framework\Search\DocumentField', $rawField);
             }
         }
         return $this->objectManager->create(
-            '\Magento\Framework\Search\Document',
+            'Magento\Framework\Search\Document',
             ['documentFields' => $fields, 'documentId' => $documentId]
         );
     }

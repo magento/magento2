@@ -78,7 +78,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::STORE_ID));
 
         $this->renderer = $objectManager->getObject(
-            '\Magento\Weee\Block\Item\Price\Renderer',
+            'Magento\Weee\Block\Item\Price\Renderer',
             [
                 'weeeHelper' => $this->weeeHelper,
                 'priceCurrency' => $this->priceCurrency,

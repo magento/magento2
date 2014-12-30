@@ -72,7 +72,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
         ];
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->basePrice = $helper->getObject('\Magento\Catalog\Pricing\Price\BasePrice',
+        $this->basePrice = $helper->getObject('Magento\Catalog\Pricing\Price\BasePrice',
             [
                 'saleableItem' => $this->saleableItemMock,
                 'quantity' => $qty,
