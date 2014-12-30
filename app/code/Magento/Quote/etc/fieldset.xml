@@ -264,6 +264,9 @@
             <field name="method">
                 <aspect name="to_order_payment" />
             </field>
+            <field name="customer_payment_id">
+                <aspect name="to_order_payment" />
+            </field>
             <field name="additional_data">
                 <aspect name="to_order_payment" />
             </field>

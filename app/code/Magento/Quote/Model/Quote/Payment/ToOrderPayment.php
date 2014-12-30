@@ -9,7 +9,7 @@ use Magento\Quote\Model\Quote\Payment;
 use Magento\Sales\Api\Data\OrderPaymentDataBuilder as OrderPaymentBuilder;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Framework\Object\Copy;
-
+use Magento\Payment\Model\Method\Substitution;
 /**
  * Class ToOrderPayment
  */
@@ -49,9 +49,11 @@ class ToOrderPayment
             'to_order_payment',
             $object
         );
-
         return $this->orderPaymentBuilder
             ->populateWithArray(array_merge($paymentData, $data))
+            ->setAdditionalInformation(
+                serialize([Substitution::INFO_KEY_TITLE => $object->getMethodInstance()->getTitle()])
+            )
             ->create();
     }
 }
