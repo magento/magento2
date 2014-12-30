@@ -9,7 +9,16 @@
         <system>
             <full_page_cache>
                 <varnish>
-                    <path>Magento/PageCache/etc/varnish.vcl</path>
+                    <path>
+                        <v3>
+                            <label>3.0</label>
+                            <vcl>Magento/PageCache/etc/varnish-3.vcl</vcl>
+                        </v3>
+                        <v4>
+                            <label>4.0</label>
+                            <vcl>Magento/PageCache/etc/varnish-4.vcl</vcl>
+                        </v4>
+                    </path>
                 </varnish>
                 <ttl>120</ttl>
                 <caching_application>1</caching_application>
@@ -18,6 +27,7 @@
                     <backend_host>localhost</backend_host>
                     <backend_port>8080</backend_port>
                     <ttl>120</ttl>
+                    <varnish_version>v3</varnish_version>
                 </default>
             </full_page_cache>
         </system>

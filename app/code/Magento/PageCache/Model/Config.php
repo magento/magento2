@@ -39,6 +39,8 @@ class Config
     const XML_VARNISH_PAGECACHE_BACKEND_PORT = 'system/full_page_cache/varnish/backend_port';
 
     const XML_VARNISH_PAGECACHE_BACKEND_HOST = 'system/full_page_cache/varnish/backend_host';
+    
+    const XML_VARNISH_PAGECACHE_VERSION = 'system/full_page_cache/varnish/varnish_version';
 
     const XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX = 'design/theme/ua_regexp';
 
@@ -48,10 +50,15 @@ class Config
     protected $_scopeConfig;
 
     /**
-     * XML path to value for saving temporary .vcl configuration
+     * XML path to value for saving temporary .vcl configurations
      */
     const VARNISH_CONFIGURATION_PATH = 'system/full_page_cache/varnish/path';
 
+    /**
+     * XML path to value for saving version specific .vcl configurations
+     */
+    const VARNISH_CONFIGURATION_FULL_PATH = '{{ varnish_configuration_path }}/{{ version_id }}/vcl';
+    
     /**
      * @var \Magento\Framework\App\Cache\StateInterface $_cacheState
      */
@@ -104,8 +111,29 @@ class Config
      */
     public function getVclFile()
     {
-        $data = $this->_modulesDirectory->readFile($this->_scopeConfig->getValue(self::VARNISH_CONFIGURATION_PATH));
+        $vclPath = strtr(
+            self::VARNISH_CONFIGURATION_FULL_PATH,
+            $this->_getVclPathReplacements()
+        );
+        $data = $this->_modulesDirectory->readFile(
+            $this->_scopeConfig->getValue($vclPath)
+        );
         return strtr($data, $this->_getReplacements());
+    }
+
+    /**
+     * retrieve replacements for self::XML_VARNISH_CONFIGURATION_FULL_PATH
+     * 
+     * @return array
+     */
+    protected function _getVclPathReplacements()
+    {
+        return [
+            '{{ varnish_configuration_path }}' => self::VARNISH_CONFIGURATION_PATH,
+            '{{ version_id }}' => $this->_scopeConfig->getValue(
+                self::XML_VARNISH_PAGECACHE_VERSION
+            )
+        ];
     }
 
     /**

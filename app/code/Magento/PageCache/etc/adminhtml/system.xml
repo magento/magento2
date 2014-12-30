@@ -40,6 +40,13 @@
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
+                    <field id="varnish_version" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Varnish version</label>
+                        <source_model>Magento\PageCache\Model\System\Config\Source\VarnishVersion</source_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
                     <field id="export_button" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Export Varnish Configuration</label>
                         <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export</frontend_model>
