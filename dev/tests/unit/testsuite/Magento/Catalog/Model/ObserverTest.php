@@ -61,7 +61,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_observer = (new ObjectManager($this))->getObject('\Magento\Catalog\Model\Observer', [
+        $this->_observer = (new ObjectManager($this))->getObject('Magento\Catalog\Model\Observer', [
             'urlFactory' => $this->_getCleanMock('\Magento\Catalog\Model\UrlFactory'),
             'categoryResource' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Category'),
             'catalogProduct' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Product'),

@@ -417,7 +417,7 @@ class Image extends AbstractHelper
         try {
             $url = $this->_assetRepo->getUrl($this->getPlaceholder());
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             $url = $this->_urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
         }
         return $url;

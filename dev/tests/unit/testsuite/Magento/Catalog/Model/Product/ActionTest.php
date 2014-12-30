@@ -99,7 +99,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Catalog\Model\Product\Action',
+            'Magento\Catalog\Model\Product\Action',
             [
                 'eventDispatcher' => $eventManagerMock,
                 'resource' => $this->resource,

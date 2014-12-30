@@ -7,10 +7,10 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
-$attributeSet = $objectManager->create('\Magento\Eav\Model\Entity\Attribute\Set');
+$attributeSet = $objectManager->create('Magento\Eav\Model\Entity\Attribute\Set');
 
 $entityType = $objectManager->create('Magento\Eav\Model\Entity\Type')->loadByCode('catalog_product');
-$defaultSetId = $objectManager->create('\Magento\Catalog\Model\Product')->getDefaultAttributeSetid();
+$defaultSetId = $objectManager->create('Magento\Catalog\Model\Product')->getDefaultAttributeSetid();
 
 $data = [
     'attribute_set_name' => 'attribute_set_with_media_attribute',
@@ -37,6 +37,6 @@ $attributeData = [
 ];
 
 /** @var \Magento\Catalog\Model\Entity\Attribute $attribute */
-$attribute = $objectManager->create('\Magento\Catalog\Model\Entity\Attribute');
+$attribute = $objectManager->create('Magento\Catalog\Model\Entity\Attribute');
 $attribute->setData($attributeData);
 $attribute->save();

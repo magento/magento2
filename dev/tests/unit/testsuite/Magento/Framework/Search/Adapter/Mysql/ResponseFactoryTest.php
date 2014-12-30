@@ -72,7 +72,7 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->expects($this->once())->method('create')
             ->with(
-                $this->equalTo('\Magento\Framework\Search\Response\QueryResponse'),
+                $this->equalTo('Magento\Framework\Search\Response\QueryResponse'),
                 $this->equalTo(['documents' => ['document1', 'document2'], 'aggregations' => null])
             )
             ->will($this->returnValue('QueryResponseObject'));
