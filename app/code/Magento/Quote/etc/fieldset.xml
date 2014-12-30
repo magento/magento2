@@ -259,9 +259,6 @@
             <field name="id">
                 <aspect name="to_order_item" targetField="order_item_id" />
             </field>
-            <field name="parent_item_id">
-                <aspect name="to_order_item" targetField="quote_parent_item_id" />
-            </field>
             <field name="product_id">
                 <aspect name="to_order_item" />
             </field>
