@@ -52,6 +52,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @dataProvider getViewActionDataProvider
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
      */

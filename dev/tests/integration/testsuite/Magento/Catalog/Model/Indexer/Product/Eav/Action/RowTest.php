@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Eav\Action;
 class RowTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */

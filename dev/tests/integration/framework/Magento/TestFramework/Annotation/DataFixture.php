@@ -52,9 +52,17 @@ class DataFixture
             if ($this->_appliedFixtures) {
                 $param->requestTransactionRollback();
             }
-            $param->requestTransactionStart();
+            if (!$this->isExplicitDbIsolationState('method', $test)) {
+                $param->requestTransactionStart();
+            } else {
+                $this->_applyFixtures($this->_getFixtures('method', $test));
+            }
         } elseif (!$this->_appliedFixtures && $this->_getFixtures('class', $test)) {
-            $param->requestTransactionStart();
+            if (!$this->isExplicitDbIsolationState('class', $test)) {
+                $param->requestTransactionStart();
+            } else {
+                $this->_applyFixtures($this->_getFixtures('class', $test));
+            }
         }
     }
 
@@ -70,7 +78,11 @@ class DataFixture
     ) {
         /* Isolate other tests from test-specific fixtures */
         if ($this->_appliedFixtures && $this->_getFixtures('method', $test)) {
-            $param->requestTransactionRollback();
+            if (!$this->isExplicitDbIsolationState('method', $test)) {
+                $param->requestTransactionRollback();
+            } else {
+                $this->_revertFixtures();
+            }
         }
     }
 
@@ -121,6 +133,19 @@ class DataFixture
             }
         }
         return $result;
+    }
+
+    /**
+     * Return is explicit set isolation state
+     *
+     * @param $scope
+     * @param \PHPUnit_Framework_TestCase $test
+     * @return bool
+     */
+    protected function isExplicitDbIsolationState($scope, \PHPUnit_Framework_TestCase $test)
+    {
+        $annotations = $test->getAnnotations();
+        return isset($annotations[$scope][DbIsolation::MAGENTO_DB_ISOLATION]);
     }
 
     /**

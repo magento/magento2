@@ -22,6 +22,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testProductUpdate()

@@ -75,6 +75,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      * @depends testReindexAll
      */
     public function testCategoryMove()

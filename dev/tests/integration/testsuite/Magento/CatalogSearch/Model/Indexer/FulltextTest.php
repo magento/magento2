@@ -5,6 +5,7 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 /**
+ * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
  */
 class FulltextTest extends \PHPUnit_Framework_TestCase
