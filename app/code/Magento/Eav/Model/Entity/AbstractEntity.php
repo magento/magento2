@@ -958,7 +958,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
             );
         }
 
-        if (!$this->getEntityTable()) {
+        if ($this->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE) {
             $bind['entity_type_id'] = $this->getTypeId();
             $select->where('entity_type_id = :entity_type_id');
         }
@@ -1159,7 +1159,9 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
                     $this->loadAllAttributes($object);
                 }
 
-                if (!$this->getEntityTable() && !$object->getEntityTypeId()) {
+                if ($this->getEntityTable() ==  \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE
+                    && !$object->getEntityTypeId()
+                ) {
                     $object->setEntityTypeId($this->getTypeId());
                 }
 

@@ -114,13 +114,6 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
     protected $_universalFactory;
 
     /**
-     * Specific entity types which not required "entity_type_id" for select
-     *
-     * @var array
-     */
-    protected $entityTypes = ['customer', 'customer_address'];
-
-    /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -199,7 +192,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
     {
         $this->getSelect()->from(['e' => $this->getEntity()->getEntityTable()]);
         $entity = $this->getEntity();
-        if ($entity->getTypeId() && !in_array($entity->getType(), $this->entityTypes)) {
+        if ($entity->getTypeId() && $entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE ) {
             $this->addAttributeToFilter('entity_type_id', $this->getEntity()->getTypeId());
         }
         return $this;
@@ -1169,7 +1162,8 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
         if (empty($attributeIds)) {
             $attributeIds = $this->_selectAttributes;
         }
-        $entityIdField = $this->getEntity()->getEntityIdField();
+        $entity = $this->getEntity();
+        $entityIdField = $entity->getEntityIdField();
         $select = $this->getConnection()->select()->from(
             $table,
             [$entityIdField, 'attribute_id']
@@ -1181,10 +1175,10 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
             $attributeIds
         );
 
-        if (!in_array($this->getEntity()->getType(), $this->entityTypes)) {
+        if ($entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE && $entity->getTypeId()) {
             $select->where(
                 'entity_type_id =?',
-                $this->getEntity()->getTypeId()
+                $entity->getTypeId()
             );
         }
         return $select;

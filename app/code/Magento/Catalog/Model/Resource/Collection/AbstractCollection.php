@@ -97,16 +97,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     }
 
     /**
-     * {@inheritdoc}
-     * Redeclare method to disable entity_type_id filter
-     */
-    protected function _initSelect()
-    {
-        $this->getSelect()->from(['e' => $this->getEntity()->getEntityTable()]);
-        return $this;
-    }
-
-    /**
      * Return current store id
      *
      * @return int
