@@ -9,7 +9,7 @@ $storesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('store_
 $this->resetObjectManager();
 
 /** @var \Magento\Store\Model\StoreManager $storeManager */
-$storeManager = $this->getObjectManager()->create('\Magento\Store\Model\StoreManager');
+$storeManager = $this->getObjectManager()->create('Magento\Store\Model\StoreManager');
 /** @var $category \Magento\Catalog\Model\Category */
 $category = $this->getObjectManager()->create('Magento\Catalog\Model\Category');
 

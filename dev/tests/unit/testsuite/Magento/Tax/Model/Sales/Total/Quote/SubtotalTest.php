@@ -97,7 +97,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $customerAddressRegionBuilderMock->expects($this->any())->method('setRegionId')->willReturnSelf();
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Tax\Model\Sales\Total\Quote\Subtotal',
+            'Magento\Tax\Model\Sales\Total\Quote\Subtotal',
             [
                 'taxConfig' => $this->taxConfigMock,
                 'taxCalculationService' => $this->taxCalculationMock,

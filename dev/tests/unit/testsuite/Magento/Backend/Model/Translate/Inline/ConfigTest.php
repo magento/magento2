@@ -21,7 +21,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $config = $objectManager->getObject(
-            '\Magento\Backend\Model\Translate\Inline\Config',
+            'Magento\Backend\Model\Translate\Inline\Config',
             ['config' => $backendConfig]
         );
         $this->assertEquals($result, $config->isActive('any'));

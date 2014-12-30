@@ -49,7 +49,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->validatorMock = $this->getMock('\Magento\Payment\Model\Checks\ZeroTotal', [], [], '', false);
 
         $this->service = $this->objectManager->getObject(
-            '\Magento\Checkout\Service\V1\PaymentMethod\WriteService',
+            'Magento\Checkout\Service\V1\PaymentMethod\WriteService',
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'paymentMethodBuilder' => $this->paymentMethodBuilderMock,

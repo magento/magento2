@@ -68,7 +68,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
          */
         $customerRepository = Bootstrap::getObjectManager()
-            ->create('\Magento\Customer\Api\CustomerRepositoryInterface');
+            ->create('Magento\Customer\Api\CustomerRepositoryInterface');
         $customerRepository->save($customerDataSet);
         $quote->setCustomer($customerDataSet);
         $expected = $this->_getCustomerDataArray();

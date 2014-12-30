@@ -24,14 +24,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Search\Model\QueryInterface|\PHPUnit_Framework_MockObject_MockObject $searchQuery */
         $searchQuery = $this->getMockBuilder('\Magento\Search\Model\QueryInterface')->getMockForAbstractClass();
         /** @var \Magento\Search\Model\SearchDataProvider $dataProvider */
-        $dataProvider = $this->objectManager->getObject('\Magento\Search\Model\SearchDataProvider');
+        $dataProvider = $this->objectManager->getObject('Magento\Search\Model\SearchDataProvider');
         $this->assertEquals([], $dataProvider->getSearchData($searchQuery));
     }
 
     public function testIsCountResultsEnabled()
     {
         /** @var \Magento\Search\Model\SearchDataProvider $dataProvider */
-        $dataProvider = $this->objectManager->getObject('\Magento\Search\Model\SearchDataProvider');
+        $dataProvider = $this->objectManager->getObject('Magento\Search\Model\SearchDataProvider');
         $this->assertFalse($dataProvider->isCountResultsEnabled());
     }
 }

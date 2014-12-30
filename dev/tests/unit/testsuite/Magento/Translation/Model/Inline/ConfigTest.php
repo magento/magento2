@@ -49,7 +49,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $config = $objectManager->getObject(
-            '\Magento\Translation\Model\Inline\Config',
+            'Magento\Translation\Model\Inline\Config',
             ['scopeConfig' => $scopeConfig]
         );
         $this->assertEquals($result, $config->isActive($store));
