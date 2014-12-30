@@ -12,7 +12,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertProductInCategory
+ * Check bundle product on the category page.
  */
 class AssertBundleInCategory extends AbstractConstraint
 {
@@ -21,7 +21,7 @@ class AssertBundleInCategory extends AbstractConstraint
     /* end tags */
 
     /**
-     * Check bundle product on the category page
+     * Check bundle product on the category page.
      *
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
@@ -44,7 +44,7 @@ class AssertBundleInCategory extends AbstractConstraint
     }
 
     /**
-     * Verify product price on category view page
+     * Verify product price on category view page.
      *
      * @param BundleProduct $bundle
      * @param CatalogCategoryView $catalogCategoryView
@@ -56,9 +56,13 @@ class AssertBundleInCategory extends AbstractConstraint
         //Price from/to verification
         $priceBlock = $catalogCategoryView->getListProductBlock()->getProductPriceBlock($bundle->getName());
 
-        $priceLow = ($bundle->getPriceView() == 'Price Range')
-            ? $priceBlock->getPriceFrom()
-            : $priceBlock->getRegularPrice();
+        if ($bundle->hasData('special_price') || $bundle->hasData('group_price')) {
+            $priceLow = $priceBlock->getFinalPrice();
+        } else {
+            $priceLow = ($bundle->getPriceView() == 'Price Range')
+                ? $priceBlock->getPriceFrom()
+                : $priceBlock->getRegularPrice();
+        }
 
         \PHPUnit_Framework_Assert::assertEquals(
             $priceData['price_from'],
@@ -75,7 +79,7 @@ class AssertBundleInCategory extends AbstractConstraint
     }
 
     /**
-     * Text of Visible in category assert
+     * Text of Visible in category assert.
      *
      * @return string
      */
