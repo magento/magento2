@@ -58,7 +58,7 @@ class DataFixture
                 $this->_applyFixtures($this->_getFixtures('method', $test));
             }
         } elseif (!$this->_appliedFixtures && $this->_getFixtures('class', $test)) {
-            if ($this->getDbIsolationState('method', $test) !== 'disabled') {
+            if ($this->getDbIsolationState('class', $test) !== 'disabled') {
                 $param->requestTransactionStart();
             } else {
                 $this->_applyFixtures($this->_getFixtures('class', $test));
