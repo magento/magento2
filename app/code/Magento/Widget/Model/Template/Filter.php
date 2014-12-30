@@ -21,7 +21,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
 
     /**
      * @param \Magento\Framework\Stdlib\String $string
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -36,7 +36,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      */
     public function __construct(
         \Magento\Framework\Stdlib\String $string,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,

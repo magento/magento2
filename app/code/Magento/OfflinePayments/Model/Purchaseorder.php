@@ -22,6 +22,13 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_infoBlockType = 'Magento\OfflinePayments\Block\Info\Purchaseorder';
 
     /**
+     * Availability option
+     *
+     * @var bool
+     */
+    protected $_isOffline = true;
+
+    /**
      * Assign data to info model instance
      *
      * @param \Magento\Framework\Object|mixed $data

@@ -11,7 +11,7 @@ use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http as Request;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Session\SessionManager;
 use Magento\Framework\TranslateInterface;
 use Magento\Framework\UrlInterface;
@@ -114,7 +114,7 @@ class Context
     /**
      * Logger
      *
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -302,7 +302,7 @@ class Context
     /**
      * Retrieve logger
      *
-     * @return \Magento\Framework\Logger
+     * @return \Psr\Log\LoggerInterface
      */
     public function getLogger()
     {

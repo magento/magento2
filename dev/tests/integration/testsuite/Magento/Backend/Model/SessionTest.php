@@ -16,7 +16,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         if (array_key_exists('adminhtml', $_SESSION)) {
             unset($_SESSION['adminhtml']);
         }
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Backend\Model\Session',
             [$logger]

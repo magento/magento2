@@ -128,7 +128,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             );
             return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             return '';
         }
     }
