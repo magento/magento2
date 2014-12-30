@@ -5,11 +5,9 @@
 
 namespace Mtf;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\ObjectManagerInterface as MagentoObjectManager;
-use Magento\Framework\Stdlib\BooleanUtils;
+use Mtf\ObjectManagerInterface as MagentoObjectManager;
+use Mtf\Stdlib\BooleanUtils;
 use Mtf\ObjectManager\Factory;
-use Mtf\System\Config as SystemConfig;
 
 /**
  * Class ObjectManagerFactory
@@ -53,14 +51,11 @@ class ObjectManagerFactory
         }
 
         $diConfig = new $this->configClassName();
-        $systemConfig = new SystemConfig();
-        $configuration = $systemConfig->getConfigParam();
-        $diConfig->extend($configuration);
         $factory = new Factory($diConfig);
         $argInterpreter = $this->createArgumentInterpreter(new BooleanUtils());
-        $argumentMapper = new \Magento\Framework\ObjectManager\Config\Mapper\Dom($argInterpreter);
+        $argumentMapper = new \Mtf\ObjectManager\Config\Mapper\Dom($argInterpreter);
 
-        $sharedInstances['Magento\Framework\ObjectManager\Config\Mapper\Dom'] = $argumentMapper;
+        $sharedInstances['Mtf\ObjectManager\Config\Mapper\Dom'] = $argumentMapper;
         $objectManager = new $this->locatorClassName($factory, $diConfig, $sharedInstances);
 
         $factory->setObjectManager($objectManager);
@@ -85,35 +80,35 @@ class ObjectManagerFactory
         return new \Magento\Framework\App\DeploymentConfig(
             new \Magento\Framework\App\DeploymentConfig\Reader($directoryList),
             isset($arguments[\Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE])
-            ? $arguments[\Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE]
-            : null
+                ? $arguments[\Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE]
+                : null
         );
     }
 
     /**
      * Return newly created instance on an argument interpreter, suitable for processing DI arguments
      *
-     * @param \Magento\Framework\Stdlib\BooleanUtils $booleanUtils
-     * @return \Magento\Framework\Data\Argument\InterpreterInterface
+     * @param \Mtf\Stdlib\BooleanUtils $booleanUtils
+     * @return \Mtf\Data\Argument\InterpreterInterface
      */
     protected function createArgumentInterpreter(
-        \Magento\Framework\Stdlib\BooleanUtils $booleanUtils
+        \Mtf\Stdlib\BooleanUtils $booleanUtils
     ) {
-        $constInterpreter = new \Magento\Framework\Data\Argument\Interpreter\Constant();
-        $result = new \Magento\Framework\Data\Argument\Interpreter\Composite(
+        $constInterpreter = new \Mtf\Data\Argument\Interpreter\Constant();
+        $result = new \Mtf\Data\Argument\Interpreter\Composite(
             [
-                'boolean' => new \Magento\Framework\Data\Argument\Interpreter\Boolean($booleanUtils),
-                'string' => new \Magento\Framework\Data\Argument\Interpreter\String($booleanUtils),
-                'number' => new \Magento\Framework\Data\Argument\Interpreter\Number(),
-                'null' => new \Magento\Framework\Data\Argument\Interpreter\NullType(),
+                'boolean' => new \Mtf\Data\Argument\Interpreter\Boolean($booleanUtils),
+                'string' => new \Mtf\Data\Argument\Interpreter\String($booleanUtils),
+                'number' => new \Mtf\Data\Argument\Interpreter\Number(),
+                'null' => new \Mtf\Data\Argument\Interpreter\NullType(),
                 'const' => $constInterpreter,
-                'object' => new \Magento\Framework\Data\Argument\Interpreter\Object($booleanUtils),
-                'init_parameter' => new \Magento\Framework\App\Arguments\ArgumentInterpreter($constInterpreter),
+                'object' => new \Mtf\Data\Argument\Interpreter\Object($booleanUtils),
+                'init_parameter' => new \Mtf\Data\Argument\Interpreter\Argument($constInterpreter),
             ],
-            \Magento\Framework\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE
+            \Mtf\ObjectManager\Config\Reader\Dom::TYPE_ATTRIBUTE
         );
         // Add interpreters that reference the composite
-        $result->addInterpreter('array', new \Magento\Framework\Data\Argument\Interpreter\ArrayType($result));
+        $result->addInterpreter('array', new \Mtf\Data\Argument\Interpreter\ArrayType($result));
         return $result;
     }
 
