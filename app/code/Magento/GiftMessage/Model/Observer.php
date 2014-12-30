@@ -41,22 +41,6 @@ class Observer extends \Magento\Framework\Object
      * @param \Magento\Framework\Object $observer
      * @return $this
      */
-    public function salesEventConvertQuoteAddressToOrder($observer)
-    {
-        if ($observer->getEvent()->getAddress()->getGiftMessageId()) {
-            $observer->getEvent()->getOrder()->setGiftMessageId(
-                $observer->getEvent()->getAddress()->getGiftMessageId()
-            );
-        }
-        return $this;
-    }
-
-    /**
-     * Set gift messages to order from quote address
-     *
-     * @param \Magento\Framework\Object $observer
-     * @return $this
-     */
     public function salesEventConvertQuoteToOrder($observer)
     {
         $observer->getEvent()->getOrder()->setGiftMessageId($observer->getEvent()->getQuote()->getGiftMessageId());
