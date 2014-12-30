@@ -19,9 +19,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['randomValue']));
 
         $filterBuilder = $objectManagerHelper
-            ->getObject('\Magento\Framework\Api\FilterBuilder');
+            ->getObject('Magento\Framework\Api\FilterBuilder');
         $filterGroupBuilder = $objectManagerHelper
-            ->getObject('\Magento\Framework\Api\Search\FilterGroupBuilder');
+            ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
         $searchCriteriaBuilder = $objectManagerHelper->getObject(
             'Magento\Framework\Api\SearchCriteriaBuilder',
             [

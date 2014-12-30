@@ -115,7 +115,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Tax Class'),
                 'class' => 'required-entry',
                 'required' => true,
-                'values' => $this->_taxCustomer->toOptionArray(true),
+                'values' => $this->_taxCustomer->toOptionArray(),
             ]
         );
 

@@ -116,7 +116,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $this->_session->setProductData($data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
                 $redirectBack = $productId ? true : 'new';

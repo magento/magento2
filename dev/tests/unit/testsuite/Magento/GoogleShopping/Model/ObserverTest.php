@@ -62,7 +62,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $this->flag->expects($this->once())->method('loadSelf')->will($this->returnSelf());
         $this->flag->expects($this->once())->method('isExpired')->will($this->returnValue(true));
-        $observer = $this->objectManagerHelper->getObject('\Magento\Framework\Event\Observer');
+        $observer = $this->objectManagerHelper->getObject('Magento\Framework\Event\Observer');
         $this->notificationInterface->expects($this->once())->method('addMajor')
             ->with(
                 'Google Shopping operation has expired.',

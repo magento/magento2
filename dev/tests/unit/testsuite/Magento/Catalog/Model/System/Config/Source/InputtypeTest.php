@@ -19,7 +19,7 @@ class InputtypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_model = $this->_helper->getObject('\Magento\Catalog\Model\System\Config\Source\Inputtype');
+        $this->_model = $this->_helper->getObject('Magento\Catalog\Model\System\Config\Source\Inputtype');
     }
 
     public function testToOptionArrayIsArray()

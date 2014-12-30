@@ -22,7 +22,7 @@ return [
     ['_childGroups', 'Magento\Core\Block\AbstractBlock'],
     ['_combineHistory'],
     ['_config', 'Magento\Core\Model\Design\Package'],
-    ['_config', 'Magento\Framework\Logger', '_dirs'],
+    ['_config', 'Psr\Log\LoggerInterface', '_dirs'],
     ['_config', 'Magento\Core\Model\Resource\Setup'],
     ['_configModel', 'Magento\Backend\Model\Menu\AbstractDirector'],
     ['_connectionConfig', 'Magento\Core\Model\Resource\Setup'],

@@ -83,7 +83,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     private function reindexAll()
     {
         /** @var \Magento\Indexer\Model\Indexer[] $indexerList */
-        $indexerList = $this->objectManager->get('\Magento\Indexer\Model\Indexer\CollectionFactory')
+        $indexerList = $this->objectManager->get('Magento\Indexer\Model\Indexer\CollectionFactory')
             ->create()
             ->getItems();
 

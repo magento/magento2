@@ -37,10 +37,10 @@ class RowTest extends \PHPUnit_Framework_TestCase
     public function testProductUpdate()
     {
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Catalog\Model\CategoryFactory'
+            'Magento\Catalog\Model\CategoryFactory'
         );
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Catalog\Block\Product\ListProduct'
+            'Magento\Catalog\Block\Product\ListProduct'
         );
 
         $this->_processor->getIndexer()->setScheduled(false);

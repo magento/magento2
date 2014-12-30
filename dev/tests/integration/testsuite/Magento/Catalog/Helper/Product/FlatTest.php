@@ -22,7 +22,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Helper\Product\Flat\Indexer'
         );
         $this->_state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            '\Magento\Catalog\Model\Indexer\Product\Flat\State'
+            'Magento\Catalog\Model\Indexer\Product\Flat\State'
         );
     }
 

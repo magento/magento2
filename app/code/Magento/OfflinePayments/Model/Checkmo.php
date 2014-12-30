@@ -22,6 +22,13 @@ class Checkmo extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_infoBlockType = 'Magento\OfflinePayments\Block\Info\Checkmo';
 
     /**
+     * Availability option
+     *
+     * @var bool
+     */
+    protected $_isOffline = true;
+
+    /**
      * Assign data to info model instance
      *
      * @param mixed $data

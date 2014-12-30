@@ -193,23 +193,6 @@
                     <comment>Translate, blocks and other output caches should be disabled for both frontend and admin inline translations.</comment>
                 </field>
             </group>
-            <group id="log" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Log Settings</label>
-                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enabled</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="file" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>System Log File Name</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Filename</backend_model>
-                    <comment>Logging from \Magento\Framework\Logger. File is located in {{base_dir}}/var/log</comment>
-                </field>
-                <field id="exception_file" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Exceptions Log File Name</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Filename</backend_model>
-                    <comment>Logging from \Magento\Framework\Logger. File is located in {{base_dir}}/var/log</comment>
-                </field>
-            </group>
             <group id="js" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>JavaScript Settings</label>
                 <field id="merge_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
