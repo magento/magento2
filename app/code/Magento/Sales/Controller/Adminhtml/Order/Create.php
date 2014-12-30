@@ -285,7 +285,7 @@ class Create extends \Magento\Backend\App\Action
         if (!empty($couponCode)) {
             $isApplyDiscount = false;
             foreach ($this->_getQuote()->getAllItems() as $item) {
-                if ($item->getIsApplyDiscount() === true) {
+                if (!$item->getNoDiscount()) {
                     $isApplyDiscount = true;
                     break;
                 }

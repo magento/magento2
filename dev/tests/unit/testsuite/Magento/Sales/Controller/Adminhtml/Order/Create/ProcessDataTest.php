@@ -123,13 +123,13 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $isApplyDiscount
+     * @param bool $noDiscount
      * @param string $couponCode
      * @param string $errorMessage
      * @param string $actualCouponCode
      * @dataProvider isApplyDiscountDataProvider
      */
-    public function testExecute($isApplyDiscount, $couponCode, $errorMessage, $actualCouponCode)
+    public function testExecute($noDiscount, $couponCode, $errorMessage, $actualCouponCode)
     {
         $quote = $this->getMock(
             'Magento\Sales\Model\Quote',
@@ -200,11 +200,11 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getIsApplyDiscount']
+            ['getNoDiscount']
         );
         $quote->expects($this->any())->method('getAllItems')->willReturn([$item]);
-        $item->expects($this->any())->method('getIsApplyDiscount')->willReturn($isApplyDiscount);
-        if ($isApplyDiscount) {
+        $item->expects($this->any())->method('getNoDiscount')->willReturn($noDiscount);
+        if (!$noDiscount) {
             $quote->expects($this->once())->method('getCouponCode')->willReturn($actualCouponCode);
         }
 
@@ -227,8 +227,8 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
     public function isApplyDiscountDataProvider()
     {
         return [
-            [false, '123', '"%1" coupon code was not applied. Do not apply discount is selected for item(s)', null],
-            [true, '123', '"%1" coupon code is not valid.', '132'],
+            [true, '123', '"%1" coupon code was not applied. Do not apply discount is selected for item(s)', null],
+            [false, '123', '"%1" coupon code is not valid.', '132'],
         ];
     }
 }

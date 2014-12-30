@@ -89,14 +89,11 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
     {
         $itemNoDiscount = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
             ->disableOriginalConstructor()
-            ->setMethods(['getNoDiscount', 'setIsApplyDiscount', '__wakeup'])
+            ->setMethods(['getNoDiscount', '__wakeup'])
             ->getMock();
         $itemNoDiscount->expects($this->once())
             ->method('getNoDiscount')
             ->willReturn(true);
-        $itemNoDiscount->expects($this->once())
-            ->method('setIsApplyDiscount')
-            ->willReturn(false);
 
         $this->validatorMock->expects($this->any())
             ->method('sortItemsByPriority')
@@ -204,7 +201,6 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
                     'getHasChildren',
                     'isChildrenCalculated',
                     'getChildren',
-                    'setIsApplyDiscount',
                     '__wakeup',
                 ]
             )
@@ -217,9 +213,6 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $itemWithChildren->expects($this->once())
             ->method('getHasChildren')
-            ->willReturn(true);
-        $itemWithChildren->expects($this->once())
-            ->method('setIsApplyDiscount')
             ->willReturn(true);
         $itemWithChildren->expects($this->once())
             ->method('isChildrenCalculated')
@@ -339,7 +332,6 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
                     'getHasChildren',
                     'isChildrenCalculated',
                     'getChildren',
-                    'setIsApplyDiscount',
                     '__wakeup',
                 ]
             )
@@ -347,9 +339,6 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
         $itemWithChildren->expects($this->once())
             ->method('getNoDiscount')
             ->willReturn(false);
-        $itemWithChildren->expects($this->once())
-            ->method('setIsApplyDiscount')
-            ->willReturn(true);
         $itemWithChildren->expects($this->once())
             ->method('getParentItem')
             ->willReturn(false);
