@@ -56,7 +56,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
         $this->_prepareCleanString($clean);
 
         $headerObject = $this->_objectManager->getObject(
-            '\Magento\Framework\HTTP\Header',
+            'Magento\Framework\HTTP\Header',
             ['httpRequest' => $this->_request, 'converter' => $this->_converter]
         );
 
@@ -138,7 +138,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
         $this->_prepareCleanString($clean);
 
         $headerObject = $this->_objectManager->getObject(
-            '\Magento\Framework\HTTP\Header',
+            'Magento\Framework\HTTP\Header',
             ['httpRequest' => $this->_request, 'converter' => $this->_converter]
         );
 
