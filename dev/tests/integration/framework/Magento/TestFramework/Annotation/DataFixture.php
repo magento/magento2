@@ -52,13 +52,13 @@ class DataFixture
             if ($this->_appliedFixtures) {
                 $param->requestTransactionRollback();
             }
-            if (!$this->isExplicitDbIsolationState('method', $test)) {
+            if ($this->getDbIsolationState('method', $test) !== 'disabled') {
                 $param->requestTransactionStart();
             } else {
                 $this->_applyFixtures($this->_getFixtures('method', $test));
             }
         } elseif (!$this->_appliedFixtures && $this->_getFixtures('class', $test)) {
-            if (!$this->isExplicitDbIsolationState('class', $test)) {
+            if ($this->getDbIsolationState('method', $test) !== 'disabled') {
                 $param->requestTransactionStart();
             } else {
                 $this->_applyFixtures($this->_getFixtures('class', $test));
@@ -78,7 +78,7 @@ class DataFixture
     ) {
         /* Isolate other tests from test-specific fixtures */
         if ($this->_appliedFixtures && $this->_getFixtures('method', $test)) {
-            if (!$this->isExplicitDbIsolationState('method', $test)) {
+            if ($this->getDbIsolationState('method', $test) !== 'disabled') {
                 $param->requestTransactionRollback();
             } else {
                 $this->_revertFixtures();
@@ -140,12 +140,14 @@ class DataFixture
      *
      * @param $scope
      * @param \PHPUnit_Framework_TestCase $test
-     * @return bool
+     * @return bool|null
      */
-    protected function isExplicitDbIsolationState($scope, \PHPUnit_Framework_TestCase $test)
+    protected function getDbIsolationState($scope, \PHPUnit_Framework_TestCase $test)
     {
         $annotations = $test->getAnnotations();
-        return isset($annotations[$scope][DbIsolation::MAGENTO_DB_ISOLATION]);
+        return isset($annotations[$scope][DbIsolation::MAGENTO_DB_ISOLATION])
+            ? $annotations[$scope][DbIsolation::MAGENTO_DB_ISOLATION]
+            : null;
     }
 
     /**

@@ -17,8 +17,8 @@ $collection->addAttributeToSelect('id')->load()->delete();
 /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
 $collection = $objectManager->create('Magento\Catalog\Model\Resource\Category\Collection');
 $collection
-    ->addAttributeToFilter('id', ['gt' => 2])
-    ->addAttributeToSelect('id')
+    ->addAttributeToFilter('entity_id', ['gt' => 2])
+    ->addAttributeToSelect('entity_id')
     ->load()
     ->delete();
 
