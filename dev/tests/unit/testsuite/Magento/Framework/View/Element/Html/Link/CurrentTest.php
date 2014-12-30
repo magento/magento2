@@ -43,7 +43,7 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
         $link = $this->_objectManager->getObject(
-            '\Magento\Framework\View\Element\Html\Link\Current',
+            'Magento\Framework\View\Element\Html\Link\Current',
             ['urlBuilder' => $this->_urlBuilderMock]
         );
 
@@ -54,7 +54,7 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
     public function testIsCurrentIfIsset()
     {
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
-        $link = $this->_objectManager->getObject('\Magento\Framework\View\Element\Html\Link\Current');
+        $link = $this->_objectManager->getObject('Magento\Framework\View\Element\Html\Link\Current');
         $link->setCurrent(true);
         $this->assertTrue($link->IsCurrent());
     }
@@ -75,7 +75,7 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
         $this->_requestMock->expects($this->once())->method('getControllerName')->will($this->returnValue('b'));
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
         $link = $this->_objectManager->getObject(
-            '\Magento\Framework\View\Element\Html\Link\Current',
+            'Magento\Framework\View\Element\Html\Link\Current',
             [
                 'urlBuilder' => $this->_urlBuilderMock,
                 'request' => $this->_requestMock,
@@ -93,7 +93,7 @@ class CurrentTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
         $link = $this->_objectManager->getObject(
-            '\Magento\Framework\View\Element\Html\Link\Current',
+            'Magento\Framework\View\Element\Html\Link\Current',
             ['urlBuilder' => $this->_urlBuilderMock, 'request' => $this->_requestMock]
         );
         $this->assertFalse($link->isCurrent());

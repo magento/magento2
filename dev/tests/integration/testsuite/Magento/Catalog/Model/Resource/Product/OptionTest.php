@@ -101,7 +101,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $title = $options[0]['values'][0]['title'];
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Catalog\Model\Product'
+            'Magento\Catalog\Model\Product'
         );
         $product->load($productId);
         $product->setStoreIds([$storeId]);
@@ -152,7 +152,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $price = $options[0]['values'][0]['price'];
         $priceType = $options[0]['values'][0]['price_type'];
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Catalog\Model\Product'
+            'Magento\Catalog\Model\Product'
         );
         $product->load($productId);
         $product->setStoreIds([$storeId]);

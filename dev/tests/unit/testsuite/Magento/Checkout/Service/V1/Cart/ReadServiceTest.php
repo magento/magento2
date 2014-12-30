@@ -60,7 +60,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         ];
         $this->quoteMock = $this->getMock('\Magento\Sales\Model\Quote', $methods, [], '', false);
         $this->quoteCollectionMock = $objectManager->getCollectionMock(
-            '\Magento\Sales\Model\Resource\Quote\Collection', [$this->quoteMock]);
+            'Magento\Sales\Model\Resource\Quote\Collection', [$this->quoteMock]);
         $this->searchResultsBuilderMock =
             $this->getMock('\Magento\Checkout\Service\V1\Data\CartSearchResultsBuilder', [], [], '', false);
         $this->cartMapperMock = $this->getMock('\Magento\Checkout\Service\V1\Data\CartMapper', ['map'], [], '', false);

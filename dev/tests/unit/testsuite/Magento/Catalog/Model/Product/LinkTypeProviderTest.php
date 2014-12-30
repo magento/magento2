@@ -52,7 +52,7 @@ class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
         ];
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Catalog\Model\Product\LinkTypeProvider',
+            'Magento\Catalog\Model\Product\LinkTypeProvider',
             [
                 'linkTypeBuilder' => $this->linkTypeBuilderMock,
                 'linkAttributeBuilder' => $this->linkAttributeBuilderMock,

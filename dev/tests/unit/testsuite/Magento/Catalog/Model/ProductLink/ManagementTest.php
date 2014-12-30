@@ -86,7 +86,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Catalog\Model\ProductLink\Management',
+            'Magento\Catalog\Model\ProductLink\Management',
             [
                 'productRepository' => $this->productRepositoryMock,
                 'collectionProvider' => $this->collectionProviderMock,
