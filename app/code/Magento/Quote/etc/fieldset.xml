@@ -11,6 +11,18 @@
             <field name="weight">
                 <aspect name="to_order" />
             </field>
+            <field name="address_type">
+                <aspect name="to_order" />
+            </field>
+            <field name="customer_id">
+                <aspect name="to_order" />
+            </field>
+            <field name="customer_address_id">
+                <aspect name="to_order" />
+            </field>
+            <field name="store_id">
+                <aspect name="to_order" />
+            </field>
             <field name="shipping_method">
                 <aspect name="to_order" />
             </field>
