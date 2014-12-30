@@ -165,4 +165,15 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     {
         return $this->getData('created_at');
     }
+
+    /**
+     * Get time in seconds since consumer was created
+     *
+     * @param int $consumerId
+     * @return int - time lapsed in seconds
+     */
+    public function getTimeInSecondsSinceCreation($consumerId)
+    {
+        return $this->getResource()->getTimeInSecondsSinceCreation($consumerId);
+    }
 }

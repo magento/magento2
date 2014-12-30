@@ -65,6 +65,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
                     'getCallbackUrl',
                     'save',
                     'getData',
+                    'getTimeInSecondsSinceCreation',
                     '__wakeup',
                 ]
             )
@@ -122,7 +123,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             $this->_consumerFactory,
             $this->_tokenFactory,
             $this->_dataHelperMock,
-            $this->_dateMock,
             $this->_tokenMock
         );
         $this->_oauth = new \Magento\Framework\Oauth\Oauth(
@@ -218,7 +218,10 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     public function testGetRequestTokenOutdatedConsumerKey()
     {
         $this->_setupConsumer();
-        $this->_dateMock->expects($this->any())->method('timestamp')->will($this->returnValue(9999999999));
+        $this->_consumerMock
+            ->expects($this->any())
+            ->method('getTimeInSecondsSinceCreation')
+            ->will($this->returnValue(9999999999));
         $this->_dataHelperMock->expects(
             $this->once()
         )->method(
@@ -267,14 +270,14 @@ class OauthTest extends \PHPUnit_Framework_TestCase
 
     protected function _makeValidExpirationPeriod()
     {
-        $this->_dateMock->expects($this->any())->method('timestamp')->will($this->returnValue(0));
-        $this->_dataHelperMock->expects(
-            $this->once()
-        )->method(
-            'getConsumerExpirationPeriod'
-        )->will(
-            $this->returnValue(300)
-        );
+        $this->_consumerMock
+            ->expects($this->any())
+            ->method('getTimeInSecondsSinceCreation')
+            ->will($this->returnValue(0));
+        $this->_dataHelperMock
+            ->expects($this->once())
+            ->method('getConsumerExpirationPeriod')
+            ->will($this->returnValue(300));
     }
 
     /**
