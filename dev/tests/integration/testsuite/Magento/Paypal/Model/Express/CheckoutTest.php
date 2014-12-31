@@ -128,6 +128,60 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express_with_customer.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testGuestExpressCheckoutStart()
+    {
+        /** @var Quote $quote */
+        $quote = $this->_getFixtureQuote();
+
+        $quote->setIsMultiShipping(false);
+        $quote->setCheckoutMethod(Onepage::METHOD_GUEST);
+        $quote->getShippingAddress()->setSameAsBilling(0);
+
+        $paypalConfigMock = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
+        $apiTypeFactory = $this->getMock('Magento\Paypal\Model\Api\Type\Factory', [], [], '', false);
+        $paypalInfo = $this->getMock('Magento\Paypal\Model\Info', [], [], '', false);
+
+        $apiMock = $this->getMockBuilder('\Magento\Paypal\Model\Api\Nvp')
+            ->disableOriginalConstructor()
+            ->setMethods(['call', 'callSetExpressCheckout'])
+            ->getMock();
+
+        $apiMock->expects($this->any())->method('call')->will($this->returnValue([]));
+        $apiMock->expects($this->once())->method('callSetExpressCheckout');
+
+        $apiMock->expects($this->never())->method('getBillingAgreementType');
+        $apiMock->expects($this->never())->method('setBillingType');
+
+        $apiTypeFactory->expects($this->any())->method('create')->will($this->returnValue($apiMock));
+
+        /** @var \Magento\Paypal\Model\Express\Checkout $checkout */
+        $checkout = $this->_objectManager->create(
+            'Magento\Paypal\Model\Express\Checkout',
+            [
+                'params' => ['quote' => $quote, 'config' => $paypalConfigMock],
+                'apiTypeFactory' => $apiTypeFactory,
+                'paypalInfo' => $paypalInfo
+            ]
+        );
+
+        $checkout->setIsBillingAgreementRequested(false);
+        $checkout->setIsBml(false);
+
+        $checkout->setCustomerData($quote->getCustomer());
+
+        $token = $checkout->start("https://domain.com/some/return/url", "https://domain.com/some/cancel/url");
+
+        $this->assertNull($token);
+        $this->assertTrue($quote->getTotalsCollectedFlag());
+        $this->assertFalse($quote->hasDataChanges());
+        $this->assertTrue($quote->getPayment()->hasMethod());
+    }
+
+    /**
      * Verify that after placing the order, addresses are associated with the order and the quote is a guest quote.
      *
      * @magentoDataFixture Magento/Paypal/_files/quote_payment_express.php
