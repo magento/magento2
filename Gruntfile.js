@@ -1,6 +1,9 @@
-'use strict';
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
 
 module.exports = function (grunt) {
+    'use strict';
 
     require('./spec_runner')(grunt);
 
@@ -145,38 +148,33 @@ module.exports = function (grunt) {
                 template: require('grunt-template-jasmine-requirejs'),
                 ignoreEmpty: true
             },
-            'backend-unit-testsuite': {
-                options: specConfigFor('unit', 'adminhtml', 8000)
-            },
-            'backend-integration-testsuite': {
-                options: specConfigFor('integration', 'adminhtml', 8000)
-            },
-            'frontend-unit-testsuite': {
-                options: specConfigFor('unit', 'frontend', 3000)
-            },
-            'frontend-integration-testsuite': {
-                options: specConfigFor('integration', 'frontend', 3000)
-            }
+            'backend-unit-testsuite':           specConfigFor('unit', 'adminhtml', 8000),
+            'backend-integration-testsuite':    specConfigFor('integration', 'adminhtml', 8000),
+            'frontend-unit-testsuite':          specConfigFor('unit', 'frontend', 3000),
+            'frontend-integration-testsuite':   specConfigFor('integration', 'frontend', 3000)
         }
     });
 
     function specConfigFor(type, dir, port) {
         return {
-            host: 'http://localhost:' + port,
-            specs: specPathFor(type, dir, 'Spec'),
-            helpers: specPathFor(type, dir, 'Helper'),
-            templateOptions: {
-                requireConfigFile: [
-                    'lib/web/app-config.js',
-                    '<%= config.path.spec %>/' + type + '/config.js'
-                ]
+            src: '<%= config.path.spec %>/env.js',
+            options: {
+                host: 'http://localhost:' + port,
+                specs: specPathFor(type, dir, 'Spec'),
+                helpers: specPathFor(type, dir, 'Helper'),
+                templateOptions: {
+                    requireConfigFile: [
+                        'lib/web/app-config.js',
+                        '<%= config.path.spec %>/' + type + '/config.js/'
+                    ]
+                }
             }
         }
-    };
+    }
 
     function specPathFor(type, dir, suffix) {
-        return '<%= config.path.spec %>/' + type + '/**/' + dir + '/**/*' + suffix + '.js'
-    };
+        return '<%= config.path.spec %>/' + type + '/**/' + dir + '/**/*' + suffix + '.js';
+    }
 
     // Clean var & pub folders
     grunt.registerTask('cleanup', [
