@@ -149,10 +149,10 @@ module.exports = function (grunt) {
                 template: require('grunt-template-jasmine-requirejs'),
                 ignoreEmpty: true
             },
-            'backend-unit-testsuite':           specRunner.build('unit', 'adminhtml', 8000),
-            'backend-integration-testsuite':    specRunner.build('integration', 'adminhtml', 8000),
-            'frontend-unit-testsuite':          specRunner.build('unit', 'frontend', 3000),
-            'frontend-integration-testsuite':   specRunner.build('integration', 'frontend', 3000)
+            'backend-unit':           specRunner.build('unit', 'adminhtml', 8000),
+            'backend-integration':    specRunner.build('integration', 'adminhtml', 8000),
+            'frontend-unit':          specRunner.build('unit', 'frontend', 3000),
+            'frontend-integration':   specRunner.build('integration', 'frontend', 3000)
         }
     });
 
@@ -188,16 +188,16 @@ module.exports = function (grunt) {
         'specRunner:backend',
         'specRunner:frontend'
     ]);
-
+    
     grunt.registerTask('spec-unit', [
         'spec-runners',
-        'jasmine:backend-unit-testsuite',
-        'jasmine:frontend-unit-testsuite'
+        'jasmine:backend-unit',
+        'jasmine:frontend-unit'
     ]);
 
     grunt.registerTask('spec-integration', [
         'spec-runners',
-        'jasmine:backend-integration-testsuite',
-        'jasmine:frontend-integration-testsuite'
+        'jasmine:backend-integration',
+        'jasmine:frontend-integration'
     ]);
 };
