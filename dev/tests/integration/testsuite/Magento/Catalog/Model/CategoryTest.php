@@ -256,4 +256,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->assertNotEmpty($this->_model->validate());
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/category_with_position.php
+     */
+    public function testSaveCategoryWithPosition()
+    {
+        $category = $this->_model->load('444');
+        $this->assertEquals('5', $category->getPosition());
+    }
 }
