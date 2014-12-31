@@ -8,7 +8,7 @@ $cartPriceRulesProductsFloor = \Magento\ToolkitFramework\Config::getInstance()->
 $this->resetObjectManager();
 
 /** @var \Magento\Store\Model\StoreManager $storeManager */
-$storeManager = $this->getObjectManager()->create('\Magento\Store\Model\StoreManager');
+$storeManager = $this->getObjectManager()->create('Magento\Store\Model\StoreManager');
 /** @var $category \Magento\Catalog\Model\Category */
 $category = $this->getObjectManager()->get('Magento\Catalog\Model\Category');
 /** @var $model  \Magento\SalesRule\Model\Rule*/

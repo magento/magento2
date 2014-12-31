@@ -100,7 +100,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $layoutMock->expects($this->at(0))->method('createBlock')
             ->with('Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group')
             ->will($this->returnValue(
-                $this->objectManagerHelper->getObject('\Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group')
+                $this->objectManagerHelper->getObject('Magento\Customer\Block\Adminhtml\Edit\Renderer\Attribute\Group')
             ));
         $layoutMock->expects($this->at(1))->method('createBlock')
             ->with('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element')

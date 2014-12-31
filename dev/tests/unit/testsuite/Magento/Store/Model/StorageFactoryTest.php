@@ -134,7 +134,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
 
-        $this->_model = $this->helper->getObject('\Magento\Store\Model\StorageFactory', [
+        $this->_model = $this->helper->getObject('Magento\Store\Model\StorageFactory', [
             'objectManager' => $this->_objectManagerMock,
             'eventManager' => $this->_eventManagerMock,
             'sidResolver' => $this->_sidResolverMock,

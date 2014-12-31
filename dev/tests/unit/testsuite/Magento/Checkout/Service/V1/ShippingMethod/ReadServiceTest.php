@@ -96,7 +96,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->service = $this->objectManager->getObject(
-            '\Magento\Checkout\Service\V1\ShippingMethod\ReadService',
+            'Magento\Checkout\Service\V1\ShippingMethod\ReadService',
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'methodBuilder' => $this->methodBuilderMock,

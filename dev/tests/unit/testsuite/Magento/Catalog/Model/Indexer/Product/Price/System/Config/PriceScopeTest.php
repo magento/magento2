@@ -46,7 +46,7 @@ class PriceScopeTest extends \PHPUnit_Framework_TestCase
 
 
         $this->_model = $this->_objectManager->getObject(
-            '\Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope',
+            'Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope',
             [
                 'context' => $contextMock,
                 'registry' => $registryMock,
