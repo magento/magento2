@@ -908,6 +908,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\Catalog\Model\Product $item
      * @param string $attrCode
      * @param int $storeId
+     * @return $this
      */
     protected function collectMultiselectValues($item, $attrCode, $storeId)
     {
@@ -922,6 +923,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         ) {
             $this->collectedMultiselectsData[$storeId][$item->getId()][$attrCode] = $options;
         }
+
+        return $this;
     }
 
     /**
