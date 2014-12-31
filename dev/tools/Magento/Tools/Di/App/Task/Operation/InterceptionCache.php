@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Tools\Di\App\Task\Operation;
+
 use Magento\Tools\Di\App\Task\OperationInterface;
 
 class InterceptionCache implements OperationInterface
@@ -14,8 +15,15 @@ class InterceptionCache implements OperationInterface
      */
     private $data = [];
 
+    /**
+     * @var \Magento\Framework\Interception\Config\Config
+     */
     private $configInterface;
 
+    /**
+     * @param \Magento\Framework\Interception\Config\Config $configInterface
+     * @param array $data
+     */
     public function __construct(
         \Magento\Framework\Interception\Config\Config $configInterface,
         $data = []
