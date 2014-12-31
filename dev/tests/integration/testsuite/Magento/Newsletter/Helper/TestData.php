@@ -28,7 +28,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetConfirmationUrl()
     {
         $url = $this->_objectManager->get('Magento\Newsletter\Helper\Data')->getConfirmationUrl($this->_subscriber);
-        $this->assertFalse(strpos($url, "admin"));
+        $this->assertTrue((bool)strpos($url, 'newsletter/subscriber/confirm'));
+        $this->assertFalse((bool)strpos($url, 'admin'));
     }
 
     /**
@@ -36,8 +37,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUnsubscribeUrl()
     {
-        $url = $this->_objectManager->get('Magento\Newsletter\Helper\Data')->getConfirmationUrl($this->_subscriber);
-        $this->assertFalse(strpos($url, "admin"));
+        $url = $this->_objectManager->get('Magento\Newsletter\Helper\Data')->getUnsubscribeUrl($this->_subscriber);
+        $this->assertTrue((bool)strpos($url, 'newsletter/subscriber/unsubscribe'));
+        $this->assertFalse((bool)strpos($url, 'admin'));
     }
 
 }

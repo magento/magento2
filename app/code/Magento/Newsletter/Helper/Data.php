@@ -17,6 +17,9 @@ class Data
      */
     protected $_frontendUrlBuilder;
 
+    /**
+     * @param \Magento\Framework\UrlInterface $frontendUrlBuilder
+     */
     public function __construct(\Magento\Framework\UrlInterface $frontendUrlBuilder)
     {
         $this->_frontendUrlBuilder = $frontendUrlBuilder;
