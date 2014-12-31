@@ -28,12 +28,12 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         );
         $category->load(4);
         $layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('\Magento\Catalog\Model\Layer\Category');
+            ->get('Magento\Catalog\Model\Layer\Category');
         $layer->setCurrentCategory($category);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Layer\Filter\Price', ['layer' => $layer]);
         $this->groupManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('\Magento\Customer\Api\GroupManagementInterface');
+            ->get('Magento\Customer\Api\GroupManagementInterface');
     }
 
     public function testApplyNothing()

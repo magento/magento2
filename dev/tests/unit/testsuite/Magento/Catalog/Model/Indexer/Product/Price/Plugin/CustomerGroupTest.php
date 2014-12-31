@@ -49,7 +49,7 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($indexerMock));
 
         $this->_model = $this->_objectManager->getObject(
-            '\Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup',
+            'Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup',
             ['indexerRegistry' => $this->indexerRegistryMock]
         );
     }

@@ -44,7 +44,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $objectManager->getObject(
-            '\Magento\Catalog\Model\Resource\Product',
+            'Magento\Catalog\Model\Resource\Product',
             [
                 'setFactory' => $this->setFactoryMock,
                 'typeFactory' => $this->typeFactoryMock,

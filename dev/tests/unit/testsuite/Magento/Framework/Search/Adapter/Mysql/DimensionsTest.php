@@ -62,7 +62,7 @@ class DimensionsTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->builder = $this->objectManager->getObject(
-            '\Magento\Framework\Search\Adapter\Mysql\Dimensions',
+            'Magento\Framework\Search\Adapter\Mysql\Dimensions',
             [
                 'conditionManager' => $this->conditionManager,
                 'scopeResolver' => $this->scopeResolver

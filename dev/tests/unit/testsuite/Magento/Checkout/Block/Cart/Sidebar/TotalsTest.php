@@ -40,7 +40,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->quote));
 
         $this->totalsObj = $objectManager->getObject(
-            '\Magento\Checkout\Block\Cart\Sidebar\Totals',
+            'Magento\Checkout\Block\Cart\Sidebar\Totals',
             ['checkoutSession' => $checkoutSession]
         );
     }

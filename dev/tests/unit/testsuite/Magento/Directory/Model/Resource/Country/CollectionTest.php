@@ -35,7 +35,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $fetchStrategy = $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
         $entityFactory = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
         $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $countryFactory = $this->getMock(
             'Magento\Directory\Model\Resource\CountryFactory',
             [],

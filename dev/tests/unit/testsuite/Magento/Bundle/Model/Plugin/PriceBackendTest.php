@@ -24,7 +24,7 @@ class PriceBackendTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->priceBackendPlugin = $objectManager->getObject('\Magento\Bundle\Model\Plugin\PriceBackend');
+        $this->priceBackendPlugin = $objectManager->getObject('Magento\Bundle\Model\Plugin\PriceBackend');
 
         $this->closure = function () {
             return static::CLOSURE_VALUE;

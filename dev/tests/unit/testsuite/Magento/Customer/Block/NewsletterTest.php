@@ -20,7 +20,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
     {
         $this->urlBuilder = $this->getMock('\Magento\Framework\UrlInterface');
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->block = $helper->getObject('\Magento\Customer\Block\Newsletter', ['urlBuilder' => $this->urlBuilder]);
+        $this->block = $helper->getObject('Magento\Customer\Block\Newsletter', ['urlBuilder' => $this->urlBuilder]);
     }
 
     public function testGetAction()
