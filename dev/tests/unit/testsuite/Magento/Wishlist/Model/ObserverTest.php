@@ -68,6 +68,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
             ->getMock();
         $this->wishlistFactory = $this->getMockBuilder('Magento\Wishlist\Model\WishlistFactory')
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->wishlist = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
