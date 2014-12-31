@@ -163,9 +163,19 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->_resizeParameters = ['width' => 100, 'height' => 50];
 
         $this->_storageCollectionFactoryMock = $this->getMock(
-            'Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory'
+            'Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory',
+            [],
+            [],
+            '',
+            false
         );
-        $this->_storageFileFactoryMock = $this->getMock('Magento\Core\Model\File\Storage\FileFactory');
+        $this->_storageFileFactoryMock = $this->getMock(
+            'Magento\Core\Model\File\Storage\FileFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $this->_storageDatabaseFactoryMock = $this->getMock(
             'Magento\Core\Model\File\Storage\DatabaseFactory',
             [],
