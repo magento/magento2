@@ -5,7 +5,8 @@
 module.exports = function (grunt) {
     'use strict';
 
-    require('./spec_runner')(grunt);
+    var specRunner = require('./spec_runner');
+    specRunner.init(grunt);
 
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
@@ -148,33 +149,12 @@ module.exports = function (grunt) {
                 template: require('grunt-template-jasmine-requirejs'),
                 ignoreEmpty: true
             },
-            'backend-unit-testsuite':           specConfigFor('unit', 'adminhtml', 8000),
-            'backend-integration-testsuite':    specConfigFor('integration', 'adminhtml', 8000),
-            'frontend-unit-testsuite':          specConfigFor('unit', 'frontend', 3000),
-            'frontend-integration-testsuite':   specConfigFor('integration', 'frontend', 3000)
+            'backend-unit-testsuite':           specRunner.build('unit', 'adminhtml', 8000),
+            'backend-integration-testsuite':    specRunner.build('integration', 'adminhtml', 8000),
+            'frontend-unit-testsuite':          specRunner.build('unit', 'frontend', 3000),
+            'frontend-integration-testsuite':   specRunner.build('integration', 'frontend', 3000)
         }
     });
-
-    function specConfigFor(type, dir, port) {
-        return {
-            src: '<%= config.path.spec %>/env.js',
-            options: {
-                host: 'http://localhost:' + port,
-                specs: specPathFor(type, dir, 'Spec'),
-                helpers: specPathFor(type, dir, 'Helper'),
-                templateOptions: {
-                    requireConfigFile: [
-                        'lib/web/app-config.js',
-                        '<%= config.path.spec %>/' + type + '/config.js/'
-                    ]
-                }
-            }
-        }
-    }
-
-    function specPathFor(type, dir, suffix) {
-        return '<%= config.path.spec %>/' + type + '/**/' + dir + '/**/*' + suffix + '.js';
-    }
 
     // Clean var & pub folders
     grunt.registerTask('cleanup', [
@@ -209,19 +189,15 @@ module.exports = function (grunt) {
         'specRunner:frontend'
     ]);
 
-    grunt.registerTask('testsuite-unit', [
+    grunt.registerTask('spec-unit', [
+        'spec-runners',
         'jasmine:backend-unit-testsuite',
         'jasmine:frontend-unit-testsuite'
     ]);
 
-    grunt.registerTask('testsuite-integration', [
+    grunt.registerTask('spec-integration', [
+        'spec-runners',
         'jasmine:backend-integration-testsuite',
         'jasmine:frontend-integration-testsuite'
-    ]);
-
-    grunt.registerTask('spec', [
-        'spec-runners',
-        'testsuite-unit',
-        'testsuite-integration'
     ]);
 };

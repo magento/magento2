@@ -4,7 +4,12 @@
 
 /* global __dirname: true */
 
-module.exports = function (grunt) {
+/**
+ * Initializes 'specRunner' grunt task.
+ *
+ * @param  {Object} grunt
+ */
+module.exports.init = function (grunt) {
     'use strict';
 
     var connect     = require('connect'),
@@ -49,9 +54,9 @@ module.exports = function (grunt) {
             middleware: null
         });
 
-        area        = options.areaDir;
-        share       = options.shareDir;
-        theme       = options.theme;
+        area    = options.areaDir;
+        share   = options.shareDir;
+        theme   = options.theme;
 
         if (options.enableLogs) {
             app.use(logger('dev'));
@@ -154,4 +159,30 @@ module.exports = function (grunt) {
 
         app.listen(options.port);
     });
+};
+
+/**
+ * Creates jasmine configuration object
+ *
+ * @param  {String} type - type of tests
+ * @param  {String} dir - area dir
+ * @param  {Number} port - port to run on
+ * @return {Object}
+ */
+module.exports.build = function (type, dir, port) {
+    'use strict';
+
+    return {
+        src: '<%= config.path.spec %>/env.js',
+        options: {
+            host: 'http://localhost:' + port,
+            specs: '<%= config.path.spec %>/' + type + '/**/' + dir + '/**/*Spec.js',
+            templateOptions: {
+                requireConfigFile: [
+                    'lib/web/app-config.js',
+                    '<%= config.path.spec %>/' + type + '/config.js/'
+                ]
+            }
+        }
+    };
 };
