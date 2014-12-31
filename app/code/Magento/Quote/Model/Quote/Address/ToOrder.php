@@ -52,6 +52,8 @@ class ToOrder
 
         return $this->orderBuilder
             ->populateWithArray(array_merge($orderData, $data))
+            ->setStoreId($object->getQuote()->getStoreId())
+            ->setQuoteId($object->getQuote()->getId())
             ->create();
     }
 }

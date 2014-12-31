@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Helper\Quote\Item;
+namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Quote\Model\Quote\Item;
 

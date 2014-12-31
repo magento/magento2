@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Magento\Sales\Helper\Quote\Item;
+namespace Magento\Quote\Model\Quote\Item;
 
 /**
  * Class CompareTest
@@ -57,7 +57,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->helper = new \Magento\Sales\Helper\Quote\Item\Compare();
+        $this->helper = new \Magento\Quote\Model\Quote\Item\Compare();
     }
 
     /**

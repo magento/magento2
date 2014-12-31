@@ -167,9 +167,9 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     protected $_itemOptionFactory;
 
     /**
-     * @var \Magento\Sales\Helper\Quote\Item\Compare
+     * @var \Magento\Quote\Model\Quote\Item\Compare
      */
-    protected $_compareHelper;
+    protected $quoteItemCompare;
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
@@ -184,7 +184,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
      * @param \Magento\Sales\Model\Status\ListFactory $statusListFactory
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param Item\OptionFactory $itemOptionFactory
-     * @param \Magento\Sales\Helper\Quote\Item\Compare $compareHelper
+     * @param \Magento\Quote\Model\Quote\Item\Compare $quoteItemCompare
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -200,7 +200,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory,
-        \Magento\Sales\Helper\Quote\Item\Compare $compareHelper,
+        \Magento\Quote\Model\Quote\Item\Compare $quoteItemCompare,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -209,7 +209,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
         $this->_errorInfos = $statusListFactory->create();
         $this->_localeFormat = $localeFormat;
         $this->_itemOptionFactory = $itemOptionFactory;
-        $this->_compareHelper = $compareHelper;
+        $this->quoteItemCompare = $quoteItemCompare;
         $this->stockRegistry = $stockRegistry;
         parent::__construct(
             $context,
@@ -495,7 +495,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
      */
     public function compare($item)
     {
-        return $this->_compareHelper->compare($this, $item);
+        return $this->quoteItemCompare->compare($this, $item);
     }
 
     /**
