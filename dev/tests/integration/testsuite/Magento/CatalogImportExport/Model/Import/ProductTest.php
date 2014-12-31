@@ -187,7 +187,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if stock state properly changed after import
      *
-     * magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      */
     public function testStockState()
     {
