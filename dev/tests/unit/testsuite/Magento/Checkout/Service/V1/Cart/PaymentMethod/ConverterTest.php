@@ -36,7 +36,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->converter = $this->objectManager->getObject(
-            '\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Converter',
+            'Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Converter',
             [
                 'builder' => $this->paymentMethodBuilderMock,
             ]

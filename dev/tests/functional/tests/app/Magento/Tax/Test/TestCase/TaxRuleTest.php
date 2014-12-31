@@ -27,7 +27,7 @@ class TaxRuleTest extends Functional
     {
         //Data
         $objectManager = Factory::getObjectManager();
-        $fixture = $objectManager->create('\Magento\Tax\Test\Fixture\TaxRule', ['dataSet' => 'us_ca_ny_rule']);
+        $fixture = $objectManager->create('Magento\Tax\Test\Fixture\TaxRule', ['dataSet' => 'us_ca_ny_rule']);
         //Pages
         $taxGridPage = Factory::getPageFactory()->getTaxRuleIndex();
         $newTaxRulePage = Factory::getPageFactory()->getTaxRuleNew();

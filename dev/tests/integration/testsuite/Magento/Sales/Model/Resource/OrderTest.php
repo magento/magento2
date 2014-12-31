@@ -24,7 +24,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->resourceModel = $this->objectManager->create('\Magento\Sales\Model\Resource\Order');
+        $this->resourceModel = $this->objectManager->create('Magento\Sales\Model\Resource\Order');
         $this->orderIncrementId = '100000001';
     }
 

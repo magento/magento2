@@ -36,7 +36,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->filterBuilder = $this->objectManager->getObject('\Magento\Framework\Api\FilterBuilder');
+        $this->filterBuilder = $this->objectManager->getObject('Magento\Framework\Api\FilterBuilder');
         $filterGroupBuilder = $this->objectManager
             ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
@@ -45,7 +45,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
         $this->sortOrderBuilder = $this->objectManager->getObject(
-            '\Magento\Framework\Api\SortOrderBuilder'
+            'Magento\Framework\Api\SortOrderBuilder'
         );
         $this->groupRepositoryMock = $this->getMockBuilder('\Magento\Customer\Api\GroupRepositoryInterface')
             ->getMock();

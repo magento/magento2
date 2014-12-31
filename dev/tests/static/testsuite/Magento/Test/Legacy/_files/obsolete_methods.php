@@ -1223,7 +1223,7 @@ return [
     [
         'changeQuoteCustomerGroupId',
         '\Magento\Sales\Model\Observer',
-        '\Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch'
+        '\Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch'
     ],
     [
         'getEncryptedSessionId',

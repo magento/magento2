@@ -56,7 +56,7 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public function testSaveOrderActionWithFormKey()
     {
-        $formKey = $this->_objectManager->get('\Magento\Framework\Data\Form\FormKey');
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $this->getRequest()->setParam('form_key', $formKey->getFormKey());
         $this->dispatch('checkout/onepage/saveOrder');
         $html = $this->getResponse()->getBody();

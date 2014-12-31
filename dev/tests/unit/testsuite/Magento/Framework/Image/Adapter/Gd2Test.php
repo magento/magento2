@@ -89,7 +89,7 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->adapter = $this->objectManager->getObject('\Magento\Framework\Image\Adapter\Gd2');
+        $this->adapter = $this->objectManager->getObject('Magento\Framework\Image\Adapter\Gd2');
     }
 
     /**

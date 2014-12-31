@@ -50,7 +50,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $this->methodListMock = $this->getMock('\Magento\Payment\Model\MethodList', [], [], '', false);
 
         $this->service = $this->objectManager->getObject(
-            '\Magento\Checkout\Service\V1\PaymentMethod\ReadService',
+            'Magento\Checkout\Service\V1\PaymentMethod\ReadService',
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'quoteMethodConverter' => $this->quoteMethodConverterMock,

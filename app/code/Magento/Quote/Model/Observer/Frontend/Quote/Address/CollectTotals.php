@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Observer\Frontend\Quote\Address;
+namespace Magento\Quote\Model\Observer\Frontend\Quote\Address;
 
 class CollectTotals
 {

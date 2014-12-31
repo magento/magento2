@@ -48,7 +48,6 @@ class ToOrderItem
         if (!$options) {
             $options = $quoteItem->getProduct()->getTypeInstance()->getOrderOptions($quoteItem->getProduct());
         }
-        $this->orderItemBuilder->setProductOptions($options);
         $orderItemData = $this->objectCopyService->getDataFromFieldset(
             'quote_convert_item',
             'to_order_item',
@@ -65,6 +64,8 @@ class ToOrderItem
             );
         }
         $this->orderItemBuilder->populateWithArray(array_merge($orderItemData, $data));
+
+        $this->orderItemBuilder->setProductOptions($options);
 
         if ($quoteItem->getParentItem()) {
             $this->orderItemBuilder->setQtyOrdered(

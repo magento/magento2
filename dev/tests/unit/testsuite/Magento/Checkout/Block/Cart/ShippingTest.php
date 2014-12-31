@@ -57,7 +57,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Checkout\Block\Cart\Shipping $shippingBlock */
         $shippingBlock = $this->objectManager->getObject(
-            '\Magento\Checkout\Block\Cart\Shipping',
+            'Magento\Checkout\Block\Cart\Shipping',
             ['context' => $contextMock]
         );
 
