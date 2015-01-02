@@ -263,8 +263,11 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, $logger, array $data = [])
-    {
+    public function __construct(
+        \Magento\Framework\Filesystem $filesystem,
+        \Psr\Log\LoggerInterface $logger,
+        array $data = []
+    ) {
         $this->_filesystem = $filesystem;
         $this->logger = $logger;
         $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
