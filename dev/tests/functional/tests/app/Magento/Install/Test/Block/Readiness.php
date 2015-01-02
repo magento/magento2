@@ -6,7 +6,7 @@
 namespace Magento\Install\Test\Block;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Readiness block.
