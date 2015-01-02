@@ -133,13 +133,15 @@ module.exports = function (grunt) {
             backend: {
                 options: {
                     port: 8000,
-                    areaDir: 'adminhtml'
+                    areaDir: 'adminhtml',
+                    theme: 'backend'
                 }
             },
             frontend: {
                 options: {
                     port: 3000,
-                    areaDir: 'frontend'
+                    areaDir: 'frontend',
+                    theme: 'blank'
                 }
             }
         },
@@ -184,19 +186,17 @@ module.exports = function (grunt) {
         'cleanup'
     ]);
 
-    grunt.registerTask('spec-runners', [
+    grunt.registerTask('spec', [
         'specRunner:backend',
         'specRunner:frontend'
     ]);
-    
-    grunt.registerTask('spec-unit', [
-        'spec-runners',
+
+    grunt.registerTask('unit', [
         'jasmine:backend-unit',
         'jasmine:frontend-unit'
     ]);
 
-    grunt.registerTask('spec-integration', [
-        'spec-runners',
+    grunt.registerTask('integration', [
         'jasmine:backend-integration',
         'jasmine:frontend-integration'
     ]);
