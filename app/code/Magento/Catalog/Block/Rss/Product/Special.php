@@ -186,6 +186,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
                         $this->dateFactory->create(
                             [
                                 'date' => $item->getSpecialToDate(),
+                                'part' => \Magento\Framework\Stdlib\DateTime\Date::ISO_8601,
                                 'locale' => $this->localeResolver->getLocaleCode()
                             ]
                         ),
