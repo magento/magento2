@@ -1120,7 +1120,10 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     public function hasItemsWithDecimalQty()
     {
         foreach ($this->getAllItems() as $item) {
-            $stockItemDo = $this->stockRegistry->getStockItem($item->getProduct()->getId(), $item->getStore()->getWebsiteId());
+            $stockItemDo = $this->stockRegistry->getStockItem(
+                $item->getProduct()->getId(),
+                $item->getStore()->getWebsiteId()
+            );
             if ($stockItemDo->getItemId() && $stockItemDo->getIsQtyDecimal()) {
                 return true;
             }

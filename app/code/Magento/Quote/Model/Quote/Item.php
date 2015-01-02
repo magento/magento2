@@ -589,7 +589,10 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     {
         if (is_array($option)) {
             $option = $this->_itemOptionFactory->create()->setData($option)->setItem($this);
-        } elseif ($option instanceof \Magento\Framework\Object && !$option instanceof \Magento\Quote\Model\Quote\Item\Option) {
+        } elseif (
+            $option instanceof \Magento\Framework\Object &&
+            !$option instanceof \Magento\Quote\Model\Quote\Item\Option
+        ) {
             $option = $this->_itemOptionFactory->create()->setData(
                 $option->getData()
             )->setProduct(
@@ -668,7 +671,9 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
         if (!isset($this->_optionsByCode[$option->getCode()])) {
             $this->_optionsByCode[$option->getCode()] = $option;
         } else {
-            throw new \Magento\Framework\Model\Exception(__('An item option with code %1 already exists.', $option->getCode()));
+            throw new \Magento\Framework\Model\Exception(
+                __('An item option with code %1 already exists.', $option->getCode())
+            );
         }
         return $this;
     }

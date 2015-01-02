@@ -156,7 +156,7 @@ class QuoteManagement
     protected function resolveItems(QuoteEntity $quote)
     {
         $quoteItems = $quote->getAllItems();
-        for($i = 0; $i < count($quoteItems) - 1; $i++) {
+        for ($i = 0; $i < count($quoteItems) - 1; $i++) {
             for ($j = 0; $j < count($quoteItems) - $i - 1; $j++) {
                 if ($quoteItems[$i]->getParentItemId() == $quoteItems[$j]->getId()) {
                     $tempItem = $quoteItems[$i];
@@ -227,7 +227,8 @@ class QuoteManagement
         }
         $this->orderBuilder->setQuoteId($quote->getId());
         $order = $this->orderBuilder->create();
-        $this->eventManager->dispatch('sales_model_service_quote_submit_before',
+        $this->eventManager->dispatch(
+            'sales_model_service_quote_submit_before',
             [
                 'order' => $order,
                 'quote' => $quote
@@ -236,14 +237,16 @@ class QuoteManagement
         try {
             $order = $this->orderManagement->place($order);
             $quote->setIsActive(false);
-            $this->eventManager->dispatch('sales_model_service_quote_submit_success',
+            $this->eventManager->dispatch(
+                'sales_model_service_quote_submit_success',
                 [
                     'order' => $order,
                     'quote' => $quote
                 ]
             );
         } catch (\Exception $e) {
-            $this->eventManager->dispatch('sales_model_service_quote_submit_failure',
+            $this->eventManager->dispatch(
+                'sales_model_service_quote_submit_failure',
                 [
                     'order' => $order,
                     'quote' => $quote
