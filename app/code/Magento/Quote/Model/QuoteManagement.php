@@ -200,14 +200,20 @@ class QuoteManagement
                 $this->quoteAddressToOrder->convert($quote->getShippingAddress(), $orderData)
             );
             $shippingAddress = $this->quoteAddressToOrderAddress->convert(
-                $quote->getShippingAddress(), ['address_type' => 'shipping']
+                $quote->getShippingAddress(), [
+                    'address_type' => 'shipping',
+                    'email' => $quote->getCustomerEmail()
+                ]
             );
             $addresses[] = $shippingAddress;
             $this->orderBuilder->setShippingAddress($shippingAddress);
 
         }
         $billingAddress = $this->quoteAddressToOrderAddress->convert(
-            $quote->getBillingAddress(), ['address_type' => 'billing']
+            $quote->getBillingAddress(), [
+                'address_type' => 'billing',
+                'email' => $quote->getCustomerEmail()
+            ]
         );
         $addresses[] = $billingAddress;
         $this->orderBuilder->setBillingAddress($billingAddress);

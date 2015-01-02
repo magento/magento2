@@ -177,11 +177,21 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn($baseOrder);
         $this->quoteAddressToOrderAddress->expects($this->at(0))
             ->method('convert')
-            ->with($shippingAddress, ['address_type' => 'shipping'])
+            ->with($shippingAddress,
+                [
+                    'address_type' => 'shipping',
+                    'email' => 'customer@example.com'
+                ]
+            )
             ->willReturn($convertedShippingAddress);
         $this->quoteAddressToOrderAddress->expects($this->at(1))
             ->method('convert')
-            ->with($billingAddress, ['address_type' => 'billing'])
+            ->with($billingAddress,
+                [
+                    'address_type' => 'billing',
+                    'email' => 'customer@example.com'
+                ]
+            )
             ->willReturn($convertedBillingAddress);
         $this->quoteItemToOrderItem->expects($this->once())
             ->method('convert')
@@ -235,6 +245,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\Quote',
             [
                 'setIsActive',
+                'getCustomerEmail',
                 'getAllVisibleItems',
                 'getCustomerIsGuest',
                 'isVirtual',
@@ -280,7 +291,9 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $customer->expects($this->once())
             ->method('getId')
             ->willReturn($customerId);
-
+        $quote->expects($this->atLeastOnce())
+            ->method('getCustomerEmail')
+            ->willReturn('customer@example.com');
         $quote->expects($this->any())
             ->method('getCustomer')
             ->willReturn($customer);

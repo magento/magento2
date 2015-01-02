@@ -195,6 +195,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     protected $quoteRepository;
 
     /**
+     * @var \Magento\Quote\Model\QuoteManagement
+     */
+    protected $quoteManagement;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -244,6 +249,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
+        \Magento\Quote\Model\QuoteManagement $quoteManagement,
         array $data = []
     ) {
         $this->_objectManager = $objectManager;
@@ -269,7 +275,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $this->quoteRepository = $quoteRepository;
         $this->accountManagement = $accountManagement;
         $this->customerMapper = $customerMapper;
-
+        $this->quoteManagement = $quoteManagement;
         parent::__construct($data);
     }
 
@@ -1790,8 +1796,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $quote = $this->getQuote();
         $this->_prepareQuoteItems();
 
-        /** @var $service \Magento\Quote\Model\Service\Quote */
-        $service = $this->_objectManager->create('Magento\Quote\Model\Service\Quote', ['quote' => $quote]);
+        $orderData = [];
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
             $originalId = $oldOrder->getOriginalIncrementId();
@@ -1806,10 +1811,8 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
                 'increment_id' => $originalId . '-' . ($oldOrder->getEditIncrement() + 1)
             ];
             $quote->setReservedOrderId($orderData['increment_id']);
-            $service->setOrderData($orderData);
         }
-
-        $order = $service->submitOrderWithDataObject();
+        $order = $this->quoteManagement->submit($quote, $orderData);
 
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
