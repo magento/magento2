@@ -199,7 +199,7 @@
             "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
             "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/",
             "Magento\\ToolkitFramework\\": "dev/tools/performance-toolkit/framework/Magento/ToolkitFramework/",
-            "Magento\\Setup\\": "setup/module/Magento/Setup/src/"
+            "Magento\\Setup\\": "setup/module/Magento/Setup/"
         }
     }
 }
