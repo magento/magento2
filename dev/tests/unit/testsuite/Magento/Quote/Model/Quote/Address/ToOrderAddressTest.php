@@ -10,7 +10,8 @@ use Magento\TestFramework\Helper\ObjectManager;
 /**
  * Tests Address convert to order
  */
-class ToOrderAddressTest extends \PHPUnit_Framework_TestCase {
+class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
+{
     /**
      * @var \Magento\Framework\Object\Copy | \PHPUnit_Framework_MockObject_MockObject
      */
