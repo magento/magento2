@@ -20,8 +20,9 @@ class QuoteValidator
     {
         if (!$quote->isVirtual()) {
             if ($quote->getShippingAddress()->validate() !== true) {
-                throw new \Magento\Framework\Model\Exception(__(
-                    'Please check the shipping address information. %1',
+                throw new \Magento\Framework\Model\Exception(
+                    __(
+                        'Please check the shipping address information. %1',
                         implode(' ', $quote->getShippingAddress()->validate())
                     )
                 );
@@ -33,7 +34,8 @@ class QuoteValidator
             }
         }
         if ($quote->getBillingAddress()->validate() !== true) {
-            throw new \Magento\Framework\Model\Exception(__(
+            throw new \Magento\Framework\Model\Exception(
+                __(
                     'Please check the billing address information. %1',
                     implode(' ', $quote->getBillingAddress()->validate())
                 )
