@@ -480,7 +480,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 '/dev/tests/static/testsuite/',
                 '/dev/tests/unit/framework/',
                 '/dev/tests/unit/testsuite/',
-                '/setup/module/',
+                '/setup/src/',
             ];
             // Full list of directories where there may be namespace classes
             foreach ($directories as $directory) {
