@@ -42,7 +42,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Sales\Helper\Quote\Item\Compare|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\Compare|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $compareHelper;
 
@@ -104,7 +104,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->compareHelper = $this->getMock(
-            'Magento\Sales\Helper\Quote\Item\Compare',
+            'Magento\Quote\Model\Quote\Item\Compare',
             [],
             [],
             '',

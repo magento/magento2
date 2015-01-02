@@ -2,7 +2,12 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Observer\Backend;
+namespace Magento\Quote\Model\Observer\Backend;
+
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Customer\Model\Config\Share as ShareConfig;
+use Magento\Quote\Model\QuoteRepository;
+use Magento\Framework\Event\Observer;
 
 /**
  * Class CustomerQuote
@@ -10,42 +15,41 @@ namespace Magento\Sales\Model\Observer\Backend;
 class CustomerQuote
 {
     /**
-     * @var \Magento\Customer\Model\Config\Share
+     * @var ShareConfig
      */
-    protected $_config;
+    protected $config;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var QuoteRepository
      */
     protected $quoteRepository;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\Config\Share $config
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param StoreManagerInterface $storeManager
+     * @param ShareConfig $config
+     * @param QuoteRepository $quoteRepository
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Model\Config\Share $config,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
+        StoreManagerInterface $storeManager,
+        ShareConfig $config,
+        QuoteRepository $quoteRepository
     ) {
-        $this->_storeManager = $storeManager;
-        $this->_config = $config;
+        $this->storeManager = $storeManager;
+        $this->config = $config;
         $this->quoteRepository = $quoteRepository;
     }
 
     /**
      * Set new customer group to all his quotes
      *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return void
+     * @param Observer $observer
      */
-    public function dispatch(\Magento\Framework\Event\Observer $observer)
+    public function dispatch(Observer $observer)
     {
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $observer->getEvent()->getCustomerDataObject();
@@ -57,9 +61,9 @@ class CustomerQuote
              * if customer accounts are shared between all of them
              */
             /** @var $websites \Magento\Store\Model\Website[] */
-            $websites = $this->_config->isWebsiteScope()
-                ? [$this->_storeManager->getWebsite($customer->getWebsiteId())]
-                : $this->_storeManager->getWebsites();
+            $websites = $this->config->isWebsiteScope()
+                ? [$this->storeManager->getWebsite($customer->getWebsiteId())]
+                : $this->storeManager->getWebsites();
 
             foreach ($websites as $website) {
                 try {

@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Observer\Backend;
+namespace Magento\Quote\Model\Observer\Backend;
 
 class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,7 +58,7 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
         $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->customerQuote = $objectManager->getObject(
-            'Magento\Sales\Model\Observer\Backend\CustomerQuote',
+            'Magento\Quote\Model\Observer\Backend\CustomerQuote',
             [
                 'storeManager' => $this->storeManagerMock,
                 'config' => $this->configMock,
