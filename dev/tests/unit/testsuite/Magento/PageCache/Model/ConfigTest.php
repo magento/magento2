@@ -87,6 +87,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         null,
                         serialize([['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']])
                     ],
+                    [
+                        \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_VERSION,
+                        \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+                        null,
+                        'v3'
+                    ],
+                    [
+                        \Magento\PageCache\Model\Config::VARNISH_CONFIGURATION_BASE_PATH . '/v3/vcl',
+                        \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+                        null,
+                        'Magento/PageCache/etc/varnish-3.vcl'
+                    ]
                 ]
             )
         );
@@ -106,7 +118,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $test = $this->_model->getVclFile();
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }
-
+    
+    public function testGetVclFilePath()
+    {
+        $this->assertEquals(
+            'Magento/PageCache/etc/varnish-3.vcl',
+            $this->_model->getVclFilePath()
+        );
+    }
+        
     public function testGetTll()
     {
         $this->_coreConfigMock->expects($this->once())->method('getValue')->with(Config::XML_PAGECACHE_TTL);

@@ -6,10 +6,11 @@
 namespace Magento\PageCache\Model\System\Config\Source;
 
 use Magento\Framework\App\Config\ScopeConfigInterface,
-    Magento\Framework\Option\ArrayInterface;
+    Magento\Framework\Option\ArrayInterface,
+    Magento\PageCache\Model\Config;
 
 /**
- * VCL source class
+ * Varnish versions source class
  * 
  */
 class VarnishVersion implements ArrayInterface
@@ -30,7 +31,7 @@ class VarnishVersion implements ArrayInterface
     }
     
     /**
-     * retrieve options array
+     * retrieve varnish versions as option array
      * 
      * @return array
      */
@@ -38,14 +39,14 @@ class VarnishVersion implements ArrayInterface
     {
         $options = [];
         $varnishVersions = $this->scopeConfig->getValue(
-            \Magento\PageCache\Model\Config::VARNISH_CONFIGURATION_PATH
+            Config::VARNISH_CONFIGURATION_BASE_PATH
         );
         foreach ($varnishVersions as $versionId => $varnishVersion) {
             if (!isset($varnishVersion['label'], $varnishVersion['vcl'])) {
                 continue;
             }
             $options[$versionId] = $varnishVersion['label'];
-        }        
+        }
         return $options;
     }
 }
