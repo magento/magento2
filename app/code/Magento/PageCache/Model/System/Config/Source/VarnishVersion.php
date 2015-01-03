@@ -5,9 +5,9 @@
 
 namespace Magento\PageCache\Model\System\Config\Source;
 
-use Magento\Framework\App\Config\ScopeConfigInterface,
-    Magento\Framework\Option\ArrayInterface,
-    Magento\PageCache\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Option\ArrayInterface;
+use Magento\PageCache\Model\Config;
 
 /**
  * Varnish versions source class
