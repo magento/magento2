@@ -15,7 +15,7 @@ class SalePriceEffectiveDateTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\GoogleShopping\Model\Attribute\SalePriceEffectiveDate $model */
         $model = (new \Magento\TestFramework\Helper\ObjectManager($this))
-            ->getObject('\Magento\GoogleShopping\Model\Attribute\SalePriceEffectiveDate');
+            ->getObject('Magento\GoogleShopping\Model\Attribute\SalePriceEffectiveDate');
         $product = $this->getMock('\Magento\Catalog\Model\Product', ['__wakeup'], [], '', false);
         $effectiveDateFrom = $this->getMock(
             '\Magento\GoogleShopping\Model\Attribute\DefaultAttribute',

@@ -17,7 +17,7 @@ class Provider implements TokenProviderInterface
     protected $_consumerFactory;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Token\Factory
+     * @var \Magento\Integration\Model\Oauth\TokenFactory
      */
     protected $_tokenFactory;
 
@@ -32,29 +32,21 @@ class Provider implements TokenProviderInterface
     protected $_date;
 
     /**
-     * @var Token
-     */
-    protected $token;
-
-    /**
      * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
-     * @param \Magento\Integration\Model\Oauth\Token\Factory $tokenFactory
+     * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
      * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param Token $token
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
-        \Magento\Integration\Model\Oauth\Token\Factory $tokenFactory,
+        \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory,
         \Magento\Integration\Helper\Oauth\Data $dataHelper,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        Token $token
+        \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_tokenFactory = $tokenFactory;
         $this->_dataHelper = $dataHelper;
         $this->_date = $date;
-        $this->token = $token;
     }
 
     /**
@@ -293,7 +285,9 @@ class Provider implements TokenProviderInterface
      */
     public function getIntegrationTokenByConsumerId($consumerId)
     {
-        $token = $this->token->loadByConsumerIdAndUserType($consumerId, UserContextInterface::USER_TYPE_INTEGRATION);
+        /** @var \Magento\Integration\Model\Oauth\Token $token */
+        $token = $this->_tokenFactory->create();
+        $token->loadByConsumerIdAndUserType($consumerId, UserContextInterface::USER_TYPE_INTEGRATION);
 
         if (!$token->getId()) {
             throw new \Magento\Framework\Oauth\Exception(

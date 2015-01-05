@@ -34,7 +34,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('isAllowed')
             ->will($this->returnValue($isAllowed));
         $model = $this->objectManager->getObject(
-            '\Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category',
+            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category',
             ['authorization' => $this->authorization]
         );
         switch ($isAllowed) {
@@ -60,7 +60,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetAfterElementHtml()
     {
         $model = $this->objectManager->getObject(
-            '\Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category',
+            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category',
             ['authorization' => $this->authorization]
         );
         $this->authorization->expects($this->any())

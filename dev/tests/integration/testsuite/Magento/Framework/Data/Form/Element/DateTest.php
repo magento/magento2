@@ -24,7 +24,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_elementFactory = $objectManager->create('Magento\Framework\Data\Form\ElementFactory');
-        $this->_localeDate = $objectManager->get('\Magento\Framework\Stdlib\DateTime\Timezone');
+        $this->_localeDate = $objectManager->get('Magento\Framework\Stdlib\DateTime\Timezone');
     }
 
     /**

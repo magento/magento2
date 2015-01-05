@@ -78,7 +78,7 @@ class Page extends Layout
     protected $assetRepo;
 
     /**
-     * @var Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -327,7 +327,7 @@ class Page extends Layout
             $params = array_merge(['_secure' => $this->request->isSecure()], $params);
             return $this->assetRepo->getUrlWithParams($fileId, $params);
         } catch (\Magento\Framework\Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             return $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
         }
     }

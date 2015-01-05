@@ -444,7 +444,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
                 if (!$retry) {
                     $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind);
-                    $this->logger->logException($e);
+                    $this->logger->critical($e);
                     throw $e;
                 }
             }

@@ -84,7 +84,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = $objectManager->getObject(
-            '\Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
+            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
             ['factoryElement' => $factory, 'factoryCollection' => $collectionFactory, 'helper' => $helper]
         );
 

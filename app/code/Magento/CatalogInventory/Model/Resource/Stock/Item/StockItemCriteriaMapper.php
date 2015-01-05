@@ -10,7 +10,7 @@ use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Data\ObjectFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 
 /**

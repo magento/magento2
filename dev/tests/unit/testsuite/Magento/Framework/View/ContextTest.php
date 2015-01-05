@@ -117,7 +117,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLogger()
     {
-        $this->assertInstanceOf('\Magento\Framework\Logger', $this->context->getLogger());
+        $this->assertInstanceOf('\Psr\Log\LoggerInterface', $this->context->getLogger());
     }
 
     public function testGetAppState()

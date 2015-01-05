@@ -159,7 +159,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->getMock('Magento\Framework\App\Resource', [], [], '', false)));
         $contextMock->expects($this->once())
             ->method('getLogger')
-            ->will($this->returnValue($this->getMock('Magento\Framework\Logger', [], [], '', false)));
+            ->will($this->returnValue($this->getMock('Psr\Log\LoggerInterface')));
         $contextMock->expects($this->once())
             ->method('getModulesReader')
             ->will(
@@ -216,7 +216,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false, false),
             $this->getMock('Magento\Framework\Filesystem', [], [], '', false),
             $this->getMock('Magento\Core\Helper\Data', [], [], '', false),
-            $this->getMock('Magento\Framework\Logger', [], [], '', false),
+            $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false),
             $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
             $this->getMock('Magento\Framework\Module\ModuleListInterface'),

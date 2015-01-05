@@ -164,7 +164,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
             $this->_eventManager->dispatch('visitor_activity_save', ['visitor' => $this]);
             $this->session->setVisitorData($this->getData());
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
         return $this;
     }
