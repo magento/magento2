@@ -4,10 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * Class TaxRatesFixture
+ */
 class TaxRatesFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 90;
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $this->application->resetObjectManager();
@@ -41,11 +50,17 @@ class TaxRatesFixture extends \Magento\ToolkitFramework\Fixture
 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Generating tax rates';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [];
@@ -53,4 +68,3 @@ class TaxRatesFixture extends \Magento\ToolkitFramework\Fixture
 }
 
 return new TaxRatesFixture($this);
-

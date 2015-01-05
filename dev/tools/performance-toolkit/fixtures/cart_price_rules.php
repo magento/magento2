@@ -4,10 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * Class CartPriceRulesFixture
+ */
 class CartPriceRulesFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 70;
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $this->application->resetObjectManager();
@@ -162,11 +171,17 @@ class CartPriceRulesFixture extends \Magento\ToolkitFramework\Fixture
 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Generating shopping cart price rules';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [

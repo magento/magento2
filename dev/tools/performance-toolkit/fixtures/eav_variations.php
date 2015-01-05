@@ -6,10 +6,19 @@
 
 define('ATTRIBUTE_SET_ID', 4);
 
+/**
+ * Class EavVariationsFixture
+ */
 class EavVariationsFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 40;
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $this->application->resetObjectManager();
@@ -93,11 +102,17 @@ class EavVariationsFixture extends \Magento\ToolkitFramework\Fixture
         $cache->remove($cacheKey);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Generating configurable EAV variations';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [];

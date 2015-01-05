@@ -4,10 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * Class DisableFormKeyUsageFixture
+ */
 class DisableFormKeyUsageFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 100;
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $this->application->resetObjectManager();
@@ -25,11 +34,17 @@ class DisableFormKeyUsageFixture extends \Magento\ToolkitFramework\Fixture
             ->clean([\Magento\Framework\App\Config::CACHE_TAG]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Disabling form key usage';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [];

@@ -4,10 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * Class CatalogPriceRulesFixture
+ */
 class CatalogPriceRulesFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 80;
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $catalogPriceRulesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('catalog_price_rules', 3);
@@ -116,11 +125,17 @@ class CatalogPriceRulesFixture extends \Magento\ToolkitFramework\Fixture
 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Generating catalog price rules';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [

@@ -4,10 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * Class SimpleProductsFixture
+ */
 class SimpleProductsFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 30;
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $simpleProductsCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('simple_products', 180);
@@ -76,6 +85,13 @@ class SimpleProductsFixture extends \Magento\ToolkitFramework\Fixture
         $import->importSource();
     }
 
+    /**
+     * Get pattern for product import
+     *
+     * @param Closure|int|string $productWebsiteClosure
+     * @param Closure|int|string $productCategoryClosure
+     * @return array
+     */
     protected function getPattern($productWebsiteClosure, $productCategoryClosure)
     {
         return [
@@ -109,11 +125,17 @@ class SimpleProductsFixture extends \Magento\ToolkitFramework\Fixture
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Generating simple products';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [

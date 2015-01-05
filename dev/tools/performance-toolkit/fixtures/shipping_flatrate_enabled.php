@@ -4,10 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * Class EnableShippingFlatRateFixture
+ */
 class EnableShippingFlatRateFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 110;
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $this->application->resetObjectManager();
@@ -25,11 +34,17 @@ class EnableShippingFlatRateFixture extends \Magento\ToolkitFramework\Fixture
             ->clean([\Magento\Framework\App\Config::CACHE_TAG]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Enabling Flat Rate shipping method';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [];

@@ -4,10 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * Class StoresFixture
+ */
 class StoresFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 10;
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $websitesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('websites', 2);
@@ -146,11 +155,17 @@ class StoresFixture extends \Magento\ToolkitFramework\Fixture
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Generating websites, stores and store views';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [

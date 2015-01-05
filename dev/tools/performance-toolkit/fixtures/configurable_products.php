@@ -4,10 +4,21 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * Class ConfigurableProductsFixture
+ */
 class ConfigurableProductsFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 50;
 
+    /**
+     * Get CSV template headers
+     *
+     * @return array
+     */
     protected function getHeaders()
     {
         return [
@@ -123,6 +134,14 @@ class ConfigurableProductsFixture extends \Magento\ToolkitFramework\Fixture
         ];
     }
 
+    /**
+     * Get CSV template rows
+     *
+     * @param Closure|mixed $productCategory
+     * @param Closure|mixed $productRootCategory
+     * @param Closure|mixed $productWebsite
+     * @return array
+     */
     protected function getRows($productCategory, $productRootCategory, $productWebsite)
     {
         return [
@@ -796,6 +815,9 @@ class ConfigurableProductsFixture extends \Magento\ToolkitFramework\Fixture
 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $configurablesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('configurable_products', 90);
@@ -874,11 +896,17 @@ class ConfigurableProductsFixture extends \Magento\ToolkitFramework\Fixture
 
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Generating configurable products';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [

@@ -44,7 +44,7 @@ try {
     foreach ($application->getFixtures() as $fixture) {
         echo $fixture->getActionTitle() . '... ';
         $startTime = microtime(true);
-//        $fixture->execute();
+        $fixture->execute();
         $endTime = microtime(true);
         $resultTime = $endTime - $startTime;
         echo ' done in ' . gmdate('H:i:s', $resultTime) . PHP_EOL;

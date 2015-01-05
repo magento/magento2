@@ -4,10 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * Class CategoriesFixture
+ */
 class CategoriesFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 20;
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $categoriesNumber = \Magento\ToolkitFramework\Config::getInstance()->getValue('categories', 18);
@@ -66,11 +75,17 @@ class CategoriesFixture extends \Magento\ToolkitFramework\Fixture
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Generating categories';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [
@@ -80,4 +95,3 @@ class CategoriesFixture extends \Magento\ToolkitFramework\Fixture
 }
 
 return new CategoriesFixture($this);
-

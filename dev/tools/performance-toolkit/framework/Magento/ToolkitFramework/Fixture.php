@@ -1,7 +1,14 @@
 <?php
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
 
 namespace Magento\ToolkitFramework;
 
+/**
+ * Class Fixture
+ * @package Magento\ToolkitFramework
+ */
 abstract class Fixture
 {
     /**
@@ -22,12 +29,32 @@ abstract class Fixture
         $this->application = $application;
     }
 
+    /**
+     * Execute fixture
+     *
+     * @return void
+     */
     abstract public function execute();
 
+    /**
+     * Get fixture action description
+     *
+     * @return string
+     */
     abstract public function getActionTitle();
 
+    /**
+     * Introduce parameters labels
+     *
+     * @return array
+     */
     abstract public function introduceParamLabels();
 
+    /**
+     * Get fixture priority
+     *
+     * @return int
+     */
     public function getPriority()
     {
         return $this->priority;

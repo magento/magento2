@@ -4,10 +4,19 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * Class CustomersFixture
+ */
 class CustomersFixture extends \Magento\ToolkitFramework\Fixture
 {
+    /**
+     * @var int
+     */
     protected $priority = 60;
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute()
     {
         $customersNumber = \Magento\ToolkitFramework\Config::getInstance()->getValue('customers', 10);
@@ -88,11 +97,17 @@ class CustomersFixture extends \Magento\ToolkitFramework\Fixture
         $import->importSource();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActionTitle()
     {
         return 'Generating customers';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function introduceParamLabels()
     {
         return [
