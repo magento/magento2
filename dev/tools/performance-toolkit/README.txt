@@ -26,15 +26,17 @@ Attempting to run with Performance Metrics Collector enabled without appropriate
 1. Run via console
 Scenario can accept parameters that are described bellow in format <parameter_name:default_value>:
 
-<host:''> URL component 'host' of application being tested (URL or IP).
-<base_path:'/'> Base path for tested site.
+<host:localhost> URL component 'host' of application being tested (URL or IP).
+<base_path:/> Base path for tested site.
 <users:100> Number of concurrent users. Recommended  amount is 100. Minimal amount is 10.
 <ramp_period:300> Ramp period (seconds). Period the request will be distributed within.
 <orders:0> Number of orders in the period specified in the current allocation. If <orders> is specified, the <users> parameter will be recalculated.
 <report_save_path:./> Path where reports will be saved. Reports will be saved in current working directory by default.
-<admin_path:backend/> Admin backend path. Default is backend.
-<admin_user:admin/> Admin backend user. Default is admin.
-<admin_password:123123q/> Admin backend password. Default is 123123q.
+<admin_path:admin> Path to admin panel.
+<admin_user:admin> Admin name.
+<admin_password:123123q> Admin password.
+<think_time_deviation:1000> Deviation (ms) for "think time" emulation.
+<think_time_delay_offset:2000> Constant delay offset (ms) for "think time" emulation.
 <view_product_add_to_cart_percent:62/> Percentage of users that will only reach the add to cart stage. Default is 62.
 <view_catalog_percent:30/> Percentage of users that will only reach the view catalog stage. Default is 30.
 <guest_checkout_percent:4/> Percentage of users that will reach the guest checkout stage. Default is 4.
@@ -45,7 +47,7 @@ Scenario can accept parameters that are described bellow in format <parameter_na
 <web_server_1_ip:10.62.51.185/> Web Server 1 IP (for jMeter Performance Metrics). Default is 10.62.51.185.
 <web_server_2_ip:10.62.51.186/> Web Server 2 IP (for jMeter Performance Metrics). Default is 10.62.51.186.
 
-All parameters must be passed to command line with "J" prefix: "-J<parameter_name>=<parameter_value>"
+Necessary parameters must be passed to command line with "J" prefix: "-J<parameter_name>=<parameter_value>"
 
 Example:
 > cd /directory_of_jMeter/bin/
