@@ -104,4 +104,24 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($variables['success']);
         $this->assertStringStartsWith('exception \'LogicException\' with message \'' . $e, $variables['console'][0]);
     }
+
+    public function testDispatch()
+    {
+        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
+        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
+        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+
+        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->will($this->returnValue($mvcEvent));
+        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->will($this->returnValue($mvcEvent));
+        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)
+            ->will($this->returnValue($mvcEvent));
+        $mvcEvent->expects($this->any())->method('getRouteMatch')->will($this->returnValue($routeMatch));
+
+        $contentArray = '{"config": { "address": { "base_url": "http://123.45.678.12"}}}';
+        $request->expects($this->any())->method('getContent')->will($this->returnValue($contentArray));
+        $this->controller->setEvent($mvcEvent);
+        $this->controller->dispatch($request, $response);
+        $this->controller->startAction();
+    }
 }
