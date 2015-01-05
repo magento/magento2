@@ -40,7 +40,7 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
         $this->objectCopyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
         $this->orderPaymentBuilderMock = $this->getMock(
             'Magento\Sales\Api\Data\OrderPaymentDataBuilder',
-            [],
+            ['populateWithArray', 'create', 'setAdditionalInformation'],
             [],
             '',
             false

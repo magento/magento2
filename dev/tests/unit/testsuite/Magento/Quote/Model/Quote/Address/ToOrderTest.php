@@ -36,7 +36,13 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderDataBuilderMock = $this->getMock('Magento\Sales\Api\Data\OrderDataBuilder', [], [], '', false);
+        $this->orderDataBuilderMock = $this->getMock(
+            'Magento\Sales\Api\Data\OrderDataBuilder',
+            ['populateWithArray', 'create', 'setStoreId', 'setQuoteId'],
+            [],
+            '',
+            false
+        );
         $this->objectCopyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
         $this->orderInterfaceMock = $this->getMock('Magento\Sales\Api\Data\OrderInterface', [], [], '', false);
         $objectManager = new ObjectManager($this);
