@@ -136,20 +136,17 @@
             .actions {
                 margin-top: 40px;
             }
+            .field.street {
+                .field.additional {
+                    .label {
+                        &:extend(.abs-visually-hidden all);
+                    }
+                }
+            }
         }
 
         .fieldset > .field:last-of-type {
             margin-bottom: 0;
-        }
-    }
-
-    .step-content {
-        .field.street {
-            .field.additional {
-                .label {
-                    &:extend(.abs-visually-hidden all);
-                }
-            }
         }
     }
 
@@ -179,14 +176,14 @@
     }
 
     .opc-payment-additional {
-        margin: 0 0 10px 15px;
+        margin: 0 0 @indent-s-base 15px;
         + .opc-payment {
-            margin: 40px 0 0;
+            margin: @indent-xl-base 0 0;
         }
     }
 
     .action.primary.checkout {
-        margin: 0 0 20px;
+        margin: 0 0 @indent-base;
     }
 
     .hidden {
@@ -194,7 +191,46 @@
     }
 
     .actions-toolbar {
-        margin: 40px 0 0;
+        margin: @indent-xl-base 0 0;
+    }
+
+    .field {
+        &.month {
+            padding-right: @indent-s-base;
+            .control {
+                position: relative;
+                &:after {
+                    content: "/";
+                    color: @color-primary-light;
+                    position: absolute;
+                    right: -9px;
+                    top: @indent-xs-base;
+                }
+            }
+        }
+        &.cvv {
+            width: 30%;
+            .control {
+                position: relative;
+            }
+            .note {
+                position: absolute;
+                right: -23px;
+                top: 0;
+                &:before {
+                    display: none;
+                }
+                > a {
+                    .icon-font(
+                    @_icon-font-content: @icon-help,
+                    @_icon-font-size: 16px,
+                    @_icon-font-color: @color-primary-light,
+                    @_icon-font-color-hover: @color-primary,
+                    @_icon-font-text-hide: true
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -262,45 +298,6 @@
         margin-right: @indent-xs-base;
         vertical-align: middle;
     }
-
-    .field {
-        &.month {
-            padding-right: @indent-s-base;
-            .control {
-                position: relative;
-                &:after {
-                    content: "/";
-                    .css(color, @color-primary-light);
-                    position: absolute;
-                    right: -9px;
-                    top: @indent-xs-base;
-                }
-            }
-        }
-        &.cvv {
-            width: 30%;
-            .control {
-                position: relative;
-            }
-            .note {
-                position: absolute;
-                right: -23px;
-                top: 0;
-                &:before {
-                    display: none;
-                }
-                > a {
-                    .icon-font(
-                    @_icon-font-content: @icon-help,
-                    @_icon-font-size: 16px,
-                    @_icon-font-color: @color-primary-light,
-                    @_icon-font-color-hover: @color-primary,
-                    @_icon-font-text-hide: true
-                    )
-                }
-            }
-        }
-    }
 }
 
 // Order review
@@ -366,7 +363,7 @@
         .font-size(18);
         font-weight: @font-weight-light;
         margin: 0;
-        padding: 10px 15px;
+        padding: @indent-s-base 15px;
         strong {
             font-weight: @font-weight-base;
         }
@@ -411,7 +408,7 @@
             font-weight: @font-weight-light;
         }
         > .content {
-             margin: 0 0 10px;
+             margin: 0 0 @indent-s-base;
             &:last-child {
                 margin-bottom: 0;
             }
@@ -424,10 +421,10 @@
         }
         .data.table {
             th {
-                padding: 5px 10px 5px 0;
+                padding: @indent-xs-base @indent-s-base @indent-xs-base 0;
             }
             td {
-                padding: 5px 0;
+                padding: @indent-xs-base 0;
             }
         }
     }
@@ -472,15 +469,16 @@
                 td:not(:last-child) {
                     border: none;
                 }
-                td:last-child {
-                    border-top: none;
-                    border-bottom: @border-width-base solid @border-color-base;
-                }
                 &:first-child td:first-child {
                     padding-top: 0;
                 }
             }
             &:extend(.abs-checkout-order-review all);
+        }
+
+        .table.table-order-review:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td:last-child {
+            border-top: none;
+            border-bottom: none;
         }
     }
 }
@@ -522,9 +520,20 @@
                 }
             }
 
-            .payments .field {
-                &:extend(.abs-form-field-revert-column-1-s all);
+            .payments,
+            .order-review {
+                .field {
+                    &:extend(.abs-form-field-revert-column-1-s all);
+                    &:nth-last-child(1),
+                    &:nth-last-child(2) {
+                        margin-bottom: @indent-base;
+                    }
+                    &:last-child {
+                        margin: 0;
+                    }
+                }
             }
+
             .toolbar {
                 text-align: left;
             }
@@ -557,23 +566,26 @@
     }
 
     // Payment methods
-    .methods-payment {
-        .item-content > .fieldset {
-            margin: @indent-s-base 0 @indent-l-base @opc-margin-left;
-            padding: 0;
-            width: 46%;
-            .field {
-                &.cvv {
-                    display: inline-block;
-                    width: 30%;
-                }
-                &.date {
-                    display: inline-block;
-                    width: 70%;
-                }
-                &.month {
-                    padding-right: 12px;
-                }
+    .methods-payment .item-content > .fieldset,
+    .order-review .fieldset {
+        margin: @indent-s-base 0 @indent-l-base @opc-margin-left;
+        padding: 0;
+        width: 46%;
+        .field .field {
+            &.cvv {
+                display: inline-block;
+                width: 30%;
+            }
+            &.date {
+                display: inline-block;
+                width: 70%;
+            }
+            &.month {
+                padding-right: 12px;
+            }
+            &.month,
+            &.year {
+                margin-bottom: 0;
             }
         }
     }

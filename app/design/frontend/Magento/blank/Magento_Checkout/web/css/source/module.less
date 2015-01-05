@@ -109,14 +109,19 @@
                 &:after {
                     text-align: center;
                 }
-                > .choice {
-                    margin-top: @form-field-vertical-indent;
-                }
                 .field:not(:first-child) {
                     margin: @indent-base 0 0;
                 }
                 > .field.choice {
                     margin: @form-field-vertical-indent 0 0;
+                }
+                .field {
+                    &.month {
+                        padding-right: @indent-s-base;
+                    }
+                    &.year {
+                        margin-top: 0;
+                    }
                 }
             }
             .form:not(.login),
@@ -128,14 +133,11 @@
             .actions {
                 margin-top: @indent-base;
             }
-        }
-    }
-
-    .step-content {
-        .field.street {
-            .field.additional {
-                .label {
-                  &:extend(.abs-visually-hidden all);
+            .field.street {
+                .field.additional {
+                    .label {
+                        &:extend(.abs-visually-hidden all);
+                    }
                 }
             }
         }
@@ -229,9 +231,6 @@
     img {
         vertical-align: middle;
     }
-    .field.month {
-        padding-right: @indent-s-base;
-    }
 }
 
 // Payment methods
@@ -245,8 +244,7 @@
             padding: 15px 0;
             .field {
                 .font-size(@font-size-base);
-                &:first-child,
-                &.year {
+                &:first-child {
                     margin-top: 0;
                 }
             }
@@ -263,9 +261,6 @@
     img {
         margin-right: @indent-xs-base;
         vertical-align: middle;
-    }
-    .field.month {
-        padding-right: @indent-s-base;
     }
 }
 
