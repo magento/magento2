@@ -35,7 +35,7 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return int
      */
-    public function getShareable();
+    public function getIsShareable();
 
     /**
      * Link price
@@ -66,5 +66,4 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableResourceInfo
      */
     public function getLinkResource();
-
 }

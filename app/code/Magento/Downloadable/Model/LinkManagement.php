@@ -22,7 +22,7 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
     protected $downloadableType;
 
     /**
-     * @var \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkInfoBuilder
+     * @var \Magento\Downloadable\Api\Data\LinkDataBuilder
      */
     protected $linkBuilder;
 
@@ -39,14 +39,15 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Downloadable\Model\Product\Type $downloadableType
-     * @param \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkInfoBuilder $linkBuilder
+     * @param \Magento\Downloadable\Api\Data\LinkDataBuilder $linkBuilder
      * @param \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfoBuilder $sampleBuilder
      * @param \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableResourceInfoBuilder $resourceBuilder
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Downloadable\Model\Product\Type $downloadableType,
-        \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkInfoBuilder $linkBuilder,
+      //  \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkInfoBuilder $linkBuilder,
+        \Magento\Downloadable\Api\Data\LinkDataBuilder $linkBuilder,
         \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfoBuilder $sampleBuilder,
         \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableResourceInfoBuilder $resourceBuilder
     ) {
@@ -84,7 +85,7 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
         $this->setBasicFields($resourceData, $this->linkBuilder);
         $this->linkBuilder->setPrice($resourceData->getPrice());
         $this->linkBuilder->setNumberOfDownloads($resourceData->getNumberOfDownloads());
-        $this->linkBuilder->setShareable($resourceData->getIsShareable());
+        $this->linkBuilder->setIsShareable($resourceData->getIsShareable());
         $this->linkBuilder->setLinkResource($this->entityInfoGenerator('link', $resourceData));
         return $this->linkBuilder->create();
     }
@@ -93,7 +94,7 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
      * Subroutine for buildLink and buildSample
      *
      * @param \Magento\Downloadable\Model\Link|\Magento\Downloadable\Model\Sample $resourceData
-     * @param \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkInfoBuilder|\Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfoBuilder $builder
+     * @param \Magento\Downloadable\Api\Data\LinkDataBuilder|\Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfoBuilder $builder
      * @return null
      */
     protected function setBasicFields($resourceData, $builder)
@@ -130,4 +131,33 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
         $this->resourceBuilder->setFile($resourceData->getData($entityType . '_file'));
         return $this->resourceBuilder->create();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSamples($productSku)
+    {
+        $sampleList = [];
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->productRepository->get($productSku);
+        $samples = $this->downloadableType->getSamples($product);
+        /** @var \Magento\Downloadable\Model\Sample $sample */
+        foreach ($samples as $sample) {
+            $sampleList[] = $this->buildSample($sample);
+        }
+        return $sampleList;
+    }
+
+    /**
+     * Build a sample data object
+     *
+     * @param \Magento\Downloadable\Model\Sample $resourceData
+     * @return \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfo
+     */
+    protected function buildSample($resourceData)
+    {
+        $this->setBasicFields($resourceData, $this->sampleBuilder);
+        return $this->sampleBuilder->create();
+    }
+
 }

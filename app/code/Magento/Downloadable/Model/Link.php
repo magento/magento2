@@ -4,6 +4,8 @@
  */
 namespace Magento\Downloadable\Model;
 
+use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Downloadable\Model\Resource\Link as Resource;
 
 /**
@@ -13,12 +15,6 @@ use Magento\Downloadable\Model\Resource\Link as Resource;
  * @method Resource getResource()
  * @method int getProductId()
  * @method Link setProductId(int $value)
- * @method int getSortOrder()
- * @method Link setSortOrder(int $value)
- * @method int getNumberOfDownloads()
- * @method Link setNumberOfDownloads(int $value)
- * @method int getIsShareable()
- * @method Link setIsShareable(int $value)
  * @method string getLinkUrl()
  * @method Link setLinkUrl(string $value)
  * @method string getLinkFile()
@@ -34,7 +30,7 @@ use Magento\Downloadable\Model\Resource\Link as Resource;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Link extends \Magento\Framework\Model\AbstractModel
+class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Downloadable\Api\Data\LinkInterface
 {
     const XML_PATH_LINKS_TITLE = 'catalog/downloadable/links_title';
 
@@ -51,8 +47,20 @@ class Link extends \Magento\Framework\Model\AbstractModel
     const LINK_SHAREABLE_CONFIG = 2;
 
     /**
+     * @var MetadataServiceInterface
+     */
+    protected $metadataService;
+
+    /**
+     * @var AttributeDataBuilder
+     */
+    protected $customAttributeBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -60,11 +68,13 @@ class Link extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $metadataService, $customAttributeBuilder, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -140,4 +150,68 @@ class Link extends \Magento\Framework\Model\AbstractModel
     {
         return $this->_getResource()->getSearchableData($productId, $storeId);
     }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTitle()
+    {
+        return $this->getData('title');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getPrice()
+    {
+        return $this->getData('price');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getLinkResource()
+    {
+        return $this->getData('link_resource');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleResource()
+    {
+        return $this->getData('sample_resource');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getIsShareable()
+    {
+        return $this->getData('is_sharable');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSortOrder()
+    {
+        return $this->getData('sort_order');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getNumberOfDownloads()
+    {
+        return $this->getData('number_of_downloads');
+    }
+
 }
