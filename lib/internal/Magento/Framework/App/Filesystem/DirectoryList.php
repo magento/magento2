@@ -111,7 +111,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     {
         $result = [
             self::ROOT => [parent::PATH => ''],
-            self::APP => [parent::PATH => 'app'],
+            self::APP => [parent::PATH => 'vendor'],
             self::MODULES => [parent::PATH => 'vendor/magento'],
             self::CONFIG => [parent::PATH => 'app/etc'],
             self::LIB_INTERNAL => [parent::PATH => 'lib/internal'],
