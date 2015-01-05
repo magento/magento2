@@ -23,19 +23,6 @@ try {
         exit(0);
     }
 
-    $config = \Magento\ToolkitFramework\Config::getInstance();
-    $config->loadConfig(\Magento\ToolkitFramework\Helper\Cli::getOption('profile'));
-    $config->loadLabels(__DIR__ . '/framework/labels.xml');
-
-    $labels = $config->getLabels();
-
-    echo 'Generating profile with following params:' . PHP_EOL;
-    foreach ($labels as $configKey => $label) {
-        echo ' |- ' . $label . ': ' . $config->getValue($configKey) . PHP_EOL;
-    }
-
-    $files = \Magento\ToolkitFramework\FixtureSet::getInstance()->getFixtures();
-
     $logWriter = new \Zend_Log_Writer_Stream('php://output');
     $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
     $logger = new \Zend_Log($logWriter);
@@ -44,11 +31,20 @@ try {
 
     $application = new \Magento\ToolkitFramework\Application($applicationBaseDir, $shell);
     $application->bootstrap();
+    $application->loadFixtures();
 
-    foreach ($files as $fixture) {
-        echo $fixture['action'] . '... ';
+    $config = \Magento\ToolkitFramework\Config::getInstance();
+    $config->loadConfig(\Magento\ToolkitFramework\Helper\Cli::getOption('profile'));
+
+    echo 'Generating profile with following params:' . PHP_EOL;
+    foreach ($application->getParamLabels() as $configKey => $label) {
+        echo ' |- ' . $label . ': ' . $config->getValue($configKey) . PHP_EOL;
+    }
+
+    foreach ($application->getFixtures() as $fixture) {
+        echo $fixture->getActionTitle() . '... ';
         $startTime = microtime(true);
-        $application->applyFixture(__DIR__ . '/fixtures/' . $fixture['file']);
+//        $fixture->execute();
         $endTime = microtime(true);
         $resultTime = $endTime - $startTime;
         echo ' done in ' . gmdate('H:i:s', $resultTime) . PHP_EOL;

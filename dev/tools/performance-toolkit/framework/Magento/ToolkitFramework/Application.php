@@ -19,6 +19,16 @@ class Application
     const AREA_CODE = 'adminhtml';
 
     /**
+     * Fixtures directory
+     */
+    const FIXTURES_DIR = '/../../../fixtures';
+
+    /**
+     * Fixtures file name pattern
+     */
+    const FIXTURE_PATTERN = '*.php';
+
+    /**
      * Application object
      *
      * @var \Magento\Framework\AppInterface
@@ -38,9 +48,16 @@ class Application
     /**
      * List of fixtures applied to the application
      *
-     * @var array
+     * @var \Magento\ToolkitFramework\Fixture[]
      */
     protected $_fixtures = [];
+
+    /**
+     * Parameters labels
+     *
+     * @var array
+     */
+    protected $_paramLabels = [];
 
     /**
      * @var string
@@ -131,6 +148,55 @@ class Application
 
         $this->reindex()
             ->_updateFilesystemPermissions();
+    }
+
+
+    /**
+     * Load fixtures
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function loadFixtures()
+    {
+        if (!is_readable(__DIR__ . self::FIXTURES_DIR)) {
+            throw new \Exception(
+                'Fixtures set directory `' . __DIR__ . self::FIXTURES_DIR . '` is not readable or does not exists.'
+            );
+        }
+        $files = glob(__DIR__ . self::FIXTURES_DIR . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN);
+        var_dump($files);
+        foreach ($files as $file) {
+            /** @var \Magento\ToolkitFramework\Fixture $fixture */
+            $fixture = require realpath($file);
+            $this->_fixtures[$fixture->getPriority()] = $fixture;
+        }
+        var_dump(array_keys($this->_fixtures));
+        ksort($this->_fixtures);
+        foreach ($this->_fixtures as $fixture) {
+            $this->_paramLabels = array_merge($this->_paramLabels, $fixture->introduceParamLabels());
+        }
+        return $this;
+    }
+
+    /**
+     * Get param labels
+     *
+     * @return array
+     */
+    public function getParamLabels()
+    {
+        return $this->_paramLabels;
+    }
+
+    /**
+     * Get fixtures
+     *
+     * @return Fixture[]
+     */
+    public function getFixtures()
+    {
+        return $this->_fixtures;
     }
 
     /**
