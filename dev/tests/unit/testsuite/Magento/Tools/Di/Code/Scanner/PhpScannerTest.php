@@ -34,7 +34,7 @@ class PhpScannerTest extends \PHPUnit_Framework_TestCase
             $this->_logMock = $this->getMock('\Magento\Tools\Di\Compiler\Log\Log', [], [], '', false)
         );
         $this->_testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');
-        $this->_testFiles = [$this->_testDir . '/app/code/Magento/SomeModule/Helper/Test.php'];
+        $this->_testFiles = [$this->_testDir . '/vendor/magento/Magento/SomeModule/Helper/Test.php'];
     }
 
     public function testCollectEntities()

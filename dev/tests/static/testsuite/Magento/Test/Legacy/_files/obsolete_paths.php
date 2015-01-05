@@ -221,7 +221,7 @@ return [
     ['/dev/tests/unit/testsuite/Magento/Object', '/dev/tests/unit/testsuite/Magento/Framework/Object'],
     ['/dev/tests/integration/testsuite/Magento/Object', '/dev/tests/integration/testsuite/Magento/Framework/Object'],
     ['/downloader'],
-    ['/app/code/Magento/Install'],
+    ['/vendor/magento/Magento/Install'],
     ['/dev/tests/integration/testsuite/Magento/Install'],
     ['/dev/tests/static/testsuite/Magento/Test/Integrity/Magento/Install'],
     ['/dev/tests/integration/testsuite/Magento/Test/Integrity/Modular/InstallWizardConfigFilesTest.php'],
@@ -231,6 +231,6 @@ return [
     ['/dev/shell/uninstall.php'],
     ['/app/design/install'],
     ['/app/etc/local.xml', '/app/etc/config.php'],
-    ['/app/code/Magento/RecurringPayment'],
-    ['/app/code/Magento/PayPalRecurringPayment'],
+    ['/vendor/magento/Magento/RecurringPayment'],
+    ['/vendor/magento/Magento/PayPalRecurringPayment'],
 ];

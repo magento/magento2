@@ -5,7 +5,7 @@
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+        xsi:noNamespaceSchemaLocation="../../../../../../../../../vendor/magento/Magento/Webapi/etc/webapi.xsd">
     <route url="/V1/testmodule1/:id" method="GET">
         <service class="Magento\TestModule1\Service\V1\AllSoapAndRestInterface" method="item"/>
         <resources>

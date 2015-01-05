@@ -105,14 +105,14 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'Test_Module',
             'etc'
         )->will(
-            $this->returnValue('app/code/Test/Module/etc')
+            $this->returnValue('vendor/magento/Test/Module/etc')
         );
-        $this->assertEquals('app/code/Test/Module/etc', $this->_model->getModuleDir('etc', 'Test_Module'));
+        $this->assertEquals('vendor/magento/Test/Module/etc', $this->_model->getModuleDir('etc', 'Test_Module'));
     }
 
     public function testGetModuleDirWhenCustomDirIsSet()
     {
-        $moduleDir = 'app/code/Test/Module/etc/custom';
+        $moduleDir = 'vendor/magento/Test/Module/etc/custom';
         $this->_dirsMock->expects($this->never())->method('getDir');
         $this->_model->setModuleDir('Test_Module', 'etc', $moduleDir);
         $this->assertEquals($moduleDir, $this->_model->getModuleDir('etc', 'Test_Module'));
@@ -120,7 +120,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfigurationFiles()
     {
-        $configPath = 'app/code/Test/Module/etc/config.xml';
+        $configPath = 'vendor/magento/Test/Module/etc/config.xml';
         $modulesDirectoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\ReadInterface');
         $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $modulesDirectoryMock->expects($this->any())->method('isExist')
@@ -136,14 +136,14 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             $this->_filesystemMock,
             new FileIteratorFactory()
         );
-        $model->setModuleDir('Test_Module', 'etc', 'app/code/Test/Module/etc');
+        $model->setModuleDir('Test_Module', 'etc', 'vendor/magento/Test/Module/etc');
 
         $this->assertEquals($configPath, $model->getConfigurationFiles('config.xml')->key());
     }
 
     public function testGetComposerJsonFiles()
     {
-        $configPath = 'app/code/Test/Module/composer.json';
+        $configPath = 'vendor/magento/Test/Module/composer.json';
         $modulesDirectoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\ReadInterface');
         $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
         $modulesDirectoryMock->expects($this->any())->method('isExist')
@@ -159,7 +159,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             $this->_filesystemMock,
             new FileIteratorFactory()
         );
-        $model->setModuleDir('Test_Module', '', 'app/code/Test/Module');
+        $model->setModuleDir('Test_Module', '', 'vendor/magento/Test/Module');
 
         $this->assertEquals($configPath, $model->getComposerJsonFiles()->key());
     }

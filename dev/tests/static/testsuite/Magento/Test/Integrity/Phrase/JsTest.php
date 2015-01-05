@@ -40,7 +40,7 @@ class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 
         $registeredPhrases = $this->_getRegisteredPhrases();
 
-        require_once BP . '/app/code/Magento/Backend/App/Area/FrontNameResolver.php';
+        require_once BP . '/vendor/magento/Magento/Backend/App/Area/FrontNameResolver.php';
         foreach ($this->_getJavascriptPhrases(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE) as $phrase) {
             if (!in_array($phrase['phrase'], $registeredPhrases)) {
                 $unregisteredMessages[] = sprintf(
@@ -104,7 +104,7 @@ class JsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
     protected function _getRegisteredPhrases()
     {
         $jsHelperFile = realpath(
-            __DIR__ . '/../../../../../../../../app/code/Magento/Translation/Model/Js/DataProvider.php'
+            __DIR__ . '/../../../../../../../../vendor/magento/Magento/Translation/Model/Js/DataProvider.php'
         );
 
         $this->_phraseCollector->parse($jsHelperFile);

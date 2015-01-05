@@ -45,8 +45,8 @@ class ReverseResolverTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap(
                 [
-                    ['Fixture_ModuleOne', '', 'app/code/Fixture/ModuleOne'],
-                    ['Fixture_ModuleTwo', '', 'app/code/Fixture/ModuleTwo'],
+                    ['Fixture_ModuleOne', '', 'vendor/magento/Fixture/ModuleOne'],
+                    ['Fixture_ModuleTwo', '', 'vendor/magento/Fixture/ModuleTwo'],
                 ]
             )
         );
@@ -56,18 +56,18 @@ class ReverseResolverTest extends \PHPUnit_Framework_TestCase
     public function getModuleNameDataProvider()
     {
         return [
-            'module root dir' => ['app/code/Fixture/ModuleOne', 'Fixture_ModuleOne'],
-            'module root dir trailing slash' => ['app/code/Fixture/ModuleOne/', 'Fixture_ModuleOne'],
+            'module root dir' => ['vendor/magento/Fixture/ModuleOne', 'Fixture_ModuleOne'],
+            'module root dir trailing slash' => ['vendor/magento/Fixture/ModuleOne/', 'Fixture_ModuleOne'],
             'module root dir backward slash' => ['app/code\\Fixture\\ModuleOne', 'Fixture_ModuleOne'],
-            'dir in module' => ['app/code/Fixture/ModuleTwo/etc', 'Fixture_ModuleTwo'],
-            'dir in module trailing slash' => ['app/code/Fixture/ModuleTwo/etc/', 'Fixture_ModuleTwo'],
-            'dir in module backward slash' => ['app/code/Fixture/ModuleTwo\\etc', 'Fixture_ModuleTwo'],
-            'file in module' => ['app/code/Fixture/ModuleOne/etc/config.xml', 'Fixture_ModuleOne'],
+            'dir in module' => ['vendor/magento/Fixture/ModuleTwo/etc', 'Fixture_ModuleTwo'],
+            'dir in module trailing slash' => ['vendor/magento/Fixture/ModuleTwo/etc/', 'Fixture_ModuleTwo'],
+            'dir in module backward slash' => ['vendor/magento/Fixture/ModuleTwo\\etc', 'Fixture_ModuleTwo'],
+            'file in module' => ['vendor/magento/Fixture/ModuleOne/etc/config.xml', 'Fixture_ModuleOne'],
             'file in module backward slash' => [
                 'app\\code\\Fixture\\ModuleOne\\etc\\config.xml',
                 'Fixture_ModuleOne',
             ],
-            'unknown module' => ['app/code/Unknown/Module', null]
+            'unknown module' => ['vendor/magento/Unknown/Module', null]
         ];
     }
 }

@@ -48,7 +48,7 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
 
     public function getSchemas()
     {
-        $codeSchemas = $this->_getFiles(BP . '/app/code/Magento', '*.xsd');
+        $codeSchemas = $this->_getFiles(BP . '/vendor/magento/Magento', '*.xsd');
         $libSchemas = $this->_getFiles(BP . '/lib/Magento', '*.xsd');
         return $this->_dataSet(array_merge($codeSchemas, $libSchemas));
     }
