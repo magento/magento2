@@ -27,6 +27,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateVirtualProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Category fixture
      *

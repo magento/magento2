@@ -23,6 +23,11 @@ use Mtf\TestCase\Injectable;
  */
 class SearchEntityResultsTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * CMS index page.
      *

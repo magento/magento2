@@ -34,6 +34,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateDownloadableProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Downloadable product fixture
      *

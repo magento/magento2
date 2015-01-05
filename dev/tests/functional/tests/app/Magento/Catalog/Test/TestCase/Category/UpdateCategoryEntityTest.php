@@ -30,6 +30,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateCategoryEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog category index page
      *

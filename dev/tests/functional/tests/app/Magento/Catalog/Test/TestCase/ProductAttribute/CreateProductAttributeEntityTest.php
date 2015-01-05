@@ -20,11 +20,16 @@ use Mtf\TestCase\Scenario;
  * 5. Save Product Attribute.
  * 6. Perform appropriate assertions.
  *
- * @group Product_Attributes_(CS)
+ * @group Product_Attributes_(MX)
  * @ZephyrId MAGETWO-24767
  */
 class CreateProductAttributeEntityTest extends Scenario
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * CatalogProductAttribute object.
      *

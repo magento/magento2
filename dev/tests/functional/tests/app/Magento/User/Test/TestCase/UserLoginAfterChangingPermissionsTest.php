@@ -34,11 +34,16 @@ use Mtf\TestCase\Injectable;
  * 13. Log in using new admin user (before the bug was fixed, it was impossible to log in from the first attempt)
  * 14. Perform assertions
  *
- * @group ACL_(MX)
+ * @group ACL_(PS)
  * @ZephyrId MAGETWO-28828
  */
 class UserLoginAfterChangingPermissionsTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * User edit page
      *

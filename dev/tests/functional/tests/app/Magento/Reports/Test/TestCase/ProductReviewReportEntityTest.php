@@ -25,6 +25,11 @@ use Mtf\TestCase\Injectable;
  */
 class ProductReviewReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Creation product review report entity
      *

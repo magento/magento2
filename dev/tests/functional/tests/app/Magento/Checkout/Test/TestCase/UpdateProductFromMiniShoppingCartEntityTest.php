@@ -31,6 +31,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Catalog product view page.
      *

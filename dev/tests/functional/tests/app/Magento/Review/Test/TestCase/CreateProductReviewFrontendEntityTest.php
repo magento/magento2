@@ -34,6 +34,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateProductReviewFrontendEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Frontend product view page
      *

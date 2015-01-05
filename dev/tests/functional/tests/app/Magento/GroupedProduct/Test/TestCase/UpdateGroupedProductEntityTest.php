@@ -31,6 +31,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateGroupedProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Page product on backend
      *

@@ -34,6 +34,11 @@ use Mtf\TestCase\Injectable;
  */
 class ProductTypeSwitchingOnUpdateTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Product page with a grid.
      *

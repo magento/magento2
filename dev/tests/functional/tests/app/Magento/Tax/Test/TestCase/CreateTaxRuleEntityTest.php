@@ -26,6 +26,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateTaxRuleEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Tax rule index page.
      *

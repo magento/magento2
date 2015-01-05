@@ -28,6 +28,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteCatalogPriceRuleEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Page CatalogRuleIndex
      *

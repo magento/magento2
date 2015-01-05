@@ -25,11 +25,16 @@ use Mtf\TestCase\Injectable;
  * 4. Delete URL Rewrite
  * 5. Perform all assertions
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites_(PS)
  * @ZephyrId MAGETWO-25086
  */
 class DeleteCategoryUrlRewriteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Url rewrite index page
      *

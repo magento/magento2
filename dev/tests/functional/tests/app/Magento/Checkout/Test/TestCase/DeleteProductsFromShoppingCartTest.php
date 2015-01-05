@@ -30,6 +30,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteProductsFromShoppingCartTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Browser interface
      *
