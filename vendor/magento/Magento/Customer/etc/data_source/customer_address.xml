@@ -5,7 +5,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../app/code/Magento/Ui/etc/data_source.xsd">
+        xsi:noNamespaceSchemaLocation="../../../../Magento/Ui/etc/data_source.xsd">
     <dataSource name="customer_address"
                 label="Customer Address"
                 dataSet="Magento\Customer\Model\Resource\Address\Collection">
