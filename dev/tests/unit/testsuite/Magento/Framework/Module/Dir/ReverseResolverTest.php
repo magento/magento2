@@ -58,13 +58,13 @@ class ReverseResolverTest extends \PHPUnit_Framework_TestCase
         return [
             'module root dir' => ['vendor/magento/Fixture/ModuleOne', 'Fixture_ModuleOne'],
             'module root dir trailing slash' => ['vendor/magento/Fixture/ModuleOne/', 'Fixture_ModuleOne'],
-            'module root dir backward slash' => ['app/code\\Fixture\\ModuleOne', 'Fixture_ModuleOne'],
+            'module root dir backward slash' => ['vendor/magento\\Fixture\\ModuleOne', 'Fixture_ModuleOne'],
             'dir in module' => ['vendor/magento/Fixture/ModuleTwo/etc', 'Fixture_ModuleTwo'],
             'dir in module trailing slash' => ['vendor/magento/Fixture/ModuleTwo/etc/', 'Fixture_ModuleTwo'],
             'dir in module backward slash' => ['vendor/magento/Fixture/ModuleTwo\\etc', 'Fixture_ModuleTwo'],
             'file in module' => ['vendor/magento/Fixture/ModuleOne/etc/config.xml', 'Fixture_ModuleOne'],
             'file in module backward slash' => [
-                'app\\code\\Fixture\\ModuleOne\\etc\\config.xml',
+                'vendor\\magento\\Fixture\\ModuleOne\\etc\\config.xml',
                 'Fixture_ModuleOne',
             ],
             'unknown module' => ['vendor/magento/Unknown/Module', null]
