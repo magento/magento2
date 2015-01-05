@@ -298,7 +298,11 @@ class Email extends \Magento\Framework\Model\AbstractModel
             return false;
         }
 
-        $store = $this->_website->getDefaultStore();
+        if ($this->_customer->getStoreId() > 0 && !is_null($this->_storeManager)) {
+            $store = $this->_storeManager->getStore($this->_customer->getStoreId());
+        } else {
+            $store = $this->_website->getDefaultStore();
+        }
         $storeId = $store->getId();
 
         if ($this->_type == 'price' && !$this->_scopeConfig->getValue(
