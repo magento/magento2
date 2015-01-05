@@ -24,7 +24,7 @@ class TranslationFiles extends \PHPUnit_Framework_TestCase
     {
         $pathToSource = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
         $places = [];
-        foreach (glob("{$pathToSource}/app/code/*/*", GLOB_ONLYDIR) as $modulePath) {
+        foreach (glob("{$pathToSource}/vendor/magento/*/*", GLOB_ONLYDIR) as $modulePath) {
             $places[basename($modulePath)] = ['placePath' => $modulePath];
         }
         foreach (glob("{$pathToSource}/app/design/*/*/*", GLOB_ONLYDIR) as $themePath) {

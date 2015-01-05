@@ -466,7 +466,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
             // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
             $directories = [
-                '/app/code/',
+                '/vendor/magento/',
                 '/lib/internal/',
                 '/dev/tools/',
                 '/dev/tests/api-functional/framework/',
