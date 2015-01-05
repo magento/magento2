@@ -216,15 +216,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function getRelationInfo()
     {
         $info = new \Magento\Framework\Object();
-        $info->setTable(
-            'catalog_product_bundle_selection'
-        )
-            ->setParentFieldName(
-                'parent_product_id'
-            )
-            ->setChildFieldName(
-                'product_id'
-            );
+        $info->setTable('catalog_product_bundle_selection')
+            ->setParentFieldName('parent_product_id')
+            ->setChildFieldName('product_id');
 
         return $info;
     }
@@ -700,7 +694,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $options
                 );
 
-                $selectionIds = $this->multiToOFlatArray($options);
+                $selectionIds = $this->multiToFlatArray($options);
                 // If product has not been configured yet then $selections array should be empty
                 if (!empty($selectionIds)) {
                     $selections = $this->getSelectionsByIds($selectionIds, $product);
@@ -807,7 +801,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param array $array
      * @return int[]|int[][]
      */
-    public function recursiveIntval(array $array)
+    private function recursiveIntval(array $array)
     {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
@@ -826,12 +820,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param array $array
      * @return int[]
      */
-    public function multiToOFlatArray(array $array)
+    private function multiToFlatArray(array $array)
     {
         $flatArray = [];
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $flatArray = array_merge($flatArray, $this->multiToOFlatArray($value));
+                $flatArray = array_merge($flatArray, $this->multiToFlatArray($value));
             } else {
                 $flatArray[$key] = $value;
             }
