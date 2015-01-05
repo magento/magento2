@@ -81,6 +81,14 @@ angular.module('web-configuration', ['ngStorage'])
             $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
         };
 
+        $scope.populateHttpsAfterNext = function() {
+            if (angular.equals($scope.config.https.text, '')) {
+                $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
+            } else {
+                $scope.config.https.text = $localStorage.config.https.text;
+            }
+        };
+
 
         // Listens on form validate event, dispatched by parent controller
         $scope.$on('validate-' + $state.current.id, function() {
