@@ -27,7 +27,7 @@
     <?php endforeach; ?>
     </dl>
 </div>
-<script type="text/javascript">
+<script>
     require(["Magento_Sales/order/create/form"], function(){
         order.setPaymentMethod('<?php echo $this->getSelectedMethodCode() ?>')
     });

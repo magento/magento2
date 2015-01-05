@@ -27,7 +27,7 @@
         <input type="checkbox" id="inventory_use_config_manage_stock" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_manage_stock]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
         <label for="inventory_use_config_manage_stock"><?php echo __('Use Config Settings') ?></label>
         <?php if (!$this->isReadonly()): ?>
-        <script type="text/javascript">
+        <script>
 require(['prototype'], function(){
 toggleValueElements($('inventory_use_config_manage_stock'), $('inventory_use_config_manage_stock').parentNode);
 });
@@ -65,7 +65,7 @@ toggleValueElements($('inventory_use_config_manage_stock'), $('inventory_use_con
         <input type="checkbox" id="inventory_use_config_min_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_min_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
         <label for="inventory_use_config_min_qty"><?php echo __('Use Config Settings') ?></label>
         <?php if (!$this->isReadonly()): ?>
-        <script type="text/javascript">
+        <script>
 require(["prototype"], function(){
 toggleValueElements($('inventory_use_config_min_qty'), $('inventory_use_config_min_qty').parentNode);
 });
@@ -89,7 +89,7 @@ toggleValueElements($('inventory_use_config_min_qty'), $('inventory_use_config_m
         <input type="checkbox" id="inventory_use_config_min_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_min_sale_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?>>
         <label for="inventory_use_config_min_sale_qty"><?php echo __('Use Config Settings') ?></label>
         <?php if (!$this->isReadonly()): ?>
-        <script type="text/javascript">
+        <script>
 require(['prototype'], function(){
 toggleValueElements($('inventory_use_config_min_sale_qty'), $('inventory_use_config_min_sale_qty').parentNode);
 });
@@ -111,7 +111,7 @@ toggleValueElements($('inventory_use_config_min_sale_qty'), $('inventory_use_con
         <input type="checkbox" id="inventory_use_config_max_sale_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_max_sale_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" class="checkbox" <?php echo $_readonly;?>>
         <label for="inventory_use_config_max_sale_qty"><?php echo __('Use Config Settings') ?></label>
         <?php if (!$this->isReadonly()): ?>
-        <script type="text/javascript">
+        <script>
 require(['prototype'], function(){
 toggleValueElements($('inventory_use_config_max_sale_qty'), $('inventory_use_config_max_sale_qty').parentNode);
 });
@@ -172,7 +172,7 @@ toggleValueElements($('inventory_use_config_max_sale_qty'), $('inventory_use_con
         <input type="checkbox" id="inventory_use_config_backorders" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_backorders]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
         <label for="inventory_use_config_backorders"><?php echo __('Use Config Settings') ?></label>
         <?php if (!$this->isReadonly()): ?>
-        <script type="text/javascript">
+        <script>
 require(['prototype'], function(){
 toggleValueElements($('inventory_use_config_backorders'), $('inventory_use_config_backorders').parentNode);
 });
@@ -194,7 +194,7 @@ toggleValueElements($('inventory_use_config_backorders'), $('inventory_use_confi
         <input type="checkbox" id="inventory_use_config_notify_stock_qty" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_notify_stock_qty]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
         <label for="inventory_use_config_notify_stock_qty"><?php echo __('Use Config Settings') ?></label>
         <?php if (!$this->isReadonly()): ?>
-        <script type="text/javascript">
+        <script>
 require(['prototype'], function(){
 toggleValueElements($('inventory_use_config_notify_stock_qty'), $('inventory_use_config_notify_stock_qty').parentNode);
 });
@@ -222,7 +222,7 @@ toggleValueElements($('inventory_use_config_notify_stock_qty'), $('inventory_use
         <input type="checkbox" id="inventory_use_config_enable_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_enable_qty_increments]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
         <label for="inventory_use_config_enable_qty_increments"><?php echo __('Use Config Settings') ?></label>
         <?php if (!$this->isReadonly()): ?>
-        <script type="text/javascript">
+        <script>
 require(['prototype'], function(){
 toggleValueElements($('inventory_use_config_enable_qty_increments'), $('inventory_use_config_enable_qty_increments').parentNode);
 });
@@ -244,7 +244,7 @@ toggleValueElements($('inventory_use_config_enable_qty_increments'), $('inventor
         <input type="checkbox" id="inventory_use_config_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[stock_data][use_config_qty_increments]" value="1" <?php echo $_checked ?> onclick="toggleValueElements(this, this.parentNode);" <?php echo $_readonly;?>>
         <label for="inventory_use_config_qty_increments"><?php echo __('Use Config Settings') ?></label>
         <?php if (!$this->isReadonly()): ?>
-        <script type="text/javascript">
+        <script>
 require(['prototype'], function(){
 toggleValueElements($('inventory_use_config_qty_increments'), $('inventory_use_config_qty_increments').parentNode);
 });
@@ -275,7 +275,7 @@ toggleValueElements($('inventory_use_config_qty_increments'), $('inventory_use_c
 </div>
 </fieldset>
 
-<script type="text/javascript">
+<script>
 require(["jquery","prototype"], function(jQuery){
 
     //<![CDATA[

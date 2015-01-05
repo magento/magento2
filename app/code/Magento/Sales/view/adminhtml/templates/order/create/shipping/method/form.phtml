@@ -65,7 +65,7 @@
             </a>
         </div>
     <?php else: ?>
-        <script type="text/javascript">
+        <script>
 require(['prototype'], function(){
     $('order-shipping-method-choose').show();
 });
@@ -82,7 +82,7 @@ require(['prototype'], function(){
     </div>
 <?php endif; ?>
 <div style="display:none;" id="shipping-method-overlay" class="overlay"><span><?php echo __('You don\'t need to select a shipping method.') ?></span></div>
-<script type="text/javascript">
+<script>
     require(["Magento_Sales/order/create/form"], function(){
 
         order.overlay('shipping-method-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);

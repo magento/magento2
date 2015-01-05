@@ -16,7 +16,7 @@
 <div class="page-actions" <?php echo $this->getUiId('content-header') ?>>
     <?php echo $this->getButtonsHtml('header') ?>
 </div>
-<script type="text/javascript">
+<script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('#edit_form').mage('form').mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});
