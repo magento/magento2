@@ -53,7 +53,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     protected $customerFactoryMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $quoteFactoryMock;
+    protected $quoteManagementMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $orderFactoryMock;
@@ -136,7 +136,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->addressFactoryMock = $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false);
         $this->formFactoryMock = $this->getMock('Magento\Customer\Model\FormFactory', [], [], '', false);
         $this->customerFactoryMock = $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false);
-        $this->quoteFactoryMock = $this->getMock('Magento\Quote\Model\Service\QuoteFactory', [], [], '', false);
+        $this->quoteManagementMock = $this->getMock('Magento\Quote\Model\QuoteManagement', [], [], '', false);
         $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
         $this->copyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
@@ -214,7 +214,6 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
                 'customrAddrFactory' => $this->addressFactoryMock,
                 'customerFormFactory' => $this->formFactoryMock,
                 'customerFactory' => $this->customerFactoryMock,
-                'serviceQuoteFactory' => $this->quoteFactoryMock,
                 'orderFactory' => $this->orderFactoryMock,
                 'objectCopyService' => $this->copyMock,
                 'messageManager' => $this->messageManagerMock,
@@ -228,7 +227,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
                 'orderSenderMock' => $orderSenderMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
-                'quoteRepository' => $this->quoteRepositoryMock
+                'quoteRepository' => $this->quoteRepositoryMock,
+                'quoteManagement' => $this->quoteManagementMock
             ]
         );
     }
