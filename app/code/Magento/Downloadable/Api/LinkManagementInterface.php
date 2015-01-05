@@ -7,13 +7,13 @@ namespace Magento\Downloadable\Api;
 
 interface LinkManagementInterface
 {
-//    /**
-//     * List of samples for downloadable product
-//     *
-//     * @param string $productSku
-//     * @return \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfo[]
-//     */
-//    public function getSamples($productSku);
+    /**
+     * List of samples for downloadable product
+     *
+     * @param string $productSku
+     * @return \Magento\Downloadable\Api\Data\SampleInterface[]
+     */
+    public function getSamples($productSku);
 
     /**
      * List of links with associated samples

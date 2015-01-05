@@ -53,17 +53,40 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getNumberOfDownloads();
 
     /**
-     * File or URL of sample if any
-     *
-     * @return \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableResourceInfo|null
+     * @return string
      */
-    public function getSampleResource();
-
+    public function getLinkType();
 
     /**
-     * File or URL of link
+     * Return file path or null when type is 'url'
      *
-     * @return \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableResourceInfo
+     * @return string|null relative file path
      */
-    public function getLinkResource();
+    public function getLinkFile();
+
+    /**
+     * Return URL or NULL when type is 'file'
+     *
+     * @return string|null file URL
+     */
+    public function getLinkUrl();
+
+    /**
+     * @return string
+     */
+    public function getSampleType();
+
+    /**
+     * Return file path or null when type is 'url'
+     *
+     * @return string|null relative file path
+     */
+    public function getSampleFile();
+
+    /**
+     * Return URL or NULL when type is 'file'
+     *
+     * @return string|null file URL
+     */
+    public function getSampleUrl();
 }

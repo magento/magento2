@@ -15,18 +15,6 @@ use Magento\Downloadable\Model\Resource\Link as Resource;
  * @method Resource getResource()
  * @method int getProductId()
  * @method Link setProductId(int $value)
- * @method string getLinkUrl()
- * @method Link setLinkUrl(string $value)
- * @method string getLinkFile()
- * @method Link setLinkFile(string $value)
- * @method string getLinkType()
- * @method Link setLinkType(string $value)
- * @method string getSampleUrl()
- * @method Link setSampleUrl(string $value)
- * @method string getSampleFile()
- * @method Link setSampleFile(string $value)
- * @method string getSampleType()
- * @method Link setSampleType(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -173,27 +161,9 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements \
      * {@inheritdoc}
      * @codeCoverageIgnore
      */
-    public function getLinkResource()
-    {
-        return $this->getData('link_resource');
-    }
-
-    /**
-     * {@inheritdoc}
-     * @codeCoverageIgnore
-     */
-    public function getSampleResource()
-    {
-        return $this->getData('sample_resource');
-    }
-
-    /**
-     * {@inheritdoc}
-     * @codeCoverageIgnore
-     */
     public function getIsShareable()
     {
-        return $this->getData('is_sharable');
+        return $this->getData('is_shareable');
     }
 
     /**
@@ -214,4 +184,57 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements \
         return $this->getData('number_of_downloads');
     }
 
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getLinkType()
+    {
+        return $this->getData('link_type');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getLinkFile()
+    {
+        return $this->getData('link_file');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getLinkUrl()
+    {
+        return $this->getData('link_url');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleType()
+    {
+        return $this->getData('sample_type');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleFile()
+    {
+        return $this->getData('sample_file');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleUrl()
+    {
+        return $this->getData('sample_url');
+    }
 }

@@ -10,19 +10,10 @@ namespace Magento\Downloadable\Model;
  * @method \Magento\Downloadable\Model\Resource\Sample _getResource()
  * @method \Magento\Downloadable\Model\Resource\Sample getResource()
  * @method int getProductId()
- * @method \Magento\Downloadable\Model\Sample setProductId(int $value)
- * @method string getSampleUrl()
- * @method \Magento\Downloadable\Model\Sample setSampleUrl(string $value)
- * @method string getSampleFile()
- * @method \Magento\Downloadable\Model\Sample setSampleFile(string $value)
- * @method string getSampleType()
- * @method \Magento\Downloadable\Model\Sample setSampleType(string $value)
- * @method int getSortOrder()
- * @method \Magento\Downloadable\Model\Sample setSortOrder(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sample extends \Magento\Framework\Model\AbstractExtensibleModel
+class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Downloadable\Api\Data\SampleInterface
 {
     const XML_PATH_SAMPLES_TITLE = 'catalog/downloadable/samples_title';
 
@@ -113,5 +104,50 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel
     public function getSearchableData($productId, $storeId)
     {
         return $this->_getResource()->getSearchableData($productId, $storeId);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTitle()
+    {
+        return $this->getData('title');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSortOrder()
+    {
+        return $this->getData('sort_order');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleType()
+    {
+        return $this->getData('sample_type');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleFile()
+    {
+        return $this->getData('sample_file');
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getSampleUrl()
+    {
+        return $this->getData('sample_url');
     }
 }

@@ -5,9 +5,6 @@
  */
 namespace Magento\Downloadable\Model;
 
-//use Magento\Framework\Exception\StateException;
-//use Magento\Framework\Exception\NoSuchEntityException;
-//use Magento\Webapi\Exception;
 
 class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterface
 {
@@ -27,35 +24,26 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
     protected $linkBuilder;
 
     /**
-     * @var \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfoBuilder
+     * @var \Magento\Downloadable\Api\Data\SampleDataBuilder
      */
     protected $sampleBuilder;
-
-    /**
-     * @var \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableResourceInfoBuilder
-     */
-    protected $resourceBuilder;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Downloadable\Model\Product\Type $downloadableType
      * @param \Magento\Downloadable\Api\Data\LinkDataBuilder $linkBuilder
-     * @param \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfoBuilder $sampleBuilder
-     * @param \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableResourceInfoBuilder $resourceBuilder
+     * @param \Magento\Downloadable\Api\Data\SampleDataBuilder $sampleBuilder
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Downloadable\Model\Product\Type $downloadableType,
-      //  \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkInfoBuilder $linkBuilder,
         \Magento\Downloadable\Api\Data\LinkDataBuilder $linkBuilder,
-        \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfoBuilder $sampleBuilder,
-        \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableResourceInfoBuilder $resourceBuilder
+        \Magento\Downloadable\Api\Data\SampleDataBuilder $sampleBuilder
     ) {
         $this->productRepository = $productRepository;
         $this->downloadableType = $downloadableType;
         $this->linkBuilder = $linkBuilder;
         $this->sampleBuilder = $sampleBuilder;
-        $this->resourceBuilder = $resourceBuilder;
     }
 
     /**
@@ -78,7 +66,7 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
      * Build a link data object
      *
      * @param \Magento\Downloadable\Model\Link $resourceData
-     * @return \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkInfo
+     * @return \Magento\Downloadable\Model\Link
      */
     protected function buildLink($resourceData)
     {
@@ -86,7 +74,10 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
         $this->linkBuilder->setPrice($resourceData->getPrice());
         $this->linkBuilder->setNumberOfDownloads($resourceData->getNumberOfDownloads());
         $this->linkBuilder->setIsShareable($resourceData->getIsShareable());
-        $this->linkBuilder->setLinkResource($this->entityInfoGenerator('link', $resourceData));
+        $this->linkBuilder->setLinkType($resourceData->getLinkType());
+        $this->linkBuilder->setLinkFile($resourceData->getLinkFile());
+        $this->linkBuilder->setLinkUrl($resourceData->getLinkUrl());
+
         return $this->linkBuilder->create();
     }
 
@@ -94,7 +85,7 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
      * Subroutine for buildLink and buildSample
      *
      * @param \Magento\Downloadable\Model\Link|\Magento\Downloadable\Model\Sample $resourceData
-     * @param \Magento\Downloadable\Api\Data\LinkDataBuilder|\Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfoBuilder $builder
+     * @param \Magento\Downloadable\Api\Data\LinkDataBuilder|\Magento\Downloadable\Api\Data\SampleDataBuilder $builder
      * @return null
      */
     protected function setBasicFields($resourceData, $builder)
@@ -109,27 +100,9 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
             $builder->setTitle($title);
         }
         $builder->setSortOrder($resourceData->getSortOrder());
-        $builder->setSampleResource($this->entityInfoGenerator('sample', $resourceData));
-    }
-
-    /**
-     * Build file info data object
-     *
-     * @param string $entityType 'link' or 'sample'
-     * @param \Magento\Downloadable\Model\Link|\Magento\Downloadable\Model\Sample $resourceData
-     * @return \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableResourceInfo|null
-     */
-    protected function entityInfoGenerator($entityType, $resourceData)
-    {
-        $type = $resourceData->getData($entityType . '_type');
-        if (empty($type)) {
-            return null;
-        }
-        $this->resourceBuilder->populateWithArray([]);
-        $this->resourceBuilder->setType($type);
-        $this->resourceBuilder->setUrl($resourceData->getData($entityType . '_url'));
-        $this->resourceBuilder->setFile($resourceData->getData($entityType . '_file'));
-        return $this->resourceBuilder->create();
+        $builder->setSampleType($resourceData->getSampleType());
+        $builder->setSampleFile($resourceData->getSampleFile());
+        $builder->setSampleUrl($resourceData->getSampleUrl());
     }
 
     /**
@@ -152,7 +125,7 @@ class LinkManagement implements \Magento\Downloadable\Api\LinkManagementInterfac
      * Build a sample data object
      *
      * @param \Magento\Downloadable\Model\Sample $resourceData
-     * @return \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfo
+     * @return \Magento\Downloadable\Model\Sample
      */
     protected function buildSample($resourceData)
     {

@@ -13,7 +13,7 @@
         </resources>
     </route>
     <route url="/V1/products/:productSku/downloadable-links/samples" method="GET">
-        <service class="Magento\Downloadable\Service\V1\DownloadableLink\ReadServiceInterface" method="getSamples"/>
+        <service class="Magento\Downloadable\Api\LinkManagementInterface" method="getSamples"/>
         <resources>
             <resource ref="Magento_Downloadable::downloadable" />
         </resources>
