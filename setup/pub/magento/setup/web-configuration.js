@@ -77,11 +77,11 @@ angular.module('web-configuration', ['ngStorage'])
             }
         };
 
-        $scope.populateHttps = function() {
+        $scope.populateHttpsWhileTyping = function() {
             $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
         };
 
-        $scope.populateHttpsAfterNext = function() {
+        $scope.populateHttps = function() {
             if (angular.equals($scope.config.https.text, '')) {
                 $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
             } else {
