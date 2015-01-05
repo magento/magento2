@@ -36,7 +36,7 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->orderAddressBuilderMock = $this->getMock(
             'Magento\Sales\Api\Data\OrderAddressDataBuilder',
-            [],
+            ['populateWithArray', 'create'],
             [],
             '',
             false
@@ -69,7 +69,9 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
         $this->orderAddressBuilderMock->expects($this->once())->method('populateWithArray')
             ->with(['test' => 'beer'])
             ->willReturnSelf();
-        $this->orderAddressBuilderMock->expects($this->once())->method('create')->willReturn($this->orderInterfaceMock);
+        $this->orderAddressBuilderMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->orderInterfaceMock);
         $this->assertSame($this->orderInterfaceMock, $this->converter->convert($object, $data));
     }
 }
