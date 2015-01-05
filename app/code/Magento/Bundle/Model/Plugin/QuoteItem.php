@@ -11,14 +11,14 @@ class QuoteItem
     /**
      * Add bundle attributes to order data
      *
-     * @param \Magento\Sales\Model\Convert\Quote $subject
-     * @param Closure $proceed
+     * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $subject
+     * @param callable $proceed
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return \Magento\Sales\Model\Order\Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundItemToOrderItem(
-        \Magento\Sales\Model\Convert\Quote $subject,
+    public function aroundConvert(
+        \Magento\Quote\Model\Quote\Item\ToOrderItem $subject,
         Closure $proceed,
         \Magento\Quote\Model\Quote\Item\AbstractItem $item
     ) {

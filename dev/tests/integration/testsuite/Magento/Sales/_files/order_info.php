@@ -66,16 +66,10 @@ $quote->collectTotals();
 $quote->save();
 
 $quote->setCustomerEmail('admin@example.com');
-/** @var $service \Magento\Quote\Model\Service\Quote */
-$service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Quote\Model\Service\Quote',
-    ['quote' => $quote]
-);
-$service->setOrderData(['increment_id' => '100000001']);
-$service->submitAllWithDataObject();
+$quoteManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Quote\Model\QuoteManagement');
 
-$order = $service->getOrder();
-$order->save();
+$order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
 
 $orderItems = $order->getAllItems();
 

@@ -43,11 +43,9 @@ class WriteService implements WriteServiceInterface
     protected $userContext;
 
     /**
-     * Quote factory.
-     *
-     * @var \Magento\Quote\Model\Service\QuoteFactory
+     * @var \Magento\Quote\Model\QuoteManagement
      */
-    protected $quoteServiceFactory;
+    protected $quoteManagement;
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
@@ -57,11 +55,11 @@ class WriteService implements WriteServiceInterface
     /**
      * Constructs a cart write service object.
      *
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager.
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository Customer registry.
-     * @param UserContextInterface $userContext User context.
-     * @param \Magento\Quote\Model\Service\QuoteFactory $quoteServiceFactory Quote service factory.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param UserContextInterface $userContext
+     * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
      */
     public function __construct(
@@ -69,14 +67,14 @@ class WriteService implements WriteServiceInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         UserContextInterface $userContext,
-        \Magento\Quote\Model\Service\QuoteFactory $quoteServiceFactory,
+        \Magento\Quote\Model\QuoteManagement $quoteManagement,
         \Magento\Customer\Model\CustomerFactory $customerModelFactory
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->storeManager = $storeManager;
         $this->customerRepository = $customerRepository;
         $this->userContext = $userContext;
-        $this->quoteServiceFactory = $quoteServiceFactory;
+        $this->quoteManagement = $quoteManagement;
         $this->customerModelFactory = $customerModelFactory;
     }
 
@@ -181,9 +179,7 @@ class WriteService implements WriteServiceInterface
     public function order($cartId)
     {
         $quote = $this->quoteRepository->getActive($cartId);
-        /** @var \Magento\Quote\Model\Service\Quote $quoteService */
-        $quoteService = $this->quoteServiceFactory->create(['quote' => $quote]);
-        $order = $quoteService->submitOrderWithDataObject();
+        $order = $this->quoteManagement->submit($quote);
         return $order->getId();
     }
 }

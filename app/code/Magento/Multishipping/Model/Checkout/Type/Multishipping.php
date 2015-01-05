@@ -50,11 +50,6 @@ class Multishipping extends \Magento\Framework\Object
     protected $_addressFactory;
 
     /**
-     * @var \Magento\Sales\Model\Convert\Quote
-     */
-    protected $_quote;
-
-    /**
      * @var \Magento\Payment\Model\Method\SpecificationInterface
      */
     protected $paymentSpecification;
@@ -112,6 +107,26 @@ class Multishipping extends \Magento\Framework\Object
     protected $filterBuilder;
 
     /**
+     * @var \Magento\Quote\Model\Quote\Address\ToOrder
+     */
+    protected $quoteAddressToOrder;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Item\ToOrderItem
+     */
+    protected $quoteItemToOrderItem;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Payment\ToOrderPayment
+     */
+    protected $quotePaymentToOrderPayment;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address\ToOrderAddress
+     */
+    protected $quoteAddressToOrderAddress;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -120,15 +135,18 @@ class Multishipping extends \Magento\Framework\Object
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Session\Generic $session
      * @param \Magento\Quote\Model\Quote\AddressFactory $addressFactory
-     * @param \Magento\Sales\Model\Convert\Quote $quote
+     * @param \Magento\Quote\Model\Quote\Address\ToOrder $quoteAddressToOrder
+     * @param \Magento\Quote\Model\Quote\Address\ToOrderAddress $quoteAddressToOrderAddress
+     * @param \Magento\Quote\Model\Quote\Payment\ToOrderPayment $quotePaymentToOrderPayment
+     * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $quoteItemToOrderItem
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification
      * @param \Magento\Multishipping\Helper\Data $helper
      * @param OrderSender $orderSender
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder,
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param array $data
      */
     public function __construct(
@@ -140,7 +158,10 @@ class Multishipping extends \Magento\Framework\Object
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Session\Generic $session,
         \Magento\Quote\Model\Quote\AddressFactory $addressFactory,
-        \Magento\Sales\Model\Convert\Quote $quote,
+        \Magento\Quote\Model\Quote\Address\ToOrder $quoteAddressToOrder,
+        \Magento\Quote\Model\Quote\Address\ToOrderAddress $quoteAddressToOrderAddress,
+        \Magento\Quote\Model\Quote\Payment\ToOrderPayment $quotePaymentToOrderPayment,
+        \Magento\Quote\Model\Quote\Item\ToOrderItem $quoteItemToOrderItem,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Payment\Model\Method\SpecificationInterface $paymentSpecification,
         \Magento\Multishipping\Helper\Data $helper,
@@ -155,7 +176,6 @@ class Multishipping extends \Magento\Framework\Object
         $this->_scopeConfig = $scopeConfig;
         $this->_session = $session;
         $this->_addressFactory = $addressFactory;
-        $this->_quote = $quote;
         $this->_storeManager = $storeManager;
         $this->paymentSpecification = $paymentSpecification;
         $this->helper = $helper;
@@ -168,6 +188,10 @@ class Multishipping extends \Magento\Framework\Object
         $this->quoteRepository = $quoteRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
+        $this->quoteAddressToOrder = $quoteAddressToOrder;
+        $this->quoteItemToOrderItem = $quoteItemToOrderItem;
+        $this->quotePaymentToOrderPayment = $quotePaymentToOrderPayment;
+        $this->quoteAddressToOrderAddress = $quoteAddressToOrderAddress;
         parent::__construct($data);
         $this->_init();
     }
@@ -572,17 +596,17 @@ class Multishipping extends \Magento\Framework\Object
         $quote->reserveOrderId();
         $quote->collectTotals();
 
-        $order = $this->_quote->addressToOrder($address);
+        $order = $this->quoteAddressToOrder->convert($address);
         $order->setQuote($quote);
-        $order->setBillingAddress($this->_quote->addressToOrderAddress($quote->getBillingAddress()));
+        $order->setBillingAddress($this->quoteAddressToOrderAddress->convert($quote->getBillingAddress()));
 
         if ($address->getAddressType() == 'billing') {
             $order->setIsVirtual(1);
         } else {
-            $order->setShippingAddress($this->_quote->addressToOrderAddress($address));
+            $order->setShippingAddress($this->quoteAddressToOrderAddress->addressToOrderAddress($address));
         }
 
-        $order->setPayment($this->_quote->paymentToOrderPayment($quote->getPayment()));
+        $order->setPayment($this->quotePaymentToOrderPayment->paymentToOrderPayment($quote->getPayment()));
         if ($this->priceCurrency->round($address->getGrandTotal()) == 0) {
             $order->getPayment()->setMethod('free');
         }
@@ -597,7 +621,7 @@ class Multishipping extends \Magento\Framework\Object
             )->setProductOptions(
                 $_quoteItem->getProduct()->getTypeInstance()->getOrderOptions($_quoteItem->getProduct())
             );
-            $orderItem = $this->_quote->itemToOrderItem($item);
+            $orderItem = $this->quoteItemToOrderItem->itemToOrderItem($item);
             if ($item->getParentItem()) {
                 $orderItem->setParentItem($order->getItemByQuoteItemId($item->getParentItem()->getId()));
             }

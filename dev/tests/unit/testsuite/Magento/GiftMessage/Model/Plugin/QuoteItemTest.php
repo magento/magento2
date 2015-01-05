@@ -56,7 +56,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () use ($orderItems) {
             return $orderItems;
         };
-        $this->subjectMock = $this->getMock('Magento\Sales\Model\Convert\Quote', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
         $this->helperMock = $this->getMock(
             'Magento\GiftMessage\Helper\Message',
             ['setGiftMessageId', 'isMessagesAvailable'],
@@ -98,7 +98,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->orderItemMock,
-            $this->model->aroundItemToOrderItem($this->subjectMock, $this->closureMock, $this->quoteItemMock)
+            $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock)
         );
     }
 }
