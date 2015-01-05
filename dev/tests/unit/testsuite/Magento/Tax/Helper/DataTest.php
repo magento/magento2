@@ -301,7 +301,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
                         'percent' => 20.0,
                         'tax_amount' => 2.5,
                         'base_tax_amount' => 2.5,
-                        'type' => 'product',
                     ],
                 ],
             ],
@@ -363,11 +362,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
                         'percent' => 20.0,
                         'tax_amount' => 6.5,
                         'base_tax_amount' => 6.5,
-                        'type' => 'product',
                     ],
                 ],
             ],
             //Scenario 3: one item, with both shipping and product taxes
+            // note that 'shipping tax' is listed before 'product tax'
             'one_item_with_both_shipping_and_product_taxes' => [
                 'order' => [
                     'order_id' => 1,
@@ -418,20 +417,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
                         ),
                     ],
                 ],
+                // note that 'shipping tax' is now listed after 'product tax'
                 'expected_results' => [
                     [
                         'title' => 'US-CA-Sales-Tax',
                         'percent' => 20.0,
                         'tax_amount' => 5.00,
                         'base_tax_amount' => 5.00,
-                        'type' => 'product',
                     ],
                     [
                         'title' => 'US-CA-Sales-Tax-Ship',
                         'percent' => 10.0,
                         'tax_amount' => 2.00,
                         'base_tax_amount' => 2.00,
-                        'type' => 'shipping',
                     ],
                 ],
             ],

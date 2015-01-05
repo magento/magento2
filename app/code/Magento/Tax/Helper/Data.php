@@ -682,23 +682,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *      'tax_amount'        => $taxAmount,
      *      'base_tax_amount'   => $baseTaxAmount,
      *      'title'             => $title,
-     *      'percent'           => $percent,
-     *      'type'              => $type
+     *      'percent'           => $percent
      *  )
      * )
      *
      * @param  array                        $taxClassAmount
      * @param  OrderTaxDetailsItemInterface $itemTaxDetail
      * @param  float                        $ratio
-     * @param  string                       $type
      * @return array
      */
-    private function _aggregateTaxes(
-        $taxClassAmount,
-        OrderTaxDetailsItemInterface $itemTaxDetail,
-        $ratio,
-        $type = 'product'
-    ) {
+    private function _aggregateTaxes($taxClassAmount, OrderTaxDetailsItemInterface $itemTaxDetail, $ratio)
+    {
         $itemAppliedTaxes = $itemTaxDetail->getAppliedTaxes();
         foreach ($itemAppliedTaxes as $itemAppliedTax) {
             $taxAmount = $itemAppliedTax->getAmount() * $ratio;
@@ -711,7 +705,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             if (!isset($taxClassAmount[$taxCode])) {
                 $taxClassAmount[$taxCode]['title'] = $itemAppliedTax->getTitle();
                 $taxClassAmount[$taxCode]['percent'] = $itemAppliedTax->getPercent();
-                $taxClassAmount[$taxCode]['type'] = $type;
                 $taxClassAmount[$taxCode]['tax_amount'] = $taxAmount;
                 $taxClassAmount[$taxCode]['base_tax_amount'] = $baseTaxAmount;
             } else {
@@ -835,7 +828,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         // Apply any taxes for shipping
-        $shippingType = \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING;
         $shippingTaxAmount = $salesItem->getShippingTaxAmount();
         $originalShippingTaxAmount = $order->getShippingTaxAmount();
         if ($shippingTaxAmount && $originalShippingTaxAmount &&
@@ -846,9 +838,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $itemTaxDetails = $orderTaxDetails->getItems();
             foreach ($itemTaxDetails as $itemTaxDetail) {
                 //Aggregate taxable items associated with shipping
-                if ($itemTaxDetail->getType() == $shippingType) {
+                if ($itemTaxDetail->getType() == \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING) {
                     $taxClassAmount =
-                        $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $shippingRatio, $shippingType);
+                        $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $shippingRatio);
                 }
             }
         }
