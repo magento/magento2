@@ -12,10 +12,14 @@ use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 
 class Match implements QueryInterface
 {
+    const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=';
+
+    const MINIMAL_CHARACTER_LENGTH = 3;
+
     /**
      * @var string[]
      */
-    private $replaceSymbols = ['-', '+', '~'];
+    private $replaceSymbols = [];
 
     /**
      * @var ResolverInterface
@@ -28,6 +32,7 @@ class Match implements QueryInterface
     public function __construct(ResolverInterface $resolver)
     {
         $this->resolver = $resolver;
+        $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
     }
 
     /**
@@ -80,7 +85,8 @@ class Match implements QueryInterface
             if (empty($queryValue)) {
                 unset($queryValues[$queryKey]);
             } else {
-                $queryValues[$queryKey] = $stringPrefix . $queryValue . '*';
+                $stringSuffix = self::MINIMAL_CHARACTER_LENGTH > strlen($queryValue) ? '' : '*';
+                $queryValues[$queryKey] = $stringPrefix . $queryValue . $stringSuffix;
             }
         }
 
