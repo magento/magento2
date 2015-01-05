@@ -80,7 +80,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
         );
         $this->customerBuilderMock = $this->getMock(
             'Magento\Customer\Api\Data\CustomerDataBuilder',
-            [],
+            ['populate', 'create'],
             [],
             '',
             false
