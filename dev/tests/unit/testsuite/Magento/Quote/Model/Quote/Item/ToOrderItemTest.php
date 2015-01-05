@@ -48,7 +48,7 @@ class ToOrderItemTest extends \PHPUnit_Framework_TestCase
     {
         $this->orderItemBuilderMock = $this->getMock(
             'Magento\Sales\Api\Data\OrderItemDataBuilder',
-            ['populateWithArray', 'create'],
+            ['populateWithArray', 'create', 'setProductOptions'],
             [],
             '',
             false
@@ -81,7 +81,13 @@ class ToOrderItemTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->orderItemMock = $this->getMockForAbstractClass('Magento\Sales\Api\Data\OrderItemInterface');
+        $this->orderItemMock = $this->getMock(
+            'Magento\Sales\Model\Order\Item',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->converter = new \Magento\Quote\Model\Quote\Item\ToOrderItem(
             $this->orderItemBuilderMock,
@@ -116,7 +122,7 @@ class ToOrderItemTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->orderItemMock);
         $this->assertInstanceOf(
-            'Magento\Sales\Api\Data\OrderItemInterface',
+            'Magento\Sales\Model\Order\Item',
             $this->converter->convert($this->quoteItemMock, [])
         );
     }
