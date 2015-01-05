@@ -4,7 +4,7 @@
 
 'use strict';
 var main = angular.module('main', ['ngStorage']);
-main.controller('navigationController', ['$scope', '$state', '$rootScope', 'navigationService', '$localStorage', function ($scope, $state, $rootScope, navigationService, $localStorage) {
+main.controller('navigationController', ['$scope', '$state', '$rootScope', 'navigationService', function ($scope, $state, $rootScope, navigationService) {
     navigationService.load();
     $rootScope.isMenuEnabled = true;
     $scope.itemStatus = function (order) {

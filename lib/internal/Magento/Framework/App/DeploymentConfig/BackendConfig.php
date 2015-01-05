@@ -28,6 +28,9 @@ class BackendConfig extends AbstractSegment
         if (!isset($data[self::KEY_FRONTNAME])) {
             throw new \InvalidArgumentException("No backend frontname provided.");
         }
+        if ($data[self::KEY_FRONTNAME] === '') {
+            throw new \InvalidArgumentException("Empty backend frontname provided.");
+        }
         if (!preg_match('/^[a-zA-Z0-9_]+$/', $data[self::KEY_FRONTNAME])) {
             throw new \InvalidArgumentException("Invalid backend frontname {$data[self::KEY_FRONTNAME]}");
         }
