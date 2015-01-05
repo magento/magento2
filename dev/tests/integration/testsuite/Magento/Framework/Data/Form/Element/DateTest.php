@@ -20,6 +20,9 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     protected $_localeDate;
 
+    /**
+     * SetUp method
+     */
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
