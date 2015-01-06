@@ -180,6 +180,14 @@ class SetupInfoTest extends \PHPUnit_Framework_TestCase
                 ],
                 false
             ],
+            'root within doc root, existent sub-directory, trailing slash' => [
+                [
+                    'DOCUMENT_ROOT' => dirname(__DIR__) . DIRECTORY_SEPARATOR,
+                    'SCRIPT_FILENAME' => __FILE__,
+                    SetupInfo::PARAM_NOT_INSTALLED_URL_PATH => '_files'
+                ],
+                true
+            ],
         ];
     }
 }
