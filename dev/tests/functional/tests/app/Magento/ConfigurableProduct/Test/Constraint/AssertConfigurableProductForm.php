@@ -13,6 +13,10 @@ use Magento\Catalog\Test\Constraint\AssertProductForm;
  */
 class AssertConfigurableProductForm extends AssertProductForm
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * List skipped fixture fields in verify
      *
@@ -55,13 +59,6 @@ class AssertConfigurableProductForm extends AssertProductForm
     protected $skippedVariationMatrixFields = [
         'configurable_attribute',
     ];
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Prepares fixture data for comparison

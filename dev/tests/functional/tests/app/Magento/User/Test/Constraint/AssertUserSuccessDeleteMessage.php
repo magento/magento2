@@ -13,14 +13,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserSuccessDeleteMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'You deleted the user.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const SUCCESS_MESSAGE = 'You deleted the user.';
 
     /**
      * Asserts that success delete message equals to expected message.

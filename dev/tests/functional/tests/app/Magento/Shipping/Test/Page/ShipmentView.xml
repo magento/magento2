@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/order/shipment" module="Magento_Shipping">
+    <blocks>
+        <shipmentBlock>
+            <class>Magento\Shipping\Test\Block\Order\Shipment</class>
+            <locator>.order-details-items</locator>
+            <strategy>css selector</strategy>
+        </shipmentBlock>
+    </blocks>
+</page>

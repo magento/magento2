@@ -92,8 +92,8 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
                     foreach ($appFiles as $info) {
-                        list($fileArea, $fileThemePath, , $module, $filePath) = $info;
-                        $this->deployAppFile($area, $fileArea, $themePath, $fileThemePath, $locale, $module, $filePath);
+                        list(, , , $module, $filePath) = $info;
+                        $this->deployFile($filePath, $area, $themePath, $locale, $module);
                     }
                     foreach ($libFiles as $filePath) {
                         $this->deployFile($filePath, $area, $themePath, $locale, null);
@@ -167,29 +167,6 @@ class Deployer
     }
 
     /**
-     * Deploy a static view file that belongs to the application
-     *
-     * @param string $area
-     * @param string $fileArea
-     * @param string $themePath
-     * @param string $fileThemePath
-     * @param string $locale
-     * @param string $module
-     * @param string $filePath
-     * @return void
-     */
-    private function deployAppFile($area, $fileArea, $themePath, $fileThemePath, $locale, $module, $filePath)
-    {
-        if ($fileArea && $fileArea != $area) {
-            return;
-        }
-        if ($fileThemePath && $fileThemePath != $themePath) {
-            return;
-        }
-        $this->deployFile($filePath, $area, $themePath, $locale, $module);
-    }
-
-    /**
      * Deploy a static view file
      *
      * @param string $filePath
@@ -205,21 +182,36 @@ class Deployer
         if (substr($filePath, -5) == '.less') {
             $requestedPath = preg_replace('/.less$/', '.css', $filePath);
         }
-        $logModule = $module ? "<{$module}>" : (null === $module ? '<lib>' : '<theme>');
+        $logMessage = "Processing file '$filePath' for area '$area', theme '$themePath', locale '$locale'";
+        if ($module) {
+            $logMessage .= ", module '$module'";
+        }
+        $this->logger->logDebug($logMessage);
         try {
             $asset = $this->assetRepo->createAsset(
                 $requestedPath,
                 ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module]
             );
-            $this->logger->logDebug("{$logModule} {$filePath} -> {$asset->getPath()}");
+            $this->logger->logDebug("\tDeploying the file to '{$asset->getPath()}'", '.');
             if ($this->isDryRun) {
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);
             }
             $this->count++;
+        } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {
+            // File was not found by Fallback (possibly because it's wrong context for it) - there is nothing to publish
+            $this->logger->logDebug(
+                "\tNotice: Could not find file '$filePath'. This file may not be relevant for the theme or area."
+            );
+        } catch (\Less_Exception_Compiler $e) {
+            $this->logger->logDebug(
+                "\tNotice: Could not parse LESS file '$filePath'. "
+                . "This may indicate that the file is incomplete, but this is acceptable. "
+                . "The file '$filePath' will be combined with another LESS file."
+            );
         } catch (\Exception $e) {
-            $this->logger->logError("{$logModule} {$filePath}");
+            $this->logger->logError($e->getMessage() . " ($logMessage)");
             $this->logger->logDebug((string)$e);
             $this->errorCount++;
         }

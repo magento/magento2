@@ -39,10 +39,10 @@ class Upload extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
             ];
         } catch (CoreException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         } catch (\Exception $e) {
             $response = ['error' => true, 'message' => __('We cannot upload the CSS file.')];
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->getResponse()->representJson(
             $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)

@@ -65,7 +65,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $this->_dataObjectProcessor = $this->_objectManager->get('Magento\Framework\Reflection\DataObjectProcessor');
 
         $this->_groupRepository = $this->_objectManager->get('Magento\Customer\Api\GroupRepositoryInterface');
-        $this->dateTime = $this->_objectManager->get('\Magento\Framework\Stdlib\DateTime');
+        $this->dateTime = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime');
 
         $this->_block = $this->_objectManager->get(
             'Magento\Framework\View\LayoutInterface'

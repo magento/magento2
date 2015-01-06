@@ -19,17 +19,14 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * Message on the product page 404
      */
     const NOT_FOUND_MESSAGE = 'Whoops, our bad...';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Product view page

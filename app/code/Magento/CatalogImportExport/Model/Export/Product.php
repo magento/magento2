@@ -139,7 +139,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_exportConfig;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -200,7 +200,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
@@ -218,7 +218,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Catalog\Model\Resource\Product\Collection $collection,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
         \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
@@ -973,7 +973,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         $dataRow[self::COL_SKU] = null;
                         $dataRow[self::COL_ATTR_SET] = null;
                         $dataRow[self::COL_TYPE] = null;
-                        $dataRow[self::COL_VISIBILITY] = $productData[$defaultStoreId][self::COL_VISIBILITY];
+                        if (isset($productData[$defaultStoreId][self::COL_VISIBILITY])) {
+                            $dataRow[self::COL_VISIBILITY] = $productData[$defaultStoreId][self::COL_VISIBILITY];
+                        }
                     } else {
                         $dataRow[self::COL_STORE] = null;
                         if (isset($stockItemRows[$productId])) {
@@ -1103,7 +1105,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
             }
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
         return $exportData;
     }

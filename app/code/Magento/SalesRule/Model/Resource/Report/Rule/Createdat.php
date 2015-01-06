@@ -94,7 +94,10 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                         'base_subtotal_canceled',
                         0
                     ) . ' - ' . $adapter->getIfNullSql(
-                        'ABS(base_discount_amount) - ' . $adapter->getIfNullSql('base_discount_canceled', 0),
+                        'ABS(base_discount_amount) - ABS(' . $adapter->getIfNullSql('base_discount_canceled', 0) . ')',
+                        0
+                    ) . ' + ' . $adapter->getIfNullSql(
+                        'base_tax_amount - ' . $adapter->getIfNullSql('base_tax_canceled', 0),
                         0
                     ) . ')
                         * base_to_global_rate)',
@@ -120,9 +123,12 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                         'base_subtotal_refunded',
                         0
                     ) . ' - ' . $adapter->getIfNullSql(
-                        'base_discount_invoiced - ' . $adapter->getIfNullSql('base_discount_refunded', 0),
+                        'ABS(base_discount_invoiced) - ABS(' . $adapter->getIfNullSql('base_discount_refunded', 0) . ')',
                         0
-                    ) . ') * base_to_global_rate)',
+                    ) . ' + ' . $adapter->getIfNullSql(
+                        'base_tax_invoiced - ' . $adapter->getIfNullSql('base_tax_refunded', 0),
+                        0
+                    )   . ') * base_to_global_rate)',
                     0
                 ),
             ];

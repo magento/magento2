@@ -7,6 +7,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var $category \Magento\Catalog\Model\Category */
 $category = $objectManager->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(
     3
 )->setName(
@@ -51,6 +52,7 @@ $product->setTypeId(
 )->save();
 
 $category = $objectManager->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(
     4
 )->setName(
@@ -72,6 +74,7 @@ $category->setId(
 )->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(
     5
 )->setName(

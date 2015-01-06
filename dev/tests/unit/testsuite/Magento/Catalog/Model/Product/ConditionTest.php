@@ -36,7 +36,7 @@ class ConditionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new ObjectManager($this);
-        $this->model = $helper->getObject('\Magento\Catalog\Model\Product\Condition');
+        $this->model = $helper->getObject('Magento\Catalog\Model\Product\Condition');
         $this->model->setTable('testTable')
             ->setPkFieldName('testFieldName');
     }

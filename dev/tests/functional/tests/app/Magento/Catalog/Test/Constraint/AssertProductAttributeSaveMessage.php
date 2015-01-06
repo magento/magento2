@@ -13,14 +13,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductAttributeSaveMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'You saved the product attribute.';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    const SUCCESS_MESSAGE = 'You saved the product attribute.';
 
     /**
      * Assert that message "You saved the product attribute." is present on Attribute page

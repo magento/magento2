@@ -62,7 +62,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->totalsObj = $objectManager->getObject(
-            '\Magento\Tax\Block\Checkout\Cart\Sidebar\Totals',
+            'Magento\Tax\Block\Checkout\Cart\Sidebar\Totals',
             [
                 'checkoutSession' => $checkoutSession,
                 'taxHelper' => $this->taxHelper,

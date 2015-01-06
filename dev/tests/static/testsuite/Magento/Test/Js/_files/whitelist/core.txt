@@ -1,4 +1,3 @@
-app/code/Magento/Authorizenet
 app/code/Magento/Bundle
 app/code/Magento/Captcha
 app/code/Magento/Catalog
@@ -10,7 +9,6 @@ app/code/Magento/GiftMessage
 app/code/Magento/Newsletter
 app/code/Magento/OfflinePayments
 app/code/Magento/Payment
-app/code/Magento/Paypal
 app/code/Magento/Persistent
 app/code/Magento/Sales
 app/code/Magento/Theme

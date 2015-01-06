@@ -8,4 +8,14 @@
     <type name="Magento\Rss\Controller\Adminhtml\Feed">
         <plugin name="adminAuthentication" type="Magento\Rss\App\Action\Plugin\BackendAuthentication"/>
     </type>
+    <type name="Magento\Rss\App\Action\Plugin\BackendAuthentication">
+        <arguments>
+            <argument name="aclResources" xsi:type="array">
+                <item name="feed" xsi:type="string">Magento_Rss::rss</item>
+                <item name="notifystock" xsi:type="string">Magento_Catalog::catalog_inventory</item>
+                <item name="new_order" xsi:type="string">Magento_Sales::actions_view</item>
+                <item name="review" xsi:type="string">Magento_Reports::review_product</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

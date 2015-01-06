@@ -64,10 +64,13 @@ class CategoryUrlPathGenerator
             return '';
         }
         $path = $category->getUrlPath();
-        if ($path !== null && !$category->dataHasChangedFor('url_key') && !$category->dataHasChangedFor('path_ids')) {
+        if ($path !== null && !$category->dataHasChangedFor('url_key') && !$category->dataHasChangedFor('parent_id')) {
             return $path;
         }
         $path = $category->getUrlKey();
+        if ($path === false) {
+            return $category->getUrlPath();
+        }
         if ($this->isNeedToGenerateUrlPathForParent($category)) {
             $parentPath = $this->getUrlPath($this->categoryRepository->get($category->getParentId()));
             $path = $parentPath === '' ? $path : $parentPath . '/' . $path;
@@ -81,7 +84,7 @@ class CategoryUrlPathGenerator
      */
     protected function isNeedToGenerateUrlPathForParent($category)
     {
-        return $category->getParentId() && $category->getLevel() >= self::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING;
+        return $category->isObjectNew() || $category->getLevel() >= self::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING;
     }
 
     /**

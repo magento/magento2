@@ -23,7 +23,7 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Container
             $this->getLayout()->getBlock('page-title')->setPageTitle('Themes');
         }
 
-        $this->buttonList->update('add', 'label', __('Add New Theme'));
+        $this->buttonList->remove('add');
     }
 
     /**

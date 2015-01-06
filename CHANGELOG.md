@@ -1,3 +1,154 @@
+0.42.0-beta2
+=============
+* Framework improvements:
+    * Added composer.lock to the repository
+* Various improvements:
+    * Magento PSR-3 compliance
+    * Updated file iterators to work with symlinks
+    * Replaced end-to-end test for advanced search with injectable test
+    * Replaced end-to-end test for quick search with injectable test
+* Fixed bugs:
+    * Fixed an issue where an exception occurred when adding configurable products to cart from the wishlist
+    * Modify .gitignore CE according to new repos structure (MAGETWO-32095)
+    * Fixed an issue where the 'Not %Username%?' link was displayed for a logged in user while pages were loaded
+    * Fixed an issue where Shopping Cart Price Rules based on product attributes were not applied to configurable products
+    * Fixed an issue where the Tax Class drop-down field on New Customer Group page contained the 'none' value when a tax class already existed
+    * Fixed an issue where the 'Credit Memo' button was absent on the Invoice page for payments
+    * Fixed an issue where incorrect totals were shown in the Coupon Usage report
+    * Fixed an issue where an error occurred and the "Append Comments" checkbox was cleared when submitting an order in the backend
+    * Fixed an issue where the Transactions tab appeared in the backend for orders where offline payment methods were used
+    * Fixed an issue with the extra empty line appearing in the Customer Address template
+* Github requests:
+    * [#853](https://github.com/magento/magento2/pull/853) -- Fix spelling error in Customer module xml
+    * [#858](https://github.com/magento/magento2/pull/858) -- Clicking CMS page in backend takes you to the dashboard
+    * [#858](https://github.com/magento/magento2/issues/816) -- Clicking CMS page takes you to the dashboard
+    * [#859](https://github.com/magento/magento2/pull/859) -- Fix email template creation date not being persisted
+    * [#860](https://github.com/magento/magento2/pull/860) -- Fix currency and price renderer
+
+0.42.0-beta1
+=============
+* Fixed bugs:
+    * Fixed an issue with incorrect price index rounding on bundle product
+    * Fixed an issue with product price not being updated when clicking the downloadable link on the downloadable product page
+    * Fixed an issue with exception appearing when clicking the Compare button for selected products
+    * Added backend UI improvements
+    * Fixed an issue with the Compare Products block appearing on mobile devices
+    * Fixed an issue with inability to add conditions to the Catalog Products List widget
+    * Fixed an issue with a customer redirected to page 404 when trying to unsubscribe from a newsletter
+    * Fixed an issue with showing a warning when customer tried to change billing address during multiple address checkout
+    * Fixed an issue with redirecting a customer to the Admin panel when clicking the Reset customer password link
+    * Fixed an issue with inability of a newly registered customer to select product quantity and shipping addresses during multiple checkout
+    * Fixed an issue with showing Zend_Date_Exception and Zend_Locale_Exception exceptions after a customer placed an order
+    * Fixed an issue with inability to rename a subcategory on a store view level
+    * Fixed an issue with not saving the changed parameters in the Admin section of the backend configuration
+    * Fixed an issue with fatal error appearing when trying to enter a new address on multi-address checkout
+    * Fixed an issue with inability to delete a product in the customer’s wishlist in the Admin panel
+    * Fixed an issue with inability to change product configuration in the customer’s wishlist in the Admin panel
+    * Fixed an issue with showing errors when customer with no addresses tried to checkout a product via Check out With Multiple Addresses
+    * Fixed an issue with fatal errors appearing in the Recently Viewed Products frontend widget block
+    * Fixed an issue with the ability of an authenticated RSS admin user to access all RSS feeds
+    * Fixed an issue with widgets losing their options and part of their layout references if more than11 layout references are added and saved
+    * Fixed an issue with the Privacy Policy link missing in the frontend
+    * Fixed an issue with inability to place an order during multiple checkout
+    * Fixed an issue with store views switching in the frontend
+    * Fixed an issue with incorrect work of the CSS minificator
+    * Fixed an issue with inability to open the edit page for a CMS page after filtering in the grid
+    * Fixed an issue with inability to expand customer menu if it doesn't contain the categories, if responsive
+    * Fixed an issue with the absence of JS validation for the Zip/Postal code field
+    * Fixed an issue with a 1 cent difference in the tax summary and detail on an invoice and a credit memo for a partial invoice when a discount and fixed product tax are applied
+    * Fixed an issue with throwing validation error for the State field when saving a product with FPT
+    * Fixed an issue with throwing an error when trying to save a timezone 
+    * Fixed an issue with Exploited Session ID in second browser leading to Error
+    * Fixed an issue with session loss on page 404 when using the Varnish caching
+    * Fixed an issue with integration test not resetting static properties to correct default values after each test suite
+    * Fixed an issue with PDO exception during an installation when MySQL does not meet minimum version requirement
+    * Removed hardcoded PHP version requirement in the setup module. Validation of PHP version during installation now uses the Composer information
+    * Fixed an issue with not redirecting to the setup page when Magento is not installed
+    * Fixed an issue with missing of some languages in the dropdown list on the Customize Your Store page of the Web installation
+    * Merged and updated data and SQL install scripts to 2.0.0
+    * Merged user reported patch to fix fetching headers for APIs when PHP is run as fast CGI
+    * Removed the @deprecated methods from the code base
+    * Fixed an issue with the fatal error when enabling Website Restrictions in the frontend
+    * Fixed an issue with showing incorrect message for view files population tool when the application is not installed
+    * Fixed certain customer APIs to be accessed anonymously
+    * Fixed integration tests to avoid sending emails
+    * Fixed an issue with the Continue button losing its style after returning to the Shipping Information step during one-page checkout in Luma, IE11, FF
+    * Fixed an issue with incorrect spaces removal
+    * Fixed an issue with broken responsive design of the Compare Products functionality in the Blank Theme
+    * Fixed an issue with showing the “No such entity with cartId' message error appearing during creating a new order for a new customer on non-default website
+    * Fixed an issue with inability to reselect the File Permission on the Readiness Check step during the installation
+    * Fixed an issue with inability to find by name simple and virtual products in the customer wishlist grid
+    * Fixed integration test fail after DbStatusValidatorTest modifies schema version of the Core module
+    * Fixed an issue with inability to install Magento without the ConfigurableProduct module
+    * Fixed an issue with fatal error appearing on the grouped product page if the GroupedProduct module is disabled
+    * Fixed an issue with no validation for assigning an attribute to an attribute group (API)
+    * Fixed an issue with inability to place an order with the registration method and different billing and shipping address
+    * Fixed an issue with broken footer layout on some Admin panel pages (product creation, order creation, catalog etc.) in IE11
+    * Fixed an issue with countries previously selected in the Ship to specific countries field not visible when the parameter is changed to showing all allowed countries and set back again to specific countries in the flat rate shipping method IE11
+    * Fixed an issue with not showing admin tax and cache warning notifications in IE11
+    * Fixed an issue with product alerts not working
+    * Fixed an issue with incorrect URL rewrite for category with two stores after renaming category for one store
+    * Fixed an issue with inability to save a bundle product with a re-created bundle option
+    * Fixed an issue with inability to add conditions to the Catalog Products List widget
+    * Fixed an issue with export not available if modules for Products Import/Export are removed
+    * Fixed an issue with the Use Layered Navigation for custom product attributes leading to an error on an anchor category page in the frontend
+    * Fixed an issue with the broken export product file on environment SampleData
+    * Fixed an issue with cache not invalidating after categories are moved in tree
+    * Fixed an issue with last five orders showing 0 items quantity after invoices are created
+    * Fixed an issue with an exception appearing on a category page if installing Magento without LayeredNavigation module
+    * Fixed an issue with tax rate not being saved if all states were chosen for any non-default country
+    * Fixed an issue with multi-select fail on the Customer add/edit form
+    * Added exception handling for required fields for REST APIs
+    * Fixed an issue with success message missing after the signup for price alert 
+    * Fixed an issue with inability to create a return order from the Admin panel
+    * Fixed an issue with incorrect work of the Default Value for Disable Automatic Group Changes Based on VAT ID setting
+    * Fixed an issue with fatal error on the I18n tools launch due to incorrect bootstrap/autoload
+    * Stabilized functional tests for products in the Catalog module
+    * Stabilized functional tests for product attribute in the Catalog module
+    * Created installation test
+    * Updated functional tests for the new customer form
+    * Updated Magento to follow the new tagging mechanism
+    * Removed incomplete in functional tests for fixed bugs
+    * Fixed an issue with missing theme preview images
+    * Fixed broken SOAP tests
+    * Fixed an issue with invalid online status on the Edit Product page in the Admin panel
+    * Fixed an issue with incorrect location of an error message "Incorrect CAPTCHA" in the frontend
+    * Fixed an issue with showing  endless JS loader on the View Configurable Product page in the frontend page, IE, Google Chrome
+    * Fixed a JavaScript error that occurred on the Create Admin Account step during Magento web installation
+    * Fixed an issue where a product remained in stock after saving it with the ‘Out of Stock’ inventory value
+    * Fixed an issue where the JS loader was not disappearing on the View Product page on the frontend if a customer closed the gallery
+    * Fixed an issue where the JS loader was absent while CAPTCHA was being reloaded
+    * Fixed an incorrect alignment of fields on the Create Packages popup
+    * Fixed an issue where Google Content Experiments was not available for CMS pages
+    * Fixed the broken design of the New Product Attribute popup
+    * Fixed an issue where product page was not found if an incorrect image URL was inserted through using the WYSISYG editor
+    * Fixed an issue where the Search Term Report and Search Term list in backend did not work
+    * Fixed an issue where downloadable links and samples were not saved because of the JavaScript error
+    * Fixed an issue where Magento Installation Guide was not accessible via the  'Getting Started' link if installing Magento through using web installer with custom locale and custom encryption key
+    * Fixed an issue with the code style
+    * Fixed an issue where changes made in tax configuration did not appear in the backend on the Create New Order page
+    * Fixed an issue where it was impossible to update options of bundle products from the mini shopping cart
+    * Fixed an issue where layered navigation worked incorrectly with the Automatic (equalize product counts) setting
+    * Fixed an issue with the incorrect error message appearing when running 'php -f setup/index.php help’
+    * Fixed an issue where URLs for subcategories were incorrect after editing URL of a subcategory
+    * Fixed an issue where attribute labels were loaded from cache after updating product attributes
+    * Fixed an issue where form data was not preserved when product form did not pass server side validation
+    * Fixed an issue with static files missing in the Production mode
+    * Fixed issues with errors appearing after View Files Population Tool was run
+* Processed GitHub requests:
+    * [#683](https://github.com/magento/magento2/pull/683) -- CMS Router not routing correctly
+    * [#786](https://github.com/magento/magento2/pull/786) -- Fix Travis CI builds
+* Various improvements:
+    * Improved error message when DB schema or data was not up-to-date
+    * Added nginx configuration to code base
+    * Removed online payment methods for the Dev Beta release
+* Sample Data:
+    * Implemented Luma Sample Data
+* Framework improvements:
+    * Updated ZF1 dependency to 1.12.9-patch1
+* Documentation update:
+    * Covered the Sales module with API documentation
+
 0.1.0-alpha108
 =============
 * Service Contracts:

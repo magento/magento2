@@ -20,7 +20,7 @@ interface EnvironmentInterface
     /**
      * Return config object
      *
-     * @return \Magento\Framework\Interception\ObjectManager\Config
+     * @return \Magento\Framework\Interception\ObjectManager\ConfigInterface
      */
     public function getDiConfig();
 

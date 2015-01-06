@@ -91,7 +91,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
-                '\Magento\Catalog\Model\Resource\Eav\Attribute',
+                'Magento\Catalog\Model\Resource\Eav\Attribute',
                 [
                     'context' => $this->contextMock,
                     'productFlatIndexerProcessor' => $this->_processor,

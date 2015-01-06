@@ -157,22 +157,35 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
     public function testTrySchedule($scheduledAt, $cronExprArr, $expected)
     {
         // 1. Create mocks
-        $date = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
+        $timezoneMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->setMethods(['date'])
+            ->getMockForAbstractClass();
+        $dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMockForAbstractClass();
 
         /** @var \Magento\Cron\Model\Schedule $model */
         $model = $this->helper->getObject(
             'Magento\Cron\Model\Schedule',
             [
-                'date' => $date
+                'timezone' => $timezoneMock
             ]
         );
 
         // 2. Set fixtures
         $model->setScheduledAt($scheduledAt);
         $model->setCronExprArr($cronExprArr);
-        $date->expects($this->any())->method('timestamp')->will($this->returnArgument(0));
+        if ($scheduledAt && $cronExprArr) {
+            $timezoneMock->expects($this->once())->method('date')->willReturn($dateMock);
+            $date = getdate(is_numeric($scheduledAt) ? $scheduledAt : strtotime($scheduledAt));
+            $dateMock->expects($this->at(0))->method('get')->with(\Zend_Date::MINUTE)->willReturn($date['minutes']);
+            $dateMock->expects($this->at(1))->method('get')->with(\Zend_Date::HOUR)->willReturn($date['hours']);
+            $dateMock->expects($this->at(2))->method('get')->with(\Zend_Date::DAY)->willReturn($date['mday']);
+            $dateMock->expects($this->at(3))->method('get')->with(\Zend_Date::MONTH)->willReturn($date['mon']);
+            $dateMock->expects($this->at(4))->method('get')->with(\Zend_Date::WEEKDAY)->willReturn($date['wday']);
+        }
 
         // 3. Run tested method
         $result = $model->trySchedule();

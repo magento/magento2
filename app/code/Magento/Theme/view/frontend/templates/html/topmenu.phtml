@@ -12,10 +12,9 @@
 ?>
 <?php $columnsLimit = $this->getColumnsLimit() ?: 0; ?>
 <?php $_menu = $this->getHtml('level-top', 'submenu', $columnsLimit) ?>
-<?php if ($_menu): ?>
+
 <nav class="navigation" role="navigation">
     <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
         <?php echo $_menu; ?>
     </ul>
 </nav>
-<?php endif; ?>

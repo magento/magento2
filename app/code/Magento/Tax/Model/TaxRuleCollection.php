@@ -29,8 +29,8 @@ class TaxRuleCollection extends AbstractServiceCollection
      * @param EntityFactory $entityFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param TaxRuleRepositoryInterface $ruleService
      * @param SortOrderBuilder $sortOrderBuilder
+     * @param TaxRuleRepositoryInterface $ruleService
      */
     public function __construct(
         EntityFactory $entityFactory,

@@ -5,56 +5,45 @@
 
 namespace Magento\CatalogSearch\Test\Constraint;
 
+use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\CatalogSearch\Test\Page\AdvancedResult;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertCatalogSearchResult
+ * Assert search results.
  */
 class AssertCatalogSearchResult extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
     /**
-     * Assert that result page contains all products, according to search request, from fixture
+     * Assert that result page contains product, according to search request from fixture.
      *
-     * @param array $products
+     * @param CatalogSearchQuery $catalogSearch
      * @param AdvancedResult $resultPage
      * @return void
      */
-    public function processAssert(array $products, AdvancedResult $resultPage)
+    public function processAssert(CatalogSearchQuery $catalogSearch, AdvancedResult $resultPage)
     {
-        $errors = [];
-        foreach ($products as $product) {
-            $name = $product->getName();
+        $product = $catalogSearch->getDataFieldConfig('query_text')['source']->getProduct();
+        $name = $product->getName();
+        $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($name);
+        while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage()) {
             $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($name);
-            while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage()) {
-                $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($name);
-            }
-
-            if ($isProductVisible === false) {
-                $errors[] = '- ' . $name;
-            }
         }
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            empty($errors),
-            'Were not found the following products:' . implode("\n", $errors)
-        );
+        \PHPUnit_Framework_Assert::assertTrue($isProductVisible, "A product with name '$name' was not found.");
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */
     public function toString()
     {
-        return 'All products have been successfully found.';
+        return 'Searched product has been successfully found.';
     }
 }

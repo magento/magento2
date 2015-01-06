@@ -11,10 +11,10 @@ use Magento\Framework\Config\Data\Scoped;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\DefinitionInterface;
-use Magento\Framework\Interception\ObjectManager\Config;
 use Magento\Framework\Interception\PluginListInterface as InterceptionPluginList;
-use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
+use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
 use Magento\Framework\ObjectManagerInterface;
 use Zend\Soap\Exception\InvalidArgumentException;
 
@@ -37,7 +37,7 @@ class PluginList extends Scoped implements InterceptionPluginList
     /**
      * Type config
      *
-     * @var Config
+     * @var ConfigInterface
      */
     protected $_omConfig;
 
@@ -77,7 +77,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param ScopeInterface $configScope
      * @param CacheInterface $cache
      * @param RelationsInterface $relations
-     * @param Config $omConfig
+     * @param ConfigInterface $omConfig
      * @param DefinitionInterface $definitions
      * @param ObjectManagerInterface $objectManager
      * @param ClassDefinitions $classDefinitions
@@ -89,7 +89,7 @@ class PluginList extends Scoped implements InterceptionPluginList
         ScopeInterface $configScope,
         CacheInterface $cache,
         RelationsInterface $relations,
-        Config $omConfig,
+        ConfigInterface $omConfig,
         DefinitionInterface $definitions,
         ObjectManagerInterface $objectManager,
         ClassDefinitions $classDefinitions,

@@ -190,6 +190,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->http->catchException($bootstrap, new \Exception('Test')));
     }
 
+    public function testCatchExceptionSessionException()
+    {
+        $this->responseMock->expects($this->once())->method('setRedirect');
+        $this->responseMock->expects($this->once())->method('sendHeaders');
+        $bootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
+        $bootstrap->expects($this->once())->method('isDeveloperMode')->willReturn(false);
+        $this->assertTrue($this->http->catchException($bootstrap, new \Magento\Framework\Session\Exception('Test')));
+    }
+
     /**
      * Prepares a mock of bootstrap in "not installed" state
      *
