@@ -36,6 +36,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     * @magentoDbIsolation enabled
+     */
     public function testReindexAll()
     {
         $categories = $this->getCategories(4);
