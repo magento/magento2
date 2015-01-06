@@ -16,22 +16,58 @@
 
 // Colors
 @color-white: #fff;
+@color-black: #000;
+
 @color-gray20: #333;
+@color-gray34: #575757;
 @color-gray56: #8f8f8f;
+@color-gray64: #a3a3a3;
+@color-gray76: #c2c2c2;
+@color-gray78: #c7c7c7;
+@color-gray82: #d1d1d1;
+@color-gray91: #e8e8e8;
+@color-gray95: #f2f2f2;
+
+@color-gray-light1: #e5efe5;
+@color-gray-light2: #bbb;
+@color-gray-light3: #aeaeae;
+
+@color-gray-darken1: #e2e2e2;
+@color-gray-darken2: #cdcdcd;
+@color-gray-darken3: #555;
+
+@color-red10: #e02b27;
+@color-red11: #b30000;
+@color-orange-red1: #ff5501;
+@color-orange-red2: #ff5601;
+
+@color-dark-green1: #006400;
+
+@color-blue1: #1979c3;
+@color-blue2: #006bb4;
+@color-sky-blue1: #68a8e0;
+
+@color-pink1: #fae5e5;
+@color-dark-pink1: #800080;
+
+@color-brownie1: #6f4400;
+@color-brownie-light1: #c07600;
+
+@color-yellow-light1: #fdf0d5;
 
 // Color nesting
 @color-primary: @color-gray20;
 @color-primary-dark: darken(@color-primary, 35%);  // #000
 @color-primary-darker: darken(@color-primary, 13.5%);  // #111
-@color-primary-lighter: lighten(@color-primary, 29%);  // #7d7d7d
+@color-primary-lighter: lighten(@color-primary, 29%)                        ;  // #7d7d7d
 @color-primary-light: lighten(@color-primary, 45%);  // #a6a6a6
-@color-secondary: #e8e8e8;
+@color-secondary: @color-gray91;
 @color-secondary-light: lighten(@color-secondary, 5%);
 @page-bg-color: @color-white;
 @panel-bg: darken(@page-bg-color, 6%);
-@color-active: #ff5501;
-@color-error: #e02b27;
-@color-focus: #68a8e0;
+@color-active: @color-orange-red1;
+@color-error: @color-red10;
+@color-focus: @color-sky-blue1;
 
 @font-family-base: @font-family-sans-serif; // Also used in: @loader-text-font-family
 // setting font-size for HTML tag, use <b>%</b>  units
@@ -73,13 +109,13 @@
 @border-width-base: 1px;
 
 // Links
-@link-color: #1979c3;
+@link-color: @color-blue1;
 @link-text-decoration: none;
 
-@link-color-visited: #800080;
+@link-color-visited: @color-dark-pink1;
 @link-text-decoration-visited: none;
 
-@link-color-hover: #006bb4;
+@link-color-hover: @color-blue2;
 @link-text-decoration-hover: underline;
 
 @link-color-active: @color-active;
@@ -330,8 +366,8 @@
 @navigation-level0-text-transform: uppercase;
 
 @navigation-level0-item-background: '';
-@navigation-level0-item-border: 1px solid #d1d1d1;
-@navigation-level0-item-color: #575757;
+@navigation-level0-item-border: 1px solid @color-gray82;
+@navigation-level0-item-color: @color-gray34;
 @navigation-level0-item-text-decoration: none;
 
 @navigation-level0-item-background-active: '';
@@ -348,7 +384,7 @@
 
 @submenu-item-background: '';
 @submenu-item-border: '';
-@submenu-item-color: #575757;
+@submenu-item-color: @color-gray34;
 @submenu-item-text-decoration: '';
 
 @submenu-item-background-active: '';
@@ -368,7 +404,7 @@
 
 @navigation-desktop-level0-item-background: '';
 @navigation-desktop-level0-item-border: '';
-@navigation-desktop-level0-item-color: #575757;
+@navigation-desktop-level0-item-color: @color-gray34;
 @navigation-desktop-level0-item-text-decoration: none;
 
 @navigation-desktop-level0-item-background-hover: '';
@@ -527,13 +563,13 @@
 
 // Default = secondary button
 @button-color: @color-primary;
-@button-background: #f2f2f2;
-@button-border: 1px solid #cdcdcd;
+@button-background: @color-gray95;
+@button-border: 1px solid @color-gray-darken2;
 @button-gradient-start-color: false;
 @button-gradient-end-color: false;
 
-@button-color-hover: #555;
-@button-background-hover: #e2e2e2;
+@button-color-hover: @color-gray-darken3;
+@button-background-hover: @color-gray-darken1;
 @button-border-hover: @button-border;
 @button-gradient-start-color-hover: false;
 @button-gradient-end-color-hover: false;
@@ -552,14 +588,14 @@
 @button-primary-gradient: false;
 @button-primary-gradient-direction: false;
 
-@button-primary-background: #1979c3;
-@button-primary-border: 1px solid #1979c3;
+@button-primary-background: @color-blue1;
+@button-primary-border: 1px solid @color-blue1;
 @button-primary-color: @color-white;
 @button-primary-gradient-start-color: false;
 @button-primary-gradient-end-color: false;
 
-@button-primary-background-hover: #006bb4;
-@button-primary-border-hover: 1px solid #006bb4;
+@button-primary-background-hover: @color-blue2;
+@button-primary-border-hover: 1px solid @color-blue2;
 @button-primary-color-hover: @button-primary-color;
 @button-primary-gradient-start-color-hover: false;
 @button-primary-gradient-end-color-hover: false;
@@ -699,16 +735,16 @@
 @message-border-radius: false;
 
 // Information message
-@message-info-color: #6f4400;
-@message-info-background: #fdf0d5;
+@message-info-color: @color-brownie1;
+@message-info-background: @color-yellow-light1;
 @message-info-link-color: @link-color;
 @message-info-link-color-hover: @link-color-hover;
 @message-info-link-color-active: @link-color-hover;
 @message-info-border-color: @message-border-color;
 @message-info-icon: @icon-warning;
-@message-info-icon-color-inner: #c07600;
+@message-info-icon-color-inner: @color-brownie-light1;
 @message-info-icon-color-lateral: @color-white;
-@message-info-icon-background: #6f4400;
+@message-info-icon-background: @color-brownie1;
 @message-info-icon-top: @message-icon-top;
 @message-info-icon-right: @message-icon-right;
 @message-info-icon-bottom: @message-icon-bottom;
@@ -732,31 +768,31 @@
 
 // Error message
 @message-error-color: @color-error;
-@message-error-background: #fae5e5;
+@message-error-background: @color-pink1;
 @message-error-link-color: @link-color;
 @message-error-link-color-hover: @link-color-hover;
 @message-error-link-color-active: @link-color-hover;
 @message-error-border-color: @message-border-color;
 @message-error-icon: @icon-warning;
-@message-error-icon-color-inner: #b30000;
+@message-error-icon-color-inner: @color-red11;
 @message-error-icon-color-lateral: @color-white;
-@message-error-icon-background: #b30000;
+@message-error-icon-background: @color-red11;
 @message-error-icon-top: @message-icon-top;
 @message-error-icon-right: @message-icon-right;
 @message-error-icon-bottom: @message-icon-bottom;
 @message-error-icon-left: @message-icon-left;
 
 // Success message
-@message-success-color: #006400;
-@message-success-background: #e5efe5;
+@message-success-color: @color-dark-green1;
+@message-success-background: @color-gray-light1;
 @message-success-link-color: @link-color;
 @message-success-link-color-hover: @link-color-hover;
 @message-success-link-color-active: @link-color-hover;
 @message-success-border-color: @message-border-color;
 @message-success-icon: @icon-checkmark;
-@message-success-icon-color-inner: #006400;
+@message-success-icon-color-inner: @color-dark-green1;
 @message-success-icon-color-lateral: @color-white;
-@message-success-icon-background: #006400;
+@message-success-icon-background: @color-dark-green1;
 @message-success-icon-top: @message-icon-top;
 @message-success-icon-right: @message-icon-right;
 @message-success-icon-bottom: @message-icon-bottom;
@@ -782,7 +818,7 @@
 //    Tooltips variables
 //--------------------------------------
 @tooltip-background: @color-white;
-@tooltip-border-color: #bbb;
+@tooltip-border-color: @color-gray-light2;
 @tooltip-border-width: 1px;
 @tooltip-border-radius: false;
 @tooltip-color: @color-primary;
@@ -829,7 +865,7 @@
 // Form elements inputs default variables
 @form-element-input-type: ''; // input-text, select, textarea, input-radio, input-checkbox
 @form-element-input-background: @color-white;
-@form-element-input-border-color: #c2c2c2;
+@form-element-input-border-color: @color-gray76;
 @form-element-input-border: 1px solid @form-element-input-border-color;
 @form-element-input-border-radius: 1px;
 @form-element-input-height: 32px;
@@ -846,7 +882,7 @@
 @form-element-input-line-height: @line-height-base;
 
 // Placeholder
-@form-element-input-placeholder-color: #c2c2c2;
+@form-element-input-placeholder-color: @color-gray76;
 @form-element-input-placeholder-font-style: @form-element-input-font-style;
 
 // Disabled state
@@ -1058,7 +1094,7 @@
 @form-field-type-inline-control-width: 74.2%;
 
 // Form field label asterisk
-@form-field-label-asterisk-color: #e02b27; // also used in: @form-hasrequired-color
+@form-field-label-asterisk-color: @color-red10; // also used in: @form-hasrequired-color
 @form-field-label-asterisk-font-size: @font-size-s;
 @form-field-label-asterisk-font-family: false;
 @form-field-label-asterisk-font-weight: false;
@@ -1215,8 +1251,8 @@
 @rating-icon-font: @icon-font;
 @rating-icon-font-size: 28px;
 @rating-icon-letter-spacing: -10px;
-@rating-icon-color: #c7c7c7;
-@rating-icon-color-active: #ff5601;
+@rating-icon-color: @color-gray78;
+@rating-icon-color-active: @color-orange-red2;
 @rating-label-hide: false;
 
 //
@@ -1235,15 +1271,15 @@
 @dropdown-list-position-left: false;
 @dropdown-list-pointer: true; // true | false
 @dropdown-list-background: @color-white;
-@dropdown-list-border: 1px solid #bbb;
-@dropdown-list-pointer-border: #bbb;
+@dropdown-list-border: 1px solid @color-gray-light2;
+@dropdown-list-pointer-border: @color-gray-light2;
 @dropdown-list-pointer-position: left; // right
 @dropdown-list-pointer-position-top: -12px;
 @dropdown-list-pointer-position-left-right: 10px;
 @dropdown-list-item-border: 0;
 @dropdown-list-item-padding: 3px 5px;
 @dropdown-list-item-margin: 0;
-@dropdown-list-item-hover: #e8e8e8;
+@dropdown-list-item-hover: @color-gray91;
 @dropdown-list-shadow: 0 3px 3px rgba(0,0,0,.15); // '' | none
 @dropdown-list-z-index: 100;
 
@@ -1338,7 +1374,7 @@
 @breadcrumbs-icon-font-vertical-align: top;
 
 // Breadcrumbs - current page
-@breadcrumbs-current-color: #a3a3a3;
+@breadcrumbs-current-color: @color-gray64;
 @breadcrumbs-current-font-weight: @font-weight-base;
 @breadcrumbs-current-background: false;
 @breadcrumbs-current-border: false;
@@ -1392,7 +1428,7 @@
 @popup-height: auto;
 @popup-padding: 22px;
 @popup-background: @color-white;
-@popup-border: 1px solid #aeaeae;
+@popup-border: 1px solid @color-gray-light3;
 @popup-shadow: 0 3px 3px rgba(0,0,0,.15);
 @popup-fade: opacity .3s linear;
 @popup-z-index: 1001;
@@ -1451,7 +1487,7 @@
 @popup-icon-font-text-hide: true;
 
 // Window overlay variables
-@overlay-background: #000;
+@overlay-background: @color-black;
 @overlay-opacity: .5;
 @overlay-opacity-old: 50;
 @overlay-fade: opacity .15s linear;
