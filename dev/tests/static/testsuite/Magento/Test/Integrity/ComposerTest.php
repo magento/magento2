@@ -1,1 +1,0 @@
-/home/valdislav/public_html/magento2ee.dev/dev/tests/static/testsuite/Magento/Test/Integrity/ComposerTest.php
