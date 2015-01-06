@@ -13,6 +13,9 @@ use Magento\Quote\Model\Quote\Item;
  */
 class Create extends \Magento\Framework\Object implements \Magento\Checkout\Model\Cart\CartInterface
 {
+    /**
+     *
+     */
     const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
 
     /**
@@ -223,6 +226,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
+     * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      * @param array $data
      */
     public function __construct(

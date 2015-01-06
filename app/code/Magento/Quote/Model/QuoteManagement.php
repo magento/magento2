@@ -99,6 +99,7 @@ class QuoteManagement
 
     /**
      * @param Quote $quote
+     * @return void
      */
     protected function deleteNominalItems(QuoteEntity $quote)
     {
@@ -111,6 +112,7 @@ class QuoteManagement
 
     /**
      * @param Quote $quote
+     * @return void
      * @throws \Magento\Framework\Model\Exception
      */
     public function submitNominalItems(QuoteEntity $quote)
@@ -200,7 +202,8 @@ class QuoteManagement
                 $this->quoteAddressToOrder->convert($quote->getShippingAddress(), $orderData)
             );
             $shippingAddress = $this->quoteAddressToOrderAddress->convert(
-                $quote->getShippingAddress(), [
+                $quote->getShippingAddress(),
+                [
                     'address_type' => 'shipping',
                     'email' => $quote->getCustomerEmail()
                 ]
@@ -210,7 +213,8 @@ class QuoteManagement
 
         }
         $billingAddress = $this->quoteAddressToOrderAddress->convert(
-            $quote->getBillingAddress(), [
+            $quote->getBillingAddress(),
+            [
                 'address_type' => 'billing',
                 'email' => $quote->getCustomerEmail()
             ]
