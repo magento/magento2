@@ -272,10 +272,10 @@ class Application
         $objectManager->removeSharedInstance('Magento\Framework\Filesystem');
         $objectManager->addSharedInstance($filesystem, 'Magento\Framework\Filesystem');
 
-        /** @var \Magento\Framework\Logger $logger */
+        /** @var \Psr\Log\LoggerInterface $logger */
         $logger = $objectManager->get('Magento\TestFramework\ErrorLog\Logger');
-        $objectManager->removeSharedInstance('Magento\Framework\Logger');
-        $objectManager->addSharedInstance($logger, 'Magento\Framework\Logger');
+        $objectManager->removeSharedInstance('Psr\Log\LoggerInterface');
+        $objectManager->addSharedInstance($logger, 'Psr\Log\LoggerInterface');
 
         Helper\Bootstrap::setObjectManager($objectManager);
 

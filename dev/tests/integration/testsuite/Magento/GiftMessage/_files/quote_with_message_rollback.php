@@ -10,7 +10,7 @@ $quote = $objectManager->create('Magento\Sales\Model\Quote');
 $quote->load('message_order_21', 'reserved_order_id');
 
 /** @var \Magento\GiftMessage\Model\Message $message */
-$message = $objectManager->create('\Magento\GiftMessage\Model\Message');
+$message = $objectManager->create('Magento\GiftMessage\Model\Message');
 $message->load($quote->getGiftMessageId());
 $message->delete();
 

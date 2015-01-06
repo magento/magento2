@@ -24,7 +24,7 @@ class AbstractCriteriaTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->criteria = $objectManager->getObject('\Magento\Framework\Data\Criteria\Sample');
+        $this->criteria = $objectManager->getObject('Magento\Framework\Data\Criteria\Sample');
     }
 
     /**

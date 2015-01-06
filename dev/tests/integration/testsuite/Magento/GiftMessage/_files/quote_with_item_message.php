@@ -37,7 +37,7 @@ $quote->setReservedOrderId('test_order_item_with_message')
 $quote->collectTotals()->save();
 
 /** @var \Magento\GiftMessage\Model\Message $message */
-$message = $objectManager->create('\Magento\GiftMessage\Model\Message');
+$message = $objectManager->create('Magento\GiftMessage\Model\Message');
 $message->setSender('John Doe');
 $message->setRecipient('Jane Roe');
 $message->setMessage('Gift Message Text');

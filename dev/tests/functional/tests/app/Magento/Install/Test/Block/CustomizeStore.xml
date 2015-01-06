@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <currency>
+            <selector>[ng-model*='currency']</selector>
+            <input>select</input>
+        </currency>
+        <language>
+            <selector>[ng-model*='language']</selector>
+            <input>select</input>
+        </language>
+    </fields>
+</mapping>

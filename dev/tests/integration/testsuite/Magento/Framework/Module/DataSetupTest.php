@@ -23,7 +23,7 @@ class DataSetupTest extends \PHPUnit_Framework_TestCase
     {
         /* reset data version */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Module\ResourceInterface'
+            'Magento\Framework\Module\ResourceInterface'
         )->setDataVersion(
             'adminnotification_setup',
             false

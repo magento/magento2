@@ -523,50 +523,50 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Validate product attribute value for condition
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
-    public function validate(\Magento\Framework\Object $object)
+    public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
         $attrCode = $this->getAttribute();
 
         if ('category_ids' == $attrCode) {
-            return $this->validateAttribute($object->getAvailableInCategories());
-        } elseif (!isset($this->_entityAttributeValues[$object->getId()])) {
-            if (!$object->getResource()) {
+            return $this->validateAttribute($model->getAvailableInCategories());
+        } elseif (!isset($this->_entityAttributeValues[$model->getId()])) {
+            if (!$model->getResource()) {
                 return false;
             }
-            $attr = $object->getResource()->getAttribute($attrCode);
+            $attr = $model->getResource()->getAttribute($attrCode);
 
             if ($attr && $attr->getBackendType() == 'datetime' && !is_int($this->getValue())) {
                 $this->setValue(strtotime($this->getValue()));
-                $value = strtotime($object->getData($attrCode));
+                $value = strtotime($model->getData($attrCode));
                 return $this->validateAttribute($value);
             }
 
             if ($attr && $attr->getFrontendInput() == 'multiselect') {
-                $value = $object->getData($attrCode);
+                $value = $model->getData($attrCode);
                 $value = strlen($value) ? explode(',', $value) : [];
                 return $this->validateAttribute($value);
             }
 
-            return parent::validate($object);
+            return parent::validate($model);
         } else {
             $result = false;
             // any valid value will set it to TRUE
             // remember old attribute state
-            $oldAttrValue = $object->hasData($attrCode) ? $object->getData($attrCode) : null;
+            $oldAttrValue = $model->hasData($attrCode) ? $model->getData($attrCode) : null;
 
-            foreach ($this->_entityAttributeValues[$object->getId()] as $value) {
-                $attr = $object->getResource()->getAttribute($attrCode);
+            foreach ($this->_entityAttributeValues[$model->getId()] as $value) {
+                $attr = $model->getResource()->getAttribute($attrCode);
                 if ($attr && $attr->getBackendType() == 'datetime') {
                     $value = strtotime($value);
                 } elseif ($attr && $attr->getFrontendInput() == 'multiselect') {
                     $value = strlen($value) ? explode(',', $value) : [];
                 }
 
-                $object->setData($attrCode, $value);
-                $result |= parent::validate($object);
+                $model->setData($attrCode, $value);
+                $result |= parent::validate($model);
 
                 if ($result) {
                     break;
@@ -574,9 +574,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             }
 
             if (is_null($oldAttrValue)) {
-                $object->unsetData($attrCode);
+                $model->unsetData($attrCode);
             } else {
-                $object->setData($attrCode, $oldAttrValue);
+                $model->setData($attrCode, $oldAttrValue);
             }
 
             return (bool)$result;

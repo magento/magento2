@@ -14,7 +14,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $configCacheType;
 
-    /** @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $logger;
 
     /** @var \Magento\Sales\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
@@ -26,7 +26,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configCacheType = $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false);
-        $this->logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->salesConfig = $this->getMock('Magento\Sales\Model\Config', [], [], '', false);
         $this->orderTotalFactory = $this->getMock('Magento\Sales\Model\Order\TotalFactory', [], [], '', false);
 

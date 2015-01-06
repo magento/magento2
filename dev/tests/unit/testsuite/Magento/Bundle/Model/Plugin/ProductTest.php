@@ -34,7 +34,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->plugin = $objectManager->getObject(
-            '\Magento\Bundle\Model\Plugin\Product',
+            'Magento\Bundle\Model\Plugin\Product',
             [
                 'type' => $this->type,
             ]

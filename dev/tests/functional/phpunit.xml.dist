@@ -25,6 +25,7 @@
             </arguments>
         </listener>
         <listener class="Mtf\System\Event\StateListener" />
+        <listener class="Mtf\System\JUnit"/>
     </listeners>
 
     <php>
@@ -38,6 +39,7 @@
         <env name="log_directory" value="var/log" />
         <env name="events_preset" value="base" />
         <env name="module_whitelist" value="Magento_Install" />
+        <env name="report_file_name" value="test-cases-report.xml"/>
     </php>
 
 </phpunit>
