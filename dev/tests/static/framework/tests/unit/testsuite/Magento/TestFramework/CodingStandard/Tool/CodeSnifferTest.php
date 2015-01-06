@@ -60,9 +60,4 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
 
         $this->_tool->run($whiteList, $blackList, $extensions);
     }
-
-    public function testGetReportFile()
-    {
-        $this->assertEquals(self::REPORT_FILE, $this->_tool->getReportFile());
-    }
 }
