@@ -7,15 +7,16 @@
 
 @desktop-form-field-vertical-indent: 29px;
 
-
 //
 //  Common
 //  _____________________________________________
 
 & when (@media-common = true) {
+
     //
     //  One Page Checkout
     //  ---------------------------------------------
+
     .opc-wrapper:extend(.abs-add-box-sizing all) {
         .css(padding-bottom, @indent-xl-base);
         > .opc:extend(.abs-reset-list all) {
@@ -146,6 +147,13 @@
         //
         //  Order review
         //  ---------------------------------------------
+
+        .order-review {
+            .fieldset > .field > .label {
+                font-weight: @font-weight-base;
+            }
+        }
+        
         .data.table:extend(.abs-product-options-list all) {
             .col {
                 &.price,
@@ -172,6 +180,7 @@
         //
         //  Customer login
         //  ---------------------------------------------
+
         .login-wrapper {
             .block {
                 .block-title:extend(.abs-login-block-title all) {
@@ -193,6 +202,7 @@
     //
     //  Shipping methods
     //  ---------------------------------------------
+
     .methods-shipping {
         .item-title:extend(.abs-methods-shipping-title all) {
         }
@@ -228,29 +238,30 @@
     //
     //  Payment methods
     //  ---------------------------------------------
+
     .methods-payment {
-        .item-title {
-            font-weight: @font-weight-base;
-        }
-        .item-content {
-            margin: 0 0 0 @indent-xl-base;
-            .fieldset {
-                padding: 15px 0;
-                .field {
-                    .font-size(@font-size-base);
-                    &:first-child {
-                        margin-top: 0;
-                    }
-                }
-                &.redirect {
-                    .font-size(@font-size-s);
-                    margin-left: -17px;
-                    padding: 0 0 15px;
-                }
-            }
-            .label {
+        .item {
+            &-title {
                 font-weight: @font-weight-base;
             }
+            &-content {
+                margin: 0 0 0 @indent-base;
+                .label {
+                    font-weight: @font-weight-base;
+                }
+            }
+        }
+        .fieldset {
+            padding: 15px 0 @indent-m-base;
+        }
+        .fieldset & {
+            .item-content > .fieldset > .field:first-child {
+                margin-top: 0;
+            }
+        }
+        .redirect {
+            .font-size(@font-size-s);
+            padding: 0 0 15px;
         }
         img {
             margin-right: @indent-xs-base;
@@ -265,6 +276,7 @@
     //
     //  Checkout Progress
     //  ---------------------------------------------
+
     .opc-block-progress:extend(.abs-add-box-sizing all) {
         margin-bottom: @indent-l-base;
         > .title {
@@ -321,6 +333,7 @@
     //
     //  Checkout Success
     //  ---------------------------------------------
+
     .checkout-onepage-success {
         .page-title {
             .print:extend(.abs-no-display all) {
@@ -346,6 +359,7 @@
 //
 //  Mobile
 //  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .opc-wrapper {
         table.data.table:extend(.abs-checkout-order-review all) {
@@ -356,6 +370,7 @@
 //
 //  Desktop
 //  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .checkout-onepage-index .column.main:extend(.abs-add-clearfix-desktop-s all) {
     }
@@ -413,6 +428,7 @@
     //
     //  Checkout success
     //  ---------------------------------------------
+
     .checkout-onepage-success {
         .page-title {
             .print {

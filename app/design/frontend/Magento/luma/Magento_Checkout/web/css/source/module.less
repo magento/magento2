@@ -12,9 +12,11 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
+
     //
     //  One Page Checkout
     //  ---------------------------------------------
+
     .opc-wrapper:extend(.abs-add-box-sizing all) {
         .field select {
             max-width: none;
@@ -63,7 +65,7 @@
                 .css(background, @sidebar-background);
                 .css(color, lighten(@color-primary, 40%));
                 margin-bottom: 2px;
-                padding: 13px 25px;
+                padding: 13px @indent-m-base;
                 position: relative;
                 h2 {
                     .font-size(18);
@@ -76,10 +78,10 @@
             }
 
             &-content {
-                padding: 35px 25px 80px;
+                padding: 35px @indent-m-base 80px;
                 position: relative;
                 .addresses .control {
-                    margin: 20px 0 30px;
+                    margin: @indent-base 0 @indent-l-base;
                 }
                 .fieldset {
                     margin-bottom: 0;
@@ -127,7 +129,7 @@
                     }
                 }
                 .actions {
-                    margin-top: 40px;
+                    margin-top: @indent-xl-base;
                 }
                 .field.street {
                     .field.additional {
@@ -145,10 +147,11 @@
         //
         //  Customer login
         //  ---------------------------------------------
+
         .login-wrapper {
             .block {
                 .block-title {
-                    margin-bottom: 30px;
+                    margin-bottom: @indent-l-base;
                     strong {
                         .font-size(22);
                         font-weight: @font-weight-light;
@@ -156,14 +159,14 @@
                     }
                 }
                 .fieldset.guest {
-                    margin-top: 20px;
+                    margin-top: @indent-base;
                 }
                 .field {
                     &.choice {
-                        margin-bottom: 10px;
+                        margin-bottom: @indent-s-base;
                     }
                     &.note {
-                        margin-bottom: 30px;
+                        margin-bottom: @indent-l-base;
                     }
                 }
             }
@@ -230,6 +233,7 @@
     //
     //  Shipping methods
     //  ---------------------------------------------
+
     .methods-shipping {
         .item-title:extend(.abs-methods-shipping-title all) {
         }
@@ -270,6 +274,7 @@
     //
     //  Payment methods
     //  ---------------------------------------------
+
     .methods-payment {
         border-bottom: @border-width-base solid @border-color-base;
         .item-title {
@@ -339,9 +344,10 @@
     //
     //  Checkout Progress
     //  ---------------------------------------------
+
     .opc-block-progress-wrapper {
         margin-bottom: @indent-l-base;
-        margin-top: 20px;
+        margin-top: @indent-base;
     }
 
     .opc-block-progress:extend(.abs-add-box-sizing all) {
@@ -424,6 +430,7 @@
     //
     //  Checkout Success
     //  ---------------------------------------------
+
     .checkout-onepage-success {
         .page-title {
             .print:extend(.abs-no-display all) {
@@ -449,6 +456,7 @@
 //
 //  Mobile
 //  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .table-wrapper.order-review-wrapper:extend(.abs-no-border-top all) {
         .table.table-order-review:extend(.abs-checkout-order-review all) {
@@ -474,6 +482,7 @@
 //
 //  Desktop
 //  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .checkout-onepage-index .column.main:extend(.abs-add-clearfix-desktop-s all) {
     }
@@ -525,6 +534,7 @@
         //
         //  Login or register
         //  ---------------------------------------------
+
         .login-wrapper:extend(.abs-add-clearfix-desktop-s all) {
             .block:extend(.abs-blocks-2columns-s all) {
                 margin-bottom: 0;
@@ -551,6 +561,7 @@
     //
     //  Payment methods
     //  ---------------------------------------------
+
     .methods-payment .item-content > .fieldset,
     .order-review .fieldset {
         margin: @indent-s-base 0 @indent-l-base @opc-margin-left;
@@ -616,6 +627,7 @@
     //
     //  Checkout success
     //  ---------------------------------------------
+
     .checkout-onepage-success {
         .page-title {
             .print:extend(.abs-action-print-s all) {
