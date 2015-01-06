@@ -28,6 +28,12 @@ class Filter extends \Magento\Email\Model\Template\Filter
         return $this;
     }
 
+    /**
+     * Retrieve media file URL directive
+     *
+     * @param string[] $construction
+     * @return string
+     */
     public function mediaDirective($construction)
     {
         $params = $this->_getIncludeParameters($construction[2]);
