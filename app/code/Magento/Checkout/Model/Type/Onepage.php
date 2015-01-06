@@ -190,6 +190,7 @@ class Onepage
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,

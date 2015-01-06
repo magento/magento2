@@ -18,12 +18,13 @@ class ToOrderConverter
     /**
      * @param QuoteAddressToOrder $subject
      * @param QuoteAddress $address
+     * @param array $additional
      * @return array
      */
-    public function beforeConvert(QuoteAddressToOrder $subject, QuoteAddress $address)
+    public function beforeConvert(QuoteAddressToOrder $subject, QuoteAddress $address, $additional)
     {
         $this->quoteAddress = $address;
-        return [$address];
+        return [$address, $additional];
     }
 
     /**

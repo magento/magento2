@@ -75,5 +75,4 @@ interface OrderManagementInterface
      * @return \Magento\Sales\Api\Data\OrderInterface
      */
     public function place(\Magento\Sales\Api\Data\OrderInterface $order);
-
 }

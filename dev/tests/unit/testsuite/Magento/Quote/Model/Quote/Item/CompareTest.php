@@ -11,7 +11,7 @@ namespace Magento\Quote\Model\Quote\Item;
 class CompareTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Helper\Quote\Item\Compare
+     * @var \Magento\Quote\Model\Quote\Item\Compare
      */
     protected $helper;
 
