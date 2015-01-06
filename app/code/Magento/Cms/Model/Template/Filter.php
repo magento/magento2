@@ -27,4 +27,10 @@ class Filter extends \Magento\Email\Model\Template\Filter
         $this->_useSessionInUrl = (bool)$flag;
         return $this;
     }
+
+    public function mediaDirective($construction)
+    {
+        $params = $this->_getIncludeParameters($construction[2]);
+        return $this->_storeManager->getStore()->getBaseMediaDir() . '/' . $params['url'];
+    }
 }

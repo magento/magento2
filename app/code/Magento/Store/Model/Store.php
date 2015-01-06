@@ -595,6 +595,26 @@ class Store extends AbstractModel implements
     }
 
     /**
+     * Retrieve base media directory path
+     *
+     * @return string
+     */
+    public function getBaseMediaDir()
+    {
+        return $this->filesystem->getUri(DirectoryList::MEDIA);
+    }
+
+    /**
+     * Retrieve base static directory path
+     *
+     * @return string
+     */
+    public function getBaseStaticDir()
+    {
+        return $this->filesystem->getUri(DirectoryList::STATIC_VIEW);
+    }
+
+    /**
      * Append script file name to url in case when server rewrites are disabled
      *
      * @param   string $url
