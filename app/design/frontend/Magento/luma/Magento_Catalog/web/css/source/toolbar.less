@@ -4,7 +4,7 @@
 
 @toolbar-mode-icon-font-size: 16px;
 @toolbar-background: transparent;
-@toolbar-element-background: #f0f0f0;
+@toolbar-element-background: @color-gray94;
 @pager-action-background: @toolbar-element-background;
 @pager-action-background-hover: darken(@toolbar-element-background, 7%);
 @pager-font-weight: @font-weight-bold;
@@ -181,7 +181,7 @@
             &.active {
                 .css(box-shadow, @button-shadow-active);
                 background: darken(@toolbar-element-background, 7%);
-                color: #9e9e9e;
+                color: @color-gray62;
             }
             .icon-font(
                 @icon-grid,
