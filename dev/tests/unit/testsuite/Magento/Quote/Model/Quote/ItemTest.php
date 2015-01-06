@@ -134,7 +134,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->modelContext,
                 'statusListFactory' => $statusListFactory,
                 'itemOptionFactory' => $this->itemOptionFactory,
-                'compareHelper' => $this->compareHelper,
+                'quoteItemCompare' => $this->compareHelper,
                 'stockRegistry' => $this->stockRegistry
             ]
         );
