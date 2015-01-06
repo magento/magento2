@@ -51,7 +51,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
         $this->_typeConfigurableFactory = $this->getMock(
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory',

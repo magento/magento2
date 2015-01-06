@@ -70,7 +70,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Eav\Model\Attribute\GroupRepository',
+            'Magento\Eav\Model\Attribute\GroupRepository',
             [
                 'groupResource' => $this->groupResourceMock,
                 'groupListFactory' => $this->groupListFactoryMock,

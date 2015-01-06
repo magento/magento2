@@ -77,7 +77,7 @@ class AssignThemeToStore extends \Magento\DesignEditor\Controller\Adminhtml\Syst
             }
             $response = ['message' => $successMessage, 'themeId' => $themeCustomization->getId()];
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $response = ['error' => true, 'message' => __('This theme is not assigned.')];
         }
         $this->getResponse()->representJson($coreHelper->jsonEncode($response));

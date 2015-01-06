@@ -19,7 +19,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->timezoneMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $loggerMock = $this->getMock('\Magento\Framework\Logger', [], [], '', false);
+        $loggerMock = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
         $localeResolverMock = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
 
         $this->model = new Date($this->timezoneMock, $loggerMock, $localeResolverMock);

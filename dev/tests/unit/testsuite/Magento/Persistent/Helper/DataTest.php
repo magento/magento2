@@ -21,7 +21,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_modulesReader = $this->getMock('\Magento\Framework\Module\Dir\Reader', [], [], '', false);
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_helper = $objectManager->getObject(
-            '\Magento\Persistent\Helper\Data',
+            'Magento\Persistent\Helper\Data',
             ['modulesReader' => $this->_modulesReader]
         );
     }

@@ -157,7 +157,7 @@ class TypeProcessor
             }
             $reflection = new ClassReflection($class);
             $docBlock = $reflection->getDocBlock();
-            $this->_types[$typeName]['documentation'] = $docBlock ? $this->_getDescription($docBlock) : '';
+            $this->_types[$typeName]['documentation'] = $docBlock ? $this->getDescription($docBlock) : '';
             /** @var \Zend\Code\Reflection\MethodReflection $methodReflection */
             foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $methodReflection) {
                 if ($methodReflection->class === "Magento\Framework\Model\AbstractModel") {
@@ -200,7 +200,7 @@ class TypeProcessor
      * @param \Zend\Code\Reflection\DocBlockReflection $doc
      * @return string
      */
-    protected function _getDescription(\Zend\Code\Reflection\DocBlockReflection $doc)
+    public function getDescription(\Zend\Code\Reflection\DocBlockReflection $doc)
     {
         $shortDescription = $doc->getShortDescription();
         $longDescription = $doc->getLongDescription();

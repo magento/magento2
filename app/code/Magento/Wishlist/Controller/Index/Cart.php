@@ -22,17 +22,65 @@ class Cart extends Action\Action implements IndexInterface
     protected $quantityProcessor;
 
     /**
+     * @var \Magento\Wishlist\Model\ItemFactory
+     */
+    protected $itemFactory;
+
+    /**
+     * @var \Magento\Checkout\Model\Cart
+     */
+    protected $cart;
+
+    /**
+     * @var \Magento\Wishlist\Model\Item\OptionFactory
+     */
+    private $optionFactory;
+
+    /**
+     * @var \Magento\Catalog\Helper\Product
+     */
+    protected $productHelper;
+
+    /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
+    /**
+     * @var \Magento\Wishlist\Helper\Data
+     */
+    protected $helper;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
+     * @param \Magento\Wishlist\Model\ItemFactory $itemFactory
+     * @param \Magento\Checkout\Model\Cart $cart
+     * @param \Magento\Wishlist\Model\Item\OptionFactory $
+     * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Wishlist\Helper\Data $helper
      */
     public function __construct(
         Action\Context $context,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor
+        \Magento\Wishlist\Model\LocaleQuantityProcessor $quantityProcessor,
+        \Magento\Wishlist\Model\ItemFactory $itemFactory,
+        \Magento\Checkout\Model\Cart $cart,
+        \Magento\Wishlist\Model\Item\OptionFactory $optionFactory,
+        \Magento\Catalog\Helper\Product $productHelper,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Wishlist\Helper\Data $helper
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->quantityProcessor = $quantityProcessor;
+        $this->itemFactory = $itemFactory;
+        $this->cart = $cart;
+        $this->optionFactory = $optionFactory;
+        $this->productHelper = $productHelper;
+        $this->escaper = $escaper;
+        $this->helper = $helper;
         parent::__construct($context);
     }
 
@@ -49,7 +97,7 @@ class Cart extends Action\Action implements IndexInterface
         $itemId = (int)$this->getRequest()->getParam('item');
 
         /* @var $item \Magento\Wishlist\Model\Item */
-        $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId);
+        $item = $this->itemFactory->create()->load($itemId);
         if (!$item->getId()) {
             return $this->_redirect('*/*');
         }
@@ -72,70 +120,61 @@ class Cart extends Action\Action implements IndexInterface
             $item->setQty($qty);
         }
 
-        /* @var $session \Magento\Framework\Session\Generic */
-        $session = $this->_objectManager->get('Magento\Wishlist\Model\Session');
-        $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
-
         $redirectUrl = $this->_url->getUrl('*/*');
+        $configureUrl = $this->_url->getUrl(
+            '*/*/configure/',
+            [
+                'id' => $item->getId(),
+                'product_id' => $item->getProductId(),
+            ]
+        );
 
         try {
-            $options = $this->_objectManager->create(
-                'Magento\Wishlist\Model\Item\Option'
-            )->getCollection()->addItemFilter(
-                [$itemId]
-            );
+            /** @var \Magento\Wishlist\Model\Resource\Item\Option\Collection $options */
+            $options = $this->optionFactory->create()->getCollection()->addItemFilter([$itemId]);
             $item->setOptions($options->getOptionsByItem($itemId));
 
-            $buyRequest = $this->_objectManager->get(
-                'Magento\Catalog\Helper\Product'
-            )->addParamsToBuyRequest(
+            $buyRequest = $this->productHelper->addParamsToBuyRequest(
                 $this->getRequest()->getParams(),
                 ['current_config' => $item->getBuyRequest()]
             );
 
             $item->mergeBuyRequest($buyRequest);
-            $item->addToCart($cart, true);
-            $cart->save()->getQuote()->collectTotals();
+            $item->addToCart($this->cart, true);
+            $this->cart->save()->getQuote()->collectTotals();
             $wishlist->save();
 
-            if (!$cart->getQuote()->getHasError()) {
+            if (!$this->cart->getQuote()->getHasError()) {
                 $message = __(
                     'You added %1 to your shopping cart.',
-                    $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($item->getProduct()->getName())
+                    $this->escaper->escapeHtml($item->getProduct()->getName())
                 );
                 $this->messageManager->addSuccess($message);
             }
 
-            $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
-
-            if ($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getShouldRedirectToCart()) {
-                $redirectUrl = $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl();
+            if ($this->cart->getShouldRedirectToCart()) {
+                $redirectUrl = $this->cart->getCartUrl();
             } else {
                 $refererUrl = $this->_redirect->getRefererUrl();
-                if ($refererUrl &&
-                    ($refererUrl != $this->_objectManager->get('Magento\Framework\UrlInterface')
-                            ->getUrl('*/*/configure/', ['id' => $item->getId()])
-                    )
-                ) {
+                if ($refererUrl && $refererUrl != $configureUrl) {
                     $redirectUrl = $refererUrl;
                 }
             }
-            $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
         } catch (\Magento\Framework\Model\Exception $e) {
             if ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_NOT_SALABLE) {
                 $this->messageManager->addError(__('This product(s) is out of stock.'));
             } elseif ($e->getCode() == \Magento\Wishlist\Model\Item::EXCEPTION_CODE_HAS_REQUIRED_OPTIONS) {
                 $this->messageManager->addNotice($e->getMessage());
-                $redirectUrl = $this->_url->getUrl('*/*/configure/', ['id' => $item->getId()]);
+                $redirectUrl = $configureUrl;
             } else {
                 $this->messageManager->addNotice($e->getMessage());
-                $redirectUrl = $this->_url->getUrl('*/*/configure/', ['id' => $item->getId()]);
+                $redirectUrl = $configureUrl;
             }
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Cannot add item to shopping cart'));
         }
 
-        $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+        $this->helper->calculate();
 
         return $this->getResponse()->setRedirect($redirectUrl);
     }

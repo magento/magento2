@@ -43,7 +43,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Authorization\Model\Resource\Role\CollectionFactory', [], [], '', false),
             $this->getMock('Magento\Authorization\Model\RulesFactory', [], [], '', false),
             $this->getMock('Magento\Authorization\Model\Resource\Rules\CollectionFactory', [], [], '', false),
-            $this->getMock('Magento\Framework\Logger', [], [], '', false),
+            $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMock('Magento\Framework\Acl\RootResource', [], [], '', false)
         );
     }

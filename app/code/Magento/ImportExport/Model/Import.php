@@ -110,9 +110,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_filesystem;
 
     /**
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Logger\AdapterFactory $adapterFactory
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param Import\ConfigInterface $importConfig
@@ -126,9 +125,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Logger\AdapterFactory $adapterFactory,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\ImportExport\Model\Import\ConfigInterface $importConfig,
@@ -152,7 +150,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->indexerRegistry = $indexerRegistry;
         $this->_behaviorFactory = $behaviorFactory;
         $this->_filesystem = $filesystem;
-        parent::__construct($logger, $filesystem, $adapterFactory, $data);
+        parent::__construct($logger, $filesystem, $data);
     }
 
     /**
@@ -170,7 +168,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 try {
                     $this->_entityAdapter = $this->_entityFactory->create($entities[$this->getEntity()]['model']);
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                     throw new \Magento\Framework\Model\Exception(__('Please enter a correct entity model'));
                 }
                 if (!$this->_entityAdapter instanceof \Magento\ImportExport\Model\Import\Entity\AbstractEntity &&
