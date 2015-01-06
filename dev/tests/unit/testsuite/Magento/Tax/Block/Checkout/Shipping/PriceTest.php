@@ -68,7 +68,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->priceObj = $objectManager->getObject(
-            '\Magento\Tax\Block\Checkout\Shipping\Price',
+            'Magento\Tax\Block\Checkout\Shipping\Price',
             [
                 'checkoutSession' => $checkoutSession,
                 'taxHelper' => $this->taxHelper,

@@ -61,13 +61,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->loggerMock = $this->getMock(
-            'Magento\Framework\Logger',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->fetchStrategy = $this->getMock(
             'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',

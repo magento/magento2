@@ -79,7 +79,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $this->taxCalculationService = $objectManager->getObject(
-            '\Magento\Tax\Model\TaxCalculation',
+            'Magento\Tax\Model\TaxCalculation',
             [
                 'calculation' => $this->calculationTool,
                 'calculatorFactory' => $this->calculatorFactory,

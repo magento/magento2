@@ -22,7 +22,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('\Magento\Catalog\Model\Product\Option');
+        $this->model = $objectManager->getObject('Magento\Catalog\Model\Product\Option');
         $this->model->setProduct($this->productMock);
     }
 

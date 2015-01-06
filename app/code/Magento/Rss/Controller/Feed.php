@@ -25,7 +25,7 @@ class Feed extends \Magento\Framework\App\Action\Action
     protected $httpAuthentication;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -52,7 +52,7 @@ class Feed extends \Magento\Framework\App\Action\Action
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AccountManagementInterface $customerAccountManagement
      * @param \Magento\Framework\HTTP\Authentication $httpAuthentication
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -62,7 +62,7 @@ class Feed extends \Magento\Framework\App\Action\Action
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\AccountManagementInterface $customerAccountManagement,
         \Magento\Framework\HTTP\Authentication $httpAuthentication,
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->rssManager = $rssManager;
         $this->scopeConfig = $scopeConfig;
@@ -86,7 +86,7 @@ class Feed extends \Magento\Framework\App\Action\Action
                 $this->customerSession->setCustomerDataAsLoggedIn($customer);
                 $this->customerSession->regenerateId();
             } catch (\Exception $e) {
-                $this->logger->logException($e);
+                $this->logger->critical($e);
             }
         }
 

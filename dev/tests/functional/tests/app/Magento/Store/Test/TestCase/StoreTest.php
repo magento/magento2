@@ -26,7 +26,7 @@ class StoreTest extends Functional
     public function testCreateNewLocalizedStoreView()
     {
         $objectManager = Factory::getObjectManager();
-        $storeFixture = $objectManager->create('\Magento\Store\Test\Fixture\Store', ['dataSet' => 'german']);
+        $storeFixture = $objectManager->create('Magento\Store\Test\Fixture\Store', ['dataSet' => 'german']);
 
         $storeListPage = Factory::getPageFactory()->getAdminSystemStore();
         $storeListPage->open();

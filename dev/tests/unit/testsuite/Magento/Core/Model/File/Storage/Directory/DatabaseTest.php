@@ -55,7 +55,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $resourceDirectoryDatabaseMock;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $loggerMock;
 
@@ -106,7 +106,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->directoryFactoryMock->expects(
             $this->any()
@@ -175,7 +175,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->directoryMock->expects($this->any())->method('getParentId')->will($this->returnValue(null));
 
-        $this->loggerMock->expects($this->any())->method('logException');
+        $this->loggerMock->expects($this->any())->method('critical');
 
         $this->directoryDatabase->importDirectories([]);
     }

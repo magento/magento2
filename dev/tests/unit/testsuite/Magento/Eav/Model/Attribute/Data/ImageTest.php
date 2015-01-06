@@ -14,7 +14,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $timezoneMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $loggerMock = $this->getMock('\Magento\Framework\Logger', [], [], '', false);
+        $loggerMock = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
         $localeResolverMock = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
         $urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', [], [], '', false);
         $fileValidatorMock = $this->getMock(

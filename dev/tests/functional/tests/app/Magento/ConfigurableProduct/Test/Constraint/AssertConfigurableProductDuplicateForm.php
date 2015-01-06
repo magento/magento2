@@ -39,6 +39,10 @@ class AssertConfigurableProductDuplicateForm extends AssertConfigurableProductFo
         $productData = $product->getData();
         $productData['sku'] = $duplicateProductSku;
         $productData['status'] = 'Product offline';
+        if (isset($compareData['quantity_and_stock_status']['qty'])) {
+            $compareData['quantity_and_stock_status']['qty'] = '';
+            $compareData['quantity_and_stock_status']['is_in_stock'] = 'Out of Stock';
+        }
         $fixtureData = $this->prepareFixtureData($productData, $this->sortFields);
         $formData = $this->prepareFormData($productPage->getProductForm()->getData($product), $this->sortFields);
         $error = $this->verifyData($fixtureData, $formData);

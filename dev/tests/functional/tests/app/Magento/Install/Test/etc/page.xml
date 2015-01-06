@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page module="Magento_Install">
+    <install>
+        <mca>setup/</mca>
+        <class>Magento\Install\Test\Page\Install</class>
+    </install>
+</page>

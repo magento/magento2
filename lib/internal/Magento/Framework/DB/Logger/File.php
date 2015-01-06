@@ -72,7 +72,7 @@ class File extends LoggerAbstract
     /**
      * {@inheritdoc}
      */
-    public function logException(\Exception $e)
+    public function critical(\Exception $e)
     {
         $this->log("EXCEPTION \n$e\n\n");
     }

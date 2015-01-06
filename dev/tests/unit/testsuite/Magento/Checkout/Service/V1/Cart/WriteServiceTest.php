@@ -104,7 +104,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->service = $this->objectManager->getObject(
-            '\Magento\Checkout\Service\V1\Cart\WriteService',
+            'Magento\Checkout\Service\V1\Cart\WriteService',
             [
                 'storeManager' => $this->storeManagerMock,
                 'customerRepository' => $this->customerRepositoryMock,
