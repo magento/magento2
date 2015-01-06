@@ -1,28 +1,31 @@
-# Contribution Guide
+# Contributing to Magento 2 code
 
-The Magento 2 development team will review all issues and contributions submitted by the community of developers. Contributions can take the form of new components/features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations or just good suggestions. To assist in the expediency of the review process, we strongly encourage you to follow all the proper requirements stated below in Definition of Done, before submitting any code for consideration.
+Contributions to the Magento 2 codebase are done using the fork & pull model.
+This contribution model has contributors maintaining their own copy of the forked codebase (which can easily be synced with the main copy). The forked repository is then used to submit a request to the base repository to “pull” a set of changes (hence the phrase “pull request”).
 
-## Contribution Process
+Contributions can take the form of new components/features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations or just good suggestions.
+
+The Magento 2 development team will review all issues and contributions submitted by the community of developers in the first in, first out order. During the review we might require clarifications from the contributor. If there is no response from the contributor for two weeks, the issue is closed.
+
+
+## Contribution requirements
+
+1. Contributions must adhere to [Magento coding standards](http://devdocs.magento.com/guides/v1.0/coding-standards/bk-coding-standards.html).
+2. Pull requests (PRs) must be accompanied by a meaningful description of their purpose. Comprehensive descriptions increase the chances of a pull request to be merged quickly and without additional clarification requests.
+3. Commits must be accompanied by meaningful commit messages.
+4. PRs which include bug fixing, must be accompanied with step-by-step description of how to reproduce the bug.
+3. PRs which include new logic or new features must be submitted along with:
+* Unit/integration test coverage (we will be releasing more information on writing test coverage in the near future).
+* Proposed [documentation](http://devdocs.magento.com) update. Documentation contributions can be submitted [here](https://github.com/magento/devdocs).
+4. For large features or changes, please [open an issue](https://github.com/magento/magento2/issues) and discuss first. This may prevent duplicate or unnecessary effort, and it may gain you some additional contributors.
+5. All automated tests are passed successfully (all builds on [Travis CI](https://travis-ci.org/magento/magento2) must be green).
+
+## Contribution process
 
 If you are a new GitHub user, we recommend that you create your own [free github account](https://github.com/signup/free). By doing that, you will be able to collaborate with the Magento 2 development team, “fork” the Magento 2 project and be able to easily send “pull requests”.
 
 1. Search current [listed issues](https://github.com/magento/magento2/issues) (open or closed) for similar proposals of intended contribution before starting work on a new contribution.
 2. Review the [Contributor License Agreement](https://github.com/magento/magento2/blob/master/CONTRIBUTOR_LICENSE_AGREEMENT.html) if this is your first time contributing.
 3. Create and test your work.
-4. Fork the Magento 2 repository according to [github's Fork A Repo instructions](https://help.github.com/articles/fork-a-repo) and when you are ready to send us a Pull Request – follow [github's Using Pull Requests instructions](https://help.github.com/articles/using-pull-requests).
+4. Fork the Magento 2 repository according to [Fork a repository instructions](http://devdocs.magento.com/guides/v1.0/contributor-guide/CONTRIBUTING.html#fork) and when you are ready to send us a pull request – follow [Create a pull request instructions](http://devdocs.magento.com/guides/v1.0/contributor-guide/CONTRIBUTING.html#pull_request).
 5. Once your contribution is received, Magento 2 development team will review the contribution and collaborate with you as needed to improve the quality of the contribution.
-
-### Contribution Acceptance Criteria
-
-1. Code changes must be covered with automated tests and supplied along with the patch (or fork). Author chooses the best approach for testing as deemed necessary. See [Magento Automated Testing Standard](https://github.com/magento/magento2/wiki/Magento-Automated-Testing-Standard) for additional guidance.
-2. New features or proposals must be supplied with documentation -- functional (how a feature works) or technical (how it is implemented/designed), or both.
-
-## Frequently Asked Questions
-
-**Do I need to follow all requirements of the contribution process?**
-
-Yes. We strongly encourage that you follow the requirements as stated, before submitting your code or patch for Magento 2 development team's review. Properly submitted contributions will help the Magento 2 development team to quickly assess your contribution and incorporate it into the Magento 2 project if deemed beneficial.
-
-**Do you accept all contributions?**
-
-Not all contributions will be used or incorporated into the code for the project. The decision to incorporate the code or not is at the discretion of the Magento 2 development team.

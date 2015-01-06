@@ -27,7 +27,7 @@ $codeScanDir = realpath($rootDir . '/app');
 try {
     $opt = new Zend_Console_Getopt(
         [
-            'serializer=w'         => 'serializer function that should be used (serialize|binary) default = serialize',
+            'serializer=w'         => 'serializer function that should be used (serialize|igbinary) default: serialize',
             'verbose|v'            => 'output report after tool run',
             'extra-classes-file=s' => 'path to file with extra proxies and factories to generate',
             'generation=s'         => 'absolute path to generated classes, <magento_root>/var/generation by default',
@@ -55,7 +55,7 @@ try {
     $errorWriter = new Writer\Console();
 
     $log = new Log($logWriter, $errorWriter);
-    $serializer = $opt->getOption('serializer') == 'binary' ? new Serializer\Igbinary() : new Serializer\Standard();
+    $serializer = $opt->getOption('serializer') == 'igbinary' ? new Serializer\Igbinary() : new Serializer\Standard();
 
     $validator = new \Magento\Framework\Code\Validator();
     $validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
