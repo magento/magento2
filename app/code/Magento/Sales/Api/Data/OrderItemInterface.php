@@ -1058,8 +1058,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function getWeight();
 
     /**
-     * @return OrderItemInterface
+     * @return \Magento\Sales\Api\Data\OrderItemInterface
      */
     public function getParentItem();
-
 }
