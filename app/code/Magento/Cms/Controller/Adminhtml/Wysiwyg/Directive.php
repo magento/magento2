@@ -5,7 +5,6 @@
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
 
 use Magento\Backend\App\Action;
-use SebastianBergmann\Exporter\Exception;
 
 class Directive extends \Magento\Backend\App\Action
 {
