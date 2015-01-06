@@ -64,7 +64,16 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteValidator = $this->getMock('Magento\Quote\Model\QuoteValidator', [], [], '', false);
         $this->eventManager = $this->getMockForAbstractClass('Magento\Framework\Event\ManagerInterface');
-        $this->orderBuilder = $this->getMock('Magento\Sales\Api\Data\OrderDataBuilder', [], [], '', false);
+        $this->orderBuilder = $this->getMock(
+            'Magento\Sales\Api\Data\OrderDataBuilder',
+            [
+                'populate', 'setShippingAddress', 'setBillingAddress', 'setAddresses', 'setPayments',
+                'setItems', 'setCustomerId', 'setQuoteId', 'create'
+            ],
+            [],
+            '',
+            false
+        );
         $this->quoteAddressToOrder = $this->getMock(
             'Magento\Quote\Model\Quote\Address\ToOrder',
             [],

@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model\Resource;
+namespace Magento\Quote\Model\Resource;
 
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {

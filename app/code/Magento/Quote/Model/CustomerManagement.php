@@ -20,14 +20,17 @@ class CustomerManagement
      * @var CustomerRepository
      */
     protected $customerRepository;
+
     /**
      * @var CustomerAddressRepository
      */
     protected $customerAddressRepository;
+
     /**
      * @var AccountManagement
      */
     protected $accountManagement;
+
     /**
      * @var CustomerBuilder
      */
@@ -51,6 +54,12 @@ class CustomerManagement
         $this->customerBuilder = $customerBuilder;
     }
 
+    /**
+     * Populate customer model
+     *
+     * @param Quote $quote
+     * @return void
+     */
     public function populateCustomerInfo(QuoteEntity $quote)
     {
         $customer = $quote->getCustomer();
@@ -61,7 +70,6 @@ class CustomerManagement
                 $quote->getPasswordHash()
             );
         }
-
         if (!$quote->getBillingAddress()->getId() && $customer->getDefaultBilling()) {
             $quote->getBillingAddress()->importCustomerAddressData(
                 $this->customerAddressRepository->getById($customer->getDefaultBilling())

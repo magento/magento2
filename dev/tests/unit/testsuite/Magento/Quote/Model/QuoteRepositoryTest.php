@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Magento\Sales\Model;
+namespace Magento\Quote\Model;
 
 use Magento\Quote\Model\QuoteRepository;
 

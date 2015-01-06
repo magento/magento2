@@ -1061,5 +1061,4 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return OrderItemInterface
      */
     public function getParentItem();
-
 }

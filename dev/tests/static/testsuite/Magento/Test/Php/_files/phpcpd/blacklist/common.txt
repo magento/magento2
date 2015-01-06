@@ -85,7 +85,7 @@ Magento/Rule
 Magento/Sales/Block/Adminhtml/Order
 Magento/Shipping/Block/Adminhtml/View
 Magento/Sales/Model/Resource
-Magento/Sales/Model/Quote/Address/Total
+Magento/Quote/Model/Quote/Address/Total
 Magento/Sales/Model/Resource/Report/Order
 Magento/SalesRule/Block/Adminhtml/Promo/Quote/Edit/Tab
 Magento/Search/Block/Adminhtml/Dashboard

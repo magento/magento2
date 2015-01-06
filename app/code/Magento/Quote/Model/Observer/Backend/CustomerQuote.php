@@ -48,6 +48,7 @@ class CustomerQuote
      * Set new customer group to all his quotes
      *
      * @param Observer $observer
+     * @return void
      */
     public function dispatch(Observer $observer)
     {

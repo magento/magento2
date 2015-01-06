@@ -9,6 +9,9 @@ namespace Magento\Checkout\Model\Session;
  */
 class SuccessValidator
 {
+    /**
+     * @var \Magento\Checkout\Model\Session
+     */
     protected $checkoutSession;
 
     /**
