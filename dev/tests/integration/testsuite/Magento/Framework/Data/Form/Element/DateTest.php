@@ -56,14 +56,14 @@ class DateTest extends \PHPUnit_Framework_TestCase
                     'time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
                     'value' => $testTimestamp,
                 ],
-                date('n/j/y g:i A', $testTimestamp),
+                date('n/j/y g:i a', $testTimestamp),
             ],
             [
                 [
                     'time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
                     'value' => $testTimestamp,
                 ],
-                date('g:i A', $testTimestamp)
+                date('g:i a', $testTimestamp)
             ],
             [
                 [
