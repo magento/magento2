@@ -38,10 +38,16 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     protected $_keyLengthFactory;
 
     /**
+     * @var  \Magento\Integration\Helper\Oauth\Data
+     */
+    protected $dataHelper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory
      * @param \Magento\Framework\Url\Validator $urlValidator
+     * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -51,12 +57,14 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
         \Magento\Framework\Registry $registry,
         \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory,
         \Magento\Framework\Url\Validator $urlValidator,
+        \Magento\Integration\Helper\Oauth\Data $dataHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
         $this->_keyLengthFactory = $keyLengthFactory;
         $this->_urlValidator = $urlValidator;
+        $this->dataHelper = $dataHelper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -167,13 +175,11 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     }
 
     /**
-     * Get time in seconds since consumer was created
-     *
-     * @param int $consumerId
-     * @return int - time lapsed in seconds
+     * {@inheritdoc}
      */
-    public function getTimeInSecondsSinceCreation($consumerId)
+    public function isValidForTokenExchange()
     {
-        return $this->getResource()->getTimeInSecondsSinceCreation($consumerId);
+        $expiry = $this->dataHelper->getConsumerExpirationPeriod();
+        return $this->getResource()->getTimeInSecondsSinceCreation($this->getId()) > $expiry;
     }
 }

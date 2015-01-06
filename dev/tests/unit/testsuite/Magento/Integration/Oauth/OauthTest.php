@@ -65,7 +65,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
                     'getCallbackUrl',
                     'save',
                     'getData',
-                    'getTimeInSecondsSinceCreation',
+                    'isValidForTokenExchange',
                     '__wakeup',
                 ]
             )
@@ -219,15 +219,8 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_setupConsumer();
         $this->_consumerMock
             ->expects($this->any())
-            ->method('getTimeInSecondsSinceCreation')
-            ->will($this->returnValue(9999999999));
-        $this->_dataHelperMock->expects(
-            $this->once()
-        )->method(
-            'getConsumerExpirationPeriod'
-        )->will(
-            $this->returnValue(0)
-        );
+            ->method('isValidForTokenExchange')
+            ->will($this->returnValue(false));
 
         $this->_oauth->getRequestToken($this->_getRequestTokenParams(), self::REQUEST_URL);
     }
@@ -271,12 +264,8 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     {
         $this->_consumerMock
             ->expects($this->any())
-            ->method('getTimeInSecondsSinceCreation')
-            ->will($this->returnValue(0));
-        $this->_dataHelperMock
-            ->expects($this->once())
-            ->method('getConsumerExpirationPeriod')
-            ->will($this->returnValue(300));
+            ->method('isValidForTokenExchange')
+            ->will($this->returnValue(true));
     }
 
     /**

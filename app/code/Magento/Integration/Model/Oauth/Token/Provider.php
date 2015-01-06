@@ -22,23 +22,15 @@ class Provider implements TokenProviderInterface
     protected $_tokenFactory;
 
     /**
-     * @var  \Magento\Integration\Helper\Oauth\Data
-     */
-    protected $_dataHelper;
-
-    /**
      * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
      * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
-     * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
-        \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory,
-        \Magento\Integration\Helper\Oauth\Data $dataHelper
+        \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_tokenFactory = $tokenFactory;
-        $this->_dataHelper = $dataHelper;
     }
 
     /**
@@ -46,9 +38,8 @@ class Provider implements TokenProviderInterface
      */
     public function validateConsumer($consumer)
     {
-        $expiry = $this->_dataHelper->getConsumerExpirationPeriod();
         // Must use consumer within expiration period.
-        if ($this->_consumerFactory->create()->getTimeInSecondsSinceCreation($consumer->getId()) > $expiry) {
+        if (!$consumer->isValidForTokenExchange()) {
             throw new \Magento\Framework\Oauth\Exception(
                 'Consumer key has expired'
             );

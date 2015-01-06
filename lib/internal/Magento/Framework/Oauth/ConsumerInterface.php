@@ -54,4 +54,11 @@ interface ConsumerInterface
      * @return string
      */
     public function getCreatedAt();
+
+    /**
+     * Check if the consumer key has not expired for Oauth token exchange usage
+     *
+     * @return bool
+     */
+    public function isValidForTokenExchange();
 }
