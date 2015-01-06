@@ -168,6 +168,7 @@ class Node extends \Magento\Framework\Object
     /**
      * @param Node $node
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isChildOf($node)
     {

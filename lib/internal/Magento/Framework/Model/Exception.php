@@ -8,6 +8,7 @@ namespace Magento\Framework\Model;
  * Magento Model Exception
  *
  * This class will be extended by other modules
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Exception extends \Exception
 {

@@ -32,6 +32,8 @@ class Gallery extends AbstractElement
 
     /**
      * @return string
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getElementHtml()
     {

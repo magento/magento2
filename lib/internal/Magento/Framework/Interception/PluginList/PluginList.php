@@ -83,6 +83,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param ClassDefinitions $classDefinitions
      * @param array $scopePriorityScheme
      * @param string $cacheId
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ReaderInterface $reader,
@@ -112,6 +113,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @return array
      * @throws InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _inheritPlugins($type)
     {

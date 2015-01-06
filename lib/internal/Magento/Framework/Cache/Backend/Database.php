@@ -498,6 +498,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      * @param string $mode
      * @param string[] $tags
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _cleanByTags($mode, $tags)
     {

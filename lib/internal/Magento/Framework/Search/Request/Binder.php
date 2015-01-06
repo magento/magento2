@@ -47,6 +47,7 @@ class Binder
      * @param array $data
      * @param array $bindData
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function processDimensions($data, $bindData)
     {

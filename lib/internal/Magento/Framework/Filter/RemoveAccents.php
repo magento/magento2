@@ -25,6 +25,7 @@ class RemoveAccents implements \Zend_Filter_Interface
     /**
      * @param string $string
      * @return string
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function filter($string)
     {

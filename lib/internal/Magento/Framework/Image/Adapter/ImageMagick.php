@@ -234,6 +234,8 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @return void
      * @throws \LogicException
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {

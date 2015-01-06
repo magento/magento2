@@ -13,6 +13,7 @@ use Magento\Framework\Escaper;
  * Data form abstract class
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractElement extends AbstractForm
 {
@@ -529,6 +530,7 @@ abstract class AbstractElement extends AbstractForm
      * @param string|int|array $values
      * @param bool $overwrite
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addElementValues($values, $overwrite = false)
     {

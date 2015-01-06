@@ -51,6 +51,7 @@ class Helper
      * @param bool $removeRoot
      * @return void
      * @throws \Magento\Framework\Exception
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function rm($path, $skipPaths = [], $removeRoot = false)
     {
@@ -77,6 +78,8 @@ class Helper
      * @param int $infoOptions
      * @param array $skipFiles
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getInfo($path, $infoOptions = self::INFO_ALL, $skipFiles = [])
     {

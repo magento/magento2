@@ -101,6 +101,7 @@ class SaveHandler implements SaveHandlerInterface
      *
      * @param int $maxLifetime
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function gc($maxLifetime)
     {

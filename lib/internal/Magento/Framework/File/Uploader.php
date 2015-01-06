@@ -169,6 +169,7 @@ class Uploader
      *
      * @param  array $result
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _afterSave($result)
     {
@@ -183,6 +184,7 @@ class Uploader
      * @param string $newFileName
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save($destinationFolder, $newFileName = null)
     {
@@ -486,6 +488,7 @@ class Uploader
      * @param string|array $fileId
      * @return void
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _setUploadFileId($fileId)
     {

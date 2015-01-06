@@ -78,6 +78,7 @@ interface MessageInterface
      * Getter for flag. Whether message is sticky
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsSticky();
 

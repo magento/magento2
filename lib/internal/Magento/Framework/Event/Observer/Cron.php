@@ -62,6 +62,8 @@ class Cron extends \Magento\Framework\Event\Observer
      * @param string $expr
      * @param int $num
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function matchCronExpression($expr, $num)
     {

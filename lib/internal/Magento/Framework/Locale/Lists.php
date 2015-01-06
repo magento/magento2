@@ -62,6 +62,7 @@ class Lists implements \Magento\Framework\Locale\ListsInterface
      *
      * @param   bool $translatedName translation flag
      * @return  array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getOptionLocales($translatedName = false)
     {

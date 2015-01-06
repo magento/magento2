@@ -6,6 +6,9 @@ namespace Magento\Framework\DB\Tree;
 
 use Magento\Framework\DB\Tree\Node\NodeException;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
 class Node
 {
     /**

@@ -6,6 +6,9 @@
  */
 namespace Magento\Framework\Config;
 
+/**
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ */
 class Data implements \Magento\Framework\Config\DataInterface
 {
     /**

@@ -64,6 +64,8 @@ class Cleaner
      * @return void
      * @throws StateException
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function cleanQuery($queryName)
     {
@@ -129,6 +131,7 @@ class Cleaner
      * @return void
      * @throws StateException
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function cleanFilter($filterName)
     {
