@@ -20,7 +20,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
     private $conditionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Logger | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     private $loggerMock;
 
@@ -40,7 +40,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder('\Magento\Framework\Logger')
+        $this->loggerMock = $this->getMockBuilder('\Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -111,7 +111,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->conditionObjectMock);
 
         $this->loggerMock->expects($this->never())
-            ->method('logException');
+            ->method('critical');
 
         $result = $this->combine->loadArray($array);
 
@@ -138,7 +138,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Exception('everything is fine, it is test'));
 
         $this->loggerMock->expects($this->once())
-            ->method('logException')
+            ->method('critical')
             ->with();
 
         $result = $this->combine->loadArray($array);

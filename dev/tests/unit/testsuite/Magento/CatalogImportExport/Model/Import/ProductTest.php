@@ -267,7 +267,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_model = $objectManager->getObject(
-            '\Magento\CatalogImportExport\Model\Import\Product',
+            'Magento\CatalogImportExport\Model\Import\Product',
             [
                 'config' => $this->_eavConfig,
                 'optionFactory' => $this->_optionFactory,

@@ -24,7 +24,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_elementFactory = $objectManager->create('Magento\Framework\Data\Form\ElementFactory');
-        $this->_localeDate = $objectManager->get('\Magento\Framework\Stdlib\DateTime\Timezone');
+        $this->_localeDate = $objectManager->get('Magento\Framework\Stdlib\DateTime\Timezone');
     }
 
     /**
@@ -48,29 +48,29 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function getValueDataProvider()
     {
-        $currentTime = time();
+        $testTimestamp = strtotime('2014-05-18 12:08:16');
         return [
             [
                 [
                     'date_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
                     'time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
-                    'value' => $currentTime,
+                    'value' => $testTimestamp,
                 ],
-                date('m/j/y g:i A', $currentTime),
+                date('n/j/y g:i A', $testTimestamp),
             ],
             [
                 [
                     'time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
-                    'value' => $currentTime,
+                    'value' => $testTimestamp,
                 ],
-                date('g:i A', $currentTime)
+                date('g:i A', $testTimestamp)
             ],
             [
                 [
                     'date_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
-                    'value' => $currentTime,
+                    'value' => $testTimestamp,
                 ],
-                date('m/j/y', $currentTime)
+                date('n/j/y', $testTimestamp)
             ]
         ];
     }

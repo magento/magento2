@@ -24,7 +24,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $_eventManager;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -66,7 +66,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     /**
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Framework\App\RequestInterface $httpRequest
@@ -81,7 +81,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     public function __construct(
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\Framework\Url\DecoderInterface $urlDecoder,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Framework\App\RequestInterface $httpRequest,
@@ -153,7 +153,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\Logger
+     * @return \Psr\Log\LoggerInterface
      */
     public function getLogger()
     {

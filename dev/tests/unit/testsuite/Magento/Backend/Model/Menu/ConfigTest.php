@@ -94,18 +94,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_logger = $this->getMock(
-            'Magento\Framework\Logger',
-            ['addStoreLog', 'log', 'logException'],
-            [],
-            '',
-            false
-        );
+        $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->_menuMock = $this->getMock(
             'Magento\Backend\Model\Menu',
             [],
-            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+            [$this->getMock('Psr\Log\LoggerInterface')]
         );
 
         $this->_menuBuilderMock = $this->getMock('Magento\Backend\Model\Menu\Builder', [], [], '', false);
@@ -210,7 +204,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMenuGenericExceptionIsNotLogged()
     {
-        $this->_logger->expects($this->never())->method('logException');
+        $this->_logger->expects($this->never())->method('critical');
 
         $this->_menuBuilderMock->expects(
             $this->exactly(1)

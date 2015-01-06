@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/App/etc/routes.xsd">
+    <router id="standard">
+        <route id="testmoduleone" frontName="testmoduleone">
+            <module name="Magento_TestModule1" />
+        </route>
+    </router>
+</config>

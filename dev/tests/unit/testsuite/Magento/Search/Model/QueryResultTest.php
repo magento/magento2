@@ -26,7 +26,7 @@ class QueryResultTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Search\Model\QueryResult $queryResult */
         $queryResult = $this->objectManager->getObject(
-            '\Magento\Search\Model\QueryResult',
+            'Magento\Search\Model\QueryResult',
             [
                 'queryText' => $queryText,
                 'resultsCount' => $resultsCount,

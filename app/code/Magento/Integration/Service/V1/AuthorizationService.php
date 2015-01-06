@@ -15,7 +15,7 @@ use Magento\Framework\Acl;
 use Magento\Framework\Acl\Builder as AclBuilder;
 use Magento\Framework\Acl\RootResource as RootAclResource;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Service for integration permissions management.
@@ -101,7 +101,7 @@ class AuthorizationService implements AuthorizationServiceInterface
             }
             $this->_associateResourcesWithRole($role, $resources);
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw new LocalizedException('Error happened while granting permissions. Check exception log for details.');
         }
     }
@@ -122,7 +122,7 @@ class AuthorizationService implements AuthorizationServiceInterface
         try {
             $this->_deleteRole($integrationId);
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw new LocalizedException(
                 'Error happened while deleting role and permissions. Check exception log for details.'
             );

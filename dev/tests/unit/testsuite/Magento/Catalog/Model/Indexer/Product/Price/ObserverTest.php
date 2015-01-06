@@ -70,7 +70,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = $this->_objectManager->getObject(
-            '\Magento\Catalog\Model\Indexer\Product\Price\Observer',
+            'Magento\Catalog\Model\Indexer\Product\Price\Observer',
             [
                 'storeManager' => $this->_storeManagerMock,
                 'resource' => $this->_resourceMock,

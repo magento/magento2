@@ -49,7 +49,7 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We couldn\'t update the payment.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->_redirect('sales/order/view', ['order_id' => $order->getId()]);
     }
