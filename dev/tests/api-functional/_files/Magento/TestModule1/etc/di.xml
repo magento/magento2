@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\TestModule1\Service\V1\AllSoapAndRestInterface" type="Magento\TestModule1\Service\V1\AllSoapAndRest" />
+    <preference for="Magento\TestModule1\Service\V2\AllSoapAndRestInterface" type="Magento\TestModule1\Service\V2\AllSoapAndRest" />
+
+    <virtualType name="Magento\TestModule1\Service\Config\TestModule1MetadataConfig" type="Magento\Framework\Api\Config\MetadataConfig">
+        <arguments>
+            <argument name="attributeMetadataBuilder" xsi:type="object">Magento\TestModule1\Service\V1\Entity\Eav\AttributeMetadataBuilder</argument>
+            <argument name="dataObjectClassName" xsi:type="string">Magento\TestModule1\Service\V1\Entity\Item</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\TestModule1\Service\V1\Entity\ItemBuilder">
+        <arguments>
+            <argument name="metadataService" xsi:type="object">Magento\TestModule1\Service\Config\TestModule1MetadataConfig</argument>
+        </arguments>
+    </type>
+</config>

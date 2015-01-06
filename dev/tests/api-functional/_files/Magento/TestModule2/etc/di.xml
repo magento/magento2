@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\TestModule2\Service\V1\SubsetRestInterface" type="Magento\TestModule2\Service\V1\SubsetRest" />
+    <preference for="Magento\TestModule2\Service\V1\NoWebApiXmlInterface" type="Magento\TestModule2\Service\V1\NoWebApiXml" />
+</config>
