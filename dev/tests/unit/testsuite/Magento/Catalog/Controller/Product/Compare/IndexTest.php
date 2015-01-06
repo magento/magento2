@@ -7,6 +7,10 @@ namespace Magento\Catalog\Controller\Product\Compare;
 
 use Magento\Catalog\Model\Resource\Product\Compare\Item;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IndexTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Catalog\Controller\Product\Compare\Index */

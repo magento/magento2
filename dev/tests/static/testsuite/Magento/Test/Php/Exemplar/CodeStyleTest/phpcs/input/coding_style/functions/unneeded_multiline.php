@@ -6,6 +6,7 @@
  * @param string|null $a
  * @param bool $b
  * @return string
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 function thereGoesFunc($a,
     $b

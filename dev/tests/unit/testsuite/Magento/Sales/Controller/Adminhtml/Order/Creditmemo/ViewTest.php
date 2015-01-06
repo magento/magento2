@@ -6,6 +6,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 /**
  * Class ViewTest
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
@@ -89,6 +90,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageTitleMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $this->invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')

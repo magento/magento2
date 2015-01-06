@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product\Visibility;
 
 /**
  * Class ProductsListTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductsListTest extends \PHPUnit_Framework_TestCase
 {

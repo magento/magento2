@@ -101,6 +101,9 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
     protected $productSku = 'simple';
     protected $websiteId = 111;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);

@@ -283,6 +283,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testGetChildrenMsrpWhenNoChildrenWithMsrp()
     {
         $key = '_cache_instance_associated_products';

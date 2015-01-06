@@ -2,6 +2,9 @@
 
 class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_prohibited_statement_goto
 {
+    /**
+     * @SuppressWarnings(PHPMD.GotoStatement)
+     */
     public function loopArrayCallback(array $array, $callback)
     {
         $index = 0;

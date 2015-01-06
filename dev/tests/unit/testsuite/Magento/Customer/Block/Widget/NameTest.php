@@ -408,6 +408,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
      * Helper method for testing all show*() methods.
      *
      * @param array $data Customer attribute(s)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function _setUpShowAttribute(array $data)
     {

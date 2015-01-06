@@ -6,6 +6,7 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 /**
  * Class ViewTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ViewTest extends \PHPUnit_Framework_TestCase
 {

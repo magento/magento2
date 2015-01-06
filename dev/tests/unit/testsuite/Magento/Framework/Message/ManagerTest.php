@@ -167,6 +167,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($messageCollection, $this->model->getMessages(true));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testAddException()
     {
         $exceptionMessage = 'exception message';

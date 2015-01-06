@@ -7,6 +7,7 @@ namespace Magento\SalesRule\Model;
 /**
  * Class UtilityTest
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UtilityTest extends \PHPUnit_Framework_TestCase
 {

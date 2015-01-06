@@ -23,6 +23,8 @@ function someFunc($inParam)
  * @param int $moreEvenLongerParamForAllThatRoutineStuff
  * @param float $andThereGoesOneParameter
  * @return string
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
  */
 function anotherFunc($someLongParam, $anotherLongParam, $moreEvenLongerParamForAllThatRoutineStuff,
     $andThereGoesOneParameter

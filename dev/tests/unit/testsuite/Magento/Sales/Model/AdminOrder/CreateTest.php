@@ -76,6 +76,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectFactory;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');

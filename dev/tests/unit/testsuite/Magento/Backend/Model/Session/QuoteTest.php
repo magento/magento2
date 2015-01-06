@@ -6,6 +6,7 @@ namespace Magento\Backend\Model\Session;
 
 /**
  * Class QuoteTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
@@ -88,6 +89,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * Set up
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {

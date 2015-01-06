@@ -147,6 +147,7 @@ class FilterPoolTest extends \PHPUnit_Framework_TestCase
      * Run test prepare method
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testPrepare()
     {

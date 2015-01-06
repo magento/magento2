@@ -6,6 +6,7 @@ namespace Magento\Persistent\Block\Header;
 
 /**
  * Class AdditionalTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdditionalTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,6 +86,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
      * Set up
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
