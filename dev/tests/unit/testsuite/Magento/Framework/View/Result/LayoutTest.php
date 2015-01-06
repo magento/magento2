@@ -99,7 +99,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      * @param bool $replaceHeader
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setHttpResponseCodeCount
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setHeaderCount
-     * @dataProvider dataProviderRenderResult
+     * @dataProvider renderResultDataProvider
      */
     public function testRenderResult(
         $httpCode, $headerName, $headerValue, $replaceHeader, $setHttpResponseCodeCount, $setHeaderCount
@@ -139,7 +139,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function dataProviderRenderResult()
+    public function renderResultDataProvider()
     {
         return [
             [200, 'content-type', 'text/html', true, $this->once(), $this->once()],
