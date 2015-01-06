@@ -9,7 +9,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Bundle\Model\Plugin\QuoteItem
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
