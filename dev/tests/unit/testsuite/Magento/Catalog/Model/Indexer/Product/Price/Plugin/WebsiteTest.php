@@ -34,7 +34,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = $this->_objectManager->getObject(
-            '\Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website',
+            'Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website',
             ['processor' => $this->_priceProcessorMock]
         );
     }

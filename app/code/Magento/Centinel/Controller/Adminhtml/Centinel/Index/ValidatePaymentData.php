@@ -27,7 +27,7 @@ class ValidatePaymentData extends \Magento\Centinel\Controller\Adminhtml\Centine
         } catch (\Magento\Framework\Model\Exception $e) {
             $result['message'] = $e->getMessage();
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $result['message'] = __('Validation failed.');
         }
         $this->getResponse()->representJson(

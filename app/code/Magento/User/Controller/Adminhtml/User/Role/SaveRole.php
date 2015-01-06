@@ -78,7 +78,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         }
 
         try {
-            $roleName = $this->getRequest()->getParam('rolename', false);
+            $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
 
             $role->setName($roleName)
                 ->setPid($this->getRequest()->getParam('parent_id', false))

@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<constraint>
+    <assertAgreementTextPresent module="Magento_Install">
+        <severity>low</severity>
+    </assertAgreementTextPresent>
+    <assertSuccessDbConnection module="Magento_Install">
+        <severity>low</severity>
+    </assertSuccessDbConnection>
+    <assertSuccessfulReadinessCheck module="Magento_Install">
+        <severity>low</severity>
+    </assertSuccessfulReadinessCheck>
+    <assertSuccessInstall module="Magento_Install">
+        <severity>low</severity>
+    </assertSuccessInstall>
+    <assertKeyCreated module="Magento_Install">
+        <severity>low</severity>
+    </assertKeyCreated>
+    <assertLanguageSelected module="Magento_Install">
+        <severity>low</severity>
+    </assertLanguageSelected>
+    <assertCurrencySelected module="Magento_Install">
+        <severity>low</severity>
+    </assertCurrencySelected>
+    <assertRewritesEnabled module="Magento_Install">
+        <severity>low</severity>
+    </assertRewritesEnabled>
+    <assertSecureUrlEnabled module="Magento_Install">
+        <severity>low</severity>
+    </assertSecureUrlEnabled>
+</constraint>

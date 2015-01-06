@@ -1,0 +1,57 @@
+<?php
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+
+namespace Magento\Install\Test\Constraint;
+
+use Mtf\Client\Browser;
+use Mtf\Constraint\AbstractConstraint;
+use Magento\Backend\Test\Page\Adminhtml\Dashboard;
+use Magento\Customer\Test\Page\CustomerAccountLogin;
+
+/**
+ * Assert that Secure Urls Enabled.
+ */
+class AssertSecureUrlEnabled extends AbstractConstraint
+{
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
+    /**
+     * Assert that Secure Urls Enabled.
+     *
+     * @param Browser $browser
+     * @param Dashboard $dashboard
+     * @param CustomerAccountLogin $customerAccountLogin
+     * @return void
+     */
+    public function processAssert(
+        Browser $browser,
+        Dashboard $dashboard,
+        CustomerAccountLogin $customerAccountLogin
+    ) {
+        $dashboard->open();
+        \PHPUnit_Framework_Assert::assertTrue(
+            strpos($browser->getUrl(), 'https://') !== false,
+            'Secure Url is not displayed on backend.'
+        );
+
+        $customerAccountLogin->open();
+        \PHPUnit_Framework_Assert::assertTrue(
+            strpos($browser->getUrl(), 'https://') !== false,
+            'Secure Url is not displayed on frontend.'
+        );
+    }
+
+    /**
+     * Returns a string representation of the object.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return 'Secure Urls are displayed successful.';
+    }
+}

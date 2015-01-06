@@ -12,4 +12,10 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Layout">
+        <plugin name="persistent-session-depersonalize"
+                type="Magento\Persistent\Model\Layout\DepersonalizePlugin"
+                sortOrder="10"
+        />
+    </type>
 </config>

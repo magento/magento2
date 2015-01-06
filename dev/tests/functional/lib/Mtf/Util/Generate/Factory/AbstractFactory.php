@@ -161,7 +161,10 @@ abstract class AbstractFactory
                 } else {
                     $dirIterator = new \RegexIterator(
                         new \RecursiveIteratorIterator(
-                            new \RecursiveDirectoryIterator($filePath, \FilesystemIterator::SKIP_DOTS)
+                            new \RecursiveDirectoryIterator(
+                                $filePath,
+                                \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS
+                            )
                         ),
                         '/.php$/i'
                     );
@@ -190,9 +193,10 @@ abstract class AbstractFactory
     {
         $filename = str_replace('\\', '/', $filename);
 
-        $classPath = str_replace(MTF_BP . '/' . $path . '/', '', $filename);
-        $classPath = str_replace('.php', '', $classPath);
-        $className = str_replace('/', '\\', $classPath);
+        $posTestsPath = strpos($filename, $path);
+        $posClassName = $posTestsPath + strlen($path);
+        $classPath = str_replace('.php', '', $filename);
+        $className = str_replace('/', '\\', substr($classPath, $posClassName));
 
         $reflectionClass = new \ReflectionClass($className);
         if ($reflectionClass->isAbstract()) {

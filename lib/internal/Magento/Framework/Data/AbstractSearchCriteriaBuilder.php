@@ -4,7 +4,7 @@
  */
 namespace Magento\Framework\Data;
 
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Class AbstractSearchCriteriaBuilder

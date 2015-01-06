@@ -5,7 +5,7 @@
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var $repository \Magento\Customer\Api\CustomerRepositoryInterface */
-$repository = $objectManager->create('\Magento\Customer\Api\CustomerRepositoryInterface');
+$repository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
 $customer = $objectManager->create('Magento\Customer\Model\Customer');
 
 /** @var Magento\Customer\Model\Customer $customer */

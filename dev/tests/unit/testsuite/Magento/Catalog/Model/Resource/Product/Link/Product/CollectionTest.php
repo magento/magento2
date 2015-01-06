@@ -76,7 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->entityFactoryMock = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->fetchStrategyMock = $this->getMock('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
         $this->managerInterfaceMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->configMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);

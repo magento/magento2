@@ -45,7 +45,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
                         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM
                     );
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                 }
             }
             $format = self::$_format;
