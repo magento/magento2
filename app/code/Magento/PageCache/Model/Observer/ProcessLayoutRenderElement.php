@@ -37,7 +37,7 @@ class ProcessLayoutRenderElement
             'page_cache/block/esi',
             [
                 'blocks' => json_encode([$block->getNameInLayout()]),
-                'handles' => urlencode(json_encode($layout->getUpdate()->getHandles()))
+                'handles' => json_encode($layout->getUpdate()->getHandles())
             ]
         );
         return sprintf('<esi:include src="%s" />', $url);
