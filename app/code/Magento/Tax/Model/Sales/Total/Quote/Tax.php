@@ -12,6 +12,7 @@ use Magento\Tax\Model\Calculation;
 
 /**
  * Tax totals calculation model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Tax extends CommonTaxCollector
 {
@@ -229,6 +230,7 @@ class Tax extends CommonTaxCollector
      * @param Address $address
      * @param array $itemsByType
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function processExtraTaxables(Address $address, Array $itemsByType)
     {
@@ -280,6 +282,7 @@ class Tax extends CommonTaxCollector
      *
      * @param   Address $address
      * @return  $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function fetch(Address $address)
     {

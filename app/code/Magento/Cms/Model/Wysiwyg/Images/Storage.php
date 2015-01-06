@@ -11,6 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * Wysiwyg Images model
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Storage extends \Magento\Framework\Object
 {
@@ -186,6 +188,8 @@ class Storage extends \Magento\Framework\Object
      *
      * @param string $path Parent directory path
      * @return \Magento\Framework\Data\Collection\Filesystem
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getDirsCollection($path)
     {

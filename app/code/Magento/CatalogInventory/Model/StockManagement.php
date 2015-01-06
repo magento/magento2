@@ -67,6 +67,7 @@ class StockManagement implements StockManagementInterface
      * @param int $websiteId
      * @return StockItemInterface[]
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerProductsSale($items, $websiteId = null)
     {

@@ -69,6 +69,7 @@ class PriceModifier
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function removeTierPrice(\Magento\Catalog\Model\Product $product, $customerGroupId, $qty, $websiteId)
     {

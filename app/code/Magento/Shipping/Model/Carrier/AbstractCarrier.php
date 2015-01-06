@@ -132,6 +132,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param string $field
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getConfigFlag($field)
     {
@@ -195,6 +196,8 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param \Magento\Framework\Object|null $params
      * @return array|bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getAllowedContainers(\Magento\Framework\Object $params = null)
     {
@@ -267,6 +270,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     /**
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function checkAvailableShipCountries(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
@@ -373,6 +377,8 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     /**
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _updateFreeMethodQuote($request)
     {
@@ -576,6 +582,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      * Define if debugging is enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDebugFlag()
     {

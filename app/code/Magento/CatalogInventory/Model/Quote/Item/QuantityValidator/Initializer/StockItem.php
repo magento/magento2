@@ -49,6 +49,8 @@ class StockItem
      *
      * @return \Magento\Framework\Object
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function initialize(
         \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem,

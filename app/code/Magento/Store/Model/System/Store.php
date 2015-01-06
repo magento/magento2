@@ -99,6 +99,8 @@ class Store extends \Magento\Framework\Object
      * @param bool $empty
      * @param bool $all
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getStoreValuesForForm($empty = false, $all = false)
     {
@@ -155,6 +157,8 @@ class Store extends \Magento\Framework\Object
      * @param array $groupIds
      * @param array $websiteIds
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getStoresStructure($isAll = false, $storeIds = [], $groupIds = [], $websiteIds = [])
     {

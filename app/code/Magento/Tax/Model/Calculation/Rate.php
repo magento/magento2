@@ -22,6 +22,7 @@ use Magento\Framework\Exception\CouldNotDeleteException;
  * @method \Magento\Tax\Model\Calculation\Rate setZipIsRange(int $value)
  * @method \Magento\Tax\Model\Calculation\Rate setZipFrom(int $value)
  * @method \Magento\Tax\Model\Calculation\Rate setZipTo(int $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Tax\Api\Data\TaxRateInterface
 {
@@ -62,6 +63,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -104,6 +106,8 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
      *
      * @return \Magento\Tax\Model\Calculation\Rate
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function beforeSave()
     {

@@ -120,6 +120,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      * @param mixed|null $parentNodeCategory
      * @param int $recursionLevel
      * @return Node|array|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
     {

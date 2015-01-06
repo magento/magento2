@@ -9,6 +9,9 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Onepage extends Action
 {
     /**
@@ -68,6 +71,7 @@ class Onepage extends Action
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

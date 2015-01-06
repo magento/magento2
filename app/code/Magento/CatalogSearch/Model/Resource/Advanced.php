@@ -84,6 +84,7 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @param string|array $value
      * @return string|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function prepareCondition($attribute, $value)
     {
@@ -121,6 +122,7 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string|array $value
      * @param int $rate
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addRatedPriceFilter($collection, $attribute, $value, $rate = 1)
     {
@@ -165,6 +167,7 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @param string|array $value
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addIndexableAttributeModifiedFilter($collection, $attribute, $value)
     {

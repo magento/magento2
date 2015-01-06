@@ -10,6 +10,7 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
  * Wishlist Data Helper
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

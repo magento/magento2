@@ -54,6 +54,7 @@ class WishlistProvider implements WishlistProviderInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getWishlist($wishlistId = null)
     {

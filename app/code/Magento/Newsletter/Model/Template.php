@@ -31,6 +31,7 @@ namespace Magento\Newsletter\Model;
  * @method \Magento\Newsletter\Model\Template setModifiedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Template extends \Magento\Email\Model\AbstractTemplate
 {
@@ -100,6 +101,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -216,6 +218,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * Check Template Text Preprocessed
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getTemplateTextPreprocessed()
     {

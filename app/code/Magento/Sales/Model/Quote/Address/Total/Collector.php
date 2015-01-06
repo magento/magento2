@@ -137,6 +137,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
      * Initialize retrievers array
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function _initRetrievers()
     {

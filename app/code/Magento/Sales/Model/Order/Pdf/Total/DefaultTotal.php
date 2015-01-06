@@ -88,6 +88,7 @@ class DefaultTotal extends \Magento\Framework\Object
      * )
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFullTaxInfo()
     {

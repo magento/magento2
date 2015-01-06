@@ -49,6 +49,8 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * Initialize coupon
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

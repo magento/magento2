@@ -8,6 +8,7 @@ namespace Magento\Backend\Block\Widget\Form;
  * Backend form container block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Container extends \Magento\Backend\Block\Widget\Container
 {

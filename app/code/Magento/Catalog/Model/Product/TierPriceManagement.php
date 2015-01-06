@@ -12,6 +12,9 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManagementInterface
 {
     /**

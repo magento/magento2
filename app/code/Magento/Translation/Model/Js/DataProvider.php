@@ -11,6 +11,7 @@ class DataProvider implements DataProviderInterface
      * Get translation data
      *
      * @return string[]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getData()
     {

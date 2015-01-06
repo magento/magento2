@@ -32,6 +32,8 @@ class DownloadCustomOption extends Action\Action implements IndexInterface
      * Custom options download action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {

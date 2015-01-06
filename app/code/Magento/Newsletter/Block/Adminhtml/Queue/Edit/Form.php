@@ -56,6 +56,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * or from  newsletter queue grid by edit option.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

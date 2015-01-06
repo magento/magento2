@@ -137,6 +137,7 @@ HTML;
      * Check whether wysiwyg enabled or not
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsWysiwygEnabled()
     {

@@ -47,6 +47,7 @@ class Converter implements ConverterInterface
      *
      * @param \DOMNode $source
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function toArray(\DOMNode $source)
     {
@@ -99,6 +100,8 @@ class Converter implements ConverterInterface
      *
      * @param \DOMDocument $source
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function convert($source)
     {

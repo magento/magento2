@@ -99,6 +99,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * Preparing default form elements for editing attribute
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

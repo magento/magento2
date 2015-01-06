@@ -46,6 +46,7 @@ class CustomerAuthenticatedEvent
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($observer)
     {

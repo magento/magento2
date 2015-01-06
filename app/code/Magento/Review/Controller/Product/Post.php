@@ -13,6 +13,7 @@ class Post extends \Magento\Review\Controller\Product
      * Submit new review action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

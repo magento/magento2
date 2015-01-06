@@ -22,6 +22,8 @@ use Magento\Sales\Api\Data\TransactionInterface;
  * @method \Magento\Sales\Model\Order\Payment\Transaction setCreatedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Transaction extends AbstractExtensibleModel implements TransactionInterface
 {
@@ -160,6 +162,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -299,6 +302,8 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * @param string $txnId
      * @param bool $recursive
      * @return Transaction[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getChildTransactions($types = null, $txnId = null, $recursive = false)
     {
@@ -567,6 +572,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * @return $this
      * @throws \Magento\Framework\Model\Exception
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function close($shouldSave = true)
     {
@@ -726,6 +732,8 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      *
      * @return void
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _loadChildren()
     {

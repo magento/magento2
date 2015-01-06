@@ -36,6 +36,7 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
      * Send Email Post Action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

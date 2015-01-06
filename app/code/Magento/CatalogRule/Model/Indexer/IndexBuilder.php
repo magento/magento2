@@ -11,6 +11,9 @@ use Magento\CatalogRule\Model\Resource\Rule\CollectionFactory as RuleCollectionF
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IndexBuilder
 {
     const SECONDS_IN_DAY = 86400;
@@ -81,6 +84,7 @@ class IndexBuilder
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param int $batchCount
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
@@ -209,6 +213,7 @@ class IndexBuilder
      * @param Product $product
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function applyRule(Rule $rule, $product)
     {
@@ -317,6 +322,8 @@ class IndexBuilder
     /**
      * @param Rule $rule
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function updateRuleProductData(Rule $rule)
     {
@@ -399,6 +406,9 @@ class IndexBuilder
      * @param Product|null $product
      * @throws \Exception
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function applyAllRules(Product $product = null)
     {

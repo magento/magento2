@@ -139,6 +139,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * Retrieve all items
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getItems()
     {
@@ -217,6 +218,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      *
      * @param string|int|null $productType
      * @return false
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isConfigurationRequired($productType)
     {

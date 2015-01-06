@@ -12,6 +12,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
      *
      * @throws \Magento\Framework\Model\Exception
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

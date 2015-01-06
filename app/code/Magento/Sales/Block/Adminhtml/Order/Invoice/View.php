@@ -53,6 +53,8 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      * Constructor
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _construct()
     {

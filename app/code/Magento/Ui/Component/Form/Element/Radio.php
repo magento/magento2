@@ -11,6 +11,7 @@ class Radio extends AbstractFormElement
 {
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getChecked()
     {

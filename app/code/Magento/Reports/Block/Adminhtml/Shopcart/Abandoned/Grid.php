@@ -8,6 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Abandoned;
  * Adminhtml abandoned shopping carts report grid block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
@@ -85,6 +86,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
     {

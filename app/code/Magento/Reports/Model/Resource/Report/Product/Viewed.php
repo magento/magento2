@@ -78,6 +78,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param null|mixed $from
      * @param null|mixed $to
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function aggregate($from = null, $to = null)
     {

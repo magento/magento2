@@ -62,6 +62,7 @@ class Preprocessor implements PreprocessorInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function process(FilterInterface $filter, $isNegation, $query)
     {

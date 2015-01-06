@@ -10,6 +10,7 @@ use Magento\Framework\Model\Exception as CoreException;
 
 /**
  * Downloadable Products Download Helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Download extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -293,6 +294,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param mixed $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getContentDisposition($store = null)
     {

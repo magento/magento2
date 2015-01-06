@@ -62,6 +62,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * [AJAX] Save attribute set data
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

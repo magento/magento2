@@ -11,6 +11,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * EAV Entity attribute model
  *
  * @method \Magento\Eav\Model\Entity\Attribute setOption($value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute implements
     \Magento\Framework\Object\IdentityInterface
@@ -79,6 +80,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -207,6 +209,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      *
      * @return $this
      * @throws Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function beforeSave()
     {
@@ -306,6 +310,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      *
      * @param string $type frontend_input field value
      * @return string backend_type field value
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getBackendTypeByInput($type)
     {
@@ -349,6 +354,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      *
      * @param string $type frontend_input field name
      * @return string default_value field value
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getDefaultValueByInput($type)
     {

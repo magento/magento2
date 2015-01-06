@@ -10,6 +10,7 @@ use Magento\Framework\Search\Response\QueryResponse;
 
 /**
  * Fulltext Collection
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {

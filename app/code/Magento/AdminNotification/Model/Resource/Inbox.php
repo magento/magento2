@@ -57,6 +57,7 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\AdminNotification\Model\Inbox $object
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getNoticeStatus(\Magento\AdminNotification\Model\Inbox $object)
     {
@@ -86,6 +87,7 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\AdminNotification\Model\Inbox $object
      * @param array $data
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function parse(\Magento\AdminNotification\Model\Inbox $object, array $data)
     {

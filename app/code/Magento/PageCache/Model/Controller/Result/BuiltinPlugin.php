@@ -56,6 +56,7 @@ class BuiltinPlugin
      * @param callable $proceed
      * @param ResponseHttp $response
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundRenderResult(
         \Magento\Framework\Controller\ResultInterface $subject,

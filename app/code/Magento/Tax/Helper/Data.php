@@ -21,6 +21,8 @@ use Magento\Sales\Model\EntityInterface;
 
 /**
  * Catalog data helper
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -169,6 +171,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Helper\Data                                  $catalogHelper
      * @param OrderTaxManagementInterface                                   $orderTaxManagement
      * @param PriceCurrencyInterface                                        $priceCurrency
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -789,6 +792,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  EntityInterface $order
      * @param  EntityInterface $salesItem
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function calculateTaxForItems(EntityInterface $order, EntityInterface $salesItem)
     {

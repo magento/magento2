@@ -56,6 +56,7 @@ class BuiltinPlugin
      * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\Controller\ResultInterface|\Magento\Framework\App\Response\Http
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
         \Magento\Framework\App\FrontControllerInterface $subject,

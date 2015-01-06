@@ -66,6 +66,8 @@ class Observer
      *
      * @param \Magento\Framework\Object $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function appendUpsellProducts($observer)
     {

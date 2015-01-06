@@ -156,6 +156,7 @@ class Data extends \Magento\Core\Helper\Data
      * Check if set `Clear on Logout` in config settings
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getClearOnLogout()
     {
@@ -190,6 +191,7 @@ class Data extends \Magento\Core\Helper\Data
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canProcess($observer)
     {

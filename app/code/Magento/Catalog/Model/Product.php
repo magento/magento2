@@ -28,6 +28,10 @@ use Magento\Framework\Pricing\Object\SaleableInterface;
  * @method Product setRequestPath(string $requestPath)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Catalog\Model\AbstractModel implements
     IdentityInterface,
@@ -639,6 +643,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param int  $groupId   Retrieve attributes of the specified group
      * @param bool $skipSuper Not used
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAttributes($groupId = null, $skipSuper = false)
     {
@@ -661,6 +666,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Check product options and type options and save them, too
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave()
     {
@@ -1392,6 +1398,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Is product salable detecting by product type
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsSalable()
     {
@@ -1678,6 +1685,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve is a virtual product
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsVirtual()
     {

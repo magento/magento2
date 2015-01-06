@@ -5,6 +5,9 @@
 
 namespace Magento\Wishlist\Helper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Rss extends \Magento\Wishlist\Helper\Data
 {
     /**
@@ -34,6 +37,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,

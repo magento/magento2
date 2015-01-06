@@ -49,6 +49,7 @@ class Flag extends \Magento\Framework\Flag
      *
      * @param \Exception $e
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function passError(\Exception $e)
     {

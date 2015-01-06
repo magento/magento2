@@ -85,6 +85,7 @@ class Totals extends SidebarTotals
      * Return whether subtotal should be displayed including tax
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDisplaySubtotalInclTax()
     {
@@ -95,6 +96,7 @@ class Totals extends SidebarTotals
      * Return whether subtotal should be displayed excluding tax
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDisplaySubtotalExclTax()
     {
@@ -105,6 +107,7 @@ class Totals extends SidebarTotals
      * Return whether subtotal should be displayed excluding and including tax
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDisplaySubtotalBoth()
     {

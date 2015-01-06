@@ -190,6 +190,7 @@ class AvailablePath extends \Zend_Validate_Abstract
      * @param string $value     File/dir path
      * @return bool
      * @throws \Exception       Throw exception on empty both paths masks types
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isValid($value)
     {
@@ -231,6 +232,8 @@ class AvailablePath extends \Zend_Validate_Abstract
      * @param string[] $paths          Protected/available paths masks
      * @param bool $protected       Paths masks is protected?
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _isValidByPaths($valuePathInfo, $paths, $protected)
     {

@@ -54,6 +54,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param int $customerId
      * @param array $types
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function updateCustomerType(\Magento\Reports\Model\Event $model, $visitorId, $customerId, $types = [])
     {
@@ -168,6 +169,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Reports\Model\Event $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function clean(\Magento\Reports\Model\Event $object)
     {

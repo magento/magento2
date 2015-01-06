@@ -56,6 +56,8 @@ class Flatrate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implement
     /**
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return Result|bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {

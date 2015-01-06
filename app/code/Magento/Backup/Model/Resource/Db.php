@@ -180,6 +180,7 @@ class Db
      * @param string $tableName
      * @param bool $step
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTableDataDump($tableName, $step = false)
     {

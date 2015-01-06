@@ -34,6 +34,7 @@ class Authorization
      * @param null|string $field
      * @return \Magento\Sales\Model\Order
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundLoad(
         \Magento\Sales\Model\Resource\Order $subject,

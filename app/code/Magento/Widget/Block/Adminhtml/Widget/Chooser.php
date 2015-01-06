@@ -118,6 +118,7 @@ class Chooser extends \Magento\Backend\Block\Template
      * Flag to indicate include hidden field before chooser or not
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getHiddenEnabled()
     {

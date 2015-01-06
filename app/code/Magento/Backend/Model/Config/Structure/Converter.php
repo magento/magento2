@@ -71,6 +71,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param \DOMNode $root
      * @return array|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _convertDOMDocument(\DOMNode $root)
     {

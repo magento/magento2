@@ -6,6 +6,7 @@ namespace Magento\GiftMessage\Helper;
 
 /**
  * Gift Message helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Message extends \Magento\Core\Helper\Data
 {
@@ -70,6 +71,7 @@ class Message extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\Escaper $escaper
      * @param array $skipMessageCheck
      * @param bool $dbCompatibleMode
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -135,6 +137,7 @@ class Message extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\Object $entity
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool|string|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isMessagesAvailable($type, \Magento\Framework\Object $entity, $store = null)
     {
@@ -287,6 +290,7 @@ class Message extends \Magento\Core\Helper\Data
      * @param array $quote
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getAvailableForQuoteItems($quote, $store = null)
     {
@@ -304,6 +308,7 @@ class Message extends \Magento\Core\Helper\Data
      * @param array $items
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getAvailableForAddressItems($items, $store = null)
     {

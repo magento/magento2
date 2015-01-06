@@ -140,6 +140,7 @@ class Builder
      * @param Combine $combine
      * @param string $value
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getMappedSqlCombination(Combine $combine, $value = '')
     {

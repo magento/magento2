@@ -243,6 +243,7 @@ class Config extends \Magento\Framework\Object
      * where: key - attribute name, value - group name
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getAttributeGroupsFlat()
     {
@@ -271,6 +272,7 @@ class Config extends \Magento\Framework\Object
      *
      * @param int $storeId
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsDebug($storeId)
     {
@@ -281,6 +283,7 @@ class Config extends \Magento\Framework\Object
      * Returns all required attributes
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getRequiredAttributes()
     {

@@ -74,6 +74,7 @@ class StockIndex implements StockIndexInterface
      * @param int $productId
      * @param int $websiteId
      * @return true
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function rebuild($productId = null, $websiteId = null)
     {
@@ -126,6 +127,7 @@ class StockIndex implements StockIndexInterface
      * @param int $qty
      * @param int $status
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processChildren(
         $productId,

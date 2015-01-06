@@ -4,6 +4,9 @@
  */
 namespace Magento\Catalog\Model\Resource\Category;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Tree extends \Magento\Framework\Data\Tree\Dbp
 {
     const ID_FIELD = 'id';
@@ -156,6 +159,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      * @param boolean $toLoad
      * @param boolean $onlyActive
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addCollectionData(
         $collection = null,
@@ -323,6 +328,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      *
      * @param int $id
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     protected function _getItemIsActive($id)
     {
@@ -436,6 +442,8 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      * @param bool $addCollectionData
      * @param bool $updateAnchorProductCount
      * @return $this|bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function loadByIds($ids, $addCollectionData = true, $updateAnchorProductCount = true)
     {

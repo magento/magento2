@@ -11,6 +11,8 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
      * Update product configuration for a cart item
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

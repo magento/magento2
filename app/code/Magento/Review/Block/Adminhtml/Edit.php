@@ -54,6 +54,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Initialize edit review
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _construct()
     {

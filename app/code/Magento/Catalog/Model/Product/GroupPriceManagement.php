@@ -68,6 +68,8 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function add($productSku, $customerGroupId, $price)
     {

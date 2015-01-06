@@ -56,6 +56,7 @@ class Observer
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param Theme\Registration $registration
      * @param \Psr\Log\LoggerInterface $logger
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,

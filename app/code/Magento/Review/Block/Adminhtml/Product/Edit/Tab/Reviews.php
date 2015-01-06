@@ -6,6 +6,9 @@
  */
 namespace Magento\Review\Block\Adminhtml\Product\Edit\Tab;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Reviews extends \Magento\Review\Block\Adminhtml\Grid
 {
     /**

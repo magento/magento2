@@ -49,6 +49,8 @@ class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function setRouteParams(array $data, $unsetOldParams = true)
     {

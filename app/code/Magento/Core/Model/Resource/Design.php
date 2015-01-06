@@ -105,6 +105,8 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string $dateTo
      * @param int $currentId
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _checkIntersection($storeId, $dateFrom, $dateTo, $currentId)
     {

@@ -14,6 +14,9 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
      * Rollback Action
      *
      * @return void|\Magento\Backend\App\Action
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {

@@ -42,6 +42,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
      * Overview action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

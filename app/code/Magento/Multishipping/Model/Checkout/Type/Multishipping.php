@@ -10,6 +10,9 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
  * Multishipping checkout model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Multishipping extends \Magento\Framework\Object
 {
@@ -130,6 +133,7 @@ class Multishipping extends \Magento\Framework\Object
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder,
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -177,6 +181,7 @@ class Multishipping extends \Magento\Framework\Object
      * Split virtual/not virtual items between default billing/shipping addresses
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _init()
     {
@@ -336,6 +341,8 @@ class Multishipping extends \Magento\Framework\Object
      * @param array $info
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function setShippingItemsInformation($info)
     {
@@ -419,6 +426,8 @@ class Multishipping extends \Magento\Framework\Object
      * @param int $quoteItemId
      * @param array $data array('qty'=>$qty, 'address'=>$customerAddressId)
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addShippingItem($quoteItemId, $data)
     {

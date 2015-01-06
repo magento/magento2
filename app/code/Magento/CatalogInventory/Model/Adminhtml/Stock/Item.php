@@ -35,6 +35,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -112,6 +113,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShowDefaultNotificationMessage()
     {

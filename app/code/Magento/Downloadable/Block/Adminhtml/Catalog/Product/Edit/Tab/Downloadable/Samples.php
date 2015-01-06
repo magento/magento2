@@ -188,6 +188,7 @@ class Samples extends \Magento\Backend\Block\Widget
      * Check exists defined samples title
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUsedDefault()
     {

@@ -249,6 +249,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * Get clear tier price list stored in DB
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getStoredTierPrices()
     {

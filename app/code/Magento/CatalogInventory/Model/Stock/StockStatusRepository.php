@@ -15,6 +15,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * Class StockStatusRepository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockStatusRepository implements StockStatusRepositoryInterface
 {

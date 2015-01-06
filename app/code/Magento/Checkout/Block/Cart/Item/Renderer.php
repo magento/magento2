@@ -15,6 +15,7 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
  *
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setProductName(string)
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Renderer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
 {

@@ -18,6 +18,7 @@ use Magento\Framework\Registry;
  * Adminhtml catalog product composite helper
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Composite extends \Magento\Framework\App\Helper\AbstractHelper
 {

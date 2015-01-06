@@ -22,6 +22,7 @@ class StoreGroup
      * @param callable $proceed
      * @param \Magento\Framework\Model\AbstractModel $group
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
         \Magento\Framework\Model\Resource\Db\AbstractDb $subject,

@@ -24,6 +24,7 @@ class GiftMessageManager
      * @param array $giftMessages
      * @param \Magento\Sales\Model\Quote $quote
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function add($giftMessages, $quote)
     {

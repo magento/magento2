@@ -105,6 +105,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      * Return count totals
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCountTotals()
     {

@@ -10,6 +10,9 @@
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\Edit\Tab\Variations;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Main extends \Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain
 {
     /**

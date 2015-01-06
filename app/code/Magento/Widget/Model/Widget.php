@@ -116,6 +116,8 @@ class Widget
      *
      * @param string $type Widget type
      * @return \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getConfigAsObject($type)
     {

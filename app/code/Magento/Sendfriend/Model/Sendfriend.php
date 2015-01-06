@@ -17,6 +17,7 @@ use Magento\Framework\Model\Exception as CoreException;
  * @method \Magento\Sendfriend\Model\Sendfriend setTime(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Sendfriend extends \Magento\Framework\Model\AbstractModel
 {
@@ -120,6 +121,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -218,6 +220,8 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
      * Validate Form data
      *
      * @return bool|string[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validate()
     {
@@ -267,6 +271,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $recipients
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function setRecipients($recipients)
     {

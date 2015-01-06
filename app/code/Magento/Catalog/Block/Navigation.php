@@ -11,6 +11,7 @@ use Magento\Customer\Model\Context;
  * Catalog navigation
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
 {
@@ -270,6 +271,9 @@ class Navigation extends \Magento\Framework\View\Element\Template implements \Ma
      * @param string $childrenWrapClass If specified wraps children list in div with this class
      * @param boolean $noEventAttributes Whether ot not to add on* attributes to list item
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _renderCategoryMenuItemHtml(
         $category,

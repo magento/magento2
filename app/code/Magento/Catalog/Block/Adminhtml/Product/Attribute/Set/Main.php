@@ -344,6 +344,7 @@ class Main extends \Magento\Backend\Block\Template
      * Check Current Attribute Set is a default
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsCurrentSetDefault()
     {

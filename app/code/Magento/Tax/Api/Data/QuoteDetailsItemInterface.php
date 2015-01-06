@@ -71,6 +71,7 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
      * Get indicate that if the tax is included in the unit price and row total
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getTaxIncluded();
 

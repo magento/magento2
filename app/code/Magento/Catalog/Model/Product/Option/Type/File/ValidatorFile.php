@@ -8,6 +8,9 @@ namespace Magento\Catalog\Model\Product\Option\Type\File;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ValidatorFile extends Validator
 {
     /**
@@ -86,6 +89,7 @@ class ValidatorFile extends Validator
      * @return array
      * @throws \Magento\Framework\Model\Exception
      * @throws \Zend_File_Transfer_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate($processingParams, $option)
     {

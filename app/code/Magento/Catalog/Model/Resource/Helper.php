@@ -29,6 +29,7 @@ class Helper extends \Magento\Eav\Model\Resource\Helper
      * @param array $column
      * @param array $describe
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function compareIndexColumnProperties($column, $describe)
     {

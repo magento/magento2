@@ -8,6 +8,7 @@ namespace Magento\ProductAlert\Model;
  * ProductAlert Email processor
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Email extends \Magento\Framework\Model\AbstractModel
 {
@@ -118,6 +119,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -280,6 +282,8 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * Send customer email
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function send()
     {

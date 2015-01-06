@@ -44,6 +44,7 @@ class StockDataFilter
      *
      * @param array $stockData
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function filter(array $stockData)
     {

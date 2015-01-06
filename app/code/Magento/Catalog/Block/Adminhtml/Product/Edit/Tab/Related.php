@@ -183,6 +183,7 @@ class Related extends Extended
      * Add columns to grid
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
     {

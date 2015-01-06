@@ -28,6 +28,7 @@ class Status extends \Magento\Backend\Controller\Adminhtml\System\Config\System\
      * Retrieve synchronize process state and it's parameters in json format
      *
      * @return \Magento\Framework\Controller\Result\JSON
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

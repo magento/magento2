@@ -10,6 +10,7 @@ use Magento\Store\Model\ScopeInterface;
  * Downloadable Products Observer
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
 {
@@ -110,6 +111,8 @@ class Observer
      *
      * @param \Magento\Framework\Object $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveDownloadableOrderItem($observer)
     {
@@ -229,6 +232,8 @@ class Observer
      *
      * @param \Magento\Framework\Object $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function setLinkStatus($observer)
     {

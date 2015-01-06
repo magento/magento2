@@ -57,6 +57,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * Save product action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

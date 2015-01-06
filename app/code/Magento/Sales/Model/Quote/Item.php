@@ -96,6 +96,7 @@ namespace Magento\Sales\Model\Quote;
  * @method null|bool getHasConfigurationUnavailableError()
  * @method \Magento\Sales\Model\Quote\Item setHasConfigurationUnavailableError(bool $value)
  * @method \Magento\Sales\Model\Quote\Item unsHasConfigurationUnavailableError()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
 {

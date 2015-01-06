@@ -19,6 +19,7 @@ use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 
 /**
  * Tax totals calculation model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CommonTaxCollector extends AbstractTotal
 {
@@ -708,6 +709,8 @@ class CommonTaxCollector extends AbstractTotal
      * @param float $baseAmount
      * @param float $rate
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _saveAppliedTaxes(
         QuoteAddress $address,

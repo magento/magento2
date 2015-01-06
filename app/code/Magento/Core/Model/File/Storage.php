@@ -10,6 +10,7 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Class Storage
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Storage extends AbstractModel
 {
@@ -96,6 +97,7 @@ class Storage extends AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -194,6 +196,8 @@ class Storage extends AbstractModel
      *
      * @param  array $storage
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function synchronize($storage)
     {

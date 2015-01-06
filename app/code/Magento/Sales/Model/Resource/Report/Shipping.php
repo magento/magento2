@@ -140,6 +140,7 @@ class Shipping extends AbstractReport
      * @param string|null $to
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _aggregateByShippingCreatedAt($from, $to)
     {

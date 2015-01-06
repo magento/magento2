@@ -125,6 +125,8 @@ class Weee extends AbstractTotal
      * @param   \Magento\Sales\Model\Quote\Address $address
      * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $item
      * @return  void|$this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _process(\Magento\Sales\Model\Quote\Address $address, $item)
     {

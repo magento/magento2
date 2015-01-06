@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Resource;
  * Product entity resource model
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends AbstractResource
 {
@@ -310,6 +311,7 @@ class Product extends AbstractResource
      *
      * @param \Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveCategories(\Magento\Framework\Object $object)
     {

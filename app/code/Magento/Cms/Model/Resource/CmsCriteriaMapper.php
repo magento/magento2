@@ -37,6 +37,7 @@ class CmsCriteriaMapper extends GenericMapper
      *
      * @param bool $flag
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function mapFirstStoreFlag($flag)
     {

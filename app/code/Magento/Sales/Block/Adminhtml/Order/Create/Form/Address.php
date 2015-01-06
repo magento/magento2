@@ -9,6 +9,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Order create address form
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
 {

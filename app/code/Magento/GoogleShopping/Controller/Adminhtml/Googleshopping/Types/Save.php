@@ -11,6 +11,7 @@ class Save extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
      * Save attribute set mapping
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

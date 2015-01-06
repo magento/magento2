@@ -204,6 +204,8 @@ class Order
      * @param object $invoice
      * @param array $data
      * @return \Magento\Sales\Model\Order\Creditmemo
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function prepareInvoiceCreditmemo($invoice, $data = [])
     {
@@ -315,6 +317,7 @@ class Order
      * @param \Magento\Sales\Model\Order\Item $item
      * @param array $qtys
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _canInvoiceItem($item, $qtys = [])
     {
@@ -355,6 +358,7 @@ class Order
      * @param \Magento\Sales\Model\Order\Item $item
      * @param array $qtys
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _canShipItem($item, $qtys = [])
     {
@@ -401,6 +405,7 @@ class Order
      * @param array $qtys
      * @param array $invoiceQtysRefundLimits
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _canRefundItem($item, $qtys = [], $invoiceQtysRefundLimits = [])
     {

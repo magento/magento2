@@ -184,6 +184,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
      * Generate array of parameters for every container type to create html template
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getDisplayOnContainers()
     {

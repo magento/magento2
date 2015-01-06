@@ -124,6 +124,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      * @param int $priceType
      * @param int|array $entityIds the entity ids limitation
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareBundlePriceByType($priceType, $entityIds = null)
     {
@@ -372,6 +373,7 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
      *
      * @param int $priceType
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _calculateBundleSelectionPrice($priceType)
     {

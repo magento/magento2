@@ -33,6 +33,7 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     /**
      * @param \Magento\Sales\Model\Quote\Address $address
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {

@@ -76,6 +76,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Return an indicator of whether or not guest is allowed to write
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsGuestAllowToWrite()
     {

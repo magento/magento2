@@ -16,6 +16,9 @@ use Magento\Framework\Model\Exception;
  * Entity/Attribute/Model - entity abstract
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractEntity extends \Magento\Framework\Model\Resource\AbstractResource implements EntityInterface
 {
@@ -413,6 +416,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param string|int|Element $attribute
      * @return AbstractAttribute|false
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAttribute($attribute)
     {
@@ -636,6 +640,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * @param   \Magento\Framework\Object $object
      * @param   AbstractAttribute $attribute
      * @return  bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _isApplicableAttribute($object, $attribute)
     {
@@ -656,6 +661,8 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @throws \Exception|\Magento\Eav\Model\Entity\Attribute\Exception
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function walkAttributes($partMethod, array $args = [], $collectExceptionMessages = null)
     {
@@ -738,6 +745,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * @param string $method
      * @param array $args array of arguments
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _isCallableAttributeInstance($instance, $method, $args)
     {
@@ -1079,6 +1087,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * @param   \Magento\Framework\Object $object
      * @param   string|int $rowId
      * @return  \Zend_Db_Select
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getLoadRowSelect($object, $rowId)
     {
@@ -1224,6 +1233,8 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param   \Magento\Framework\Object $newObject
      * @return  array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _collectSaveData($newObject)
     {
@@ -1328,6 +1339,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * @param mixed $v New value of the attribute. Can be used in subclasses.
      * @param array $origData
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _canUpdateAttribute(AbstractAttribute $attribute, $v, array &$origData)
     {
@@ -1382,6 +1394,8 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param   array $saveData array('newObject', 'entityRow', 'insert', 'update', 'delete')
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _processSaveData($saveData)
     {
@@ -1491,6 +1505,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * @param   mixed $valueId
      * @param   mixed $value
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
@@ -1581,6 +1596,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * @param   string $table
      * @param   array $info
      * @return  \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _deleteAttributes($object, $table, $info)
     {
@@ -1609,6 +1625,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * @param string $attributeCode
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function saveAttribute(\Magento\Framework\Object $object, $attributeCode)
     {
@@ -1665,6 +1682,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * @param \Magento\Framework\Object|int|string $object
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function delete($object)
     {

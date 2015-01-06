@@ -185,6 +185,7 @@ class AbstractAction
      * Return array of static columns
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getStaticColumns()
     {

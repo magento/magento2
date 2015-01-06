@@ -71,6 +71,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Apply sorting and filtering to collection
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _prepareCollection()
     {
@@ -183,6 +184,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      *
      * @param array $data
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _setFilterValues($data)
     {
@@ -208,6 +210,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Return visibility of store switcher
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getStoreSwitcherVisibility()
     {
@@ -240,6 +243,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
      * Return visibility of date filter
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDateFilterVisibility()
     {

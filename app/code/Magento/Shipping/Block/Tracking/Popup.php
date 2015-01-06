@@ -85,6 +85,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      * Is 'contact us' option enabled?
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getContactUsEnabled()
     {

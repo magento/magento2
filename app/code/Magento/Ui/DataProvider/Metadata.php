@@ -246,6 +246,9 @@ class Metadata implements \Iterator, \ArrayAccess
      * @param string $name
      * @param array $field
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function prepare($name, array & $field)
     {

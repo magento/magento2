@@ -58,6 +58,7 @@ class Listing extends AbstractView
      * @param ActionPool $actionPool
      * @param RowPool $dataProviderRowPool
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         TemplateContext $context,

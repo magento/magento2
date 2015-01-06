@@ -9,6 +9,7 @@ use Magento\Sales\Model\Quote;
 
 /**
  * Cart mapper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartMapper
 {

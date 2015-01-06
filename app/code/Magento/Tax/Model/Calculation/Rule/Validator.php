@@ -32,6 +32,9 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
      * @param \Magento\Tax\Model\Calculation\Rule $value
      * @return boolean
      * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function isValid($value)
     {

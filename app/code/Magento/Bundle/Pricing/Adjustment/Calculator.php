@@ -19,6 +19,7 @@ use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Bundle price calculator
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Calculator implements BundleCalculatorInterface
 {
@@ -171,6 +172,8 @@ class Calculator implements BundleCalculatorInterface
      * @param bool $searchMin
      * @param bool $useRegularPrice
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getSelectionAmounts(Product $bundleProduct, $searchMin, $useRegularPrice = false)
     {
@@ -294,6 +297,7 @@ class Calculator implements BundleCalculatorInterface
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
      * @param null|string $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function calculateDynamicBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude)
     {
@@ -381,6 +385,7 @@ class Calculator implements BundleCalculatorInterface
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
      * @param bool $searchMin
      * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processOptions($option, $selectionPriceList, $searchMin = true)
     {

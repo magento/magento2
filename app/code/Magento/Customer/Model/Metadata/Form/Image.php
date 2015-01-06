@@ -16,6 +16,8 @@ class Image extends File
      *
      * @param array $value
      * @return string[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _validateByRules($value)
     {

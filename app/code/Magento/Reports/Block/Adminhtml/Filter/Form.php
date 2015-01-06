@@ -51,6 +51,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param string $fieldId
      * @param bool $defaultVisibility
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getFieldVisibility($fieldId, $defaultVisibility = true)
     {

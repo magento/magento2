@@ -196,6 +196,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
      * @param string $renderZone
      * @param array $arguments
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getProductPriceHtml(
         \Magento\Catalog\Model\Product $product,

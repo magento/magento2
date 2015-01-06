@@ -69,6 +69,7 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Downloadable\Model\Link $linkObject
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function saveItemTitleAndPrice($linkObject)
     {

@@ -51,6 +51,9 @@ use Magento\Sales\Model\EntityInterface;
  * @method \Magento\Sales\Model\Order\Invoice setBaseShippingHiddenTaxAmnt(float $value)
  * @method \Magento\Sales\Model\Order\Invoice setShippingInclTax(float $value)
  * @method \Magento\Sales\Model\Order\Invoice setBaseShippingInclTax(float $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 {
@@ -165,6 +168,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -616,6 +620,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function register()
     {

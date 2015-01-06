@@ -12,6 +12,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Customer repository.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInterface
 {
@@ -88,6 +89,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Customer\Model\CustomerFactory $customerFactory,
@@ -119,6 +121,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {

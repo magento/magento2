@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Permission tree retriever
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AclRetriever
 {

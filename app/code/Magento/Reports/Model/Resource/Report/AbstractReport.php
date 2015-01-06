@@ -7,6 +7,7 @@ namespace Magento\Reports\Model\Resource\Report;
 
 /**
  * Abstract report aggregate resource model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
@@ -275,6 +276,7 @@ abstract class AbstractReport extends \Magento\Framework\Model\Resource\Db\Abstr
      * @param string $alias
      * @param string $relatedAlias
      * @return \Magento\Framework\DB\Select
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     protected function _getTableDateRangeRelatedSelect(
         $table,
