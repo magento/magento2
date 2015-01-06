@@ -16,14 +16,14 @@ class WriteServiceTest extends WebapiAbstract
     private $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Quote\Model\Quote
      */
     protected $quote;
 
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $this->quote = $this->objectManager->create('Magento\Quote\Model\Quote');
     }
 
     protected function getServiceInfo()

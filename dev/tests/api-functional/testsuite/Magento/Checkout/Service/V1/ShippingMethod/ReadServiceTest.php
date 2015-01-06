@@ -30,8 +30,8 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetMethod()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
 
         $cartId = $quote->getId();
@@ -58,7 +58,7 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetMethodOfVirtualCart()
     {
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $cartId = $quote->load('test_order_with_virtual_product', 'reserved_order_id')->getId();
 
         $result = $this->_webApiCall($this->getSelectedMethodServiceInfo($cartId), ["cartId" => $cartId]);
@@ -70,7 +70,7 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetMethodOfCartWithNoShippingMethod()
     {
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $cartId = $quote->load('test_order_1', 'reserved_order_id')->getId();
 
         $result = $this->_webApiCall($this->getSelectedMethodServiceInfo($cartId), ["cartId" => $cartId]);
@@ -83,7 +83,7 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetListForVirtualCart()
     {
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $cartId = $quote->load('test_order_with_virtual_product', 'reserved_order_id')->getId();
 
         $this->assertEquals([], $this->_webApiCall($this->getListServiceInfo($cartId), ["cartId" => $cartId]));
@@ -94,8 +94,8 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetList()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
         if (!$cartId) {
@@ -156,7 +156,7 @@ class ReadServiceTest extends WebapiAbstract
      * Convert rate models array to data array
      *
      * @param string $currencyCode
-     * @param \Magento\Sales\Model\Quote\Address\Rate[] $groupedRates
+     * @param \Magento\Quote\Model\Quote\Address\Rate[] $groupedRates
      * @return array
      */
     protected function convertRates($groupedRates, $currencyCode)

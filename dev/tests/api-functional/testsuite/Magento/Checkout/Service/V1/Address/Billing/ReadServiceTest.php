@@ -31,10 +31,10 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetAddress()
     {
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
 
-        /** @var \Magento\Sales\Model\Quote\Address $address */
+        /** @var \Magento\Quote\Model\Quote\Address $address */
         $address = $quote->getBillingAddress();
 
         $data = [

@@ -30,8 +30,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testDelete()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
         $serviceInfo = [
@@ -58,8 +58,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testSetCouponThrowsExceptionIfCouponDoesNotExist()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -91,8 +91,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testSetCouponSuccess()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -121,7 +121,7 @@ class WriteServiceTest extends WebapiAbstract
 
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
 
-        $quoteWithCoupon = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $quoteWithCoupon = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quoteWithCoupon->load('test01', 'reserved_order_id');
 
         $this->assertEquals($quoteWithCoupon->getCouponCode(), $couponCode);
