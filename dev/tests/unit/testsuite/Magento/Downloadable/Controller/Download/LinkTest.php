@@ -221,7 +221,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecute()
+    public function testAbsentLinkId()
     {
         $this->objectManager->expects($this->once())
             ->method('get')
@@ -245,7 +245,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->response, $this->link->execute());
     }
 
-    public function testExecute2()
+    public function testGetLinkForGuestCustomer()
     {
         $this->objectManager->expects($this->at(0))
             ->method('get')
@@ -296,7 +296,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->link->execute());
     }
 
-    public function testExecute3()
+    public function testGetLinkForWrongCustomer()
     {
         $this->objectManager->expects($this->at(0))
             ->method('get')
@@ -336,7 +336,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->response, $this->link->execute());
     }
 
-    public function testExecute4()
+    public function testExceptionInUpdateLinkStatus()
     {
         $this->objectManager->expects($this->at(0))
             ->method('get')
@@ -423,9 +423,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
      * @param string $messageType
      * @param string $status
      * @param string $notice
-     * @dataProvider execute5DataProvider
+     * @dataProvider linkNotAvailableDataProvider
      */
-    public function testExecute5($messageType, $status, $notice)
+    public function testLinkNotAvailable($messageType, $status, $notice)
     {
         $this->objectManager->expects($this->at(0))
             ->method('get')
@@ -460,7 +460,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function execute5DataProvider()
+    public function linkNotAvailableDataProvider()
     {
         return [
             ['addNotice', 'expired', 'The link has expired.'],
