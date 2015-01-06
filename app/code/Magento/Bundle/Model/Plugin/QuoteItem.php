@@ -16,6 +16,7 @@ class QuoteItem
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param array $additional
      * @return \Magento\Sales\Model\Order\Item
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundConvert(
         \Magento\Quote\Model\Quote\Item\ToOrderItem $subject,

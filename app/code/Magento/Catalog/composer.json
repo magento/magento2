@@ -20,7 +20,6 @@
         "magento/module-catalog-inventory": "0.42.0-beta2",
         "magento/module-directory": "0.42.0-beta2",
         "magento/module-catalog-rule": "0.42.0-beta2",
-        "magento/module-sales": "0.42.0-beta2",
         "magento/module-product-alert": "0.42.0-beta2",
         "magento/module-url-rewrite": "0.42.0-beta2",
         "magento/module-catalog-url-rewrite": "0.42.0-beta2",
