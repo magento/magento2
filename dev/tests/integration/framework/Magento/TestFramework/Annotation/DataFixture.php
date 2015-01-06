@@ -52,13 +52,13 @@ class DataFixture
             if ($this->_appliedFixtures) {
                 $param->requestTransactionRollback();
             }
-            if ($this->getDbIsolationState('method', $test) !== 'disabled') {
+            if ($this->getDbIsolationState('method', $test) !== ['disabled']) {
                 $param->requestTransactionStart();
             } else {
                 $this->_applyFixtures($this->_getFixtures('method', $test));
             }
         } elseif (!$this->_appliedFixtures && $this->_getFixtures('class', $test)) {
-            if ($this->getDbIsolationState('class', $test) !== 'disabled') {
+            if ($this->getDbIsolationState('class', $test) !== ['disabled']) {
                 $param->requestTransactionStart();
             } else {
                 $this->_applyFixtures($this->_getFixtures('class', $test));
@@ -78,7 +78,7 @@ class DataFixture
     ) {
         /* Isolate other tests from test-specific fixtures */
         if ($this->_appliedFixtures && $this->_getFixtures('method', $test)) {
-            if ($this->getDbIsolationState('method', $test) !== 'disabled') {
+            if ($this->getDbIsolationState('method', $test) !== ['disabled']) {
                 $param->requestTransactionRollback();
             } else {
                 $this->_revertFixtures();
