@@ -28,9 +28,9 @@ class XmlScannerTest extends \PHPUnit_Framework_TestCase
         );
         $testDir = __DIR__ . '/../../' . '/_files';
         $this->_testFiles = [
-            $testDir . '/app/code/Magento/SomeModule/etc/adminhtml/system.xml',
-            $testDir . '/app/code/Magento/SomeModule/etc/di.xml',
-            $testDir . '/app/code/Magento/SomeModule/view/frontend/default.xml',
+            $testDir . '/vendor/magento/Magento/SomeModule/etc/adminhtml/system.xml',
+            $testDir . '/vendor/magento/Magento/SomeModule/etc/di.xml',
+            $testDir . '/vendor/magento/Magento/SomeModule/view/frontend/default.xml',
         ];
     }
 

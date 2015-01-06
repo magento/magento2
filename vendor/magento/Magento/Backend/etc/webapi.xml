@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../Magento/Webapi/etc/webapi.xsd">
+    <route url="/V1/modules" method="GET">
+        <service class="Magento\Backend\Service\V1\ModuleServiceInterface" method="getModules"/>
+        <resources>
+            <resource ref="Magento_Adminhtml::admin"/>
+        </resources>
+    </route>
+</routes>

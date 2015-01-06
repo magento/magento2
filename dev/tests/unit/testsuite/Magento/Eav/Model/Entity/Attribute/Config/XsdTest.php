@@ -19,7 +19,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_xsdSchema = BP . '/app/code/Magento/Eav/etc/eav_attributes.xsd';
+        $this->_xsdSchema = BP . '/vendor/magento/Magento/Eav/etc/eav_attributes.xsd';
         $this->_xsdValidator = new \Magento\TestFramework\Utility\XsdValidator();
     }
 

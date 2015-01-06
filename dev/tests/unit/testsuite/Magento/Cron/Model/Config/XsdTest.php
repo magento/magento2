@@ -10,7 +10,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_xsdFile = __DIR__ . "/../../../../../../../../app/code/Magento/Cron/etc/crontab.xsd";
+        $this->_xsdFile = __DIR__ . "/../../../../../../../../vendor/magento/Magento/Cron/etc/crontab.xsd";
     }
 
     /**

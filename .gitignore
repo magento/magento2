@@ -39,4 +39,10 @@ atlassian*
 
 /var/*
 !/var/.htaccess
-/vendor
+!/vendor/
+
+/vendor/*
+!/vendor/magento/
+
+/vendor/magento/*
+!/vendor/magento/Magento

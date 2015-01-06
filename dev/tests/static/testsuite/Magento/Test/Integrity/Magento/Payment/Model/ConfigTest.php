@@ -95,7 +95,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return '/app/code/Magento/Payment/etc/payment.xsd';
+        return '/vendor/magento/Magento/Payment/etc/payment.xsd';
     }
 
     /**
@@ -105,6 +105,6 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return '/app/code/Magento/Payment/etc/payment_file.xsd';
+        return '/vendor/magento/Magento/Payment/etc/payment_file.xsd';
     }
 }

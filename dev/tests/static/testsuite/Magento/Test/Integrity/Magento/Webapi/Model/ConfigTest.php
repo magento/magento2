@@ -83,7 +83,7 @@ class ConfigTest extends AbstractConfig
      */
     protected function _getXsd()
     {
-        return '/app/code/Magento/Webapi/etc/webapi.xsd';
+        return '/vendor/magento/Magento/Webapi/etc/webapi.xsd';
     }
 
     /**

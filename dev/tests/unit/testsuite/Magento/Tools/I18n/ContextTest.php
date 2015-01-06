@@ -34,7 +34,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     public function dataProviderContextByPath()
     {
         return [
-            [[Context::CONTEXT_TYPE_MODULE, 'Magento_Module'], '/app/code/Magento/Module/Block/Test.php'],
+            [[Context::CONTEXT_TYPE_MODULE, 'Magento_Module'], '/vendor/magento/Magento/Module/Block/Test.php'],
             [[Context::CONTEXT_TYPE_THEME, 'area/theme/test.phtml'], '/app/design/area/theme/test.phtml'],
             [[Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'], '/lib/web/module/test.phtml'],
         ];

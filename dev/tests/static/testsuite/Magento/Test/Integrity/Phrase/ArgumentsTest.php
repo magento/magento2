@@ -35,7 +35,7 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
         $rootDir = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
         $this->blackList = [
             // the file below is the only file where strings are translated without corresponding arguments
-            $rootDir . '/app/code/Magento/Translation/Model/Js/DataProvider.php',
+            $rootDir . '/vendor/magento/Magento/Translation/Model/Js/DataProvider.php',
         ];
     }
 

@@ -37,14 +37,14 @@ class DirectoryScannerTest extends \PHPUnit_Framework_TestCase
             'php' => [
                 $this->_testDir . '/additional.php',
                 $this->_testDir . '/app/bootstrap.php',
-                $this->_testDir . '/app/code/Magento/SomeModule/Helper/Test.php',
-                $this->_testDir . '/app/code/Magento/SomeModule/Model/Test.php',
+                $this->_testDir . '/vendor/magento/Magento/SomeModule/Helper/Test.php',
+                $this->_testDir . '/vendor/magento/Magento/SomeModule/Model/Test.php',
             ],
             'config' => [
-                $this->_testDir . '/app/code/Magento/SomeModule/etc/adminhtml/system.xml',
-                $this->_testDir . '/app/code/Magento/SomeModule/etc/config.xml',
+                $this->_testDir . '/vendor/magento/Magento/SomeModule/etc/adminhtml/system.xml',
+                $this->_testDir . '/vendor/magento/Magento/SomeModule/etc/config.xml',
             ],
-            'view' => [$this->_testDir . '/app/code/Magento/SomeModule/view/frontend/default.xml'],
+            'view' => [$this->_testDir . '/vendor/magento/Magento/SomeModule/view/frontend/default.xml'],
             'design' => [$this->_testDir . '/app/design/adminhtml/Magento/backend/layout.xml'],
             'etc' => [$this->_testDir . '/app/etc/additional.xml', $this->_testDir . '/app/etc/config.xml'],
         ];

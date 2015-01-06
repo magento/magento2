@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Ui/etc/data_source.xsd">
+    <dataSource name="customer_group" label="Customer Group" dataSet="Magento\Customer\Model\Resource\Group\Collection">
+        <fields>
+            <field name="customer_group_id" dataType="number" visible="false"/>
+            <field name="customer_group_code" dataType="text"/>
+        </fields>
+    </dataSource>
+</config>

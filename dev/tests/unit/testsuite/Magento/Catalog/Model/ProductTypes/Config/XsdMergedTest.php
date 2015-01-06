@@ -19,7 +19,7 @@ class XsdMergedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_xsdSchema = BP . '/app/code/Magento/Catalog/etc/product_types_merged.xsd';
+        $this->_xsdSchema = BP . '/vendor/magento/Magento/Catalog/etc/product_types_merged.xsd';
         $this->_xsdValidator = new \Magento\TestFramework\Utility\XsdValidator();
     }
 

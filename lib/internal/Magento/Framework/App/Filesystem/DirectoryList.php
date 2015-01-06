@@ -17,12 +17,12 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     /**
      * Most of entire application
      */
-    const APP = 'app';
+    const APP = 'vendor';
 
     /**
      * Modules
      */
-    const MODULES = 'code';
+    const MODULES = 'magento';
 
     /**
      * Themes
@@ -111,8 +111,8 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     {
         $result = [
             self::ROOT => [parent::PATH => ''],
-            self::APP => [parent::PATH => 'app'],
-            self::MODULES => [parent::PATH => 'app/code'],
+            self::APP => [parent::PATH => 'vendor'],
+            self::MODULES => [parent::PATH => 'vendor/magento'],
             self::CONFIG => [parent::PATH => 'app/etc'],
             self::LIB_INTERNAL => [parent::PATH => 'lib/internal'],
             self::VAR_DIR => [parent::PATH => 'var'],

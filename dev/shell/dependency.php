@@ -216,7 +216,7 @@ function initialize()
 {
     global $modules, $componentsByName;
     $baseDir = "../../";
-    $fileNames = glob($baseDir . "app/code/Magento/*/composer.json");
+    $fileNames = glob($baseDir . "vendor/magento/Magento/*/composer.json");
 
     foreach ($fileNames as $fileName) {
         $moduleDirectoryName = basename(dirname($fileName));

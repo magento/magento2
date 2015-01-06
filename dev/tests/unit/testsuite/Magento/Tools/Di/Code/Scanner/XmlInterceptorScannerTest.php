@@ -26,7 +26,7 @@ class XmlInterceptorScannerTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Tools\Di\Code\Scanner\XmlInterceptorScanner();
         $this->_testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');
         $this->_testFiles = [
-            $this->_testDir . '/app/code/Magento/SomeModule/etc/di.xml',
+            $this->_testDir . '/vendor/magento/Magento/SomeModule/etc/di.xml',
             $this->_testDir . '/app/etc/di/config.xml',
         ];
     }

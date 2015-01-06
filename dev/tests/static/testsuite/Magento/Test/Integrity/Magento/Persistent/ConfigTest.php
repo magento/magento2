@@ -18,7 +18,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return '/app/code/Magento/Persistent/etc/persistent.xsd';
+        return '/vendor/magento/Magento/Persistent/etc/persistent.xsd';
     }
 
     /**

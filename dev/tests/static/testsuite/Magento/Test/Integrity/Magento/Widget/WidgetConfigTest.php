@@ -17,7 +17,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
              */
             function ($configFile) {
                 $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() .
-                    '/app/code/Magento/Widget/etc/widget.xsd';
+                    '/vendor/magento/Magento/Widget/etc/widget.xsd';
                 $this->_validateFileExpectSuccess($configFile, $schema);
             },
             array_merge(
@@ -31,7 +31,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     {
         $xmlFile = __DIR__ . '/_files/widget.xml';
         $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() .
-            '/app/code/Magento/Widget/etc/widget.xsd';
+            '/vendor/magento/Magento/Widget/etc/widget.xsd';
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
@@ -39,7 +39,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     {
         $xmlFile = __DIR__ . '/_files/invalid_widget.xml';
         $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() .
-            '/app/code/Magento/Widget/etc/widget.xsd';
+            '/vendor/magento/Magento/Widget/etc/widget.xsd';
         $this->_validateFileExpectFailure($xmlFile, $schema);
     }
 
@@ -47,7 +47,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     {
         $xmlFile = __DIR__ . '/_files/widget_file.xml';
         $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() .
-            '/app/code/Magento/Widget/etc/widget_file.xsd';
+            '/vendor/magento/Magento/Widget/etc/widget_file.xsd';
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
@@ -55,7 +55,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     {
         $xmlFile = __DIR__ . '/_files/invalid_widget.xml';
         $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() .
-            '/app/code/Magento/Widget/etc/widget_file.xsd';
+            '/vendor/magento/Magento/Widget/etc/widget_file.xsd';
         $this->_validateFileExpectFailure($xmlFile, $schema);
     }
 
