@@ -59,7 +59,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $this->quoteItemMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
         $this->orderItemMock->expects($this->once())->method('setProductOptions');
 
-        $orderItem = $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock);
+        $orderItem = $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock, []);
         $this->assertSame($this->orderItemMock, $orderItem);
     }
 
@@ -78,7 +78,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $this->quoteItemMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
         $this->orderItemMock->expects($this->never())->method('setProductOptions');
 
-        $orderItem = $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock);
+        $orderItem = $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock, []);
         $this->assertSame($this->orderItemMock, $orderItem);
     }
 }

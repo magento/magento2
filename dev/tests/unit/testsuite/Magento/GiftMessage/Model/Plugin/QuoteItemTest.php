@@ -98,7 +98,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->orderItemMock,
-            $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock)
+            $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock, [])
         );
     }
 }
