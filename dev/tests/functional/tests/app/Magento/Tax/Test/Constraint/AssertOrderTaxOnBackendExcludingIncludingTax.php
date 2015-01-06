@@ -20,7 +20,7 @@ class AssertOrderTaxOnBackendExcludingIncludingTax extends AbstractAssertOrderTa
     /**
      * Get order totals.
      *
-     * @param $actualPrices
+     * @param array $actualPrices
      * @return array
      */
     public function getOrderTotals($actualPrices)
@@ -43,7 +43,7 @@ class AssertOrderTaxOnBackendExcludingIncludingTax extends AbstractAssertOrderTa
     /**
      * Get invoice new totals.
      *
-     * @param $actualPrices
+     * @param array $actualPrices
      * @return array
      */
     public function getInvoiceNewTotals($actualPrices)
@@ -67,7 +67,7 @@ class AssertOrderTaxOnBackendExcludingIncludingTax extends AbstractAssertOrderTa
     /**
      * Get Credit Memo new totals.
      *
-     * @param $actualPrices
+     * @param array $actualPrices
      * @return array
      */
     public function getCreditMemoNewTotals($actualPrices)

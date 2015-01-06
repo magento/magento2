@@ -46,11 +46,35 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     protected $severeness = 'high';
 
     /**
+     * Implementation assert
+     *
+     * @param array $actualPrices
+     * @return array
+     */
+    abstract protected function getOrderTotals($actualPrices);
+
+    /**
+     * Implementation assert
+     *
+     * @param array $actualPrices
+     * @return array
+     */
+    abstract protected function getInvoiceNewTotals($actualPrices);
+
+    /**
+     * Implementation getCreditMemoNewTotals
+     *
+     * @param array $actualPrices
+     * @return array
+     */
+    abstract protected function getCreditMemoNewTotals($actualPrices);
+
+    /**
      * Assert that specified prices are actual on order, invoice and refund pages.
      *
      * @param array $prices
      * @param InjectableFixture $product
-     * @param OrderIndex $orderIndex ,
+     * @param OrderIndex $orderIndex
      * @param OrderView $orderView
      * @param OrderInvoiceNew $orderInvoiceNew
      * @param OrderCreditMemoNew $orderCreditMemoNew
@@ -115,18 +139,18 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
      */
     protected function preparePrices($prices)
     {
-        if (isset($prices['category_price_excl_tax'])) {
-            unset($prices['category_price_excl_tax']);
+        $deletePrices = [
+            'category_price_excl_tax',
+            'category_price_incl_tax',
+            'product_view_price_excl_tax',
+            'product_view_price_incl_tax'
+        ];
+        foreach ($deletePrices as $key) {
+            if (array_key_exists($key, $prices)) {
+                unset($prices[$key]);
+            }
         }
-        if (isset($prices['category_price_incl_tax'])) {
-            unset($prices['category_price_incl_tax']);
-        }
-        if (isset($prices['product_view_price_excl_tax'])) {
-            unset($prices['product_view_price_excl_tax']);
-        }
-        if (isset($prices['product_view_price_incl_tax'])) {
-            unset($prices['product_view_price_incl_tax']);
-        }
+
         return $prices;
     }
 
@@ -147,7 +171,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
      * Get order product prices.
      *
      * @param InjectableFixture $product
-     * @param $actualPrices
+     * @param array $actualPrices
      * @return array
      */
     public function getOrderPrices($actualPrices, InjectableFixture $product)
@@ -164,7 +188,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
      * Get invoice new product prices.
      *
      * @param InjectableFixture $product
-     * @param $actualPrices
+     * @param array $actualPrices
      * @return array
      */
     public function getInvoiceNewPrices($actualPrices, InjectableFixture $product)
@@ -181,7 +205,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
      * Get Credit Memo new product prices.
      *
      * @param InjectableFixture $product
-     * @param $actualPrices
+     * @param array $actualPrices
      * @return array
      */
     public function getCreditMemoNewPrices($actualPrices, InjectableFixture $product)

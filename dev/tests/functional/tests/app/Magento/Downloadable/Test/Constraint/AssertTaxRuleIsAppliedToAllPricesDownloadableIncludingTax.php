@@ -21,7 +21,7 @@ class AssertTaxRuleIsAppliedToAllPricesDownloadableIncludingTax
     /**
      * Get prices on category page.
      *
-     * @param $productName
+     * @param string $productName
      * @param array $actualPrices
      * @return array
      */

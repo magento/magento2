@@ -53,7 +53,7 @@ class AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax
     /**
      * Get totals.
      *
-     * @param $actualPrices
+     * @param array $actualPrices
      * @return array
      */
     public function getTotals($actualPrices)

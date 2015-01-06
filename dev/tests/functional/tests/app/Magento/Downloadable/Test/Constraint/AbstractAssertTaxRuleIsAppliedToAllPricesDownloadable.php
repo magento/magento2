@@ -16,7 +16,7 @@ use Mtf\Fixture\InjectableFixture;
 /**
  * Checks that product prices excl tax on category, product and cart pages are equal to specified in dataset.
  */
-class AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable extends AbstractAssertTaxRuleIsAppliedToAllPrices
+abstract class AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable extends AbstractAssertTaxRuleIsAppliedToAllPrices
 {
     /**
      * Constraint severeness.

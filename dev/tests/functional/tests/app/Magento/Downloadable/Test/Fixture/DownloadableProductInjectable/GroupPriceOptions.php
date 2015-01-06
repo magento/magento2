@@ -1,19 +1,12 @@
 <?php
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
 
 /**
- * Class GroupPriceOptions
- *
- * Data keys:
- *  - preset (Price options preset name)
- *  - products (comma separated sku identifiers)
+ * Group price options fixture for downloadable product
  */
 class GroupPriceOptions extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions
 {

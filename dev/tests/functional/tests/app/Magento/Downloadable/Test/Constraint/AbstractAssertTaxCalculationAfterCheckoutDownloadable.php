@@ -16,7 +16,7 @@ use Magento\Tax\Test\Constraint\AbstractAssertTaxCalculationAfterCheckout;
 /**
  * Checks that prices excl tax on order review and customer order pages are equal to specified in dataset.
  */
-class AbstractAssertTaxCalculationAfterCheckoutDownloadable extends AbstractAssertTaxCalculationAfterCheckout
+abstract class AbstractAssertTaxCalculationAfterCheckoutDownloadable extends AbstractAssertTaxCalculationAfterCheckout
 {
     /**
      * Constraint severeness

@@ -55,6 +55,31 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
     protected $severeness = 'high';
 
     /**
+     * Implementation getCategoryPrices
+     *
+     * @param string $productName
+     * @param array $actualPrices
+     * @return array
+     */
+    abstract protected function getCategoryPrices($productName, $actualPrices);
+
+    /**
+     * Implementation getProductPagePrices
+     *
+     * @param array $actualPrices
+     * @return array
+     */
+    abstract protected function getProductPagePrices($actualPrices);
+
+    /**
+     * Implementation getTotals
+     *
+     * @param array $actualPrices
+     * @return array
+     */
+    abstract protected function getTotals($actualPrices);
+
+    /**
      * Assert that specified prices are actual on category, product and cart pages.
      *
      * @param InjectableFixture $product

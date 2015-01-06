@@ -40,6 +40,22 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
     protected $severeness = 'high';
 
     /**
+     * Implementation getReviewTotals
+     *
+     * @param array $actualPrices
+     * @return array
+     */
+    abstract protected function getReviewTotals($actualPrices);
+
+    /**
+     * Implementation getOrderTotals
+     *
+     * @param array $actualPrices
+     * @return array
+     */
+    abstract protected function getOrderTotals($actualPrices);
+
+    /**
      * Assert that prices on order review and customer order pages are equal to specified in dataset.
      *
      * @param array $prices

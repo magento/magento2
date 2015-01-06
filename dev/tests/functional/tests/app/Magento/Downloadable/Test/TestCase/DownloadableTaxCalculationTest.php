@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Test\TestCase;
 use Magento\Tax\Test\TestCase\TaxCalculationTest;
 
 /**
- * Test DownloadableTaxCalculationTest
+ * Test tax calculation with downloadable product.
  *
  * Test Flow:
  * Steps:
