@@ -2,14 +2,14 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Sales\Model;
+namespace Magento\Quote\Model;
 
 use Magento\Quote\Model\Quote\Address;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 /**
- * Test class for \Magento\Sales\Model\Order
+ * Test class for \Magento\Quote\Model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
