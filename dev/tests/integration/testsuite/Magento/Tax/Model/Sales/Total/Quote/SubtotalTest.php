@@ -221,7 +221,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $address = $quote->getShippingAddress();
 
         /** @var \Magento\Quote\Model\Quote\Address\Total\Subtotal $addressSubtotalCollector */
-        $addressSubtotalCollector = $this->objectManager->create('Magento\Sales\Model\Quote\Address\Total\Subtotal');
+        $addressSubtotalCollector = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total\Subtotal');
         $addressSubtotalCollector->collect($address);
 
         /** @var \Magento\Tax\Model\Sales\Total\Quote\Subtotal $subtotalCollector */
