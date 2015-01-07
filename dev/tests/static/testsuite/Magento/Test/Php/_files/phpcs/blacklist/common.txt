@@ -32,9 +32,9 @@ dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd/input
 lib/internal/Magento/Framework/Translate/Adapter.php
 # __ method for Translate cannot be in camelCase
 lib/internal/Magento/Framework/Translate/AdapterInterface.php
-# PSR-1 not applied to
+# Exclude unit, integration, and api-functional tests from PSR-X code style check
+dev/tests/api-functional/testsuite/Magento
 dev/tests/integration/testsuite/Magento
-# PSR-1 not applied to
 dev/tests/unit/testsuite/Magento
 # Newer version of phpcs does not complain about spacing issue.  This appears to be a bug in the phpcs version that is currently run in bamboo.
 app/code/Magento/Sales/Model/Order/Payment/Transaction.php
