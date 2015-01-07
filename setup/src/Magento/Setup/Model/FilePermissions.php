@@ -102,7 +102,6 @@ class FilePermissions
     /**
      * Retrieve list of currently writable directories for installation
      *
-     * @param bool
      * @return array
      */
     public function getInstallationCurrentWritableDirectories()
@@ -120,7 +119,6 @@ class FilePermissions
     /**
      * Retrieve list of currently non-writable directories for application
      *
-     * @param bool
      * @return array
      */
     public function getApplicationCurrentNonWritableDirectories()
