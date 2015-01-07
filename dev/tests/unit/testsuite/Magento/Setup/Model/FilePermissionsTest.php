@@ -89,9 +89,11 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $mockMethods
+     * @param array $expected
      * @dataProvider getApplicationCurrentNonWritableDirectoriesDataProvider
      */
-    public function testGetApplicationCurrentNonWritableDirectories(array $mockMethods, $expected)
+    public function testGetApplicationCurrentNonWritableDirectories(array $mockMethods, array $expected)
     {
         $this->directoryListMock
             ->expects($this->at(0))
@@ -118,7 +120,15 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
     public function getApplicationCurrentNonWritableDirectoriesDataProvider()
     {
         return [
-            [['isExist' => true, 'isDirectory' => true, 'isReadable' => true, 'isWritable' => false], [BP . '/app/etc']],
+            [
+                [
+                    'isExist' => true,
+                    'isDirectory' => true,
+                    'isReadable' => true,
+                    'isWritable' => false
+                ],
+                [BP . '/app/etc'],
+            ],
             [['isExist' => false], []],
             [['isExist' => true, 'isDirectory' => false], []],
             [['isExist' => true, 'isDirectory' => true, 'isReadable' => true, 'isWritable' => true], []],
@@ -143,9 +153,11 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $mockMethods
+     * @param array $expected
      * @dataProvider getUnnecessaryWritableDirectoriesForApplicationDataProvider
      */
-    public function testGetUnnecessaryWritableDirectoriesForApplication($mockMethods, $expected)
+    public function testGetUnnecessaryWritableDirectoriesForApplication(array $mockMethods, array $expected)
     {
         $this->directoryListMock
             ->expects($this->at(0))

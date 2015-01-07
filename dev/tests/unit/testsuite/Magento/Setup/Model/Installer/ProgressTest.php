@@ -8,6 +8,8 @@ namespace Magento\Setup\Model\Installer;
 class ProgressTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @param int $total
+     * @param int $current
      * @dataProvider constructorExceptionInvalidTotalDataProvider
      * @expectedException \LogicException
      * @expectedExceptionMessage Total number must be more than zero.

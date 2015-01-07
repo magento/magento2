@@ -14,9 +14,11 @@ use Magento\Store\Model\Store;
 class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @param array $data
+     * @param array $expected
      * @dataProvider getConfigDataDataProvider
      */
-    public function testGetConfigData($data, $expected)
+    public function testGetConfigData(array $data, array $expected)
     {
         $userConfigurationDataMapper = new UserConfigurationDataMapper();
         $this->assertEquals($expected, $userConfigurationDataMapper->getConfigData($data));
