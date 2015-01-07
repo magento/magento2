@@ -31,12 +31,6 @@
             <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
-    <route url="/V1/customerGroups/search" method="POST">
-        <service class="Magento\Customer\Api\GroupRepositoryInterface" method="getList"/>
-        <resources>
-            <resource ref="Magento_Customer::group"/>
-        </resources>
-    </route>
     <route url="/V1/customerGroups/search" method="GET">
         <service class="Magento\Customer\Api\GroupRepositoryInterface" method="getList"/>
         <resources>
@@ -159,12 +153,6 @@
         <data>
             <parameter name="customerId" force="true">%customer_id%</parameter>
         </data>
-    </route>
-    <route url="/V1/customers/search" method="POST">
-        <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="getList"/>
-        <resources>
-            <resource ref="Magento_Customer::customer"/>
-        </resources>
     </route>
     <route url="/V1/customers/search" method="GET">
         <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="getList"/>

@@ -26,7 +26,7 @@
             <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
-    <route url="/V1/products" method="PUT">
+    <route url="/V1/products" method="GET">
         <service class="Magento\Catalog\Api\ProductRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Catalog::products" />
@@ -51,7 +51,7 @@
             <resource ref="Magento_Catalog::attributes_attributes" />
         </resources>
     </route>
-    <route url="/V1/products/attributes" method="PUT">
+    <route url="/V1/products/attributes" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeRepositoryInterface" method="getList" />
         <resources>
             <resource ref="Magento_Catalog::attributes_attributes" />
@@ -63,7 +63,7 @@
             <resource ref="Magento_Catalog::attributes_attributes" />
         </resources>
     </route>
-    <route url="/V1/categories/attributes" method="PUT">
+    <route url="/V1/categories/attributes" method="GET">
         <service class="Magento\Catalog\Api\CategoryAttributeRepositoryInterface" method="getList" />
         <resources>
             <resource ref="Magento_Catalog::attributes_attributes" />
@@ -99,7 +99,7 @@
             <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
-    <route url="/V1/products/attribute-sets/sets/list" method="PUT">
+    <route url="/V1/products/attribute-sets/sets/list" method="GET">
         <service class="Magento\Catalog\Api\AttributeSetRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Catalog::sets"/>
@@ -147,7 +147,7 @@
             <resource ref="Magento_Catalog::sets"/>
         </resources>
     </route>
-    <route url="/V1/products/attribute-sets/groups/list" method="PUT">
+    <route url="/V1/products/attribute-sets/groups/list" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Catalog::sets"/>
