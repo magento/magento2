@@ -180,6 +180,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     public function isValidForTokenExchange()
     {
         $expiry = $this->dataHelper->getConsumerExpirationPeriod();
-        return $this->getResource()->getTimeInSecondsSinceCreation($this->getId()) > $expiry;
+        return $expiry > $this->getResource()->getTimeInSecondsSinceCreation($this->getId());
     }
 }
