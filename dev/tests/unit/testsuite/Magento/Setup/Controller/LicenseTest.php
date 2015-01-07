@@ -25,9 +25,7 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
 
     public function testIndexActionWithLicense()
     {
-        $this->licenseModel->expects($this->once())->method('getContents')->will(
-            $this->returnValue('some license string')
-        );
+        $this->licenseModel->expects($this->once())->method('getContents')->willReturn('some license string');
         $viewModel = $this->controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertArrayHasKey('license', $viewModel->getVariables());

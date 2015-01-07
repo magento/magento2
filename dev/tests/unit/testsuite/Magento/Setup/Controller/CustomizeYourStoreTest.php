@@ -18,9 +18,7 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $lists = $this->getMock('\Magento\Setup\Model\Lists', [], [], '', false);
         $controller = new CustomizeYourStore($lists, $sampleData);
 
-        $sampleData->expects($this->once())->method('isDeployed')->will(
-            $this->returnValue($expected['isSampledataEnabled']));
-
+        $sampleData->expects($this->once())->method('isDeployed')->willReturn($expected['isSampledataEnabled']);
         $lists->expects($this->once())->method('getTimezoneList')->willReturn($expected['timezone']);
         $lists->expects($this->once())->method('getCurrencyList')->willReturn($expected['currency']);
         $lists->expects($this->once())->method('getLocaleList')->willReturn($expected['language']);

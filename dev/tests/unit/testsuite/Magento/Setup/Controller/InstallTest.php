@@ -33,8 +33,8 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $installerFactory = $this->getMock('\Magento\Setup\Model\InstallerFactory', [], [], '', false);
         $this->installer = $this->getMock('\Magento\Setup\Model\Installer', [], [], '', false);
         $this->progressFactory = $this->getMock('\Magento\Setup\Model\Installer\ProgressFactory', [], [], '', false);
-        $installerFactory->expects($this->once())->method('create')->with($this->webLogger)->will(
-            $this->returnValue($this->installer));
+        $installerFactory->expects($this->once())->method('create')->with($this->webLogger)
+            ->willReturn($this->installer);
         $this->controller = new Install($this->webLogger, $installerFactory, $this->progressFactory);
     }
 
@@ -76,8 +76,8 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $someNumber = 42;
         $consoleMessages = ['key1' => 'log message 1', 'key2' => 'log message 2'];
         $progress = $this->getMock('\Magento\Setup\Model\Installer\Progress', [], [], '', false);
-        $this->progressFactory->expects($this->once())->method('createFromLog')->with($this->webLogger)->will(
-            $this->returnValue($progress));
+        $this->progressFactory->expects($this->once())->method('createFromLog')->with($this->webLogger)
+            ->willReturn($progress);
         $progress->expects($this->once())->method('getRatio')->willReturn($someNumber);
         $this->webLogger->expects($this->once())->method('get')->willReturn($consoleMessages);
         $jsonModel = $this->controller->progressAction();
