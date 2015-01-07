@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\TestModule5\Service\V1\AllSoapAndRestInterface" type="Magento\TestModule5\Service\V1\AllSoapAndRest" />
+    <preference for="Magento\TestModule5\Service\V2\AllSoapAndRestInterface" type="Magento\TestModule5\Service\V2\AllSoapAndRest" />
+    <preference for="Magento\TestModule5\Service\V1\OverrideServiceInterface" type="Magento\TestModule5\Service\V1\OverrideService" />
+</config>
