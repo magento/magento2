@@ -49,6 +49,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     public function getValueDataProvider()
     {
         $testTimestamp = strtotime('2014-05-18 12:08:16');
+
         return [
             [
                 [
