@@ -25,7 +25,7 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
 
     public function testIndexAction()
     {
-        $this->navigationModel->expects($this->once())->method('getData')->will($this->returnValue('some data'));
+        $this->navigationModel->expects($this->once())->method('getData')->willReturn('some data');
         $viewModel = $this->controller->indexAction();
         $this->assertInstanceOf('\Zend\View\Model\JsonModel', $viewModel);
         $this->assertArrayHasKey('nav', $viewModel->getVariables());

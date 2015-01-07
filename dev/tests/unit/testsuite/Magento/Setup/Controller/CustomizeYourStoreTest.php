@@ -21,9 +21,9 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $sampleData->expects($this->once())->method('isDeployed')->will(
             $this->returnValue($expected['isSampledataEnabled']));
 
-        $lists->expects($this->once())->method('getTimezoneList')->will($this->returnValue($expected['timezone']));
-        $lists->expects($this->once())->method('getCurrencyList')->will($this->returnValue($expected['currency']));
-        $lists->expects($this->once())->method('getLocaleList')->will($this->returnValue($expected['language']));
+        $lists->expects($this->once())->method('getTimezoneList')->willReturn($expected['timezone']);
+        $lists->expects($this->once())->method('getCurrencyList')->willReturn($expected['currency']);
+        $lists->expects($this->once())->method('getLocaleList')->willReturn($expected['language']);
 
         $viewModel = $controller->indexAction();
 

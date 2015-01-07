@@ -78,8 +78,8 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $progress = $this->getMock('\Magento\Setup\Model\Installer\Progress', [], [], '', false);
         $this->progressFactory->expects($this->once())->method('createFromLog')->with($this->webLogger)->will(
             $this->returnValue($progress));
-        $progress->expects($this->once())->method('getRatio')->will($this->returnValue($someNumber));
-        $this->webLogger->expects($this->once())->method('get')->will($this->returnValue($consoleMessages));
+        $progress->expects($this->once())->method('getRatio')->willReturn($someNumber);
+        $this->webLogger->expects($this->once())->method('get')->willReturn($consoleMessages);
         $jsonModel = $this->controller->progressAction();
         $this->assertInstanceOf('\Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -112,14 +112,13 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
 
         $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
-        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->will($this->returnValue($mvcEvent));
-        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->will($this->returnValue($mvcEvent));
-        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)
-            ->will($this->returnValue($mvcEvent));
-        $mvcEvent->expects($this->any())->method('getRouteMatch')->will($this->returnValue($routeMatch));
+        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
 
         $contentArray = '{"config": { "address": { "base_url": "http://123.45.678.12"}}}';
-        $request->expects($this->any())->method('getContent')->will($this->returnValue($contentArray));
+        $request->expects($this->any())->method('getContent')->willReturn($contentArray);
         $this->controller->setEvent($mvcEvent);
         $this->controller->dispatch($request, $response);
         $this->controller->startAction();
