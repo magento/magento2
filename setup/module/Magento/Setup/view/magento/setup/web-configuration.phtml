@@ -35,7 +35,6 @@ $hints = [
                    ng-model="config.address.base_url"
                    ng-init="config.address.auto_base_url = '<?php echo $this->autoBaseUrl ?>'; config.address.base_url = config.address.auto_base_url;"
                    ng-blur="addSlash()"
-                   ng-change="populateHttps('fromBaseUrl')"
                    class="form-control"
                    tooltip-placement="right"
                    tooltip-html-unsafe="<?php echo $hints['base_url']; ?>"
@@ -94,11 +93,10 @@ $hints = [
             <div class="col-md-4 col-md-offset-3">
                 <input type="url"
                        name="https"
-                       ng-model="config.https.text"
+                       ng-model="config.https.secure_url"
                        ng-if="config.https.front || config.https.admin"
                        class="form-control"
                        ng-focus="config.https.front"
-                       ng-init="populateHttps('fromHttps')"
                        required />
             </div>
             <div class="col-md-offset-3 col-md-4" ng-show="webconfig.https.$invalid && webconfig.submitted">

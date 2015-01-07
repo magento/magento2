@@ -15,7 +15,7 @@ angular.module('web-configuration', ['ngStorage'])
             https: {
                 front: false,
                 admin: false,
-                text: ''
+                secure_url: ''
             },
             rewrites: {
                 allowed: true
@@ -55,6 +55,12 @@ angular.module('web-configuration', ['ngStorage'])
             }
         });
 
+        $scope.$watch('config.address.base_url', function() {
+            if(angular.equals($scope.config.https.secure_url, '') || angular.isUndefined($scope.config.https.secure_url)){
+                $scope.config.https.secure_url = $scope.config.address.base_url.replace('http', 'https');
+            }
+        });
+
         $scope.showEncryptKey = function() {
             return angular.equals($scope.config.encrypt.type, 'user');
         }
@@ -76,15 +82,6 @@ angular.module('web-configuration', ['ngStorage'])
                 }
             }
         };
-
-        $scope.populateHttps = function($arg) {
-            if (angular.equals($scope.config.https.text, '') || ($arg == 'fromBaseUrl')) {
-                $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
-            } else {
-                $scope.config.https.text = $localStorage.config.https.text;
-            }
-        };
-
 
         // Listens on form validate event, dispatched by parent controller
         $scope.$on('validate-' + $state.current.id, function() {
