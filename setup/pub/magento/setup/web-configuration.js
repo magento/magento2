@@ -77,12 +77,8 @@ angular.module('web-configuration', ['ngStorage'])
             }
         };
 
-        $scope.populateHttpsWhileTyping = function() {
-            $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
-        };
-
-        $scope.populateHttps = function() {
-            if (angular.equals($scope.config.https.text, '')) {
+        $scope.populateHttps = function($arg) {
+            if (angular.equals($scope.config.https.text, '') || ($arg == 'fromBaseUrl')) {
                 $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
             } else {
                 $scope.config.https.text = $localStorage.config.https.text;
