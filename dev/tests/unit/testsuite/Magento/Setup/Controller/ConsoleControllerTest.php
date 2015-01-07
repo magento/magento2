@@ -198,6 +198,9 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->controller->maintenanceAction();
     }
 
+    /**
+     * @return array
+     */
     public function maintenanceActionDataProvider()
     {
         return [

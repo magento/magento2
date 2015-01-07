@@ -7,6 +7,23 @@ namespace Magento\Setup\Controller;
 
 class WebConfigurationTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * To prevent save value of $SERVER, which is modified in this test
+     *
+     * @var array
+     */
+    private $serverArray;
+
+    public function setUp()
+    {
+        $this->serverArray = $_SERVER;
+    }
+
+    public function tearDown()
+    {
+        $_SERVER = $this->serverArray;
+    }
+
     public function testIndexAction()
     {
         /** @var $controller WebConfiguration */

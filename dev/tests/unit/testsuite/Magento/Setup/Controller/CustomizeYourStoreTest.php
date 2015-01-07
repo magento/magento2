@@ -8,25 +8,22 @@ namespace Magento\Setup\Controller;
 class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param array $timezone
-     * @param array $currency
-     * @param array $language
-     * @param bool $isSampleDataEnabled
+     * @param array $expected
      *
      * @dataProvider indexActionDataProvider
      */
-    public function testIndexAction($timezone, $currency, $language, $isSampleDataEnabled)
+    public function testIndexAction($expected)
     {
         $sampleData = $this->getMock('\Magento\Setup\Model\SampleData', [], [], '', false);
         $lists = $this->getMock('\Magento\Setup\Model\Lists', [], [], '', false);
         $controller = new CustomizeYourStore($lists, $sampleData);
 
-        $sampleData->expects($this->once())->method('isDeployed')->with()->will(
-            $this->returnValue($isSampleDataEnabled));
+        $sampleData->expects($this->once())->method('isDeployed')->will(
+            $this->returnValue($expected['isSampledataEnabled']));
 
-        $lists->expects($this->once())->method('getTimezoneList')->with()->will($this->returnValue($timezone));
-        $lists->expects($this->once())->method('getCurrencyList')->with()->will($this->returnValue($currency));
-        $lists->expects($this->once())->method('getLocaleList')->with()->will($this->returnValue($language));
+        $lists->expects($this->once())->method('getTimezoneList')->will($this->returnValue($expected['timezone']));
+        $lists->expects($this->once())->method('getCurrencyList')->will($this->returnValue($expected['currency']));
+        $lists->expects($this->once())->method('getLocaleList')->will($this->returnValue($expected['language']));
 
         $viewModel = $controller->indexAction();
 
@@ -34,28 +31,33 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($viewModel->terminate());
 
         $variables = $viewModel->getVariables();
-        $this->assertSame($timezone, $variables['timezone']);
-        $this->assertSame($currency, $variables['currency']);
-        $this->assertSame($language, $variables['language']);
-        $this->assertEquals($isSampleDataEnabled, $variables['isSampledataEnabled']);
+        $this->assertArrayHasKey('timezone', $variables);
+        $this->assertArrayHasKey('currency', $variables);
+        $this->assertArrayHasKey('language', $variables);
+        $this->assertSame($expected, $variables);
     }
 
+    /**
+     * @return array
+     */
     public function indexActionDataProvider()
     {
-        $timezones = ['America/New_York'=>'EST', 'America/Chicago' => 'CST'];
-        $currency = ['USD'=>'US Dollar', 'EUR' => 'Euro'];
-        $language = ['en_US'=>'English (USA)', 'en_UK' => 'English (UK)'];
+        $timezones = ['timezone' => ['America/New_York'=>'EST', 'America/Chicago' => 'CST']];
+        $currency = ['currency' => ['USD'=>'US Dollar', 'EUR' => 'Euro']];
+        $language = ['language' => ['en_US'=>'English (USA)', 'en_UK' => 'English (UK)']];
+        $sampleDataTrue = ['isSampledataEnabled' => true];
+        $sampleDataFalse = ['isSampledataEnabled' => false];
 
         return [
-            'with_all_data' => [$timezones, $currency, $language, true],
-            'no_currency_data' => [$timezones, null, $language, true],
-            'no_timezone_data' => [null, $currency, $language, true],
-            'no_language_data' => [$timezones, $currency, null, true],
-            'empty_currency_data' => [$timezones, [], $language, true],
-            'empty_timezone_data' => [[], $currency, $language, true],
-            'empty_language_data' => [$timezones, $currency, [], true],
-            'no_sample_data' => [$timezones, $currency, $language, false],
+            'with_all_data' => [array_merge($timezones, $currency, $language, $sampleDataTrue)],
+            'no_currency_data' => [array_merge($timezones, ['currency' => null], $language, $sampleDataTrue)],
+            'no_timezone_data' => [array_merge(['timezone' => null], $currency, $language, $sampleDataTrue)],
+            'no_language_data' => [array_merge($timezones, $currency, ['language' => null], $sampleDataTrue)],
+            'empty_currency_data' => [array_merge($timezones, ['currency' => []], $language, $sampleDataTrue)],
+            'empty_timezone_data' => [array_merge(['timezone' => []], $currency, $language, $sampleDataTrue)],
+            'empty_language_data' => [array_merge($timezones, $currency, ['language' => []], $sampleDataTrue)],
+            'false_sample_data' => [array_merge($timezones, $currency, $language, $sampleDataFalse)],
+            'no_sample_data' => [array_merge($timezones, $currency, $language, ['isSampledataEnabled' => null])],
         ];
     }
 }
-
