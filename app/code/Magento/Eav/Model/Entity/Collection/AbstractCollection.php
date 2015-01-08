@@ -192,7 +192,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
     {
         $this->getSelect()->from(['e' => $this->getEntity()->getEntityTable()]);
         $entity = $this->getEntity();
-        if ($entity->getTypeId() && $entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE ) {
+        if ($entity->getTypeId() && $entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE) {
             $this->addAttributeToFilter('entity_type_id', $this->getEntity()->getTypeId());
         }
         return $this;
