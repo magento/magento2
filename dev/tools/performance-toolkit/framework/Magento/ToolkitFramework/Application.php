@@ -165,13 +165,11 @@ class Application
             );
         }
         $files = glob(__DIR__ . self::FIXTURES_DIR . DIRECTORY_SEPARATOR . self::FIXTURE_PATTERN);
-        var_dump($files);
         foreach ($files as $file) {
             /** @var \Magento\ToolkitFramework\Fixture $fixture */
             $fixture = require realpath($file);
             $this->_fixtures[$fixture->getPriority()] = $fixture;
         }
-        var_dump(array_keys($this->_fixtures));
         ksort($this->_fixtures);
         foreach ($this->_fixtures as $fixture) {
             $this->_paramLabels = array_merge($this->_paramLabels, $fixture->introduceParamLabels());
