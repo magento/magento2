@@ -3,6 +3,10 @@
 //  */
 
 //
+//  Variables list
+//  _____________________________________________
+
+//
 //  Typography
 //  ---------------------------------------------
 
@@ -100,24 +104,22 @@
 @color-error: @color-red10;
 @color-focus: @color-sky-blue1;
 
-@font-family-base: @font-family-sans-serif; //  Also used in: @loader-text-font-family
-//  Setting font-size for HTML tag, use <b>%</b>  units
-@font-size-root: 62.5%;
-//  Defines ratio between root font size and base font size
+@font-family-base: @font-family-sans-serif;
+//  Setting font-size for HTML tag, use <b>%</b> units
+@font-size-root: 62.5%; //  Defines ratio between root font size and base font size
 @font-size-base-ratio: 1.4;
 @font-rem-ratio: unit(@font-size-root * 16/100);
-//  Base font size value in <b>px</b>:
-@font-size-base: unit((@font-size-root / 100) * 16 * @font-size-base-ratio, px); //  Also used in: @loader-text-font-size
+@font-size-base: unit((@font-size-root / 100) * 16 * @font-size-base-ratio, px); //  Base font size value in <b>px</b>
 @font-size-xl: ceil(1.5 * @font-size-base); //  21
 @font-size-l: ceil(1.25 * @font-size-base); //  18
-@font-size-s: ceil(.85 * @font-size-base); //  12 Also used in: Breadcrumbs and in Small button
+@font-size-s: ceil(.85 * @font-size-base); //  12
 @font-size-xs: floor(.75 * @font-size-base); //  11
 
 @font-weight-base: 400;
 @font-weight-light: 300;
 @font-weight-semibold: 600;
-@font-weight-bold: 700; //  Also used in: @loader-text-font-weight
-@font-style-base: normal; //  Also used in: @loader-text-font-style
+@font-weight-bold: 700;
+@font-style-base: normal;
 @font-style-emphasis: italic;
 
 @line-height-base: 1.428571429;
@@ -125,9 +127,9 @@
 @line-height-s: 1.33;
 @line-height-l: 1.5;
 
-@text-color: @color-primary; //  Also used in @pager-action-color-visited, @pager-action-color-hover, @pager-action-color-active, @tab-control-color-active
+@text-color: @color-primary;
 @text-color-intense: @color-primary-darker;
-@text-color-muted: @color-primary-lighter; //  Also used in @pager-action-color, @tab-control-color
+@text-color-muted: @color-primary-lighter;
 
 @indent-base: @line-height-computed; //  20px
 @indent-xl-base: @indent-base * 2; //  40px
@@ -259,7 +261,7 @@
 //  Blockquote
 @blockquote-border-color: @border-color-base;
 @blockquote-border-width: 0;
-@blockquote-before-content: '\2014 \00A0'; //  em dash, nbsp
+@blockquote-before-content: '\2014 \00A0';
 @blockquote-font-size: @font-size-base;
 @blockquote-font-style: @font-style-emphasis;
 @blockquote-margin: 0 0 @indent-base @indent-xl-base;
@@ -301,7 +303,7 @@
 @table-border-width: @border-width-base;
 @table-border-style: solid;
 
-@table-caption-hide: true; //  true, false
+@table-caption-hide: true; //  [true|false]
 @table-caption-font-size: false;
 @table-caption-color: false;
 @table-caption-font-family: false;
@@ -395,7 +397,7 @@
 @navigation-level0-font-weight: @font-weight-bold;
 @navigation-level0-item-line-height: false;
 @navigation-level0-item-margin: 0;
-@navigation-level0-item-padding: 8px 20px;
+@navigation-level0-item-padding: 8px @indent-base;
 @navigation-level0-text-transform: uppercase;
 
 @navigation-level0-item-background: '';
@@ -460,7 +462,7 @@
 @submenu-desktop-min-width: 230px;
 @submenu-desktop-padding: 15px 0;
 
-@submenu-desktop-arrow: true; // true | false
+@submenu-desktop-arrow: true; // [true|false]
 @submenu-desktop-arrow-size: 10px;
 @submenu-desktop-arrow-left: 20px;
 
@@ -504,7 +506,7 @@
 @tab-control-text-decoration-hover: @tab-control-text-decoration;
 
 //  Active tab
-@tab-control-bg-active: lighten(@tab-control-bg, 15%); //  Also used in: @tab-content-bg
+@tab-control-bg-active: lighten(@tab-control-bg, 15%);
 @tab-control-color-active: @text-color;
 @tab-control-text-decoration-active: @tab-control-text-decoration;
 
@@ -585,8 +587,8 @@
 @button-font-weight: @font-weight-bold;
 @button-line-height: @font-size-base + 2;
 @button-margin: 0;
-@button-padding: 7px 15px; //  is set up to false when buttons don't depend of side paddings or have fixed width, Also used in @button-primary-padding
-@button-width: false; //  is set up to false when buttons depend of side paddings or to fixed value when needed
+@button-padding: 7px 15px; //  is set up to false when buttons don't depend on side paddings or have fixed width
+@button-width: false; //  is set up to false when buttons depend on side paddings or to fixed value when needed
 
 //  Buttons display settings
 @button-display: inline-block;
@@ -640,23 +642,22 @@
 @button-primary-gradient-end-color-active: false;
 
 //  Gradient button
-//  Does button have gradient background:
-@button-gradient: false;
-@button-gradient-direction: false;
+@button-gradient: false; // [true|false] - button has a gradient background
+@button-gradient-direction: false; // button gradient direction if button has a gradient background
 
 //  Button with icon
 @button-icon-use: false;
 @button-font-content: @icon-settings;
-@button-icon-font: @icon-font; //  Also used in: @popup-icon-font
-@button-icon-font-size: 22px; //  Also used in: @popup-icon-font-size
-@button-icon-font-line-height: @button-icon-font-size; // Also used in: @popup-icon-font-line-height
-@button-icon-font-color: inherit; //  Also used in: @popup-icon-font-color
-@button-icon-font-color-hover: inherit; //  Also used in: @popup-icon-font-color-hover
-@button-icon-font-color-active: inherit; //  Also used in: @popup-icon-font-color-active
-@button-icon-font-margin: 0; //  Also used in: @popup-icon-font-margin
-@button-icon-font-vertical-align: top; //  Also used in: @popup-icon-font-vertical-align
-@button-icon-font-position: @icon-position; //  Also used in: @popup-icon-font-position
-@button-icon-font-text-hide: false; //  Also used in: @popup-icon-font-text-hide
+@button-icon-font: @icon-font;
+@button-icon-font-size: 22px;
+@button-icon-font-line-height: @button-icon-font-size;
+@button-icon-font-color: inherit;
+@button-icon-font-color-hover: inherit;
+@button-icon-font-color-active: inherit;
+@button-icon-font-margin: 0;
+@button-icon-font-vertical-align: top;
+@button-icon-font-position: @icon-position;
+@button-icon-font-text-hide: false;
 
 //  Large button
 @button-l-font-size: @font-size-l;
@@ -677,7 +678,7 @@
 @icon-height: 26px;
 @icon-width: 26px;
 @icon-margin: '';
-@icon-vertical-align: middle; // Also used in: @icon-font-vertical-align
+@icon-vertical-align: middle;
 
 @icon-image-position-x: 0;
 @icon-image-position-y: 0;
@@ -686,11 +687,11 @@
 @icon-sprite-position-y: 0;
 @icon-sprite-grid: 26px;
 
-@icon-font: @icon-font-name; //  Also used in: @button-icon-font, @rating-icon-font, @pager-icon-font
+@icon-font: @icon-font-name;
 @icon-font-position: @icon-position;
 @icon-font-text-hide: @icon-text-hide;
 @icon-font-margin: @icon-margin;
-@icon-font-size: inherit; //  Also used in: @icon-font-line-height
+@icon-font-size: inherit;
 @icon-font-line-height: @icon-font-size;
 @icon-font-color: inherit;
 @icon-font-color-hover: false;
@@ -875,12 +876,13 @@
 //
 //  Loaders variables
 //  ---------------------------------------------
-@loader-overlay-background-color: rgba(255, 255, 255, .5); //  Also used in: @loading-background-color
+
+@loader-overlay-background-color: rgba(255, 255, 255, .5);
 @loader-overlay-z-index: 9999;
 @loader-icon-width: 160px;
 @loader-icon-height: 160px;
 @loader-icon-background-color: transparent;
-@loader-icon-background-image: url('@{baseDir}images/loader-2.gif'); //  Also used in: @loading-background-image
+@loader-icon-background-image: url('@{baseDir}images/loader-2.gif');
 @loader-icon-background-position: 50% 50%;
 @loader-icon-border-radius: 5px;
 @loader-icon-padding: '';
@@ -899,7 +901,7 @@
 //  ---------------------------------------------
 
 //  Form elements inputs default variables
-@form-element-input-type: ''; //  input-text, select, textarea, input-radio, input-checkbox
+@form-element-input-type: ''; //  [input-text|select|textarea|input-radio|input-checkbox]
 @form-element-input-background: @color-white;
 @form-element-input-border-color: @color-gray76;
 @form-element-input-border: 1px solid @form-element-input-border-color;
@@ -909,7 +911,7 @@
 @form-element-input-margin: false;
 @form-element-input-padding: 0 9px;
 @form-element-input-vertical-align: baseline;
-@form-element-input-background-clip: padding-box; //  border-box, content-box
+@form-element-input-background-clip: padding-box; //  [border-box|content-box|padding-box]
 @form-element-input-font-size: @font-size-base;
 @form-element-input-color: false;
 @form-element-input-font-family: @font-family-base;
@@ -935,7 +937,7 @@
 @form-element-input-focus-font-style: @form-element-input-font-style;
 
 //  Form elements choice default variables
-@form-element-choice-type: ''; //  radio, checkbox
+@form-element-choice-type: ''; //  [radio|checkbox]
 @form-element-choice-vertical-align: false;
 @form-element-choice-margin: 2px @indent-xs-base 0 0;
 @form-element-choice-disabled-opacity: @form-element-input-disabled-opacity;
@@ -949,7 +951,7 @@
 @input-text-margin: @form-element-input-margin;
 @input-text-padding: @form-element-input-padding;
 @input-text-vertical-align: @form-element-input-vertical-align;
-@input-text-background-clip: @form-element-input-background-clip; //  border-box, content-box
+@input-text-background-clip: @form-element-input-background-clip; //  [border-box|content-box|padding-box]
 @input-text-font-size: @form-element-input-font-size;
 @input-text-color: @form-element-input-color;
 @input-text-font-family: @form-element-input-font-family;
@@ -981,9 +983,9 @@
 @select-height: @form-element-input-height;
 @select-width: @form-element-input-width;
 @select-margin: @form-element-input-margin;
-@select-padding: 5px 10px 4px;
+@select-padding: @indent-xs-base @indent-s-base 4px;
 @select-vertical-align: @form-element-input-vertical-align;
-@select-background-clip: @form-element-input-background-clip; //  border-box, content-box
+@select-background-clip: @form-element-input-background-clip; //  [border-box|content-box|padding-box]
 @select-font-size: @form-element-input-font-size;
 @select-color: @form-element-input-color;
 @select-font-family: @form-element-input-font-family;
@@ -1017,14 +1019,14 @@
 @textarea-padding: @indent-s-base;
 @textarea-margin: 0;
 @textarea-vertical-align: @form-element-input-vertical-align;
-@textarea-background-clip: @form-element-input-background-clip; //  border-box, content-box
+@textarea-background-clip: @form-element-input-background-clip; //  [border-box|content-box|padding-box]
 @textarea-font-size: @form-element-input-font-size;
 @textarea-color: @form-element-input-color;
 @textarea-font-family: @form-element-input-font-family;
 @textarea-font-weight: @form-element-input-font-weight;
 @textarea-font-style: @form-element-input-font-style;
 @textarea-line-height: @form-element-input-line-height;
-@textarea-resize: vertical; //  none | both | horizontal | vertical | inherit
+@textarea-resize: vertical; //  [none|both|horizontal|vertical|inherit]
 
 //  Placeholder
 @textarea-placeholder-color: @form-element-input-placeholder-color;
@@ -1078,10 +1080,10 @@
 
 @form-element-validation-color-error: false;
 @form-element-validation-color-valid: false;
-@form-element-validation-border-error: lighten(@form-validation-note-color-error, 20%); //  darken(@form-element-validation-color-error, 5%)
-@form-element-validation-border-valid: false; //  darken(@form-element-validation-color-valid, 5%)
-@form-element-validation-background-error: false; //  lighten(@form-element-validation-color-error, 50%)
-@form-element-validation-background-valid: false; //  lighten(@form-element-validation-color-valid, 50%)
+@form-element-validation-border-error: lighten(@form-validation-note-color-error, 20%);
+@form-element-validation-border-valid: false;
+@form-element-validation-background-error: false;
+@form-element-validation-background-valid: false;
 
 //  Fieldset
 @form-fieldset-border: 0;
@@ -1095,11 +1097,11 @@
 @form-fieldset-legend-line-height: 1.2;
 @form-fieldset-legend-margin: 0 0 @indent-m-base;
 @form-fieldset-legend-padding: 0;
-@form-fieldset-legend-width: false; //  @form-field-type-inline-control-width
+@form-fieldset-legend-width: false;
 
 //  Field
-@form-field-type: block; //  inline
-@form-field-type-revert: inline; //  inline, block, false
+@form-field-type: block; //  [inline|block]
+@form-field-type-revert: inline; //  [inline|block|false]
 @form-field-border: false;
 @form-field-column: false;
 @form-field-column-padding: 0 12px 0 0;
@@ -1130,7 +1132,7 @@
 @form-field-type-inline-control-width: 74.2%;
 
 //  Form field label asterisk
-@form-field-label-asterisk-color: @color-red10; // also used in: @form-hasrequired-color
+@form-field-label-asterisk-color: @color-red10;
 @form-field-label-asterisk-font-size: @font-size-s;
 @form-field-label-asterisk-font-family: false;
 @form-field-label-asterisk-font-weight: false;
@@ -1162,7 +1164,7 @@
 @form-field-note-icon-font-text-hide: @icon-font-text-hide;
 
 //  Hasrequired
-@form-hasrequired-position: top; //  top | bottom
+@form-hasrequired-position: top; //  [top|bottom]
 @form-hasrequired-color: @form-field-label-asterisk-color;
 @form-hasrequired-font-size: @font-size-s;
 @form-hasrequired-font-family: false;
@@ -1179,7 +1181,7 @@
 
 @pager-label-display: none;
 @pager-item-display: inline-block;
-@pager-reset-spaces: true;  //  reset spaces between inline-block elements
+@pager-reset-spaces: true;  //  Reset spaces between inline-block elements
 
 @pager-font-size: @font-size-s;
 @pager-font-weight: @font-weight-bold;
@@ -1246,9 +1248,9 @@
 @pager-icon-font-size: 46px;
 @pager-icon-font-line-height: @icon-font-line-height;
 
-//  Pager link.action gradient: does element have gradient background
-@pager-action-gradient: false;
-@pager-action-gradient-direction: false;
+//  Pager link.action gradient: element has a gradient background
+@pager-action-gradient: false; //  [true|false]
+@pager-action-gradient-direction: false; //  [true|false]
 
 //  Pager link.action default
 @pager-action-color: @text-color-muted;
@@ -1283,6 +1285,7 @@
 //
 //  Ratings variables
 //  ---------------------------------------------
+
 @rating-icon-count: 5;
 @rating-icon-content: @icon-star;
 @rating-icon-font: @icon-font;
@@ -1298,26 +1301,26 @@
 
 //  Variables simple dropdown
 @dropdown-actions-padding: false;
-@dropdown-list-min-width: 100%; //  Also used in: @dropdown-split-list-min-width
-@dropdown-list-width: false; //  Also used in: @dropdown-split-list-width
-@dropdown-list-height: false; //  Also used in: @dropdown-split-list-height
+@dropdown-list-min-width: 100%;
+@dropdown-list-width: false;
+@dropdown-list-height: false;
 @dropdown-list-margin-top: 4px;
 @dropdown-list-position-top: 100%;
 @dropdown-list-position-right: false;
 @dropdown-list-position-bottom: false;
 @dropdown-list-position-left: false;
-@dropdown-list-pointer: true; //  true | false
+@dropdown-list-pointer: true; //  [true|false]
 @dropdown-list-background: @color-white;
 @dropdown-list-border: 1px solid @color-gray-light2;
 @dropdown-list-pointer-border: @color-gray-light2;
-@dropdown-list-pointer-position: left; //  left, right
+@dropdown-list-pointer-position: left; //  [left|right]
 @dropdown-list-pointer-position-top: -12px;
 @dropdown-list-pointer-position-left-right: 10px;
 @dropdown-list-item-border: 0;
-@dropdown-list-item-padding: 3px 5px;
+@dropdown-list-item-padding: 3px @indent-xs-base;
 @dropdown-list-item-margin: 0;
 @dropdown-list-item-hover: @color-gray91;
-@dropdown-list-shadow: 0 3px 3px rgba(0,0,0,.15); // '' | none
+@dropdown-list-shadow: 0 3px 3px rgba(0,0,0,.15); //  [''|none|value]
 @dropdown-list-z-index: 100;
 
 @dropdown-toggle-icon-content: @icon-pointer-down;
@@ -1337,7 +1340,7 @@
 @dropdown-split-actions-padding: 0 @indent-xs-base;
 @dropdown-split-toggle-actions-padding: 4px @indent-xs-base;
 @dropdown-split-button-actions-padding: false;
-@dropdown-split-toggle-position: right; //  Also used in: @dropdown-split-list-pointer-position
+@dropdown-split-toggle-position: right;
 @dropdown-split-list-min-width: @dropdown-list-min-width;
 @dropdown-split-list-width: @dropdown-list-width;
 @dropdown-split-list-height: @dropdown-list-height;
@@ -1358,7 +1361,7 @@
 @dropdown-split-list-item-margin: @dropdown-list-item-margin;
 @dropdown-split-list-item-hover: @dropdown-list-item-hover;
 @dropdown-split-button-border-radius-fix: false;
-@dropdown-split-list-shadow: @dropdown-list-shadow; //  '', none
+@dropdown-split-list-shadow: @dropdown-list-shadow; //  [''|none|value]
 @dropdown-split-list-z-index: @dropdown-list-z-index;
 
 @dropdown-split-toggle-icon-content: @dropdown-toggle-icon-content;
@@ -1372,24 +1375,22 @@
 @dropdown-split-toggle-icon-font-margin: @button-icon-font-margin;
 @dropdown-split-toggle-icon-font-vertical-align: @button-icon-font-vertical-align;
 @dropdown-split-toggle-icon-position: @dropdown-toggle-icon-position;
-@dropdown-split-toggle-icon-text-hide: true; //  true, false
+@dropdown-split-toggle-icon-text-hide: true; //  [true|false]
 
 //
 //  Actions-toolbar variables
 //  ---------------------------------------------
 
-@actions-toolbar-actions-position: justify; // left, right, center, justify
-//  Also used in: @popup-actions-toolbar-actions-position
-@actions-toolbar-actions-reverse: false; //  true
-//  Also used in: @popup-actions-toolbar-actions-position-reverse
-@actions-toolbar-margin: false; // Also used in: @popup-actions-toolbar-margins
-@actions-toolbar-padding: false; //  Also used in: @popup-actions-toolbar-padding
-@actions-toolbar-actions-margin: false; //  Also used in: @popup-actions-toolbar-actions-margin
-@actions-toolbar-primary-actions-margin: 0 @indent-xs-base 0 0; //  Also used in: @popup-actions-toolbar-primary-actions-margin
-@actions-toolbar-secondary-actions-margin: false; //  Also used in: @popup-actions-toolbar-secondary-actions-margin
-@actions-toolbar-actions-links-margin-top: false; //  Also used in: @popup-actions-toolbar-actions-links-margin-top
-@actions-toolbar-primary-actions-links-margin-top: false; //  Also used in: @popup-actions-primary-toolbar-actions-links-margin-top
-@actions-toolbar-secondary-actions-links-margin-top: 6px; //  Also used in: @popup-actions-secondary-toolbar-actions-links-margin-top
+@actions-toolbar-actions-position: justify; //  [left|right|center|justify]
+@actions-toolbar-actions-reverse: false; //  [true|false]
+@actions-toolbar-margin: false;
+@actions-toolbar-padding: false;
+@actions-toolbar-actions-margin: false;
+@actions-toolbar-primary-actions-margin: 0 @indent-xs-base 0 0;
+@actions-toolbar-secondary-actions-margin: false;
+@actions-toolbar-actions-links-margin-top: false;
+@actions-toolbar-primary-actions-links-margin-top: false;
+@actions-toolbar-secondary-actions-links-margin-top: 6px;
 
 //
 //  Breadcrumbs variables
@@ -1426,8 +1427,8 @@
 
 //  Breadcrumbs - link
 //  Breadcrumbs link - gradient
-@breadcrumbs-link-gradient: false;
-@breadcrumbs-link-gradient-direction: false;
+@breadcrumbs-link-gradient: false; //  [true|false]
+@breadcrumbs-link-gradient-direction: false; //  [true|false]
 
 @breadcrumbs-link-color: @color-primary;
 @breadcrumbs-link-background: false;
@@ -1489,11 +1490,11 @@
 @popup-content-margin: false;
 @popup-footer-margin: false;
 
-@popup-title-headings: true; //  false
-@popup-title-headings-level: h3; //  h1, h2, h3, h4, h5, h6
+@popup-title-headings: true; //  [true|false]
+@popup-title-headings-level: h3; //  [h1|h2|h3|h4|h5|h6]
 
-@popup-button-close-icon: true; //  false
-@popup-button-close-reset: true; //  false
+@popup-button-close-icon: true; //  [true|false]
+@popup-button-close-reset: true; //  [true|false]
 @popup-button-close-position: absolute;
 @popup-button-close-position-top: @indent-s-base;
 @popup-button-close-position-right: @indent-s-base;
@@ -1501,7 +1502,7 @@
 @popup-button-close-position-left: false;
 
 //  Actions toolbar variables
-@popup-action-toolbar: false; //  true
+@popup-action-toolbar: false; //  [true|false]
 @popup-actions-toolbar-actions-position: @actions-toolbar-actions-position;
 @popup-actions-toolbar-actions-reverse: @actions-toolbar-actions-reverse;
 @popup-actions-toolbar-margin: @actions-toolbar-margin;
