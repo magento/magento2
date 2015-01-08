@@ -9,8 +9,14 @@ $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
 );
 require __DIR__ . '/categories_rollback.php';
 
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', true);
+
 /** @var $productCollection \Magento\Catalog\Model\Resource\Product\Collection */
 $productCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('\Magento\Catalog\Model\Resource\Product\Collection');
 
 $productCollection->load()->delete();
+
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', false);
