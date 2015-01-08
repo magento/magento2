@@ -7,7 +7,7 @@ namespace Magento\Install\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
-use Mtf\Client\Driver\Selenium\Browser;
+use Mtf\Client\BrowserInterface;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
 
 /**
@@ -24,9 +24,9 @@ class AssertRewritesEnabled extends AbstractConstraint
      *
      * @param CatalogCategory $category
      * @param CmsIndex $homePage
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      */
-    public function processAssert(CatalogCategory $category, CmsIndex $homePage, Browser $browser)
+    public function processAssert(CatalogCategory $category, CmsIndex $homePage, BrowserInterface $browser)
     {
         $category->persist();
         $homePage->open();
