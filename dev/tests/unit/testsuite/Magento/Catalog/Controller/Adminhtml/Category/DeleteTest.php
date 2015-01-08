@@ -51,8 +51,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->authStorage = $this->getMock(
-            'Magento\Backend\Model\Auth\StorageInterface'
-            ,
+            'Magento\Backend\Model\Auth\StorageInterface',
             ['processLogin', 'processLogout', 'isLoggedIn', 'prolong', 'setDeletedPath'],
             [],
             '',
