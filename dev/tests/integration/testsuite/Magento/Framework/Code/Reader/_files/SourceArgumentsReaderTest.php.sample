@@ -21,6 +21,5 @@ class AnotherSimpleClass
         array $itemEight = [],
         $itemNine = 'test'
     ) {
-        return;
     }
 }
