@@ -63,7 +63,7 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $optionsCollMock = $objectManager->getCollectionMock(
-            '\Magento\Bundle\Model\Resource\Option\Collection',
+            'Magento\Bundle\Model\Resource\Option\Collection',
             [$optionMock]
         );
         $this->typeMock->expects($this->once())

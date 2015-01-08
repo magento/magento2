@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * PHPUnit configuration for Web API functional tests.
+ *
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+         colors="true"
+         bootstrap="./framework/bootstrap.php"
+>
+    <!-- Test suites definition -->
+    <testsuites>
+        <testsuite name="Magento Web API Functional Tests">
+            <directory suffix="Test.php">testsuite</directory>
+        </testsuite>
+    </testsuites>
+
+    <!-- Code coverage filters -->
+    <filter>
+        <whitelist>
+            <!-- All CE modules -->
+            <directory suffix=".php">../../app/code/Magento</directory>
+            <exclude>
+                <!-- Excluding installation and upgrade scripts -->
+                <directory>../../app/code/Magento/*/sql</directory>
+                <!-- Excluding data installation and upgrade scripts -->
+                <directory>../../app/code/Magento/*/data</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <!-- PHP INI settings and constants definition -->
+    <php>
+        <includePath>./testsuite</includePath>
+        <const name="TESTS_INSTALL_CONFIG_FILE" value="config/install-config-mysql.php"/>
+        <!-- WebSerivice Type. Possible values: soap, rest -->
+        <const name="TESTS_WEB_API_ADAPTER" value="rest"/>
+        <!-- Webserver URL -->
+        <const name="TESTS_BASE_URL" value="http://magento.url"/>
+        <!-- Webserver API user -->
+        <const name="TESTS_WEBSERVICE_USER" value="admin"/>
+        <!-- Webserver API key -->
+        <const name="TESTS_WEBSERVICE_APIKEY" value="123123q"/>
+        <!-- Define if debugger should be started using XDEBUG_SESSION cookie -->
+        <const name="TESTS_XDEBUG_ENABLED" value="false"/>
+        <!-- Define XDEBUG_SESSION cookie value-->
+        <const name="TESTS_XDEBUG_SESSION" value="phpstorm" />
+        <!--Generate documentation from REST tests and put it into var/log/rest-documentation directory-->
+        <const name="GENERATE_REST_DOCUMENTATION" value="false" />
+
+        <ini name="date.timezone" value="America/Los_Angeles"/>
+        <ini name="soap.wsdl_cache_enabled" value="0" />
+
+        <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
+        <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
+        <!-- Whether to cleanup the application before running tests or not -->
+        <const name="TESTS_CLEANUP" value="enabled"/>
+        <!--Defines if Magento should be installed before tests execution-->
+        <const name="TESTS_MAGENTO_INSTALLATION" value="disabled"/>
+        <!-- Magento mode for tests execution. Possible values are "default", "developer" and "production". -->
+        <const name="TESTS_MAGENTO_MODE" value="default"/>
+    </php>
+
+    <!-- Test listeners -->
+    <listeners>
+        <listener class="Magento\TestFramework\Event\PhpUnit"/>
+    </listeners>
+</phpunit>

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Cms\Model\Wysiwyg as WysiwygModel;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Registry;
 
 class Builder
@@ -19,7 +19,7 @@ class Builder
     protected $productFactory;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -75,7 +75,7 @@ class Builder
                 $product->load($productId);
             } catch (\Exception $e) {
                 $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE);
-                $this->logger->logException($e);
+                $this->logger->critical($e);
             }
         }
 

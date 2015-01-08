@@ -57,7 +57,7 @@ class ConditionManagerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->adapter));
 
         $this->conditionManager = $objectManager->getObject(
-            '\Magento\Framework\Search\Adapter\Mysql\ConditionManager',
+            'Magento\Framework\Search\Adapter\Mysql\ConditionManager',
             [
                 'resource' => $this->resource
             ]

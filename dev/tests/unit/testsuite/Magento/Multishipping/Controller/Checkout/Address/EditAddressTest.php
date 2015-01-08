@@ -88,7 +88,7 @@ class EditAddressTest extends \PHPUnit_Framework_TestCase
         $this->pageMock->expects($this->any())->method('getConfig')->willReturn($this->configMock);
         $this->configMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
         $this->viewMock->expects($this->any())->method('getPage')->willReturn($this->pageMock);
-        $this->controller = $objectManager->getObject('\Magento\Multishipping\Controller\Checkout\Address\EditAddress',
+        $this->controller = $objectManager->getObject('Magento\Multishipping\Controller\Checkout\Address\EditAddress',
             ['context' => $contextMock]);
     }
 
