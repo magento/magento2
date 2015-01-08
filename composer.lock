@@ -118,7 +118,7 @@
                     "email": "justin.rainbow@gmail.com"
                 },
                 {
-                    "name": "Robert SchÃ¶nthal",
+                    "name": "Robert Schönthal",
                     "email": "robert.schoenthal@gmail.com",
                     "homepage": "http://digitalkaoz.net"
                 }
@@ -1621,7 +1621,7 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "a component that aids in manipulating and validating Â» Uniform Resource Identifiers (URIs)",
+            "description": "a component that aids in manipulating and validating » Uniform Resource Identifiers (URIs)",
             "keywords": [
                 "uri",
                 "zf2"
@@ -1863,7 +1863,7 @@
             ],
             "authors": [
                 {
-                    "name": "Dariusz RumiÅ„ski",
+                    "name": "Dariusz Rumiński",
                     "email": "dariusz.ruminski@gmail.com"
                 },
                 {
@@ -3143,7 +3143,6 @@
         "phpmd/phpmd": 0
     },
     "prefer-stable": false,
-    "prefer-lowest": false,
     "platform": {
         "php": "~5.4.11|~5.5.0|~5.6.0"
     },
