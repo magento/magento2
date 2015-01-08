@@ -6,11 +6,16 @@
 -->
 <fixture class="Magento\Bundle\Test\Fixture\BundleProduct">
     <module>Magento_Bundle</module>
-    <type>eav</type>
-    <entity_type>catalog_product</entity_type>
-    <product_type>bundle</product_type>
-    <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
-    <identifier>sku</identifier>
+   <repository_class>Magento\Bundle\Test\Repository\BundleProduct</repository_class>
+   <handler_interface>Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface</handler_interface>
+   <data_config>
+      <type_id>bundle</type_id>
+      <create_url_params>
+          <type>bundle</type>
+          <set>4</set>
+      </create_url_params>
+      <input_prefix>product</input_prefix>
+   </data_config>
     <fields>
         <category_ids>
             <attribute_code>category_ids</attribute_code>
@@ -18,6 +23,8 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>text</input>
+            <group>product-details</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds</source>
         </category_ids>
         <country_of_manufacture>
             <attribute_code>country_of_manufacture</attribute_code>
@@ -67,6 +74,7 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>textarea</input>
+            <group>product-details</group>
         </description>
         <enable_googlecheckout>
             <attribute_code>enable_googlecheckout</attribute_code>
@@ -88,7 +96,16 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>select</input>
+            <group>autosettings</group>
         </gift_message_available>
+        <use_config_gift_message_available>
+            <attribute_code>use_config_gift_message_available</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>checkbox</input>
+            <group>autosettings</group>
+        </use_config_gift_message_available>
         <group_price>
             <attribute_code>group_price</attribute_code>
             <backend_type>decimal</backend_type>
@@ -172,8 +189,9 @@
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>BundleProduct %isolation%</default_value>
             <input>text</input>
+            <group>product-details</group>
         </name>
         <news_from_date>
             <attribute_code>news_from_date</attribute_code>
@@ -217,20 +235,47 @@
             <default_value></default_value>
             <input>price</input>
             <source>Magento\Bundle\Test\Fixture\BundleProduct\Price</source>
+            <group>product-details</group>
         </price>
+        <price_from>
+            <attribute_code>price_from</attribute_code>
+            <backend_type>decimal</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>price</input>
+            <group>product-details</group>
+        </price_from>
+        <price_to>
+            <attribute_code>price_to</attribute_code>
+            <backend_type>decimal</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>price</input>
+            <group>product-details</group>
+        </price_to>
         <price_type>
             <attribute_code>price_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
+            <default_value>Dynamic</default_value>
+            <input>select</input>
+            <group>product-details</group>
         </price_type>
+        <status>
+            <attribute_code>status</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>0</is_required>
+            <default_value>1</default_value>
+            <input>checkbox</input>
+            <group>product-details</group>
+        </status>
         <price_view>
             <attribute_code>price_view</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input>select</input>
+            <group>advanced-pricing</group>
         </price_view>
         <quantity_and_stock_status>
             <attribute_code>quantity_and_stock_status</attribute_code>
@@ -238,6 +283,7 @@
             <is_required>0</is_required>
             <default_value>1</default_value>
             <input>select</input>
+            <group>product-details</group>
         </quantity_and_stock_status>
         <required_options>
             <attribute_code>required_options</attribute_code>
@@ -246,12 +292,23 @@
             <default_value></default_value>
             <input>text</input>
         </required_options>
+        <use_config_manage_stock>
+            <attribute_code>use_config_manage_stock</attribute_code>
+            <input>checkbox</input>
+            <group>advanced-inventory</group>
+        </use_config_manage_stock>
+        <manage_stock>
+            <attribute_code>manage_stock</attribute_code>
+            <input>select</input>
+            <group>advanced-inventory</group>
+        </manage_stock>
         <shipment_type>
             <attribute_code>shipment_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
-            <input></input>
+            <input>select</input>
+            <group>product-details</group>
         </shipment_type>
         <short_description>
             <attribute_code>short_description</attribute_code>
@@ -259,6 +316,7 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>textarea</input>
+            <group>autosettings</group>
         </short_description>
         <sku>
             <attribute_code>sku</attribute_code>
@@ -266,14 +324,32 @@
             <is_required>1</is_required>
             <default_value></default_value>
             <input>text</input>
+            <group>product-details</group>
         </sku>
         <sku_type>
             <attribute_code>sku_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
+            <default_value>Dynamic</default_value>
+            <input>select</input>
+            <group>product-details</group>
         </sku_type>
+        <weight_type>
+            <attribute_code>weight_type</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value>Dynamic</default_value>
+            <input>select</input>
+            <group>product-details</group>
+        </weight_type>
+        <weight>
+            <attribute_code>weight</attribute_code>
+            <backend_type>decimal</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+            <group>product-details</group>
+        </weight>
         <small_image>
             <attribute_code>small_image</attribute_code>
             <backend_type>varchar</backend_type>
@@ -298,38 +374,30 @@
         </special_price>
         <special_from_date>
             <attribute_code>special_from_date</attribute_code>
-            <backend_type>decimal</backend_type>
+            <backend_type>data</backend_type>
             <is_required>0</is_required>
             <default_value></default_value>
             <input>price</input>
             <group>advanced-pricing</group>
-            <source>Magento\Backend\Test\Fixture\Date</source>
+            <source>Magento\Backend\Test\Fixture\Source\Date</source>
         </special_from_date>
         <special_to_date>
             <attribute_code>special_to_date</attribute_code>
-            <backend_type>decimal</backend_type>
+            <backend_type>data</backend_type>
             <is_required>0</is_required>
             <default_value></default_value>
             <input>price</input>
             <group>advanced-pricing</group>
-            <source>Magento\Backend\Test\Fixture\Date</source>
+            <source>Magento\Backend\Test\Fixture\Source\Date</source>
         </special_to_date>
-        <status>
-            <attribute_code>status</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value>Product online</default_value>
-            <input>checkbox</input>
-            <group>product-details</group>
-        </status>
         <tax_class_id>
             <attribute_code>tax_class_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
             <default_value>Taxable Goods</default_value>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
             <input>select</input>
             <group>product-details</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
         </tax_class_id>
         <thumbnail>
             <attribute_code>thumbnail</attribute_code>
@@ -351,6 +419,8 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>text</input>
+            <group>advanced-pricing</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions</source>
         </tier_price>
         <updated_at>
             <attribute_code>updated_at</attribute_code>
@@ -380,21 +450,8 @@
             <is_required>0</is_required>
             <default_value>4</default_value>
             <input>select</input>
+            <group>autosettings</group>
         </visibility>
-        <weight>
-            <attribute_code>weight</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>weight</input>
-        </weight>
-        <weight_type>
-            <attribute_code>weight_type</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
-        </weight_type>
         <id>
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
@@ -404,45 +461,47 @@
             <backend_type>virtual</backend_type>
             <is_required>1</is_required>
             <group>bundle</group>
-            <fixture>Magento\Bundle\Test\Fixture\Bundle\BundleSelections</fixture>
+            <source>Magento\Bundle\Test\Fixture\BundleProduct\BundleSelections</source>
         </bundle_selections>
         <checkout_data>
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
-            <group />
-            <fixture>Magento\Bundle\Test\Fixture\BundleProduct\CheckoutData</fixture>
+            <is_required>1</is_required>
+            <group></group>
+            <source>Magento\Bundle\Test\Fixture\BundleProduct\CheckoutData</source>
         </checkout_data>
         <custom_options>
             <attribute_code>custom_options</attribute_code>
             <backend_type>virtual</backend_type>
-            <group>customer-options</group>
             <is_required>0</is_required>
+            <group>customer-options</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</source>
         </custom_options>
         <type_id>
             <attribute_code>type_id</attribute_code>
             <backend_type>virtual</backend_type>
         </type_id>
+        <new_variations_attribute_set_id>
+            <attribute_code>new_variations_attribute_set_id</attribute_code>
+        </new_variations_attribute_set_id>
+        <affect_bundle_product_selection>
+            <attribute_code>affect_bundle_product_selection</attribute_code>
+        </affect_bundle_product_selection>
+        <stock_data>
+            <attribute_code>stock_data</attribute_code>
+            <group>advanced-inventory</group>
+        </stock_data>
+        <category_id>
+            <attribute_code>category_id</attribute_code>
+            <group>product-details</group>
+        </category_id>
+        <website_ids>
+            <attribute_code>website_ids</attribute_code>
+            <backend_type>virtual</backend_type>
+            <default_value>
+                <key_0>Main Website</key_0>
+            </default_value>
+            <group>websites</group>
+        </website_ids>
     </fields>
-    <data_set>
-        <sku></sku>
-        <name></name>
-        <short_description></short_description>
-        <description></description>
-        <tax_class_id></tax_class_id>
-        <sku_type></sku_type>
-        <weight_type></weight_type>
-        <price_type></price_type>
-        <shipment_type></shipment_type>
-        <bundle_selections></bundle_selections>
-    </data_set>
-    <data_config>
-        <create_url_params>
-            <type>bundle</type>
-            <set>4</set>
-        </create_url_params>
-        <input_prefix>product</input_prefix>
-    </data_config>
-    <repository_class>Magento\Bundle\Test\Repository\BundleProduct</repository_class>
-    <handler_interface>Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface</handler_interface>
 </fixture>

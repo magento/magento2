@@ -4,13 +4,14 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<fixture class="Magento\Backend\Test\Fixture\Search">
+<fixture class="Magento\Backend\Test\Fixture\GlobalSearch">
     <module>Magento_Backend</module>
     <fields>
         <query>
             <attribute_code>query</attribute_code>
             <backend_type>virtual</backend_type>
-            <fixture>Magento\Backend\Test\Fixture\Search\Query</fixture>
+            <source>Magento\Backend\Test\Fixture\GlobalSearch\Query</source>
+            <default_value>catalogProductSimple::default::name</default_value>
         </query>
     </fields>
 </fixture>

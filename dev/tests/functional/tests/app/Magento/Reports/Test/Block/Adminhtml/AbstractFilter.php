@@ -39,7 +39,7 @@ abstract class AbstractFilter extends Form
         foreach ($viewsReport as $key => $reportFilter) {
             if (in_array($key, $this->dateFields)) {
                 $date = ObjectManager::getInstance()->create(
-                    '\Magento\Backend\Test\Fixture\Date',
+                    '\Magento\Backend\Test\Fixture\Source\Date',
                     ['params' => [], 'data' => ['pattern' => $reportFilter]]
                 );
                 $viewsReport[$key] = $date->getData();

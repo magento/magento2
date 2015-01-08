@@ -30,44 +30,6 @@ class CatalogProductVirtual extends InjectableFixture
      */
     protected $handlerInterface = 'Magento\Catalog\Test\Handler\CatalogProductVirtual\CatalogProductVirtualInterface';
 
-    /**
-     * Constructor
-     *
-     * @constructor
-     * @param Config $configuration
-     * @param RepositoryFactory $repositoryFactory
-     * @param FixtureFactory $fixtureFactory
-     * @param HandlerFactory $handlerFactory
-     * @param EventManagerInterface $eventManager
-     * @param array $data
-     * @param string $dataSet
-     * @param bool $persist
-     */
-    public function __construct(
-        Config $configuration,
-        RepositoryFactory $repositoryFactory,
-        FixtureFactory $fixtureFactory,
-        HandlerFactory $handlerFactory,
-        EventManagerInterface $eventManager,
-        array $data = [],
-        $dataSet = '',
-        $persist = false
-    ) {
-        if (!isset($data['url_key']) && isset($data['name'])) {
-            $data['url_key'] = trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $data['name'])), '-');
-        }
-        parent::__construct(
-            $configuration,
-            $repositoryFactory,
-            $fixtureFactory,
-            $handlerFactory,
-            $eventManager,
-            $data,
-            $dataSet,
-            $persist
-        );
-    }
-
     protected $dataConfig = [
         'type_id' => 'virtual',
         'create_url_params' => [

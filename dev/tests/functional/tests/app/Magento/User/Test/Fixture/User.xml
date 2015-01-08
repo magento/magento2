@@ -6,9 +6,8 @@
 -->
 <fixture class="Magento\User\Test\Fixture\User">
     <module>Magento_User</module>
-    <type>flat</type>
-    <entity_type>admin_user</entity_type>
-    <collection>Magento\User\Model\Resource\User\Collection</collection>
+   <repository_class>Magento\User\Test\Repository\User</repository_class>
+   <handler_interface>Magento\User\Test\Handler\User\UserInterface</handler_interface>
     <fields>
         <user_id>
             <attribute_code>user_id</attribute_code>
@@ -21,36 +20,41 @@
             <attribute_code>firstname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>FirstName%isolation%</default_value>
             <input></input>
+            <group>user-info</group>
         </firstname>
         <lastname>
             <attribute_code>lastname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>LastName%isolation%</default_value>
             <input></input>
+            <group>user-info</group>
         </lastname>
         <email>
             <attribute_code>email</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>email%isolation%@example.com</default_value>
             <input></input>
+            <group>user-info</group>
         </email>
         <username>
             <attribute_code>username</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>AdminUser%isolation%</default_value>
             <input></input>
+            <group>user-info</group>
         </username>
         <password>
             <attribute_code>password</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>123123q</default_value>
             <input></input>
+            <group>user-info</group>
         </password>
         <created>
             <attribute_code>created</attribute_code>
@@ -91,7 +95,7 @@
             <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
-            <default_value>1</default_value>
+            <default_value>Active</default_value>
             <input></input>
         </is_active>
         <extra>
@@ -131,12 +135,13 @@
         <password_confirmation>
             <attribute_code>password_confirmation</attribute_code>
             <backend_type>virtual</backend_type>
+            <group>user-info</group>
+            <default_value>123123q</default_value>
         </password_confirmation>
         <current_password>
             <attribute_code>current_password</attribute_code>
             <backend_type>virtual</backend_type>
+            <group>user-info</group>
         </current_password>
     </fields>
-    <repository_class>Magento\User\Test\Repository\User</repository_class>
-    <handler_interface>Magento\User\Test\Handler\User\UserInterface</handler_interface>
 </fixture>

@@ -5,12 +5,17 @@
  */
 -->
 <fixture class="Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable">
-    <module>Magento_Catalog</module>
-    <type>eav</type>
-    <entity_type>catalog_product</entity_type>
-    <product_type>grouped</product_type>
-    <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
-    <identifier>sku</identifier>
+    <module>Magento_GroupedProduct</module>
+   <repository_class>Magento\GroupedProduct\Test\Repository\GroupedProductInjectable</repository_class>
+   <handler_interface>Magento\GroupedProduct\Test\Handler\GroupedProductInjectable\GroupedProductInjectableInterface</handler_interface>
+   <data_config>
+      <type_id>grouped</type_id>
+      <create_url_params>
+          <type>grouped</type>
+          <set>4</set>
+      </create_url_params>
+      <input_prefix>product</input_prefix>
+   </data_config>
     <fields>
         <category_ids>
             <attribute_code>category_ids</attribute_code>
@@ -18,6 +23,8 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>text</input>
+            <group>product-details</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds</source>
         </category_ids>
         <country_of_manufacture>
             <attribute_code>country_of_manufacture</attribute_code>
@@ -40,6 +47,13 @@
             <default_value></default_value>
             <input>select</input>
         </custom_design>
+        <associated>
+            <attribute_code>associated</attribute_code>
+            <backend_type>virtual</backend_type>
+            <is_required>1</is_required>
+            <group>grouped</group>
+            <source>Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable\Associated</source>
+        </associated>
         <custom_design_from>
             <attribute_code>custom_design_from</attribute_code>
             <backend_type>datetime</backend_type>
@@ -65,8 +79,9 @@
             <attribute_code>description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
-            <input>textarea</input>
+            <default_value>This is description for grouped product</default_value>
+            <input></input>
+            <group>product-details</group>
         </description>
         <gallery>
             <attribute_code>gallery</attribute_code>
@@ -142,8 +157,9 @@
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>GroupedProduct_%isolation%</default_value>
             <input>text</input>
+            <group>product-details</group>
         </name>
         <news_from_date>
             <attribute_code>news_from_date</attribute_code>
@@ -184,9 +200,17 @@
             <attribute_code>quantity_and_stock_status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>1</default_value>
+            <default_value>
+                <qty>1</qty>
+                <is_in_stock>In Stock</is_in_stock>
+            </default_value>
             <input>select</input>
+            <group>product-details</group>
         </quantity_and_stock_status>
+        <stock_data>
+            <attribute_code>stock_data</attribute_code>
+            <group>advanced-inventory</group>
+        </stock_data>
         <related_tgtr_position_behavior>
             <attribute_code>related_tgtr_position_behavior</attribute_code>
             <backend_type>int</backend_type>
@@ -212,15 +236,17 @@
             <attribute_code>short_description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
-            <input>textarea</input>
+            <default_value>This is short description for grouped product</default_value>
+            <input></input>
+            <group>autosettings</group>
         </short_description>
         <sku>
             <attribute_code>sku</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>GroupedProduct_%isolation%</default_value>
             <input>text</input>
+            <group>product-details</group>
         </sku>
         <small_image>
             <attribute_code>small_image</attribute_code>
@@ -304,60 +330,37 @@
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
         </id>
-        <associated>
-            <attribute_code>associated</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group>grouped</group>
-            <is_required>1</is_required>
-            <source>Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable\GroupedProducts</source>
-        </associated>
         <type_id>
             <attribute_code>type_id</attribute_code>
             <backend_type>virtual</backend_type>
         </type_id>
         <attribute_set_id>
             <attribute_code>attribute_set_id</attribute_code>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId</source>
             <backend_type>virtual</backend_type>
             <group>product-details</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId</source>
         </attribute_set_id>
         <website_ids>
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
-            <default_value>Main Website</default_value>
+            <default_value>
+                <key_0>Main Website</key_0>
+            </default_value>
             <group>websites</group>
         </website_ids>
         <price>
             <attribute_code>price</attribute_code>
             <backend_type>virtual</backend_type>
-            <source>'Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</source>
+            <source>Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable\Price</source>
         </price>
-        <stock_data>
-            <attribute_code>stock_data</attribute_code>
-            <group>advanced-inventory</group>
-        </stock_data>
         <checkout_data>
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
-            <group />
+            <group></group>
             <source>Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable\CheckoutData</source>
         </checkout_data>
+        <tax_class>
+            <default_value>Taxable Goods</default_value>
+        </tax_class>
     </fields>
-    <data_set>
-        <sku></sku>
-        <name></name>
-        <short_description></short_description>
-        <description></description>
-        <tax_class_id></tax_class_id>
-    </data_set>
-    <data_config>
-        <create_url_params>
-            <type>grouped</type>
-            <set>4</set>
-        </create_url_params>
-        <input_prefix>product</input_prefix>
-    </data_config>
-    <repository_class>Magento\Catalog\Test\Repository\GroupedProductInjectable</repository_class>
-    <handler_interface>Magento\Catalog\Test\Handler\GroupedProductInjectable\GroupedProductInjectableInterface
-    </handler_interface>
 </fixture>

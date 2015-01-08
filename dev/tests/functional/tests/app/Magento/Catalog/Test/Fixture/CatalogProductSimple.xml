@@ -6,11 +6,16 @@
 -->
 <fixture class="Magento\Catalog\Test\Fixture\CatalogProductSimple">
     <module>Magento_Catalog</module>
-    <type>eav</type>
-    <entity_type>catalog_product</entity_type>
-    <product_type>simple</product_type>
-    <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
-    <identifier>sku</identifier>
+   <repository_class>Magento\Catalog\Test\Repository\CatalogProductSimple</repository_class>
+   <handler_interface>Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface</handler_interface>
+   <data_config>
+      <type_id>simple</type_id>
+      <create_url_params>
+          <type>simple</type>
+          <set>4</set>
+      </create_url_params>
+      <input_prefix>product</input_prefix>
+   </data_config>
     <fields>
         <category_ids>
             <attribute_code>category_ids</attribute_code>
@@ -99,7 +104,7 @@
             <default_value></default_value>
             <input>text</input>
             <group>advanced-pricing</group>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions</fixture>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions</source>
         </group_price>
         <has_options>
             <attribute_code>has_options</attribute_code>
@@ -185,24 +190,10 @@
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>Test simple product %isolation%</default_value>
             <input>text</input>
             <group>product-details</group>
         </name>
-        <news_from_date>
-            <attribute_code>news_from_date</attribute_code>
-            <backend_type>datetime</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>date</input>
-        </news_from_date>
-        <news_to_date>
-            <attribute_code>news_to_date</attribute_code>
-            <backend_type>datetime</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>date</input>
-        </news_to_date>
         <old_id>
             <attribute_code>old_id</attribute_code>
             <backend_type>int</backend_type>
@@ -228,17 +219,22 @@
             <attribute_code>price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>
+                <value>100</value>
+            </default_value>
             <input>price</input>
             <group>product-details</group>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</fixture>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</source>
         </price>
         <quantity_and_stock_status>
             <attribute_code>quantity_and_stock_status</attribute_code>
-            <backend_type>int</backend_type>
+            <backend_type>array</backend_type>
             <is_required>0</is_required>
-            <default_value>In Stock</default_value>
-            <input>select</input>
+            <default_value>
+                <qty>10</qty>
+                <is_in_stock>In Stock</is_in_stock>
+            </default_value>
+            <input></input>
             <group>product-details</group>
         </quantity_and_stock_status>
         <required_options>
@@ -252,7 +248,7 @@
             <attribute_code>sku</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>test_simple_sku_%isolation%</default_value>
             <input>text</input>
             <group>product-details</group>
         </sku>
@@ -314,8 +310,8 @@
             <is_required>0</is_required>
             <default_value>Taxable Goods</default_value>
             <input>select</input>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
             <group>product-details</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
         </tax_class_id>
         <thumbnail>
             <attribute_code>thumbnail</attribute_code>
@@ -338,7 +334,7 @@
             <default_value></default_value>
             <input>text</input>
             <group>advanced-pricing</group>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions</fixture>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions</source>
         </tier_price>
         <updated_at>
             <attribute_code>updated_at</attribute_code>
@@ -374,27 +370,30 @@
             <attribute_code>weight</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value>12</default_value>
             <input>weight</input>
             <group>product-details</group>
         </weight>
         <id>
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
+            <group></group>
         </id>
         <type_id>
             <attribute_code>type_id</attribute_code>
             <backend_type>virtual</backend_type>
-            <group />
         </type_id>
         <attribute_set_id>
             <attribute_code>attribute_set_id</attribute_code>
             <backend_type>virtual</backend_type>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId</source>
             <group>product-details</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId</source>
+            <default_value>
+                <dataSet>default</dataSet>
+            </default_value>
         </attribute_set_id>
         <custom_attribute>
-            <attribute_code>attributes</attribute_code>
+            <attribute_code>custom_attribute</attribute_code>
             <backend_type>virtual</backend_type>
             <group>product-details</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomAttribute</source>
@@ -404,12 +403,14 @@
             <backend_type>virtual</backend_type>
             <is_required>0</is_required>
             <group>customer-options</group>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</fixture>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</source>
         </custom_options>
         <website_ids>
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
-            <default_value>Main Website</default_value>
+            <default_value>
+                <key_0>Main Website</key_0>
+            </default_value>
             <group>websites</group>
         </website_ids>
         <is_returnable>
@@ -420,6 +421,22 @@
             <input>select</input>
             <group>autosettings</group>
         </is_returnable>
+        <news_from_date>
+            <attribute_code>news_from_date</attribute_code>
+            <backend_type>datetime</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>date</input>
+            <source>Magento\Backend\Test\Fixture\Source\Date</source>
+        </news_from_date>
+        <news_to_date>
+            <attribute_code>news_to_date</attribute_code>
+            <backend_type>datetime</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>date</input>
+            <source>Magento\Backend\Test\Fixture\Source\Date</source>
+        </news_to_date>
         <stock_data>
             <attribute_code>stock_data</attribute_code>
             <backend_type>virtual</backend_type>
@@ -428,7 +445,7 @@
         <checkout_data>
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
-            <group />
+            <group></group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CheckoutData</source>
         </checkout_data>
         <cross_sell_products>
@@ -468,20 +485,4 @@
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\Fpt</source>
         </fpt>
     </fields>
-    <data_set>
-        <sku></sku>
-        <name></name>
-        <short_description></short_description>
-        <description></description>
-        <tax_class_id></tax_class_id>
-    </data_set>
-    <data_config>
-        <create_url_params>
-            <type>simple</type>
-            <set>4</set>
-        </create_url_params>
-        <input_prefix>product</input_prefix>
-    </data_config>
-    <repository_class>Magento\Catalog\Test\Repository\CatalogProductSimple</repository_class>
-    <handler_interface>Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface</handler_interface>
 </fixture>

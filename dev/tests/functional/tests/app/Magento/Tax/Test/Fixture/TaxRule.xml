@@ -6,54 +6,56 @@
 -->
 <fixture class="Magento\Tax\Test\Fixture\TaxRule">
     <module>Magento_Tax</module>
-    <type>flat</type>
-    <entity_type>tax_calculation_rule</entity_type>
-    <collection>Magento\Tax\Model\Resource\Calculation\Rule\Collection</collection>
-    <identifier>code</identifier>
+   <repository_class>Magento\Tax\Test\Repository\TaxRule</repository_class>
+   <handler_interface>Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface</handler_interface>
     <fields>
         <tax_calculation_rule_id>
             <attribute_code>tax_calculation_rule_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value />
-            <input />
+            <default_value></default_value>
+            <input></input>
         </tax_calculation_rule_id>
         <code>
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value />
-            <input />
+            <is_required></is_required>
+            <default_value>TaxIdentifier%isolation%</default_value>
+            <input></input>
         </code>
         <priority>
             <attribute_code>priority</attribute_code>
             <backend_type>int</backend_type>
-            <is_required />
-            <default_value />
-            <input />
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
         </priority>
         <position>
             <attribute_code>position</attribute_code>
             <backend_type>int</backend_type>
-            <is_required />
-            <default_value />
-            <input />
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
         </position>
         <tax_rate>
             <attribute_code>tax_rate</attribute_code>
             <backend_type>virtual</backend_type>
+            <source>Magento\Tax\Test\Fixture\TaxRule\TaxRate</source>
+            <default_value>
+                <dataSet>
+                    <key_0>US-CA-*-Rate 1</key_0>
+                </dataSet>
+            </default_value>
         </tax_rate>
         <tax_customer_class>
             <attribute_code>tax_customer_class</attribute_code>
             <backend_type>virtual</backend_type>
+            <source>Magento\Tax\Test\Fixture\TaxRule\TaxClass</source>
         </tax_customer_class>
         <tax_product_class>
             <attribute_code>tax_product_class</attribute_code>
             <backend_type>virtual</backend_type>
+            <source>Magento\Tax\Test\Fixture\TaxRule\TaxClass</source>
         </tax_product_class>
     </fields>
-    <data_set />
-    <data_config />
-    <repository_class>Magento\Tax\Test\Repository\TaxRule</repository_class>
-    <handler_interface>Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface</handler_interface>
 </fixture>

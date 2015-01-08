@@ -6,8 +6,8 @@
 -->
 <fixture class="Magento\Install\Test\Fixture\Install">
     <module>Magento_Install</module>
-    <type>virtual</type>
-    <entity_type>install</entity_type>
+   <repository_class>Magento\Install\Test\Repository\Install</repository_class>
+   <handler_interface>Magento\Install\Test\Handler\Install\InstallInterface</handler_interface>
     <fields>
         <dbHost>
             <attribute_code>dbHost</attribute_code>
@@ -17,50 +17,62 @@
             <attribute_code>dbUser</attribute_code>
             <backend_type>virtual</backend_type>
         </dbUser>
-        <dbTablePrefix>
-            <attribute_code>dbTablePrefix</attribute_code>
-            <backend_type>virtual</backend_type>
-        </dbTablePrefix>
         <dbPassword>
             <attribute_code>dbPassword</attribute_code>
             <backend_type>virtual</backend_type>
         </dbPassword>
         <dbName>
-            <attribute_code>dbname</attribute_code>
+            <attribute_code>dbName</attribute_code>
             <backend_type>virtual</backend_type>
         </dbName>
         <web>
             <attribute_code>web</attribute_code>
             <backend_type>virtual</backend_type>
         </web>
-        <dbTablePrefix>
-            <attribute_code>dbTablePrefix</attribute_code>
-            <backend_type>virtual</backend_type>
-        </dbTablePrefix>
         <admin>
             <attribute_code>admin</attribute_code>
             <backend_type>virtual</backend_type>
         </admin>
-        <httpsFront>
-            <attribute_code>httpsFront</attribute_code>
+        <adminUsername>
+            <attribute_code>adminUsername</attribute_code>
             <backend_type>virtual</backend_type>
-        </httpsFront>
-        <https>
-            <attribute_code>https</attribute_code>
+        </adminUsername>
+        <adminEmail>
+            <attribute_code>adminEmail</attribute_code>
             <backend_type>virtual</backend_type>
-        </https>
-        <httpsAdmin>
-            <attribute_code>httpsAdmin</attribute_code>
+        </adminEmail>
+        <adminPassword>
+            <attribute_code>adminPassword</attribute_code>
             <backend_type>virtual</backend_type>
-        </httpsAdmin>
+        </adminPassword>
+        <adminConfirm>
+            <attribute_code>adminConfirm</attribute_code>
+            <backend_type>virtual</backend_type>
+        </adminConfirm>
         <apacheRewrites>
             <attribute_code>apacheRewrites</attribute_code>
             <backend_type>virtual</backend_type>
         </apacheRewrites>
+        <dbTablePrefix>
+            <attribute_code>dbTablePrefix</attribute_code>
+            <backend_type>virtual</backend_type>
+        </dbTablePrefix>
         <keyOwn>
             <attribute_code>keyOwn</attribute_code>
             <backend_type>virtual</backend_type>
         </keyOwn>
+        <httpsAdmin>
+            <attribute_code>httpsAdmin</attribute_code>
+            <backend_type>virtual</backend_type>
+        </httpsAdmin>
+        <https>
+            <attribute_code>https</attribute_code>
+            <backend_type>virtual</backend_type>
+        </https>
+        <httpsFront>
+            <attribute_code>httpsFront</attribute_code>
+            <backend_type>virtual</backend_type>
+        </httpsFront>
         <keyValue>
             <attribute_code>keyValue</attribute_code>
             <backend_type>virtual</backend_type>
@@ -70,10 +82,8 @@
             <backend_type>virtual</backend_type>
         </language>
         <currency>
-            <attribute_code>currency</attribute_code>
+            <attribute_code>language</attribute_code>
             <backend_type>virtual</backend_type>
         </currency>
     </fields>
-    <repository_class>Magento\Install\Test\Repository\Install</repository_class>
-    <handler_interface>Magento\Install\Test\Handler\Install\InstallInterface</handler_interface>
 </fixture>

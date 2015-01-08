@@ -6,30 +6,28 @@
 -->
 <fixture class="Magento\Store\Test\Fixture\Website">
     <module>Magento_Store</module>
-    <type>flat</type>
-    <entity_type>store_website</entity_type>
-    <collection>Magento\Store\Model\Resource\Website\Collection</collection>
-    <identifier>code</identifier>
+   <repository_class>Magento\Store\Test\Repository\Website</repository_class>
+   <handler_interface>Magento\Store\Test\Handler\Website\WebsiteInterface</handler_interface>
     <fields>
         <website_id>
             <attribute_code>website_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>1</default_value>
             <input></input>
         </website_id>
         <code>
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>base</default_value>
             <input></input>
         </code>
         <name>
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>Main Website</default_value>
             <input></input>
         </name>
         <sort_order>
@@ -54,7 +52,4 @@
             <input></input>
         </is_default>
     </fields>
-    <data_set></data_set>
-    <data_config></data_config>
-    <repository_class>Magento\Store\Test\Repository\Website</repository_class>
 </fixture>

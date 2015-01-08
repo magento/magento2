@@ -6,11 +6,16 @@
 -->
 <fixture class="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable">
     <module>Magento_Downloadable</module>
-    <type>eav</type>
-    <entity_type>catalog_product</entity_type>
-    <product_type>downloadable</product_type>
-    <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
-    <identifier>sku</identifier>
+   <repository_class>Magento\Downloadable\Test\Repository\DownloadableProductInjectable</repository_class>
+   <handler_interface>Magento\Downloadable\Test\Handler\DownloadableProductInjectable\DownloadableProductInjectableInterface</handler_interface>
+   <data_config>
+      <type_id>downloadable</type_id>
+      <create_url_params>
+          <type>downloadable</type>
+          <set>4</set>
+      </create_url_params>
+      <input_prefix>product</input_prefix>
+   </data_config>
     <fields>
         <category_ids>
             <attribute_code>category_ids</attribute_code>
@@ -67,7 +72,7 @@
             <attribute_code>description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value>This is description for downloadable product</default_value>
             <input>textarea</input>
             <group>product-details</group>
         </description>
@@ -91,6 +96,8 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>text</input>
+            <group>advanced-pricing</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions</source>
         </group_price>
         <has_options>
             <attribute_code>has_options</attribute_code>
@@ -194,8 +201,9 @@
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>DownloadableProduct_%isolation%</default_value>
             <input>text</input>
+            <group>product-details</group>
         </name>
         <news_from_date>
             <attribute_code>news_from_date</attribute_code>
@@ -236,10 +244,29 @@
             <attribute_code>price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>
+                <value>100</value>
+            </default_value>
             <input>price</input>
+            <group>product-details</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</source>
         </price>
+        <stock_data>
+            <attribute_code>stock_data</attribute_code>
+            <input>text</input>
+            <group>advanced-inventory</group>
+        </stock_data>
+        <quantity_and_stock_status>
+            <attribute_code>quantity_and_stock_status</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>0</is_required>
+            <default_value>
+                <qty>1</qty>
+                <is_in_stock>In Stock</is_in_stock>
+            </default_value>
+            <input>select</input>
+            <group>product-details</group>
+        </quantity_and_stock_status>
         <related_tgtr_position_behavior>
             <attribute_code>related_tgtr_position_behavior</attribute_code>
             <backend_type>int</backend_type>
@@ -272,16 +299,43 @@
             <attribute_code>short_description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value>This is short description for downloadable product</default_value>
             <input>textarea</input>
-            <group>autosetting</group>
+            <group>autosettings</group>
         </short_description>
+        <downloadable>
+            <attribute_code>downloadable</attribute_code>
+            <backend_type>virtual</backend_type>
+            <is_required>0</is_required>
+            <group>downloadable_information</group>
+        </downloadable>
+        <downloadable_links>
+            <attribute_code>downloadable_items</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required>0</is_required>
+            <default_value>
+                <preset>default</preset>
+            </default_value>
+            <input>text</input>
+            <group>downloadable_information</group>
+            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Links</source>
+        </downloadable_links>
+        <downloadable_sample>
+            <attribute_code>downloadable_sample</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required>0</is_required>
+            <default_value>dafault</default_value>
+            <input>text</input>
+            <group>downloadable_information</group>
+            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Samples</source>
+        </downloadable_sample>
         <sku>
             <attribute_code>sku</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>DownloadableProduct_%isolation%</default_value>
             <input>text</input>
+            <group>product-details</group>
         </sku>
         <small_image>
             <attribute_code>small_image</attribute_code>
@@ -308,7 +362,8 @@
             <attribute_code>special_price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value>10</default_value>
+            <group>advanced-pricing</group>
         </special_price>
         <special_to_date>
             <attribute_code>special_to_date</attribute_code>
@@ -323,15 +378,18 @@
             <is_required>0</is_required>
             <default_value>1</default_value>
             <input>select</input>
+            <group>product-details</group>
         </status>
         <tax_class_id>
             <attribute_code>tax_class_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>2</default_value>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
-            <group>product-details</group>
+            <default_value>
+                <dataSet>Taxable Goods</dataSet>
+            </default_value>
             <input>select</input>
+            <group>product-details</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
         </tax_class_id>
         <thumbnail>
             <attribute_code>thumbnail</attribute_code>
@@ -351,8 +409,10 @@
             <attribute_code>tier_price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value>default</default_value>
             <input>text</input>
+            <group>advanced-pricing</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions</source>
         </tier_price>
         <updated_at>
             <attribute_code>updated_at</attribute_code>
@@ -379,7 +439,7 @@
             <attribute_code>url_key</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value>downloadableproduct_%isolation%</default_value>
             <input>text</input>
             <group>search-engine-optimization</group>
         </url_key>
@@ -396,6 +456,7 @@
             <is_required>0</is_required>
             <default_value>4</default_value>
             <input>select</input>
+            <group>autosettings</group>
         </visibility>
         <weight>
             <attribute_code>weight</attribute_code>
@@ -403,79 +464,39 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>weight</input>
+            <group>product-details</group>
         </weight>
+        <custom_options>
+            <attribute_code>custom_options</attribute_code>
+            <backend_type>virtual</backend_type>
+            <is_required>0</is_required>
+            <default_value>default</default_value>
+            <group>customer-options</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</source>
+        </custom_options>
         <id>
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
         </id>
-        <inventory_manage_stock>
-            <attribute_code>inventory_manage_stock</attribute_code>
-            <input>select</input>
-        </inventory_manage_stock>
-        <quantity_and_stock_status>
-            <attribute_code>quantity_and_stock_status</attribute_code>
-            <input>select</input>
-        </quantity_and_stock_status>
-        <inventory_qty>
-            <attribute_code>inventory_qty</attribute_code>
-            <input>text</input>
-        </inventory_qty>
-        <stock_data_use_config_min_qty>
-            <attribute_code>stock_data_use_config_min_qty</attribute_code>
-            <input>checkbox</input>
-        </stock_data_use_config_min_qty>
-        <stock_data_min_qty>
-            <attribute_code>stock_data_min_qty</attribute_code>
-            <input>text</input>
-        </stock_data_min_qty>
-        <website_ids>
-            <attribute_code>website_ids</attribute_code>
-            <backend_type>virtual</backend_type>
-            <default_value>Main Website</default_value>
-            <group>websites</group>
-        </website_ids>
-        <downloadable_links>
-            <attribute_code>downloadable_links</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group>downloadable_information</group>
-            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Links</source>
-        </downloadable_links>
-        <downloadable_sample>
-            <attribute_code>downloadable_sample</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group>downloadable_information</group>
-            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Samples</source>
-        </downloadable_sample>
-        <checkout_data>
-            <attribute_code>checkout_data</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group />
-            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\CheckoutData</source>
-        </checkout_data>
         <is_virtual>
             <attribute_code>is_virtual</attribute_code>
             <backend_type>virtual</backend_type>
             <group>product-details</group>
+            <default_value>Yes</default_value>
         </is_virtual>
+        <website_ids>
+            <attribute_code>website_ids</attribute_code>
+            <backend_type>virtual</backend_type>
+            <default_value>
+                <key_0>Main Website</key_0>
+            </default_value>
+            <group>websites</group>
+        </website_ids>
+        <checkout_data>
+            <attribute_code>checkout_data</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group></group>
+            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\CheckoutData</source>
+        </checkout_data>
     </fields>
-    <data_set>
-        <sku></sku>
-        <name></name>
-        <short_description></short_description>
-        <description></description>
-        <tax_class_id></tax_class_id>
-        <links_purchased_separately></links_purchased_separately>
-        <samples_title></samples_title>
-        <links_title></links_title>
-        <links_exist></links_exist>
-    </data_set>
-    <data_config>
-        <create_url_params>
-            <type>downloadable</type>
-            <set>4</set>
-        </create_url_params>
-        <input_prefix>product</input_prefix>
-    </data_config>
-    <repository_class>Magento\Downloadable\Test\Repository\DownloadableProductInjectable</repository_class>
-    <handler_interface>Magento\Downloadable\Test\Handler\DownloadableProductInjectable\DownloadableProductInjectableInterface</handler_interface>
 </fixture>

@@ -6,12 +6,8 @@
 -->
 <fixture class="Magento\Catalog\Test\Fixture\CatalogProductAttribute">
     <module>Magento_Catalog</module>
-    <type>composite</type>
-    <entities>
-        <eav_attribute>eav_attribute</eav_attribute>
-        <catalog_eav_attribute>catalog_eav_attribute</catalog_eav_attribute>
-    </entities>
-    <collection>Magento\Catalog\Model\Resource\Attribute</collection>
+   <repository_class>Magento\Catalog\Test\Repository\CatalogProductAttribute</repository_class>
+   <handler_interface>Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface</handler_interface>
     <fields>
         <attribute_id>
             <attribute_code>attribute_id</attribute_code>
@@ -33,6 +29,7 @@
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
+            <group>advanced-properties</group>
         </attribute_code>
         <attribute_model>
             <attribute_code>attribute_model</attribute_code>
@@ -73,18 +70,26 @@
             <attribute_code>frontend_input</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
+            <default_value>Text Field</default_value>
+            <input>select</input>
             <group>properties</group>
         </frontend_input>
         <frontend_label>
             <attribute_code>frontend_label</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>attribute_label%isolation%</default_value>
             <input></input>
             <group>properties</group>
         </frontend_label>
+        <manage_frontend_label>
+            <attribute_code>manage_frontend_label</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+            <group>manage-labels</group>
+        </manage_frontend_label>
         <frontend_class>
             <attribute_code>frontend_class</attribute_code>
             <backend_type>varchar</backend_type>
@@ -103,8 +108,8 @@
             <attribute_code>is_required</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
+            <default_value>No</default_value>
+            <input>select</input>
             <group>properties</group>
         </is_required>
         <is_user_defined>
@@ -120,6 +125,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>advanced-properties</group>
         </is_unique>
         <note>
             <attribute_code>note</attribute_code>
@@ -141,6 +147,7 @@
             <is_required></is_required>
             <default_value>1</default_value>
             <input></input>
+            <group>advanced-properties</group>
         </is_global>
         <is_visible>
             <attribute_code>is_visible</attribute_code>
@@ -155,6 +162,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>frontend-properties</group>
         </is_searchable>
         <is_filterable>
             <attribute_code>is_filterable</attribute_code>
@@ -162,6 +170,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>frontend-properties</group>
         </is_filterable>
         <is_comparable>
             <attribute_code>is_comparable</attribute_code>
@@ -169,6 +178,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>frontend-properties</group>
         </is_comparable>
         <is_visible_on_front>
             <attribute_code>is_visible_on_front</attribute_code>
@@ -176,6 +186,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>frontend-properties</group>
         </is_visible_on_front>
         <is_html_allowed_on_front>
             <attribute_code>is_html_allowed_on_front</attribute_code>
@@ -183,6 +194,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>frontend-properties</group>
         </is_html_allowed_on_front>
         <is_used_for_price_rules>
             <attribute_code>is_used_for_price_rules</attribute_code>
@@ -190,6 +202,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>frontend-properties</group>
         </is_used_for_price_rules>
         <is_filterable_in_search>
             <attribute_code>is_filterable_in_search</attribute_code>
@@ -197,6 +210,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>frontend-properties</group>
         </is_filterable_in_search>
         <used_in_product_listing>
             <attribute_code>used_in_product_listing</attribute_code>
@@ -204,6 +218,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>frontend-properties</group>
         </used_in_product_listing>
         <used_for_sort_by>
             <attribute_code>used_for_sort_by</attribute_code>
@@ -211,6 +226,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>frontend-properties</group>
         </used_for_sort_by>
         <apply_to>
             <attribute_code>apply_to</attribute_code>
@@ -225,6 +241,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
+            <group>frontend-properties</group>
         </is_visible_in_advanced_search>
         <position>
             <attribute_code>position</attribute_code>
@@ -253,6 +270,7 @@
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
+            <group>advanced-properties</group>
         </is_configurable>
         <search_weight>
             <attribute_code>search_weight</attribute_code>
@@ -272,20 +290,23 @@
         <default_value_text>
             <attribute_code>default_value_text</attribute_code>
             <backend_type>text</backend_type>
+            <group>advanced-properties</group>
         </default_value_text>
         <default_value_textarea>
             <attribute_code>default_value_textarea</attribute_code>
             <backend_type>text</backend_type>
+            <group>advanced-properties</group>
         </default_value_textarea>
         <default_value_date>
             <attribute_code>default_value_date</attribute_code>
             <backend_type>text</backend_type>
+            <group>advanced-properties</group>
+            <source>Magento\Backend\Test\Fixture\Source\Date</source>
         </default_value_date>
         <default_value_yesno>
             <attribute_code>default_value_yesno</attribute_code>
             <backend_type>text</backend_type>
+            <group>advanced-properties</group>
         </default_value_yesno>
     </fields>
-    <repository_class>Magento\Catalog\Test\Repository\CatalogProductAttribute</repository_class>
-    <handler_interface>Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogAttributeEntityInterface</handler_interface>
 </fixture>

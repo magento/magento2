@@ -36,6 +36,7 @@ class User extends InjectableFixture
         'email' => 'email%isolation%@example.com',
         'password' => '123123q',
         'password_confirmation' => '123123q',
+        'current_password' => '%current_password%',
         'is_active' => 'Active',
     ];
 
@@ -189,43 +190,8 @@ class User extends InjectableFixture
         'attribute_code' => 'current_password',
         'backend_type' => 'virtual',
         'group' => 'user-info',
+        'source' => 'Magento\User\Test\Fixture\User\CurrentPassword',
     ];
-
-    /**
-     * Initialize dependencies.
-     *
-     * @param Config $configuration
-     * @param RepositoryFactory $repositoryFactory
-     * @param FixtureFactory $fixtureFactory
-     * @param HandlerFactory $handlerFactory
-     * @param EventManagerInterface $eventManager
-     * @param array $data
-     * @param string $dataSet
-     * @param bool $persist
-     */
-    public function __construct(
-        Config $configuration,
-        RepositoryFactory $repositoryFactory,
-        FixtureFactory $fixtureFactory,
-        HandlerFactory $handlerFactory,
-        EventManagerInterface $eventManager,
-        array $data = [],
-        $dataSet = '',
-        $persist = false
-    ) {
-        $this->defaultDataSet['current_password'] = $configuration
-            ->getConfigParam('application/backend_user_credentials/password');
-        parent::__construct(
-            $configuration,
-            $repositoryFactory,
-            $fixtureFactory,
-            $handlerFactory,
-            $eventManager,
-            $data,
-            $dataSet,
-            $persist
-        );
-    }
 
     public function getUserId()
     {

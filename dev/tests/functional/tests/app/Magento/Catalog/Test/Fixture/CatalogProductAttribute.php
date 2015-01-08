@@ -363,7 +363,7 @@ class CatalogProductAttribute extends InjectableFixture
         'attribute_code' => 'default_value_date',
         'backend_type' => 'text',
         'group' => 'advanced-properties',
-        'source' => 'Magento\Backend\Test\Fixture\Date',
+        'source' => 'Magento\Backend\Test\Fixture\Source\Date',
     ];
 
     protected $default_value_yesno = [

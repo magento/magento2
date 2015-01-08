@@ -6,8 +6,6 @@
 -->
 <fixture class="Magento\ImportExport\Test\Fixture\ImportExport">
     <module>Magento_ImportExport</module>
-    <type>flat</type>
-    <entity_type>importexport_importdata</entity_type>
     <fields>
         <id>
             <attribute_code>id</attribute_code>
@@ -20,22 +18,22 @@
             <attribute_code>entity</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>Products</default_value>
             <input></input>
         </entity>
         <behavior>
             <attribute_code>behavior</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value>append</default_value>
+            <default_value>CSV</default_value>
             <input></input>
         </behavior>
-        <data>
+        <data_export>
             <attribute_code>data</attribute_code>
             <backend_type>longtext</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </data>
+        </data_export>
     </fields>
 </fixture>

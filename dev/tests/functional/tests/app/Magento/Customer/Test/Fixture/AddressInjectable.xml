@@ -6,29 +6,42 @@
 -->
 <fixture class="Magento\Customer\Test\Fixture\AddressInjectable">
     <module>Magento_Customer</module>
-    <type>eav</type>
-    <entity_type>customer_address</entity_type>
-    <collection>Magento\Customer\Model\Resource\Address\Collection</collection>
+   <repository_class>Magento\Customer\Test\Repository\AddressInjectable</repository_class>
+   <handler_interface>Magento\Customer\Test\Handler\AddressInjectable\AddressInjectableInterface</handler_interface>
     <fields>
         <city>
             <attribute_code>city</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>Culver City</default_value>
             <input>text</input>
         </city>
+        <default_billing>
+            <attribute_code>default_billing</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>checkbox</input>
+        </default_billing>
+        <default_shipping>
+            <attribute_code>default_shipping</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>checkbox</input>
+        </default_shipping>
         <company>
             <attribute_code>company</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value>Magento %isolation%</default_value>
             <input>text</input>
         </company>
         <country_id>
             <attribute_code>country_id</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>United States</default_value>
             <input>select</input>
         </country_id>
         <fax>
@@ -42,16 +55,23 @@
             <attribute_code>firstname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>John</default_value>
             <input>text</input>
         </firstname>
         <lastname>
             <attribute_code>lastname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>Doe</default_value>
             <input>text</input>
         </lastname>
+        <email>
+            <attribute_code>email</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value>John.Doe%isolation%@example.com</default_value>
+            <input>text</input>
+        </email>
         <middlename>
             <attribute_code>middlename</attribute_code>
             <backend_type>varchar</backend_type>
@@ -63,7 +83,7 @@
             <attribute_code>postcode</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value>90230</default_value>
             <input>text</input>
         </postcode>
         <prefix>
@@ -84,14 +104,14 @@
             <attribute_code>region_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value>California</default_value>
             <input>hidden</input>
         </region_id>
         <street>
             <attribute_code>street</attribute_code>
             <backend_type>text</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>6161 West Centinela Avenue</default_value>
             <input>multiline</input>
         </street>
         <suffix>
@@ -105,7 +125,7 @@
             <attribute_code>telephone</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>555-55-555-55</default_value>
             <input>text</input>
         </telephone>
         <vat_id>
@@ -143,25 +163,5 @@
             <default_value></default_value>
             <input>text</input>
         </vat_request_success>
-        <default_billing>
-            <attribute_code>default_billing</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>checkbox</input>
-        </default_billing>
-        <default_shipping>
-            <attribute_code>default_shipping</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>checkbox</input>
-        </default_shipping>
-        <email>
-            <attribute_code>email</attribute_code>
-            <backend_type>virtual</backend_type>
-        </email>
     </fields>
-    <repository_class>Magento\Customer\Test\Repository\AddressInjectable</repository_class>
-    <handler_interface>Magento\Customer\Test\Handler\AddressInjectable\AddressInjectableInterface</handler_interface>
 </fixture>

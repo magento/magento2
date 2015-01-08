@@ -6,22 +6,21 @@
 -->
 <fixture class="Magento\Store\Test\Fixture\Store">
     <module>Magento_Store</module>
-    <type>flat</type>
-    <entity_type>store</entity_type>
-    <collection>Magento\Store\Model\Resource\Store\Collection</collection>
+   <repository_class>Magento\Store\Test\Repository\Store</repository_class>
+   <handler_interface>Magento\Store\Test\Handler\Store\StoreInterface</handler_interface>
     <fields>
         <store_id>
             <attribute_code>store_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>1</default_value>
             <input></input>
         </store_id>
         <code>
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>default</default_value>
             <input>text</input>
         </code>
         <website_id>
@@ -35,7 +34,9 @@
             <attribute_code>group_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
-            <default_value>0</default_value>
+            <default_value>
+                <dataSet>default</dataSet>
+            </default_value>
             <input>select</input>
             <source>Magento\Store\Test\Fixture\Store\GroupId</source>
         </group_id>
@@ -43,7 +44,7 @@
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>Default Store View</default_value>
             <input>text</input>
         </name>
         <sort_order>
@@ -57,12 +58,8 @@
             <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
-            <default_value>0</default_value>
+            <default_value>Enabled</default_value>
             <input>select</input>
         </is_active>
     </fields>
-    <data_set></data_set>
-    <data_config></data_config>
-    <repository_class>Magento\Store\Test\Repository\Store</repository_class>
-    <handler_interface>Magento\Store\Test\Handler\Store\StoreInterface</handler_interface>
 </fixture>

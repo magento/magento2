@@ -38,6 +38,7 @@ class BundleProduct extends AbstractRepository
             'weight_type' => '0',
             'status' => 'Product online',
             'shipment_type' => '1',
+            'url_key' => 'bundle-dynamic-product-%isolation%',
             'mtf_dataset_name' => 'BundleDynamic_sku_1073507449',
             'website_ids' => ['Main Website'],
         ];
@@ -56,6 +57,7 @@ class BundleProduct extends AbstractRepository
             'weight_type' => '0',
             'price_type' => '0',
             'shipment_type' => '1',
+            'url_key' => 'bundle-dynamic-product-%isolation%',
             'mtf_dataset_name' => 'BundleDynamic_sku_215249172',
             'website_ids' => ['Main Website'],
         ];

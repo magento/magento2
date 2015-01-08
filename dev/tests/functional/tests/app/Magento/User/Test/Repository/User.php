@@ -34,7 +34,7 @@ class User extends AbstractRepository
             'password' => '123123q',
             'password_confirmation' => '123123q',
             'user_id' => 1,
-            'current_password' => $superAdminPassword,
+            'current_password' => '%current_password%',
         ];
 
         $this->_data['custom_admin'] = [
@@ -44,7 +44,7 @@ class User extends AbstractRepository
             'email' => 'email%isolation%@example.com',
             'password' => '123123q',
             'password_confirmation' => '123123q',
-            'current_password' => $superAdminPassword,
+            'current_password' => '%current_password%',
         ];
 
         $this->_data['custom_admin_with_default_role'] = [
@@ -55,7 +55,7 @@ class User extends AbstractRepository
             'password' => '123123q',
             'password_confirmation' => '123123q',
             'role_id' => ['dataSet' => 'default'],
-            'current_password' => $superAdminPassword,
+            'current_password' => '%current_password%',
             'is_active' => 'Active',
         ];
     }

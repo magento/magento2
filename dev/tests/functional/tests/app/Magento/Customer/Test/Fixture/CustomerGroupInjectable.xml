@@ -4,11 +4,10 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<fixture class="Magento\Customer\Test\Fixture\CustomerGroup">
+<fixture class="Magento\Customer\Test\Fixture\CustomerGroupInjectable">
     <module>Magento_Customer</module>
-    <type>flat</type>
-    <entity_type>customer_group</entity_type>
-    <collection>Magento\Customer\Model\Resource\Group\Collection</collection>
+   <repository_class>Magento\Customer\Test\Repository\CustomerGroupInjectable</repository_class>
+   <handler_interface>Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface</handler_interface>
     <fields>
         <customer_group_code>
             <attribute_code>code</attribute_code>
@@ -21,14 +20,15 @@
             <attribute_code>tax_class</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>Retail Customer</default_value>
+            <default_value>
+                <dataSet>customer_tax_class</dataSet>
+            </default_value>
             <input>select</input>
+            <source>Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds</source>
         </tax_class_id>
         <customer_group_id>
             <attribute_code>customer_group_id</attribute_code>
             <backend_type>virtual</backend_type>
         </customer_group_id>
     </fields>
-    <repository_class>Magento\Customer\Test\Repository\CustomerGroupInjectable</repository_class>
-    <handler_interface>Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface</handler_interface>
 </fixture>

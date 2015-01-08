@@ -6,10 +6,8 @@
 -->
 <fixture class="Magento\Customer\Test\Fixture\CustomerInjectable">
     <module>Magento_Customer</module>
-    <type>eav</type>
-    <entity_type>customer</entity_type>
-    <collection>Magento\Customer\Model\Resource\Customer\Collection</collection>
-    <identifier>email</identifier>
+   <repository_class>Magento\Customer\Test\Repository\CustomerInjectable</repository_class>
+   <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
     <fields>
         <address>
             <attribute_code>address</attribute_code>
@@ -23,6 +21,11 @@
             <default_value></default_value>
             <input>text</input>
         </confirmation>
+        <id>
+            <attribute_code>id</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group></group>
+        </id>
         <created_at>
             <attribute_code>created_at</attribute_code>
             <backend_type>static</backend_type>
@@ -30,11 +33,6 @@
             <default_value></default_value>
             <input>date</input>
         </created_at>
-        <id>
-            <attribute_code>id</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group>null</group>
-        </id>
         <created_in>
             <attribute_code>created_in</attribute_code>
             <backend_type>varchar</backend_type>
@@ -77,7 +75,7 @@
             <attribute_code>email</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>John.Doe%isolation%@example.com</default_value>
             <input>text</input>
             <group>account_information</group>
         </email>
@@ -85,7 +83,7 @@
             <attribute_code>firstname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>John</default_value>
             <input>text</input>
             <group>account_information</group>
         </firstname>
@@ -110,7 +108,7 @@
             <attribute_code>lastname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>Doe</default_value>
             <input>text</input>
             <group>account_information</group>
         </lastname>
@@ -175,14 +173,6 @@
             <input>text</input>
             <group>account_information</group>
         </taxvat>
-        <amount_delta>
-            <attribute_code>amount_delta</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-            <group>store_credit</group>
-        </amount_delta>
         <website_id>
             <attribute_code>website_id</attribute_code>
             <backend_type>static</backend_type>
@@ -191,6 +181,14 @@
             <input>select</input>
             <group>account_information</group>
         </website_id>
+        <amount_delta>
+            <attribute_code>amount_delta</attribute_code>
+            <backend_type>static</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>text</input>
+            <group>store_credit</group>
+        </amount_delta>
         <is_subscribed>
             <attribute_code>is_subscribed</attribute_code>
             <backend_type>virtual</backend_type>
@@ -198,24 +196,19 @@
         <password>
             <attribute_code>password</attribute_code>
             <backend_type>virtual</backend_type>
+            <group></group>
+            <default_value>123123q</default_value>
         </password>
         <password_confirmation>
             <attribute_code>password_confirmation</attribute_code>
             <backend_type>virtual</backend_type>
+            <group></group>
+            <default_value>123123q</default_value>
         </password_confirmation>
-        <reward_points_delta>
-            <attribute_code>reward_points_delta</attribute_code>
-            <backend_type>virtual</backend_type>
-            <source>Magento\Customer\Test\Fixture\CustomerInjectable\RewardPoints</source>
-        </reward_points_delta>
-        <store_credit>
-            <attribute_code>store_credit</attribute_code>
-            <backend_type>virtual</backend_type>
-        </store_credit>
         <current_password>
             <attribute_code>current_password</attribute_code>
             <backend_type>virtual</backend_type>
+            <group></group>
         </current_password>
     </fields>
-    <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
 </fixture>

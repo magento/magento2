@@ -6,9 +6,8 @@
 -->
 <fixture class="Magento\Sitemap\Test\Fixture\Sitemap">
     <module>Magento_Sitemap</module>
-    <type>flat</type>
-    <entity_type>sitemap</entity_type>
-    <collection>Magento\Sitemap\Model\Resource\Sitemap\Collection</collection>
+   <repository_class>Magento\Sitemap\Test\Repository\Sitemap</repository_class>
+   <handler_interface>Magento\Sitemap\Test\Handler\Sitemap\SitemapInterface</handler_interface>
     <fields>
         <sitemap_id>
             <attribute_code>sitemap_id</attribute_code>
@@ -28,14 +27,14 @@
             <attribute_code>sitemap_filename</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>sitemap.xml</default_value>
             <input></input>
         </sitemap_filename>
         <sitemap_path>
             <attribute_code>sitemap_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>/</default_value>
             <input></input>
         </sitemap_path>
         <sitemap_time>
@@ -53,6 +52,4 @@
             <input></input>
         </store_id>
     </fields>
-    <repository_class>Magento\Sitemap\Test\Repository\Sitemap</repository_class>
-    <handler_interface>Magento\Sitemap\Test\Handler\Sitemap\SitemapInterface</handler_interface>
 </fixture>

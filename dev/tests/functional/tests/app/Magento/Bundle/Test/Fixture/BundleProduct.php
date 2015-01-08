@@ -31,44 +31,6 @@ class BundleProduct extends InjectableFixture
      */
     protected $handlerInterface = 'Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface';
 
-    /**
-     * Constructor
-     *
-     * @constructor
-     * @param Config $configuration
-     * @param RepositoryFactory $repositoryFactory
-     * @param FixtureFactory $fixtureFactory
-     * @param HandlerFactory $handlerFactory
-     * @param EventManagerInterface $eventManager
-     * @param array $data
-     * @param string $dataSet
-     * @param bool $persist
-     */
-    public function __construct(
-        Config $configuration,
-        RepositoryFactory $repositoryFactory,
-        FixtureFactory $fixtureFactory,
-        HandlerFactory $handlerFactory,
-        EventManagerInterface $eventManager,
-        array $data = [],
-        $dataSet = '',
-        $persist = false
-    ) {
-        parent::__construct(
-            $configuration,
-            $repositoryFactory,
-            $fixtureFactory,
-            $handlerFactory,
-            $eventManager,
-            $data,
-            $dataSet,
-            $persist
-        );
-        if (!isset($this->data['url_key']) && isset($this->data['name'])) {
-            $this->data['url_key'] = trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $this->data['name'])), '-');
-        }
-    }
-
     protected $dataConfig = [
         'type_id' => 'bundle',
         'create_url_params' => [
@@ -495,7 +457,7 @@ class BundleProduct extends InjectableFixture
         'default_value' => '',
         'input' => 'price',
         'group' => 'advanced-pricing',
-        'source' => 'Magento\Backend\Test\Fixture\Date',
+        'source' => 'Magento\Backend\Test\Fixture\Source\Date',
     ];
 
     protected $special_to_date = [
@@ -505,7 +467,7 @@ class BundleProduct extends InjectableFixture
         'default_value' => '',
         'input' => 'price',
         'group' => 'advanced-pricing',
-        'source' => 'Magento\Backend\Test\Fixture\Date',
+        'source' => 'Magento\Backend\Test\Fixture\Source\Date',
     ];
 
     protected $tax_class_id = [

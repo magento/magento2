@@ -6,61 +6,56 @@
 -->
 <fixture class="Magento\Core\Test\Fixture\SystemVariable">
     <module>Magento_Core</module>
-    <type>composite</type>
-    <entities>
-        <core_variable>core_variable</core_variable>
-        <core_variable_value>core_variable_value</core_variable_value>
-    </entities>
-    <collection>Magento\Core\Model\Resource\Variable\Collection</collection>
+   <handler_interface>Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface</handler_interface>
     <fields>
         <variable_id>
             <attribute_code>variable_id</attribute_code>
             <backend_type>int</backend_type>
-            <is_required />
+            <is_required></is_required>
             <default_value>0</default_value>
-            <input />
+            <input></input>
         </variable_id>
         <code>
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value />
-            <input />
+            <is_required></is_required>
+            <default_value>variableCode%isolation%</default_value>
+            <input></input>
         </code>
         <name>
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value />
-            <input />
+            <is_required></is_required>
+            <default_value>variableName%isolation%</default_value>
+            <input></input>
         </name>
         <value_id>
             <attribute_code>value_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value />
-            <input />
+            <default_value></default_value>
+            <input></input>
         </value_id>
         <store_id>
             <attribute_code>store_id</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required />
+            <is_required></is_required>
             <default_value>0</default_value>
-            <input />
+            <input></input>
         </store_id>
         <plain_value>
             <attribute_code>plain_value</attribute_code>
             <backend_type>text</backend_type>
-            <is_required />
-            <default_value />
-            <input />
+            <is_required></is_required>
+            <default_value>plain_value</default_value>
+            <input></input>
         </plain_value>
         <html_value>
             <attribute_code>html_value</attribute_code>
             <backend_type>text</backend_type>
-            <is_required />
-            <default_value />
-            <input />
+            <is_required></is_required>
+            <default_value><p>html_value</p></default_value>
+            <input></input>
         </html_value>
         <use_default_value>
             <attribute_code>use_default_value</attribute_code>
@@ -68,5 +63,4 @@
             <input>select</input>
         </use_default_value>
     </fields>
-    <handler_interface>Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface</handler_interface>
 </fixture>

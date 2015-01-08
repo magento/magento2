@@ -6,21 +6,20 @@
 -->
 <fixture class="Magento\CatalogRule\Test\Fixture\CatalogRule">
     <module>Magento_CatalogRule</module>
-    <type>eav</type>
-    <entity_type>catalog_rule</entity_type>
-    <collection>Magento\CatalogRule\Model\Resource\Rule\Product\Price\Collection</collection>
+   <repository_class>Magento\CatalogRule\Test\Repository\CatalogRule</repository_class>
+   <handler_interface>Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface</handler_interface>
     <fields>
         <name>
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>CatalogPriceRule %isolation%</default_value>
             <input>text</input>
             <group>rule_information</group>
         </name>
         <description>
             <attribute_code>description</attribute_code>
-            <default_value></default_value>
+            <default_value>Catalog Price Rule Description</default_value>
             <input>text</input>
             <group>rule_information</group>
         </description>
@@ -28,7 +27,7 @@
             <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>Active</default_value>
             <input>select</input>
             <group>rule_information</group>
         </is_active>
@@ -36,7 +35,9 @@
             <attribute_code>website_ids</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>
+                <key_0>Main Website</key_0>
+            </default_value>
             <input>multiselect</input>
             <group>rule_information</group>
         </website_ids>
@@ -44,18 +45,12 @@
             <attribute_code>customer_group_ids</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>
+                <key_0>NOT LOGGED IN</key_0>
+            </default_value>
             <input>multiselect</input>
             <group>rule_information</group>
         </customer_group_ids>
-        <website_ids>
-            <attribute_code>website_ids</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input>multiselect</input>
-            <group>rule_information</group>
-        </website_ids>
         <from_date>
             <attribute_code>from_date</attribute_code>
             <backend_type>date</backend_type>
@@ -76,7 +71,7 @@
             <attribute_code>simple_action</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value>By Percentage of the Original Price</default_value>
             <input>select</input>
             <group>actions</group>
         </simple_action>
@@ -84,7 +79,7 @@
             <attribute_code>discount_amount</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value>50</default_value>
             <input>text</input>
             <group>actions</group>
         </discount_amount>
@@ -104,7 +99,7 @@
         <rule>
             <attribute_code>rule</attribute_code>
             <backend_type>virtual</backend_type>
-            <is_required>0</is_required>l
+            <is_required>0</is_required>
             <group>conditions</group>
         </rule>
         <conditions>
@@ -129,6 +124,4 @@
             <group>rule_information</group>
         </stop_rules_processing>
     </fields>
-    <repository_class>Magento\CatalogRule\Test\Repository\CatalogRule</repository_class>
-    <handler_interface>Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface</handler_interface>
 </fixture>

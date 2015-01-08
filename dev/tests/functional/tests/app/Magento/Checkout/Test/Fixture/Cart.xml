@@ -6,9 +6,8 @@
 -->
 <fixture class="Magento\Checkout\Test\Fixture\Cart">
     <module>Magento_Checkout</module>
-    <type>flat</type>
-    <entity_type>sales_quote</entity_type>
-    <collection>Magento\Checkout\Model\Resource\Cart</collection>
+   <repository_class>Magento\Checkout\Test\Repository\Cart</repository_class>
+   <handler_interface>Magento\Checkout\Test\Handler\Cart\CartInterface</handler_interface>
     <fields>
         <entity_id>
             <attribute_code>entity_id</attribute_code>
@@ -375,10 +374,8 @@
         <checkout_data>
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
-            <group />
+            <group></group>
             <source>Magento\Checkout\Test\Fixture\Cart\CheckoutData</source>
         </checkout_data>
     </fields>
-    <repository_class>Magento\Checkout\Test\Repository\Cart</repository_class>
-    <handler_interface>Magento\Checkout\Test\Handler\Cart\CartInterface</handler_interface>
 </fixture>
