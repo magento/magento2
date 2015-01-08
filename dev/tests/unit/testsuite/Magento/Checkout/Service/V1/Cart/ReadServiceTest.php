@@ -45,7 +45,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $methods = [
             'getId', 'getStoreId', 'getCreatedAt', 'getUpdatedAt', 'getConvertedAt',
             'getIsActive', 'getIsVirtual', 'getItemsCount', 'getItemsQty', 'getCheckoutMethod', 'getReservedOrderId',
@@ -58,9 +58,9 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             'getStoreToBaseRate', 'getStoreToQuoteRate', 'getBaseToGlobalRate', 'getBaseToQuoteRate', 'setStoreId',
             'getShippingAddress', 'getAllItems',
         ];
-        $this->quoteMock = $this->getMock('\Magento\Sales\Model\Quote', $methods, [], '', false);
+        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', $methods, [], '', false);
         $this->quoteCollectionMock = $objectManager->getCollectionMock(
-            'Magento\Sales\Model\Resource\Quote\Collection', [$this->quoteMock]);
+            'Magento\Quote\Model\Resource\Quote\Collection', [$this->quoteMock]);
         $this->searchResultsBuilderMock =
             $this->getMock('\Magento\Checkout\Service\V1\Data\CartSearchResultsBuilder', [], [], '', false);
         $this->cartMapperMock = $this->getMock('\Magento\Checkout\Service\V1\Data\CartMapper', ['map'], [], '', false);

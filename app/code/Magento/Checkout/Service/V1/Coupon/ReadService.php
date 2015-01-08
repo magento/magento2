@@ -15,7 +15,7 @@ class ReadService implements ReadServiceInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -29,11 +29,11 @@ class ReadService implements ReadServiceInterface
     /**
      * Constructs a coupon read service object.
      *
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
      * @param CouponBuilder $couponBuilder Coupon builder.
      */
     public function __construct(
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         CouponBuilder $couponBuilder
     ) {
         $this->quoteRepository = $quoteRepository;
@@ -49,7 +49,7 @@ class ReadService implements ReadServiceInterface
      */
     public function get($cartId)
     {
-        /** @var  \Magento\Sales\Model\Quote $quote */
+        /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $data = [Coupon::COUPON_CODE => $quote->getCouponCode()];
         $output = $this->couponBuilder->populateWithArray($data)->create();
