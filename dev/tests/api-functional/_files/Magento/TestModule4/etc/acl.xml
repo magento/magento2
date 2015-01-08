@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Adminhtml::admin">
+                <resource id="Magento_TestModule4::all" title="TestModule4" sortOrder="1">
+                    <resource id="Magento_TestModule4::resource1" title="Resource1" sortOrder="20"/>
+                    <resource id="Magento_TestModule4::resource2" title="Resource2" sortOrder="10"/>
+                    <resource id="Magento_TestModule4::resource3" title="Resource3" sortOrder="30"/>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>
