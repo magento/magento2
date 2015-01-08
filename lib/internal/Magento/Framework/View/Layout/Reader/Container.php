@@ -86,7 +86,8 @@ class Container implements Layout\ReaderInterface
             default:
                 break;
         }
-        return $this->readerPool->interpret($readerContext, $currentElement);
+        $this->readerPool->interpret($readerContext, $currentElement);
+        return $this;
     }
 
     /**
