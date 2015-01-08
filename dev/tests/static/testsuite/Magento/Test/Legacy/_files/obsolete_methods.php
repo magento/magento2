@@ -2008,5 +2008,10 @@ return [
     ],
     ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
     ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
-    ['cleanTransactions', 'Magento\Paypal\Model\Observer']
+    ['cleanTransactions', 'Magento\Paypal\Model\Observer'],
+    ['compareIndexColumnProperties', 'Magento\Catalog\Model\Resource\Helper'],
+    ['getIsNullNotNullCondition', 'Magento\Catalog\Model\Resource\Helper'],
+    ['_getCategoryPath', 'Magento\Catalog\Model\Resource\Setup'],
+    ['_getCategoryEntityRow', 'Magento\Catalog\Model\Resource\Setup'],
+    ['createEavAttributeResource', 'Magento\Catalog\Model\Resource\Setup'],
 ];
