@@ -6,4 +6,5 @@
 -->
 <theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Config/etc/theme.xsd">
     <title>Default</title>
+    <version>0.1.0-alpha108</version>
 </theme>

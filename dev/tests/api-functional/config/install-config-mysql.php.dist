@@ -1,0 +1,29 @@
+<?php
+/**
+ * Magento console installer options for Web API functional tests. Are used in functional tests bootstrap.
+ *
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+return [
+    'language'                     => 'en_US',
+    'timezone'                     => 'America/Los_Angeles',
+    'currency'                     => 'USD',
+    'db_host'                      => 'localhost',
+    'db_name'                      => 'magento_functional_tests',
+    'db_user'                      => 'root',
+    'db_pass'                      => '',
+    'backend_frontname'            => 'backend',
+    'base_url'                     => 'http://localhost/',
+    'use_secure'                   => '0',
+    'use_rewrites'                 => '0',
+    'admin_lastname'               => 'Admin',
+    'admin_firstname'              => 'Admin',
+    'admin_email'                  => 'admin@example.com',
+    'admin_username'               => 'admin',
+    'admin_password'               => '123123q',
+    'admin_use_security_key'       => '0',
+    /* PayPal has limitation for order number - 20 characters. 10 digits prefix + 8 digits number is good enough */
+    'sales_order_increment_prefix' => time(),
+    'session_save'                 => 'db',
+    'cleanup_database'             => true,
+];

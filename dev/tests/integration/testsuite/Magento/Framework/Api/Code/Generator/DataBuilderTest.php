@@ -16,7 +16,8 @@ class DataBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\Framework\Filesystem\FileResolver::addIncludePath([__DIR__ . '/../../_files']);
+        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
+        $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/../../_files/Magento/Wonderland'));
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_objectManager->configure(
             [

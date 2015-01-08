@@ -6,7 +6,7 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\GiftMessage\Model\Message $message */
-$message = $objectManager->create('\Magento\GiftMessage\Model\Message');
+$message = $objectManager->create('Magento\GiftMessage\Model\Message');
 $message->setSender('Romeo');
 $message->setRecipient('Mercutio');
 $message->setMessage('I thought all for the best.');
