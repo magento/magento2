@@ -8,4 +8,6 @@
     <media>
         <preview_image>images/preview_image.jpg</preview_image>
     </media>
+    <version>0.1.0</version>
+    <parent>Magento/default</parent>
 </theme>
