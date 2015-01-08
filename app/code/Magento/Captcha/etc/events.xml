@@ -14,9 +14,9 @@
     <event name="controller_action_predispatch_customer_account_forgotpasswordpost">
         <observer name="captcha" instance="Magento\Captcha\Model\Observer" method="checkForgotpassword"/>
     </event>
-    <event name="admin_user_authenticate_before">
-        <observer name="captcha" instance="Magento\Captcha\Model\Observer" method="checkUserLoginBackend" />
-    </event>
+    <!--<event name="admin_user_authenticate_before">-->
+        <!--<observer name="captcha" instance="Magento\Captcha\Model\Observer" method="checkUserLoginBackend" />-->
+    <!--</event>-->
     <event name="controller_action_predispatch_checkout_onepage_saveBilling">
         <observer name="captcha_guest" instance="Magento\Captcha\Model\Observer" method="checkGuestCheckout" />
         <observer name="captcha_register" instance="Magento\Captcha\Model\Observer" method="checkRegisterCheckout" />
