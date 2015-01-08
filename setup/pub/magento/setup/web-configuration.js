@@ -15,7 +15,7 @@ angular.module('web-configuration', ['ngStorage'])
             https: {
                 front: false,
                 admin: false,
-                secure_url: ''
+                text: ''
             },
             rewrites: {
                 allowed: true
@@ -56,8 +56,8 @@ angular.module('web-configuration', ['ngStorage'])
         });
 
         $scope.$watch('config.address.base_url', function() {
-            if(angular.equals($scope.config.https.secure_url, '') || angular.isUndefined($scope.config.https.secure_url)){
-                $scope.config.https.secure_url = $scope.config.address.base_url.replace('http', 'https');
+            if(angular.equals($scope.config.https.text, '') || angular.isUndefined($scope.config.https.text)) {
+                $scope.config.https.text = $scope.config.address.base_url.replace('http', 'https');
             }
         });
 
