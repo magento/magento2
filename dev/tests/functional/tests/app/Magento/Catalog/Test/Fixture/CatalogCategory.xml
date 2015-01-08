@@ -37,6 +37,7 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>textarea</input>
+            <group>general_information</group>
         </description>
         <parent_id>
             <attribute_code>parent_id</attribute_code>
@@ -122,6 +123,7 @@
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
+            <group>general_information</group>
         </meta_title>
         <id>
             <attribute_code>id</attribute_code>
@@ -140,7 +142,7 @@
         <is_anchor>
             <attribute_code>is_anchor</attribute_code>
             <backend_type>virtual</backend_type>
-            <group>general_information</group>
+            <group>display_setting</group>
         </is_anchor>
         <url_key>
             <attribute_code>url_key</attribute_code>
@@ -157,6 +159,7 @@
             <backend_type>virtual</backend_type>
             <input>select</input>
             <group>display_setting</group>
+            <source>\Magento\Catalog\Test\Fixture\CatalogCategory\LandingPage</source>
         </landing_page>
         <display_mode>
             <attribute_code>display_mode</attribute_code>

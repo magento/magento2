@@ -15,7 +15,7 @@
             <class value="Magento\ConfigurableProduct\Test\TestCase\CreateWithAttributeTest" />
             <class value="Magento\Catalog\Test\TestCase\Product\CreateSimpleWithCustomOptionsAndCategoryTest" />
             <!--Category-->
-            <class value="Magento\Catalog\Test\TestCase\Category\CreateTest" />
+            <class value="Magento\Catalog\Test\TestCase\Category\CreateCategoryEntityTest" />
             <!--Stores-->
             <class value="Magento\Store\Test\TestCase\StoreTest" />
             <!--Quick Search-->

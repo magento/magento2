@@ -57,8 +57,8 @@ class Product extends DataFixture
         if (isset($placeholders['categories'])) {
             $this->categories = $placeholders['categories'];
         } else {
-            $this->_placeholders['category::getCategoryName'] = [$this, 'categoryProvider'];
-            $this->_placeholders['category::getCategoryId'] = [$this, 'categoryProvider'];
+            $this->_placeholders['category::getName'] = [$this, 'categoryProvider'];
+            $this->_placeholders['category::getId'] = [$this, 'categoryProvider'];
         }
     }
 
@@ -178,8 +178,7 @@ class Product extends DataFixture
     protected function getCategory($key)
     {
         if (!isset($this->categories[$key])) {
-            $category = Factory::getFixtureFactory()->getMagentoCatalogCategory();
-            $category->switchData('subcategory');
+            $category = Factory::getFixtureFactory()->getMagentoCatalogCatalogCategory();
             $category->persist();
             $this->categories[$key] = $category;
         }
@@ -204,9 +203,9 @@ class Product extends DataFixture
     public function getCategoryIds()
     {
         $categoryIds = [];
-        /** @var Category $category */
+        /** @var CatalogCategory $category */
         foreach ($this->categories as $category) {
-            $categoryIds[] = $category->getCategoryId();
+            $categoryIds[] = $category->getId();
         }
         return $categoryIds;
     }

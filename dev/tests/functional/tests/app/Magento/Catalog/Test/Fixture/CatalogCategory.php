@@ -64,6 +64,7 @@ class CatalogCategory extends InjectableFixture
         'is_required' => '0',
         'default_value' => '',
         'input' => 'textarea',
+        'group' => 'general_information',
     ];
 
     protected $parent_id = [
@@ -167,6 +168,7 @@ class CatalogCategory extends InjectableFixture
         'is_required' => '',
         'default_value' => '',
         'input' => '',
+        'group' => 'general_information',
     ];
 
     protected $id = [
@@ -190,7 +192,7 @@ class CatalogCategory extends InjectableFixture
     protected $is_anchor = [
         'attribute_code' => 'is_anchor',
         'backend_type' => 'virtual',
-        'group' => 'general_information',
+        'group' => 'display_setting',
     ];
 
     protected $url_key = [
@@ -210,6 +212,7 @@ class CatalogCategory extends InjectableFixture
         'backend_type' => 'virtual',
         'input' => 'select',
         'group' => 'display_setting',
+        'source' => '\Magento\Catalog\Test\Fixture\CatalogCategory\LandingPage'
     ];
 
     protected $display_mode = [

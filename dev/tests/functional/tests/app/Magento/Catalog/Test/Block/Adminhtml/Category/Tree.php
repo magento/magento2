@@ -97,15 +97,11 @@ class Tree extends Block
      */
     public function selectCategory(FixtureInterface $category, $fullPath = true)
     {
-        if ($category instanceof InjectableFixture) {
-            $parentPath = $this->prepareFullCategoryPath($category);
-            if (!$fullPath) {
-                array_pop($parentPath);
-            }
-            $path = implode('/', $parentPath);
-        } else {
-            $path = $category->getCategoryPath();
+        $parentPath = $this->prepareFullCategoryPath($category);
+        if (!$fullPath) {
+            array_pop($parentPath);
         }
+        $path = implode('/', $parentPath);
 
         $this->expandAllCategories();
         $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree')->setValue($path);
