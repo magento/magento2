@@ -53,7 +53,7 @@ class Generator
      * @param \Magento\Webapi\Model\Soap\Config $apiConfig
      * @param Factory $wsdlFactory
      * @param \Magento\Webapi\Model\Cache\Type $cache
-     * @param \Framework\Magento\Reflection\TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
