@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6fa42719525f72454c4c706f02f102cb",
+    "hash": "d784dd3070bb6f45bc8f1793feecb191",
     "packages": [
         {
             "name": "composer/composer",
@@ -118,7 +118,7 @@
                     "email": "justin.rainbow@gmail.com"
                 },
                 {
-                    "name": "Robert Schönthal",
+                    "name": "Robert SchÃ¶nthal",
                     "email": "robert.schoenthal@gmail.com",
                     "homepage": "http://digitalkaoz.net"
                 }
@@ -1621,7 +1621,7 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "a component that aids in manipulating and validating » Uniform Resource Identifiers (URIs)",
+            "description": "a component that aids in manipulating and validating Â» Uniform Resource Identifiers (URIs)",
             "keywords": [
                 "uri",
                 "zf2"
@@ -1863,7 +1863,7 @@
             ],
             "authors": [
                 {
-                    "name": "Dariusz Rumiński",
+                    "name": "Dariusz RumiÅ„ski",
                     "email": "dariusz.ruminski@gmail.com"
                 },
                 {
@@ -3143,6 +3143,7 @@
         "phpmd/phpmd": 0
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": "~5.4.11|~5.5.0|~5.6.0"
     },
