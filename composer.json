@@ -48,7 +48,8 @@
         "ext-curl": "*",
         "ext-iconv": "*",
         "sjparkinson/static-review": "~4.1",
-        "fabpot/php-cs-fixer": "~1.2"
+        "fabpot/php-cs-fixer": "~1.2",
+        "lusitanian/oauth": "~0.3"
     },
     "replace": {
         "magento/module-admin-notification": "self.version",
@@ -181,9 +182,6 @@
             ],
             "tinymce/tinymce": "lib/web/tiny_mce"
         }
-    },
-    "config": {
-        "use-include-path": true
     },
     "autoload": {
         "psr-4": {
