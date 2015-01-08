@@ -55,6 +55,12 @@ class OrderCreateTest extends WebapiAbstract
         $orderItem->setData('parent_item', ['weight' => 1]);
         $email = uniqid() . 'email@example.com';
         $orderItem->setSku('sku#1');
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $orderItem->setData('parent_item', $orderItem->getData() + ['parent_item' => null]);
+            $orderItem->setAdditionalData('test');
+        } else {
+            $orderItem->setData('parent_item', ['weight' => 1]);
+        }
         $orderPayment->setCcLast4('4444');
         $orderPayment->setMethod('checkmo');
         $orderPayment->setAccountStatus('ok');
