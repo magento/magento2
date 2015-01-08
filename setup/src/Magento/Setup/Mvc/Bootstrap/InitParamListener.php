@@ -44,8 +44,10 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      */
     public static function attachToConsoleRoutes($config)
     {
-        foreach ($config['console']['router']['routes'] as &$route) {
-            $route['options']['route'] .= ' [--' . self::BOOTSTRAP_PARAM . '=]';
+        if (isset($config['console']['router']['routes'])) {
+            foreach ($config['console']['router']['routes'] as &$route) {
+                $route['options']['route'] .= ' [--' . self::BOOTSTRAP_PARAM . '=]';
+            }
         }
         return $config;
     }
@@ -104,7 +106,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param MvcEvent $e
      * @return void
      */
-    public function onBootstrap(\Zend\Mvc\MvcEvent $e)
+    public function onBootstrap(MvcEvent $e)
     {
         /** @var Application $application */
         $application = $e->getApplication();
