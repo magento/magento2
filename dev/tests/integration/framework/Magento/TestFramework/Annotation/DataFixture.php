@@ -49,7 +49,7 @@ class DataFixture
         /* Start transaction before applying first fixture to be able to revert them all further */
         if ($this->_getFixtures($test)) {
             /* Re-apply even the same fixtures to guarantee data consistency */
-            if ($this->_appliedFixtures) {
+            if ($this->_appliedFixtures && $this->_getFixtures($test, 'method')) {
                 $param->requestTransactionRollback();
             }
             if ($this->getDbIsolationState($test) !== ['disabled']) {
@@ -71,7 +71,7 @@ class DataFixture
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         /* Isolate other tests from test-specific fixtures */
-        if ($this->_appliedFixtures && $this->_getFixtures($test)) {
+        if ($this->_appliedFixtures && $this->_getFixtures($test, 'method')) {
             if ($this->getDbIsolationState($test) !== ['disabled']) {
                 $param->requestTransactionRollback();
             } else {
@@ -102,12 +102,17 @@ class DataFixture
      * Retrieve fixtures from annotation
      *
      * @param \PHPUnit_Framework_TestCase $test
+     * @param string $scope
      * @return array
      * @throws \Magento\Framework\Exception
      */
-    protected function _getFixtures(\PHPUnit_Framework_TestCase $test)
+    protected function _getFixtures(\PHPUnit_Framework_TestCase $test, $scope = null)
     {
-        $annotations = $this->getAnnotations($test);
+        if ($scope === null) {
+            $annotations = $this->getAnnotations($test);
+        } else {
+            $annotations = $test->getAnnotations()[$scope];
+        }
         $result = [];
         if (!empty($annotations['magentoDataFixture'])) {
             foreach ($annotations['magentoDataFixture'] as $fixture) {
