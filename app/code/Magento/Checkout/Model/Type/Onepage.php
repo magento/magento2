@@ -491,13 +491,19 @@ class Onepage
                     )->setCollectShippingRates(
                         true
                     )->collectTotals();
-                    $shipping->save();
+                    if (!$this->isCheckoutMethodRegister()) {
+                        $shipping->save();
+                    }
                     $this->getCheckout()->setStepData('shipping', 'complete', true);
                     break;
             }
         }
 
-        $this->quoteRepository->save($this->getQuote());
+        if ($this->isCheckoutMethodRegister()) {
+            $this->quoteRepository->save($this->getQuote());
+        } else {
+            $address->save();
+        }
 
         $this->getCheckout()->setStepData(
             'billing',
@@ -514,6 +520,16 @@ class Onepage
         );
 
         return [];
+    }
+
+    /**
+     * Check whether checkout method is "register"
+     *
+     * @return bool
+     */
+    protected function isCheckoutMethodRegister()
+    {
+        return $this->getQuote()->getCheckoutMethod() == self::METHOD_REGISTER;
     }
 
     /**
