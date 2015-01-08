@@ -5,7 +5,7 @@
 @import "listings.less";
 @import "toolbar.less";
 
-@product-info-price: #575757;
+@product-info-price: @color-gray34;
 @product-h1-margin-bottom-desktop: @indent-s-base + @indent-xs-base;
 
 //
@@ -149,7 +149,7 @@
 
 .product-info-main {
     .product-info-price {
-        border-bottom: 1px #c1c1c1 solid;
+        border-bottom: 1px @color-gray-light5 solid;
         display: table;
         width: 100%;
         .css(color, @product-info-price);
