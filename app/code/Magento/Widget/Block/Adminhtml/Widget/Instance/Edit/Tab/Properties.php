@@ -16,7 +16,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Widget config parameter
      */
-    const WIDGET_PARAMETER = 'template';
+    const WIDGET_TEMPLATE_PARAMETER = 'template';
 
     /**
      * Prepare label for tab
@@ -55,11 +55,13 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      */
     public function isHidden()
     {
-        $parameters = $this->getWidgetInstance()->getWidgetConfigAsArray()['parameters'];
+        $widgetConfig = $this->getWidgetInstance()->getWidgetConfigAsArray();
 
-        foreach ($parameters as $key => $parameter) {
-            if ($parameter['visible'] == 1 && $key != self::WIDGET_PARAMETER) {
-                return false;
+        if (in_array('parameters', array_keys($widgetConfig))) {
+            foreach ($widgetConfig['parameters'] as $key => $parameter) {
+                if ($parameter['visible'] == 1 && $key != self::WIDGET_TEMPLATE_PARAMETER) {
+                    return false;
+                }
             }
         }
 
