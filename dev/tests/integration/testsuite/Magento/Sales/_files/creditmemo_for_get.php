@@ -20,7 +20,7 @@ $creditmemo->setIncrementId('100000001');
 $creditmemo->save();
 
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
-$orderItem = $objectManager->get('\Magento\Sales\Model\Order\Item');
+$orderItem = $objectManager->get('Magento\Sales\Model\Order\Item');
 $orderItem->setName('Test item')
     ->setQtyRefunded(1)
     ->setQtyInvoiced(10)

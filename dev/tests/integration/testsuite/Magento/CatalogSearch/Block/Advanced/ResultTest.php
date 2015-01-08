@@ -48,7 +48,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $category->setId(100500); // Any id - just for layer navigation
         /** @var \Magento\Catalog\Model\Layer\Resolver $resolver */
         $resolver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('\Magento\Catalog\Model\Layer\Resolver');
+            ->get('Magento\Catalog\Model\Layer\Resolver');
         $resolver->get()->setCurrentCategory($category);
 
         $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'search_result_list', 'block');

@@ -73,7 +73,7 @@ class WishlistProviderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->wishlistProvider = $objectManager->getObject(
-            '\Magento\Wishlist\Controller\WishlistProvider',
+            'Magento\Wishlist\Controller\WishlistProvider',
             [
                 'request' => $this->request,
                 'wishlistFactory' => $this->wishlistFactory,

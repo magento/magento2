@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/Api/etc/data_object.xsd">
+    <custom_attributes for="Magento\TestModuleMSC\Api\Data\ItemInterface">
+        <attribute code="custom_attribute_data_object" type="Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface" />
+        <attribute code="custom_attribute_string" type="string" />
+    </custom_attributes>
+    <custom_attributes for="Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface">
+        <attribute code="custom_attribute_nested" type="Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface" />
+        <attribute code="custom_attribute_int" type="int" />
+    </custom_attributes>
+</config>

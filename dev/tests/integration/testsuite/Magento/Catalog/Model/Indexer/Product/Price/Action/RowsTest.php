@@ -41,10 +41,10 @@ class RowsTest extends \PHPUnit_Framework_TestCase
         $this->_processor->reindexList([$this->_product->getId()]);
 
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            '\Magento\Catalog\Model\CategoryFactory'
+            'Magento\Catalog\Model\CategoryFactory'
         );
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            '\Magento\Catalog\Block\Product\ListProduct'
+            'Magento\Catalog\Block\Product\ListProduct'
         );
 
         $category = $categoryFactory->create()->load(9);

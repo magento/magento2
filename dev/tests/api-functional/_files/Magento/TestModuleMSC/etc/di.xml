@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+
+    <preference for="Magento\TestModuleMSC\Api\AllSoapAndRestInterface" type="Magento\TestModuleMSC\Model\AllSoapAndRest" />
+
+    <preference for="Magento\TestModuleMSC\Api\Data\ItemInterface" type="Magento\TestModuleMSC\Model\Data\Item" />
+    <preference for="Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface" type="Magento\TestModuleMSC\Model\Data\CustomAttributeDataObject" />
+    <preference for="Magento\TestModuleMSC\Api\Data\CustomAttributeNestedDataObjectInterface" type="Magento\TestModuleMSC\Model\Data\CustomAttributeNestedDataObject" />
+
+    <virtualType name="Magento\TestModuleMSC\Service\Config\TestModuleMSCMetadataConfig" type="Magento\Framework\Api\Config\MetadataConfig">
+        <arguments>
+            <argument name="attributeMetadataBuilder" xsi:type="object">Magento\TestModuleMSC\Model\Data\Eav\AttributeMetadataBuilder</argument>
+            <argument name="dataObjectClassName" xsi:type="string">Magento\TestModuleMSC\Model\Data\Item</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\TestModuleMSC\Model\Data\Item">
+        <arguments>
+            <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\Resource\Item</argument>
+            <argument name="metadataService" xsi:type="object">Magento\TestModuleMSC\Service\Config\TestModuleMSCMetadataConfig</argument>
+        </arguments>
+    </type>
+    <type name="Magento\TestModuleMSC\Model\Data\CustomAttributeDataObject">
+        <arguments>
+            <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\Resource\Item</argument>
+        </arguments>
+    </type>
+    <type name="Magento\TestModuleMSC\Model\Data\CustomAttributeNestedDataObject">
+        <arguments>
+            <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\Resource\Item</argument>
+        </arguments>
+    </type>
+
+</config>

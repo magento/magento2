@@ -34,7 +34,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository = $this->_objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
         $this->_addressBuilder = $this->_objectManager->create('Magento\Customer\Api\Data\AddressDataBuilder');
 
-        $builder = $this->_objectManager->create('\Magento\Customer\Api\Data\RegionDataBuilder');
+        $builder = $this->_objectManager->create('Magento\Customer\Api\Data\RegionDataBuilder');
         $region = $builder
             ->setRegionCode('AL')
             ->setRegion('Alabama')
