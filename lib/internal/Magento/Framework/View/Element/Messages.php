@@ -282,7 +282,7 @@ class Messages extends Template
                 foreach ($messages as $message) {
                     $html .= '<' . $this->secondLevelTagName . ' class="message ' . $type . '">';
                     $html .= '<' . $this->contentWrapTagName . $this->getUiId('message', $type) . '>';
-                    $html .= $message->getText();
+                    $html .= $this->_escaper->escapeHtml($message->getText());
                     $html .= '</' . $this->contentWrapTagName . '>';
                     $html .= '</' . $this->secondLevelTagName . '>';
                 }
