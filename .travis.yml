@@ -2,6 +2,7 @@ language: php
 php:
   - 5.4
   - 5.5
+  - 5.6
 env:
   - TEST_SUITE=unit
   - TEST_SUITE=integration
@@ -14,6 +15,12 @@ matrix:
       env: TEST_SUITE=static_phpcs
     - php: 5.4
       env: TEST_SUITE=static_annotation
+    - php: 5.6
+      env: TEST_SUITE=static_phpcs
+    - php: 5.6
+      env: TEST_SUITE=static_annotation
+  allow_failures:
+    - php: 5.6
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
