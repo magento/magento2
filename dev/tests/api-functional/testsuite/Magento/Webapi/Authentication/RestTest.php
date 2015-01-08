@@ -175,7 +175,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage HTTP/1.1 401
+     * @expectedExceptionMessage HTTP/1.1 400
      */
     public function testAccessApiInvalidAccessToken()
     {

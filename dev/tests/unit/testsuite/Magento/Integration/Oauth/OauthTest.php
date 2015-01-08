@@ -217,6 +217,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     public function testGetRequestTokenOutdatedConsumerKey()
     {
         $this->_setupConsumer();
+        $this->_setupNonce();
         $this->_consumerMock
             ->expects($this->any())
             ->method('isValidForTokenExchange')
@@ -521,7 +522,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /**
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
-     * @expectedException \Magento\Framework\Oauth\Exception
+     * @expectedException \Magento\Framework\Oauth\OauthInputException
      */
     public function testGetAccessTokenTokenRejected()
     {
