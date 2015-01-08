@@ -196,16 +196,6 @@ class Config extends \Magento\Framework\Object
     }
 
     /**
-     * Return URL for skin images placeholder
-     *
-     * @return string
-     */
-    public function getSkinImagePlaceholderUrl()
-    {
-        return $this->_assetRepo->getUrl(self::WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID);
-    }
-
-    /**
      * Return path for skin images placeholder
      *
      * @return string

@@ -12,9 +12,6 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
  */
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
-    const MEDIA = 'media';
-    const STATIC_VIEW = 'static';
-
     /**
      * @var \Magento\Store\Model\Store
      */
@@ -604,7 +601,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $expectedResult = 'pub/media';
         $this->filesystemMock->expects($this->once())
             ->method('getUri')
-            ->with(self::MEDIA)
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
             ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->store->getBaseMediaDir());
     }
@@ -617,7 +614,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $expectedResult = 'pub/static';
         $this->filesystemMock->expects($this->once())
             ->method('getUri')
-            ->with(self::STATIC_VIEW)
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::STATIC_VIEW)
             ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->store->getBaseStaticDir());
     }

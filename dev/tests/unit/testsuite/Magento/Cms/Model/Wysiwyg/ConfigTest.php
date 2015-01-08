@@ -9,8 +9,6 @@ namespace Magento\Cms\Model\Wysiwyg;
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    const WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID = 'Magento_Cms::images/wysiwyg_skin_image.png';
-
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
@@ -188,21 +186,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Config::getSkinImagePlaceholderUrl
-     */
-    public function testGetSkinImagePlaceholderUrl()
-    {
-        $url = '/some/url';
-
-        $this->assetRepoMock->expects($this->atLeastOnce())
-            ->method('getUrl')
-            ->with(self::WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID)
-            ->willReturn($url);
-
-        $this->assertEquals($url, $this->wysiwygConfig->getSkinImagePlaceholderUrl());
-    }
-
-    /**
      * @covers \Magento\Cms\Model\Wysiwyg\Config::getSkinImagePlaceholderPath
      */
     public function testGetSkinImagePlaceholderPath()
@@ -219,7 +202,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn($staticPath);
         $this->assetRepoMock->expects($this->any())
             ->method('createAsset')
-            ->with(self::WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID)
+            ->with(\Magento\Cms\Model\Wysiwyg\Config::WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID)
             ->willReturn($this->assetFileMock);
         $this->assetFileMock->expects($this->once())
             ->method('getPath')
