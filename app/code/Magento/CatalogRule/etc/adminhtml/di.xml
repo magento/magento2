@@ -31,4 +31,7 @@
     <type name="Magento\Catalog\Model\Resource\Eav\Attribute">
         <plugin name="change_product_attribute" type="Magento\CatalogRule\Plugin\Indexer\Product\Attribute"/>
     </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="price_plugin" type="Magento\CatalogRule\Plugin\Model\Product\Action"/>
+    </type>
 </config>

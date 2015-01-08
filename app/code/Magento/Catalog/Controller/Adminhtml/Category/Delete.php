@@ -7,6 +7,23 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
 {
+    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface */
+    protected $categoryRepository;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
+    ) {
+        parent::__construct($context, $resultRedirectFactory);
+        $this->categoryRepository = $categoryRepository;
+    }
+
     /**
      * Delete category action
      *
@@ -18,14 +35,14 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $categoryId = (int)$this->getRequest()->getParam('id');
+        $parentId = null;
         if ($categoryId) {
             try {
-                $category = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
+                $category = $this->categoryRepository->get($categoryId);
+                $parentId = $category->getParentId();
                 $this->_eventManager->dispatch('catalog_controller_category_delete', ['category' => $category]);
-
-                $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->setDeletedPath($category->getPath());
-
-                $category->delete();
+                $this->_auth->getAuthStorage()->setDeletedPath($category->getPath());
+                $this->categoryRepository->delete($category);
                 $this->messageManager->addSuccess(__('You deleted the category.'));
             } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -35,6 +52,6 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Category
                 return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
             }
         }
-        return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
+        return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => $parentId]);
     }
 }
