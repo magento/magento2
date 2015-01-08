@@ -5,8 +5,8 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
-use Magento\Catalog\Test\Fixture\CatalogCategory\LandingPage;
+use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Fixture\Category\LandingPage;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
@@ -29,16 +29,16 @@ class AssertCategoryPage extends AbstractConstraint
     /**
      * Assert that displayed category data on category page equals to passed from fixture.
      *
-     * @param CatalogCategory $category
-     * @param CatalogCategory $initialCategory
+     * @param Category $category
+     * @param Category $initialCategory
      * @param FixtureFactory $fixtureFactory
      * @param CatalogCategoryView $categoryView
      * @param Browser $browser
      * @return void
      */
     public function processAssert(
-        CatalogCategory $category,
-        CatalogCategory $initialCategory,
+        Category $category,
+        Category $initialCategory,
         FixtureFactory $fixtureFactory,
         CatalogCategoryView $categoryView,
         Browser $browser
@@ -55,8 +55,10 @@ class AssertCategoryPage extends AbstractConstraint
             ]
         );
         $categoryData = array_merge($initialCategory->getData(), $category->getData());
-        $categoryUrlKey = $category->hasData('url_key') ? $category->getUrlKey() : $category->getName();
-        $categoryUrl = $_ENV['app_frontend_url'] . strtolower($categoryUrlKey) . '.html';
+        $categoryUrlKey = $category->hasData('url_key')
+            ? strtolower($category->getUrlKey())
+            : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
+        $categoryUrl = $_ENV['app_frontend_url'] . $categoryUrlKey . '.html';
 
         $product->persist();
         $browser->open($categoryUrl);

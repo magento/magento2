@@ -5,7 +5,7 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Mtf\Constraint\AbstractAssertForm;
@@ -25,8 +25,7 @@ class AssertCategoryForm extends AbstractAssertForm
      * @var array
      */
     protected $skippedFixtureFields = [
-        'parent_id',
-        'url_key'
+        'parent_id'
     ];
 
     /**
@@ -34,22 +33,20 @@ class AssertCategoryForm extends AbstractAssertForm
      *
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param CatalogCategoryEdit $catalogCategoryEdit
+     * @param Category $category
      * @return void
      */
     public function processAssert(
         CatalogCategoryIndex $catalogCategoryIndex,
         CatalogCategoryEdit $catalogCategoryEdit,
-        CatalogCategory $category
+        Category $category
     ) {
         $catalogCategoryIndex->open();
         $catalogCategoryIndex->getTreeCategories()->selectCategory($category, true);
 
-        $fixtureData = $category->getData();
+        $fixtureData = $this->prepareFixtureData($category->getData());
         $formData = $catalogCategoryEdit->getEditForm()->getData($category);
-        $error = $this->verifyData(
-            $this->sortData($this->prepareFixtureData($fixtureData)),
-            $this->sortData($formData)
-        );
+        $error = $this->verifyData($this->sortData($fixtureData), $this->sortData($formData));
         \PHPUnit_Framework_Assert::assertEmpty($error);
     }
 
@@ -61,6 +58,14 @@ class AssertCategoryForm extends AbstractAssertForm
      */
     protected function prepareFixtureData(array $data)
     {
+        if (!isset($data['parent_id'])) {
+            $this->skippedFixtureFields[] = 'url_key';
+        }
+
+        if (isset($data['url_key'])) {
+            $data['url_key'] = strtolower($data['url_key']);
+        }
+
         return array_diff_key($data, array_flip($this->skippedFixtureFields));
     }
 

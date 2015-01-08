@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Mtf\Client\Element;
+use Mtf\Client\Element\Locator;
 
 /**
  * Product details tab.
@@ -13,9 +14,11 @@ use Mtf\Client\Element;
 class ProductDetails extends \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab
 {
     /**
-     * Locator for "Description" field.
+     * Locator for following sibling of category element.
+     *
+     * @var string
      */
-    protected $description = '[name$="[description]"]';
+    protected $categoryFollowingSibling = '//*[@id="attribute-category_ids-container"]/following-sibling::div[1]';
 
     /**
      * Fill data to fields on tab.
@@ -29,6 +32,7 @@ class ProductDetails extends \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\
         $data = $this->dataMapping($fields);
 
         if (isset($data['category_ids'])) {
+            /* Fix browser behavior for click by hidden list result of suggest(category) element */
             $this->scrollToCategory();
             $this->_fill([$data['category_ids']], $element);
             unset($data['category_ids']);
@@ -39,10 +43,12 @@ class ProductDetails extends \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\
     }
 
     /**
-     * Scroll  page to "Categories" field.
+     * Scroll page to "Categories" field.
+     *
+     * @return void
      */
     protected function scrollToCategory()
     {
-        $this->_rootElement->find($this->description)->click();
+        $this->_rootElement->find($this->categoryFollowingSibling, Locator::SELECTOR_XPATH)->click();
     }
 }

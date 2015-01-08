@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Magento\Catalog\Test\Fixture\CatalogCategory;
+namespace Magento\Catalog\Test\Fixture\Category;
 
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;

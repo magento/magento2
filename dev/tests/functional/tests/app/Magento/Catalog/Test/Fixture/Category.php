@@ -13,17 +13,17 @@ use Mtf\Fixture\InjectableFixture;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class CatalogCategory extends InjectableFixture
+class Category extends InjectableFixture
 {
     /**
      * @var string
      */
-    protected $repositoryClass = 'Magento\Catalog\Test\Repository\CatalogCategory';
+    protected $repositoryClass = 'Magento\Catalog\Test\Repository\Category';
 
     /**
      * @var string
      */
-    protected $handlerInterface = 'Magento\Catalog\Test\Handler\CatalogCategory\CatalogCategoryInterface';
+    protected $handlerInterface = 'Magento\Catalog\Test\Handler\Category\CategoryInterface';
 
     protected $defaultDataSet = [
         'name' => 'Category%isolation%',
@@ -74,7 +74,7 @@ class CatalogCategory extends InjectableFixture
         'default_value' => '0',
         'input' => '',
         'group' => null,
-        'source' => 'Magento\Catalog\Test\Fixture\CatalogCategory\ParentId',
+        'source' => 'Magento\Catalog\Test\Fixture\Category\ParentId',
     ];
 
     protected $created_at = [
@@ -212,7 +212,7 @@ class CatalogCategory extends InjectableFixture
         'backend_type' => 'virtual',
         'input' => 'select',
         'group' => 'display_setting',
-        'source' => '\Magento\Catalog\Test\Fixture\CatalogCategory\LandingPage'
+        'source' => '\Magento\Catalog\Test\Fixture\Category\LandingPage'
     ];
 
     protected $display_mode = [
@@ -226,7 +226,7 @@ class CatalogCategory extends InjectableFixture
         'attribute_code' => 'category_products',
         'backend_type' => 'virtual',
         'group' => 'category_products',
-        'source' => 'Magento\Catalog\Test\Fixture\CatalogCategory\CategoryProducts',
+        'source' => 'Magento\Catalog\Test\Fixture\Category\CategoryProducts',
     ];
 
     public function getEntityId()

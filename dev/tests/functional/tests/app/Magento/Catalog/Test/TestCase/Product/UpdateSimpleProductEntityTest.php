@@ -5,7 +5,7 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
@@ -58,10 +58,10 @@ class UpdateSimpleProductEntityTest extends Injectable
     /**
      * Prepare data
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return array
      */
-    public function __prepare(CatalogCategory $category)
+    public function __prepare(Category $category)
     {
         $category->persist();
         return [
@@ -74,14 +74,14 @@ class UpdateSimpleProductEntityTest extends Injectable
      *
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $editProductPage
-     * @param CatalogCategory $category
+     * @param Category $category
      * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         CatalogProductIndex $productGrid,
         CatalogProductEdit $editProductPage,
-        CatalogCategory $category,
+        Category $category,
         FixtureFactory $fixtureFactory
     ) {
         $this->initialProduct = $fixtureFactory->createByCode(

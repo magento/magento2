@@ -6,6 +6,7 @@ namespace Magento\Catalog\Test\Fixture;
 
 use Mtf\Factory\Factory;
 use Mtf\Fixture\DataFixture;
+use Mtf\ObjectManager;
 use Mtf\System\Config;
 
 class Product extends DataFixture
@@ -178,7 +179,10 @@ class Product extends DataFixture
     protected function getCategory($key)
     {
         if (!isset($this->categories[$key])) {
-            $category = Factory::getFixtureFactory()->getMagentoCatalogCatalogCategory();
+            $category = ObjectManager::getInstance()->create(
+                '\Magento\Catalog\Test\Fixture\Category',
+                ['dataSet' => 'default_subcategory']
+            );
             $category->persist();
             $this->categories[$key] = $category;
         }
@@ -203,7 +207,7 @@ class Product extends DataFixture
     public function getCategoryIds()
     {
         $categoryIds = [];
-        /** @var CatalogCategory $category */
+        /** @var Category $category */
         foreach ($this->categories as $category) {
             $categoryIds[] = $category->getId();
         }

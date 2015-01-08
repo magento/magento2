@@ -5,7 +5,7 @@
 
 namespace Magento\Catalog\Test\TestCase\Category;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Mtf\TestCase\Injectable;
@@ -59,10 +59,10 @@ class DeleteCategoryEntityTest extends Injectable
     /**
      * Delete category
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function test(CatalogCategory $category)
+    public function test(Category $category)
     {
         $this->markTestIncomplete('MAGETWO-31723');
         $category->persist();
