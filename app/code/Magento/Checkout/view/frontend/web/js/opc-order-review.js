@@ -36,8 +36,7 @@ define([
             var isAgreementValid = true;
             agreementFormsGroup.find('form').each(
                 function(){
-                    $(this).validation();
-                    isAgreementValid = isAgreementValid && $(this).validation && $(this).validation('isValid');
+                    isAgreementValid = $(this).validation() && $(this).validation('isValid') && isAgreementValid;
                 }
             );
 
