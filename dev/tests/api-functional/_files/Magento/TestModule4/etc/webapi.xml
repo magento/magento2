@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <route method="GET" url="/V1/testmodule4/:id">
+        <service class="Magento\TestModule4\Service\V1\DataObjectServiceInterface" method="getData" />
+        <resources>
+            <resource ref="Magento_TestModule4::resource1" />
+        </resources>
+    </route>
+    <route method="GET" url="/V1/testmodule4/scalar/:id">
+        <service class="Magento\TestModule4\Service\V1\DataObjectServiceInterface" method="scalarResponse" />
+        <resources>
+            <resource ref="Magento_TestModule4::resource1" />
+        </resources>
+    </route>
+    <route method="POST" url="/V1/testmodule4/:id">
+        <service class="Magento\TestModule4\Service\V1\DataObjectServiceInterface" method="updateData" />
+        <resources>
+            <resource ref="Magento_TestModule4::resource2" />
+        </resources>
+    </route>
+    <route method="POST" url="/V1/testmodule4/:id/nested">
+        <service class="Magento\TestModule4\Service\V1\DataObjectServiceInterface" method="nestedData" />
+        <resources>
+            <resource ref="Magento_TestModule4::resource3" />
+        </resources>
+    </route>
+    <route method="POST" url="/V1/testmodule4/extensibleDataObject/:id">
+        <service class="Magento\TestModule4\Service\V1\DataObjectServiceInterface" method="extensibleDataObject" />
+        <resources>
+            <resource ref="Magento_TestModule4::resource3" />
+        </resources>
+    </route>
+</routes>
