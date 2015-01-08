@@ -71,7 +71,7 @@ class DataFixture
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         /* Isolate other tests from test-specific fixtures */
-        if ($this->_appliedFixtures && $this->_getFixtures($test, 'method')) {
+        if ($this->_appliedFixtures && $this->_getFixtures($test) && !$this->hasDependsAnnotation($test)) {
             if ($this->getDbIsolationState($test) !== ['disabled']) {
                 $param->requestTransactionRollback();
             } else {
@@ -221,5 +221,15 @@ class DataFixture
             }
         }
         $this->_appliedFixtures = [];
+    }
+
+    /**
+     * @param \PHPUnit_Framework_TestCase $test
+     * @return bool
+     */
+    private function hasDependsAnnotation(\PHPUnit_Framework_TestCase $test)
+    {
+        $annotations = $test->getAnnotations();
+        return !empty($annotations['method']['depends']);
     }
 }
