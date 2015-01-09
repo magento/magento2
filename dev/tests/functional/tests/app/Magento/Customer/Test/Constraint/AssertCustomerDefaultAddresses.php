@@ -94,7 +94,9 @@ class AssertCustomerDefaultAddresses extends AbstractConstraint
         $pattern[] = $address->getCity() . ", " . $region . ", " . $address->getPostcode();
         $pattern[] = $address->getCountryId();
         $pattern[] = "T: " . $address->getTelephone();
-        $pattern[] = "F: " . $address->getFax();
+        if ($address->hasData('fax')) {
+            $pattern[] = "F: " . $address->getFax();
+        }
         return $pattern;
     }
 }

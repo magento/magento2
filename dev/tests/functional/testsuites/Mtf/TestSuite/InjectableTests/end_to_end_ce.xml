@@ -36,7 +36,7 @@
             <class value="Magento\UrlRewrite\Test\TestCase\CreateCategoryRewriteEntityTest" />
             <!--Customer-->
             <class value="Magento\Customer\Test\TestCase\BackendCustomerCreateTest" />
-            <class value="Magento\Customer\Test\TestCase\CreateOnFrontendTest" />
+            <class value="Magento\Customer\Test\TestCase\RegisterCustomerFrontendEntityTest" />
             <!--Review-->
             <class value="Magento\Review\Test\TestCase\ReviewTest" />
             <!--Tax-->
