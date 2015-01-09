@@ -230,6 +230,10 @@ class QuoteManagement
             $this->orderBuilder->setCustomerId($quote->getCustomer()->getId());
         }
         $this->orderBuilder->setQuoteId($quote->getId());
+        $this->orderBuilder->setCustomerEmail($quote->getCustomerEmail());
+        $this->orderBuilder->setCustomerFirstname($quote->getCustomerFirstname());
+        $this->orderBuilder->setCustomerMiddlename($quote->getCustomerMiddlename());
+        $this->orderBuilder->setCustomerLastname($quote->getCustomerLastname());
         $order = $this->orderBuilder->create();
         $this->eventManager->dispatch(
             'sales_model_service_quote_submit_before',

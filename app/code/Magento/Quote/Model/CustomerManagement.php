@@ -69,6 +69,7 @@ class CustomerManagement
                 $this->customerBuilder->populate($customer)->create(),
                 $quote->getPasswordHash()
             );
+            $quote->setCustomer($customer);
         }
         if (!$quote->getBillingAddress()->getId() && $customer->getDefaultBilling()) {
             $quote->getBillingAddress()->importCustomerAddressData(
@@ -85,6 +86,5 @@ class CustomerManagement
             );
             $quote->getShippingAddress()->setCustomerAddressId($customer->getDefaultShipping());
         }
-        $quote->setCustomer($customer);
     }
 }
