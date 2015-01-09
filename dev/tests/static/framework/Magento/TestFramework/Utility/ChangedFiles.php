@@ -5,6 +5,8 @@
 
 namespace Magento\TestFramework\Utility;
 
+use Magento\Framework\Test\Utility\Files;
+
 /**
  * A helper to gather various changed files
  * if INCREMENTAL_BUILD env variable is set by CI build infrastructure, only files changed in the
@@ -23,7 +25,12 @@ class ChangedFiles
         $fileHelper = \Magento\Framework\Test\Utility\Files::init();
         $allPhpFiles = $fileHelper->getPhpFiles();
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
-            $phpFiles = file($changedFilesList, FILE_IGNORE_NEW_LINES);
+            try {
+                $phpFiles = Files::readLists($changedFilesList);
+            } catch (\Exception $e){
+                $phpFiles = [];
+            }
+
             foreach ($phpFiles as $key => $phpFile) {
                 $phpFiles[$key] = $fileHelper->getPathToSource() . '/' . $phpFile;
             }
