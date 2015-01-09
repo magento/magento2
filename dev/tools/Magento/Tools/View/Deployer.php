@@ -37,6 +37,9 @@ class Deployer
     /** @var \Magento\Framework\App\View\Asset\Publisher */
     private $assetPublisher;
 
+    /** @var \Magento\Framework\App\View\Asset\BundleService */
+    private $bundleService;
+
     /** @var bool */
     private $isDryRun;
 
@@ -58,13 +61,15 @@ class Deployer
         Deployer\Log $logger,
         Version\StorageInterface $versionStorage,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $isDryRun = false
+        $isDryRun = false,
+        \Magento\Framework\App\View\Asset\BundleService $bundleService
     ) {
         $this->filesUtil = $filesUtil;
         $this->logger = $logger;
         $this->versionStorage = $versionStorage;
         $this->dateTime = $dateTime;
         $this->isDryRun = $isDryRun;
+        $this->bundleService = $bundleService;
     }
 
     /**
@@ -102,6 +107,7 @@ class Deployer
                 }
             }
         }
+        $this->bundleService->saveBundles();
         $version = $this->dateTime->toTimestamp(true);
         $this->logger->logMessage("New version of deployed files: {$version}");
         if (!$this->isDryRun) {
@@ -188,15 +194,17 @@ class Deployer
         }
         $this->logger->logDebug($logMessage);
         try {
+            $context = ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module];
             $asset = $this->assetRepo->createAsset(
                 $requestedPath,
-                ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module]
+                $context
             );
             $this->logger->logDebug("\tDeploying the file to '{$asset->getPath()}'", '.');
             if ($this->isDryRun) {
                 $asset->getContent();
             } else {
                 $this->assetPublisher->publish($asset);
+                $this->bundleService->collect($asset, $context);
             }
             $this->count++;
         } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {
