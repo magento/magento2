@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Catalog\Test\Repository\Category">
+        <default>
+            <config>
+            </config>
+            <data>
+            </data>
+        </default>
+        <anchor_category>
+            <config>
+            </config>
+            <data>
+                <fields>
+                    <is_anchor>
+                        <value>Yes</value>
+                        <input_value>1</input_value>
+                        <group>display_setting</group>
+                        <input>select</input>
+                    </is_anchor>
+                </fields>
+            </data>
+        </anchor_category>
+</repository>

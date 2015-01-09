@@ -24,7 +24,7 @@ class CatalogProductVirtual extends AbstractRepository
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
         $this->_data['default'] = [
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'status' => 'Product online',
             'website_ids' => ['Main Website'],
             'is_virtual' => 'Yes',
@@ -42,7 +42,7 @@ class CatalogProductVirtual extends AbstractRepository
         ];
 
         $this->_data['virtual_big_qty'] = [
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'status' => 'Product online',
             'website_ids' => ['Main Website'],
             'is_virtual' => 'Yes',
@@ -60,7 +60,7 @@ class CatalogProductVirtual extends AbstractRepository
         ];
 
         $this->_data['virtual_for_sales'] = [
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'status' => 'Product online',
             'website_ids' => ['Main Website'],
             'is_virtual' => 'Yes',
@@ -77,10 +77,10 @@ class CatalogProductVirtual extends AbstractRepository
             'checkout_data' => ['preset' => 'order_custom_price'],
         ];
 
-        $this->_data['50_dollar_product'] = [
-            'name' => '50_dollar_product %isolation%',
-            'sku' => '50_dollar_product_%isolation%',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+        $this->_data['product_50_dollar'] = [
+            'name' => 'product_50_dollar %isolation%',
+            'sku' => 'product_50_dollar_%isolation%',
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'status' => 'Product online',
             'website_ids' => ['Main Website'],
             'is_virtual' => 'Yes',
@@ -92,7 +92,7 @@ class CatalogProductVirtual extends AbstractRepository
                 'is_in_stock' => 'In Stock',
             ],
             'price' => ['value' => 50.00, 'preset' => '-'],
-            'checkout_data' => ['preset' => '50_dollar_product'],
+            'checkout_data' => ['preset' => 'product_50_dollar'],
         ];
     }
 }

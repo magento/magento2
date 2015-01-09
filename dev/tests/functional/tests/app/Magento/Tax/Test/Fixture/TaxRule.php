@@ -26,7 +26,7 @@ class TaxRule extends InjectableFixture
         'code' => 'TaxIdentifier%isolation%',
         'tax_rate' => [
             'dataSet' => [
-                'US-CA-*-Rate 1',
+                'US-CA-Rate_1',
             ],
         ],
     ];

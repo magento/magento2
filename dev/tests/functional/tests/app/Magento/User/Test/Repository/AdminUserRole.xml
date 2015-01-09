@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\User\Test\Repository\AdminUserRole">
+    <default>
+        <rolename>RoleName%isolation%</rolename>
+        <resource_access>All</resource_access>
+    </default>
+    <Administrators>
+        <rolename>Administrators</rolename>
+        <resource_access>All</resource_access>
+        <role_id>1</role_id>
+    </Administrators>
+    <role_sales>
+        <rolename>RoleName%isolation%</rolename>
+        <resource_access>Custom</resource_access>
+        <roles_resources>
+            <Sales>Magento_Sales::sales</Sales>
+            <Operation>Magento_Sales::sales_operation</Operation>
+            <Actions>Magento_Sales::actions</Actions>
+            <Orders>Magento_Sales::sales_order</Orders>
+            <Create>Magento_Sales::create</Create>
+            <View>Magento_Sales::actions_view</View>
+            <Send Order Email>Magento_Sales::email</Send Order Email>
+            <Reorder>Magento_Sales::reorder</Reorder>
+            <Edit>Magento_Sales::actions_edit</Edit>
+            <Cancel>Magento_Sales::cancel</Cancel>
+            <Accept or Deny Payment>Magento_Sales::review_payment</Accept or Deny Payment>
+            <Capture>Magento_Sales::capture</Capture>
+            <Invoice>Magento_Sales::invoice</Invoice>
+            <Credit Memos>Magento_Sales::creditmemo</Credit Memos>
+            <Hold>Magento_Sales::hold</Hold>
+            <Unhold>Magento_Sales::unhold</Unhold>
+            <Ship>Magento_Sales::ship</Ship>
+            <Comment>Magento_Sales::comment</Comment>
+            <Send Sales Emails>Magento_Sales::emails</Send Sales Emails>
+        </roles_resources>
+    </role_sales>
+</repository>

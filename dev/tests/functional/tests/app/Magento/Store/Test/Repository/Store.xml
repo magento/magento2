@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Store\Test\Repository\Store">
+    <default>
+        <group_id>
+            <dataSet>default</dataSet>
+        </group_id>
+        <name>Default Store View</name>
+        <code>base</code>
+        <is_active>Enabled</is_active>
+        <store_id>1</store_id>
+    </default>
+    <custom>
+        <group_id>
+            <dataSet>default</dataSet>
+        </group_id>
+        <name>Custom_Store_%isolation%</name>
+        <code>code_%isolation%</code>
+        <is_active>Enabled</is_active>
+    </custom>
+    <default_store_view>
+        <store_id>1</store_id>
+        <name>Default Store View</name>
+    </default_store_view>
+    <All Store Views>
+        <name>All Store Views</name>
+        <store_id>0</store_id>
+    </All Store Views>
+    <german>
+        <group_id>
+            <dataSet>default</dataSet>
+        </group_id>
+        <name>DE%isolation%</name>
+        <code>de%isolation%</code>
+        <is_active>Enabled</is_active>
+    </german>
+</repository>

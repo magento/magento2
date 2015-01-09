@@ -1,0 +1,229 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Customer\Test\Repository\AddressInjectable">
+    <US_address>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <email>John.Doe%isolation%@example.com</email>
+        <company>Magento %isolation%</company>
+        <street>6161 West Centinela Avenue</street>
+        <city>Culver City</city>
+        <region_id>California</region_id>
+        <postcode>90230</postcode>
+        <country_id>United States</country_id>
+        <telephone>555-55-555-55</telephone>
+        <default_billing>Yes</default_billing>
+        <default_shipping>Yes</default_shipping>
+    </US_address>
+    <US_address_default_billing>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <email>John.Doe%isolation%@example.com</email>
+        <company>Magento %isolation%</company>
+        <street>6161 West Centinela Avenue</street>
+        <city>Culver City</city>
+        <region_id>California</region_id>
+        <postcode>90230</postcode>
+        <country_id>United States</country_id>
+        <telephone>555-55-555-55</telephone>
+        <default_billing>Yes</default_billing>
+        <default_shipping>No</default_shipping>
+    </US_address_default_billing>
+    <US_NY_address_billing>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <email>John.Doe%isolation%@example.com</email>
+        <company>Magento %isolation%</company>
+        <street>6262 Fifth Avenue</street>
+        <city>New York</city>
+        <region_id>New York</region_id>
+        <postcode>90230</postcode>
+        <country_id>United States</country_id>
+        <telephone>555-55-555-55</telephone>
+        <default_billing>No</default_billing>
+        <default_shipping>No</default_shipping>
+    </US_NY_address_billing>
+    <US_address_default_shipping>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <email>John.Doe%isolation%@example.com</email>
+        <company>Magento %isolation%</company>
+        <street>6161 West Centinela Avenue</street>
+        <city>Culver City</city>
+        <region_id>California</region_id>
+        <postcode>90230</postcode>
+        <country_id>United States</country_id>
+        <telephone>555-55-555-55</telephone>
+        <default_billing>Yes</default_billing>
+        <default_shipping>No</default_shipping>
+    </US_address_default_shipping>
+    <default_US_address>
+        <company>Magento %isolation%</company>
+        <street>6161 West Centinela Avenue</street>
+        <city>Culver City</city>
+        <region_id>California</region_id>
+        <postcode>90230</postcode>
+        <country_id>United States</country_id>
+        <telephone>555-55-555-55</telephone>
+        <default_billing>Yes</default_billing>
+        <default_shipping>Yes</default_shipping>
+    </default_US_address>
+    <US_address_without_email>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <company>Magento %isolation%</company>
+        <street>6161 West Centinela Avenue</street>
+        <city>Culver City</city>
+        <region_id>California</region_id>
+        <postcode>90230</postcode>
+        <country_id>United States</country_id>
+        <telephone>555-55-555-55</telephone>
+    </US_address_without_email>
+    <US_address_NY>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <email>John.Doe%isolation%@example.com</email>
+        <company>Magento %isolation%</company>
+        <street>3222 Cliffside Drive</street>
+        <city>Binghamton</city>
+        <region_id>New York</region_id>
+        <postcode>13901</postcode>
+        <country_id>United States</country_id>
+        <telephone>607-481-7802</telephone>
+        <default_billing>Yes</default_billing>
+        <default_shipping>Yes</default_shipping>
+    </US_address_NY>
+    <US_address_TX>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <email>John.Doe%isolation%@example.com</email>
+        <company>Magento %isolation%</company>
+        <street>7700 W. Parmer Lane Bldg. D</street>
+        <city>Austin</city>
+        <region_id>Texas</region_id>
+        <postcode>78729 </postcode>
+        <country_id>United States</country_id>
+        <telephone>512-691-4400</telephone>
+        <default_billing>Yes</default_billing>
+        <default_shipping>Yes</default_shipping>
+    </US_address_TX>
+    <customer_US>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <email>JohnDoe_%isolation%@example.com</email>
+        <company>Magento %isolation%</company>
+        <city>Culver City</city>
+        <street>6161 West Centinela Avenue</street>
+        <postcode>90230</postcode>
+        <country_id>United States</country_id>
+        <region_id>California</region_id>
+        <telephone>555-55-555-55</telephone>
+        <fax>555-55-555-55</fax>
+    </customer_US>
+    <customer_UK>
+        <firstname>Jane</firstname>
+        <lastname>Doe</lastname>
+        <email>JaneDoe_%isolation%@example.com</email>
+        <company>Magento %isolation%</company>
+        <city>London</city>
+        <street>172, Westminster Bridge Rd</street>
+        <postcode>SE1 7RW</postcode>
+        <country_id>United Kingdom</country_id>
+        <region>London</region>
+        <telephone>444-44-444-44</telephone>
+        <fax>444-44-444-44</fax>
+    </customer_UK>
+    <address_US_1>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <company>Magento %isolation%</company>
+        <email>John.Doe%isolation%@example.com</email>
+        <city>Culver City</city>
+        <street>6161 West Centinela Avenue</street>
+        <postcode>90230</postcode>
+        <country_id>United States</country_id>
+        <region_id>California</region_id>
+        <telephone>555-55-555-55</telephone>
+    </address_US_1>
+    <address_US_2>
+        <firstname>Billy</firstname>
+        <lastname>Holiday</lastname>
+        <company>Magento %isolation%</company>
+        <email>b.holliday@example.net</email>
+        <city>New York</city>
+        <street>727 5th Ave</street>
+        <postcode>10022</postcode>
+        <country_id>United States</country_id>
+        <region_id>New York</region_id>
+        <telephone>777-77-77-77</telephone>
+    </address_US_2>
+    <address_data_US_1>
+        <firstname>John</firstname>
+        <lastname>Doe</lastname>
+        <company>Magento %isolation%</company>
+        <city>Culver City</city>
+        <street>6161 West Centinela Avenue</street>
+        <postcode>90230</postcode>
+        <country_id>United States</country_id>
+        <region_id>California</region_id>
+        <telephone>555-55-555-55</telephone>
+    </address_data_US_1>
+    <address_DE>
+        <firstname>Jan</firstname>
+        <lastname>Jansen</lastname>
+        <company>Magento %isolation%</company>
+        <city>Berlin</city>
+        <street>Augsburger Strabe 41</street>
+        <postcode>10789</postcode>
+        <country_id>Germany</country_id>
+        <region_id>Berlin</region_id>
+        <telephone>333-33-333-33</telephone>
+    </address_DE>
+    <address_UK>
+        <firstname>Jane</firstname>
+        <lastname>Doe</lastname>
+        <company>Magento %isolation%</company>
+        <city>London</city>
+        <street>172, Westminster Bridge Rd</street>
+        <postcode>SE1 7RW</postcode>
+        <country_id>United Kingdom</country_id>
+        <region_id>London</region_id>
+        <telephone>444-44-444-44</telephone>
+    </address_UK>
+    <address_UK_2>
+        <firstname>Jane</firstname>
+        <lastname>Doe</lastname>
+        <company>Magento %isolation%</company>
+        <city>Manchester</city>
+        <street>42 King Street West</street>
+        <postcode>M3 2WY</postcode>
+        <country_id>United Kingdom</country_id>
+        <region_id>Manchester</region_id>
+        <telephone>444-44-444-44</telephone>
+    </address_UK_2>
+    <address_UK_with_VAT>
+        <firstname>Jane</firstname>
+        <lastname>Doe</lastname>
+        <company>Magento %isolation%</company>
+        <city>London</city>
+        <street>172, Westminster Bridge Rd</street>
+        <postcode>SE1 7RW</postcode>
+        <country_id>United Kingdom</country_id>
+        <region_id>London</region_id>
+        <telephone>444-44-444-44</telephone>
+        <vat_id>584451913</vat_id>
+    </address_UK_with_VAT>
+    <address_US_pay_pal>
+        <firstname>Dmytro</firstname>
+        <lastname>Aponasenko</lastname>
+        <city>Culver City</city>
+        <street>1 Main St</street>
+        <postcode>90230</postcode>
+        <country_id>United States</country_id>
+        <region_id>Culver City</region_id>
+    </address_US_pay_pal>
+</repository>

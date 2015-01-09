@@ -5,18 +5,34 @@
  */
 -->
 <repository class="Magento\Tax\Test\Repository\TaxClass">
-    <item>
+    <taxable_goods>
         <class_id>2</class_id>
-        <class_name><![CDATA[Taxable Goods]]></class_name>
-        <class_type><![CDATA[PRODUCT]]></class_type>
+        <class_name>Taxable Goods</class_name>
+        <class_type>PRODUCT</class_type>
         <id>2</id>
-        <mtf_dataset_name><![CDATA[taxable_goods]]></mtf_dataset_name>
-    </item>
-    <item>
+        <mtf_dataset_name>Taxable Goods</mtf_dataset_name>
+    </taxable_goods>
+    <retail_customer>
         <class_id>3</class_id>
-        <class_name><![CDATA[Retail Customer]]></class_name>
-        <class_type><![CDATA[CUSTOMER]]></class_type>
+        <class_name>Retail Customer</class_name>
+        <class_type>CUSTOMER</class_type>
         <id>3</id>
-        <mtf_dataset_name><![CDATA[retail_customer]]></mtf_dataset_name>
-    </item>
+        <mtf_dataset_name>Retail Customer</mtf_dataset_name>
+    </retail_customer>
+    <customer_tax_class>
+        <class_name>Customer Tax Class %isolation%</class_name>
+        <class_type>CUSTOMER</class_type>
+    </customer_tax_class>
+    <product_tax_class>
+        <class_name>Product Tax Class %isolation%</class_name>
+        <class_type>PRODUCT</class_type>
+    </product_tax_class>
+    <None>
+        <class_name>None</class_name>
+        <class_type>PRODUCT</class_type>
+        <id>0</id>
+    </None>
+    <all>
+        <class_name>All</class_name>
+    </all>
 </repository>

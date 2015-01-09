@@ -1,0 +1,206 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\ConfigurableProduct\Test\Repository\ConfigurableProductInjectable">
+        <default>
+            <name>Test configurable product %isolation%</name>
+            <sku>sku_test_configurable_product_%isolation%</sku>
+            <price>
+                <value>120</value>
+            </price>
+            <weight>30</weight>
+            <status>Product online</status>
+            <visibility>Catalog, Search</visibility>
+            <tax_class_id>
+                <dataSet>taxable_goods</dataSet>
+            </tax_class_id>
+            <url_key>configurable-product-%isolation%</url_key>
+            <configurable_attributes_data>
+                <preset>default</preset>
+            </configurable_attributes_data>
+            <quantity_and_stock_status>
+                <is_in_stock>In Stock</is_in_stock>
+            </quantity_and_stock_status>
+            <website_ids>
+                <key_0>Main Website</key_0>
+            </website_ids>
+            <attribute_set_id>
+                <dataSet>default</dataSet>
+            </attribute_set_id>
+            <checkout_data>
+                <preset>default</preset>
+            </checkout_data>
+        </default>
+        <product_with_size>
+            <name>Test configurable product with size %isolation%</name>
+            <sku>sku_test_configurable_product_%isolation%</sku>
+            <price>
+                <value>120</value>
+            </price>
+            <weight>30</weight>
+            <status>Product online</status>
+            <visibility>Catalog, Search</visibility>
+            <tax_class_id>
+                <dataSet>taxable_goods</dataSet>
+            </tax_class_id>
+            <url_key>configurable-product-%isolation%</url_key>
+            <configurable_attributes_data>
+                <preset>size</preset>
+            </configurable_attributes_data>
+            <quantity_and_stock_status>
+                <is_in_stock>In Stock</is_in_stock>
+            </quantity_and_stock_status>
+            <website_ids>
+                <key_0>Main Website</key_0>
+            </website_ids>
+            <attribute_set_id>
+                <dataSet>default</dataSet>
+            </attribute_set_id>
+            <checkout_data>
+                <preset>default</preset>
+            </checkout_data>
+        </product_with_size>
+        <product_with_color_and_size>
+            <name>Test configurable product with color and size %isolation%</name>
+            <sku>sku_test_configurable_product_%isolation%</sku>
+            <price>
+                <value>120</value>
+            </price>
+            <weight>30</weight>
+            <status>Product online</status>
+            <visibility>Catalog, Search</visibility>
+            <tax_class_id>
+                <dataSet>taxable_goods</dataSet>
+            </tax_class_id>
+            <url_key>configurable-product-%isolation%</url_key>
+            <configurable_attributes_data>
+                <preset>color_and_size</preset>
+            </configurable_attributes_data>
+            <quantity_and_stock_status>
+                <is_in_stock>In Stock</is_in_stock>
+            </quantity_and_stock_status>
+            <website_ids>
+                <key_0>Main Website</key_0>
+            </website_ids>
+            <attribute_set_id>
+                <dataSet>default</dataSet>
+            </attribute_set_id>
+            <checkout_data>
+                <preset>default</preset>
+            </checkout_data>
+        </product_with_color_and_size>
+        <one_variation>
+            <name>Test configurable product %isolation%</name>
+            <sku>sku_test_configurable_product_%isolation%</sku>
+            <price>
+                <value>120</value>
+            </price>
+            <weight>30</weight>
+            <status>Product online</status>
+            <visibility>Catalog, Search</visibility>
+            <tax_class_id>
+                <dataSet>taxable_goods</dataSet>
+            </tax_class_id>
+            <url_key>test-configurable-product-%isolation%</url_key>
+            <configurable_attributes_data>
+                <preset>one_variation</preset>
+            </configurable_attributes_data>
+            <quantity_and_stock_status>
+                <is_in_stock>In Stock</is_in_stock>
+            </quantity_and_stock_status>
+            <website_ids>
+                <key_0>Main Website</key_0>
+            </website_ids>
+            <attribute_set_id>
+                <dataSet>default</dataSet>
+            </attribute_set_id>
+        </one_variation>
+        <not_virtual_for_type_switching>
+            <name>Test configurable product %isolation%</name>
+            <sku>sku_test_configurable_product_%isolation%</sku>
+            <price>
+                <value>120</value>
+            </price>
+            <is_virtual>No</is_virtual>
+            <weight>30</weight>
+            <status>Product online</status>
+            <visibility>Catalog, Search</visibility>
+            <tax_class_id>
+                <dataSet>taxable_goods</dataSet>
+            </tax_class_id>
+            <url_key>configurable-product-%isolation%</url_key>
+            <configurable_attributes_data>
+                <preset>default</preset>
+            </configurable_attributes_data>
+            <quantity_and_stock_status>
+                <is_in_stock>In Stock</is_in_stock>
+            </quantity_and_stock_status>
+            <website_ids>
+                <key_0>Main Website</key_0>
+            </website_ids>
+            <attribute_set_id>
+                <dataSet>default</dataSet>
+            </attribute_set_id>
+            <checkout_data>
+                <preset>default</preset>
+            </checkout_data>
+        </not_virtual_for_type_switching>
+        <with_one_option>
+            <name>Test configurable product %isolation%</name>
+            <sku>sku_test_configurable_product_%isolation%</sku>
+            <price>
+                <value>10</value>
+            </price>
+            <weight>30</weight>
+            <status>Product online</status>
+            <visibility>Catalog, Search</visibility>
+            <tax_class_id>
+                <dataSet>taxable_goods</dataSet>
+            </tax_class_id>
+            <url_key>configurable-product-%isolation%</url_key>
+            <configurable_attributes_data>
+                <preset>with_one_option</preset>
+            </configurable_attributes_data>
+            <quantity_and_stock_status>
+                <is_in_stock>In Stock</is_in_stock>
+            </quantity_and_stock_status>
+            <website_ids>
+                <key_0>Main Website</key_0>
+            </website_ids>
+            <attribute_set_id>
+                <dataSet>default</dataSet>
+            </attribute_set_id>
+            <checkout_data>
+                <preset>with_one_option</preset>
+            </checkout_data>
+        </with_one_option>
+        <with_out_of_stock_item>
+            <name>Test configurable product %isolation%</name>
+            <sku>sku_test_configurable_product_%isolation%</sku>
+            <price>
+                <value>120</value>
+            </price>
+            <weight>30</weight>
+            <status>Product online</status>
+            <visibility>Catalog, Search</visibility>
+            <tax_class_id>
+                <dataSet>taxable_goods</dataSet>
+            </tax_class_id>
+            <url_key>test-configurable-product-%isolation%</url_key>
+            <configurable_attributes_data>
+                <preset>with_out_of_stock_item</preset>
+            </configurable_attributes_data>
+            <quantity_and_stock_status>
+                <is_in_stock>In Stock</is_in_stock>
+            </quantity_and_stock_status>
+            <website_ids>
+                <key_0>Main Website</key_0>
+            </website_ids>
+            <attribute_set_id>
+                <dataSet>default</dataSet>
+            </attribute_set_id>
+        </with_out_of_stock_item>
+</repository>

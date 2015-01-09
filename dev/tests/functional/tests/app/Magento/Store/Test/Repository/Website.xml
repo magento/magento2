@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Store\Test\Repository\Website">
+    <all_websites>
+        <name>All Websites</name>
+        <website_id>0</website_id>
+    </all_websites>
+    <main_website>
+        <name>Main Website</name>
+        <code>base</code>
+        <sort_order>0</sort_order>
+        <website_id>1</website_id>
+    </main_website>
+    <custom_website>
+        <name>Web_Site_%isolation%</name>
+        <code>code_%isolation%</code>
+    </custom_website>
+</repository>

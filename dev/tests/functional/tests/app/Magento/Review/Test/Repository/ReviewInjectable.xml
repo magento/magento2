@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Review\Test\Repository\ReviewInjectable">
+    <review_for_simple_product_with_rating>
+        <status_id>Approved</status_id>
+        <select_stores>
+            <key_0>Main Website/Main Website Store/Default Store View</key_0>
+        </select_stores>
+        <nickname>nickname_%isolation%</nickname>
+        <title>title_%isolation%</title>
+        <detail>review_detail_%isolation%</detail>
+        <ratings>
+            <key_0>
+                <dataSet>visibleOnDefaultWebsite</dataSet>
+                <rating>5</rating>
+            </key_0>
+        </ratings>
+        <entity_id>
+            <dataSet>catalogProductSimple::default</dataSet>
+        </entity_id>
+    </review_for_simple_product_with_rating>
+    <frontend_review>
+        <status_id>Pending</status_id>
+        <select_stores>
+            <key_0>Main Website/Main Website Store/Default Store View</key_0>
+        </select_stores>
+        <nickname>nickname_%isolation%</nickname>
+        <title>title_%isolation%</title>
+        <detail>review_detail_%isolation%</detail>
+        <entity_id>
+            <dataSet>catalogProductSimple::default</dataSet>
+        </entity_id>
+    </frontend_review>
+</repository>

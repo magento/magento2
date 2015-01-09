@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Review\Test\Repository\Rating">
+    <default>
+        <rating_code>Rating %isolation%</rating_code>
+        <stores>
+            <key_0>Main Website/Main Website Store/Default Store View</key_0>
+        </stores>
+        <is_active>Yes</is_active>
+    </default>
+    <visibleOnDefaultWebsite>
+        <rating_code>productRating_%isolation%</rating_code>
+        <stores>
+            <key_0>Main Website/Main Website Store/Default Store View</key_0>
+        </stores>
+        <is_active>Yes</is_active>
+    </visibleOnDefaultWebsite>
+</repository>

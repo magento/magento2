@@ -365,7 +365,7 @@
             <source>Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable\CheckoutData</source>
         </checkout_data>
         <tax_class>
-            <default_value>Taxable Goods</default_value>
+            <default_value>taxable_goods</default_value>
         </tax_class>
     </fields>
 </fixture>

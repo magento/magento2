@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Catalog\Test\Repository\CatalogCategory">
+    <default_category>
+        <name>Default Category</name>
+        <parent_id>1</parent_id>
+        <is_active>Yes</is_active>
+        <id>2</id>
+    </default_category>
+    <default_subcategory>
+        <name>DefaultSubcategory%isolation%</name>
+        <url_key>default-subcategory-%isolation%</url_key>
+        <parent_id>
+            <dataSet>default_category</dataSet>
+        </parent_id>
+        <is_active>Yes</is_active>
+        <include_in_menu>Yes</include_in_menu>
+    </default_subcategory>
+    <default_anchor_subcategory>
+        <name>DefaultSubcategory%isolation%</name>
+        <url_key>default-subcategory-%isolation%</url_key>
+        <parent_id>
+            <dataSet>default_category</dataSet>
+        </parent_id>
+        <is_active>Yes</is_active>
+        <is_anchor>Yes</is_anchor>
+        <include_in_menu>Yes</include_in_menu>
+    </default_anchor_subcategory>
+    <root_category>
+        <name>RootCategory%isolation%</name>
+        <url_key>root-category-%isolation%</url_key>
+        <parent_id>1</parent_id>
+        <is_active>Yes</is_active>
+        <include_in_menu>Yes</include_in_menu>
+    </root_category>
+    <root_subcategory>
+        <name>RootSubCategory%isolation%</name>
+        <url_key>root-sub-category-%isolation%</url_key>
+        <parent_id>
+            <dataSet>root_category</dataSet>
+        </parent_id>
+        <is_active>Yes</is_active>
+        <include_in_menu>Yes</include_in_menu>
+    </root_subcategory>
+</repository>

@@ -31,7 +31,7 @@ class ConfigurableProductInjectable extends AbstractRepository
             'weight' => 30.0000,
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'configurable-product-%isolation%',
             'configurable_attributes_data' => ['preset' => 'default'],
             'quantity_and_stock_status' => [
@@ -49,7 +49,7 @@ class ConfigurableProductInjectable extends AbstractRepository
             'weight' => 30.0000,
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'configurable-product-%isolation%',
             'configurable_attributes_data' => ['preset' => 'size'],
             'quantity_and_stock_status' => [
@@ -67,7 +67,7 @@ class ConfigurableProductInjectable extends AbstractRepository
             'weight' => 30.0000,
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'configurable-product-%isolation%',
             'configurable_attributes_data' => ['preset' => 'color_and_size'],
             'quantity_and_stock_status' => [
@@ -85,7 +85,7 @@ class ConfigurableProductInjectable extends AbstractRepository
             'weight' => 30.0000,
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'test-configurable-product-%isolation%',
             'configurable_attributes_data' => ['preset' => 'one_variation'],
             'quantity_and_stock_status' => [
@@ -103,7 +103,7 @@ class ConfigurableProductInjectable extends AbstractRepository
             'weight' => 30.0000,
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'configurable-product-%isolation%',
             'configurable_attributes_data' => ['preset' => 'default'],
             'quantity_and_stock_status' => [
@@ -121,7 +121,7 @@ class ConfigurableProductInjectable extends AbstractRepository
             'weight' => 30.0000,
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'configurable-product-%isolation%',
             'configurable_attributes_data' => ['preset' => 'with_one_option'],
             'quantity_and_stock_status' => [
@@ -139,7 +139,7 @@ class ConfigurableProductInjectable extends AbstractRepository
             'weight' => 30.0000,
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'test-configurable-product-%isolation%',
             'configurable_attributes_data' => ['preset' => 'with_out_of_stock_item'],
             'quantity_and_stock_status' => [

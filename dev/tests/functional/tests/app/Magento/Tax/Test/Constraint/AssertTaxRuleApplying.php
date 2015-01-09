@@ -125,7 +125,7 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         $this->productSimple = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => '100_dollar_product_for_tax_rule',
+                'dataSet' => 'product_100_dollar_for_tax_rule',
                 'data' => [
                     'tax_class_id' => ['tax_product_class' => $taxProductClass],
                 ]

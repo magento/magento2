@@ -1,0 +1,120 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Catalog\Test\Repository\CatalogProductVirtual">
+    <default>
+        <tax_class_id>
+            <dataSet>taxable_goods</dataSet>
+        </tax_class_id>
+        <status>Product online</status>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <is_virtual>Yes</is_virtual>
+        <url_key>virtual-product%isolation%</url_key>
+        <visibility>Catalog, Search</visibility>
+        <attribute_set_id>
+            <dataSet>default</dataSet>
+        </attribute_set_id>
+        <name>Virtual product %isolation%</name>
+        <sku>sku_virtual_product_%isolation%</sku>
+        <quantity_and_stock_status>
+            <qty>666</qty>
+            <is_in_stock>In Stock</is_in_stock>
+        </quantity_and_stock_status>
+        <price>
+            <value>10</value>
+            <preset>-</preset>
+        </price>
+        <checkout_data>
+            <preset>order_default</preset>
+        </checkout_data>
+    </default>
+    <virtual_big_qty>
+        <tax_class_id>
+            <dataSet>taxable_goods</dataSet>
+        </tax_class_id>
+        <status>Product online</status>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <is_virtual>Yes</is_virtual>
+        <url_key>virtual-product%isolation%</url_key>
+        <visibility>Catalog, Search</visibility>
+        <attribute_set_id>
+            <dataSet>default</dataSet>
+        </attribute_set_id>
+        <name>Virtual product %isolation%</name>
+        <sku>sku_virtual_product_%isolation%</sku>
+        <quantity_and_stock_status>
+            <qty>1000</qty>
+            <is_in_stock>In Stock</is_in_stock>
+        </quantity_and_stock_status>
+        <price>
+            <value>10</value>
+            <preset>-</preset>
+        </price>
+        <checkout_data>
+            <preset>order_big_qty</preset>
+        </checkout_data>
+    </virtual_big_qty>
+    <virtual_for_sales>
+        <tax_class_id>
+            <dataSet>taxable_goods</dataSet>
+        </tax_class_id>
+        <status>Product online</status>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <is_virtual>Yes</is_virtual>
+        <url_key>virtual-product%isolation%</url_key>
+        <visibility>Catalog, Search</visibility>
+        <attribute_set_id>
+            <dataSet>default</dataSet>
+        </attribute_set_id>
+        <name>Virtual product %isolation%</name>
+        <sku>sku_virtual_product_%isolation%</sku>
+        <quantity_and_stock_status>
+            <qty>666</qty>
+            <is_in_stock>In Stock</is_in_stock>
+        </quantity_and_stock_status>
+        <price>
+            <value>10</value>
+            <preset>-</preset>
+        </price>
+        <checkout_data>
+            <preset>order_custom_price</preset>
+        </checkout_data>
+    </virtual_for_sales>
+    <product_50_dollar>
+        <name>product_50_dollar %isolation%</name>
+        <sku>product_50_dollar_%isolation%</sku>
+        <tax_class_id>
+            <dataSet>taxable_goods</dataSet>
+        </tax_class_id>
+        <status>Product online</status>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <is_virtual>Yes</is_virtual>
+        <url_key>virtual-product%isolation%</url_key>
+        <visibility>Catalog, Search</visibility>
+        <attribute_set_id>
+            <dataSet>default</dataSet>
+        </attribute_set_id>
+        <quantity_and_stock_status>
+            <qty>111</qty>
+            <is_in_stock>In Stock</is_in_stock>
+        </quantity_and_stock_status>
+        <price>
+            <value>50</value>
+            <preset>-</preset>
+        </price>
+        <checkout_data>
+            <preset>product_50_dollar</preset>
+        </checkout_data>
+    </product_50_dollar>
+</repository>

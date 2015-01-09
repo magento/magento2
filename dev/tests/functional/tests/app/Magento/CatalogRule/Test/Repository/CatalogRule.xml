@@ -1,0 +1,99 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\CatalogRule\Test\Repository\CatalogRule">
+    <active_catalog_rule>
+        <name>Active Catalog Rule</name>
+        <description>Rule Description</description>
+        <is_active>Active</is_active>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <customer_group_ids>
+            <key_0>NOT LOGGED IN</key_0>
+            <key_1>General</key_1>
+            <key_2>Wholesale</key_2>
+            <key_3>Retailer</key_3>
+        </customer_group_ids>
+        <from_date>3/25/14</from_date>
+        <to_date>3/29/14</to_date>
+        <sort_order>1</sort_order>
+        <simple_action>By Percentage of the Original Price</simple_action>
+        <discount_amount>50</discount_amount>
+    </active_catalog_rule>
+    <inactive_catalog_price_rule>
+        <name>Inactive Catalog Price Rule</name>
+        <is_active>Inactive</is_active>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <customer_group_ids>
+            <key_0>NOT LOGGED IN</key_0>
+        </customer_group_ids>
+        <simple_action>By Percentage of the Original Price</simple_action>
+        <discount_amount>50</discount_amount>
+    </inactive_catalog_price_rule>
+    <active_catalog_price_rule_with_conditions>
+        <name>Active Catalog Rule with conditions %isolation%</name>
+        <description>Rule Description</description>
+        <is_active>Active</is_active>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <customer_group_ids>
+            <key_0>NOT LOGGED IN</key_0>
+            <key_1>General</key_1>
+            <key_2>Wholesale</key_2>
+            <key_3>Retailer</key_3>
+        </customer_group_ids>
+        <rule>[Category|is|2]</rule>
+        <simple_action>By Percentage of the Original Price</simple_action>
+        <discount_amount>10</discount_amount>
+    </active_catalog_price_rule_with_conditions>
+    <catalog_price_rule_priority_0>
+        <name>catalog_price_rule_priority_0</name>
+        <description>-50% of price, Priority = 0</description>
+        <is_active>Active</is_active>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <customer_group_ids>
+            <key_0>NOT LOGGED IN</key_0>
+        </customer_group_ids>
+        <sort_order>0</sort_order>
+        <simple_action>By Percentage of the Original Price</simple_action>
+        <discount_amount>50</discount_amount>
+    </catalog_price_rule_priority_0>
+    <catalog_price_rule_priority_1_stop_further_rules>
+        <name>catalog_price_rule_priority_1_stop_further_rules</name>
+        <description>Priority 1, -5 By fixed amount</description>
+        <is_active>Active</is_active>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <customer_group_ids>
+            <key_0>NOT LOGGED IN</key_0>
+        </customer_group_ids>
+        <sort_order>1</sort_order>
+        <simple_action>By Fixed Amount</simple_action>
+        <discount_amount>5</discount_amount>
+        <stop_rules_processing>Yes</stop_rules_processing>
+    </catalog_price_rule_priority_1_stop_further_rules>
+    <catalog_price_rule_priority_2>
+        <name>catalog_price_rule_priority_2</name>
+        <description>Priority 2, -10 By fixed amount</description>
+        <is_active>Active</is_active>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <customer_group_ids>
+            <key_0>NOT LOGGED IN</key_0>
+        </customer_group_ids>
+        <sort_order>2</sort_order>
+        <simple_action>By Fixed Amount</simple_action>
+        <discount_amount>10</discount_amount>
+    </catalog_price_rule_priority_2>
+</repository>

@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Store\Test\Repository\StoreGroup">
+    <default>
+        <website_id>
+            <dataSet>main_website</dataSet>
+        </website_id>
+        <name>Main Website Store</name>
+        <group_id>1</group_id>
+        <root_category_id>
+            <dataSet>default_category</dataSet>
+        </root_category_id>
+    </default>
+    <custom>
+        <website_id>
+            <dataSet>main_website</dataSet>
+        </website_id>
+        <name>store_name_%isolation%</name>
+        <root_category_id>
+            <dataSet>default_category</dataSet>
+        </root_category_id>
+    </custom>
+</repository>

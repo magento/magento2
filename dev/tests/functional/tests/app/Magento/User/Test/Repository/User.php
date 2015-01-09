@@ -23,9 +23,6 @@ class User extends AbstractRepository
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        /** @var \Mtf\System\Config $systemConfig */
-        $systemConfig = ObjectManager::getInstance()->create('Mtf\System\Config');
-        $superAdminPassword = $systemConfig->getConfigParam('application/backend_user_credentials/password');
         $this->_data['default'] = [
             'username' => 'admin',
             'firstname' => 'FirstName%isolation%',

@@ -20,7 +20,7 @@ class TaxClass extends AbstractRepository
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        $this->_data['Taxable Goods'] = [
+        $this->_data['taxable_goods'] = [
             'class_id' => '2',
             'class_name' => 'Taxable Goods',
             'class_type' => 'PRODUCT',
@@ -28,7 +28,7 @@ class TaxClass extends AbstractRepository
             'mtf_dataset_name' => 'Taxable Goods',
         ];
 
-        $this->_data['Retail Customer'] = [
+        $this->_data['retail_customer'] = [
             'class_id' => '3',
             'class_name' => 'Retail Customer',
             'class_type' => 'CUSTOMER',

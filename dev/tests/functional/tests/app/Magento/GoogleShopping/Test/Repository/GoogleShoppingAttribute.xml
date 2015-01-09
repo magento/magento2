@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\GoogleShopping\Test\Repository\GoogleShoppingAttribute">
+    <default>
+        <target_country>United States</target_country>
+        <attribute_set_id>
+            <dataSet>default</dataSet>
+        </attribute_set_id>
+        <category>Apparel & Accessories</category>
+    </default>
+</repository>

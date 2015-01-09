@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Core\Test\Repository\SystemVariable">
+    <custom_variable>
+        <variable>
+            <code>variableCode%isolation%</code>
+            <name>variableName%isolation%</name>
+            <html_value><p class='custom-variable-test-class-%isolation%'>variableName%isolation%</p></html_value>
+            <plain_value>variableName%isolation%</plain_value>
+        </variable>
+    </custom_variable>
+</repository>

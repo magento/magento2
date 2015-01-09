@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Sitemap\Test\Repository\Sitemap">
+    <default>
+        <sitemap_filename>sitemap.xml</sitemap_filename>
+        <sitemap_path>/</sitemap_path>
+    </default>
+</repository>

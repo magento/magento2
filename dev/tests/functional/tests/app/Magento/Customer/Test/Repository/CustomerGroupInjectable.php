@@ -24,30 +24,30 @@ class CustomerGroupInjectable extends AbstractRepository
         $this->_data['General'] = [
             'customer_group_id' => '1',
             'customer_group_code' => 'General',
-            'tax_class_id' => ['dataSet' => 'Retail Customer'],
+            'tax_class_id' => ['dataSet' => 'retail_customer'],
         ];
 
         $this->_data['Retailer'] = [
             'customer_group_id' => '3',
             'customer_group_code' => 'Retailer',
-            'tax_class_id' => ['dataSet' => 'Retail Customer'],
+            'tax_class_id' => ['dataSet' => 'retail_customer'],
         ];
 
         $this->_data['Wholesale'] = [
             'customer_group_id' => '2',
             'customer_group_code' => 'Wholesale',
-            'tax_class_id' => ['dataSet' => 'Retail Customer'],
+            'tax_class_id' => ['dataSet' => 'retail_customer'],
         ];
 
-        $this->_data['All Customer Groups'] = [
+        $this->_data['All_Customer_Groups'] = [
             'customer_group_id' => '0',
             'customer_group_code' => 'All Customer Groups',
         ];
 
-        $this->_data['NOT LOGGED IN'] = [
+        $this->_data['NOT_LOGGED_IN'] = [
             'customer_group_id' => '0',
             'customer_group_code' => 'NOT LOGGED IN',
-            'tax_class_id' => ['dataSet' => 'Retail Customer'],
+            'tax_class_id' => ['dataSet' => 'retail_customer'],
         ];
     }
 }

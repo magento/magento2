@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\GiftMessage\Test\Repository\GiftMessage">
+    <default>
+        <sender>John Doe</sender>
+        <recipient>Jane Doe</recipient>
+        <message>text_%isolation%</message>
+    </default>
+</repository>

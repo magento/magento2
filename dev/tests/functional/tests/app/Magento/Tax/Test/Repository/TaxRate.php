@@ -22,7 +22,7 @@ class TaxRate extends AbstractRepository
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        $this->_data['US-CA-*-Rate 1'] = [
+        $this->_data['US-CA-Rate_1'] = [
             'tax_calculation_rate_id' => '1',
             'tax_country_id' => 'US',
             'tax_region_id' => '12',
@@ -36,7 +36,7 @@ class TaxRate extends AbstractRepository
             'mtf_dataset_name' => 'US-CA-*-Rate 1',
         ];
 
-        $this->_data['US-NY-*-Rate 1'] = [
+        $this->_data['US-NY-Rate_1'] = [
             'tax_calculation_rate_id' => '2',
             'tax_country_id' => 'US',
             'tax_region_id' => '43',

@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Newsletter\Test\Repository\Template">
+    <default>
+        <code>Newsletter Template %isolation%</code>
+        <subject>Newsletter Subject %isolation%</subject>
+        <sender_name>Sender Name %isolation%</sender_name>
+        <sender_email>support%isolation%@example.com</sender_email>
+        <text>Template Content %isolation%</text>
+    </default>
+</repository>

@@ -47,7 +47,7 @@
             <source>Magento\Tax\Test\Fixture\TaxRule\TaxRate</source>
             <default_value>
                 <dataSet>
-                    <key_0>US-CA-*-Rate 1</key_0>
+                    <key_0>US-CA-Rate_1</key_0>
                 </dataSet>
             </default_value>
         </tax_rate>

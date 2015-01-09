@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\User\Test\Repository\User">
+    <default>
+        <username>admin</username>
+        <firstname>FirstName%isolation%</firstname>
+        <lastname>LastName%isolation%</lastname>
+        <email>email%isolation%@example.com</email>
+        <password>123123q</password>
+        <password_confirmation>123123q</password_confirmation>
+        <user_id>1</user_id>
+        <current_password>%current_password%</current_password>
+    </default>
+    <custom_admin>
+        <username>AdminUser%isolation%</username>
+        <firstname>FirstName%isolation%</firstname>
+        <lastname>LastName%isolation%</lastname>
+        <email>email%isolation%@example.com</email>
+        <password>123123q</password>
+        <password_confirmation>123123q</password_confirmation>
+        <current_password>%current_password%</current_password>
+    </custom_admin>
+    <custom_admin_with_default_role>
+        <username>AdminUser%isolation%</username>
+        <firstname>FirstName%isolation%</firstname>
+        <lastname>LastName%isolation%</lastname>
+        <email>email%isolation%@example.com</email>
+        <password>123123q</password>
+        <password_confirmation>123123q</password_confirmation>
+        <role_id>
+            <dataSet>default</dataSet>
+        </role_id>
+        <current_password>%current_password%</current_password>
+        <is_active>Active</is_active>
+    </custom_admin_with_default_role>
+</repository>

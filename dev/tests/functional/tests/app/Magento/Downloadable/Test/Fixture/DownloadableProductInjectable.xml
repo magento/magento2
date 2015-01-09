@@ -390,7 +390,7 @@
             <backend_type>int</backend_type>
             <is_required>0</is_required>
             <default_value>
-                <dataSet>Taxable Goods</dataSet>
+                <dataSet>taxable_goods</dataSet>
             </default_value>
             <input>select</input>
             <group>product-details</group>

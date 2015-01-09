@@ -28,7 +28,7 @@ class DownloadableProductInjectable extends AbstractRepository
             'sku' => 'sku_test_downloadable_product_%isolation%',
             'price' => ['value' => 280.00, 'preset' => '-'],
             'type_id' => 'downloadable',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'quantity_and_stock_status' => [
                 'qty' => 90.0000,
                 'is_in_stock' => 'In Stock',
@@ -46,7 +46,7 @@ class DownloadableProductInjectable extends AbstractRepository
             'sku' => 'downloadable_product_%isolation%',
             'url_key' => 'downloadable-product-%isolation%',
             'price' => ['value' => '20'],
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'quantity_and_stock_status' => [
                 'qty' => 1111,
                 'is_in_stock' => 'In Stock',
@@ -62,7 +62,7 @@ class DownloadableProductInjectable extends AbstractRepository
             'sku' => 'downloadable_product_%isolation%',
             'url_key' => 'downloadable-product-%isolation%',
             'price' => ['value' => '20'],
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'quantity_and_stock_status' => [
                 'qty' => 1111,
                 'is_in_stock' => 'In Stock',

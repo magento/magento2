@@ -45,7 +45,7 @@ class GroupedProductInjectable extends InjectableFixture
     protected $defaultDataSet = [
         'name' => 'GroupedProduct_%isolation%',
         'sku' => 'GroupedProduct_%isolation%',
-        'tax_class' => 'Taxable Goods',
+        'tax_class' => 'taxable_goods',
         'description' => 'This is description for grouped product',
         'short_description' => 'This is short description for grouped product',
         'quantity_and_stock_status' => [

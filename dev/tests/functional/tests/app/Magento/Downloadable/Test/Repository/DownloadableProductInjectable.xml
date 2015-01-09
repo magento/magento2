@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Downloadable\Test\Repository\DownloadableProductInjectable">
+    <default>
+        <name>Test downloadable product %isolation%</name>
+        <sku>sku_test_downloadable_product_%isolation%</sku>
+        <price>
+            <value>280</value>
+            <preset>-</preset>
+        </price>
+        <type_id>downloadable</type_id>
+        <tax_class_id>
+            <dataSet>taxable_goods</dataSet>
+        </tax_class_id>
+        <quantity_and_stock_status>
+            <qty>90</qty>
+            <is_in_stock>In Stock</is_in_stock>
+        </quantity_and_stock_status>
+        <status>Product online</status>
+        <visibility>Catalog, Search</visibility>
+        <url_key>test-downloadable-product-%isolation%</url_key>
+        <is_virtual>Yes</is_virtual>
+        <downloadable_links>
+            <preset>default</preset>
+        </downloadable_links>
+        <website_ids>
+            <key_0>Main Website</key_0>
+        </website_ids>
+        <checkout_data>
+            <preset>default</preset>
+        </checkout_data>
+    </default>
+    <with_two_separately_links>
+        <name>Downloadable product %isolation%</name>
+        <sku>downloadable_product_%isolation%</sku>
+        <url_key>downloadable-product-%isolation%</url_key>
+        <price>
+            <value>20</value>
+        </price>
+        <tax_class_id>
+            <dataSet>taxable_goods</dataSet>
+        </tax_class_id>
+        <quantity_and_stock_status>
+            <qty>1111</qty>
+            <is_in_stock>In Stock</is_in_stock>
+        </quantity_and_stock_status>
+        <status>Product online</status>
+        <visibility>Catalog, Search</visibility>
+        <is_virtual>Yes</is_virtual>
+        <downloadable_links>
+            <preset>with_two_separately_links</preset>
+        </downloadable_links>
+        <checkout_data>
+            <preset>with_two_separately_links</preset>
+        </checkout_data>
+    </with_two_separately_links>
+    <with_two_bought_links>
+        <name>Downloadable product %isolation%</name>
+        <sku>downloadable_product_%isolation%</sku>
+        <url_key>downloadable-product-%isolation%</url_key>
+        <price>
+            <value>20</value>
+        </price>
+        <tax_class_id>
+            <dataSet>taxable_goods</dataSet>
+        </tax_class_id>
+        <quantity_and_stock_status>
+            <qty>1111</qty>
+            <is_in_stock>In Stock</is_in_stock>
+        </quantity_and_stock_status>
+        <status>Product online</status>
+        <visibility>Catalog, Search</visibility>
+        <is_virtual>Yes</is_virtual>
+        <downloadable_links>
+            <preset>with_two_separately_links</preset>
+        </downloadable_links>
+        <checkout_data>
+            <preset>with_two_bought_links</preset>
+        </checkout_data>
+    </with_two_bought_links>
+</repository>

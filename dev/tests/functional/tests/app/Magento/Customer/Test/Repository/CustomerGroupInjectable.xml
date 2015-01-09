@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Customer\Test\Repository\CustomerGroupInjectable">
+    <General>
+        <customer_group_id>1</customer_group_id>
+        <customer_group_code>General</customer_group_code>
+        <tax_class_id>
+            <dataSet>retail_customer</dataSet>
+        </tax_class_id>
+    </General>
+    <Retailer>
+        <customer_group_id>3</customer_group_id>
+        <customer_group_code>Retailer</customer_group_code>
+        <tax_class_id>
+            <dataSet>retail_customer</dataSet>
+        </tax_class_id>
+    </Retailer>
+    <Wholesale>
+        <customer_group_id>2</customer_group_id>
+        <customer_group_code>Wholesale</customer_group_code>
+        <tax_class_id>
+            <dataSet>retail_customer</dataSet>
+        </tax_class_id>
+    </Wholesale>
+    <All_Customer_Groups>
+        <customer_group_id>0</customer_group_id>
+        <customer_group_code>All Customer Groups</customer_group_code>
+    </All_Customer_Groups>
+    <NOT_LOGGED_IN>
+        <customer_group_id>0</customer_group_id>
+        <customer_group_code>NOT LOGGED IN</customer_group_code>
+        <tax_class_id>
+            <dataSet>retail_customer</dataSet>
+        </tax_class_id>
+    </NOT_LOGGED_IN>
+</repository>

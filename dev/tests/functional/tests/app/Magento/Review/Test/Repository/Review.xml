@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository class="Magento\Review\Test\Repository\Review">
+    <default>
+        <config>
+        </config>
+        <data>
+        </data>
+    </default>
+</repository>

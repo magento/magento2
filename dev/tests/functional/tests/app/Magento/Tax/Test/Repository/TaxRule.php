@@ -37,19 +37,19 @@ class TaxRule extends AbstractRepository
             'code' => 'Tax Rule %isolation%',
             'tax_rate' => [
                 'dataSet' => [
-                    0 => 'US-CA-*-Rate 1',
+                    0 => 'US-CA-Rate_1',
                     1 => 'us_ny_rate_8_1',
                 ],
             ],
             'tax_customer_class' => [
                 'dataSet' => [
-                    0 => 'Retail Customer',
+                    0 => 'retail_customer',
                     1 => 'customer_tax_class',
                 ],
             ],
             'tax_product_class' => [
                 'dataSet' => [
-                    0 => 'Taxable Goods',
+                    0 => 'taxable_goods',
                     1 => 'product_tax_class',
                 ],
             ],
@@ -72,17 +72,17 @@ class TaxRule extends AbstractRepository
             'code' => 'TaxIdentifier%isolation%',
             'tax_rate' => [
                 'dataSet' => [
-                    0 => 'US-CA-*-Rate 1',
+                    0 => 'US-CA-Rate_1',
                 ],
             ],
             'tax_customer_class' => [
                 'dataSet' => [
-                    0 => 'Retail Customer',
+                    0 => 'retail_customer',
                 ],
             ],
             'tax_product_class' => [
                 'dataSet' => [
-                    0 => 'Taxable Goods',
+                    0 => 'taxable_goods',
                 ],
             ],
             'priority' => '1',
@@ -93,20 +93,20 @@ class TaxRule extends AbstractRepository
             'code' => 'TaxIdentifier%isolation%',
             'tax_rate' => [
                 'dataSet' => [
-                    0 => 'US-CA-*-Rate 1',
-                    1 => 'US-NY-*-Rate 1',
+                    0 => 'US-CA-Rate_1',
+                    1 => 'US-NY-Rate_1',
                 ],
             ],
             'tax_customer_class' => [
                 'dataSet' => [
-                    0 => 'Retail Customer',
+                    0 => 'retail_customer',
                     1 => 'customer_tax_class',
                 ],
             ],
             'tax_product_class' => [
                 'dataSet' => [
                     0 => 'product_tax_class',
-                    1 => 'Taxable Goods',
+                    1 => 'taxable_goods',
                 ],
             ],
             'priority' => '1',

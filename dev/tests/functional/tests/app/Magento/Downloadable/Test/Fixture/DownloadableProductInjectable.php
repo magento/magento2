@@ -42,7 +42,7 @@ class DownloadableProductInjectable extends InjectableFixture
         'sku' => 'DownloadableProduct_%isolation%',
         'url_key' => 'downloadableproduct_%isolation%',
         'price' => ['value' => 100.00],
-        'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+        'tax_class_id' => ['dataSet' => 'taxable_goods'],
         'description' => 'This is description for downloadable product',
         'short_description' => 'This is short description for downloadable product',
         'quantity_and_stock_status' => [

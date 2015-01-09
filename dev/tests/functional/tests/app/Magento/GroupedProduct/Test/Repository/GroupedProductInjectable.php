@@ -30,7 +30,7 @@ class GroupedProductInjectable extends AbstractRepository
             'associated' => ['preset' => 'defaultSimpleProduct'],
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'test-grouped-product-%isolation%',
             'quantity_and_stock_status' => [
                 'is_in_stock' => 'In Stock',
@@ -46,7 +46,7 @@ class GroupedProductInjectable extends AbstractRepository
             'associated' => ['preset' => 'defaultSimpleProduct'],
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'test-grouped-product-%isolation%',
             'quantity_and_stock_status' => [
                 'is_in_stock' => 'Out of Stock',
@@ -63,7 +63,7 @@ class GroupedProductInjectable extends AbstractRepository
             'associated' => ['preset' => 'defaultSimpleProduct'],
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'test-grouped-product-%isolation%',
             'quantity_and_stock_status' => [
                 'is_in_stock' => 'In Stock',
@@ -79,7 +79,7 @@ class GroupedProductInjectable extends AbstractRepository
             'associated' => ['preset' => 'three_simple_products'],
             'status' => 'Product online',
             'visibility' => 'Catalog, Search',
-            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'tax_class_id' => ['dataSet' => 'taxable_goods'],
             'url_key' => 'test-grouped-product-%isolation%',
             'quantity_and_stock_status' => [
                 'is_in_stock' => 'In Stock',
