@@ -50,7 +50,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function getWhitelist($fileTypes = ['php'])
     {
-        $directoriesToCheck = file(__DIR__ . '/_files/whitelist/whitelist.txt', FILE_IGNORE_NEW_LINES);
+        $directoriesToCheck = file(__DIR__ . '/_files/whitelist/common.txt', FILE_IGNORE_NEW_LINES);
 
         try {
             $changedFiles = array_filter(
