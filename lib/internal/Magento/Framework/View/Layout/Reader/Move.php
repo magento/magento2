@@ -34,7 +34,7 @@ class Move implements Layout\ReaderInterface
     public function interpret(Context $readerContext, Layout\Element $currentElement)
     {
         $this->scheduleMove($readerContext->getScheduledStructure(), $currentElement);
-        return false;
+        return $this;
     }
 
     /**
