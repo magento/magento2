@@ -49,10 +49,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\TestFramework\Mail\Template\TransportBuilderMock $transportBuilder */
         $transportBuilder = $this->_objectManager->get('Magento\TestFramework\Mail\Template\TransportBuilderMock');
-
-        $this->assertStringMatchesFormat(
-            '%AHello %A'
-            . $this->_customerViewHelper->getCustomerName($this->_customerSession->getCustomerDataObject()) . ',%A',
+        $this->assertContains(
+            'Hello John Smi=' . PHP_EOL . 'th',
             $transportBuilder->getSentMessage()->getBodyHtml()->getContent()
         );
     }

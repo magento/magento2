@@ -255,9 +255,9 @@ class WordsFinder
             }
         }
         if ($contents && $this->isCopyrightChecked && !$this->isCopyrightCheckSkipped($file)
-            && (($copyrightStringPosition = strpos($contents, $this->copyrightString)) === false
+            && (($copyrightStringPosition = mb_strpos($contents, $this->copyrightString)) === false
             || ($copyingStringPosition = strpos($contents, $this->copyingString)) === false
-            || $copyingStringPosition - $copyrightStringPosition > 10)
+            || $copyingStringPosition - $copyrightStringPosition - mb_strlen($this->copyrightString) > 10)
         ) {
             $foundWords[] = 'Copyright string is missing';
         }
