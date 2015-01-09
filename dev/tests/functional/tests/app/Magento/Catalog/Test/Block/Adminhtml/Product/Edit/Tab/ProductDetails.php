@@ -14,11 +14,18 @@ use Mtf\Client\Element\Locator;
 class ProductDetails extends \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab
 {
     /**
+     * Locator for preceding sibling of category element.
+     *
+     * @var string
+     */
+    protected $categoryPrecedingSibling = '//*[@id="attribute-category_ids-container"]/preceding-sibling::div[%d]';
+
+    /**
      * Locator for following sibling of category element.
      *
      * @var string
      */
-    protected $categoryFollowingSibling = '//*[@id="attribute-category_ids-container"]/following-sibling::div[1]';
+    protected $categoryFollowingSibling = '//*[@id="attribute-category_ids-container"]/following-sibling::div[%d]';
 
     /**
      * Fill data to fields on tab.
@@ -49,6 +56,7 @@ class ProductDetails extends \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\
      */
     protected function scrollToCategory()
     {
-        $this->_rootElement->find($this->categoryFollowingSibling, Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find(sprintf($this->categoryFollowingSibling, 1), Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find(sprintf($this->categoryPrecedingSibling, 2), Locator::SELECTOR_XPATH)->click();
     }
 }

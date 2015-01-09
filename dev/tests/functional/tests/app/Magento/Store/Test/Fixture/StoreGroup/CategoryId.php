@@ -47,7 +47,7 @@ class CategoryId implements FixtureInterface
     {
         $this->params = $params;
         if (isset($data['dataSet'])) {
-            $category = $fixtureFactory->createByCode('catalogCategory', ['dataSet' => $data['dataSet']]);
+            $category = $fixtureFactory->createByCode('category', ['dataSet' => $data['dataSet']]);
             /** @var Category $category */
             if (!$category->getId()) {
                 $category->persist();

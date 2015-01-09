@@ -63,7 +63,7 @@ class CreateCategoryRewriteEntityTest extends Injectable
         $this->urlRewriteEdit = $urlRewriteEdit;
         $this->urlRewriteIndex = $urlRewriteIndex;
         $category = $fixtureFactory->createByCode(
-            'catalogCategory',
+            'category',
             ['dataSet' => 'default_subcategory']
         );
         $category->persist();
