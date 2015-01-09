@@ -57,7 +57,7 @@
         </arguments>
     </type>
     <preference for="\Magento\Downloadable\Api\LinkManagementInterface" type="\Magento\Downloadable\Model\LinkManagement" />
-    <preference for="\Magento\Downloadable\Api\SampleManagementInterface" type="\Magento\Downloadable\Model\SampleManagement" />
+    <preference for="\Magento\Downloadable\Api\SampleRepositoryInterface" type="\Magento\Downloadable\Model\SampleRepository" />
     <preference for="\Magento\Downloadable\Api\Data\LinkInterface" type="\Magento\Downloadable\Model\Link" />
     <preference for="\Magento\Downloadable\Api\Data\SampleInterface" type="\Magento\Downloadable\Model\Sample" />
     <preference for="\Magento\Downloadable\Api\Data\SampleContentInterface" type="\Magento\Downloadable\Model\Sample\Content" />

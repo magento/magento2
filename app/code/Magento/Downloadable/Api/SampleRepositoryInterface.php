@@ -7,19 +7,8 @@ namespace Magento\Downloadable\Api;
 
 use Magento\Downloadable\Api\Data\SampleContentInterface;
 
-interface SampleManagementInterface
+interface SampleRepositoryInterface
 {
-    /**
-     * Add downloadable sample to the given product
-     *
-     * @param string $productSku
-     * @param \Magento\Downloadable\Api\Data\SampleContentInterface $sampleContent
-     * @param bool $isGlobalScopeContent
-     * @return int sample ID
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function create($productSku, SampleContentInterface $sampleContent, $isGlobalScopeContent = false);
-
     /**
      * Update downloadable sample of the given product (sample type and its resource cannot be changed)
      *
@@ -27,10 +16,9 @@ interface SampleManagementInterface
      * @param int $sampleId
      * @param \Magento\Downloadable\Api\Data\SampleContentInterface $sampleContent
      * @param bool $isGlobalScopeContent
-     * @return bool
+     * @return int
      */
-    public function update($productSku, $sampleId, SampleContentInterface $sampleContent, $isGlobalScopeContent = false);
-
+    public function save($productSku, $sampleId = null, SampleContentInterface $sampleContent, $isGlobalScopeContent = false);
 
     /**
      * Delete downloadable sample
