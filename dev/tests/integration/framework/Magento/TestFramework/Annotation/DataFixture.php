@@ -48,10 +48,6 @@ class DataFixture
     ) {
         /* Start transaction before applying first fixture to be able to revert them all further */
         if ($this->_getFixtures($test)) {
-            /* Re-apply even the same fixtures to guarantee data consistency */
-            if ($this->_appliedFixtures && $this->_getFixtures($test, 'method')) {
-                $param->requestTransactionRollback();
-            }
             if ($this->getDbIsolationState($test) !== ['disabled']) {
                 $param->requestTransactionStart();
             } else {
@@ -71,7 +67,7 @@ class DataFixture
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         /* Isolate other tests from test-specific fixtures */
-        if ($this->_appliedFixtures && $this->_getFixtures($test) && !$this->hasDependsAnnotation($test)) {
+        if ($this->_appliedFixtures && $this->_getFixtures($test)) {
             if ($this->getDbIsolationState($test) !== ['disabled']) {
                 $param->requestTransactionRollback();
             } else {
