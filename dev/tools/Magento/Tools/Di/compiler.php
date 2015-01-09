@@ -39,8 +39,8 @@ try {
     $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . '/var/generation';
     $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . '/var/di';
     $compiledFile = $diDir . '/definitions.php';
-    $relationsFile = $diDir . '/relations.php';
-    $pluginDefFile = $diDir . '/plugins.php';
+    $relationsFile = $diDir . '/relations.ser';
+    $pluginDefFile = $diDir . '/plugins.ser';
 
     $compilationDirs = [
         $rootDir . '/app/code',

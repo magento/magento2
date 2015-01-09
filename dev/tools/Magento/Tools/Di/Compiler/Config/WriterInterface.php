@@ -11,9 +11,9 @@ interface WriterInterface
     /**
      * Writes config in storage
      *
-     * @param string $areaCode
+     * @param string $key
      * @param array $config
      * @return void
      */
-    public function write($areaCode, array $config);
+    public function write($key, array $config);
 }

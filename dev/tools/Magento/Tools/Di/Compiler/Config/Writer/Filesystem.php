@@ -13,21 +13,16 @@ class Filesystem implements WriterInterface
     /**
      * Writes config in storage
      *
-     * @param string $areaCode
+     * @param string $key
      * @param array $config
      * @return void
      */
-    public function write($areaCode, array $config)
+    public function write($key, array $config)
     {
         $this->initialize();
-        foreach ($config['arguments'] as $key => $value) {
-            if ($value !== null) {
-                $config['arguments'][$key] = serialize($value);
-            }
-        }
 
         $serialized = serialize($config);
-        file_put_contents(BP . '/var/di/' . $areaCode . '.ser', $serialized);
+        file_put_contents(BP . '/var/di/' . $key . '.ser', $serialized);
     }
 
     /**

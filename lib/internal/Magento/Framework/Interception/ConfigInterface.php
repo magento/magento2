@@ -15,4 +15,12 @@ interface ConfigInterface
      * @return bool
      */
     public function hasPlugins($type);
+
+    /**
+     * Initialize interception config
+     *
+     * @param array $classDefinitions
+     * @return void
+     */
+    public function initialize($classDefinitions = []);
 }

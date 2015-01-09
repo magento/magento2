@@ -91,12 +91,12 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'relations' => [
-                'DefinitionDir/relations.php',
+                'DefinitionDir/relations.ser',
                 'createRelations',
                 '\Magento\Framework\ObjectManager\Relations\Compiled',
             ],
             'plugins' => [
-                'DefinitionDir/plugins.php',
+                'DefinitionDir/plugins.ser',
                 'createPluginDefinition',
                 '\Magento\Framework\Interception\Definition\Compiled',
             ],
@@ -121,12 +121,12 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'relations' => [
-                'DefinitionDir/relations.php',
+                'DefinitionDir/relations.ser',
                 'createRelations',
                 '\Magento\Framework\ObjectManager\Relations\Runtime',
             ],
             'plugins' => [
-                'DefinitionDir/plugins.php',
+                'DefinitionDir/plugins.ser',
                 'createPluginDefinition',
                 '\Magento\Framework\Interception\Definition\Runtime',
             ],
