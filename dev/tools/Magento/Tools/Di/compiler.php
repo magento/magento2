@@ -15,6 +15,7 @@ use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Proxy;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
+use Magento\Framework\ObjectManager\Code\Generator\Persistor;
 use Magento\Tools\Di\Code\Scanner;
 use Magento\Tools\Di\Compiler\Directory;
 use Magento\Tools\Di\Compiler\Log\Log;
@@ -70,6 +71,9 @@ try {
     $files['additional'] = [$opt->getOption('extra-classes-file')];
     $entities = [];
 
+    $repositoryScanner = new Scanner\RepositoryScanner();
+    $repositories = $repositoryScanner->collectEntities($files['di']);
+
     $scanner = new Scanner\CompositeScanner();
     $scanner->addChild(new Scanner\PhpScanner($log), 'php');
     $scanner->addChild(new Scanner\XmlScanner($log), 'di');
@@ -94,6 +98,7 @@ try {
             Proxy::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Proxy',
             Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
             Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
+            Persistor::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Persistor',
             Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
             Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
             SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
@@ -102,6 +107,26 @@ try {
 
     $generatorAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
     spl_autoload_register([$generatorAutoloader, 'load']);
+
+
+
+    foreach ($repositories as $entityName) {
+        switch ($generator->generateClass($entityName)) {
+            case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
+                $log->add(Log::GENERATION_SUCCESS, $entityName);
+                break;
+
+            case \Magento\Framework\Code\Generator::GENERATION_ERROR:
+                $log->add(Log::GENERATION_ERROR, $entityName);
+                break;
+
+            case \Magento\Framework\Code\Generator::GENERATION_SKIP:
+            default:
+                //no log
+                break;
+        }
+    }
+
     foreach (['php', 'additional'] as $type) {
         sort($entities[$type]);
         foreach ($entities[$type] as $entityName) {
