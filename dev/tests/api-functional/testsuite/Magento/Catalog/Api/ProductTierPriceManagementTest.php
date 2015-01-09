@@ -35,9 +35,9 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         ];
 
         $groupPriceList = $this->_webApiCall(
-                $serviceInfo,
-                ['productSku' => $productSku, 'customerGroupId' => $customerGroupId]
-            );
+            $serviceInfo,
+            ['productSku' => $productSku, 'customerGroupId' => $customerGroupId]
+        );
 
         $this->assertCount($count, $groupPriceList);
         if ($count) {

@@ -262,7 +262,8 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $optionDataPost['option_id'] = $optionId;
             $updatedOption = $this->_webApiCall(
-                $serviceInfo, [ 'id' => $optionId, 'option' => $optionDataPost]
+                $serviceInfo,
+                ['id' => $optionId, 'option' => $optionDataPost]
             );
         } else {
             $updatedOption = $this->_webApiCall(
@@ -307,13 +308,14 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
 
         $values = [];
         foreach ($option->getValues() as $key => $value) {
-            $values[] = [
-                'price' => $value->getPrice(),
-                'price_type' => $value->getPriceType(),
-                'sku' => $value->getSku(),
-                'title' => $value->getTitle(),
-                'sort_order' => $value->getSortOrder(),
-        ];
+            $values[] =
+                [
+                    'price' => $value->getPrice(),
+                    'price_type' => $value->getPriceType(),
+                    'sku' => $value->getSku(),
+                    'title' => $value->getTitle(),
+                    'sort_order' => $value->getSortOrder(),
+                ];
         }
         $values[] = $valueData;
         $data = [
@@ -339,12 +341,11 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $data['option_id'] = $fixtureOption->getId();
             $valueObject = $this->_webApiCall(
-                $serviceInfo, [ 'option_id' => $fixtureOption->getId(), 'option' => $data]
+                $serviceInfo,
+                [ 'option_id' => $fixtureOption->getId(), 'option' => $data]
             );
         } else {
-            $valueObject = $this->_webApiCall(
-                $serviceInfo, ['option' => $data]
-            );
+            $valueObject = $this->_webApiCall($serviceInfo, ['option' => $data]);
         }
 
         $values = end($valueObject['values']);

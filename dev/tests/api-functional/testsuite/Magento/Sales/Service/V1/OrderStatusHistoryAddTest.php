@@ -73,10 +73,12 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
             $this->assertEquals($commentData[OrderStatusHistoryInterface::COMMENT], $statusHistoryComment->getComment());
             $this->assertEquals($commentData[OrderStatusHistoryInterface::PARENT_ID], $statusHistoryComment->getParentId());
             $this->assertEquals(
-                $commentData[OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED], $statusHistoryComment->getIsCustomerNotified()
+                $commentData[OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED],
+                $statusHistoryComment->getIsCustomerNotified()
             );
             $this->assertEquals(
-                $commentData[OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT], $statusHistoryComment->getIsVisibleOnFront()
+                $commentData[OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT],
+                $statusHistoryComment->getIsVisibleOnFront()
             );
         }
     }

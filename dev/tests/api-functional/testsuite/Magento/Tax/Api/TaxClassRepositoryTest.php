@@ -290,10 +290,14 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $requestData = ['searchCriteria' => $searchData];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(2, $searchResults['total_count']);
-        $this->assertEquals($productTaxClass[Data\TaxClassInterface::KEY_NAME],
-            $searchResults['items'][0][Data\TaxClassInterface::KEY_NAME]);
-        $this->assertEquals($customerTaxClass[Data\TaxClassInterface::KEY_NAME],
-            $searchResults['items'][1][Data\TaxClassInterface::KEY_NAME]);
+        $this->assertEquals(
+            $productTaxClass[Data\TaxClassInterface::KEY_NAME],
+            $searchResults['items'][0][Data\TaxClassInterface::KEY_NAME]
+        );
+        $this->assertEquals(
+            $customerTaxClass[Data\TaxClassInterface::KEY_NAME],
+            $searchResults['items'][1][Data\TaxClassInterface::KEY_NAME]
+        );
 
         /** class_name == 'Retail Customer' && ( class_type == 'CUSTOMER' || class_type == 'PRODUCT') */
         $this->searchCriteriaBuilder->addFilter([$filter2]);
@@ -303,7 +307,9 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $requestData = ['searchCriteria' => $searchData];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(1, $searchResults['total_count']);
-        $this->assertEquals($customerTaxClass[Data\TaxClassInterface::KEY_NAME],
-            $searchResults['items'][0][Data\TaxClassInterface::KEY_NAME]);
+        $this->assertEquals(
+            $customerTaxClass[Data\TaxClassInterface::KEY_NAME],
+            $searchResults['items'][0][Data\TaxClassInterface::KEY_NAME]
+        );
     }
 }
