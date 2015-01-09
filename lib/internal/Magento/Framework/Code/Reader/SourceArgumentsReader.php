@@ -22,8 +22,8 @@ class SourceArgumentsReader
     {
         $output = [null];
         if (!$class->getFileName() || false == $class->hasMethod(
-                '__construct'
-            ) || !$inherited && $class->getConstructor()->class !== $class->getName()
+            '__construct'
+        ) || !$inherited && $class->getConstructor()->class !== $class->getName()
         ) {
             return $output;
         }
