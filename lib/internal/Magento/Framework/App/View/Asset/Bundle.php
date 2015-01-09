@@ -16,7 +16,7 @@ class Bundle
     protected $bundlePath;
 
     /** @var int */
-    protected $bundleParts = 4;
+    protected $bundleParts = 1;
 
     /** @var array */
     protected $assets = [];
@@ -25,18 +25,17 @@ class Bundle
     protected $bundle = [];
 
     /**
-     * Object Manager
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\Framework\View\Asset\MinifyServiceFactory
      */
-    protected $objectManager;
+    protected $minifyServiceFactory;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\View\Asset\MinifyServiceFactory
      */
-    function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
+    function __construct(
+        \Magento\Framework\View\Asset\MinifyServiceFactory $minifyServiceFactory
+    ) {
+        $this->minifyServiceFactory = $minifyServiceFactory;
     }
 
     /**
@@ -66,7 +65,7 @@ class Bundle
     {
         $assetKey = $this->getAssetKey($asset);
 
-        $minifyService = $this->objectManager->create('Magento\Framework\View\Asset\MinifyService');
+        $minifyService = $this->minifyServiceFactory->create();
         $asset = $minifyService->getAssets([$asset])[0];
 
         $this->assets[$assetKey] = $asset;
@@ -127,7 +126,7 @@ class Bundle
         foreach ($this->bundle as &$part) {
                $part = "require.config({\n" .
                 "    config: {\n" .
-                "        'jsbuild':" . $part . ";\n" .
+                "        'jsbuild':" . $part . "\n" .
                 "    }\n" .
                 "});\n";
         }

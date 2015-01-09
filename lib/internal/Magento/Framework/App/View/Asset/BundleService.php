@@ -30,78 +30,89 @@ class BundleService
     protected $bundles = [];
 
     /**
-     * Object Manager
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\Framework\App\View\Asset\BundleFactory
      */
-    protected $objectManager;
+    protected $bundleFactory;
+
+    protected $excludeDir = [
+        'frontend' => [
+            'jquery/fileUploader',
+            'jquery/jstree',
+            'mage/adminhtml',
+            'mage/backend',
+            'requirejs',
+            'prototype'
+        ],
+        'adminhtml' => [
+            'requirejs',
+            'prototype'
+        ]
+    ];
 
     /** @var array  */
     protected $excludeList = [
         'adminhtml' => [
-            "mage/common.js",
-            "mage/cookies.js",
-            "mage/dataPost.js",
-            "mage/decorate.js",
-            "mage/deletable-item.js",
-            "mage/dialog.js",
-            "mage/dropdown.js",
-            "mage/dropdowns.js",
-            "mage/fieldset-controls.js",
-            "mage/gallery-fullscreen.js",
-            "mage/gallery.js",
-            "mage/item-table.js",
-            "mage/list.js",
-            "mage/loader.js",
-            "mage/menu.js",
-            "mage/popup-window.js",
-            "mage/redirect-url.js",
-            "mage/sticky.js",
-            "mage/terms.js",
-            "mage/toggle.js",
-            "mage/tooltip.js",
-            "mage/translate-inline-vde.js",
-            "mage/webapi.js",
-            "mage/zoom.js",
-            "mage/validation/dob-rule.js",
-            "mage/validation/validation.js",
-            "jquery/jquery.parsequery.js",
-            "jquery/jquery.mobile.custom.js",
-            "jquery/jquery-ui.js",
-            "jquery/autocomplete/jquery.autocomplete.js",
-            "matchMedia.js"
+            'mage/common.js',
+            'mage/cookies.js',
+            'mage/dataPost.js',
+            'mage/decorate.js',
+            'mage/deletable-item.js',
+            'mage/dialog.js',
+            'mage/dropdown.js',
+            'mage/dropdowns.js',
+            'mage/fieldset-controls.js',
+            'mage/gallery-fullscreen.js',
+            'mage/gallery.js',
+            'mage/item-table.js',
+            'mage/list.js',
+            'mage/loader.js',
+            'mage/menu.js',
+            'mage/popup-window.js',
+            'mage/redirect-url.js',
+            'mage/sticky.js',
+            'mage/terms.js',
+            'mage/toggle.js',
+            'mage/tooltip.js',
+            'mage/translate-inline-vde.js',
+            'mage/webapi.js',
+            'mage/zoom.js',
+            'mage/validation/dob-rule.js',
+            'mage/validation/validation.js',
+            'jquery/jquery.parsequery.js',
+            'jquery/jquery.mobile.custom.js',
+            'jquery/jquery-ui.js',
+            'jquery/autocomplete/jquery.autocomplete.js',
+            'matchMedia.js',
+            'jquery/jquery.js'
         ],
         'frontend' => [
-            "mage/captcha.js",
-            "mage/dropdown_old.js",
-            "mage/list.js",
-            "mage/loader_old.js",
-            "mage/webapi.js",
-            "mage/adminhtml/*",
-            "mage/backeknd/*",
-            "jquery/jquery-ui-1.9.2.js",
-            "jquery/jquery.ba-hashchange.min.js",
-            "jquery/jquery.details.js",
-            "jquery/jquery.hoverIntent.js",
-            "jquery/autocomplete/jquery.autocomplete.js",
-            "jquery/editableMultiselect/js/jquery.editable.js",
-            "jquery/editableMultiselect/js/jquery.multiselect.js",
-            "jquery/farbtastic/jquery.farbtastic.js",
-            "jquery/fileUploader/*",
-            "jquery/jstree/*"
+            'mage/captcha.js',
+            'mage/dropdown_old.js',
+            'mage/list.js',
+            'mage/loader_old.js',
+            'mage/webapi.js',
+            'jquery/jquery-ui-1.9.2.js',
+            'jquery/jquery.ba-hashchange.min.js',
+            'jquery/jquery.details.js',
+            'jquery/jquery.hoverIntent.js',
+            'jquery/autocomplete/jquery.autocomplete.js',
+            'jquery/editableMultiselect/js/jquery.editable.js',
+            'jquery/editableMultiselect/js/jquery.multiselect.js',
+            'jquery/farbtastic/jquery.farbtastic.js',
+            'jquery/jquery.js'
         ]
     ];
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\App\View\Asset\BundleFactory $bundleFactory
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \Magento\Framework\App\View\Asset\BundleFactory $bundleFactory
     ) {
         $this->filesystem = $filesystem;
-        $this->objectManager = $objectManager;
+        $this->bundleFactory = $bundleFactory;
     }
 
     /**
@@ -111,9 +122,19 @@ class BundleService
      * @param $key
      * @return bool
      */
-    public function isExcluded($area, $key)
+    public function isExcluded($area, Asset\LocalInterface $asset)
     {
-        return in_array($key, $this->excludeList[$area]);
+        if (in_array($asset->getFilePath(), $this->excludeList[$area])) {
+            return true;
+        }
+
+        // check if file in excluded directory
+        $assetDirectory  = dirname($asset->getFilePath());
+        foreach ($this->excludeDir[$area] as $dir) {
+            if (strpos($assetDirectory, $dir) !== false) {
+                return true;
+            }
+        }
     }
 
     /**
@@ -144,7 +165,7 @@ class BundleService
     protected function isValidAsset(Asset\LocalInterface $asset, array $context)
     {
         if ($asset->getContentType() != 'js'
-            || $this->isExcluded($context['area'], $asset->getFilePath())
+            || $this->isExcluded($context['area'], $asset)
             || !$this->isAmd($asset)
         ) {
             return false;
@@ -181,7 +202,7 @@ class BundleService
     protected function createBundle(array $context)
     {
         $bundlePath = $this->getBundlePath($context);
-        $bundle = $this->objectManager->create('Magento\Framework\App\View\Asset\Bundle');
+        $bundle = $this->bundleFactory->create();
         $bundle->setPath($bundlePath);
         $this->bundles[$bundlePath] = $bundle;
         return $bundle;
@@ -195,7 +216,13 @@ class BundleService
      */
     protected function getBundlePath(array $context)
     {
-        return $context['area'] . '/' . $context['theme'] . '/' . $context['locale'] . '/';
+        $path = $context['area'] . '/' . $context['theme'] . '/' . $context['locale'] . '/';
+        if ($context['module'] == '') {
+            $path .= 'lib-bundle';
+        } else {
+            $path .= 'bundle';
+        }
+        return $path;
     }
 
     /**
@@ -232,7 +259,7 @@ class BundleService
         foreach ($this->bundles as $bundle) {
             /** @var \Magento\Framework\App\View\Asset\Bundle $bundle */
             foreach ($bundle->getContent() as $index => $part) {
-                $dir->writeFile($bundle->getPath() . "bundle$index.js", $part);
+                $dir->writeFile($bundle->getPath() . "$index.js", $part);
             }
         }
 

@@ -61,15 +61,15 @@ class Deployer
         Deployer\Log $logger,
         Version\StorageInterface $versionStorage,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        $isDryRun = false,
-        \Magento\Framework\App\View\Asset\BundleService $bundleService
+        \Magento\Framework\App\View\Asset\BundleService $bundleService,
+        $isDryRun = false
     ) {
         $this->filesUtil = $filesUtil;
         $this->logger = $logger;
         $this->versionStorage = $versionStorage;
         $this->dateTime = $dateTime;
-        $this->isDryRun = $isDryRun;
         $this->bundleService = $bundleService;
+        $this->isDryRun = $isDryRun;
     }
 
     /**
