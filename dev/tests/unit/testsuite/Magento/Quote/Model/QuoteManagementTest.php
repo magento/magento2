@@ -68,7 +68,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Api\Data\OrderDataBuilder',
             [
                 'populate', 'setShippingAddress', 'setBillingAddress', 'setAddresses', 'setPayments',
-                'setItems', 'setCustomerId', 'setQuoteId', 'create'
+                'setItems', 'setCustomerId', 'setQuoteId', 'create', 'setCustomerEmail', 'setCustomerFirstname',
+                'setCustomerMiddlename', 'setCustomerLastname'
             ],
             [],
             '',
