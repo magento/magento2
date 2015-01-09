@@ -15,7 +15,7 @@ use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class ProductRepositoryMultiStoreTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductServiceV1';
+    const SERVICE_NAME = 'catalogProductRepositoryV1';
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products';
     const STORE_CODE_FROM_FIXTURE = 'fixturestore';
@@ -76,7 +76,7 @@ class ProductRepositoryMultiStoreTest extends WebapiAbstract
             ]
         ];
 
-        $requestData = ['id' => $sku];
+        $requestData = ['id' => $sku, 'productSku' => $sku];
         $defaultStoreResponse = $this->_webApiCall($serviceInfo, $requestData);
         $nameInDefaultStore = 'Simple Product';
         $this->assertEquals(
