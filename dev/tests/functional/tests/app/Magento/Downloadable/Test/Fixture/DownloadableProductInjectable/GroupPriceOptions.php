@@ -19,6 +19,13 @@ class GroupPriceOptions extends \Magento\Catalog\Test\Fixture\CatalogProductSimp
     protected function getPreset($name)
     {
         $presets = [
+            'default' => [
+                [
+                    'price' => 20,
+                    'website' => 'All Websites [USD]',
+                    'customer_group' => 'NOT LOGGED IN',
+                ],
+            ],
             'downloadable_with_tax' => [
                 [
                     'price' => 20.00,
