@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .filter {
     &.block {
@@ -21,7 +21,7 @@
             text-align: center;
             padding: 7px 10px;
             @_shadow: inset 0 1px 0 0 @color-white, inset 0 -1px 0 0 fade(@border-color-base, 30);
-            background-color: @toolbar-element-background;
+            .css(background-color, @toolbar-element-background);
             .css(box-shadow, @_shadow);
             border-radius: 3px;
             font-weight: 400;
@@ -34,10 +34,10 @@
                 padding: 2px;
                 font-size: .8em;
                 margin: 0 5px;
-                color: @color-white;
+                .css(color, @color-white);
                 min-width: 1em;
                 line-height: 1;
-                background: #fc5e10;
+                background: @color-orange-red4;
             }
             &.disabled {
                 opacity: .5;
@@ -87,7 +87,7 @@
         }
     }
     &-value {
-        color: @filter-quantity;
+        .css(color, @filter-quantity);
     }
     &-options {
         display: none;
@@ -118,7 +118,7 @@
                 top: 9px;
             }
             &:hover {
-                color: @filter-link-hover;
+                .css(color, @filter-link-hover);
             }
             .active > & {
                 .icon-font-symbol(
@@ -135,21 +135,21 @@
                 line-height: 1.5em;
             }
             a {
-                color: @filter-link;
+                .css(color, @filter-link);
                 margin-right: -5px;
                 padding-left: 5px;
                 margin-left: -5px;
                 padding-right: 7px;
                 &:hover {
-                    background-color: #e8e8e8;
+                    background-color: @color-gray91;
                     text-decoration: none;
                     & + .count {
-                        background-color: #e8e8e8;
+                        background-color: @color-gray91;
                     }
                 }
             }
             .count {
-                color: @filter-quantity;
+                .css(color, @filter-quantity);
                 padding-right: 5px;
                 &:before {
                     content: "(";
@@ -168,7 +168,7 @@
 //    Mobile
 //--------------------------------------
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     body.filter-active {
         .page-wrapper {
             visibility: hidden;
@@ -219,7 +219,7 @@
                 right: 0;
                 left: 0;
                 height: 50px;
-                background: @toolbar-background;
+                .css(background, @toolbar-background);
                 z-index: 1;
                 line-height: 32px;
             }
@@ -231,7 +231,7 @@
                 right: 0;
                 bottom: 0;
                 overflow: scroll;
-                background: @color-white;
+                .css(background, @color-white);
                 z-index: 10;
             }
         }
@@ -289,7 +289,7 @@
             &:after {
                 content:' (' attr(data-count) ')';
                 font-size:.9em;
-                color: @text-color-muted;
+                .css(color, @text-color-muted);
             }
         }
         &.active {
@@ -313,7 +313,7 @@
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
 
     .filter {
         &.block {
@@ -382,7 +382,7 @@
                         &:before {
                             content: "";
                             display: block;
-                            .arrow(up,8px,#000);
+                            .arrow(up, 8px, @color-black);
                             position: absolute;
                             left: 50%;
                             bottom: -1px;
@@ -390,7 +390,7 @@
                             margin-left: -20px;
                         }
                         &:after {
-                            border-bottom-color: @color-white;
+                            .css(border-bottom-color, @color-white);
                             margin-top:2px;
                             z-index: 4;
                         }
@@ -407,7 +407,7 @@
                 &-content {
                     position: absolute;
                     z-index: 2;
-                    background: @color-white;
+                    .css(background, @color-white);
                     width: 180px;
                     top: 100%;
                     border: 1px solid @border-color-base;
@@ -421,7 +421,7 @@
                             margin-left: 0;
                         }
                         &:hover {
-                            background-color: #e8e8e8;
+                            background-color: @color-gray91;
                         }
                     }
                 }
@@ -432,7 +432,7 @@
                 &-subtitle {
                     display: inline;
                     padding: 0;
-                    color: @text-color-muted;
+                    .css(color, @text-color-muted);
                     font-size: @font-size-base;
                     font-weight: normal;
                     &:after {

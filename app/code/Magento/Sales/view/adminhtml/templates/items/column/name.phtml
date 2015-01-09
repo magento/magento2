@@ -22,7 +22,7 @@
             <?php else: ?>
                 <?php $_option = $this->getFormattedOption($_option['value']); ?>
                 <?php echo $_option['value']; ?><?php if (isset($_option['remainder']) && $_option['remainder']): ?><span id="<?php echo $_dots = 'dots' . uniqid()?>"> ...</span><span id="<?php echo $_id = 'id' . uniqid()?>"><?php echo $_option['remainder'] ?></span>
-                    <script type="text/javascript">
+                    <script>
 require(['prototype'], function(){
 
     $('<?php echo $_id ?>').hide();

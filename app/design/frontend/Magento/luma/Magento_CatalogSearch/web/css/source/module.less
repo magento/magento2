@@ -4,15 +4,15 @@
 
 @autocomplete-background: @color-white;
 @autocomplete-border: 1px solid @form-element-input-border-color;
-@autocomplete-item-border: 1px solid #e5e5e5;
-@autocomplete-item-hover: #e8e8e8;
-@autocomplete-item-amount-color: #999;
+@autocomplete-item-border: 1px solid @color-gray90;
+@autocomplete-item-hover: @color-gray91;
+@autocomplete-item-amount-color: @color-gray60;
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .block-search {
     margin-bottom: 0;
@@ -73,12 +73,12 @@
     ul {
         .list-reset-styles();
         &:not(:empty) {
-            background: @autocomplete-background;
-            border: @autocomplete-border;
+            .css(background, @autocomplete-background);
+            .css(border, @autocomplete-border);
             border-top: 0;
         }
         li {
-            border-top: @autocomplete-item-border;
+            .css(border-top, @autocomplete-item-border);
             cursor: pointer;
             padding: @indent-xs-base @indent-xl-base @indent-xs-base @indent-s-base;
             margin: 0;
@@ -90,10 +90,10 @@
             }
             &:hover,
             &.selected {
-                background: @autocomplete-item-hover;
+                .css(background, @autocomplete-item-hover);
             }
             .amount {
-                color: @autocomplete-item-amount-color;
+                .css(color, @autocomplete-item-amount-color);
                 position: absolute;
                 right: 7px;
                 top: @indent-xs-base;
@@ -167,7 +167,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .block-search {
         margin-top: @indent-s-base;
     }
@@ -176,7 +176,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .block-search {
         position: relative;
         float: right;
@@ -214,7 +214,7 @@
             .button-reset();
             &:focus {
                 &:before {
-                    color: @color-gray20;
+                    .css(color, @color-gray20);
                 }
             }
         }

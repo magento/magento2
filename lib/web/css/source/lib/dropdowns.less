@@ -11,6 +11,7 @@
     @_dropdown-list-min-width: @dropdown-list-min-width,
     @_dropdown-list-width: @dropdown-list-width,
     @_dropdown-list-height: @dropdown-list-height,
+    @_dropdown-list-margin-top: @dropdown-list-margin-top,
     @_dropdown-list-position-top: @dropdown-list-position-top,
     @_dropdown-list-position-bottom: @dropdown-list-position-bottom,
     @_dropdown-list-position-left: @dropdown-list-position-left,
@@ -70,6 +71,7 @@
         @_dropdown-list-min-width,
         @_dropdown-list-width,
         @_dropdown-list-height,
+        @_dropdown-list-margin-top,
         @_dropdown-list-background,
         @_dropdown-list-border,
         @_dropdown-list-z-index,
@@ -104,6 +106,7 @@
     @_dropdown-split-list-min-width: @dropdown-split-list-min-width,
     @_dropdown-split-list-width: @dropdown-split-list-width,
     @_dropdown-split-list-height: @dropdown-split-list-height,
+    @_dropdown-split-list-margin-top: @dropdown-split-list-margin-top,
     @_dropdown-split-list-position-top: @dropdown-split-list-position-top,
     @_dropdown-split-list-position-bottom: @dropdown-split-list-position-bottom,
     @_dropdown-split-list-position-left: @dropdown-split-list-position-left,
@@ -172,6 +175,7 @@
         @_dropdown-split-list-min-width,
         @_dropdown-split-list-width,
         @_dropdown-split-list-height,
+        @_dropdown-split-list-margin-top,
         @_dropdown-split-list-background,
         @_dropdown-split-list-border,
         @_dropdown-split-list-z-index,
@@ -199,6 +203,7 @@
     @_dropdown-list-min-width,
     @_dropdown-list-width,
     @_dropdown-list-height,
+    @_dropdown-list-margin-top,
     @_dropdown-list-background,
     @_dropdown-list-border,
     @_dropdown-list-z-index,
@@ -234,6 +239,7 @@
         .css(min-width, @_dropdown-list-min-width);
         .css(width, @_dropdown-list-width);
         .css(height, @_dropdown-list-height);
+        .css(margin-top, @_dropdown-list-margin-top);
         display: none;
         ._dropdown-list-shadow(@_dropdown-list-shadow);
         li {
@@ -472,7 +478,6 @@
     @_dropdown-list-pointer-position-top,
     @_dropdown-list-pointer-position-left-right
 ) when (@_dropdown-list-pointer = true) {
-    margin-top: 4px;
     ._dropdown-pointer(
         @_dropdown-list-background,
         @_dropdown-list-pointer-border,

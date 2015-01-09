@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .form.wishlist.items {
     .actions-toolbar {
@@ -140,7 +140,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .products-grid.wishlist {
         .product-item {
             border-bottom: 1px solid @color-secondary;
@@ -151,7 +151,7 @@
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .products-grid.wishlist {
         margin-right: -@indent-s-base;
         margin-bottom: @indent-l-base;
@@ -220,11 +220,11 @@
                     width: auto;
                 }
             }
-        } 
+        }
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .wishlist-index-index {
         .products-grid {
             .product-item {
@@ -241,7 +241,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .products-grid.wishlist {
         .product {
             &-item {
@@ -285,7 +285,7 @@
     }
 }
 
-.responsive-min-l(@break) when (@break = @screen-l) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-l) {
     .wishlist-index-index .products-grid .product-items { margin: 0; }
     .wishlist-index-index .products-grid .product-item {
         width: 24%;

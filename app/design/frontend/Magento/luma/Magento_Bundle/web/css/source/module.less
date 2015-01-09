@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .bundle-actions {
     margin: 0 0 @indent-l-base;
@@ -38,7 +38,7 @@
         margin-bottom: @indent-l-base;
         .fieldset > .field {
             padding-top: @form-field-vertical-indent;
-            border-top: 1px #e4e4e4 solid;
+            border-top: 1px @color-gray-middle1 solid;
             &:first-of-type {
                 border-top: 0;
                 padding-top: 0;
@@ -82,7 +82,7 @@
         }
         > .title,
         .bundle-summary .subtitle {
-            border-bottom: 1px #e4e4e4 solid;
+            border-bottom: 1px @color-gray-middle1 solid;
             padding-bottom: 16px;
             margin-bottom: @indent-m-base;
         }
@@ -141,7 +141,7 @@
         }
     }
     p.required {
-        color: @form-field-label-asterisk-color;
+        .css(color, @form-field-label-asterisk-color);
     }
     .nested {
         .field.qty {
@@ -165,7 +165,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .bundle-actions {
         .action.primary.customize {
             width: auto;
@@ -192,12 +192,12 @@
                     font-size: @price-size-desktop;
                     line-height: @price-size-desktop;
                     font-weight: @font-weight-semibold;
-                    color: @price-color;
+                    .css(color, @price-color);
                 }
             }
             .price-container {
                 .weee {
-                    color: @price-color;
+                    .css(color, @price-color);
                     .price {
                         .font-size(12);
                         font-weight: @font-weight-bold;

@@ -6,29 +6,29 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .order-links {
     .item {
         line-height: @tab-control-height;
         margin: 0 0 -1px;
         strong {
-            background: @tab-control-bg-active;
+            .css(background, @tab-control-bg-active);
             border: @border-width-base solid @border-color-base;
             display: block;
             font-weight: @tab-control-font-weight;
             padding: 0 20px;
         }
         a {
-            background: @tab-control-bg;
-            color: @tab-control-color;
+            .css(background, @tab-control-bg);
+            .css(color, @tab-control-color);
             border: @border-width-base solid @border-color-base;
             display: block;
             font-weight: @tab-control-font-weight;
             padding: 0 20px;
             &:hover {
-                background: @tab-control-bg-hover;
-                text-decoration: @tab-control-text-decoration-hover;
+                .css(background, @tab-control-bg-hover);
+                .css(text-decoration, @tab-control-text-decoration-hover);
             }
         }
     }
@@ -159,7 +159,7 @@
                 @_icon-font-position: after,
                 @_icon-font-display: inline-block
             );
-            color: @color-primary;
+            .css(color, @color-primary);
             &.expanded {
                 .icon-font-symbol(
                     @_icon-font-content: @icon-up,
@@ -319,7 +319,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .table-wrapper {
         &.orders-recent {
             &:extend(.abs-account-table-margin-mobile all);
@@ -413,7 +413,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .order-details-items {
         .order-title {
             .action {
@@ -429,7 +429,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .table-wrapper.orders-recent {
         &:extend(.abs-account-table-margin-desktop all);
     }

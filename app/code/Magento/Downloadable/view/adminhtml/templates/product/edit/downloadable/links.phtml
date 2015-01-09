@@ -64,7 +64,7 @@
 
 
 </div>
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'Magento_Ui/js/lib/registry/registry',
@@ -115,7 +115,7 @@ require([
                             '<div class="fileinput-button form-buttons">'+
                                 '<span><?php echo __('Browse Files...') ?></span>' +
                                 '<input id="downloadable_link_{{id}}_sample_file" type="file" name="<?php echo $this->getFileFieldName('link_samples') ?>">' +
-                                '<script type="text/javascript">' +
+                                '<script>' +
                                 '/*<![CDATA[*/' +
                                     'linksUploader("#downloadable_link_{{id}}_sample_file", "<?php echo $this->getUploadUrl('link_samples') ?>"); ' +
                                 '/*]]>*/' +
@@ -143,7 +143,7 @@ require([
                             '<div class="fileinput-button form-buttons">'+
                                 '<span><?php echo __('Browse Files...') ?></span>' +
                                 '<input id="downloadable_link_{{id}}_file" type="file" name="<?php echo $this->getFileFieldName('links') ?>">' +
-                                '<script type="text/javascript">' +
+                                '<script>' +
                                 '/*<![CDATA[*/' +
                                     'linksUploader("#downloadable_link_{{id}}_file", "<?php echo $this->getUploadUrl('links') ?>"); ' +
                                 '/*]]>*/' +

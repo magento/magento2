@@ -7,7 +7,7 @@
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="attributes-edit-form" class="attributes-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>
 </form>
-<script type="text/javascript">
+<script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('#attributes-edit-form').mage('form')

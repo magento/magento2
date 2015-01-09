@@ -20,7 +20,7 @@ class Attributes
         $mapEnabled = $subject->getForm()->getElement('msrp');
         if ($mapEnabled && $subject->getCanEditPrice() !== false) {
             $mapEnabled->setAfterElementHtml(
-                '<script type="text/javascript">' .
+                '<script>' .
                 "
                 function changePriceTypeMap() {
                     if ($('price_type').value == " . \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC . ") {

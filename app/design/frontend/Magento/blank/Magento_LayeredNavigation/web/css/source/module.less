@@ -6,7 +6,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .block.filter {
     margin-bottom: 40px;
@@ -33,7 +33,7 @@
             }
         }
         .count {
-            color: @text-color-muted;
+            .css(color, @text-color-muted);
             &:before {
                 content: "(";
             }

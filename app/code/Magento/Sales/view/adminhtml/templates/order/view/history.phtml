@@ -54,7 +54,7 @@
         </li>
     <?php endforeach; ?>
     </ul>
-    <script type="text/javascript">
+    <script>
 require(['prototype'], function(){
 
         if($('order_status'))$('order_status').update('<?php echo $this->getOrder()->getStatusLabel() ?>');

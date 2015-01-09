@@ -21,17 +21,16 @@
     @_loader-text-padding: @loader-text-padding
 ) {
     position: fixed;
-    left: 0;
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: @_loader-overlay-background-color;
-    z-index: @_loader-overlay-z-index;
+    left: 0;
+    .css(background-color, @_loader-overlay-background-color);
+    .css(z-index, @_loader-overlay-z-index);
     &:before {
+        .css(border-radius, @_loader-icon-border-radius);
+        .css(background, @_loader-icon-background-color @_loader-icon-background-image no-repeat @_loader-icon-background-position);
         box-sizing: border-box;
-        .css(padding, @_loader-icon-padding);
-        background: @_loader-icon-background-color @_loader-icon-background-image no-repeat @_loader-icon-background-position;
-        border-radius: @_loader-icon-border-radius;
         content: '';
         position: absolute;
         top: 0;
@@ -39,9 +38,9 @@
         left: 0;
         bottom: 0;
         margin: auto;
-        width: @_loader-icon-width;
-        height: @_loader-icon-height;
-
+        .css(padding, @_loader-icon-padding);
+        .css(width, @_loader-icon-width);
+        .css(height, @_loader-icon-height);
         ._loader-text(@_loader-text);
     }
 }
@@ -50,7 +49,7 @@
     @_loader-text
 ) when (@_loader-text = true) {
     content: attr(data-text);
-    padding: @_loader-text-padding;
+    .css(padding, @_loader-text-padding);
     vertical-align: baseline;
     text-align: center;
     .typography(
@@ -74,7 +73,7 @@
         top: 0;
         right: 0;
         bottom: 0;
-        background: @_loading-background-color @_loading-background-image no-repeat 50% 50%;
+        .css(background, @_loading-background-color @_loading-background-image no-repeat 50% 50%);
     }
 }
 
