@@ -14,9 +14,13 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * Widget config parameter
+     * Widget config parameters
+     *
+     * @var array
      */
-    const WIDGET_TEMPLATE_PARAMETER = 'template';
+    protected $hiddenParameters = [
+        'template'
+    ];
 
     /**
      * Prepare label for tab
@@ -57,9 +61,9 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     {
         $widgetConfig = $this->getWidgetInstance()->getWidgetConfigAsArray();
 
-        if (in_array('parameters', array_keys($widgetConfig))) {
+        if (isset($widgetConfig['parameters'])) {
             foreach ($widgetConfig['parameters'] as $key => $parameter) {
-                if ($parameter['visible'] == 1 && $key != self::WIDGET_TEMPLATE_PARAMETER) {
+                if ($parameter['visible'] == 1 && !in_array($key, $this->hiddenParameters)) {
                     return false;
                 }
             }
@@ -102,7 +106,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      */
     protected function _addField($parameter)
     {
-        if ($parameter->getKey() != 'template') {
+        if (!in_array($parameter->getKey(), $this->hiddenParameters)) {
             return parent::_addField($parameter);
         }
         return false;

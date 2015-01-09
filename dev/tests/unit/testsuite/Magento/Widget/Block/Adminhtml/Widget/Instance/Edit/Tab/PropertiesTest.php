@@ -7,34 +7,50 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 class PropertiesTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $widget;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $registry;
+
+    /**
+     * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties
+     */
+    protected $propertiesBlock;
+
+    protected function setUp()
+    {
+        $this->widget = $this->getMock('Magento\Widget\Model\Widget\Instance', [], [], '', false);
+        $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->propertiesBlock = $objectManager->getObject(
+            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties',
+            [
+                'registry' => $this->registry
+            ]
+        );
+    }
+
+    /**
      * @param array $widgetConfig
-     * @param boolean $expected
+     * @param boolean $isHidden
      *
      * @dataProvider isHiddenDataProvider
      */
-    public function testIsHidden($widgetConfig, $expected)
+    public function testIsHidden($widgetConfig, $isHidden)
     {
-        /** @var \Magento\Widget\Model\Widget\Instance|\PHPUnit_Framework_MockObject_MockObject $widget */
-        $widget = $this->getMock('Magento\Widget\Model\Widget\Instance', [], [], '', false);
-        $widget->expects($this->atLeastOnce())->method('getWidgetConfigAsArray')->willReturn($widgetConfig);
+        $this->widget->expects($this->atLeastOnce())->method('getWidgetConfigAsArray')->willReturn($widgetConfig);
 
-        /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject $registry */
-        $registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $registry->expects($this->atLeastOnce())
+        $this->registry->expects($this->atLeastOnce())
             ->method('registry')
             ->with('current_widget_instance')
-            ->willReturn($widget);
+            ->willReturn($this->widget);
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties $propertiesBlock */
-        $propertiesBlock = $objectManager->getObject(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Properties',
-            [
-                'registry' => $registry
-            ]
-        );
-
-        $this->assertEquals($expected, $propertiesBlock->isHidden());
+        $this->assertEquals($isHidden, $this->propertiesBlock->isHidden());
     }
 
     /**
@@ -56,7 +72,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
                         ],
                     ]
                 ],
-                'expected' => true
+                'isHidden' => true
             ],
             [
                 'widgetConfig' => [
@@ -71,7 +87,22 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
                         ],
                     ]
                 ],
-                'expected' => false
+                'isHidden' => false
+            ],
+            [
+                'widgetConfig' => [],
+                'isHidden' => true
+            ],
+            [
+                'widgetConfig' => [
+                    'parameters' => [
+                        'template' => [
+                            'type' => 'select',
+                            'visible' => '0',
+                        ],
+                    ]
+                ],
+                'isHidden' => true
             ]
         ];
     }
