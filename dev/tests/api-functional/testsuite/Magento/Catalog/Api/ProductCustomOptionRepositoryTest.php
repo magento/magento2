@@ -266,9 +266,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 ['id' => $optionId, 'option' => $optionDataPost]
             );
         } else {
-            $updatedOption = $this->_webApiCall(
-                $serviceInfo, ['option' => $optionDataPost]
-            );
+            $updatedOption = $this->_webApiCall($serviceInfo, ['option' => $optionDataPost]);
         }
 
         unset($updatedOption['values']);
