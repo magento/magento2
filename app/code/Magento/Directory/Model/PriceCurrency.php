@@ -57,13 +57,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * Convert and round price value for specified store or passed currency
-     *
-     * @param float $amount
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @param Currency|string|null $currency
-     * @param int $precision
-     * @return float
+     * {@inheritdoc}
      */
     public function convertAndRound($amount, $store = null, $currency = null, $precision = self::DEFAULT_PRECISION)
     {
