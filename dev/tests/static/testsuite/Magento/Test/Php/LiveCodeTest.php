@@ -159,11 +159,9 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     /**
      * Run mess detector on code
      *
-     * @param array $whiteList
      * @return void
-     * @dataProvider whiteListDataProvider
      */
-    public function testCodeMess($whiteList)
+    public function testCodeMess()
     {
         $reportFile = self::$reportDir . '/phpmd_report.xml';
         $codeMessDetector = new CodeMessDetector(realpath(__DIR__ . '/_files/phpmd/ruleset.xml'), $reportFile);
