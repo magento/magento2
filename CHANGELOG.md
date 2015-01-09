@@ -2,22 +2,23 @@
 =============
 * Fixed bugs:
     * Fixed an issue where malicious JavaScript could be executed when adding new User Roles in the backend
-    * Fixed an issue where incorrect output format was returned when invoking customer service getAllAttributesMetadata
+    * Fixed an issue where incorrect output format was returned when invoking the Customer service
     * Fixed an issue where it was impossible to activate an integration after editing the URLs
-    * Fixed an issue where incorrect class path was used in ObjectManager calls
+    * Fixed an issue where incorrect class path was used in the ObjectManager calls
     * Fixed an issue where inconsistent Reflection classes were used for WebApi applications
-    * Fixed: Integration DateTest
-    * Fixed: Remove include-path from composer.json
-    * Fixed: Add parent element back to theme.xml
-* Api-functional Tests Changes:
-    * Added api-functional tests for CE modules
+    * Fixed an issue where the parent element was removed from theme.xml by mistake
+* API functional tests changes:
+    * Moved API functional tests to CE repository
+* Various improvements:
+    * Removed include-path from composer.json
 * GitHub requests:
-    * [#876](https://github.com/magento/magento2/pull/876) -- Fixed german translation "Warenkorbrn"
+    * [#876](https://github.com/magento/magento2/pull/876) -- [BUGFIX] Fixed german translation "Warenkorbrn"
     * [#880](https://github.com/magento/magento2/pull/880) -- Naming fix in DI compiler.php - rename binary to igbinary to stay consistent
     * [#913](https://github.com/magento/magento2/pull/913) -- Specify date fixture and fix expectations
     * [#874](https://github.com/magento/magento2/pull/874) -- Prevent special characters finding their way into layout handle due to SKU being used
     * [#903](https://github.com/magento/magento2/pull/903) -- Small cleanup refactoring
     * [#905](https://github.com/magento/magento2/pull/905), [#907](https://github.com/magento/magento2/pull/907), [#908](https://github.com/magento/magento2/pull/908) -- Change interpret() return value to conform with Layout\ReaderInterface
+    * [#913](https://github.com/magento/magento2/pull/913) -- Specify date fixture and fix expectations
 
 0.42.0-beta2
 =============
