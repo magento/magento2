@@ -32,6 +32,11 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $converter;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManagerMock;
+
     protected function setUp()
     {
         $this->orderDataBuilderMock = $this->getMock(
@@ -43,12 +48,14 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
         );
         $this->objectCopyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
         $this->orderInterfaceMock = $this->getMock('Magento\Sales\Api\Data\OrderInterface', [], [], '', false);
+        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(
             'Magento\Quote\Model\Quote\Address\ToOrder',
             [
                 'orderBuilder' => $this->orderDataBuilderMock,
-                'objectCopyService' => $this->objectCopyMock
+                'objectCopyService' => $this->objectCopyMock,
+                'eventManager' => $this->eventManagerMock
             ]
         );
     }
@@ -59,9 +66,10 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
         $data = ['test' => 'beer'];
         $quoteId = 1;
         $storeId = 777;
+
         $object = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
         $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $object->expects($this->exactly(2))->method('getQuote')->willReturn($quote);
+        $object->expects($this->exactly(4))->method('getQuote')->willReturn($quote);
         $quote->expects($this->once())->method('getId')->willReturn($quoteId);
         $quote->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(
@@ -75,6 +83,9 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
         $this->orderDataBuilderMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
         $this->orderDataBuilderMock->expects($this->once())->method('setQuoteId')->with($quoteId)->willReturnSelf();
         $this->orderDataBuilderMock->expects($this->once())->method('create')->willReturn($this->orderInterfaceMock);
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with('sales_convert_quote_to_order', ['order' => $this->orderInterfaceMock, 'quote' => $quote]);
         $this->assertSame($this->orderInterfaceMock, $this->converter->convert($object, $data));
     }
 }

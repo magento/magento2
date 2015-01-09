@@ -52,7 +52,6 @@ class OrderCreateTest extends WebapiAbstract
             ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderAddressInterface')]
         );
 
-        $orderItem->setData('parent_item', ['weight' => 1]);
         $email = uniqid() . 'email@example.com';
         $orderItem->setSku('sku#1');
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
