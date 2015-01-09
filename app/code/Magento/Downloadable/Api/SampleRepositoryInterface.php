@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Downloadable\Api;
@@ -18,7 +17,12 @@ interface SampleRepositoryInterface
      * @param bool $isGlobalScopeContent
      * @return int
      */
-    public function save($productSku, $sampleId = null, SampleContentInterface $sampleContent, $isGlobalScopeContent = false);
+    public function save(
+        $productSku,
+        $sampleId = null,
+        SampleContentInterface $sampleContent,
+        $isGlobalScopeContent = false
+    );
 
     /**
      * Delete downloadable sample
@@ -27,5 +31,4 @@ interface SampleRepositoryInterface
      * @return bool
      */
     public function delete($sampleId);
-
 }

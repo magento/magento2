@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Downloadable\Api\Data;
@@ -15,7 +14,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return int|null Sample(or link) id
      */
     public function getId();
-
 
     /**
      * @return string|null

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 namespace Magento\Downloadable\Api\Data;
@@ -38,12 +37,10 @@ interface SampleContentInterface extends \Magento\Framework\Api\ExtensibleDataIn
      */
     public function getSortOrder();
 
-
     /**
      * Retrieve sample URL
      *
      * @return string|null
      */
     public function getSampleUrl();
-
 }

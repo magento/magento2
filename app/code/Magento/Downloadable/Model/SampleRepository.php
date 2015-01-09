@@ -60,8 +60,12 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * {@inheritdoc}
      */
-    public function save($productSku, $sampleId = null, SampleContentInterface $sampleContent, $isGlobalScopeContent = false)
-    {
+    public function save(
+        $productSku,
+        $sampleId = null,
+        SampleContentInterface $sampleContent,
+        $isGlobalScopeContent = false
+    ) {
         $product = $this->productRepository->get($productSku, true);
 
         if ($sampleId) {
@@ -100,7 +104,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
                 ->save();
 
             return true;
-
         } else {
 
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
@@ -128,9 +131,11 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             ];
 
             if ($sampleContent->getSampleType() == 'file') {
-                $sampleData['file'] = $this->jsonEncoder->encode([
+                $sampleData['file'] = $this->jsonEncoder->encode(
+                    [
                         $this->fileContentUploader->upload($sampleContent->getSampleFile(), 'sample'),
-                    ]);
+                    ]
+                );
             } else {
                 $sampleData['sample_url'] = $sampleContent->getSampleUrl();
             }
