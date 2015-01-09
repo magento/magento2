@@ -40,11 +40,94 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSchemaFile()
     {
-        /** @var \Magento\Framework\Config\Theme $config */
         $config = $this->objectManager->getObject(
-            'Magento\Framework\Config\Theme'
+            'Magento\Framework\Config\Theme',
+            ['configContent' => '<theme><title>Required Dummy</title><version>1</version></theme>']
         );
         $this->assertFileExists($config->getSchemaFile());
+    }
+
+    public function testThemeXmlTitleAndVersionOnly()
+    {
+        $themePath = 'test_themexml_only';
+        $config = $this->createThemeConfig(file_get_contents(
+            __DIR__ . '/_files/area/' . $themePath . '/theme-only-title-version.xml'
+        ), '');
+        $this->assertSame('1.0', $config->getThemeVersion());
+        $this->assertSame(['preview_image' => ''], $config->getMedia());
+        $this->assertSame('Test', $config->getThemeTitle());
+        $this->assertSame(null, $config->getParentTheme());
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage The specified versions do not match
+     */
+    public function testItThrowsAnExceptionIfVersionsDoNotMatch()
+    {
+        $themePath = 'test_theme_composer_mismatch';
+        $this->createThemeConfig(file_get_contents(
+            __DIR__ . '/_files/area/' . $themePath . '/version-mismatch.xml'
+        ), file_get_contents(
+            __DIR__ . '/_files/area/' . $themePath . '/version-mismatch.json'
+        ));
+    }
+    
+    public function testThemeXmlTitleVersionAndParent()
+    {
+        $themePath = 'test_themexml_only';
+        $config = $this->createThemeConfig(file_get_contents(
+            __DIR__ . '/_files/area/' . $themePath . '/theme-only-title-version-parent.xml'
+        ), '');
+        $this->assertSame('1.0', $config->getThemeVersion());
+        $this->assertSame(['preview_image' => ''], $config->getMedia());
+        $this->assertSame('Test', $config->getThemeTitle());
+        $this->assertSame(['Test', 'parent'], $config->getParentTheme());
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage The specified parent themes do not match
+     */
+    public function testItThrowsAnExceptionIfParentsDoNotMatch()
+    {
+        $themePath = 'test_theme_composer_mismatch';
+        $this->createThemeConfig(file_get_contents(
+            __DIR__ . '/_files/area/' . $themePath . '/parent-mismatch.xml'
+        ), file_get_contents(
+            __DIR__ . '/_files/area/' . $themePath . '/parent-mismatch.json'
+        ));
+    }
+    
+    public function testItThrowsNoExceptionIfVersionAndParentMatchInXmlAndComposer()
+    {
+        $themePath = 'test_theme_xml_composer_match';
+        $config = $this->createThemeConfig(file_get_contents(
+            __DIR__ . '/_files/area/' . $themePath . '/theme.xml'
+        ), file_get_contents(
+            __DIR__ . '/_files/area/' . $themePath . '/composer.json'
+        ));
+        $this->assertSame(['Test', 'parent'], $config->getParentTheme());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Version configuration is missing from theme
+     */
+    public function testItThrowsAnExceptionIfTheVersionIsNotSpecifiedAnywhere()
+    {
+        $xmlConfig = '<theme><title>Test</title></theme>';
+        $this->createThemeConfig($xmlConfig, '');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Theme title configuration is missing
+     */
+    public function testItThrowsAnExceptionIfTheTitleIsMissingInXmlConfig()
+    {
+        $xmlConfig = '<theme><version>1</version></theme>';
+        $this->createThemeConfig($xmlConfig, '');
     }
 
     /**
@@ -52,16 +135,12 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      * @param array $expected
      * @dataProvider dataGetterDataProvider
      */
-    public function testDataGetter($themePath, $expected)
+    public function testItCanCombineRequiredInfoFromThemeXmlAndComposer($themePath, $expected)
     {
         $expected = reset($expected);
-        /** @var \Magento\Framework\Config\Theme $config */
-        $config = $this->objectManager->getObject(
-            'Magento\Framework\Config\Theme',
-            [
-                'configContent' => file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml'),
-                'composerContent' => file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/composer.json'),
-            ]
+        $config = $this->createThemeConfig(
+            file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml'),
+            file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/composer.json')
         );
         $this->assertSame($expected['version'], $config->getThemeVersion());
         $this->assertSame($expected['media'], $config->getMedia());
@@ -116,5 +195,21 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                     'parent' => ['Magento', 'default_test2'],
                 ]]],
         ];
+    }
+
+    /**
+     * @param string $xmlConfig
+     * @param string $composerConfig
+     * @return \Magento\Framework\Config\Theme
+     */
+    private function createThemeConfig($xmlConfig, $composerConfig)
+    {
+        return $this->objectManager->getObject(
+            'Magento\Framework\Config\Theme',
+            [
+                'configContent' => $xmlConfig,
+                'composerContent' => $composerConfig,
+            ]
+        );
     }
 }
