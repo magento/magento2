@@ -31,7 +31,8 @@ interface AdapterInterface
      * );
      * </pre>
      * @param array $arguments
+     * @param string|null $storeCode if store code not provided, default store code will be used
      * @return array|string|int|float|bool
      */
-    public function call($serviceInfo, $arguments = []);
+    public function call($serviceInfo, $arguments = [], $storeCode = null);
 }

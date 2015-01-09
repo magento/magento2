@@ -154,15 +154,16 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      * @param array $serviceInfo
      * @param array $arguments
      * @param string|null $webApiAdapterCode
+     * @param string|null $storeCode
      * @return array|int|string|float|bool Web API call results
      */
-    protected function _webApiCall($serviceInfo, $arguments = [], $webApiAdapterCode = null)
+    protected function _webApiCall($serviceInfo, $arguments = [], $webApiAdapterCode = null, $storeCode = null)
     {
         if (is_null($webApiAdapterCode)) {
             /** Default adapter code is defined in PHPUnit configuration */
             $webApiAdapterCode = strtolower(TESTS_WEB_API_ADAPTER);
         }
-        return $this->_getWebApiAdapter($webApiAdapterCode)->call($serviceInfo, $arguments);
+        return $this->_getWebApiAdapter($webApiAdapterCode)->call($serviceInfo, $arguments, $storeCode);
     }
 
     /**
