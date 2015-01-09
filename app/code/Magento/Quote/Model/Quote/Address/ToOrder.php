@@ -65,8 +65,10 @@ class ToOrder
             ->create();
 
         $this->objectCopyService->copyFieldsetToTarget('sales_convert_quote', 'to_order', $object->getQuote(), $order);
-        $this->eventManager->dispatch('sales_convert_quote_to_order',
-            ['order' => $order, 'quote' => $object->getQuote()]);
+        $this->eventManager->dispatch(
+            'sales_convert_quote_to_order',
+            ['order' => $order, 'quote' => $object->getQuote()]
+        );
         return $order;
 
     }
