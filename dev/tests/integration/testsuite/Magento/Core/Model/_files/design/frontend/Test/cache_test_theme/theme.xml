@@ -5,4 +5,6 @@
 -->
 <theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../lib/internal/Magento/Framework/Config/etc/theme.xsd">
     <title>Cache Test Theme</title>
+    <version>0.1.0</version>
+    <parent>Test/default</parent>
 </theme>

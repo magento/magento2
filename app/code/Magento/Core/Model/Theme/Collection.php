@@ -268,15 +268,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
         $relativeConfigPath = $this->_directory->getRelativePath($configPath);
         $configContent = $this->_directory->isExist($relativeConfigPath) ?
             $this->_directory->readFile($relativeConfigPath) : null;
-        $relativeComposerPath = dirname($relativeConfigPath) . '/composer.json';
-        $composerContent = $this->_directory->isExist($relativeComposerPath) ?
-            $this->_directory->readFile($relativeComposerPath) : null;
-        return $this->themeConfigFactory->create(
-            [
-                'configContent' => $configContent,
-                'composerContent' => $composerContent,
-            ]
-        );
+        return $this->themeConfigFactory->create(['configContent' => $configContent]);
     }
 
     /**

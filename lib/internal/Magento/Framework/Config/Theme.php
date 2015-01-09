@@ -28,13 +28,10 @@ class Theme
      * Constructor
      *
      * @param string $configContent
-     * @param string $composerContent
      */
-    public function __construct(
-        $configContent = null,
-        $composerContent = null
-    ) {
-        $this->_data = $this->_extractData($configContent, $composerContent);
+    public function __construct($configContent = null)
+    {
+        $this->_data = $this->_extractData($configContent);
     }
 
     /**
@@ -48,13 +45,12 @@ class Theme
     }
 
     /**
-     * Extract configuration data from theme.xml and composer.json
+     * Extract configuration data from theme.xml
      *
      * @param string $configContent
-     * @param string $composerContent
      * @return array
      */
-    protected function _extractData($configContent, $composerContent)
+    protected function _extractData($configContent)
     {
         $data = [
             'version' => null,
@@ -69,20 +65,16 @@ class Theme
             // todo: validation of the document
             /** @var $themeNode \DOMElement */
             $themeNode = $dom->getElementsByTagName('theme')->item(0);
-            $data['title'] = $themeNode->getElementsByTagName('title')->item(0)->nodeValue;
+            $themeTitleNode = $themeNode->getElementsByTagName('title')->item(0);
+            $data['title'] = $themeTitleNode ? $themeTitleNode->nodeValue : null;
             /** @var $mediaNode \DOMElement */
             $mediaNode = $themeNode->getElementsByTagName('media')->item(0);
             $previewImage = $mediaNode ? $mediaNode->getElementsByTagName('preview_image')->item(0)->nodeValue : '';
             $data['media']['preview_image'] = $previewImage;
-        }
-
-        if (!empty($composerContent)) {
-            $json = json_decode($composerContent);
-            $package = new Package($json);
-            $data['version'] = $package->get('version');
-            $parents = (array)$package->get('require', '/.+\/theme-/');
-            $parents = empty($parents) ? null : array_keys($parents);
-            $data['parent'] = empty($parents) ? null : array_shift($parents);
+            $themeVersionNode = $themeNode->getElementsByTagName('version')->item(0);
+            $data['version'] = $themeVersionNode ? $themeVersionNode->nodeValue : null;
+            $themeParentNode = $themeNode->getElementsByTagName('parent')->item(0);
+            $data['parent'] = $themeParentNode ? $themeParentNode->nodeValue : null;
         }
 
         return $data;
@@ -129,28 +121,6 @@ class Theme
         if (!$parentTheme) {
             return null;
         }
-        $parent = $this->parseThemeName($parentTheme);
-        return [ucfirst($parent['vendor']), $parent['name']];
-    }
-
-    /**
-     * Parse theme name
-     *
-     * @param string $themeName
-     * @return array|null Return array if theme name is in the right format, otherwise null is returned, for example:
-     *   [
-     *     'vendor' => 'magento',
-     *     'area' => 'frontend',
-     *     'name' => 'luma'
-     *   ]
-     */
-    private function parseThemeName($themeName)
-    {
-        preg_match('/(?<vendor>.+)\/theme-(?<area>.+)-(?<name>.+)/', $themeName, $matches);
-        return [
-            'vendor' => $matches['vendor'],
-            'area' => $matches['area'],
-            'name' => $matches['name'],
-        ];
+        return explode(self::THEME_PATH_SEPARATOR, $parentTheme);
     }
 }
