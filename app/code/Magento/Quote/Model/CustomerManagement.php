@@ -70,6 +70,8 @@ class CustomerManagement
                 $quote->getPasswordHash()
             );
             $quote->setCustomer($customer);
+        } else {
+            $this->customerRepository->save($customer);
         }
         if (!$quote->getBillingAddress()->getId() && $customer->getDefaultBilling()) {
             $quote->getBillingAddress()->importCustomerAddressData(
