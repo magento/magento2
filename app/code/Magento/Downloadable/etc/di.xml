@@ -61,6 +61,7 @@
     <preference for="\Magento\Downloadable\Api\Data\LinkInterface" type="\Magento\Downloadable\Model\Link" />
     <preference for="\Magento\Downloadable\Api\Data\SampleInterface" type="\Magento\Downloadable\Model\Sample" />
     <preference for="\Magento\Downloadable\Api\Data\SampleContentInterface" type="\Magento\Downloadable\Model\Sample\Content" />
+    <preference for="\Magento\Downloadable\Api\Data\LinkContentInterface" type="\Magento\Downloadable\Model\Link\Content" />
     <preference for="\Magento\Downloadable\Api\Data\File\ContentInterface" type="\Magento\Downloadable\Model\File\Content" />
     <preference for="\Magento\Downloadable\Api\Data\File\ContentUploaderInterface" type="\Magento\Downloadable\Model\File\ContentUploader" />
     <preference for="\Magento\Downloadable\Service\V1\DownloadableLink\ReadServiceInterface" type="\Magento\Downloadable\Service\V1\DownloadableLink\ReadService" />

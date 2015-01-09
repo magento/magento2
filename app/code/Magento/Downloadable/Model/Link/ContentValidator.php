@@ -3,13 +3,14 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Downloadable\Service\V1\DownloadableLink\Data;
+namespace Magento\Downloadable\Model\Link;
 
-use Magento\Downloadable\Service\V1\Data\FileContentValidator;
+use Magento\Downloadable\Api\Data\LinkContentInterface;
+use Magento\Downloadable\Model\File\ContentValidator as FileContentValidator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Url\Validator as UrlValidator;
 
-class DownloadableLinkContentValidator
+class ContentValidator
 {
     /**
      * @var FileContentValidator
@@ -36,11 +37,11 @@ class DownloadableLinkContentValidator
     /**
      * Check if link content is valid
      *
-     * @param DownloadableLinkContent $linkContent
+     * @param LinkContentInterface $linkContent
      * @return bool
      * @throws InputException
      */
-    public function isValid(DownloadableLinkContent $linkContent)
+    public function isValid(LinkContentInterface $linkContent)
     {
         if (!is_numeric($linkContent->getPrice()) || $linkContent->getPrice() < 0) {
             throw new InputException('Link price must have numeric positive value.');
@@ -60,11 +61,11 @@ class DownloadableLinkContentValidator
     /**
      * Validate link resource (file or URL)
      *
-     * @param DownloadableLinkContent $linkContent
+     * @param LinkContentInterface $linkContent
      * @throws InputException
      * @return void
      */
-    protected function validateLinkResource(DownloadableLinkContent $linkContent)
+    protected function validateLinkResource(LinkContentInterface $linkContent)
     {
         if ($linkContent->getLinkType() == 'url'
             && !$this->urlValidator->isValid($linkContent->getLinkUrl())
@@ -81,11 +82,11 @@ class DownloadableLinkContentValidator
     /**
      * Validate sample resource (file or URL)
      *
-     * @param DownloadableLinkContent $linkContent
+     * @param LinkContentInterface $linkContent
      * @throws InputException
      * @return void
      */
-    protected function validateSampleResource(DownloadableLinkContent $linkContent)
+    protected function validateSampleResource(LinkContentInterface $linkContent)
     {
         if ($linkContent->getSampleType() == 'url'
             && !$this->urlValidator->isValid($linkContent->getSampleUrl())
