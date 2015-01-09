@@ -160,7 +160,8 @@ class SourceArgumentsReader
                     if ($importName) {
                         $output[$importName] = self::NS_SEPARATOR . $useStatement;
                     } else {
-                        $key = end(explode(self::NS_SEPARATOR, $useStatement));
+                        $key = explode(self::NS_SEPARATOR, $useStatement);
+                        $key = end($key);
                         $output[$key] = self::NS_SEPARATOR . $useStatement;
                     }
                 }
