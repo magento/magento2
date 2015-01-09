@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -25,7 +26,14 @@ class WordsFinder
      *
      * @var string
      */
-    protected $copyrightString = '@copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)';
+    protected $copyrightString = 'Copyright © 2015 Magento. All rights reserved.';
+
+    /**
+     * Copying string which must be present in every non-binary file right after copyright string
+     *
+     * @var string
+     */
+    protected $copyingString = 'See COPYING.txt for license details.';
 
     /**
      * List of extensions for which copyright check must be skipped
@@ -247,7 +255,9 @@ class WordsFinder
             }
         }
         if ($contents && $this->isCopyrightChecked && !$this->isCopyrightCheckSkipped($file)
-            && strpos($contents, $this->copyrightString) === false
+            && (($copyrightStringPosition = strpos($contents, $this->copyrightString)) === false
+            || ($copyingStringPosition = strpos($contents, $this->copyingString)) === false
+            || $copyingStringPosition - $copyrightStringPosition > 10)
         ) {
             $foundWords[] = 'Copyright string is missing';
         }
