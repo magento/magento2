@@ -32,7 +32,7 @@ class ConstructorArgumentTypesTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->sourceArgumentsReaderMock = $this->getMock(
-            '\Magento\Framework\Code\Reader\sourceArgumentsReader',
+            '\Magento\Framework\Code\Reader\SourceArgumentsReader',
             [],
             [],
             '',
