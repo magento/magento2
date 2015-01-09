@@ -14,6 +14,10 @@ use Mtf\TestCase\Functional;
  */
 class LinksPurchasedSeparatelyTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Product fixture
      *

@@ -17,6 +17,10 @@ use Mtf\TestCase\Functional;
  */
 class ReviewTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Adding product review from not logged customer prospective
      *

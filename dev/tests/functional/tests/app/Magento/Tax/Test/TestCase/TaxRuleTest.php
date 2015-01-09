@@ -18,6 +18,10 @@ use Mtf\TestCase\Functional;
  */
 class TaxRuleTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Create Tax Rule with new and existing Tax Rate, Customer Tax Class, Product Tax Class
      *

@@ -12,6 +12,10 @@ use Mtf\TestCase\Functional;
 
 class StoreTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Login into backend area before test
      */

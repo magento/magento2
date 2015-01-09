@@ -15,6 +15,10 @@ use Mtf\TestCase\Functional;
  */
 class CreateVirtualTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Login into backend area before test
      *

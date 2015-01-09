@@ -17,6 +17,10 @@ use Mtf\TestCase\Functional;
  */
 class CreateWithAttributeTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Creating configurable product with creating new category and new attribute (required fields only)
      *

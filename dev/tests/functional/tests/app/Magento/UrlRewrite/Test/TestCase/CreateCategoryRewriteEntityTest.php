@@ -36,6 +36,7 @@ class CreateCategoryRewriteEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'PS';
+    const TEST_TYPE = 'acceptance_test';
     /* end tags */
 
     /**

@@ -15,6 +15,10 @@ use Mtf\TestCase\Functional;
  */
 class CreateOnFrontendTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Create Customer account on frontend
      *

@@ -15,6 +15,10 @@ use Mtf\TestCase\Functional;
  */
 class CreateTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Creating Category from Category page with required fields only
      *

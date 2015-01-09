@@ -14,6 +14,10 @@ use Mtf\TestCase\Functional;
  */
 class AssignProductTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Creating a subcategory and assign products to the category
      *
