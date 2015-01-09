@@ -282,6 +282,7 @@ class Menu extends \Magento\Backend\Block\Template
             'admin_top_nav',
             $this->getActive(),
             $this->_authSession->getUser()->getId(),
+            $this->_authSession->getUser()->getRole()->getId(),
             $this->_localeResolver->getLocaleCode(),
         ];
         // Add additional key parameters if needed
