@@ -6,7 +6,11 @@
 -->
 <fixture class="Magento\GiftMessage\Test\Fixture\GiftMessage">
     <module>Magento_GiftMessage</module>
-   <repository_class>Magento\GiftMessage\Test\Repository\GiftMessage</repository_class>
+    <type>flat</type>
+    <entity_type>gift_message</entity_type>
+    <collection>Magento\GiftMessage\Model\Resource\Message\Collection</collection>
+    <identifier>gift_message_id</identifier>
+    <repository_class>Magento\GiftMessage\Test\Repository\GiftMessage</repository_class>
     <fields>
         <gift_message_id>
             <attribute_code>gift_message_id</attribute_code>

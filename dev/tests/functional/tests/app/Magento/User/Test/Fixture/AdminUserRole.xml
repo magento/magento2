@@ -6,8 +6,11 @@
 -->
 <fixture class="Magento\User\Test\Fixture\AdminUserRole">
     <module>Magento_User</module>
-   <repository_class>Magento\User\Test\Repository\AdminUserRole</repository_class>
-   <handler_interface>Magento\User\Test\Handler\AdminUserRole\AdminUserRoleInterface</handler_interface>
+    <type>flat</type>
+    <entity_type>authorization_role</entity_type>
+    <collection>Magento\User\Model\Resource\Role\User\Collection</collection>
+    <repository_class>Magento\User\Test\Repository\AdminUserRole</repository_class>
+    <handler_interface>Magento\User\Test\Handler\AdminUserRole\AdminUserRoleInterface</handler_interface>
     <fields>
         <role_id>
             <attribute_code>role_id</attribute_code>

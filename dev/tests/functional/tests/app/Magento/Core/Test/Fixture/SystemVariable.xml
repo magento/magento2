@@ -6,7 +6,13 @@
 -->
 <fixture class="Magento\Core\Test\Fixture\SystemVariable">
     <module>Magento_Core</module>
-   <handler_interface>Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface</handler_interface>
+    <type>composite</type>
+    <entities>
+        <core_variable>core_variable</core_variable>
+        <core_variable_value>core_variable_value</core_variable_value>
+    </entities>
+    <collection>Magento\Core\Model\Resource\Variable\Collection</collection>
+    <handler_interface>Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface</handler_interface>
     <fields>
         <variable_id>
             <attribute_code>variable_id</attribute_code>

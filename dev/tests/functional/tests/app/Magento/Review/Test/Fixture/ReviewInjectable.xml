@@ -6,8 +6,14 @@
 -->
 <fixture class="Magento\Review\Test\Fixture\ReviewInjectable">
     <module>Magento_Review</module>
-   <repository_class>Magento\Review\Test\Repository\ReviewInjectable</repository_class>
-   <handler_interface>Magento\Review\Test\Handler\ReviewInjectable\ReviewInjectableInterface</handler_interface>
+    <type>composite</type>
+    <entities>
+        <review>review</review>
+        <review_detail>review_detail</review_detail>
+    </entities>
+    <collection>Magento\Review\Model\Resource\Review\Collection</collection>
+    <repository_class>Magento\Review\Test\Repository\ReviewInjectable</repository_class>
+    <handler_interface>Magento\Review\Test\Handler\ReviewInjectable\ReviewInjectableInterface</handler_interface>
     <fields>
         <review_id>
             <attribute_code>review_id</attribute_code>
@@ -103,10 +109,10 @@
             <backend_type>virtual</backend_type>
             <source>Magento\Review\Test\Fixture\ReviewInjectable\Ratings</source>
             <default_value>
-                <0>
+                <key_0>
                     <dataSet>visibleOnDefaultWebsite</dataSet>
                     <rating>4</rating>
-                </0>
+                </key_0>
             </default_value>
         </ratings>
         <type>

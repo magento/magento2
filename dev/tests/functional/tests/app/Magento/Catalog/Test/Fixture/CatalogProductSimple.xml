@@ -6,16 +6,21 @@
 -->
 <fixture class="Magento\Catalog\Test\Fixture\CatalogProductSimple">
     <module>Magento_Catalog</module>
-   <repository_class>Magento\Catalog\Test\Repository\CatalogProductSimple</repository_class>
-   <handler_interface>Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface</handler_interface>
-   <data_config>
-      <type_id>simple</type_id>
-      <create_url_params>
-          <type>simple</type>
-          <set>4</set>
-      </create_url_params>
-      <input_prefix>product</input_prefix>
-   </data_config>
+    <type>eav</type>
+    <entity_type>catalog_product</entity_type>
+    <product_type>simple</product_type>
+    <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
+    <identifier>sku</identifier>
+    <repository_class>Magento\Catalog\Test\Repository\CatalogProductSimple</repository_class>
+    <handler_interface>Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface</handler_interface>
+    <data_config>
+        <type_id>simple</type_id>
+        <create_url_params>
+            <type>simple</type>
+            <set>4</set>
+        </create_url_params>
+        <input_prefix>product</input_prefix>
+    </data_config>
     <fields>
         <category_ids>
             <attribute_code>category_ids</attribute_code>
@@ -377,7 +382,7 @@
         <id>
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
-            <group></group>
+            <group>null</group>
         </id>
         <type_id>
             <attribute_code>type_id</attribute_code>
@@ -427,7 +432,7 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>date</input>
-            <source>Magento\Backend\Test\Fixture\Source\Date</source>
+            <source>Magento\Backend\Test\Fixture\Date</source>
         </news_from_date>
         <news_to_date>
             <attribute_code>news_to_date</attribute_code>
@@ -435,7 +440,7 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>date</input>
-            <source>Magento\Backend\Test\Fixture\Source\Date</source>
+            <source>Magento\Backend\Test\Fixture\Date</source>
         </news_to_date>
         <stock_data>
             <attribute_code>stock_data</attribute_code>
@@ -445,7 +450,7 @@
         <checkout_data>
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
-            <group></group>
+            <group>null</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CheckoutData</source>
         </checkout_data>
         <cross_sell_products>

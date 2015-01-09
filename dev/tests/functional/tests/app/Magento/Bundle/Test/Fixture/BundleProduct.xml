@@ -6,16 +6,21 @@
 -->
 <fixture class="Magento\Bundle\Test\Fixture\BundleProduct">
     <module>Magento_Bundle</module>
-   <repository_class>Magento\Bundle\Test\Repository\BundleProduct</repository_class>
-   <handler_interface>Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface</handler_interface>
-   <data_config>
-      <type_id>bundle</type_id>
-      <create_url_params>
-          <type>bundle</type>
-          <set>4</set>
-      </create_url_params>
-      <input_prefix>product</input_prefix>
-   </data_config>
+    <type>eav</type>
+    <entity_type>catalog_product</entity_type>
+    <product_type>bundle</product_type>
+    <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
+    <identifier>sku</identifier>
+    <repository_class>Magento\Bundle\Test\Repository\BundleProduct</repository_class>
+    <handler_interface>Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface</handler_interface>
+    <data_config>
+        <type_id>bundle</type_id>
+        <create_url_params>
+            <type>bundle</type>
+            <set>4</set>
+        </create_url_params>
+        <input_prefix>product</input_prefix>
+    </data_config>
     <fields>
         <category_ids>
             <attribute_code>category_ids</attribute_code>
@@ -379,7 +384,7 @@
             <default_value></default_value>
             <input>price</input>
             <group>advanced-pricing</group>
-            <source>Magento\Backend\Test\Fixture\Source\Date</source>
+            <source>Magento\Backend\Test\Fixture\Date</source>
         </special_from_date>
         <special_to_date>
             <attribute_code>special_to_date</attribute_code>
@@ -388,7 +393,7 @@
             <default_value></default_value>
             <input>price</input>
             <group>advanced-pricing</group>
-            <source>Magento\Backend\Test\Fixture\Source\Date</source>
+            <source>Magento\Backend\Test\Fixture\Date</source>
         </special_to_date>
         <tax_class_id>
             <attribute_code>tax_class_id</attribute_code>
@@ -467,7 +472,7 @@
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
             <is_required>1</is_required>
-            <group></group>
+            <group>null</group>
             <source>Magento\Bundle\Test\Fixture\BundleProduct\CheckoutData</source>
         </checkout_data>
         <custom_options>

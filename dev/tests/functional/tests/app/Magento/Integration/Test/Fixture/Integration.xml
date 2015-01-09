@@ -6,8 +6,16 @@
 -->
 <fixture class="Magento\Integration\Test\Fixture\Integration">
     <module>Magento_Integration</module>
-   <repository_class>Magento\Integration\Test\Repository\Integration</repository_class>
-   <handler_interface>Magento\Integration\Test\Handler\Integration\IntegrationInterface</handler_interface>
+    <type>composite</type>
+    <entities>
+        <integration>integration</integration>
+        <oauth_token>oauth_token</oauth_token>
+        <oauth_consumer>oauth_consumer</oauth_consumer>
+    </entities>
+    <entity_type>integration</entity_type>
+    <collection>Magento\Integration\Model\Resource\Integration\Collection</collection>
+    <repository_class>Magento\Integration\Test\Repository\Integration</repository_class>
+    <handler_interface>Magento\Integration\Test\Handler\Integration\IntegrationInterface</handler_interface>
     <fields>
         <integration_id>
             <attribute_code>integration_id</attribute_code>

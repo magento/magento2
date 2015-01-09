@@ -6,8 +6,12 @@
 -->
 <fixture class="Magento\Customer\Test\Fixture\CustomerInjectable">
     <module>Magento_Customer</module>
-   <repository_class>Magento\Customer\Test\Repository\CustomerInjectable</repository_class>
-   <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
+    <type>eav</type>
+    <entity_type>customer</entity_type>
+    <collection>Magento\Customer\Model\Resource\Customer\Collection</collection>
+    <identifier>email</identifier>
+    <repository_class>Magento\Customer\Test\Repository\CustomerInjectable</repository_class>
+    <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
     <fields>
         <address>
             <attribute_code>address</attribute_code>
@@ -24,7 +28,7 @@
         <id>
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
-            <group></group>
+            <group>null</group>
         </id>
         <created_at>
             <attribute_code>created_at</attribute_code>
@@ -196,19 +200,19 @@
         <password>
             <attribute_code>password</attribute_code>
             <backend_type>virtual</backend_type>
-            <group></group>
+            <group>null</group>
             <default_value>123123q</default_value>
         </password>
         <password_confirmation>
             <attribute_code>password_confirmation</attribute_code>
             <backend_type>virtual</backend_type>
-            <group></group>
+            <group>null</group>
             <default_value>123123q</default_value>
         </password_confirmation>
         <current_password>
             <attribute_code>current_password</attribute_code>
             <backend_type>virtual</backend_type>
-            <group></group>
+            <group>null</group>
         </current_password>
     </fields>
 </fixture>

@@ -6,8 +6,12 @@
 -->
 <fixture class="Magento\Tax\Test\Fixture\TaxClass">
     <module>Magento_Tax</module>
-   <repository_class>Magento\Tax\Test\Repository\TaxClass</repository_class>
-   <handler_interface>Magento\Tax\Test\Handler\TaxClass\TaxClassInterface</handler_interface>
+    <type>flat</type>
+    <entity_type>tax_class</entity_type>
+    <collection>Magento\Tax\Model\Resource\TaxClass\Collection</collection>
+    <identifier />
+    <repository_class>Magento\Tax\Test\Repository\TaxClass</repository_class>
+    <handler_interface>Magento\Tax\Test\Handler\TaxClass\TaxClassInterface</handler_interface>
     <fields>
         <class_id>
             <attribute_code>class_id</attribute_code>

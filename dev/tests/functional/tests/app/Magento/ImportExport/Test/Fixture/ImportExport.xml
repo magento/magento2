@@ -6,6 +6,8 @@
 -->
 <fixture class="Magento\ImportExport\Test\Fixture\ImportExport">
     <module>Magento_ImportExport</module>
+    <type>flat</type>
+    <entity_type>importexport_importdata</entity_type>
     <fields>
         <id>
             <attribute_code>id</attribute_code>

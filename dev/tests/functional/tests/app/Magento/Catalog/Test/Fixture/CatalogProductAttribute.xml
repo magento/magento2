@@ -6,8 +6,14 @@
 -->
 <fixture class="Magento\Catalog\Test\Fixture\CatalogProductAttribute">
     <module>Magento_Catalog</module>
-   <repository_class>Magento\Catalog\Test\Repository\CatalogProductAttribute</repository_class>
-   <handler_interface>Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface</handler_interface>
+    <type>composite</type>
+    <entities>
+        <eav_attribute>eav_attribute</eav_attribute>
+        <catalog_eav_attribute>catalog_eav_attribute</catalog_eav_attribute>
+    </entities>
+    <collection>Magento\Catalog\Model\Resource\Attribute</collection>
+    <repository_class>Magento\Catalog\Test\Repository\CatalogProductAttribute</repository_class>
+    <handler_interface>Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface</handler_interface>
     <fields>
         <attribute_id>
             <attribute_code>attribute_id</attribute_code>
@@ -301,7 +307,7 @@
             <attribute_code>default_value_date</attribute_code>
             <backend_type>text</backend_type>
             <group>advanced-properties</group>
-            <source>Magento\Backend\Test\Fixture\Source\Date</source>
+            <source>Magento\Backend\Test\Fixture\Date</source>
         </default_value_date>
         <default_value_yesno>
             <attribute_code>default_value_yesno</attribute_code>

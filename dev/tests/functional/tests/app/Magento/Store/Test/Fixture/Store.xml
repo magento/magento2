@@ -6,8 +6,11 @@
 -->
 <fixture class="Magento\Store\Test\Fixture\Store">
     <module>Magento_Store</module>
-   <repository_class>Magento\Store\Test\Repository\Store</repository_class>
-   <handler_interface>Magento\Store\Test\Handler\Store\StoreInterface</handler_interface>
+    <type>flat</type>
+    <entity_type>store</entity_type>
+    <collection>Magento\Store\Model\Resource\Store\Collection</collection>
+    <repository_class>Magento\Store\Test\Repository\Store</repository_class>
+    <handler_interface>Magento\Store\Test\Handler\Store\StoreInterface</handler_interface>
     <fields>
         <store_id>
             <attribute_code>store_id</attribute_code>

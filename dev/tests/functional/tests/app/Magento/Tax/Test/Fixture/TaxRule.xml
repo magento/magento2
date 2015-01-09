@@ -6,8 +6,12 @@
 -->
 <fixture class="Magento\Tax\Test\Fixture\TaxRule">
     <module>Magento_Tax</module>
-   <repository_class>Magento\Tax\Test\Repository\TaxRule</repository_class>
-   <handler_interface>Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface</handler_interface>
+    <type>flat</type>
+    <entity_type>tax_calculation_rule</entity_type>
+    <collection>Magento\Tax\Model\Resource\Calculation\Rule\Collection</collection>
+    <identifier>code</identifier>
+    <repository_class>Magento\Tax\Test\Repository\TaxRule</repository_class>
+    <handler_interface>Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface</handler_interface>
     <fields>
         <tax_calculation_rule_id>
             <attribute_code>tax_calculation_rule_id</attribute_code>

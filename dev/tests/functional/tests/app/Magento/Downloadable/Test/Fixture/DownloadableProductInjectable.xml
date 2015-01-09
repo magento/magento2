@@ -6,16 +6,21 @@
 -->
 <fixture class="Magento\Downloadable\Test\Fixture\DownloadableProductInjectable">
     <module>Magento_Downloadable</module>
-   <repository_class>Magento\Downloadable\Test\Repository\DownloadableProductInjectable</repository_class>
-   <handler_interface>Magento\Downloadable\Test\Handler\DownloadableProductInjectable\DownloadableProductInjectableInterface</handler_interface>
-   <data_config>
-      <type_id>downloadable</type_id>
-      <create_url_params>
-          <type>downloadable</type>
-          <set>4</set>
-      </create_url_params>
-      <input_prefix>product</input_prefix>
-   </data_config>
+    <type>eav</type>
+    <entity_type>catalog_product</entity_type>
+    <product_type>downloadable</product_type>
+    <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
+    <identifier>sku</identifier>
+    <repository_class>Magento\Downloadable\Test\Repository\DownloadableProductInjectable</repository_class>
+    <handler_interface>Magento\Downloadable\Test\Handler\DownloadableProductInjectable\DownloadableProductInjectableInterface</handler_interface>
+    <data_config>
+        <type_id>downloadable</type_id>
+        <create_url_params>
+            <type>downloadable</type>
+            <set>4</set>
+        </create_url_params>
+        <input_prefix>product</input_prefix>
+    </data_config>
     <fields>
         <category_ids>
             <attribute_code>category_ids</attribute_code>
@@ -495,7 +500,7 @@
         <checkout_data>
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
-            <group></group>
+            <group>null</group>
             <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\CheckoutData</source>
         </checkout_data>
     </fields>

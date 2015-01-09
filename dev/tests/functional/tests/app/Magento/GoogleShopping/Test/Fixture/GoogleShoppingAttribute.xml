@@ -6,8 +6,11 @@
 -->
 <fixture class="Magento\GoogleShopping\Test\Fixture\GoogleShoppingAttribute">
     <module>Magento_GoogleShopping</module>
-   <repository_class>Magento\GoogleShopping\Test\Repository\GoogleShoppingAttribute</repository_class>
-   <handler_interface>Magento\GoogleShopping\Test\Handler\GoogleShoppingAttribute\GoogleShoppingAttributeInterface</handler_interface>
+    <type>flat</type>
+    <entity_type>googleshopping_types</entity_type>
+    <collection>Magento\GoogleShopping\Model\Resource\Attribute\Collection</collection>
+    <repository_class>Magento\GoogleShopping\Test\Repository\GoogleShoppingAttribute</repository_class>
+    <handler_interface>Magento\GoogleShopping\Test\Handler\GoogleShoppingAttribute\GoogleShoppingAttributeInterface</handler_interface>
     <fields>
         <type_id>
             <attribute_code>type_id</attribute_code>

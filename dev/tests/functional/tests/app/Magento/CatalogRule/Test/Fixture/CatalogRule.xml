@@ -6,8 +6,11 @@
 -->
 <fixture class="Magento\CatalogRule\Test\Fixture\CatalogRule">
     <module>Magento_CatalogRule</module>
-   <repository_class>Magento\CatalogRule\Test\Repository\CatalogRule</repository_class>
-   <handler_interface>Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface</handler_interface>
+    <type>eav</type>
+    <entity_type>catalog_rule</entity_type>
+    <collection>Magento\CatalogRule\Model\Resource\Rule\Product\Price\Collection</collection>
+    <repository_class>Magento\CatalogRule\Test\Repository\CatalogRule</repository_class>
+    <handler_interface>Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface</handler_interface>
     <fields>
         <name>
             <attribute_code>name</attribute_code>

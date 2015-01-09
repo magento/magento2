@@ -6,8 +6,12 @@
 -->
 <fixture class="Magento\Review\Test\Fixture\Rating">
     <module>Magento_Review</module>
-   <repository_class>Magento\Review\Test\Repository\Rating</repository_class>
-   <handler_interface>Magento\Review\Test\Handler\Rating\RatingInterface</handler_interface>
+    <type>flat</type>
+    <entity_type>rating</entity_type>
+    <collection>Magento\Review\Model\Resource\Rating\Collection</collection>
+    <identifier>rating_code</identifier>
+    <repository_class>Magento\Review\Test\Repository\Rating</repository_class>
+    <handler_interface>Magento\Review\Test\Handler\Rating\RatingInterface</handler_interface>
     <fields>
         <rating_id>
             <attribute_code>rating_id</attribute_code>

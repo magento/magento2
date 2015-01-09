@@ -6,8 +6,11 @@
 -->
 <fixture class="Magento\Catalog\Test\Fixture\CatalogCategory">
     <module>Magento_Catalog</module>
-   <repository_class>Magento\Catalog\Test\Repository\CatalogCategory</repository_class>
-   <handler_interface>Magento\Catalog\Test\Handler\CatalogCategory\CatalogCategoryInterface</handler_interface>
+    <type>eav</type>
+    <entity_type>catalog_category_entity</entity_type>
+    <collection>Magento\Catalog\Model\Resource\Category\Collection</collection>
+    <repository_class>Magento\Catalog\Test\Repository\CatalogCategory</repository_class>
+    <handler_interface>Magento\Catalog\Test\Handler\CatalogCategory\CatalogCategoryInterface</handler_interface>
     <fields>
         <entity_id>
             <attribute_code>entity_id</attribute_code>
@@ -43,7 +46,7 @@
             <is_required></is_required>
             <default_value>2</default_value>
             <input></input>
-            <group></group>
+            <group>null</group>
             <source>Magento\Catalog\Test\Fixture\CatalogCategory\ParentId</source>
         </parent_id>
         <created_at>
@@ -65,7 +68,7 @@
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>Default Category</default_value>
-            <group></group>
+            <group>null</group>
             <input></input>
         </path>
         <position>
@@ -131,7 +134,7 @@
         <id>
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
-            <group></group>
+            <group>null</group>
         </id>
         <name>
             <attribute_code>name</attribute_code>

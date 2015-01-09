@@ -6,16 +6,21 @@
 -->
 <fixture class="Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable">
     <module>Magento_GroupedProduct</module>
-   <repository_class>Magento\GroupedProduct\Test\Repository\GroupedProductInjectable</repository_class>
-   <handler_interface>Magento\GroupedProduct\Test\Handler\GroupedProductInjectable\GroupedProductInjectableInterface</handler_interface>
-   <data_config>
-      <type_id>grouped</type_id>
-      <create_url_params>
-          <type>grouped</type>
-          <set>4</set>
-      </create_url_params>
-      <input_prefix>product</input_prefix>
-   </data_config>
+    <type>eav</type>
+    <entity_type>catalog_product</entity_type>
+    <product_type>grouped</product_type>
+    <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
+    <identifier>sku</identifier>
+    <repository_class>Magento\GroupedProduct\Test\Repository\GroupedProductInjectable</repository_class>
+    <handler_interface>Magento\GroupedProduct\Test\Handler\GroupedProductInjectable\GroupedProductInjectableInterface</handler_interface>
+    <data_config>
+        <type_id>grouped</type_id>
+        <create_url_params>
+            <type>grouped</type>
+            <set>4</set>
+        </create_url_params>
+        <input_prefix>product</input_prefix>
+    </data_config>
     <fields>
         <category_ids>
             <attribute_code>category_ids</attribute_code>
@@ -356,7 +361,7 @@
         <checkout_data>
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
-            <group></group>
+            <group>null</group>
             <source>Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable\CheckoutData</source>
         </checkout_data>
         <tax_class>

@@ -6,8 +6,11 @@
 -->
 <fixture class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery">
     <module>Magento_CatalogSearch</module>
-   <repository_class>Magento\CatalogSearch\Test\Repository\CatalogSearchQuery</repository_class>
-   <handler_interface>Magento\CatalogSearch\Test\Handler\CatalogSearchQuery\CatalogSearchQueryInterface</handler_interface>
+    <type>flat</type>
+    <entity_type>search_query</entity_type>
+    <collection>Magento\Search\Model\Resource\Query\Collection</collection>
+    <repository_class>Magento\CatalogSearch\Test\Repository\CatalogSearchQuery</repository_class>
+    <handler_interface>Magento\CatalogSearch\Test\Handler\CatalogSearchQuery\CatalogSearchQueryInterface</handler_interface>
     <fields>
         <query_id>
             <attribute_code>query_id</attribute_code>
@@ -63,14 +66,14 @@
             <attribute_code>display_in_terms</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>null</default_value>
             <input></input>
         </display_in_terms>
         <is_active>
             <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>null</default_value>
             <input></input>
         </is_active>
         <is_processed>
@@ -84,7 +87,7 @@
             <attribute_code>updated_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value>null</default_value>
             <input></input>
         </updated_at>
     </fields>

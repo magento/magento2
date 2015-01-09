@@ -6,8 +6,10 @@
 -->
 <fixture class="Magento\Install\Test\Fixture\Install">
     <module>Magento_Install</module>
-   <repository_class>Magento\Install\Test\Repository\Install</repository_class>
-   <handler_interface>Magento\Install\Test\Handler\Install\InstallInterface</handler_interface>
+    <type>virtual</type>
+    <entity_type>install</entity_type>
+    <repository_class>Magento\Install\Test\Repository\Install</repository_class>
+    <handler_interface>Magento\Install\Test\Handler\Install\InstallInterface</handler_interface>
     <fields>
         <dbHost>
             <attribute_code>dbHost</attribute_code>

@@ -6,8 +6,11 @@
 -->
 <fixture class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
     <module>Magento_Catalog</module>
-   <repository_class>Magento\Catalog\Test\Repository\CatalogAttributeSet</repository_class>
-   <handler_interface>Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface</handler_interface>
+    <type>flat</type>
+    <entity_type>eav_attribute_set</entity_type>
+    <collection>Magento\Catalog\Model\Resource\Product\Link\Product\Collection</collection>
+    <repository_class>Magento\Catalog\Test\Repository\CatalogAttributeSet</repository_class>
+    <handler_interface>Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface</handler_interface>
     <fields>
         <attribute_set_id>
             <attribute_code>attribute_set_id</attribute_code>

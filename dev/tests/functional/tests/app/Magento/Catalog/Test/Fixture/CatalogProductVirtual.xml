@@ -6,16 +6,21 @@
 -->
 <fixture class="Magento\Catalog\Test\Fixture\CatalogProductVirtual">
     <module>Magento_Catalog</module>
-   <repository_class>Magento\Catalog\Test\Repository\CatalogProductVirtual</repository_class>
-   <handler_interface>Magento\Catalog\Test\Handler\CatalogProductVirtual\CatalogProductVirtualInterface</handler_interface>
-   <data_config>
-      <type_id>virtual</type_id>
-      <create_url_params>
-          <type>virtual</type>
-          <set>4</set>
-      </create_url_params>
-      <input_prefix>product</input_prefix>
-   </data_config>
+    <type>eav</type>
+    <entity_type>catalog_product</entity_type>
+    <product_type>virtual</product_type>
+    <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
+    <identifier>sku</identifier>
+    <repository_class>Magento\Catalog\Test\Repository\CatalogProductVirtual</repository_class>
+    <handler_interface>Magento\Catalog\Test\Handler\CatalogProductVirtual\CatalogProductVirtualInterface</handler_interface>
+    <data_config>
+        <type_id>virtual</type_id>
+        <create_url_params>
+            <type>virtual</type>
+            <set>4</set>
+        </create_url_params>
+        <input_prefix>product</input_prefix>
+    </data_config>
     <fields>
         <is_virtual>
             <attribute_code>is_virtual</attribute_code>
@@ -426,7 +431,7 @@
         <checkout_data>
             <attribute_code>checkout_data</attribute_code>
             <backend_type>virtual</backend_type>
-            <group></group>
+            <group>null</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductVirtual\CheckoutData</source>
         </checkout_data>
     </fields>
