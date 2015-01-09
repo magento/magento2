@@ -1,10 +1,13 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * {license_notice}
+ *
+ * @copyright   {copyright}
+ * @license     {license_link}
  */
 -->
-<fixture class="Magento\Review\Test\Fixture\ReviewInjectable">
+<fixture class="Magento\Review\Test\Fixture\Review">
     <module>Magento_Review</module>
     <type>composite</type>
     <entities>
@@ -33,7 +36,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-            <source>Magento\Review\Test\Fixture\ReviewInjectable\EntityId</source>
+            <source>Magento\Review\Test\Fixture\Review\EntityId</source>
         </entity_id>
         <entity_pk_value>
             <attribute_code>entity_pk_value</attribute_code>
@@ -108,9 +111,13 @@
         <ratings>
             <attribute_code>ratings</attribute_code>
             <backend_type>virtual</backend_type>
-            <source>Magento\Review\Test\Fixture\ReviewInjectable\Ratings</source>
+            <source>Magento\Review\Test\Fixture\Review\Ratings</source>
         </ratings>
+        <customer>
+            <attribute_code>customer</attribute_code>
+            <backend_type>virtual</backend_type>
+        </customer>
     </fields>
-    <repository_class>Magento\Review\Test\Repository\ReviewInjectable</repository_class>
-    <handler_interface>Magento\Review\Test\Handler\ReviewInjectable\ReviewInjectableInterface</handler_interface>
+    <repository_class>Magento\Review\Test\Repository\Review</repository_class>
+    <handler_interface>Magento\Review\Test\Handler\Review\ReviewInterface</handler_interface>
 </fixture>

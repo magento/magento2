@@ -1,13 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * {license_notice}
+ *
+ * @copyright   {copyright}
+ * @license     {license_link}
  */
 
-namespace Magento\Review\Test\Fixture\ReviewInjectable;
+namespace Magento\Review\Test\Fixture\Review;
 
-use Magento\Review\Test\Fixture\Rating;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
+use Magento\Review\Test\Fixture\Rating;
 
 /**
  * Class Ratings
@@ -62,7 +65,7 @@ class Ratings implements FixtureInterface
                 $this->ratings[] = $fixtureRating;
                 $this->data[] = [
                     'title' => $fixtureRating->getRatingCode(),
-                    'rating' => $rating['rating'],
+                    'rating' => $rating['rating']
                 ];
             }
         }

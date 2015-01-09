@@ -5,7 +5,7 @@
 
 namespace Magento\Review\Test\TestCase;
 
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
 use Mtf\TestCase\Injectable;
@@ -67,11 +67,11 @@ class ModerateProductReviewEntityTest extends Injectable
     /**
      * Run moderate product review test
      *
-     * @param ReviewInjectable $reviewInitial
-     * @param ReviewInjectable $review
+     * @param Review $reviewInitial
+     * @param Review $review
      * @return array
      */
-    public function test(ReviewInjectable $reviewInitial, ReviewInjectable $review)
+    public function test(Review $reviewInitial, Review $review)
     {
         // Precondition
         $reviewInitial->persist();

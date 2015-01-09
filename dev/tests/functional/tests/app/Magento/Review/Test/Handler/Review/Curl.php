@@ -1,25 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * {license_notice}
+ *
+ * @copyright   {copyright}
+ * @license     {license_link}
  */
 
-namespace Magento\Review\Test\Handler\ReviewInjectable;
+namespace Magento\Review\Test\Handler\Review;
 
-use Magento\Backend\Test\Handler\Extractor;
-use Magento\Review\Test\Fixture\Rating;
-use Magento\Review\Test\Fixture\ReviewInjectable;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Handler\Curl as AbstractCurl;
 use Mtf\System\Config;
+use Mtf\Fixture\FixtureInterface;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
+use Magento\Review\Test\Fixture\Rating;
+use Magento\Backend\Test\Handler\Extractor;
+use Magento\Review\Test\Fixture\Review;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Mtf\Handler\Curl as AbstractCurl;
 
 /**
  * Class Curl
  * Curl handler for creating product Review through backend.
  */
-class Curl extends AbstractCurl implements ReviewInjectableInterface
+class Curl extends AbstractCurl implements ReviewInterface
 {
     /**
      * Mapping values for data.
@@ -30,11 +33,11 @@ class Curl extends AbstractCurl implements ReviewInjectableInterface
         'status_id' => [
             'Approved' => 1,
             'Pending' => 2,
-            'Not Approved' => 3,
+            'Not Approved' => 3
         ],
         'select_stores' => [
-            'Main Website/Main Website Store/Default Store View' => 1,
-        ],
+            'Main Website/Main Website Store/Default Store View' => 1
+        ]
     ];
 
     /**
@@ -46,7 +49,7 @@ class Curl extends AbstractCurl implements ReviewInjectableInterface
      */
     public function persist(FixtureInterface $review = null)
     {
-        /** @var ReviewInjectable $review */
+        /** @var Review $review */
         $url = $_ENV['app_backend_url'] . 'review/product/post/';
         $curl = new BackendDecorator(new CurlTransport(), new Config());
         $data = $this->replaceMappingData($this->getPreparedData($review));

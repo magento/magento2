@@ -38,7 +38,7 @@
             <class value="Magento\Customer\Test\TestCase\BackendCustomerCreateTest" />
             <class value="Magento\Customer\Test\TestCase\CreateOnFrontendTest" />
             <!--Review-->
-            <class value="Magento\Review\Test\TestCase\ReviewTest" />
+            <class value="Magento\Review\Test\TestCase\CreateProductReviewFrontendEntityTest" />
             <!--Tax-->
             <class value="Magento\Tax\Test\TestCase\TaxRuleTest" />
             <!--Assign products to a category-->
