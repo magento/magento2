@@ -43,7 +43,9 @@ class ConstructorArgumentTypes implements ValidatorInterface
         $class = new \ReflectionClass($className);
         $expectedArguments = $this->argumentsReader->getConstructorArguments($class);
         $actualArguments = $this->sourceArgumentsReader->getConstructorArgumentTypes($class);
-        $expectedArguments = array_column($expectedArguments, 'type');
+        $expectedArguments = array_map(function ($element) {
+            return $element['type'];
+        }, $expectedArguments);
         $result = array_diff($expectedArguments, $actualArguments);
         if (!empty($result)) {
             throw new \Magento\Framework\Code\ValidationException(

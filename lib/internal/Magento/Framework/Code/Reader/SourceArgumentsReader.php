@@ -21,9 +21,11 @@ class SourceArgumentsReader
     public function getConstructorArgumentTypes(\ReflectionClass $class, $inherited = false)
     {
         $output = [null];
+
         /**
-         * Skip native PHP types, classes without constructor
-         */
+            Skip native PHP types, classes without constructor.
+        */
+
         if (!$class->getFileName() || false == $class->hasMethod(
                 '__construct'
             ) || !$inherited && $class->getConstructor()->class !== $class->getName()
@@ -53,7 +55,10 @@ class SourceArgumentsReader
             }
             return true;
         });
-        $arguments = array_column($arguments, 1);
+        $arguments = array_map(function ($element) {
+            return $element[1];
+        }, $arguments);
+        $arguments = array_values($arguments);
         $arguments = implode('', $arguments);
         if (empty($arguments)) {
             return $output;
@@ -70,8 +75,8 @@ class SourceArgumentsReader
     /**
      * Perform namespace resolution if required and return fully qualified name.
      *
-     * @param $argument
-     * @param $availableNamespaces array
+     * @param string $argument
+     * @param array $availableNamespaces
      * @return string
      */
     protected function resolveNamespaces($argument, $availableNamespaces)
@@ -97,7 +102,7 @@ class SourceArgumentsReader
     /**
      * Remove default value from argument.
      *
-     * @param $argument
+     * @param string $argument
      * @return string
      */
     protected function removeDefaultValue($argument)
@@ -136,7 +141,7 @@ class SourceArgumentsReader
                     }
                     $imports[$importsCount][] = $item;
                 }
-                foreach($imports as $import) {
+                foreach ($imports as $import) {
                     $import = array_filter($import, function ($token) {
                         $whitelist = [T_NS_SEPARATOR, T_STRING, T_AS];
                         if (isset($token[0]) && in_array($token[0], $whitelist)) {
@@ -144,7 +149,10 @@ class SourceArgumentsReader
                         }
                         return false;
                     });
-                    $import = array_column($import, 1);
+                    $import = array_map(function ($element) {
+                        return $element[1];
+                    }, $import);
+                    $import = array_values($import);
                     if ($import[0] === self::NS_SEPARATOR) {
                         array_shift($import);
                     }
