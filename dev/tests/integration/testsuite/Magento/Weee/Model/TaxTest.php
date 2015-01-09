@@ -57,7 +57,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ['metadataService' => $customerMetadataService]
         );
         $expected = $this->_extensibleDataObjectConverter->toFlatArray(
-            $customerRepository->getById(1)
+            $customerRepository->getById(1), [], '\Magento\Customer\Api\Data\CustomerInterface'
         );
         $customerBuilder->populateWithArray($expected);
         $customerDataSet = $customerBuilder->create();

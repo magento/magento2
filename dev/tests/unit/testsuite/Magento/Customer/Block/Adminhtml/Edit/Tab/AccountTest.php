@@ -186,6 +186,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
                 'adminhtml_customer',
                 $this->extensibleDataObjectConverterMock->toFlatArray(
                     $customerObject,
+                    [],
                     '\Magento\Customer\Api\Data\CustomerInterface'
                 )
             )

@@ -36,7 +36,7 @@ class Mapper
      */
     public function toFlatArray($addressDataObject)
     {
-        $flatAddressArray = $this->extensibleDataObjectConverter->toFlatArray($addressDataObject);
+        $flatAddressArray = $this->extensibleDataObjectConverter->toFlatArray($addressDataObject, [], '\Magento\Customer\Api\Data\AddressInterface');
         //preserve street
         $street = $addressDataObject->getStreet();
         if (!empty($street) && is_array($street)) {
