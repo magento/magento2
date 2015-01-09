@@ -801,6 +801,10 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
             return false;
         }
 
+        if ($this->hasInvoices()) {
+            return false;
+        }
+
         if (!$this->getPayment()->getMethodInstance()->canEdit()) {
             return false;
         }
@@ -1818,6 +1822,18 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
             }
         }
         return $this->_invoices;
+    }
+
+    /**
+     * Set order invoices collection
+     *
+     * @param InvoiceCollection $invoices
+     * @return $this
+     */
+    public function setInvoiceCollection(InvoiceCollection $invoices)
+    {
+        $this->_invoices = $invoices;
+        return $this;
     }
 
     /**
