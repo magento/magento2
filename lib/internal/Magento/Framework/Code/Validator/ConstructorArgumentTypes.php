@@ -44,7 +44,8 @@ class ConstructorArgumentTypes implements ValidatorInterface
         $expectedArguments = $this->argumentsReader->getConstructorArguments($class);
         $actualArguments = $this->sourceArgumentsReader->getConstructorArgumentTypes($class);
         $expectedArguments = array_column($expectedArguments, 'type');
-        if (!empty(array_diff($expectedArguments, $actualArguments))) {
+        $result = array_diff($expectedArguments, $actualArguments);
+        if (!empty($result)) {
             throw new \Magento\Framework\Code\ValidationException(
                 'Invalid constructor argument(s) in ' . $className
             );
