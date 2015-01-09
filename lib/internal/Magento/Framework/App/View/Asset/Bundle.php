@@ -7,6 +7,9 @@ namespace Magento\Framework\App\View\Asset;
 
 use Magento\Framework\View\Asset;
 
+/**
+ * Bundle model
+ */
 class Bundle
 {
     /** @var string */
@@ -44,6 +47,11 @@ class Bundle
         $this->bundlePath = $path;
     }
 
+    /**
+     * Get bundle save path
+     *
+     * @return string
+     */
     public function getPath()
     {
         return $this->bundlePath;
@@ -81,6 +89,9 @@ class Bundle
         return $key;
     }
 
+    /**
+     * Divided bundle on small parts
+     */
     public function prepare()
     {
         $perBundlePart = ceil(count($this->assets) / $this->bundleParts);
@@ -88,6 +99,9 @@ class Bundle
         unset($this->assets);
     }
 
+    /**
+     * Fill bundle with real content
+     */
     public function fill()
     {
         foreach ($this->assets as $path => $asset) {
@@ -95,6 +109,9 @@ class Bundle
         }
     }
 
+    /**
+     * Convert bundle content to json
+     */
     public function toJson()
     {
         foreach ($this->bundle as &$part) {
@@ -102,6 +119,9 @@ class Bundle
         }
     }
 
+    /**
+     * Prepare bundle part for executing in js
+     */
     public function wrapp()
     {
         foreach ($this->bundle as &$part) {
@@ -114,6 +134,11 @@ class Bundle
 
     }
 
+    /**
+     * Get bundle content
+     *
+     * @return array
+     */
     public function getContent()
     {
         return $this->bundle;

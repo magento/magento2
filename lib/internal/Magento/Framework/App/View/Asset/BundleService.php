@@ -9,6 +9,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset;
 use Magento\Tools\View\Deployer;
 
+/**
+ * BundleService model
+ */
 class BundleService
 {
     /**
@@ -114,6 +117,8 @@ class BundleService
     }
 
     /**
+     * Collect bundle
+     *
      * @param Asset\LocalInterface $asset
      * @param array $context
      * @return bool
@@ -149,7 +154,7 @@ class BundleService
     }
 
     /**
-     * Retunr bundle
+     * Return bundle
      *
      * @param array $context
      * @return \Magento\Framework\App\View\Asset\Bundle|bool
@@ -168,6 +173,8 @@ class BundleService
     }
 
     /**
+     * Create bundle
+     *
      * @param array $context
      * @return \Magento\Framework\App\View\Asset\Bundle
      */
