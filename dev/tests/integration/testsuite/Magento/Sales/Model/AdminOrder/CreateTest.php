@@ -586,7 +586,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             $orderData['customer_firstname'],
             'Customer first name is invalid.'
         );
-        $this->assertEquals($shippingMethod, $orderData['shipping_method'], 'Customer first name is invalid.');
+        $this->assertEquals($shippingMethod, $orderData['shipping_method'], 'Shipping method is invalid.');
     }
 
     /**
