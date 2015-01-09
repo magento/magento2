@@ -57,7 +57,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Framework\Image\Adapter\AbstractAdapter',
-            [$this->filesystemMock,$this->loggerMock]
+            [$this->filesystemMock, $this->loggerMock]
         );
     }
 

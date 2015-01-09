@@ -87,6 +87,6 @@ class ImageMagickTest extends \PHPUnit_Framework_TestCase
         $exception = new FilesystemException();
         $this->writeMock->method('create')->will($this->throwException($exception));
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
-        $this->imageMagic->save('product/cache','sample.jpg');
+        $this->imageMagic->save('product/cache', 'sample.jpg');
     }
 }
