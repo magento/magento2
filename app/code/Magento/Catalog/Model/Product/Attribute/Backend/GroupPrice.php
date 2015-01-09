@@ -9,14 +9,14 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Groupprice extends \Magento\Catalog\Model\Product\Attribute\Backend\Groupprice\AbstractGroupprice
+class GroupPrice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
 {
     /**
      * Catalog product attribute backend groupprice
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice
+     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice
      */
-    protected $_productAttributeBackendGroupprice;
+    protected $_productAttributeBackendGroupPrice;
 
     /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -25,7 +25,7 @@ class Groupprice extends \Magento\Catalog\Model\Product\Attribute\Backend\Groupp
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice $productAttributeBackendGroupprice
+     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice $productAttributeBackendGroupPrice
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -34,9 +34,9 @@ class Groupprice extends \Magento\Catalog\Model\Product\Attribute\Backend\Groupp
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice $productAttributeBackendGroupprice
+        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice $productAttributeBackendGroupPrice
     ) {
-        $this->_productAttributeBackendGroupprice = $productAttributeBackendGroupprice;
+        $this->_productAttributeBackendGroupPrice = $productAttributeBackendGroupPrice;
         parent::__construct(
             $currencyFactory,
             $storeManager,
@@ -50,11 +50,11 @@ class Groupprice extends \Magento\Catalog\Model\Product\Attribute\Backend\Groupp
     /**
      * Retrieve resource instance
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice
+     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice
      */
     protected function _getResource()
     {
-        return $this->_productAttributeBackendGroupprice;
+        return $this->_productAttributeBackendGroupPrice;
     }
 
     /**
