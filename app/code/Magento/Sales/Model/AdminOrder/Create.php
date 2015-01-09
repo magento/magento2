@@ -14,7 +14,7 @@ use Magento\Quote\Model\Quote\Item;
 class Create extends \Magento\Framework\Object implements \Magento\Checkout\Model\Cart\CartInterface
 {
     /**
-     *
+     * Xml default email domain path
      */
     const XML_PATH_DEFAULT_EMAIL_DOMAIN = 'customer/create_account/email_domain';
 
