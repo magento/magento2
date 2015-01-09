@@ -184,6 +184,8 @@ class Quote
                 $this->customerBuilder->populate($customer)->create(),
                 $quote->getPasswordHash()
             );
+        } else {
+            $this->customerRepository->save($customer);
         }
 
         if (!$quote->getBillingAddress()->getId() && $customer->getDefaultBilling()) {
