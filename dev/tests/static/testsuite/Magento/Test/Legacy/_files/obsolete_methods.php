@@ -616,6 +616,7 @@ return [
     ],
     ['getTaxAmount', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
     ['getTaxRatesByProductClass', '', '_getAllRatesByProductClass'],
+    ['getThemeVersion', '\Magento\Framework\Config\Theme'],
     ['getAllRatesByProductClass', 'Magento\Tax\Helper\Data'],
     [
         'getTemplateProcessor',

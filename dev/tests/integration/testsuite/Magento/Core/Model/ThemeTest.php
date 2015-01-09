@@ -19,7 +19,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         );
         $themeModel->setData($this->_getThemeValidData());
 
-        $crud = new \Magento\TestFramework\Entity($themeModel, ['theme_version' => '0.1.0']);
+        $crud = new \Magento\TestFramework\Entity($themeModel, []);
         $crud->testCrud();
     }
 
@@ -33,7 +33,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         return [
             'area' => 'space_area',
             'theme_title' => 'Space theme',
-            'theme_version' => '0.1.0',
             'parent_id' => null,
             'is_featured' => false,
             'theme_path' => 'default/space',

@@ -12,8 +12,6 @@ $objectManager->get('Magento\Framework\App\AreaList')
 $theme = $objectManager->create('Magento\Framework\View\Design\ThemeInterface');
 $theme->setThemePath(
     'test/test'
-)->setThemeVersion(
-    '0.1.0'
 )->setArea(
     'frontend'
 )->setThemeTitle(
