@@ -10,6 +10,9 @@
         <allow>
             <tag group="test_type" value="acceptance_test" />
         </allow>
+        <deny>
+            <tag group="stable" value="no" />
+        </deny>
     </rule>
     <rule scope="variation">
         <allow>
