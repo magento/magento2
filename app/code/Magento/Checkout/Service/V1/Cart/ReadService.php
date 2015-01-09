@@ -71,7 +71,7 @@ class ReadService implements ReadServiceInterface
     /**
      * Constructs a cart read service object.
      *
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param QuoteRepository $quoteRepository Quote repository.
      * @param QuoteCollection $quoteCollection Quote collection.
      * @param Data\CartSearchResultsBuilder $searchResultsBuilder Search results builder.
      * @param Data\CartMapper $cartMapper Cart mapper.

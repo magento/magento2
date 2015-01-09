@@ -45,7 +45,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var QuoteRepository
      */
     protected $quoteRepository;
 

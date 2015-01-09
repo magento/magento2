@@ -4,7 +4,7 @@
  */
 namespace Magento\Checkout\Service\V1\PaymentMethod;
 
-use Magento\Quote\Model\QuoteRepository;
+use \Magento\Quote\Model\QuoteRepository;
 use \Magento\Store\Model\StoreManagerInterface;
 use Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Converter as QuoteMethodConverter;
 use Magento\Checkout\Service\V1\Data\PaymentMethod\Converter as PaymentMethodConverter;

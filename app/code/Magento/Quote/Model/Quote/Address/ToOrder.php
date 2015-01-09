@@ -9,6 +9,7 @@ use Magento\Framework\Object\Copy;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Api\Data\OrderDataBuilder as OrderBuilder;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class ToOrder converter
@@ -26,15 +27,23 @@ class ToOrder
     protected $orderBuilder;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * @param OrderBuilder $orderBuilder
      * @param Copy $objectCopyService
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         OrderBuilder $orderBuilder,
-        Copy $objectCopyService
+        Copy $objectCopyService,
+        ManagerInterface $eventManager
     ) {
         $this->orderBuilder = $orderBuilder;
         $this->objectCopyService = $objectCopyService;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -49,11 +58,16 @@ class ToOrder
             'to_order',
             $object
         );
-
-        return $this->orderBuilder
+        $order = $this->orderBuilder
             ->populateWithArray(array_merge($orderData, $data))
             ->setStoreId($object->getQuote()->getStoreId())
             ->setQuoteId($object->getQuote()->getId())
             ->create();
+
+        $this->objectCopyService->copyFieldsetToTarget('sales_convert_quote', 'to_order', $object->getQuote(), $order);
+        $this->eventManager->dispatch('sales_convert_quote_to_order',
+            ['order' => $order, 'quote' => $object->getQuote()]);
+        return $order;
+
     }
 }

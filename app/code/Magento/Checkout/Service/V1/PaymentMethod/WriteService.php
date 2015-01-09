@@ -17,7 +17,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var QuoteRepository
      */
     protected $quoteRepository;
 
@@ -38,7 +38,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Constructs a payment method write service object.
      *
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param QuoteRepository $quoteRepository Quote repository.
      * @param Builder $paymentMethodBuilder Payment method builder.
      * @param ZeroTotal $zeroTotalValidator Zero total validator.
      */
