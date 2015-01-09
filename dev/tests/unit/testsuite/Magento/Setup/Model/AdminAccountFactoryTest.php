@@ -14,16 +14,10 @@ class AdminAccountFactoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('get')
             ->with('Magento\Framework\Math\Random')
-            ->will(
-                $this->returnValue(
-                    $this->getMockBuilder('Magento\Framework\Math\Random')
-                        ->disableOriginalConstructor()
-                        ->getMock()
-                )
-            );
+            ->will($this->returnValue($this->getMock('Magento\Framework\Math\Random')));
         $adminAccountFactory = new AdminAccountFactory($serviceLocatorMock);
         $adminAccount = $adminAccountFactory->create(
-            $this->getMockBuilder('Magento\Setup\Module\Setup')->disableOriginalConstructor()->getMock(),
+            $this->getMock('Magento\Setup\Module\Setup', [], [], '', false),
             []
         );
         $this->assertInstanceOf('Magento\Setup\Model\AdminAccount', $adminAccount);

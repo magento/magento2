@@ -10,17 +10,17 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class FilePermissionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
      */
     private $directoryWriteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
      */
     private $filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
      */
     private $directoryListMock;
 
@@ -31,22 +31,15 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->directoryWriteMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\Write')
-            ->disableOriginalConstructor()
-            ->setMethods(['isWritable', 'isExist', 'isDirectory', 'isReadable'])
-            ->getMock();
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
-            ->disableOriginalConstructor()
-            ->setMethods(['getDirectoryWrite'])
-            ->getMock();
+        $this->directoryWriteMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+
         $this->filesystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->directoryWriteMock));
-        $this->directoryListMock = $this->getMockBuilder('Magento\Framework\App\Filesystem\DirectoryList')
-            ->disableOriginalConstructor()
-            ->setMethods(['getPath'])
-            ->getMock();
+        $this->directoryListMock = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+
         $this->filePermissions = new FilePermissions($this->filesystemMock, $this->directoryListMock);
     }
 

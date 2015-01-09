@@ -8,7 +8,7 @@ namespace Magento\Setup\Model;
 class NavigationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceLocatorInterface
      */
     private $serviceLocatorMock;
 

@@ -8,25 +8,19 @@ namespace Magento\Setup\Model;
 class PhpInformationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read
      */
     private $directoryReadMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
      */
     private $filesystemMock;
 
     public function setUp()
     {
-        $this->directoryReadMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\Read')
-            ->disableOriginalConstructor()
-            ->setMethods(['isExist', 'readFile'])
-            ->getMock();
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
-            ->disableOriginalConstructor()
-            ->setMethods(['getDirectoryRead'])
-            ->getMock();
+        $this->directoryReadMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryRead')
@@ -43,10 +37,10 @@ class PhpInformationTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('readFile')
             ->with('composer.lock')
-            ->will($this->returnValue('{"platform":{"php":"~5.4.11|~5.5.0"}}'));
+            ->will($this->returnValue('{"platform":{"php":"~a.b.c|~a.e.f"}}'));
 
         $phpInfo = new PhpInformation($this->filesystemMock);
-        $this->assertEquals("~5.4.11|~5.5.0", $phpInfo->getRequiredPhpVersion());
+        $this->assertEquals("~a.b.c|~a.e.f", $phpInfo->getRequiredPhpVersion());
     }
 
     /**

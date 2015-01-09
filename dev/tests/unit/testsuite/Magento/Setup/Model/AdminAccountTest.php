@@ -8,17 +8,17 @@ namespace Magento\Setup\Model;
 class AdminAccountTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\Setup
      */
     private $setUpMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     private $dbAdapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Math\Random
      */
     private $randomMock;
 
@@ -29,15 +29,9 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->setUpMock = $this->getMockBuilder('Magento\Setup\Module\Setup')
-            ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getTable'])
-            ->getMock();
+        $this->setUpMock = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
 
-        $this->dbAdapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
-            ->disableOriginalConstructor()
-            ->setMethods(['fetchRow', 'update', 'insert', 'quoteInto', 'lastInsertId'])
-            ->getMock();
+        $this->dbAdapterMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
 
         $this->setUpMock
             ->expects($this->any())
@@ -49,7 +43,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             ->method('getTable')
             ->will($this->returnCallback(function ($table) {return $table;}));
 
-        $this->randomMock = $this->getMock('Magento\Framework\Math\Random', ['getRandomString']);
+        $this->randomMock = $this->getMock('Magento\Framework\Math\Random');
         $this->randomMock->expects($this->any())->method('getRandomString')->will($this->returnValue('salt'));
 
         $data = [
@@ -66,45 +60,43 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
     public function testSaveUserExistsAdminRoleExists()
     {
         // existing user data
-        $result = [
+        $existingUserData = [
             'email' => 'john.doe@test.com',
             'username' => 'admin',
             'user_id' => 1,
         ];
 
-        $this->dbAdapterMock
-            ->expects($this->at(0))
-            ->method('fetchRow')
-            ->will($this->returnValue($result));
-
-        $this->dbAdapterMock
-            ->expects($this->once())
-            ->method('quoteInto')
-            ->will($this->returnValue(''));
-
-        $this->dbAdapterMock
-            ->expects($this->once())
-            ->method('update')
-            ->will($this->returnValue(1));
-
         // existing admin role data
-        $this->dbAdapterMock
-            ->expects($this->at(3))
-            ->method('fetchRow')
-            ->will($this->returnValue([
-                'parent_id'  => 0,
-                'tree_level' => 2,
-                'role_type'  => 'U',
-                'user_id'    => 1,
-                'user_type'  => 2,
-                'role_name'  => 'admin',
-                'role_id'    => 1,
-            ]));
+        $existingAdminRoleData = [
+            'parent_id'  => 0,
+            'tree_level' => 2,
+            'role_type'  => 'U',
+            'user_id'    => 1,
+            'user_type'  => 2,
+            'role_name'  => 'admin',
+            'role_id'    => 1,
+        ];
+
+        $returnValueMap = [
+            [
+                'SELECT user_id, username, email FROM admin_user WHERE username = :username OR email = :email',
+                ['username' => 'admin', 'email' => 'john.doe@test.com'],
+                null,
+                $existingUserData,
+            ],
+            [
+                'SELECT * FROM authorization_role WHERE user_id = :user_id',
+                ['user_id' => 1],
+                null,
+                $existingAdminRoleData,
+            ],
+        ];
+        $this->dbAdapterMock->expects($this->any())->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
+        $this->dbAdapterMock->expects($this->once())->method('update')->will($this->returnValue(1));
 
         // should never insert new row
-        $this->dbAdapterMock
-            ->expects($this->never())
-            ->method('insert');
+        $this->dbAdapterMock->expects($this->never())->method('insert');
 
         $this->adminAccount->save();
     }
@@ -112,46 +104,56 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
     public function testSaveUserExistsNewAdminRole()
     {
         // existing user data
-        $result = [
+        $existingUserData = [
             'email' => 'john.doe@test.com',
             'username' => 'admin',
             'user_id' => 1,
         ];
 
-        $this->dbAdapterMock
-            ->expects($this->at(0))
-            ->method('fetchRow')
-            ->will($this->returnValue($result));
+        // speical admin role data
+        $administratorRoleData = [
+            'parent_id'  => 0,
+            'tree_level' => 1,
+            'role_type' => 'G',
+            'user_id' => 0,
+            'user_type' => 2,
+            'role_name' => 'Administrators',
+            'role_id' => 0,
+        ];
 
-        $this->dbAdapterMock
-            ->expects($this->once())
-            ->method('quoteInto')
-            ->will($this->returnValue(''));
+        $returnValueMap = [
+            [
+                'SELECT user_id, username, email FROM admin_user WHERE username = :username OR email = :email',
+                ['username' => 'admin', 'email' => 'john.doe@test.com'],
+                null,
+                $existingUserData,
+            ],
+            [
+                'SELECT * FROM authorization_role WHERE user_id = :user_id',
+                ['user_id' => 1],
+                null,
+                [],
+            ],
+            [
+                'SELECT * FROM authorization_role WHERE parent_id = :parent_id AND tree_level = :tree_level ' .
+                'AND role_type = :role_type AND user_id = :user_id ' .
+                'AND user_type = :user_type AND role_name = :role_name',
+                [
+                    'parent_id'  => 0,
+                    'tree_level' => 1,
+                    'role_type' => 'G',
+                    'user_id' => 0,
+                    'user_type' => 2,
+                    'role_name' => 'Administrators',
+                ],
+                null,
+                $administratorRoleData,
+            ],
+        ];
 
-        $this->dbAdapterMock
-            ->expects($this->once())
-            ->method('update')
-            ->will($this->returnValue(1));
-
-        // no admin role found
-        $this->dbAdapterMock
-            ->expects($this->at(3))
-            ->method('fetchRow')
-            ->will($this->returnValue([]));
-
-        // Special admin role created by data fixture
-        $this->dbAdapterMock
-            ->expects($this->at(4))
-            ->method('fetchRow')
-            ->will($this->returnValue([
-                'parent_id'  => 0,
-                'tree_level' => 1,
-                'role_type' => 'G',
-                'user_id' => 0,
-                'user_type' => 2,
-                'role_name' => 'Administrators',
-                'role_id' => 0,
-            ]));
+        $this->dbAdapterMock->expects($this->any())->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
+        $this->dbAdapterMock->expects($this->once())->method('update')->will($this->returnValue(1));
 
         // should only insert once (admin role)
         $this->dbAdapterMock
@@ -163,78 +165,91 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveNewUserAdminRoleExists()
     {
-        // no existing user
-        $this->dbAdapterMock
-            ->expects($this->at(0))
-            ->method('fetchRow')
-            ->will($this->returnValue([]));
-
-        // insert only once (new user)
-        $this->dbAdapterMock
-            ->expects($this->once())
-            ->method('insert');
-
-        // after inserting new user
-        $this->dbAdapterMock
-            ->expects($this->once())
-            ->method('lastInsertId')
-            ->will($this->returnValue(1));
-
         // existing admin role data
-        $this->dbAdapterMock
-            ->expects($this->at(3))
-            ->method('fetchRow')
-            ->will($this->returnValue([
-                'parent_id'  => 0,
-                'tree_level' => 2,
-                'role_type'  => 'U',
-                'user_id'    => 1,
-                'user_type'  => 2,
-                'role_name'  => 'admin',
-                'role_id'    => 1,
-            ]));
+        $existingAdminRoleData = [
+            'parent_id'  => 0,
+            'tree_level' => 2,
+            'role_type'  => 'U',
+            'user_id'    => 1,
+            'user_type'  => 2,
+            'role_name'  => 'admin',
+            'role_id'    => 1,
+        ];
+
+        $returnValueMap = [
+            [
+                'SELECT user_id, username, email FROM admin_user WHERE username = :username OR email = :email',
+                ['username' => 'admin', 'email' => 'john.doe@test.com'],
+                null,
+                [],
+            ],
+            [
+                'SELECT * FROM authorization_role WHERE user_id = :user_id',
+                ['user_id' => 1],
+                null,
+                $existingAdminRoleData,
+            ],
+        ];
+
+        $this->dbAdapterMock->expects($this->any())->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        // insert only once (new user)
+        $this->dbAdapterMock->expects($this->once())->method('insert');
+        // after inserting new user
+        $this->dbAdapterMock->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
 
         $this->adminAccount->save();
     }
 
     public function testSaveNewUserNewAdminRole()
     {
-        // no existing user
-        $this->dbAdapterMock
-            ->expects($this->at(0))
-            ->method('fetchRow')
-            ->will($this->returnValue([]));
+        // special admin role data
+        $administratorRoleData = [
+            'parent_id'  => 0,
+            'tree_level' => 1,
+            'role_type' => 'G',
+            'user_id' => 0,
+            'user_type' => 2,
+            'role_name' => 'Administrators',
+            'role_id' => 0,
+        ];
 
+        $returnValueMap = [
+            [
+                'SELECT user_id, username, email FROM admin_user WHERE username = :username OR email = :email',
+                ['username' => 'admin', 'email' => 'john.doe@test.com'],
+                null,
+                [],
+            ],
+            [
+                'SELECT * FROM authorization_role WHERE user_id = :user_id',
+                ['user_id' => 1],
+                null,
+                [],
+            ],
+            [
+                'SELECT * FROM authorization_role WHERE parent_id = :parent_id AND tree_level = :tree_level ' .
+                'AND role_type = :role_type AND user_id = :user_id ' .
+                'AND user_type = :user_type AND role_name = :role_name',
+                [
+                    'parent_id'  => 0,
+                    'tree_level' => 1,
+                    'role_type' => 'G',
+                    'user_id' => 0,
+                    'user_type' => 2,
+                    'role_name' => 'Administrators',
+                ],
+                null,
+                $administratorRoleData,
+            ]
+
+        ];
+
+        $this->dbAdapterMock->expects($this->any())->method('fetchRow')->will($this->returnValueMap($returnValueMap));
         // after inserting new user
-        $this->dbAdapterMock
-            ->expects($this->once())
-            ->method('lastInsertId')
-            ->will($this->returnValue(1));
+        $this->dbAdapterMock->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
 
-        // no existing admin role
-        $this->dbAdapterMock
-            ->expects($this->at(3))
-            ->method('fetchRow')
-            ->will($this->returnValue([]));
-
-        // Special admin role created by data fixture
-        $this->dbAdapterMock
-            ->expects($this->at(4))
-            ->method('fetchRow')
-            ->will($this->returnValue([
-                'parent_id'  => 0,
-                'tree_level' => 2,
-                'role_type'  => 'U',
-                'user_id'    => 1,
-                'user_type'  => 2,
-                'role_name'  => 'admin',
-                'role_id'    => 1,
-            ]));
-
-        // insert twice once (new user and new admin role)
-        $this->dbAdapterMock
-            ->expects($this->exactly(2))
-            ->method('insert');
+        // insert twice only (new user and new admin role)
+        $this->dbAdapterMock->expects($this->exactly(2))->method('insert');
 
         $this->adminAccount->save();
     }
@@ -246,24 +261,15 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
     public function testSaveExceptionUsernameNotMatch()
     {
         // existing user in db
-        $result = [
+        $existingUserData = [
             'email' => 'john.doe@test.com',
             'username' => 'Another.name',
         ];
 
-        $this->dbAdapterMock
-            ->expects($this->once())
-            ->method('fetchRow')
-            ->will($this->returnValue($result));
-
+        $this->dbAdapterMock->expects($this->once())->method('fetchRow')->will($this->returnValue($existingUserData));
         // should not alter db
-        $this->dbAdapterMock
-            ->expects($this->never())
-            ->method('update');
-
-        $this->dbAdapterMock
-            ->expects($this->never())
-            ->method('insert');
+        $this->dbAdapterMock->expects($this->never())->method('update');
+        $this->dbAdapterMock->expects($this->never())->method('insert');
 
         $this->adminAccount->save();
     }
@@ -274,24 +280,15 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveExceptionEmailNotMatch()
     {
-        $result = [
+        $existingUserData = [
             'email' => 'another.email@test.com',
             'username' => 'admin',
         ];
 
-        $this->dbAdapterMock
-            ->expects($this->once())
-            ->method('fetchRow')
-            ->will($this->returnValue($result));
-
+        $this->dbAdapterMock->expects($this->once())->method('fetchRow')->will($this->returnValue($existingUserData));
         // should not alter db
-        $this->dbAdapterMock
-            ->expects($this->never())
-            ->method('update');
-
-        $this->dbAdapterMock
-            ->expects($this->never())
-            ->method('insert');
+        $this->dbAdapterMock->expects($this->never())->method('update');
+        $this->dbAdapterMock->expects($this->never())->method('insert');
 
         $this->adminAccount->save();
     }
@@ -303,10 +300,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
     public function testSaveExceptionSpecialAdminRoleNotFound()
     {
         $this->dbAdapterMock->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
-        $this->dbAdapterMock
-            ->expects($this->exactly(3))
-            ->method('fetchRow')
-            ->will($this->returnValue([]));
+        $this->dbAdapterMock->expects($this->exactly(3))->method('fetchRow')->will($this->returnValue([]));
 
         $this->adminAccount->save();
     }

@@ -72,13 +72,28 @@ class ProgressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $progress->getTotal());
     }
 
-    public function testRatio()
+    /**
+     * @param int $total
+     * @param int $current
+     * @dataProvider ratioDataProvider
+     */
+    public function testRatio($total, $current)
     {
+        $progress = new Progress($total, $current);
+        $this->assertEquals($current / $total, $progress->getRatio());
+    }
+
+    /**
+     * @return array
+     */
+    public function ratioDataProvider()
+    {
+        $data = [];
         for ($i = 10; $i <= 20; $i++) {
             for ($j = 0; $j <= $i; $j++) {
-                $progress = new Progress($i, $j);
-                $this->assertEquals($j / $i, $progress->getRatio());
+                $data[] = [$i, $j];
             }
         }
+        return $data;
     }
 }
