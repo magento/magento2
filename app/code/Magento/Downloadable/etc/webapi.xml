@@ -37,19 +37,19 @@
         </resources>
     </route>
     <route url="/V1/products/:productSku/downloadable-links/samples" method="POST">
-        <service class="Magento\Downloadable\Service\V1\DownloadableSample\WriteServiceInterface" method="create"/>
+        <service class="Magento\Downloadable\Api\SampleManagementInterface" method="create"/>
         <resources>
             <resource ref="Magento_Downloadable::downloadable" />
         </resources>
     </route>
     <route url="/V1/products/:productSku/downloadable-links/samples/:sampleId" method="PUT">
-        <service class="Magento\Downloadable\Service\V1\DownloadableSample\WriteServiceInterface" method="update"/>
-        <resources>
-            <resource ref="Magento_Downloadable::downloadable" />
-        </resources>
-    </route>
+    <service class="Magento\Downloadable\Api\SampleManagementInterface" method="update"/>
+    <resources>
+        <resource ref="Magento_Downloadable::downloadable" />
+    </resources>
+</route>
     <route url="/V1/products/downloadable-links/samples/:sampleId" method="DELETE">
-        <service class="Magento\Downloadable\Service\V1\DownloadableSample\WriteServiceInterface" method="delete"/>
+        <service class="Magento\Downloadable\Api\SampleManagementInterface" method="delete"/>
         <resources>
             <resource ref="Magento_Downloadable::downloadable" />
         </resources>

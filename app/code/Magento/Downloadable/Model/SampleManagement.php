@@ -3,18 +3,18 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Downloadable\Service\V1\DownloadableSample;
+namespace Magento\Downloadable\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Downloadable\Model\SampleFactory;
-use Magento\Downloadable\Service\V1\Data\FileContentUploaderInterface;
-use Magento\Downloadable\Service\V1\DownloadableSample\Data\DownloadableSampleContent;
-use Magento\Downloadable\Service\V1\DownloadableSample\Data\DownloadableSampleContentValidator;
+use Magento\Downloadable\Api\Data\File\ContentUploaderInterface;
+use Magento\Downloadable\Api\Data\SampleContentInterface;
+use Magento\Downloadable\Model\Sample\ContentValidator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\EncoderInterface;
 
-class WriteService implements WriteServiceInterface
+class SampleManagement implements \Magento\Downloadable\Api\SampleManagementInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
@@ -22,12 +22,12 @@ class WriteService implements WriteServiceInterface
     protected $productRepository;
 
     /**
-     * @var DownloadableSampleContentValidator
+     * @var ContentValidator
      */
     protected $contentValidator;
 
     /**
-     * @var FileContentUploaderInterface
+     * @var ContentUploaderInterface
      */
     protected $fileContentUploader;
 
@@ -43,15 +43,15 @@ class WriteService implements WriteServiceInterface
 
     /**
      * @param ProductRepositoryInterface $productRepository
-     * @param DownloadableSampleContentValidator $contentValidator
-     * @param FileContentUploaderInterface $fileContentUploader
+     * @param ContentValidator $contentValidator
+     * @param ContentUploaderInterface $fileContentUploader
      * @param EncoderInterface $jsonEncoder
      * @param SampleFactory $sampleFactory
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        DownloadableSampleContentValidator $contentValidator,
-        FileContentUploaderInterface $fileContentUploader,
+        ContentValidator $contentValidator,
+        ContentUploaderInterface $fileContentUploader,
         EncoderInterface $jsonEncoder,
         SampleFactory $sampleFactory
     ) {
@@ -65,7 +65,7 @@ class WriteService implements WriteServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function create($productSku, DownloadableSampleContent $sampleContent, $isGlobalScopeContent = false)
+    public function create($productSku, SampleContentInterface $sampleContent, $isGlobalScopeContent = false)
     {
         $product = $this->productRepository->get($productSku, true);
         if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
@@ -94,8 +94,8 @@ class WriteService implements WriteServiceInterface
 
         if ($sampleContent->getSampleType() == 'file') {
             $sampleData['file'] = $this->jsonEncoder->encode([
-                $this->fileContentUploader->upload($sampleContent->getSampleFile(), 'sample'),
-            ]);
+                    $this->fileContentUploader->upload($sampleContent->getSampleFile(), 'sample'),
+                ]);
         } else {
             $sampleData['sample_url'] = $sampleContent->getSampleUrl();
         }
@@ -115,7 +115,7 @@ class WriteService implements WriteServiceInterface
     public function update(
         $productSku,
         $sampleId,
-        DownloadableSampleContent $sampleContent,
+        SampleContentInterface $sampleContent,
         $isGlobalScopeContent = false
     ) {
         $product = $this->productRepository->get($productSku, true);

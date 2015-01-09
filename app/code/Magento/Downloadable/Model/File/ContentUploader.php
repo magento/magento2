@@ -2,18 +2,19 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Downloadable\Service\V1\Data;
+namespace Magento\Downloadable\Model\File;
 
 use Magento\Core\Helper\File\Storage;
 use Magento\Core\Helper\File\Storage\Database;
 use Magento\Core\Model\File\Uploader;
 use Magento\Core\Model\File\Validator\NotProtectedExtension;
+use Magento\Downloadable\Api\Data\File\ContentInterface;
 use Magento\Downloadable\Model\Link as LinkConfig;
 use Magento\Downloadable\Model\Sample as SampleConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
-class FileContentUploader extends Uploader implements FileContentUploaderInterface
+class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data\File\ContentUploaderInterface
 {
     /**
      * Default MIME type
@@ -75,10 +76,10 @@ class FileContentUploader extends Uploader implements FileContentUploaderInterfa
     /**
      * Decode base64 encoded content and save it in system tmp folder
      *
-     * @param FileContent $fileContent
+     * @param ContentInterface $fileContent
      * @return array
      */
-    protected function decodeContent(FileContent $fileContent)
+    protected function decodeContent(ContentInterface $fileContent)
     {
         $tmpFileName = $this->getTmpFileName();
         $fileSize = $this->systemTmpDirectory->writeFile($tmpFileName, base64_decode($fileContent->getData()));
@@ -105,7 +106,7 @@ class FileContentUploader extends Uploader implements FileContentUploaderInterfa
     /**
      * {@inheritdoc}
      */
-    public function upload(FileContent $fileContent, $contentType)
+    public function upload(ContentInterface $fileContent, $contentType)
     {
         $this->_file = $this->decodeContent($fileContent);
         if (!file_exists($this->_file['tmp_name'])) {
