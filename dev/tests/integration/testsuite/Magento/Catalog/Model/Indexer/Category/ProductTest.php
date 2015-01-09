@@ -148,10 +148,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexAll
+     *
      */
     public function testCategoryCreate()
     {
+        $this->testReindexAll();
         $categories = $this->getCategories(4);
         $products = $this->getProducts(3);
 
