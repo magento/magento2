@@ -27,4 +27,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $languageConfig->getUses()
         );
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception
+     * @expectedExceptionMessage Opening and ending tag mismatch: xlanguage line 7 and language
+     */
+    public function testFailedConfiguration()
+    {
+	$languageXml = file_get_contents(__DIR__ . '/_files/language_invalid.xml');
+	$languageConfig = new Config($languageXml);
+    }
 }

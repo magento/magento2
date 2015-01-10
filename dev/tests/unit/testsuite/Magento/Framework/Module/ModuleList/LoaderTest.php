@@ -90,4 +90,20 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $object = new Loader($this->filesystem, $this->converter);
         $object->load();
     }
+
+    /**
+     * @expectedException \Magento\Framework\Module\Exception
+     * @expectedExceptionMessage Opening and ending tag mismatch: xtest line 1
+     */
+    public function testMalformedXML()
+    {
+	$sampleXml = '<?xml version="1.0"?><xtest></test>';
+	$this->dir->expects($this->once())->method('search')->willReturn(['a']);
+	$this->dir->expects($this->exactly(1))->method('readFile')->will($this->returnValueMap([
+	    ['a', null, null, $sampleXml],
+	]));
+	$this->converter = $this->getMock('Magento\Framework\Module\Declaration\Converter\Dom', [], [], '', false);
+	$object = new Loader($this->filesystem, $this->converter);
+	$object->load();
+    }
 }

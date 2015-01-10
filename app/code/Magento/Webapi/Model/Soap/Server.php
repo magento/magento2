@@ -7,6 +7,8 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
+use \Magento\Framework\Xml\Parser;
+
 class Server
 {
     const SOAP_DEFAULT_ENCODING = 'UTF-8';
@@ -178,11 +180,26 @@ class Server
      */
     protected function _checkRequest($soapRequest)
     {
-        $dom = new \DOMDocument();
-        if (strlen($soapRequest) == 0 || !$dom->loadXML($soapRequest)) {
-            throw new \Magento\Webapi\Exception(__('Invalid XML'), 0, \Magento\Webapi\Exception::HTTP_INTERNAL_ERROR);
+	if (strlen($soapRequest) == 0) {
+	    throw new \Magento\Webapi\Exception(
+		__('Request length is zero.'),
+		0,
+		\Magento\Webapi\Exception::HTTP_INTERNAL_ERROR
+	    );
+	}
+
+	$parser = new Parser('\InvalidArgumentException');
+	try {
+	    $parser->loadXML($soapRequest);
+	} catch (\InvalidArgumentException $e) {
+	    throw new \Magento\Webapi\Exception(
+		__('Invalid XML') . PHP_EOL . $e->getMessage(),
+		0,
+		\Magento\Webapi\Exception::HTTP_INTERNAL_ERROR
+	    );
         }
-        foreach ($dom->childNodes as $child) {
+
+	foreach ($parser->getDom()->childNodes as $child) {
             if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
                 throw new \Magento\Webapi\Exception(
                     __('Invalid XML: Detected use of illegal DOCTYPE'),
