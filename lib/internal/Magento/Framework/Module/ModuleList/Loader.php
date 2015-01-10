@@ -8,6 +8,7 @@ namespace Magento\Framework\Module\ModuleList;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Xml\Parser;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 
 /**
@@ -45,6 +46,7 @@ class Loader
      * Loads the full module list information
      *
      * @return array
+     * @throws \Magento\Framework\Module\Exception
      */
     public function load()
     {
@@ -52,9 +54,8 @@ class Loader
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
         foreach ($dir->search('*/*/etc/module.xml') as $file) {
             $contents = $dir->readFile($file);
-            $dom = new \DOMDocument();
-            $dom->loadXML($contents);
-            $data = $this->converter->convert($dom);
+	    $parser = new Parser('\Magento\Framework\Module\Exception');
+	    $data = $this->converter->convert($parser->loadXML($contents)->getDom());
             $name = key($data);
             $result[$name] = $data[$name];
         }

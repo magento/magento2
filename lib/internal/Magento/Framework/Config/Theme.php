@@ -9,7 +9,7 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Config\Composer\Package;
+use Magento\Framework\Xml\Parser;
 
 class Theme
 {
@@ -51,6 +51,7 @@ class Theme
      * @param string $configContent
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception
      */
     protected function _extractData($configContent)
     {
@@ -61,11 +62,11 @@ class Theme
         ];
 
         if (!empty($configContent)) {
-            $dom = new \DOMDocument();
-            $dom->loadXML($configContent);
-            // todo: validation of the document
+	    $parser = new Parser('\Magento\Framework\Exception');
+	    $parser->loadXMLandValidate($configContent, $this->getSchemaFile());
+
             /** @var $themeNode \DOMElement */
-            $themeNode = $dom->getElementsByTagName('theme')->item(0);
+	    $themeNode = $parser->getDom()->getElementsByTagName('theme')->item(0);
             $themeTitleNode = $themeNode->getElementsByTagName('title')->item(0);
             $data['title'] = $themeTitleNode ? $themeTitleNode->nodeValue : null;
             /** @var $mediaNode \DOMElement */

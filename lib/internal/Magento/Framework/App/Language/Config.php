@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\App\Language;
 
-use Magento\Framework\Config\Dom;
+use Magento\Framework\Xml\Parser;
 
 /**
  * Language pack configuration file
@@ -28,13 +28,9 @@ class Config
      */
     public function __construct($source)
     {
-        $config = new \DOMDocument();
-        $config->loadXML($source);
-        $errors = Dom::validateDomDocument($config, $this->getSchemaFile());
-        if (!empty($errors)) {
-            throw new \Magento\Framework\Exception("Invalid Document: \n" . implode("\n", $errors));
-        }
-        $this->_data = $this->_extractData($config);
+	$parser = new Parser('\Magento\Framework\Exception');
+	$parser->loadXMLandValidate($source, $this->getSchemaFile());
+	$this->_data = $this->_extractData($parser->getDom());
     }
 
     /**

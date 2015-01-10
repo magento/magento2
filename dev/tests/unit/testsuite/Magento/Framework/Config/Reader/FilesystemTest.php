@@ -110,7 +110,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception
-     * @expectedExceptionMessage Invalid XML in file
+     * @expectedExceptionMessage DOMDocument::schemaValidate(): Invalid Schema source
      */
     public function testReadWithInvalidXml()
     {
