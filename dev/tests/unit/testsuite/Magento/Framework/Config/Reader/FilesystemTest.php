@@ -110,7 +110,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception
-     * @expectedExceptionMessage Element 'config': Element content is not allowed, because the type definition is simple
+     * @expectedExceptionMessage DOMDocument::schemaValidate(): Invalid Schema source
      */
     public function testReadWithInvalidXml()
     {
