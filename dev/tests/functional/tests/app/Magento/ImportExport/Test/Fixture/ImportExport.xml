@@ -9,33 +9,33 @@
     <type>flat</type>
     <entity_type>importexport_importdata</entity_type>
     <fields>
-        <id>
+        <field name="id" >
             <attribute_code>id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input></input>
-        </id>
-        <entity>
+        </field>
+        <field name="entity" >
             <attribute_code>entity</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>Products</default_value>
             <input></input>
-        </entity>
-        <behavior>
+        </field>
+        <field name="behavior" >
             <attribute_code>behavior</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>CSV</default_value>
             <input></input>
-        </behavior>
-        <data_export>
+        </field>
+        <field name="data_export" >
             <attribute_code>data</attribute_code>
             <backend_type>longtext</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </data_export>
+        </field>
     </fields>
 </fixture>

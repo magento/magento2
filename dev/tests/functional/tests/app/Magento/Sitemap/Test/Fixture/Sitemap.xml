@@ -12,47 +12,47 @@
     <repository_class>Magento\Sitemap\Test\Repository\Sitemap</repository_class>
     <handler_interface>Magento\Sitemap\Test\Handler\Sitemap\SitemapInterface</handler_interface>
     <fields>
-        <sitemap_id>
+        <field name="sitemap_id" >
             <attribute_code>sitemap_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input></input>
-        </sitemap_id>
-        <sitemap_type>
+        </field>
+        <field name="sitemap_type" >
             <attribute_code>sitemap_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </sitemap_type>
-        <sitemap_filename>
+        </field>
+        <field name="sitemap_filename" >
             <attribute_code>sitemap_filename</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>sitemap.xml</default_value>
             <input></input>
-        </sitemap_filename>
-        <sitemap_path>
+        </field>
+        <field name="sitemap_path" >
             <attribute_code>sitemap_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>/</default_value>
             <input></input>
-        </sitemap_path>
-        <sitemap_time>
+        </field>
+        <field name="sitemap_time" >
             <attribute_code>sitemap_time</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </sitemap_time>
-        <store_id>
+        </field>
+        <field name="store_id" >
             <attribute_code>store_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </store_id>
+        </field>
     </fields>
 </fixture>

@@ -12,83 +12,83 @@
     <repository_class>Magento\CatalogSearch\Test\Repository\CatalogSearchQuery</repository_class>
     <handler_interface>Magento\CatalogSearch\Test\Handler\CatalogSearchQuery\CatalogSearchQueryInterface</handler_interface>
     <fields>
-        <query_id>
+        <field name="query_id" >
             <attribute_code>query_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input></input>
-        </query_id>
-        <query_text>
+        </field>
+        <field name="query_text" >
             <attribute_code>query_text</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
             <source>Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\QueryText</source>
-        </query_text>
-        <num_results>
+        </field>
+        <field name="num_results" >
             <attribute_code>num_results</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </num_results>
-        <popularity>
+        </field>
+        <field name="popularity" >
             <attribute_code>popularity</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </popularity>
-        <redirect>
+        </field>
+        <field name="redirect" >
             <attribute_code>redirect</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </redirect>
-        <synonym_for>
+        </field>
+        <field name="synonym_for" >
             <attribute_code>synonym_for</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </synonym_for>
-        <store_id>
+        </field>
+        <field name="store_id" >
             <attribute_code>store_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </store_id>
-        <display_in_terms>
+        </field>
+        <field name="display_in_terms" >
             <attribute_code>display_in_terms</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
             <default_value>null</default_value>
             <input></input>
-        </display_in_terms>
-        <is_active>
+        </field>
+        <field name="is_active" >
             <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
             <default_value>null</default_value>
             <input></input>
-        </is_active>
-        <is_processed>
+        </field>
+        <field name="is_processed" >
             <attribute_code>is_processed</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </is_processed>
-        <updated_at>
+        </field>
+        <field name="updated_at" >
             <attribute_code>updated_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required></is_required>
             <default_value>null</default_value>
             <input></input>
-        </updated_at>
+        </field>
     </fields>
 </fixture>

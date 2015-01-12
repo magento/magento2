@@ -13,30 +13,30 @@
     <repository_class>Magento\Tax\Test\Repository\TaxClass</repository_class>
     <handler_interface>Magento\Tax\Test\Handler\TaxClass\TaxClassInterface</handler_interface>
     <fields>
-        <class_id>
+        <field name="class_id" >
             <attribute_code>class_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input></input>
-        </class_id>
-        <class_name>
+        </field>
+        <field name="class_name" >
             <attribute_code>class_name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>Tax Class %isolation%</default_value>
             <input></input>
-        </class_name>
-        <class_type>
+        </field>
+        <field name="class_type" >
             <attribute_code>class_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>CUSTOMER</default_value>
             <input></input>
-        </class_type>
-        <id>
+        </field>
+        <field name="id" >
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
-        </id>
+        </field>
     </fields>
 </fixture>

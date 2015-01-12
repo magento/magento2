@@ -13,35 +13,35 @@
     <repository_class>Magento\Tax\Test\Repository\TaxRule</repository_class>
     <handler_interface>Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface</handler_interface>
     <fields>
-        <tax_calculation_rule_id>
+        <field name="tax_calculation_rule_id" >
             <attribute_code>tax_calculation_rule_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input></input>
-        </tax_calculation_rule_id>
-        <code>
+        </field>
+        <field name="code" >
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>TaxIdentifier%isolation%</default_value>
             <input></input>
-        </code>
-        <priority>
+        </field>
+        <field name="priority" >
             <attribute_code>priority</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </priority>
-        <position>
+        </field>
+        <field name="position" >
             <attribute_code>position</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </position>
-        <tax_rate>
+        </field>
+        <field name="tax_rate" >
             <attribute_code>tax_rate</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Tax\Test\Fixture\TaxRule\TaxRate</source>
@@ -50,16 +50,16 @@
                     <key_0>US-CA-Rate_1</key_0>
                 </dataSet>
             </default_value>
-        </tax_rate>
-        <tax_customer_class>
+        </field>
+        <field name="tax_customer_class" >
             <attribute_code>tax_customer_class</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Tax\Test\Fixture\TaxRule\TaxClass</source>
-        </tax_customer_class>
-        <tax_product_class>
+        </field>
+        <field name="tax_product_class" >
             <attribute_code>tax_product_class</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Tax\Test\Fixture\TaxRule\TaxClass</source>
-        </tax_product_class>
+        </field>
     </fields>
 </fixture>

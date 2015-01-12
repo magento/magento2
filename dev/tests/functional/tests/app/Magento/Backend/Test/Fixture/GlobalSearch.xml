@@ -7,11 +7,11 @@
 <fixture class="Magento\Backend\Test\Fixture\GlobalSearch">
     <module>Magento_Backend</module>
     <fields>
-        <query>
+        <field name="query" >
             <attribute_code>query</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Backend\Test\Fixture\GlobalSearch\Query</source>
             <default_value>catalogProductSimple::default::name</default_value>
-        </query>
+        </field>
     </fields>
 </fixture>

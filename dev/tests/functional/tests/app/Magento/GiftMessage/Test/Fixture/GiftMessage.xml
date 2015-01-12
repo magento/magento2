@@ -12,59 +12,59 @@
     <identifier>gift_message_id</identifier>
     <repository_class>Magento\GiftMessage\Test\Repository\GiftMessage</repository_class>
     <fields>
-        <gift_message_id>
+        <field name="gift_message_id" >
             <attribute_code>gift_message_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input></input>
-        </gift_message_id>
-        <customer_id>
+        </field>
+        <field name="customer_id" >
             <attribute_code>customer_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </customer_id>
-        <sender>
+        </field>
+        <field name="sender" >
             <attribute_code>sender</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>John Doe</default_value>
             <input></input>
-        </sender>
-        <recipient>
+        </field>
+        <field name="recipient" >
             <attribute_code>recipient</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>Jane Doe</default_value>
             <input></input>
-        </recipient>
-        <message>
+        </field>
+        <field name="message" >
             <attribute_code>message</attribute_code>
             <backend_type>text</backend_type>
             <is_required></is_required>
             <default_value>text_%isolation%</default_value>
             <input></input>
-        </message>
-        <allow_gift_options>
+        </field>
+        <field name="allow_gift_options" >
             <attribute_code>allow_gift_options</attribute_code>
             <backend_type>virtual</backend_type>
             <default_value>Yes</default_value>
-        </allow_gift_options>
-        <allow_gift_messages_for_order>
+        </field>
+        <field name="allow_gift_messages_for_order" >
             <attribute_code>allow_gift_messages_for_order</attribute_code>
             <backend_type>virtual</backend_type>
             <default_value>Yes</default_value>
-        </allow_gift_messages_for_order>
-        <allow_gift_options_for_items>
+        </field>
+        <field name="allow_gift_options_for_items" >
             <attribute_code>allow_gift_options_for_items</attribute_code>
             <backend_type>virtual</backend_type>
-        </allow_gift_options_for_items>
-        <items>
+        </field>
+        <field name="items" >
             <attribute_code>items</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\GiftMessage\Test\Fixture\GiftMessage\Items</source>
-        </items>
+        </field>
     </fields>
 </fixture>

@@ -12,79 +12,79 @@
     <repository_class>Magento\User\Test\Repository\AdminUserRole</repository_class>
     <handler_interface>Magento\User\Test\Handler\AdminUserRole\AdminUserRoleInterface</handler_interface>
     <fields>
-        <role_id>
+        <field name="role_id" >
             <attribute_code>role_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input></input>
-        </role_id>
-        <parent_id>
+        </field>
+        <field name="parent_id" >
             <attribute_code>parent_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </parent_id>
-        <tree_level>
+        </field>
+        <field name="tree_level" >
             <attribute_code>tree_level</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </tree_level>
-        <sort_order>
+        </field>
+        <field name="sort_order" >
             <attribute_code>sort_order</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </sort_order>
-        <role_type>
+        </field>
+        <field name="role_type" >
             <attribute_code>role_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </role_type>
-        <user_id>
+        </field>
+        <field name="user_id" >
             <attribute_code>user_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </user_id>
-        <rolename>
+        </field>
+        <field name="rolename" >
             <attribute_code>rolename</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>AdminRole%isolation%</default_value>
             <input></input>
             <group>role-info</group>
-        </rolename>
-        <user_type>
+        </field>
+        <field name="user_type" >
             <attribute_code>user_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </user_type>
-        <resource_access>
+        </field>
+        <field name="resource_access" >
             <attribute_code>resource_access</attribute_code>
             <backend_type>virtual</backend_type>
             <group>role-resources</group>
             <default_value>All</default_value>
-        </resource_access>
-        <roles_resources>
+        </field>
+        <field name="roles_resources" >
             <attribute_code>roles_resources</attribute_code>
             <backend_type>virtual</backend_type>
             <group>role-resources</group>
-        </roles_resources>
-        <in_role_users>
+        </field>
+        <field name="in_role_users" >
             <attribute_code>in_role_users</attribute_code>
             <backend_type>virtual</backend_type>
             <group>in_role_users</group>
             <source>Magento\User\Test\Fixture\AdminUserRole\InRoleUsers</source>
-        </in_role_users>
+        </field>
     </fields>
 </fixture>

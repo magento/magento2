@@ -12,14 +12,14 @@
     <repository_class>Magento\Customer\Test\Repository\CustomerGroupInjectable</repository_class>
     <handler_interface>Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface</handler_interface>
     <fields>
-        <customer_group_code>
+        <field name="customer_group_code" >
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
             <default_value>customer_code_%isolation%</default_value>
             <input>text</input>
-        </customer_group_code>
-        <tax_class_id>
+        </field>
+        <field name="tax_class_id" >
             <attribute_code>tax_class</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
@@ -28,10 +28,10 @@
             </default_value>
             <input>select</input>
             <source>Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds</source>
-        </tax_class_id>
-        <customer_group_id>
+        </field>
+        <field name="customer_group_id" >
             <attribute_code>customer_group_id</attribute_code>
             <backend_type>virtual</backend_type>
-        </customer_group_id>
+        </field>
     </fields>
 </fixture>

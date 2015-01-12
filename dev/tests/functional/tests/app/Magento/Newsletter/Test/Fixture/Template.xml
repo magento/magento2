@@ -13,89 +13,89 @@
     <repository_class>Magento\Newsletter\Test\Repository\Template</repository_class>
     <handler_interface>Magento\Newsletter\Test\Handler\Template\TemplateInterface</handler_interface>
     <fields>
-        <id>
+        <field name="id" >
             <attribute_code>template_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input></input>
-        </id>
-        <code>
+        </field>
+        <field name="code" >
             <attribute_code>template_code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>TemplateName%isolation%</default_value>
             <input></input>
-        </code>
-        <text>
+        </field>
+        <field name="text" >
             <attribute_code>template_text</attribute_code>
             <backend_type>text</backend_type>
             <is_required></is_required>
             <default_value>Some text %isolation%</default_value>
             <input></input>
-        </text>
-        <text_preprocessed>
+        </field>
+        <field name="text_preprocessed" >
             <attribute_code>template_text_preprocessed</attribute_code>
             <backend_type>text</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </text_preprocessed>
-        <styles>
+        </field>
+        <field name="styles" >
             <attribute_code>template_styles</attribute_code>
             <backend_type>text</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </styles>
-        <type>
+        </field>
+        <field name="type" >
             <attribute_code>template_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </type>
-        <subject>
+        </field>
+        <field name="subject" >
             <attribute_code>template_subject</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>TemplateSubject%isolation%</default_value>
             <input></input>
-        </subject>
-        <sender_name>
+        </field>
+        <field name="sender_name" >
             <attribute_code>template_sender_name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>SenderName%isolation%</default_value>
             <input></input>
-        </sender_name>
-        <sender_email>
+        </field>
+        <field name="sender_email" >
             <attribute_code>template_sender_email</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>SenderName%isolation%@example.com</default_value>
             <input></input>
-        </sender_email>
-        <actual>
+        </field>
+        <field name="actual" >
             <attribute_code>template_actual</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
             <default_value>1</default_value>
             <input></input>
-        </actual>
-        <added_at>
+        </field>
+        <field name="added_at" >
             <attribute_code>added_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </added_at>
-        <modified_at>
+        </field>
+        <field name="modified_at" >
             <attribute_code>modified_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </modified_at>
+        </field>
     </fields>
 </fixture>

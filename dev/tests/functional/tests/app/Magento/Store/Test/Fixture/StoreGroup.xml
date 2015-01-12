@@ -13,42 +13,42 @@
     <repository_class>Magento\Store\Test\Repository\StoreGroup</repository_class>
     <handler_interface>Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface</handler_interface>
     <fields>
-        <group_id>
+        <field name="group_id" >
             <attribute_code>group_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
             <default_value></default_value>
             <input></input>
-        </group_id>
-        <website_id>
+        </field>
+        <field name="website_id" >
             <attribute_code>website_id</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Store\Test\Fixture\StoreGroup\WebsiteId</source>
             <default_value>
                 <dataSet>main_website</dataSet>
             </default_value>
-        </website_id>
-        <name>
+        </field>
+        <field name="name" >
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>StoreGroup%isolation%</default_value>
             <input></input>
-        </name>
-        <root_category_id>
+        </field>
+        <field name="root_category_id" >
             <attribute_code>root_category_id</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Store\Test\Fixture\StoreGroup\CategoryId</source>
             <default_value>
                 <dataSet>default_category</dataSet>
             </default_value>
-        </root_category_id>
-        <default_store_id>
+        </field>
+        <field name="default_store_id" >
             <attribute_code>default_store_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
             <input></input>
-        </default_store_id>
+        </field>
     </fields>
 </fixture>
