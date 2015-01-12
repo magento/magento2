@@ -36,6 +36,6 @@ class Remove implements Layout\ReaderInterface
     {
         $scheduledStructure = $readerContext->getScheduledStructure();
         $scheduledStructure->setElementToRemoveList((string)$currentElement->getAttribute('name'));
-        return false;
+        return $this;
     }
 }
