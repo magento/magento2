@@ -27,8 +27,7 @@ class Create extends \Magento\Backend\App\Action
         Action\Context $context,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper
-    )
-    {
+    ) {
         parent::__construct($context);
         $productHelper->setSkipSaleableCheck(true);
         $this->escaper = $escaper;
