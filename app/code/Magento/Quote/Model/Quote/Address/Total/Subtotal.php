@@ -13,16 +13,16 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Sales data
      *
-     * @var \Magento\Sales\Helper\Data
+     * @var \Magento\Quote\Helper\Data
      */
-    protected $_salesData = null;
+    protected $quoteDataHelper = null;
 
     /**
-     * @param \Magento\Sales\Helper\Data $salesData
+     * @param \Magento\Quote\Helper\Data $quoteDataHelper
      */
-    public function __construct(\Magento\Sales\Helper\Data $salesData)
+    public function __construct(\Magento\Quote\Helper\Data $quoteDataHelper)
     {
-        $this->_salesData = $salesData;
+        $this->quoteDataHelper = $quoteDataHelper;
     }
 
     /**
@@ -62,8 +62,8 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         /**
          * Initialize grand totals
          */
-        $this->_salesData->checkQuoteAmount($address->getQuote(), $address->getSubtotal());
-        $this->_salesData->checkQuoteAmount($address->getQuote(), $address->getBaseSubtotal());
+        $this->quoteDataHelper->checkQuoteAmount($address->getQuote(), $address->getSubtotal());
+        $this->quoteDataHelper->checkQuoteAmount($address->getQuote(), $address->getBaseSubtotal());
         return $this;
     }
 

@@ -193,9 +193,9 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     /**
      * Sales data
      *
-     * @var \Magento\Sales\Helper\Data
+     * @var \Magento\Quote\Helper\Data
      */
-    protected $_salesData;
+    protected $quoteDataHelper;
 
     /**
      * Core store config
@@ -330,7 +330,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Helper\Data $salesData
+     * @param \Magento\Quote\Helper\Data $quoteDataHelper
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -363,7 +363,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Sales\Helper\Data $salesData,
+        \Magento\Quote\Helper\Data $quoteDataHelper,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -393,7 +393,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        $this->_salesData = $salesData;
+        $this->quoteDataHelper = $quoteDataHelper;
         $this->_catalogProduct = $catalogProduct;
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
@@ -1698,8 +1698,8 @@ class Quote extends \Magento\Framework\Model\AbstractModel
             $this->setBaseGrandTotal((float)$this->getBaseGrandTotal() + $address->getBaseGrandTotal());
         }
 
-        $this->_salesData->checkQuoteAmount($this, $this->getGrandTotal());
-        $this->_salesData->checkQuoteAmount($this, $this->getBaseGrandTotal());
+        $this->quoteDataHelper->checkQuoteAmount($this, $this->getGrandTotal());
+        $this->quoteDataHelper->checkQuoteAmount($this, $this->getBaseGrandTotal());
 
         $this->setData('trigger_recollect', 0);
         $this->_validateCouponCode();

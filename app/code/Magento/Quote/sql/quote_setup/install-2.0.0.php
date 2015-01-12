@@ -5,20 +5,6 @@
 
 /** @var $this \Magento\Quote\Model\Resource\Setup */
 $this->startSetup();
-$oldQuoteTables = [
-    'sales_quote',
-    'sales_quote_item',
-    'sales_quote_address',
-    'sales_quote_address_item',
-    'sales_quote_shipping_rate',
-    'sales_quote_payment'
-];
-
-foreach ($oldQuoteTables as $table) {
-    if ($this->getConnection()->isTableExists($table)) {
-        $this->getConnection()->dropTable($table);
-    }
-}
 
 /**
  * Create table 'quote'
