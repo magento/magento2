@@ -72,7 +72,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         // First element should be blank line
         $this->assertEquals('', $usage[0]);
         // Only one parameter definition is added to usage statement
-        $this->assertContains('[--magento_init_params="<query>"]', $usage[1][0]);
+        $this->assertContains(escapeshellarg('[--magento_init_params=\'<query>\']'), escapeshellarg($usage[1][0]));
     }
 
     public function testAttach()
