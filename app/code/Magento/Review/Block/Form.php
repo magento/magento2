@@ -13,6 +13,7 @@ use Magento\Review\Model\Resource\Rating\Collection as RatingCollection;
  * Review form block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Form extends \Magento\Framework\View\Element\Template
 {
@@ -85,6 +86,7 @@ class Form extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

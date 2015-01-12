@@ -185,6 +185,10 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @param bool $directUrl
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getChartUrl($directUrl = true)
     {

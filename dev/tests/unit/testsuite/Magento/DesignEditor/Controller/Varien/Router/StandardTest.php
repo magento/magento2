@@ -71,6 +71,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      * Data provider for testMatch
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function matchDataProvider()
     {

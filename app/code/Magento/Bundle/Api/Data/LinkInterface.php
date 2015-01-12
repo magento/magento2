@@ -47,6 +47,7 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Get is default
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsDefault();
 

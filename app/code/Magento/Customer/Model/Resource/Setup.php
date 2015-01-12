@@ -46,6 +46,8 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * Add customer attributes to customer forms
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function installCustomerForms()
     {
@@ -113,6 +115,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * Retrieve default entities: customer, customer_address
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getDefaultEntities()
     {

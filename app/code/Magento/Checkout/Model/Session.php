@@ -7,6 +7,9 @@ namespace Magento\Checkout\Model;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Sales\Model\Quote;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Session extends \Magento\Framework\Session\SessionManager
 {
     /**
@@ -93,6 +96,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -169,6 +173,8 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Get checkout quote instance by current session
      *
      * @return Quote
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getQuote()
     {

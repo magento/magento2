@@ -8,6 +8,9 @@ namespace Magento\Shipping\Model\Shipping;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LabelGenerator
 {
     /**

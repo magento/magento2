@@ -26,6 +26,7 @@ class Plugin
      * @param \Magento\Framework\Locale\ResolverInterface $subject
      * @param string|null $localeCode
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterEmulate(\Magento\Framework\Locale\ResolverInterface $subject, $localeCode)
     {
@@ -36,6 +37,7 @@ class Plugin
      * @param \Magento\Framework\Locale\ResolverInterface $subject
      * @param string|null $localeCode
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterRevert(\Magento\Framework\Locale\ResolverInterface $subject, $localeCode)
     {

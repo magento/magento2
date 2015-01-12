@@ -202,6 +202,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param resource &$imageResourceTo
      * @return int
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function _fillBackgroundColor(&$imageResourceTo)
     {
@@ -275,6 +276,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param bool &$isAlpha
      * @param bool &$isTrueColor
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     private function _getTransparency($imageResource, $fileType, &$isAlpha = false, &$isTrueColor = false)
     {
@@ -365,6 +367,9 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @param int $opacity
      * @param bool $tile
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {

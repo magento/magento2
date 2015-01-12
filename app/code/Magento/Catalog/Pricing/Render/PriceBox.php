@@ -83,6 +83,7 @@ class PriceBox extends PriceBoxRender
      *
      * @param Product $product
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanDisplayQty(Product $product)
     {

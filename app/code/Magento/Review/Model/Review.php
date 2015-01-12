@@ -18,6 +18,7 @@ use Magento\Review\Model\Resource\Review\Status\Collection as StatusCollection;
  * @method \Magento\Review\Model\Review setEntityPkValue(int $value)
  * @method int getStatusId()
  * @method \Magento\Review\Model\Review setStatusId(int $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Review extends \Magento\Framework\Model\AbstractModel
 {
@@ -120,6 +121,7 @@ class Review extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

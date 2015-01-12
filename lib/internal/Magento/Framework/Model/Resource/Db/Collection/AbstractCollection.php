@@ -6,6 +6,7 @@ namespace Magento\Framework\Model\Resource\Db\Collection;
 
 /**
  * Abstract Resource Collection
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
 {
@@ -190,6 +191,8 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
      * Init fields for select
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _initSelectFields()
     {

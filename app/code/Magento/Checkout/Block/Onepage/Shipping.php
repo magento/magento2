@@ -9,6 +9,7 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 
 /**
  * One page checkout status
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
@@ -38,6 +39,7 @@ class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

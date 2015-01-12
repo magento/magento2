@@ -10,6 +10,7 @@ use Magento\Backend\App\Action;
  * Adminhtml sales orders controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Order extends \Magento\Backend\App\Action
 {
@@ -100,6 +101,7 @@ class Order extends \Magento\Backend\App\Action
      * Acl check for admin
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _isAllowed()
     {

@@ -14,6 +14,9 @@ use Magento\Shipping\Model\Rate\Result;
 
 /**
  * DHL International (API v1.4)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -206,6 +209,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -369,6 +373,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\Object $request
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function setRequest(\Magento\Framework\Object $request)
     {
@@ -610,6 +616,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string $code One-symbol code (see getDhlProducts())
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDhlProductTitle($code)
     {
@@ -656,6 +663,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * Prepare items to pieces
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getAllItems()
     {
@@ -746,6 +755,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Shipping\Model\Simplexml\Element $nodeBkgDetails
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _makePieces(\Magento\Shipping\Model\Simplexml\Element $nodeBkgDetails)
     {
@@ -1008,6 +1018,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param string $response
      * @return bool|\Magento\Framework\Object|Result|Error
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _parseResponse($response)
     {
@@ -1095,6 +1107,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \SimpleXMLElement $shipmentDetails
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _addRate(\SimpleXMLElement $shipmentDetails)
     {
@@ -1359,6 +1372,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @return Result|\Magento\Framework\Object
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _doRequest()
     {
@@ -1552,6 +1568,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param RateRequest $rawRequest
      * @param string $originRegion
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _shipmentDetails($xml, $rawRequest, $originRegion = '')
     {
@@ -1740,6 +1758,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param string[] $trackings
      * @param string $response
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _parseXmlTrackingResponse($trackings, $response)
     {

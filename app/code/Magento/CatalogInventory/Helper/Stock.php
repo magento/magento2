@@ -83,6 +83,7 @@ class Stock
      *
      * @param \Magento\Catalog\Model\Resource\Collection\AbstractCollection $productCollection
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function addStockStatusToProducts(
         \Magento\Catalog\Model\Resource\Collection\AbstractCollection $productCollection

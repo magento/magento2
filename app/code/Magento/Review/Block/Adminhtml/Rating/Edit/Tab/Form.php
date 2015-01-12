@@ -60,6 +60,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare rating edit form
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

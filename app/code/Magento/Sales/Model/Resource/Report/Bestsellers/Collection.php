@@ -216,6 +216,9 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      * but before adding unions and calculating totals
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _beforeLoad()
     {

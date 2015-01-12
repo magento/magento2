@@ -10,6 +10,7 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * Multishipping checkout controller
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Checkout extends \Magento\Checkout\Controller\Action implements
     \Magento\Checkout\Controller\Express\RedirectLoginInterface
@@ -76,6 +77,8 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function dispatch(RequestInterface $request)
     {

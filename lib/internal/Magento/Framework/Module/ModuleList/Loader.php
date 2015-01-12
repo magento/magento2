@@ -65,6 +65,7 @@ class Loader
      *
      * @param array $origList
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function sortBySequence($origList)
     {

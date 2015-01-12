@@ -13,6 +13,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Tokenize string and return getted variable stack path
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function tokenize()
     {
@@ -58,6 +59,7 @@ class Variable extends \Magento\Framework\Filter\Template\Tokenizer\AbstractToke
      * Get string value for method args
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getString()
     {

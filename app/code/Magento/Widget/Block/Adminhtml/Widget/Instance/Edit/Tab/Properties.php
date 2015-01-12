@@ -10,6 +10,9 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {

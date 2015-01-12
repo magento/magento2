@@ -163,6 +163,7 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
      *
      * @param bool $useRegularPrice
      * @dataProvider useRegularPriceDataProvider
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testGetValueTypeDynamic($useRegularPrice)
     {

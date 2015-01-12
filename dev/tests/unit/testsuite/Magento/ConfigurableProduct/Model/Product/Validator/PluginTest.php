@@ -325,6 +325,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      * @param bool $isValid
      * @internal param array $attributes
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function createProduct($index, $id, $isValid = true)
     {

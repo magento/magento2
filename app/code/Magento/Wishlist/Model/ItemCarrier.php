@@ -14,6 +14,9 @@ use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\UrlInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ItemCarrier
 {
     /**
@@ -100,6 +103,9 @@ class ItemCarrier
      * @param Wishlist $wishlist
      * @param array $qtys
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function moveAllToCart(Wishlist $wishlist, $qtys)
     {

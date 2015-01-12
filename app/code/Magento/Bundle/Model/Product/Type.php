@@ -9,6 +9,9 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Bundle Type Model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
@@ -340,6 +343,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this|void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave($product)
     {
@@ -384,6 +388,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($product)
     {
@@ -590,6 +595,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function isSalable($product)
     {
@@ -648,6 +655,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return array|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
     {
@@ -1013,6 +1023,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return boolean true
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getForceChildItemQtyChanges($product)
     {

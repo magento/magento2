@@ -187,6 +187,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param array $optionIds
      * @param int $storeId
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getValuesByOption($optionIds, $storeId = null)
     {

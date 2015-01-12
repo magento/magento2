@@ -57,6 +57,7 @@ class DbTable extends \SessionHandler
      * @param string $savePath ignored
      * @param string $sessionName ignored
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function open($savePath, $sessionName)
     {
@@ -144,6 +145,7 @@ class DbTable extends \SessionHandler
      *
      * @param int $maxLifeTime
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function gc($maxLifeTime)
     {

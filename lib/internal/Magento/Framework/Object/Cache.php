@@ -122,6 +122,8 @@ class Cache
      * @param array|string $tags
      * @return string
      * @throws \Magento\Framework\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save($object, $idx = null, $tags = null)
     {
@@ -273,6 +275,7 @@ class Cache
      *
      * @param array|string $tags
      * @return true
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deleteByTags($tags)
     {
@@ -347,6 +350,7 @@ class Cache
      *
      * @param array|string $tags
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function findByTags($tags)
     {
@@ -388,6 +392,7 @@ class Cache
      * @param string $idx
      * @param object|null $object
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function debug($idx, $object = null)
     {

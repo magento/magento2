@@ -54,6 +54,7 @@ class Updater
      * @param array $info
      * @throws InvalidArgumentException
      * @return Updater
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function update(Item $item, array $info)
     {

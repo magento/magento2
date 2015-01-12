@@ -68,6 +68,7 @@ interface StockConfigurationInterface
      *
      * @param int $storeId
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getEnableQtyIncrements($storeId = null);
 
@@ -98,6 +99,7 @@ interface StockConfigurationInterface
      *
      * @param int $storeId
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanBackInStock($storeId = null);
 

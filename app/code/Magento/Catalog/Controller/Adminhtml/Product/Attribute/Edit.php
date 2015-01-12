@@ -38,6 +38,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

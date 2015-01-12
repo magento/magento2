@@ -8,6 +8,7 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
  * Adminhtml catalog product downloadable items tab links section
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Links extends \Magento\Backend\Block\Template
 {
@@ -87,6 +88,7 @@ class Links extends \Magento\Backend\Block\Template
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Backend\Model\UrlFactory $urlFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -214,6 +216,7 @@ class Links extends \Magento\Backend\Block\Template
      * Check exists defined links title
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUsedDefault()
     {
@@ -224,6 +227,7 @@ class Links extends \Magento\Backend\Block\Template
      * Return true if price in website scope
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsPriceWebsiteScope()
     {
@@ -241,6 +245,8 @@ class Links extends \Magento\Backend\Block\Template
      * Return array of links
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getLinkData()
     {

@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Service;
 /**
  * Class Quote
  * Quote submit service model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Quote
 {
@@ -110,6 +111,7 @@ class Quote
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -209,6 +211,8 @@ class Quote
      *
      * @return \Magento\Sales\Model\Order
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function submitOrderWithDataObject()
     {

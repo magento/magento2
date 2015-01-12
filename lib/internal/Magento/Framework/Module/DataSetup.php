@@ -262,6 +262,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      * @param string $toVersion
      * @param array $arrFiles
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getModifySqlFiles($actionType, $fromVersion, $toVersion, $arrFiles)
     {
@@ -383,6 +384,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      * @param string $parentField
      * @param string|integer $parentId
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function updateTableRow($table, $idField, $rowId, $field, $value = null, $parentField = null, $parentId = 0)
     {
@@ -415,6 +417,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
      * Check call afterApplyAllUpdates method for setup class
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCallAfterApplyAllUpdates()
     {

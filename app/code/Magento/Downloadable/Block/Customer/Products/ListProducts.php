@@ -158,6 +158,7 @@ class ListProducts extends \Magento\Framework\View\Element\Template
      * Return true if target of link new window
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsOpenInNewWindow()
     {

@@ -338,6 +338,9 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($optionId, $this->model->save($productMock, $optionMock));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testUpdate()
     {
         $productId = 1;

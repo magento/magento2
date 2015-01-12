@@ -8,6 +8,7 @@ namespace Magento\Framework;
  * Universal data container with array access implementation
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Object implements \ArrayAccess
 {

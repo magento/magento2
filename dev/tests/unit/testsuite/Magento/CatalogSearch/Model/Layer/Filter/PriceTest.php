@@ -10,6 +10,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Layer\Filter\Price
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {

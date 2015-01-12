@@ -6,6 +6,7 @@ namespace Magento\Framework\Io;
 
 /**
  * Filesystem client
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class File extends AbstractIo
 {
@@ -366,6 +367,8 @@ class File extends AbstractIo
      * @param array $dirCallback
      * @return mixed
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected static function _recursiveCallback($dir, array $fileCallback, array $dirCallback = [])
     {
@@ -416,6 +419,7 @@ class File extends AbstractIo
      * @param string $dir
      * @return true
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function cd($dir)
     {
@@ -458,6 +462,7 @@ class File extends AbstractIo
      * @param string|resource $src
      * @param int $mode
      * @return int|bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function write($filename, $src, $mode = null)
     {
@@ -593,6 +598,7 @@ class File extends AbstractIo
      *
      * @param string $filename
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function rm($filename)
     {
@@ -608,6 +614,7 @@ class File extends AbstractIo
      * @param string $src
      * @param string $destination
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function mv($src, $destination)
     {
@@ -623,6 +630,7 @@ class File extends AbstractIo
      * @param string $src
      * @param string $destination
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function cp($src, $destination)
     {
@@ -678,6 +686,8 @@ class File extends AbstractIo
      * @param string|null $grep
      * @return array
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function ls($grep = null)
     {
@@ -781,6 +791,8 @@ class File extends AbstractIo
      * @param int $mode
      * @access protected
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _parsePermissions($mode)
     {

@@ -11,6 +11,7 @@ use Magento\User\Model\User as ModelUser;
 
 /**
  * ACL user resource
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {

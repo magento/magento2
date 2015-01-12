@@ -21,6 +21,9 @@ use Magento\Tax\Model\Resource\Calculation\Rule as Resource;
 use Magento\Tax\Model\Resource\Calculation\Rule\Collection;
 use Magento\Tax\Model\Resource\Calculation\Rule\CollectionFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TaxRuleRepository implements TaxRuleRepositoryInterface
 {
     /**

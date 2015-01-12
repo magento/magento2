@@ -48,6 +48,7 @@ interface UrlInterface
      * Retrieve use session rule
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseSession();
 

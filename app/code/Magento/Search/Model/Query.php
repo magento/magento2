@@ -39,6 +39,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method string getUpdatedAt()
  * @method \Magento\Search\Model\Query setUpdatedAt(string $value)
  * @method \Magento\Search\Model\Query setIsQueryTextExceeded(bool $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Query extends AbstractModel implements QueryInterface
 {

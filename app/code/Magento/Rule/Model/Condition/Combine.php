@@ -199,6 +199,7 @@ class Combine extends AbstractCondition
      * @param array $arr
      * @param string $key
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function loadArray($arr, $key = 'conditions')
     {

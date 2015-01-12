@@ -113,6 +113,7 @@ class Dom
      * @param \DOMElement $node
      * @param string $parentPath path to parent node
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _mergeNode(\DOMElement $node, $parentPath)
     {

@@ -100,6 +100,7 @@ class Multiline extends AbstractElement
 
     /**
      * @return mixed
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getDefaultHtml()
     {

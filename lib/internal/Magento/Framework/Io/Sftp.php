@@ -96,6 +96,7 @@ class Sftp extends AbstractIo implements IoInterface
      * @param bool $recursive
      * @return bool
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function rmdir($dir, $recursive = false)
     {
@@ -147,6 +148,7 @@ class Sftp extends AbstractIo implements IoInterface
      *
      * @param string $dir
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function cd($dir)
     {
@@ -187,6 +189,7 @@ class Sftp extends AbstractIo implements IoInterface
      *
      * @param string $filename
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function rm($filename)
     {
@@ -199,6 +202,7 @@ class Sftp extends AbstractIo implements IoInterface
      * @param string $source
      * @param string $destination
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function mv($source, $destination)
     {
@@ -222,6 +226,7 @@ class Sftp extends AbstractIo implements IoInterface
      *
      * @param null $grep ignored parameter
      * @return array
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function ls($grep = null)
     {

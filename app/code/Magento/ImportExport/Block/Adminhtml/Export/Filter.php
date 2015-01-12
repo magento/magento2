@@ -209,6 +209,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param Attribute $attribute
      * @param mixed $value
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _getSelectHtmlWithValue(Attribute $attribute, $value)
     {
@@ -322,6 +323,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Framework\Object $column
      * @param boolean $isExport
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function decorateFilter($value, Attribute $row, \Magento\Framework\Object $column, $isExport)
     {

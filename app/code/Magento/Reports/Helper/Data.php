@@ -41,6 +41,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $to
      * @param string $period
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getIntervals($from, $to, $period = self::REPORT_PERIOD_TYPE_DAY)
     {

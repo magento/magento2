@@ -4,6 +4,9 @@
  */
 namespace Magento\Framework\Mview;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class View extends \Magento\Framework\Object implements ViewInterface
 {
     /**

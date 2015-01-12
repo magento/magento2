@@ -115,6 +115,8 @@ class Main extends Generic implements TabInterface
      * Prepare form before rendering HTML
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

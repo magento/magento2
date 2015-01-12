@@ -260,6 +260,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param null $attributeGroupId
      * @param null $attributeSortOrder
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveInSetIncluding(
         AbstractModel $object,

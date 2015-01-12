@@ -73,6 +73,7 @@ class Form extends AbstractView
      * @param ActionPool $actionPool
      * @param ButtonProviderFactory $buttonProviderFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         TemplateContext $context,
@@ -209,6 +210,7 @@ class Form extends AbstractView
      * @param array $itemA
      * @param array $itemB
      * @return int
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function sortButtons(array $itemA, array $itemB)
     {

@@ -7,6 +7,9 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
@@ -56,6 +59,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -82,6 +86,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {

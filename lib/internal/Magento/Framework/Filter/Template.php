@@ -95,6 +95,7 @@ class Template implements \Zend_Filter_Interface
      * @param string $value
      * @return string
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function filter($value)
     {
@@ -235,6 +236,7 @@ class Template implements \Zend_Filter_Interface
      * @param string $value raw parameters
      * @param string $default default value
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getVariable($value, $default = '{no_value_defined}')
     {

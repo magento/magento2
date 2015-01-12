@@ -28,6 +28,9 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      *
      * @param \Magento\Sales\Model\Quote\Address $address
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {

@@ -134,6 +134,7 @@ interface ConfigInterface
      * Get session.cookie_secure
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCookieSecure();
 
@@ -149,6 +150,7 @@ interface ConfigInterface
      * Get session.cookie_httponly
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCookieHttpOnly();
 
@@ -164,6 +166,7 @@ interface ConfigInterface
      * Get session.use_cookies
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseCookies();
 }

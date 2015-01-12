@@ -38,6 +38,7 @@ class Freeshipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTota
      *
      * @param   \Magento\Sales\Model\Quote\Address $address
      * @return  \Magento\OfflineShipping\Model\Quote\Freeshipping
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function collect(Address $address)
     {

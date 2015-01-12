@@ -96,6 +96,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
     protected $extensibleDataObjectConverterMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->addressRepositoryMock = $this->getMockForAbstractClass(
@@ -378,6 +381,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testSaveBilling(
         $data,

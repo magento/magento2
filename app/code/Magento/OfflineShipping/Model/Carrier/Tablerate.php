@@ -50,6 +50,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
      * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory
      * @param \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -72,6 +73,9 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     /**
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {

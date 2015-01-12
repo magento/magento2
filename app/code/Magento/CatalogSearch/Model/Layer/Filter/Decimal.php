@@ -88,6 +88,7 @@ class Decimal extends AbstractFilter
      *
      * @return array
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getItemsData()
     {

@@ -136,6 +136,7 @@ class Csv
      * @param string $delimiter
      * @param string $enclosure
      * @return int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function fputcsv(&$handle, $fields = [], $delimiter = ',', $enclosure = '"')
     {

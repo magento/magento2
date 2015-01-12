@@ -10,6 +10,9 @@
  */
 namespace Magento\GoogleShopping\Model\Attribute;
 
+/**
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ */
 class DefaultAttribute extends \Magento\GoogleShopping\Model\Attribute
 {
     /**

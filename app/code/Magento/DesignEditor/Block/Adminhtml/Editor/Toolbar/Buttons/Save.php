@@ -78,6 +78,7 @@ class Save extends \Magento\Backend\Block\Widget\Button\SplitButton
      * Whether button is disabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDisabled()
     {

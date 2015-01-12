@@ -342,6 +342,7 @@ class SessionManager implements SessionManagerInterface
      *
      * @param string $urlHost can be host or url
      * @return string {session_id_key}={session_id_encrypted}
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getSessionIdForHost($urlHost)
     {

@@ -11,6 +11,7 @@ use Magento\Customer\Model\Context;
  * Catalog navigation
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Navigation extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
 {

@@ -43,6 +43,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateUserValue($values)
     {
@@ -116,6 +118,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @return string|null Prepared option value
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function prepareForCart()
     {
@@ -174,6 +178,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @param string $optionValue Prepared for cart option value
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getFormattedOptionValue($optionValue)
     {

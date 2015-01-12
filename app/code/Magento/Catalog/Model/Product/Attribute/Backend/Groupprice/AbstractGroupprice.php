@@ -108,6 +108,7 @@ abstract class AbstractGroupprice extends Price
      *
      * @param array $objectArray
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getAdditionalUniqueFields($objectArray)
     {
@@ -131,6 +132,8 @@ abstract class AbstractGroupprice extends Price
      * @param \Magento\Catalog\Model\Product $object
      * @throws \Magento\Framework\Model\Exception
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validate($object)
     {
@@ -283,6 +286,9 @@ abstract class AbstractGroupprice extends Price
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function afterSave($object)
     {

@@ -116,6 +116,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $attributesData
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _hasIndexableAttributes($attributesData)
     {

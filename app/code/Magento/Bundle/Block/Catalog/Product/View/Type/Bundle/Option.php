@@ -271,6 +271,7 @@ class Option extends \Magento\Bundle\Block\Catalog\Product\Price
      * @param int $elementId
      * @param int $containerId
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setValidationContainer($elementId, $containerId)
     {

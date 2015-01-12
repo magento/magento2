@@ -6,6 +6,7 @@ namespace Magento\Sales\Model\Resource\Report;
 
 /**
  * Bestsellers report resource model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bestsellers extends AbstractReport
 {
@@ -79,6 +80,7 @@ class Bestsellers extends AbstractReport
      * @param string|int|\Zend_Date|array|null $to
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function aggregate($from = null, $to = null)
     {

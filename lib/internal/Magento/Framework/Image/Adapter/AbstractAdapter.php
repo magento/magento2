@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @file        Abstract.php
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -261,6 +262,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(\Magento\Framework\Filesystem $filesystem, array $data = [])
     {

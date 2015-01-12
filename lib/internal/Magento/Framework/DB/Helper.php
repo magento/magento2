@@ -181,6 +181,8 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      * @param string|null $groupByCondition OPTIONAL
      * @return mixed|array
      * @throws \Zend_Db_Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareColumnsList(\Magento\Framework\DB\Select $select, $groupByCondition = null)
     {

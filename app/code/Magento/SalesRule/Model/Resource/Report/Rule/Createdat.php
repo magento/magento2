@@ -41,6 +41,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
      * @param mixed $from
      * @param mixed $to
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {

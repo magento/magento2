@@ -200,6 +200,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedPostData
      *
      * @dataProvider deletePostJsonDataProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetDeletePostJson($id, $url, $isAjax, $expectedPostData)
     {

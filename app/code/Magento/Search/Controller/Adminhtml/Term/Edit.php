@@ -32,6 +32,7 @@ class Edit extends \Magento\Search\Controller\Adminhtml\Term
 
     /**
      * @return \Magento\Backend\Model\View\Result\Page
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

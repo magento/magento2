@@ -6,6 +6,8 @@ namespace Magento\Catalog\Model;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Config extends \Magento\Eav\Model\Config
 {

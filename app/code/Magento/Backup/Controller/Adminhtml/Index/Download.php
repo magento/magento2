@@ -13,6 +13,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
      * Download backup action
      *
      * @return void|\Magento\Backend\App\Action
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {

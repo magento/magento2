@@ -152,6 +152,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare grid columns
      *
      * @return \Magento\Backend\Block\Widget\Grid
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
     {

@@ -10,6 +10,9 @@ use Magento\Core\App\Action\FormKeyValidator;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Index extends \Magento\Catalog\Controller\Product\Compare
 {
     /**

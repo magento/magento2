@@ -52,6 +52,7 @@ class Actions extends Generic implements TabInterface
 
     /**
      * @return Form
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

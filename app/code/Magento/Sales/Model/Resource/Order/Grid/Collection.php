@@ -85,6 +85,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Get customer mode flag value
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsCustomerMode()
     {

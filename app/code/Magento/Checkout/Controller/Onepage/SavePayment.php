@@ -23,6 +23,7 @@ class SavePayment extends \Magento\Checkout\Controller\Onepage
      * Sets either redirect or a JSON response
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

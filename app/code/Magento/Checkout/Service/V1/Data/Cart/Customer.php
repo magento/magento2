@@ -171,6 +171,7 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject
      * Is customer a guest?
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsGuest()
     {

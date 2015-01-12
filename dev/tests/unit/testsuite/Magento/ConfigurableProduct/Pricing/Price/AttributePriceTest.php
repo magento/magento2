@@ -125,6 +125,9 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\ConfigurableProduct\Pricing\Price\AttributePrice', $object);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareJsonAttributes()
     {
         $options = [];

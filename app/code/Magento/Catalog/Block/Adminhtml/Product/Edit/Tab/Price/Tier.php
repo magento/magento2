@@ -42,6 +42,7 @@ class Tier extends Group\AbstractGroup
      * @param array $a
      * @param array $b
      * @return int
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _sortTierPrices($a, $b)
     {

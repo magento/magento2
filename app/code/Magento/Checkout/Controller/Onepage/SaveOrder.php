@@ -11,6 +11,8 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
      * Create order action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {

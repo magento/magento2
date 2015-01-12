@@ -122,6 +122,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      *          )
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFormatedOptionValue($optionValue)
     {

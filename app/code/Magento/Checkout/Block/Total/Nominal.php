@@ -103,6 +103,7 @@ class Nominal extends \Magento\Checkout\Block\Total\DefaultTotal
      *
      * @param \Magento\Framework\Object $row
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getItemDetailsRowIsCompounded(\Magento\Framework\Object $row)
     {

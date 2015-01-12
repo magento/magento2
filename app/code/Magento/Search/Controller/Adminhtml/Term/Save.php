@@ -30,6 +30,7 @@ class Save extends \Magento\Search\Controller\Adminhtml\Term
      * Save search query
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

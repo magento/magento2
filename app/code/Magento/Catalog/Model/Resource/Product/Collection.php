@@ -12,6 +12,11 @@ use Magento\Store\Model\Store;
 
 /**
  * Product collection
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractCollection
 {
@@ -1389,6 +1394,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * @param array $condition
      * @param string $joinType
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {
@@ -1528,6 +1534,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * @param string $attribute
      * @param string $dir
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -1625,6 +1633,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * Join website product limitation
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _productLimitationJoinWebsite()
     {
@@ -1677,6 +1686,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * Join additional (alternative) store visibility filter
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _productLimitationJoinStore()
     {
@@ -1976,6 +1987,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * Add tier price data to loaded items
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addTierPriceData()
     {

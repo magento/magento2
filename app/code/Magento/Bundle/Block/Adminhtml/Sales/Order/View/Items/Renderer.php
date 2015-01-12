@@ -32,6 +32,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
     /**
      * @param null|object $item
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isShipmentSeparately($item = null)
     {
@@ -64,6 +65,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
     /**
      * @param null|object $item
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isChildCalculated($item = null)
     {

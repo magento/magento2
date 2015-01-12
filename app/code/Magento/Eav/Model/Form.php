@@ -10,6 +10,8 @@ use Magento\Framework\App\RequestInterface;
  * EAV Entity Form Model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Form
 {
@@ -576,6 +578,7 @@ abstract class Form
      * Return is AJAX Request
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsAjaxRequest()
     {

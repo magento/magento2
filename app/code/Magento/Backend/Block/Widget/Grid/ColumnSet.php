@@ -100,6 +100,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * @param \Magento\Backend\Model\Widget\Grid\SubTotals $subtotals
      * @param \Magento\Backend\Model\Widget\Grid\Totals $totals
      * @param array $data
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -485,6 +486,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Retrieve flag is collapsed
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsCollapsed()
     {
@@ -527,6 +529,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Return count subtotals
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCountSubTotals()
     {
@@ -549,6 +552,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
      * Return count totals
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCountTotals()
     {

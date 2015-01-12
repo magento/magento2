@@ -33,6 +33,7 @@ class Fromcart extends Action\Action implements IndexInterface
      *
      * @return \Zend_Controller_Response_Abstract
      * @throws NotFoundException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute()
     {

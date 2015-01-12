@@ -13,6 +13,7 @@ use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
 /**
  * Customer session model
  * @method string getNoReferer()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -111,6 +112,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param CustomerRepositoryInterface $customerRepository
      * @param GroupManagementInterface $groupManagement
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,

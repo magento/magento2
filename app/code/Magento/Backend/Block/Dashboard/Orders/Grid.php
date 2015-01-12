@@ -8,6 +8,7 @@ namespace Magento\Backend\Block\Dashboard\Orders;
  * Adminhtml dashboard recent orders grid
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Backend\Block\Dashboard\Grid
 {

@@ -506,6 +506,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDbIsolation enabled
      * @dataProvider searchTaxRatesDataProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetList($filters, $filterGroup, $expectedRateCodes)
     {

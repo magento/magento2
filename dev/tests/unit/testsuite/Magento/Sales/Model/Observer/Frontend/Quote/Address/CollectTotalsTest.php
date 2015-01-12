@@ -74,6 +74,9 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
      */
     protected $groupInterfaceMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -190,6 +193,9 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         $this->model->dispatch($this->observerMock);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testDispatchWithCustomerCountryNotInEUAndNotLoggedCustomerInGroup()
     {
         $this->groupManagementMock->expects($this->once())

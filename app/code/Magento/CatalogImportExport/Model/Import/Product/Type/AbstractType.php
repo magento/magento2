@@ -122,6 +122,7 @@ abstract class AbstractType
      * @param array $attrParams Refined attribute parameters.
      * @param mixed $attribute
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _addAttributeParams($attrSetName, array $attrParams, $attribute)
     {
@@ -200,6 +201,7 @@ abstract class AbstractType
      *
      * @param string $attrCode
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _isAttributeRequiredCheckNeeded($attrCode)
     {
@@ -212,6 +214,7 @@ abstract class AbstractType
      * @param array $rowData
      * @param int $rowNum
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _isParticularAttributesValid(array $rowData, $rowNum)
     {
@@ -246,6 +249,7 @@ abstract class AbstractType
      * @param int $rowNum
      * @param bool $isNewProduct Optional
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
@@ -300,6 +304,7 @@ abstract class AbstractType
      * @param bool $withDefaultValue
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
     {

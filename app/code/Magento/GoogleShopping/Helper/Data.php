@@ -85,6 +85,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $message \Exception message to parse
      * @param null|\Magento\Catalog\Model\Product $product
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function parseGdataExceptionMessage($message, $product = null)
     {

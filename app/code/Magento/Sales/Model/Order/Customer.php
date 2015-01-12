@@ -92,6 +92,7 @@ class Customer
      * @param string $customerPrefix
      * @param string $customerSuffix
      * @param string $customerTaxvat
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $customerDob,

@@ -16,6 +16,7 @@ class Frontend extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFron
      *
      * @param \Magento\Sales\Model\Quote\Address $address
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetchTotals(\Magento\Sales\Model\Quote\Address $address)
     {

@@ -18,6 +18,8 @@ use Magento\Ui\DataProvider\Manager;
 
 /**
  * Abstract class AbstractView
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractView extends Template implements UiComponentInterface
 {

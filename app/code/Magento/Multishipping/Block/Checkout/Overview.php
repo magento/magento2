@@ -132,6 +132,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShippingAddressRate($address)
     {

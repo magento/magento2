@@ -69,6 +69,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
      * Get create label button html
      *
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getCreateLabelButton()
     {

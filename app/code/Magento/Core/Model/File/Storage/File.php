@@ -130,6 +130,7 @@ class File
      * @param  int $count
      * @param  string $type
      * @return array|bool
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function collectData($offset = 0, $count = 100, $type = 'files')
     {

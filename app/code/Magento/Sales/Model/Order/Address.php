@@ -37,6 +37,7 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
  * @method Address setMiddlename(string $value)
  * @method Address setSuffix(string $value)
  * @method Address setCompany(string $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Address extends AbstractAddress implements OrderAddressInterface
 {
@@ -77,6 +78,7 @@ class Address extends AbstractAddress implements OrderAddressInterface
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

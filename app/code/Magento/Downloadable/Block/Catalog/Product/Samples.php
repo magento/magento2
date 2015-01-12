@@ -59,6 +59,7 @@ class Samples extends \Magento\Catalog\Block\Product\AbstractProduct
      * Return true if target of link new window
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsOpenInNewWindow()
     {

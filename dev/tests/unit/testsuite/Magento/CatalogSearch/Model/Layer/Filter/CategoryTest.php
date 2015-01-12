@@ -226,6 +226,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->target->apply($this->request);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetItems()
     {
         $this->category->expects($this->any())

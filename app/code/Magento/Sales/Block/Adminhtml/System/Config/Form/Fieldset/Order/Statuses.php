@@ -103,6 +103,7 @@ class Statuses extends \Magento\Backend\Block\System\Config\Form\Fieldset
      * @param string $id
      * @param string $status
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getFieldHtml($fieldset, $id, $status)
     {

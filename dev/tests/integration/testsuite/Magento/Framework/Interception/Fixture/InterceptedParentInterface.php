@@ -7,5 +7,8 @@ namespace Magento\Framework\Interception\Fixture;
 
 interface InterceptedParentInterface
 {
+    /**
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     */
     public function A($param1);
 }

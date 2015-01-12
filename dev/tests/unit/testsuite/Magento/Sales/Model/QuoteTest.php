@@ -12,6 +12,7 @@ use Magento\TestFramework\Helper\ObjectManager;
  * Test class for \Magento\Sales\Model\Order
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
@@ -522,6 +523,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testSetCustomerAddressData()
     {
         $customerId = 1;

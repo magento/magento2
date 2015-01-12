@@ -18,6 +18,9 @@ use Magento\Framework\Model\AbstractModel;
  * @method int getStoreId()
  * @method \Magento\Store\Model\Store setSortOrder(int $value)
  * @method \Magento\Store\Model\Store setIsActive(int $value)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Store extends AbstractModel implements
     \Magento\Framework\App\ScopeInterface,
@@ -316,6 +319,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param bool $isCustomEntryPoint
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -525,6 +529,8 @@ class Store extends AbstractModel implements
      * @param boolean|null $secure
      * @return string
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getBaseUrl($type = \Magento\Framework\UrlInterface::URL_TYPE_LINK, $secure = null)
     {
@@ -1010,6 +1016,8 @@ class Store extends AbstractModel implements
      *
      * @param bool|string $fromStore
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getCurrentUrl($fromStore = true)
     {

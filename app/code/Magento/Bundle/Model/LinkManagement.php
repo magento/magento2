@@ -9,6 +9,9 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterface
 {
     /**
@@ -95,6 +98,8 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addChild(
         \Magento\Catalog\Api\Data\ProductInterface $product,

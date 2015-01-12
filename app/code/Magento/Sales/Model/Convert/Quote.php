@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Convert;
 
 /**
  * Quote data convert model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Quote extends \Magento\Framework\Object
 {

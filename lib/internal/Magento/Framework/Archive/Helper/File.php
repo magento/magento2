@@ -85,6 +85,7 @@ class File
      * @param int $chmod
      * @return void
      * @throws MagentoException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function open($mode = 'w+', $chmod = 0666)
     {

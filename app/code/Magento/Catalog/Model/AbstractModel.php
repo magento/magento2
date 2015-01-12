@@ -312,6 +312,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param   string $attributeCode
      * @return  bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getExistsStoreValueFlag($attributeCode)
     {

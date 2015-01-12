@@ -7,6 +7,7 @@ namespace Magento\CatalogWidget\Block\Product;
 /**
  * Catalog Products List widget block
  * Class ProductsList
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Widget\Block\BlockInterface
 {
@@ -146,6 +147,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getProductPriceHtml(
         \Magento\Catalog\Model\Product $product,

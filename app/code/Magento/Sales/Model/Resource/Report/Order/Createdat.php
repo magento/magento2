@@ -41,6 +41,8 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param string|int|\Zend_Date|array|null $to
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _aggregateByField($aggregationField, $from, $to)
     {

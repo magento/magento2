@@ -4,6 +4,7 @@ class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_method_length
 {
     /**
      * Method that violates the allowed method length
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function bar() // 001
     { // 002

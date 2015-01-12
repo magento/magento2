@@ -209,6 +209,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string                         $zone
      * @param Store|int|string               $store
      * @return bool|int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function typeOfDisplay(
         $compareTo = null,

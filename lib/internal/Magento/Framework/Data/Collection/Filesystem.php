@@ -230,6 +230,8 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param string|array $dir
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _collectRecursive($dir)
     {
@@ -432,6 +434,8 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param array $row
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.EvalExpression)
      */
     protected function _filterRow($row)
     {
@@ -473,6 +477,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param callback $callback
      * @param array $callbackParams
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _invokeFilter($callback, $callbackParams)
     {
@@ -491,6 +496,9 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param string $type 'and' | 'or'
      * @see Db::addFieldToFilter()
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function addFieldToFilter($field, $cond, $type = 'and')
     {
@@ -730,6 +738,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return bool
      * @see addFieldToFilter()
      * @see addCallbackFilter()
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function filterCallbackIsNull($field, $filterValue, $row)
     {

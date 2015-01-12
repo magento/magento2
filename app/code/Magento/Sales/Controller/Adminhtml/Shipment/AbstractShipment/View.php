@@ -19,6 +19,7 @@ abstract class View extends \Magento\Backend\App\Action
      * Shipment information page
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute()
     {

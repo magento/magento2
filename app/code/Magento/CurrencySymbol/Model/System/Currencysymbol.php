@@ -138,6 +138,8 @@ class Currencysymbol
      * Returns currency symbol properties array based on config values
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getCurrencySymbolsData()
     {

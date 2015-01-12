@@ -13,6 +13,10 @@ namespace Magento\OfflineShipping\Model\Resource\Carrier;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
@@ -240,6 +244,8 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @return \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate
      * @todo: this method should be refactored as soon as updated design will be provided
      * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function uploadAndImport(\Magento\Framework\Object $object)
     {
@@ -402,6 +408,8 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param array $row
      * @param int $rowNumber
      * @return array|false
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getImportRow($row, $rowNumber = 0)
     {

@@ -46,6 +46,7 @@ interface ProductCustomOptionInterface
      * Get is require
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsRequire();
 

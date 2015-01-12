@@ -95,6 +95,7 @@ class Manager
      * @param string $dataSource
      * @param array $filters
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getData($dataSource, array $filters = [])
     {

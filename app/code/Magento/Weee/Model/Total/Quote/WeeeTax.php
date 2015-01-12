@@ -15,6 +15,8 @@ class WeeeTax extends Weee
      *
      * @param   \Magento\Sales\Model\Quote\Address $address
      * @return  $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {

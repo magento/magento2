@@ -47,6 +47,7 @@ class Observer
      *
      * @param EventObserver $event
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function clearJs(EventObserver $event)
     {

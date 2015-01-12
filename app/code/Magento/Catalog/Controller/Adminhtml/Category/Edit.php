@@ -38,6 +38,8 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
      * Edit category page
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

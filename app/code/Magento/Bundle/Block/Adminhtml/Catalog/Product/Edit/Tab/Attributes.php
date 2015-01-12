@@ -6,6 +6,7 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 /**
  * Bundle product attributes tab
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes
 {
@@ -13,6 +14,8 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
      * Prepare attributes form of bundle product
      *
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

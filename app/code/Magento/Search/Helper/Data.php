@@ -250,6 +250,7 @@ class Data extends AbstractHelper
      *
      * @param mixed $store
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function checkNotes($store = null)
     {

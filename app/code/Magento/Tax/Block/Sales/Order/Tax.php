@@ -114,6 +114,7 @@ class Tax extends \Magento\Framework\View\Element\Template
 
     /**
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _initSubtotal()
     {

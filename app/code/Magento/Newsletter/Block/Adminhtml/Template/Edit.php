@@ -55,6 +55,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Preparing block layout
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareLayout()
     {
@@ -170,6 +171,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Return edit flag for block
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getEditMode()
     {
@@ -277,6 +279,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * Getter for id of current store (the only one in single-store mode and current in multi-stores mode)
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     protected function getStoreId()
     {

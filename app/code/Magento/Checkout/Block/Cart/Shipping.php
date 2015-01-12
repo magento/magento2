@@ -195,6 +195,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Show City in Shipping Estimation
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCityActive()
     {
@@ -205,6 +206,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Show State in Shipping Estimation. Result updated using plugins
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getStateActive()
     {

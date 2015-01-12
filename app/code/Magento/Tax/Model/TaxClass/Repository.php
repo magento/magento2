@@ -20,6 +20,9 @@ use Magento\Tax\Model\ClassModelRegistry;
 use Magento\Tax\Model\Resource\TaxClass\Collection as TaxClassCollection;
 use Magento\Tax\Model\Resource\TaxClass\CollectionFactory as TaxClassCollectionFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 {
     /**

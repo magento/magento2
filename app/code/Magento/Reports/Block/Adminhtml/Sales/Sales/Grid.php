@@ -8,6 +8,7 @@ namespace Magento\Reports\Block\Adminhtml\Sales\Sales;
  * Adminhtml sales report grid block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 {
@@ -38,6 +39,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
 
     /**
      * @return \Magento\Backend\Block\Widget\Grid\Extended
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
     {

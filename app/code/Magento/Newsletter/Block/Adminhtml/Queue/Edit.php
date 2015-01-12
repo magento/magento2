@@ -217,6 +217,7 @@ class Edit extends \Magento\Backend\Block\Template
      * Getter for availability preview mode
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsPreview()
     {
@@ -240,6 +241,7 @@ class Edit extends \Magento\Backend\Block\Template
      * Getter for id of current store (the only one in single-store mode and current in multi-stores mode)
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     protected function getStoreId()
     {
@@ -250,6 +252,7 @@ class Edit extends \Magento\Backend\Block\Template
      * Getter for check is this newsletter the plain text.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsTextType()
     {
@@ -260,6 +263,7 @@ class Edit extends \Magento\Backend\Block\Template
      * Getter for availability resume action
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanResume()
     {
@@ -270,6 +274,7 @@ class Edit extends \Magento\Backend\Block\Template
      * Getter for header text
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getHeaderText()
     {

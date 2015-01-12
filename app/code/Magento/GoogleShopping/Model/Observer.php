@@ -145,6 +145,7 @@ class Observer
      *
      * @param  \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function checkSynchronizationOperations(\Magento\Framework\Event\Observer $observer)
     {

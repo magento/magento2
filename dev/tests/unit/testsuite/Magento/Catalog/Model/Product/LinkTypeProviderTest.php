@@ -62,6 +62,9 @@ class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testGetItems()
     {
         $expectedResult = [];

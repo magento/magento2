@@ -10,6 +10,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
  * Sitemap resource product collection model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {

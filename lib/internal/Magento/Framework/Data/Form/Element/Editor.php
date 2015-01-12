@@ -38,6 +38,7 @@ class Editor extends Textarea
 
     /**
      * @return string
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getElementHtml()
     {
@@ -217,6 +218,8 @@ class Editor extends Textarea
      *
      * @param bool $visible Display button or not
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getPluginButtonsHtml($visible = true)
     {
@@ -331,6 +334,7 @@ class Editor extends Textarea
      *
      * @param array $data Button params
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getButtonHtml($data)
     {

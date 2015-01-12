@@ -182,6 +182,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Add products to items and item options
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _assignProducts()
     {

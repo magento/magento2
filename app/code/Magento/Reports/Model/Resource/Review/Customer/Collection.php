@@ -28,6 +28,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,

@@ -141,6 +141,7 @@ class CsvImportHandler
      * @param array $validFields assoc array of valid file fields
      * @return array
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _filterRateData(array $rateRawData, array $invalidFields, array $validFields)
     {

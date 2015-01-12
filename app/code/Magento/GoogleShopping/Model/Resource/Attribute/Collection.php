@@ -93,6 +93,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Get flag - whether to join attribute_set_id to attributes or not
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getJoinAttributeSetFlag()
     {

@@ -61,6 +61,7 @@ class Add extends \Magento\Checkout\Controller\Cart
      * Add product to shopping cart action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

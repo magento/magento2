@@ -10,6 +10,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Bundle Price Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
@@ -73,6 +74,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * Is min/max prices have been calculated by index
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsPricesCalculatedByIndex()
     {
@@ -180,6 +182,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param  bool|null                  $includeTax
      * @param  bool                       $takeTierPrice
      * @return float|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getTotalPrices($product, $which = null, $includeTax = null, $takeTierPrice = true)
     {
@@ -522,6 +527,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param   float                    $qty
      * @param   \Magento\Catalog\Model\Product $product
      * @return  float|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getTierPrice($qty, $product)
     {

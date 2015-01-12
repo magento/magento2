@@ -4,6 +4,10 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Address extends AbstractCustomer
 {
     /**#@+
@@ -225,6 +229,8 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param array $data
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
@@ -450,6 +456,8 @@ class Address extends AbstractCustomer
      *
      * @param array $rowData
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
@@ -644,6 +652,8 @@ class Address extends AbstractCustomer
      * @param array $rowData
      * @param int $rowNumber
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {

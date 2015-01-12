@@ -10,6 +10,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 /**
  * Class Special
  * @package Magento\Catalog\Block\Rss\Product
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Special extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {

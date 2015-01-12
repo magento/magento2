@@ -31,6 +31,8 @@ class Date extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return bool|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateValue($value)
     {

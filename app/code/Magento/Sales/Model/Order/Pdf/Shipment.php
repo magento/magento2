@@ -6,6 +6,7 @@ namespace Magento\Sales\Model\Order\Pdf;
 
 /**
  * Sales Order Shipment PDF model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Shipment extends AbstractPdf
 {

@@ -59,6 +59,9 @@ use Magento\Sales\Model\EntityInterface;
  * @method \Magento\Sales\Model\Order\Creditmemo setBaseShippingHiddenTaxAmnt(float $value)
  * @method \Magento\Sales\Model\Order\Creditmemo setShippingInclTax(float $value)
  * @method \Magento\Sales\Model\Order\Creditmemo setBaseShippingInclTax(float $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInterface
 {
@@ -164,6 +167,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -753,6 +757,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * @param bool $reload
      * @return \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\Collection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCommentsCollection($reload = false)
     {

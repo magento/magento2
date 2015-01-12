@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Widget;
  *
  * @method string getRowClickCallback() getRowClickCallback()
  * @method \Magento\Backend\Block\Widget\Grid setRowClickCallback() setRowClickCallback(string $value)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Grid extends \Magento\Backend\Block\Widget
 {
@@ -145,6 +146,7 @@ class Grid extends \Magento\Backend\Block\Widget
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _construct()
     {
@@ -330,6 +332,7 @@ class Grid extends \Magento\Backend\Block\Widget
      * Apply sorting and filtering to collection
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _prepareCollection()
     {
@@ -577,6 +580,7 @@ class Grid extends \Magento\Backend\Block\Widget
      * Return visibility of pager
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getPagerVisibility()
     {
@@ -598,6 +602,7 @@ class Grid extends \Magento\Backend\Block\Widget
      * Return visibility of message blocks
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getMessageBlockVisibility()
     {
@@ -760,6 +765,7 @@ class Grid extends \Magento\Backend\Block\Widget
      * Return count totals
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCountTotals()
     {

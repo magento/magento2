@@ -8,6 +8,9 @@ namespace Magento\CatalogImportExport\Model\Export;
  * Export entity product model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 {
@@ -212,6 +215,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -758,6 +762,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * Get export data for collection
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _getExportData()
     {

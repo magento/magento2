@@ -155,6 +155,9 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testExecute()
     {
         $carrier = 'carrier';

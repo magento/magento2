@@ -27,6 +27,7 @@ class Converter
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function afterConvert(\Magento\Backend\Model\Config\Structure\Converter $subject, array $result)
     {

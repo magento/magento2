@@ -29,6 +29,7 @@ class Sendfriend extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param int $startTime
      * @param int $websiteId
      * @return int
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getSendCount($object, $ip, $startTime, $websiteId = null)
     {

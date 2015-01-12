@@ -8,6 +8,7 @@ use Magento\Sales\Model\Order\Shipment;
 
 /**
  * Shipping labels model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Labels extends \Magento\Shipping\Model\Shipping
 {
@@ -33,6 +34,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Shipping\Model\Shipment\Request $request
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -68,6 +70,8 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param Shipment $orderShipment
      * @return \Magento\Framework\Object
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function requestToShipment(Shipment $orderShipment)
     {

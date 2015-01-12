@@ -113,6 +113,7 @@ class Info extends \Magento\Framework\View\Element\Template
      * false => full information may be shown
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsSecureMode()
     {

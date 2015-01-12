@@ -12,6 +12,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Saving quote and create order
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

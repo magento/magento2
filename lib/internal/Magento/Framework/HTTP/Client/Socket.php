@@ -10,6 +10,12 @@
  */
 namespace Magento\Framework\HTTP\Client;
 
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
+/**
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ */
 class Socket implements \Magento\Framework\HTTP\ClientInterface
 {
     /**
@@ -406,6 +412,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * Process response
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function processResponse()
     {

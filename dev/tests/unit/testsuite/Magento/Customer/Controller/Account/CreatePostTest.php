@@ -116,6 +116,9 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
      */
     protected $messageManagerMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         /**

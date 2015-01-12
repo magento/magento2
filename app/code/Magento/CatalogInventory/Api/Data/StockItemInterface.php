@@ -91,16 +91,19 @@ interface StockItemInterface extends ExtensibleDataInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsQtyDecimal();
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShowDefaultNotificationMessage();
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigMinQty();
 
@@ -125,6 +128,7 @@ interface StockItemInterface extends ExtensibleDataInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigMaxSaleQty();
 
@@ -137,6 +141,7 @@ interface StockItemInterface extends ExtensibleDataInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigBackorders();
 
@@ -149,6 +154,7 @@ interface StockItemInterface extends ExtensibleDataInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigNotifyStockQty();
 
@@ -161,6 +167,7 @@ interface StockItemInterface extends ExtensibleDataInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigQtyIncrements();
 
@@ -173,6 +180,7 @@ interface StockItemInterface extends ExtensibleDataInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigEnableQtyInc();
 
@@ -180,11 +188,13 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve whether Quantity Increments is enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getEnableQtyIncrements();
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseConfigManageStock();
 
@@ -192,6 +202,7 @@ interface StockItemInterface extends ExtensibleDataInterface
      * Retrieve can Manage Stock
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getManageStock();
 
@@ -202,6 +213,7 @@ interface StockItemInterface extends ExtensibleDataInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsDecimalDivided();
 

@@ -36,6 +36,7 @@ class Config
      * Get configuration data of carrier
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function getCodes()
     {

@@ -31,6 +31,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * @param string $from
      * @param string $to
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setDateRange($from, $to)
     {

@@ -9,6 +9,7 @@ namespace Magento\Backend\Model;
  * Used to save configuration
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Config extends \Magento\Framework\Object
 {
@@ -178,6 +179,9 @@ class Config extends \Magento\Framework\Object
      * @param \Magento\Framework\DB\Transaction $saveTransaction
      * @param \Magento\Framework\DB\Transaction $deleteTransaction
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _processGroup(
         $groupId,

@@ -248,6 +248,7 @@ class Image extends AbstractHelper
      * @param bool $flag
      * @param string[] $position
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function keepFrame($flag, $position = ['center', 'middle'])
     {
@@ -266,6 +267,7 @@ class Image extends AbstractHelper
      * @param bool $flag
      * @param int $alphaOpacity
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function keepTransparency($flag, $alphaOpacity = null)
     {

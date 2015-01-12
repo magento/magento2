@@ -10,6 +10,9 @@
  */
 namespace Magento\Reports\Model\Resource\Product\Lowstock;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Collection extends \Magento\Reports\Model\Resource\Product\Collection
 {
     /**

@@ -33,6 +33,8 @@ class NamespaceResolver
      * @param string $name
      * @param bool $asFullModuleName
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function determineOmittedNamespace($name, $asFullModuleName = false)
     {

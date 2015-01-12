@@ -8,6 +8,8 @@ use Magento\ImportExport\Model\Import\AbstractSource;
 
 /**
  * Import entity abstract model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractEntity
 {
@@ -256,6 +258,7 @@ abstract class AbstractEntity
      *
      * @param array $rowData
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _isRowScopeDefault(array $rowData)
     {
@@ -287,6 +290,7 @@ abstract class AbstractEntity
      * Validate data rows and save bunches to DB.
      *
      * @return $this|void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveValidatedBunches()
     {
@@ -573,6 +577,7 @@ abstract class AbstractEntity
      * @param array $rowData Row data
      * @param int $rowNum
      * @return boolean
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum)
     {

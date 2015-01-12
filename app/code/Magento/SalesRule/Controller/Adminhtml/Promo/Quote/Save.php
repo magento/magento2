@@ -11,6 +11,8 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      * Promo quote save action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

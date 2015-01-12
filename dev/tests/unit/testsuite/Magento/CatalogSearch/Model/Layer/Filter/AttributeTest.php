@@ -8,6 +8,9 @@ namespace Magento\CatalogSearch\Model\Layer\Filter;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -229,6 +232,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedFilterItems, $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetItemsWithoutApply()
     {
         $attributeCode = 'attributeCode';

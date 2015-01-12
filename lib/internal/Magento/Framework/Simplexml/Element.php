@@ -26,6 +26,7 @@ class Element extends \SimpleXMLElement
      *
      * @param \Magento\Framework\Simplexml\Element $element
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setParent($element)
     {
@@ -58,6 +59,7 @@ class Element extends \SimpleXMLElement
      * Enter description here...
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function hasChildren()
     {
@@ -92,6 +94,7 @@ class Element extends \SimpleXMLElement
      * @todo    param string $path Subset of xpath. Example: "child/grand[@attrName='attrValue']/subGrand"
      * @param   string $path Example: "child/grand@attrName=attrValue/subGrand" (to make it faster without regex)
      * @return  \Magento\Framework\Simplexml\Element
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function descend($path)
     {
@@ -221,6 +224,8 @@ class Element extends \SimpleXMLElement
      * @param string $filename
      * @param int|boolean $level if false
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function asNiceXml($filename = '', $level = 0)
     {
@@ -367,6 +372,8 @@ class Element extends \SimpleXMLElement
      * @param \Magento\Framework\Simplexml\Element $source
      * @param boolean $overwrite
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function extendChild($source, $overwrite = false)
     {

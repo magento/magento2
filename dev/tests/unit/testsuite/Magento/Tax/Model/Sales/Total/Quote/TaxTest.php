@@ -26,6 +26,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider dataProviderCollectArray
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testCollect($itemData, $appliedRatesData, $taxDetailsData, $quoteDetailsData,
         $addressData, $verifyData

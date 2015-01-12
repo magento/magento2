@@ -271,6 +271,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * @param array $matches
      * @param array $options
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getAttributeLocation($matches, $options)
     {
@@ -284,6 +285,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * @param array $matches
      * @param array $options
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getTagLocation($matches, $options)
     {

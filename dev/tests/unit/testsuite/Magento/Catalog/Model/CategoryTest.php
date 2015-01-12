@@ -5,6 +5,10 @@
 
 namespace Magento\Catalog\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Catalog\Model\Category */

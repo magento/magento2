@@ -126,6 +126,7 @@ class SidResolver implements SidResolverInterface
      * Retrieve use flag session var instead of SID for URL
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseSessionVar()
     {
@@ -148,6 +149,7 @@ class SidResolver implements SidResolverInterface
      * Retrieve use session in URL flag
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseSessionInUrl()
     {
