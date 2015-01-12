@@ -10,15 +10,7 @@ $registry = $objectManager->get('Magento\Framework\Registry');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-
-/** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
-$collection = $objectManager->create('Magento\Catalog\Model\Resource\Category\Collection');
-$collection
-    ->addAttributeToFilter('entity_id', ['gt' => 2])
-    ->setOrder('entity_id', \Zend_Db_Select::SQL_DESC)
-    ->load()
-    ->delete();
-
+$objectManager->create('Magento\Catalog\Model\Category')->load(3)->delete();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
