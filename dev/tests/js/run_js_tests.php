@@ -32,9 +32,9 @@ if (isset($config['Browser'])) {
     } else {
         $browser = exec('which firefox');
     }
-}
-if (!file_exists($browser)) {
-    reportError('Browser executable not found: ' . $browser);
+    if (!file_exists($browser)) {
+        reportError('Browser executable not found: ' . $browser);
+    }
 }
 
 $server = isset($config['server']) ? $config['server'] : "http://localhost:9876";
