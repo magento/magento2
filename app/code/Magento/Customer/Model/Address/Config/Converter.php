@@ -2,7 +2,8 @@
 /**
  * Converter of customer address format configuration from \DOMDocument to array
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Address\Config;
 
