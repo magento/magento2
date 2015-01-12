@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests Magento\Core\Model\App\Emulation
+ * Tests Magento\Store\Model\App\Emulation
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -65,7 +65,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
     const NEW_STORE_ID = 9;
 
     /**
-     * @var \Magento\Core\Model\App\Emulation
+     * @var \Magento\Store\Model\App\Emulation
      */
     private $model;
 
@@ -105,7 +105,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
         $this->designMock->expects($this->any())->method('getData')->willReturn(false);
 
         // Prepare SUT
-        $this->model = $this->objectManager->getObject('Magento\Core\Model\App\Emulation',
+        $this->model = $this->objectManager->getObject('Magento\Store\Model\App\Emulation',
             [
                 'storeManager' => $this->storeManagerMock,
                 'viewDesign' => $this->viewDesignMock,
