@@ -12,7 +12,7 @@ class OauthInputExceptionTest extends \PHPUnit_Framework_TestCase
         foreach (['field1', 'field2'] as $param) {
             $exception->addError(OauthInputException::REQUIRED_FIELD, ['fieldName' => $param]);
         }
-        $exception->addError('Message with period.', ['fieldName' => 'field3']);
+        $exception->addError('Message with period.');
 
         $this->assertEquals(
             'field1 is a required field, field2 is a required field, Message with period',
