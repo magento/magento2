@@ -18,6 +18,7 @@ class ConfigTest extends \Magento\Backend\Utility\Controller
 
     /**
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      */
     public function testChangeBaseUrl()
     {
