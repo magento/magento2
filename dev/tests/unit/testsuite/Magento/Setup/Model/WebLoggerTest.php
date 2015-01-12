@@ -60,13 +60,8 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
     {
         $logFile = 'custom.log';
         $directoryWriteMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
-        $directoryWriteMock->expects($this->once())
-            ->method('readFile')
-            ->with($logFile);
-        $directoryWriteMock
-            ->expects($this->once())
-            ->method('writeFile')
-            ->with($logFile);
+        $directoryWriteMock->expects($this->once())->method('readFile')->with($logFile);
+        $directoryWriteMock->expects($this->once())->method('writeFile')->with($logFile);
 
         $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $filesystemMock
