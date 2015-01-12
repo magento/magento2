@@ -4,112 +4,114 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\GroupedProduct\Test\Repository\GroupedProductInjectable">
-    <default>
-        <name>Test grouped product %isolation%</name>
-        <sku>sku_test_grouped_product_%isolation%</sku>
-        <category_ids>
-            <presets>default</presets>
-        </category_ids>
-        <associated>
-            <preset>defaultSimpleProduct</preset>
-        </associated>
-        <status>Product online</status>
-        <visibility>Catalog, Search</visibility>
-        <tax_class_id>
-            <dataSet>taxable_goods</dataSet>
-        </tax_class_id>
-        <url_key>test-grouped-product-%isolation%</url_key>
-        <quantity_and_stock_status>
-            <is_in_stock>In Stock</is_in_stock>
-        </quantity_and_stock_status>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <attribute_set_id>
-            <dataSet>default</dataSet>
-        </attribute_set_id>
-    </default>
-    <grouped_product_out_of_stock>
-        <name>Test grouped product %isolation%</name>
-        <sku>sku_test_grouped_product_%isolation%</sku>
-        <category_ids>
-            <presets>default</presets>
-        </category_ids>
-        <associated>
-            <preset>defaultSimpleProduct</preset>
-        </associated>
-        <status>Product online</status>
-        <visibility>Catalog, Search</visibility>
-        <tax_class_id>
-            <dataSet>taxable_goods</dataSet>
-        </tax_class_id>
-        <url_key>test-grouped-product-%isolation%</url_key>
-        <quantity_and_stock_status>
-            <is_in_stock>Out of Stock</is_in_stock>
-        </quantity_and_stock_status>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <attribute_set_id>
-            <dataSet>default</dataSet>
-        </attribute_set_id>
-    </grouped_product_out_of_stock>
-    <grouped_product_with_price>
-        <name>Test grouped product %isolation%</name>
-        <sku>sku_test_grouped_product_%isolation%</sku>
-        <price>
-            <value>-</value>
-            <preset>starting-560</preset>
-        </price>
-        <category_ids>
-            <presets>default</presets>
-        </category_ids>
-        <associated>
-            <preset>defaultSimpleProduct</preset>
-        </associated>
-        <status>Product online</status>
-        <visibility>Catalog, Search</visibility>
-        <tax_class_id>
-            <dataSet>taxable_goods</dataSet>
-        </tax_class_id>
-        <url_key>test-grouped-product-%isolation%</url_key>
-        <quantity_and_stock_status>
-            <is_in_stock>In Stock</is_in_stock>
-        </quantity_and_stock_status>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <attribute_set_id>
-            <dataSet>default</dataSet>
-        </attribute_set_id>
-    </grouped_product_with_price>
-    <three_simple_products>
-        <name>Grouped product %isolation%</name>
-        <sku>grouped_product_%isolation%</sku>
-        <category_ids>
-            <presets>default</presets>
-        </category_ids>
-        <associated>
-            <preset>three_simple_products</preset>
-        </associated>
-        <status>Product online</status>
-        <visibility>Catalog, Search</visibility>
-        <tax_class_id>
-            <dataSet>taxable_goods</dataSet>
-        </tax_class_id>
-        <url_key>test-grouped-product-%isolation%</url_key>
-        <quantity_and_stock_status>
-            <is_in_stock>In Stock</is_in_stock>
-        </quantity_and_stock_status>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <attribute_set_id>
-            <dataSet>default</dataSet>
-        </attribute_set_id>
-        <checkout_data>
-            <preset>three_simple_products</preset>
-        </checkout_data>
-    </three_simple_products>
+<repository>
+    <storage class="Magento\GroupedProduct\Test\Repository\GroupedProductInjectable">
+        <dataset name="default" >
+            <field name="name" xsi:type="string">Test grouped product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_grouped_product_%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="presets" xsi:type="string">default</item>
+            </field>
+            <field name="associated" xsi:type="array">
+                <item name="preset" xsi:type="string">defaultSimpleProduct</item>
+            </field>
+            <field name="status" xsi:type="string">Product online</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">test-grouped-product-%isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+        </dataset>
+        <dataset name="grouped_product_out_of_stock" >
+            <field name="name" xsi:type="string">Test grouped product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_grouped_product_%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="presets" xsi:type="string">default</item>
+            </field>
+            <field name="associated" xsi:type="array">
+                <item name="preset" xsi:type="string">defaultSimpleProduct</item>
+            </field>
+            <field name="status" xsi:type="string">Product online</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">test-grouped-product-%isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">Out of Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+        </dataset>
+        <dataset name="grouped_product_with_price" >
+            <field name="name" xsi:type="string">Test grouped product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_test_grouped_product_%isolation%</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">-</item>
+                <item name="preset" xsi:type="string">starting-560</item>
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="presets" xsi:type="string">default</item>
+            </field>
+            <field name="associated" xsi:type="array">
+                <item name="preset" xsi:type="string">defaultSimpleProduct</item>
+            </field>
+            <field name="status" xsi:type="string">Product online</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">test-grouped-product-%isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+        </dataset>
+        <dataset name="three_simple_products" >
+            <field name="name" xsi:type="string">Grouped product %isolation%</field>
+            <field name="sku" xsi:type="string">grouped_product_%isolation%</field>
+            <field name="category_ids" xsi:type="array">
+                <item name="presets" xsi:type="string">default</item>
+            </field>
+            <field name="associated" xsi:type="array">
+                <item name="preset" xsi:type="string">three_simple_products</item>
+            </field>
+            <field name="status" xsi:type="string">Product online</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="url_key" xsi:type="string">test-grouped-product-%isolation%</field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="preset" xsi:type="string">three_simple_products</item>
+            </field>
+        </dataset>
+    </storage>
 </repository>

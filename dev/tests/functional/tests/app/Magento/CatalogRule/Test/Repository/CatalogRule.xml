@@ -4,96 +4,98 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\CatalogRule\Test\Repository\CatalogRule">
-    <active_catalog_rule>
-        <name>Active Catalog Rule</name>
-        <description>Rule Description</description>
-        <is_active>Active</is_active>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <customer_group_ids>
-            <key_0>NOT LOGGED IN</key_0>
-            <key_1>General</key_1>
-            <key_2>Wholesale</key_2>
-            <key_3>Retailer</key_3>
-        </customer_group_ids>
-        <from_date>3/25/14</from_date>
-        <to_date>3/29/14</to_date>
-        <sort_order>1</sort_order>
-        <simple_action>By Percentage of the Original Price</simple_action>
-        <discount_amount>50</discount_amount>
-    </active_catalog_rule>
-    <inactive_catalog_price_rule>
-        <name>Inactive Catalog Price Rule</name>
-        <is_active>Inactive</is_active>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <customer_group_ids>
-            <key_0>NOT LOGGED IN</key_0>
-        </customer_group_ids>
-        <simple_action>By Percentage of the Original Price</simple_action>
-        <discount_amount>50</discount_amount>
-    </inactive_catalog_price_rule>
-    <active_catalog_price_rule_with_conditions>
-        <name>Active Catalog Rule with conditions %isolation%</name>
-        <description>Rule Description</description>
-        <is_active>Active</is_active>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <customer_group_ids>
-            <key_0>NOT LOGGED IN</key_0>
-            <key_1>General</key_1>
-            <key_2>Wholesale</key_2>
-            <key_3>Retailer</key_3>
-        </customer_group_ids>
-        <rule>[Category|is|2]</rule>
-        <simple_action>By Percentage of the Original Price</simple_action>
-        <discount_amount>10</discount_amount>
-    </active_catalog_price_rule_with_conditions>
-    <catalog_price_rule_priority_0>
-        <name>catalog_price_rule_priority_0</name>
-        <description>-50% of price, Priority = 0</description>
-        <is_active>Active</is_active>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <customer_group_ids>
-            <key_0>NOT LOGGED IN</key_0>
-        </customer_group_ids>
-        <sort_order>0</sort_order>
-        <simple_action>By Percentage of the Original Price</simple_action>
-        <discount_amount>50</discount_amount>
-    </catalog_price_rule_priority_0>
-    <catalog_price_rule_priority_1_stop_further_rules>
-        <name>catalog_price_rule_priority_1_stop_further_rules</name>
-        <description>Priority 1, -5 By fixed amount</description>
-        <is_active>Active</is_active>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <customer_group_ids>
-            <key_0>NOT LOGGED IN</key_0>
-        </customer_group_ids>
-        <sort_order>1</sort_order>
-        <simple_action>By Fixed Amount</simple_action>
-        <discount_amount>5</discount_amount>
-        <stop_rules_processing>Yes</stop_rules_processing>
-    </catalog_price_rule_priority_1_stop_further_rules>
-    <catalog_price_rule_priority_2>
-        <name>catalog_price_rule_priority_2</name>
-        <description>Priority 2, -10 By fixed amount</description>
-        <is_active>Active</is_active>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <customer_group_ids>
-            <key_0>NOT LOGGED IN</key_0>
-        </customer_group_ids>
-        <sort_order>2</sort_order>
-        <simple_action>By Fixed Amount</simple_action>
-        <discount_amount>10</discount_amount>
-    </catalog_price_rule_priority_2>
+<repository>
+    <storage class="Magento\CatalogRule\Test\Repository\CatalogRule">
+        <dataset name="active_catalog_rule" >
+            <field name="name" xsi:type="string">Active Catalog Rule</field>
+            <field name="description" xsi:type="string">Rule Description</field>
+            <field name="is_active" xsi:type="string">Active</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="customer_group_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">NOT LOGGED IN</item>
+                <item name="key_1" xsi:type="string">General</item>
+                <item name="key_2" xsi:type="string">Wholesale</item>
+                <item name="key_3" xsi:type="string">Retailer</item>
+            </field>
+            <field name="from_date" xsi:type="string">3/25/14</field>
+            <field name="to_date" xsi:type="string">3/29/14</field>
+            <field name="sort_order" xsi:type="string">1</field>
+            <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
+            <field name="discount_amount" xsi:type="string">50</field>
+        </dataset>
+        <dataset name="inactive_catalog_price_rule" >
+            <field name="name" xsi:type="string">Inactive Catalog Price Rule</field>
+            <field name="is_active" xsi:type="string">Inactive</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="customer_group_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">NOT LOGGED IN</item>
+            </field>
+            <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
+            <field name="discount_amount" xsi:type="string">50</field>
+        </dataset>
+        <dataset name="active_catalog_price_rule_with_conditions" >
+            <field name="name" xsi:type="string">Active Catalog Rule with conditions %isolation%</field>
+            <field name="description" xsi:type="string">Rule Description</field>
+            <field name="is_active" xsi:type="string">Active</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="customer_group_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">NOT LOGGED IN</item>
+                <item name="key_1" xsi:type="string">General</item>
+                <item name="key_2" xsi:type="string">Wholesale</item>
+                <item name="key_3" xsi:type="string">Retailer</item>
+            </field>
+            <field name="rule" xsi:type="string">[Category|is|2]</field>
+            <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
+            <field name="discount_amount" xsi:type="string">10</field>
+        </dataset>
+        <dataset name="catalog_price_rule_priority_0" >
+            <field name="name" xsi:type="string">catalog_price_rule_priority_0</field>
+            <field name="description" xsi:type="string">-50% of price, Priority = 0</field>
+            <field name="is_active" xsi:type="string">Active</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="customer_group_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">NOT LOGGED IN</item>
+            </field>
+            <field name="sort_order" xsi:type="string">0</field>
+            <field name="simple_action" xsi:type="string">By Percentage of the Original Price</field>
+            <field name="discount_amount" xsi:type="string">50</field>
+        </dataset>
+        <dataset name="catalog_price_rule_priority_1_stop_further_rules" >
+            <field name="name" xsi:type="string">catalog_price_rule_priority_1_stop_further_rules</field>
+            <field name="description" xsi:type="string">Priority 1, -5 By fixed amount</field>
+            <field name="is_active" xsi:type="string">Active</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="customer_group_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">NOT LOGGED IN</item>
+            </field>
+            <field name="sort_order" xsi:type="string">1</field>
+            <field name="simple_action" xsi:type="string">By Fixed Amount</field>
+            <field name="discount_amount" xsi:type="string">5</field>
+            <field name="stop_rules_processing" xsi:type="string">Yes</field>
+        </dataset>
+        <dataset name="catalog_price_rule_priority_2" >
+            <field name="name" xsi:type="string">catalog_price_rule_priority_2</field>
+            <field name="description" xsi:type="string">Priority 2, -10 By fixed amount</field>
+            <field name="is_active" xsi:type="string">Active</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="customer_group_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">NOT LOGGED IN</item>
+            </field>
+            <field name="sort_order" xsi:type="string">2</field>
+            <field name="simple_action" xsi:type="string">By Fixed Amount</field>
+            <field name="discount_amount" xsi:type="string">10</field>
+        </dataset>
+    </storage>
 </repository>

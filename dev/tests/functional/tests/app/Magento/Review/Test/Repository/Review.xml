@@ -4,11 +4,13 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Review\Test\Repository\Review">
-    <default>
-        <config>
-        </config>
-        <data>
-        </data>
-    </default>
+<repository>
+    <storage class="Magento\Review\Test\Repository\Review">
+        <dataset name="default" >
+            <field name="config" xsi:type="string">
+        </field>
+            <field name="data" xsi:type="string">
+        </field>
+        </dataset>
+    </storage>
 </repository>

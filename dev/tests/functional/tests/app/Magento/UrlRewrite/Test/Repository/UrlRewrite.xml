@@ -4,23 +4,25 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\UrlRewrite\Test\Repository\UrlRewrite">
-    <default>
-        <request_path>test-test-test%isolation%.html</request_path>
-        <target_path>http://www.ebayinc.com/</target_path>
-        <redirect_type>Temporary (302)</redirect_type>
-        <store_id>Main Website/Main Website Store/Default Store View</store_id>
-    </default>
-    <default_without_target>
-        <request_path>test-test-test%isolation%.html</request_path>
-        <redirect_type>Temporary (302)</redirect_type>
-        <store_id>Main Website/Main Website Store/Default Store View</store_id>
-    </default_without_target>
-    <custom_rewrite_wishlist>
-        <store_id>Main Website/Main Website Store/Default Store View</store_id>
-        <request_path>wishlist/%isolation%</request_path>
-        <target_path>http://google.com</target_path>
-        <redirect_type>Temporary (302)</redirect_type>
-        <description>test description</description>
-    </custom_rewrite_wishlist>
+<repository>
+    <storage class="Magento\UrlRewrite\Test\Repository\UrlRewrite">
+        <dataset name="default" >
+            <field name="request_path" xsi:type="string">test-test-test%isolation%.html</field>
+            <field name="target_path" xsi:type="string">http://www.ebayinc.com/</field>
+            <field name="redirect_type" xsi:type="string">Temporary (302)</field>
+            <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
+        </dataset>
+        <dataset name="default_without_target" >
+            <field name="request_path" xsi:type="string">test-test-test%isolation%.html</field>
+            <field name="redirect_type" xsi:type="string">Temporary (302)</field>
+            <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
+        </dataset>
+        <dataset name="custom_rewrite_wishlist" >
+            <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
+            <field name="request_path" xsi:type="string">wishlist/%isolation%</field>
+            <field name="target_path" xsi:type="string">http://google.com</field>
+            <field name="redirect_type" xsi:type="string">Temporary (302)</field>
+            <field name="description" xsi:type="string">test description</field>
+        </dataset>
+    </storage>
 </repository>

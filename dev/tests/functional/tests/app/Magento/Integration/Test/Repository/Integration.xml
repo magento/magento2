@@ -4,23 +4,25 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Integration\Test\Repository\Integration">
-    <default_with_all_resources>
-        <name>default_integration_%isolation%</name>
-        <email>test_%isolation%@example.com</email>
-        <resource_access>All</resource_access>
-        <resources>
-            <key_0>Dashboard</key_0>
-            <key_1>Sales</key_1>
-            <key_2>Products</key_2>
-            <key_3>Customers</key_3>
-            <key_4>My Account</key_4>
-            <key_5>Marketing</key_5>
-            <key_6>Content</key_6>
-            <key_7>Reports</key_7>
-            <key_8>Stores</key_8>
-            <key_9>System</key_9>
-            <key_10>Global Search</key_10>
-        </resources>
-    </default_with_all_resources>
+<repository>
+    <storage class="Magento\Integration\Test\Repository\Integration">
+        <dataset name="default_with_all_resources" >
+            <field name="name" xsi:type="string">default_integration_%isolation%</field>
+            <field name="email" xsi:type="string">test_%isolation%@example.com</field>
+            <field name="resource_access" xsi:type="string">All</field>
+            <field name="resources" xsi:type="array">
+                <item name="key_0" xsi:type="string">Dashboard</item>
+                <item name="key_1" xsi:type="string">Sales</item>
+                <item name="key_2" xsi:type="string">Products</item>
+                <item name="key_3" xsi:type="string">Customers</item>
+                <item name="key_4" xsi:type="string">My Account</item>
+                <item name="key_5" xsi:type="string">Marketing</item>
+                <item name="key_6" xsi:type="string">Content</item>
+                <item name="key_7" xsi:type="string">Reports</item>
+                <item name="key_8" xsi:type="string">Stores</item>
+                <item name="key_9" xsi:type="string">System</item>
+                <item name="key_10" xsi:type="string">Global Search</item>
+            </field>
+        </dataset>
+    </storage>
 </repository>

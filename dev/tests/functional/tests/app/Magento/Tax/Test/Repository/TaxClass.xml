@@ -4,35 +4,37 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Tax\Test\Repository\TaxClass">
-    <taxable_goods>
-        <class_id>2</class_id>
-        <class_name>Taxable Goods</class_name>
-        <class_type>PRODUCT</class_type>
-        <id>2</id>
-        <mtf_dataset_name>Taxable Goods</mtf_dataset_name>
-    </taxable_goods>
-    <retail_customer>
-        <class_id>3</class_id>
-        <class_name>Retail Customer</class_name>
-        <class_type>CUSTOMER</class_type>
-        <id>3</id>
-        <mtf_dataset_name>Retail Customer</mtf_dataset_name>
-    </retail_customer>
-    <customer_tax_class>
-        <class_name>Customer Tax Class %isolation%</class_name>
-        <class_type>CUSTOMER</class_type>
-    </customer_tax_class>
-    <product_tax_class>
-        <class_name>Product Tax Class %isolation%</class_name>
-        <class_type>PRODUCT</class_type>
-    </product_tax_class>
-    <None>
-        <class_name>None</class_name>
-        <class_type>PRODUCT</class_type>
-        <id>0</id>
-    </None>
-    <all>
-        <class_name>All</class_name>
-    </all>
+<repository>
+    <storage class="Magento\Tax\Test\Repository\TaxClass">
+        <dataset name="taxable_goods" >
+            <field name="class_id" xsi:type="string">2</field>
+            <field name="class_name" xsi:type="string">Taxable Goods</field>
+            <field name="class_type" xsi:type="string">PRODUCT</field>
+            <field name="id" xsi:type="string">2</field>
+            <field name="mtf_dataset_name" xsi:type="string">Taxable Goods</field>
+        </dataset>
+        <dataset name="retail_customer" >
+            <field name="class_id" xsi:type="string">3</field>
+            <field name="class_name" xsi:type="string">Retail Customer</field>
+            <field name="class_type" xsi:type="string">CUSTOMER</field>
+            <field name="id" xsi:type="string">3</field>
+            <field name="mtf_dataset_name" xsi:type="string">Retail Customer</field>
+        </dataset>
+        <dataset name="customer_tax_class" >
+            <field name="class_name" xsi:type="string">Customer Tax Class %isolation%</field>
+            <field name="class_type" xsi:type="string">CUSTOMER</field>
+        </dataset>
+        <dataset name="product_tax_class" >
+            <field name="class_name" xsi:type="string">Product Tax Class %isolation%</field>
+            <field name="class_type" xsi:type="string">PRODUCT</field>
+        </dataset>
+        <dataset name="None" >
+            <field name="class_name" xsi:type="string">None</field>
+            <field name="class_type" xsi:type="string">PRODUCT</field>
+            <field name="id" xsi:type="string">0</field>
+        </dataset>
+        <dataset name="all" >
+            <field name="class_name" xsi:type="string">All</field>
+        </dataset>
+    </storage>
 </repository>

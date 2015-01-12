@@ -4,19 +4,21 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Store\Test\Repository\Website">
-    <all_websites>
-        <name>All Websites</name>
-        <website_id>0</website_id>
-    </all_websites>
-    <main_website>
-        <name>Main Website</name>
-        <code>base</code>
-        <sort_order>0</sort_order>
-        <website_id>1</website_id>
-    </main_website>
-    <custom_website>
-        <name>Web_Site_%isolation%</name>
-        <code>code_%isolation%</code>
-    </custom_website>
+<repository>
+    <storage class="Magento\Store\Test\Repository\Website">
+        <dataset name="all_websites" >
+            <field name="name" xsi:type="string">All Websites</field>
+            <field name="website_id" xsi:type="string">0</field>
+        </dataset>
+        <dataset name="main_website" >
+            <field name="name" xsi:type="string">Main Website</field>
+            <field name="code" xsi:type="string">base</field>
+            <field name="sort_order" xsi:type="string">0</field>
+            <field name="website_id" xsi:type="string">1</field>
+        </dataset>
+        <dataset name="custom_website" >
+            <field name="name" xsi:type="string">Web_Site_%isolation%</field>
+            <field name="code" xsi:type="string">code_%isolation%</field>
+        </dataset>
+    </storage>
 </repository>

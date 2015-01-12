@@ -4,126 +4,128 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Bundle\Test\Repository\BundleProduct">
-    <BundleDynamic_sku_1073507449>
-        <sku>BundleDynamic_sku_10735074493</sku>
-        <name>BundleDynamic 1073507449</name>
-        <price>
-            <price_from>1</price_from>
-            <price_to>2</price_to>
-        </price>
-        <short_description></short_description>
-        <description></description>
-        <tax_class_id>
-            <dataSet>taxable_goods</dataSet>
-        </tax_class_id>
-        <sku_type>0</sku_type>
-        <price_type>0</price_type>
-        <weight_type>0</weight_type>
-        <status>Product online</status>
-        <shipment_type>1</shipment_type>
-        <url_key>bundle-dynamic-product-%isolation%</url_key>
-        <mtf_dataset_name>BundleDynamic_sku_1073507449</mtf_dataset_name>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-    </BundleDynamic_sku_1073507449>
-    <BundleDynamic_sku_215249172>
-        <sku>BundleDynamic_sku_215249172</sku>
-        <name>BundleDynamic 215249172</name>
-        <price>
-            <price_from>3</price_from>
-            <price_to>4</price_to>
-        </price>
-        <short_description></short_description>
-        <description></description>
-        <tax_class_id>
-            <dataSet>taxable_goods</dataSet>
-        </tax_class_id>
-        <sku_type>0</sku_type>
-        <weight_type>0</weight_type>
-        <price_type>0</price_type>
-        <shipment_type>1</shipment_type>
-        <url_key>bundle-dynamic-product-%isolation%</url_key>
-        <mtf_dataset_name>BundleDynamic_sku_215249172</mtf_dataset_name>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-    </BundleDynamic_sku_215249172>
-    <bundle_dynamic_product>
-        <name>Bundle dynamic product %isolation%</name>
-        <sku>sku_bundle_dynamic_product_%isolation%</sku>
-        <sku_type>Dynamic</sku_type>
-        <price_type>Dynamic</price_type>
-        <price>
-            <value>-</value>
-            <preset>default_dynamic</preset>
-        </price>
-        <quantity_and_stock_status>
-            <qty>666</qty>
-            <is_in_stock>In Stock</is_in_stock>
-        </quantity_and_stock_status>
-        <weight_type>Dynamic</weight_type>
-        <shipment_type>Separately</shipment_type>
-        <tax_class_id>
-            <dataSet>taxable_goods</dataSet>
-        </tax_class_id>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <stock_data>
-            <manage_stock>Yes</manage_stock>
-            <use_config_enable_qty_increments>Yes</use_config_enable_qty_increments>
-            <use_config_qty_increments>Yes</use_config_qty_increments>
-            <is_in_stock>In Stock</is_in_stock>
-        </stock_data>
-        <url_key>bundle-dynamic-product-%isolation%</url_key>
-        <visibility>Catalog, Search</visibility>
-        <bundle_selections>
-            <preset>default_dynamic</preset>
-        </bundle_selections>
-        <attribute_set_id>Default</attribute_set_id>
-        <checkout_data>
-            <preset>default_dynamic</preset>
-        </checkout_data>
-    </bundle_dynamic_product>
-    <bundle_fixed_product>
-        <name>Bundle fixed product %isolation%</name>
-        <sku>sku_bundle_fixed_product_%isolation%</sku>
-        <sku_type>Fixed</sku_type>
-        <price_type>Fixed</price_type>
-        <price>
-            <value>750</value>
-            <preset>default_fixed</preset>
-        </price>
-        <tax_class_id>
-            <dataSet>taxable_goods</dataSet>
-        </tax_class_id>
-        <quantity_and_stock_status>
-            <qty>666</qty>
-            <is_in_stock>In Stock</is_in_stock>
-        </quantity_and_stock_status>
-        <weight>1</weight>
-        <weight_type>Fixed</weight_type>
-        <status>Product online</status>
-        <shipment_type>Together</shipment_type>
-        <website_ids>
-            <key_0>Main Website</key_0>
-        </website_ids>
-        <stock_data>
-            <manage_stock>Yes</manage_stock>
-            <use_config_enable_qty_increments>Yes</use_config_enable_qty_increments>
-            <use_config_qty_increments>Yes</use_config_qty_increments>
-            <is_in_stock>In Stock</is_in_stock>
-        </stock_data>
-        <url_key>bundle-fixed-product-%isolation%</url_key>
-        <visibility>Catalog, Search</visibility>
-        <bundle_selections>
-            <preset>default_fixed</preset>
-        </bundle_selections>
-        <attribute_set_id>Default</attribute_set_id>
-        <checkout_data>
-            <preset>default_fixed</preset>
-        </checkout_data>
-    </bundle_fixed_product>
+<repository>
+    <storage class="Magento\Bundle\Test\Repository\BundleProduct">
+        <dataset name="BundleDynamic_sku_1073507449" >
+            <field name="sku" xsi:type="string">BundleDynamic_sku_10735074493</field>
+            <field name="name" xsi:type="string">BundleDynamic 1073507449</field>
+            <field name="price" xsi:type="array">
+                <item name="price_from" xsi:type="string">1</item>
+                <item name="price_to" xsi:type="string">2</item>
+            </field>
+            <field name="short_description" xsi:type="string"></field>
+            <field name="description" xsi:type="string"></field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="sku_type" xsi:type="string">0</field>
+            <field name="price_type" xsi:type="string">0</field>
+            <field name="weight_type" xsi:type="string">0</field>
+            <field name="status" xsi:type="string">Product online</field>
+            <field name="shipment_type" xsi:type="string">1</field>
+            <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
+            <field name="mtf_dataset_name" xsi:type="string">BundleDynamic_sku_1073507449</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+        </dataset>
+        <dataset name="BundleDynamic_sku_215249172" >
+            <field name="sku" xsi:type="string">BundleDynamic_sku_215249172</field>
+            <field name="name" xsi:type="string">BundleDynamic 215249172</field>
+            <field name="price" xsi:type="array">
+                <item name="price_from" xsi:type="string">3</item>
+                <item name="price_to" xsi:type="string">4</item>
+            </field>
+            <field name="short_description" xsi:type="string"></field>
+            <field name="description" xsi:type="string"></field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="sku_type" xsi:type="string">0</field>
+            <field name="weight_type" xsi:type="string">0</field>
+            <field name="price_type" xsi:type="string">0</field>
+            <field name="shipment_type" xsi:type="string">1</field>
+            <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
+            <field name="mtf_dataset_name" xsi:type="string">BundleDynamic_sku_215249172</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+        </dataset>
+        <dataset name="bundle_dynamic_product" >
+            <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">Dynamic</field>
+            <field name="price_type" xsi:type="string">Dynamic</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">-</item>
+                <item name="preset" xsi:type="string">default_dynamic</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">666</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="weight_type" xsi:type="string">Dynamic</field>
+            <field name="shipment_type" xsi:type="string">Separately</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="stock_data" xsi:type="array">
+                <item name="manage_stock" xsi:type="string">Yes</item>
+                <item name="use_config_enable_qty_increments" xsi:type="string">Yes</item>
+                <item name="use_config_qty_increments" xsi:type="string">Yes</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="preset" xsi:type="string">default_dynamic</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="string">Default</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="preset" xsi:type="string">default_dynamic</item>
+            </field>
+        </dataset>
+        <dataset name="bundle_fixed_product" >
+            <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
+            <field name="sku" xsi:type="string">sku_bundle_fixed_product_%isolation%</field>
+            <field name="sku_type" xsi:type="string">Fixed</field>
+            <field name="price_type" xsi:type="string">Fixed</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">750</item>
+                <item name="preset" xsi:type="string">default_fixed</item>
+            </field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">666</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="weight_type" xsi:type="string">Fixed</field>
+            <field name="status" xsi:type="string">Product online</field>
+            <field name="shipment_type" xsi:type="string">Together</field>
+            <field name="website_ids" xsi:type="array">
+                <item name="key_0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="stock_data" xsi:type="array">
+                <item name="manage_stock" xsi:type="string">Yes</item>
+                <item name="use_config_enable_qty_increments" xsi:type="string">Yes</item>
+                <item name="use_config_qty_increments" xsi:type="string">Yes</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
+            <field name="visibility" xsi:type="string">Catalog, Search</field>
+            <field name="bundle_selections" xsi:type="array">
+                <item name="preset" xsi:type="string">default_fixed</item>
+            </field>
+            <field name="attribute_set_id" xsi:type="string">Default</field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="preset" xsi:type="string">default_fixed</item>
+            </field>
+        </dataset>
+    </storage>
 </repository>

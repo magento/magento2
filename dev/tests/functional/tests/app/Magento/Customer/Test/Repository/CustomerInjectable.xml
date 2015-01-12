@@ -4,108 +4,110 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Customer\Test\Repository\CustomerInjectable">
-    <default>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <group_id>
-            <dataSet>General</dataSet>
-        </group_id>
-        <email>JohnDoe_%isolation%@example.com</email>
-        <password>123123q</password>
-        <password_confirmation>123123q</password_confirmation>
-    </default>
-    <johndoe>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>JohnDoe_%isolation%@example.com</email>
-        <password>123123q</password>
-        <password_confirmation>123123q</password_confirmation>
-        <dob>01/01/1990</dob>
-        <gender>Male</gender>
-        <group_id>
-            <dataSet>General</dataSet>
-        </group_id>
-    </johndoe>
-    <johndoe_retailer>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <group_id>
-            <dataSet>Retailer</dataSet>
-        </group_id>
-        <email>JohnDoe_%isolation%@example.com</email>
-        <password>123123q</password>
-        <password_confirmation>123123q</password_confirmation>
-        <dob>01/01/1990</dob>
-        <gender>Male</gender>
-    </johndoe_retailer>
-    <johndoe_with_balance>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>JohnDoe_%isolation%@example.com</email>
-        <password>123123q</password>
-        <password_confirmation>123123q</password_confirmation>
-        <dob>01/01/1990</dob>
-        <gender>Male</gender>
-        <amount_delta>501</amount_delta>
-    </johndoe_with_balance>
-    <defaultBackend>
-        <website_id>Main Website</website_id>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>JohnDoe_%isolation%@example.com</email>
-    </defaultBackend>
-    <johndoe_with_addresses>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <group_id>
-            <dataSet>General</dataSet>
-        </group_id>
-        <email>JohnDoe_%isolation%@example.com</email>
-        <password>123123q</password>
-        <password_confirmation>123123q</password_confirmation>
-        <address>
-            <presets>US_address</presets>
-        </address>
-    </johndoe_with_addresses>
-    <customer_US>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>JohnDoe_%isolation%@example.com</email>
-        <password>123123q</password>
-        <password_confirmation>123123q</password_confirmation>
-    </customer_US>
-    <customer_UK>
-        <firstname>Jane</firstname>
-        <lastname>Doe</lastname>
-        <email>JaneDoe_%isolation%@example.com</email>
-        <password>123123q</password>
-        <password_confirmation>123123q</password_confirmation>
-    </customer_UK>
-    <johndoe_unique>
-        <firstname>John</firstname>
-        <lastname>Doe%isolation%</lastname>
-        <group_id>
-            <dataSet>General</dataSet>
-        </group_id>
-        <email>JohnDoe_%isolation%@example.com</email>
-        <password>123123q</password>
-        <password_confirmation>123123q</password_confirmation>
-        <address>
-            <presets>US_address_NY</presets>
-        </address>
-    </johndoe_unique>
-    <johndoe_unique_TX>
-        <firstname>John</firstname>
-        <lastname>Doe%isolation%</lastname>
-        <group_id>
-            <dataSet>General</dataSet>
-        </group_id>
-        <email>JohnDoe_%isolation%@example.com</email>
-        <password>123123q</password>
-        <password_confirmation>123123q</password_confirmation>
-        <address>
-            <presets>US_address_TX</presets>
-        </address>
-    </johndoe_unique_TX>
+<repository>
+    <storage class="Magento\Customer\Test\Repository\CustomerInjectable">
+        <dataset name="default" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">General</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+        </dataset>
+        <dataset name="johndoe" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="dob" xsi:type="string">01/01/1990</field>
+            <field name="gender" xsi:type="string">Male</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">General</item>
+            </field>
+        </dataset>
+        <dataset name="johndoe_retailer" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">Retailer</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="dob" xsi:type="string">01/01/1990</field>
+            <field name="gender" xsi:type="string">Male</field>
+        </dataset>
+        <dataset name="johndoe_with_balance" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="dob" xsi:type="string">01/01/1990</field>
+            <field name="gender" xsi:type="string">Male</field>
+            <field name="amount_delta" xsi:type="string">501</field>
+        </dataset>
+        <dataset name="defaultBackend" >
+            <field name="website_id" xsi:type="string">Main Website</field>
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+        </dataset>
+        <dataset name="johndoe_with_addresses" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">General</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="address" xsi:type="array">
+                <item name="presets" xsi:type="string">US_address</item>
+            </field>
+        </dataset>
+        <dataset name="customer_US" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+        </dataset>
+        <dataset name="customer_UK" >
+            <field name="firstname" xsi:type="string">Jane</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+        </dataset>
+        <dataset name="johndoe_unique" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe%isolation%</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">General</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="address" xsi:type="array">
+                <item name="presets" xsi:type="string">US_address_NY</item>
+            </field>
+        </dataset>
+        <dataset name="johndoe_unique_TX" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe%isolation%</field>
+            <field name="group_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">General</item>
+            </field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="password" xsi:type="string">123123q</field>
+            <field name="password_confirmation" xsi:type="string">123123q</field>
+            <field name="address" xsi:type="array">
+                <item name="presets" xsi:type="string">US_address_TX</item>
+            </field>
+        </dataset>
+    </storage>
 </repository>

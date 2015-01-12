@@ -4,24 +4,26 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Catalog\Test\Repository\CatalogAttributeSet">
-    <default>
-        <attribute_set_name>Default</attribute_set_name>
-        <attribute_set_id>4</attribute_set_id>
-    </default>
-    <custom_attribute_set>
-        <attribute_set_name>Custom_attribute_set%isolation%</attribute_set_name>
-        <skeleton_set>
-            <dataSet>default</dataSet>
-        </skeleton_set>
-    </custom_attribute_set>
-    <custom_attribute_set_with_fpt>
-        <attribute_set_name>Custom_attribute_set%isolation%</attribute_set_name>
-        <skeleton_set>
-            <dataSet>default</dataSet>
-        </skeleton_set>
-        <assigned_attributes>
-            <presets>attribute_type_fpt</presets>
-        </assigned_attributes>
-    </custom_attribute_set_with_fpt>
+<repository>
+    <storage class="Magento\Catalog\Test\Repository\CatalogAttributeSet">
+        <dataset name="default" >
+            <field name="attribute_set_name" xsi:type="string">Default</field>
+            <field name="attribute_set_id" xsi:type="string">4</field>
+        </dataset>
+        <dataset name="custom_attribute_set" >
+            <field name="attribute_set_name" xsi:type="string">Custom_attribute_set%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+        </dataset>
+        <dataset name="custom_attribute_set_with_fpt" >
+            <field name="attribute_set_name" xsi:type="string">Custom_attribute_set%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+            <field name="assigned_attributes" xsi:type="array">
+                <item name="presets" xsi:type="string">attribute_type_fpt</item>
+            </field>
+        </dataset>
+    </storage>
 </repository>

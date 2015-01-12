@@ -4,37 +4,39 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Customer\Test\Repository\CustomerGroupInjectable">
-    <General>
-        <customer_group_id>1</customer_group_id>
-        <customer_group_code>General</customer_group_code>
-        <tax_class_id>
-            <dataSet>retail_customer</dataSet>
-        </tax_class_id>
-    </General>
-    <Retailer>
-        <customer_group_id>3</customer_group_id>
-        <customer_group_code>Retailer</customer_group_code>
-        <tax_class_id>
-            <dataSet>retail_customer</dataSet>
-        </tax_class_id>
-    </Retailer>
-    <Wholesale>
-        <customer_group_id>2</customer_group_id>
-        <customer_group_code>Wholesale</customer_group_code>
-        <tax_class_id>
-            <dataSet>retail_customer</dataSet>
-        </tax_class_id>
-    </Wholesale>
-    <All_Customer_Groups>
-        <customer_group_id>0</customer_group_id>
-        <customer_group_code>All Customer Groups</customer_group_code>
-    </All_Customer_Groups>
-    <NOT_LOGGED_IN>
-        <customer_group_id>0</customer_group_id>
-        <customer_group_code>NOT LOGGED IN</customer_group_code>
-        <tax_class_id>
-            <dataSet>retail_customer</dataSet>
-        </tax_class_id>
-    </NOT_LOGGED_IN>
+<repository>
+    <storage class="Magento\Customer\Test\Repository\CustomerGroupInjectable">
+        <dataset name="General" >
+            <field name="customer_group_id" xsi:type="string">1</field>
+            <field name="customer_group_code" xsi:type="string">General</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">retail_customer</item>
+            </field>
+        </dataset>
+        <dataset name="Retailer" >
+            <field name="customer_group_id" xsi:type="string">3</field>
+            <field name="customer_group_code" xsi:type="string">Retailer</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">retail_customer</item>
+            </field>
+        </dataset>
+        <dataset name="Wholesale" >
+            <field name="customer_group_id" xsi:type="string">2</field>
+            <field name="customer_group_code" xsi:type="string">Wholesale</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">retail_customer</item>
+            </field>
+        </dataset>
+        <dataset name="All_Customer_Groups" >
+            <field name="customer_group_id" xsi:type="string">0</field>
+            <field name="customer_group_code" xsi:type="string">All Customer Groups</field>
+        </dataset>
+        <dataset name="NOT_LOGGED_IN" >
+            <field name="customer_group_id" xsi:type="string">0</field>
+            <field name="customer_group_code" xsi:type="string">NOT LOGGED IN</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">retail_customer</item>
+            </field>
+        </dataset>
+    </storage>
 </repository>

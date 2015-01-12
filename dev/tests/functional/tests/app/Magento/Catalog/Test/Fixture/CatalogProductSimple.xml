@@ -22,7 +22,7 @@
         <input_prefix>product</input_prefix>
     </data_config>
     <fields>
-        <category_ids>
+        <field name="category_ids">
             <attribute_code>category_ids</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
@@ -30,7 +30,7 @@
             <input>text</input>
             <group>product-details</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds</source>
-        </category_ids>
+        </field>
         <color>
             <attribute_code>color</attribute_code>
             <backend_type>int</backend_type>

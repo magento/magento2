@@ -4,46 +4,48 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Catalog\Test\Repository\CatalogCategory">
-    <default_category>
-        <name>Default Category</name>
-        <parent_id>1</parent_id>
-        <is_active>Yes</is_active>
-        <id>2</id>
-    </default_category>
-    <default_subcategory>
-        <name>DefaultSubcategory%isolation%</name>
-        <url_key>default-subcategory-%isolation%</url_key>
-        <parent_id>
-            <dataSet>default_category</dataSet>
-        </parent_id>
-        <is_active>Yes</is_active>
-        <include_in_menu>Yes</include_in_menu>
-    </default_subcategory>
-    <default_anchor_subcategory>
-        <name>DefaultSubcategory%isolation%</name>
-        <url_key>default-subcategory-%isolation%</url_key>
-        <parent_id>
-            <dataSet>default_category</dataSet>
-        </parent_id>
-        <is_active>Yes</is_active>
-        <is_anchor>Yes</is_anchor>
-        <include_in_menu>Yes</include_in_menu>
-    </default_anchor_subcategory>
-    <root_category>
-        <name>RootCategory%isolation%</name>
-        <url_key>root-category-%isolation%</url_key>
-        <parent_id>1</parent_id>
-        <is_active>Yes</is_active>
-        <include_in_menu>Yes</include_in_menu>
-    </root_category>
-    <root_subcategory>
-        <name>RootSubCategory%isolation%</name>
-        <url_key>root-sub-category-%isolation%</url_key>
-        <parent_id>
-            <dataSet>root_category</dataSet>
-        </parent_id>
-        <is_active>Yes</is_active>
-        <include_in_menu>Yes</include_in_menu>
-    </root_subcategory>
+<repository>
+    <storage class="Magento\Catalog\Test\Repository\CatalogCategory">
+        <dataset name="default_category" >
+            <field name="name" xsi:type="string">Default Category</field>
+            <field name="parent_id" xsi:type="string">1</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="id" xsi:type="string">2</field>
+        </dataset>
+        <dataset name="default_subcategory" >
+            <field name="name" xsi:type="string">DefaultSubcategory%isolation%</field>
+            <field name="url_key" xsi:type="string">default-subcategory-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default_category</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+        <dataset name="default_anchor_subcategory" >
+            <field name="name" xsi:type="string">DefaultSubcategory%isolation%</field>
+            <field name="url_key" xsi:type="string">default-subcategory-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default_category</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="is_anchor" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+        <dataset name="root_category" >
+            <field name="name" xsi:type="string">RootCategory%isolation%</field>
+            <field name="url_key" xsi:type="string">root-category-%isolation%</field>
+            <field name="parent_id" xsi:type="string">1</field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+        <dataset name="root_subcategory" >
+            <field name="name" xsi:type="string">RootSubCategory%isolation%</field>
+            <field name="url_key" xsi:type="string">root-sub-category-%isolation%</field>
+            <field name="parent_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">root_category</item>
+            </field>
+            <field name="is_active" xsi:type="string">Yes</field>
+            <field name="include_in_menu" xsi:type="string">Yes</field>
+        </dataset>
+    </storage>
 </repository>

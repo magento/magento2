@@ -4,12 +4,14 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Newsletter\Test\Repository\Template">
-    <default>
-        <code>Newsletter Template %isolation%</code>
-        <subject>Newsletter Subject %isolation%</subject>
-        <sender_name>Sender Name %isolation%</sender_name>
-        <sender_email>support%isolation%@example.com</sender_email>
-        <text>Template Content %isolation%</text>
-    </default>
+<repository>
+    <storage class="Magento\Newsletter\Test\Repository\Template">
+        <dataset name="default" >
+            <field name="code" xsi:type="string">Newsletter Template %isolation%</field>
+            <field name="subject" xsi:type="string">Newsletter Subject %isolation%</field>
+            <field name="sender_name" xsi:type="string">Sender Name %isolation%</field>
+            <field name="sender_email" xsi:type="string">support%isolation%@example.com</field>
+            <field name="text" xsi:type="string">Template Content %isolation%</field>
+        </dataset>
+    </storage>
 </repository>

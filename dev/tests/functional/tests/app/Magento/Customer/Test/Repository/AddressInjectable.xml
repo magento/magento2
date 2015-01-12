@@ -4,226 +4,228 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository class="Magento\Customer\Test\Repository\AddressInjectable">
-    <US_address>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>John.Doe%isolation%@example.com</email>
-        <company>Magento %isolation%</company>
-        <street>6161 West Centinela Avenue</street>
-        <city>Culver City</city>
-        <region_id>California</region_id>
-        <postcode>90230</postcode>
-        <country_id>United States</country_id>
-        <telephone>555-55-555-55</telephone>
-        <default_billing>Yes</default_billing>
-        <default_shipping>Yes</default_shipping>
-    </US_address>
-    <US_address_default_billing>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>John.Doe%isolation%@example.com</email>
-        <company>Magento %isolation%</company>
-        <street>6161 West Centinela Avenue</street>
-        <city>Culver City</city>
-        <region_id>California</region_id>
-        <postcode>90230</postcode>
-        <country_id>United States</country_id>
-        <telephone>555-55-555-55</telephone>
-        <default_billing>Yes</default_billing>
-        <default_shipping>No</default_shipping>
-    </US_address_default_billing>
-    <US_NY_address_billing>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>John.Doe%isolation%@example.com</email>
-        <company>Magento %isolation%</company>
-        <street>6262 Fifth Avenue</street>
-        <city>New York</city>
-        <region_id>New York</region_id>
-        <postcode>90230</postcode>
-        <country_id>United States</country_id>
-        <telephone>555-55-555-55</telephone>
-        <default_billing>No</default_billing>
-        <default_shipping>No</default_shipping>
-    </US_NY_address_billing>
-    <US_address_default_shipping>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>John.Doe%isolation%@example.com</email>
-        <company>Magento %isolation%</company>
-        <street>6161 West Centinela Avenue</street>
-        <city>Culver City</city>
-        <region_id>California</region_id>
-        <postcode>90230</postcode>
-        <country_id>United States</country_id>
-        <telephone>555-55-555-55</telephone>
-        <default_billing>Yes</default_billing>
-        <default_shipping>No</default_shipping>
-    </US_address_default_shipping>
-    <default_US_address>
-        <company>Magento %isolation%</company>
-        <street>6161 West Centinela Avenue</street>
-        <city>Culver City</city>
-        <region_id>California</region_id>
-        <postcode>90230</postcode>
-        <country_id>United States</country_id>
-        <telephone>555-55-555-55</telephone>
-        <default_billing>Yes</default_billing>
-        <default_shipping>Yes</default_shipping>
-    </default_US_address>
-    <US_address_without_email>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <company>Magento %isolation%</company>
-        <street>6161 West Centinela Avenue</street>
-        <city>Culver City</city>
-        <region_id>California</region_id>
-        <postcode>90230</postcode>
-        <country_id>United States</country_id>
-        <telephone>555-55-555-55</telephone>
-    </US_address_without_email>
-    <US_address_NY>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>John.Doe%isolation%@example.com</email>
-        <company>Magento %isolation%</company>
-        <street>3222 Cliffside Drive</street>
-        <city>Binghamton</city>
-        <region_id>New York</region_id>
-        <postcode>13901</postcode>
-        <country_id>United States</country_id>
-        <telephone>607-481-7802</telephone>
-        <default_billing>Yes</default_billing>
-        <default_shipping>Yes</default_shipping>
-    </US_address_NY>
-    <US_address_TX>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>John.Doe%isolation%@example.com</email>
-        <company>Magento %isolation%</company>
-        <street>7700 W. Parmer Lane Bldg. D</street>
-        <city>Austin</city>
-        <region_id>Texas</region_id>
-        <postcode>78729 </postcode>
-        <country_id>United States</country_id>
-        <telephone>512-691-4400</telephone>
-        <default_billing>Yes</default_billing>
-        <default_shipping>Yes</default_shipping>
-    </US_address_TX>
-    <customer_US>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <email>JohnDoe_%isolation%@example.com</email>
-        <company>Magento %isolation%</company>
-        <city>Culver City</city>
-        <street>6161 West Centinela Avenue</street>
-        <postcode>90230</postcode>
-        <country_id>United States</country_id>
-        <region_id>California</region_id>
-        <telephone>555-55-555-55</telephone>
-        <fax>555-55-555-55</fax>
-    </customer_US>
-    <customer_UK>
-        <firstname>Jane</firstname>
-        <lastname>Doe</lastname>
-        <email>JaneDoe_%isolation%@example.com</email>
-        <company>Magento %isolation%</company>
-        <city>London</city>
-        <street>172, Westminster Bridge Rd</street>
-        <postcode>SE1 7RW</postcode>
-        <country_id>United Kingdom</country_id>
-        <region>London</region>
-        <telephone>444-44-444-44</telephone>
-        <fax>444-44-444-44</fax>
-    </customer_UK>
-    <address_US_1>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <company>Magento %isolation%</company>
-        <email>John.Doe%isolation%@example.com</email>
-        <city>Culver City</city>
-        <street>6161 West Centinela Avenue</street>
-        <postcode>90230</postcode>
-        <country_id>United States</country_id>
-        <region_id>California</region_id>
-        <telephone>555-55-555-55</telephone>
-    </address_US_1>
-    <address_US_2>
-        <firstname>Billy</firstname>
-        <lastname>Holiday</lastname>
-        <company>Magento %isolation%</company>
-        <email>b.holliday@example.net</email>
-        <city>New York</city>
-        <street>727 5th Ave</street>
-        <postcode>10022</postcode>
-        <country_id>United States</country_id>
-        <region_id>New York</region_id>
-        <telephone>777-77-77-77</telephone>
-    </address_US_2>
-    <address_data_US_1>
-        <firstname>John</firstname>
-        <lastname>Doe</lastname>
-        <company>Magento %isolation%</company>
-        <city>Culver City</city>
-        <street>6161 West Centinela Avenue</street>
-        <postcode>90230</postcode>
-        <country_id>United States</country_id>
-        <region_id>California</region_id>
-        <telephone>555-55-555-55</telephone>
-    </address_data_US_1>
-    <address_DE>
-        <firstname>Jan</firstname>
-        <lastname>Jansen</lastname>
-        <company>Magento %isolation%</company>
-        <city>Berlin</city>
-        <street>Augsburger Strabe 41</street>
-        <postcode>10789</postcode>
-        <country_id>Germany</country_id>
-        <region_id>Berlin</region_id>
-        <telephone>333-33-333-33</telephone>
-    </address_DE>
-    <address_UK>
-        <firstname>Jane</firstname>
-        <lastname>Doe</lastname>
-        <company>Magento %isolation%</company>
-        <city>London</city>
-        <street>172, Westminster Bridge Rd</street>
-        <postcode>SE1 7RW</postcode>
-        <country_id>United Kingdom</country_id>
-        <region_id>London</region_id>
-        <telephone>444-44-444-44</telephone>
-    </address_UK>
-    <address_UK_2>
-        <firstname>Jane</firstname>
-        <lastname>Doe</lastname>
-        <company>Magento %isolation%</company>
-        <city>Manchester</city>
-        <street>42 King Street West</street>
-        <postcode>M3 2WY</postcode>
-        <country_id>United Kingdom</country_id>
-        <region_id>Manchester</region_id>
-        <telephone>444-44-444-44</telephone>
-    </address_UK_2>
-    <address_UK_with_VAT>
-        <firstname>Jane</firstname>
-        <lastname>Doe</lastname>
-        <company>Magento %isolation%</company>
-        <city>London</city>
-        <street>172, Westminster Bridge Rd</street>
-        <postcode>SE1 7RW</postcode>
-        <country_id>United Kingdom</country_id>
-        <region_id>London</region_id>
-        <telephone>444-44-444-44</telephone>
-        <vat_id>584451913</vat_id>
-    </address_UK_with_VAT>
-    <address_US_pay_pal>
-        <firstname>Dmytro</firstname>
-        <lastname>Aponasenko</lastname>
-        <city>Culver City</city>
-        <street>1 Main St</street>
-        <postcode>90230</postcode>
-        <country_id>United States</country_id>
-        <region_id>Culver City</region_id>
-    </address_US_pay_pal>
+<repository>
+    <storage class="Magento\Customer\Test\Repository\AddressInjectable">
+        <dataset name="US_address" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="default_billing" xsi:type="string">Yes</field>
+            <field name="default_shipping" xsi:type="string">Yes</field>
+        </dataset>
+        <dataset name="US_address_default_billing" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="default_billing" xsi:type="string">Yes</field>
+            <field name="default_shipping" xsi:type="string">No</field>
+        </dataset>
+        <dataset name="US_NY_address_billing" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="street" xsi:type="string">6262 Fifth Avenue</field>
+            <field name="city" xsi:type="string">New York</field>
+            <field name="region_id" xsi:type="string">New York</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="default_billing" xsi:type="string">No</field>
+            <field name="default_shipping" xsi:type="string">No</field>
+        </dataset>
+        <dataset name="US_address_default_shipping" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="default_billing" xsi:type="string">Yes</field>
+            <field name="default_shipping" xsi:type="string">No</field>
+        </dataset>
+        <dataset name="default_US_address" >
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="default_billing" xsi:type="string">Yes</field>
+            <field name="default_shipping" xsi:type="string">Yes</field>
+        </dataset>
+        <dataset name="US_address_without_email" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+        </dataset>
+        <dataset name="US_address_NY" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="street" xsi:type="string">3222 Cliffside Drive</field>
+            <field name="city" xsi:type="string">Binghamton</field>
+            <field name="region_id" xsi:type="string">New York</field>
+            <field name="postcode" xsi:type="string">13901</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="telephone" xsi:type="string">607-481-7802</field>
+            <field name="default_billing" xsi:type="string">Yes</field>
+            <field name="default_shipping" xsi:type="string">Yes</field>
+        </dataset>
+        <dataset name="US_address_TX" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="street" xsi:type="string">7700 W. Parmer Lane Bldg. D</field>
+            <field name="city" xsi:type="string">Austin</field>
+            <field name="region_id" xsi:type="string">Texas</field>
+            <field name="postcode" xsi:type="string">78729 </field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="telephone" xsi:type="string">512-691-4400</field>
+            <field name="default_billing" xsi:type="string">Yes</field>
+            <field name="default_shipping" xsi:type="string">Yes</field>
+        </dataset>
+        <dataset name="customer_US" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+            <field name="fax" xsi:type="string">555-55-555-55</field>
+        </dataset>
+        <dataset name="customer_UK" >
+            <field name="firstname" xsi:type="string">Jane</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">London</field>
+            <field name="street" xsi:type="string">172, Westminster Bridge Rd</field>
+            <field name="postcode" xsi:type="string">SE1 7RW</field>
+            <field name="country_id" xsi:type="string">United Kingdom</field>
+            <field name="region" xsi:type="string">London</field>
+            <field name="telephone" xsi:type="string">444-44-444-44</field>
+            <field name="fax" xsi:type="string">444-44-444-44</field>
+        </dataset>
+        <dataset name="address_US_1" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+        </dataset>
+        <dataset name="address_US_2" >
+            <field name="firstname" xsi:type="string">Billy</field>
+            <field name="lastname" xsi:type="string">Holiday</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="email" xsi:type="string">b.holliday@example.net</field>
+            <field name="city" xsi:type="string">New York</field>
+            <field name="street" xsi:type="string">727 5th Ave</field>
+            <field name="postcode" xsi:type="string">10022</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">New York</field>
+            <field name="telephone" xsi:type="string">777-77-77-77</field>
+        </dataset>
+        <dataset name="address_data_US_1" >
+            <field name="firstname" xsi:type="string">John</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">California</field>
+            <field name="telephone" xsi:type="string">555-55-555-55</field>
+        </dataset>
+        <dataset name="address_DE" >
+            <field name="firstname" xsi:type="string">Jan</field>
+            <field name="lastname" xsi:type="string">Jansen</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Berlin</field>
+            <field name="street" xsi:type="string">Augsburger Strabe 41</field>
+            <field name="postcode" xsi:type="string">10789</field>
+            <field name="country_id" xsi:type="string">Germany</field>
+            <field name="region_id" xsi:type="string">Berlin</field>
+            <field name="telephone" xsi:type="string">333-33-333-33</field>
+        </dataset>
+        <dataset name="address_UK" >
+            <field name="firstname" xsi:type="string">Jane</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">London</field>
+            <field name="street" xsi:type="string">172, Westminster Bridge Rd</field>
+            <field name="postcode" xsi:type="string">SE1 7RW</field>
+            <field name="country_id" xsi:type="string">United Kingdom</field>
+            <field name="region_id" xsi:type="string">London</field>
+            <field name="telephone" xsi:type="string">444-44-444-44</field>
+        </dataset>
+        <dataset name="address_UK_2" >
+            <field name="firstname" xsi:type="string">Jane</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">Manchester</field>
+            <field name="street" xsi:type="string">42 King Street West</field>
+            <field name="postcode" xsi:type="string">M3 2WY</field>
+            <field name="country_id" xsi:type="string">United Kingdom</field>
+            <field name="region_id" xsi:type="string">Manchester</field>
+            <field name="telephone" xsi:type="string">444-44-444-44</field>
+        </dataset>
+        <dataset name="address_UK_with_VAT" >
+            <field name="firstname" xsi:type="string">Jane</field>
+            <field name="lastname" xsi:type="string">Doe</field>
+            <field name="company" xsi:type="string">Magento %isolation%</field>
+            <field name="city" xsi:type="string">London</field>
+            <field name="street" xsi:type="string">172, Westminster Bridge Rd</field>
+            <field name="postcode" xsi:type="string">SE1 7RW</field>
+            <field name="country_id" xsi:type="string">United Kingdom</field>
+            <field name="region_id" xsi:type="string">London</field>
+            <field name="telephone" xsi:type="string">444-44-444-44</field>
+            <field name="vat_id" xsi:type="string">584451913</field>
+        </dataset>
+        <dataset name="address_US_pay_pal" >
+            <field name="firstname" xsi:type="string">Dmytro</field>
+            <field name="lastname" xsi:type="string">Aponasenko</field>
+            <field name="city" xsi:type="string">Culver City</field>
+            <field name="street" xsi:type="string">1 Main St</field>
+            <field name="postcode" xsi:type="string">90230</field>
+            <field name="country_id" xsi:type="string">United States</field>
+            <field name="region_id" xsi:type="string">Culver City</field>
+        </dataset>
+    </storage>
 </repository>
