@@ -30,6 +30,11 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
      */
     private $design;
 
+    /**
+     * @var \Magento\Framework\View\Design\ThemeInterface
+     */
+    private $baseTheme;
+
     protected function setUp()
     {
         $om = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager();
@@ -37,6 +42,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
         $this->explicitFallback = $om->get('Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple');
         $this->themeRepo = $om->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
         $this->design = $om->get('Magento\Framework\View\DesignInterface');
+        $this->baseTheme = $om->get('Magento\Framework\View\Design\ThemeInterface');
     }
 
     /**
@@ -125,6 +131,9 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
      */
     private function getStaticFile($area, $theme, $locale, $filePath, $module, $isExplicit = false)
     {
+        if ($area == 'base') {
+            $theme = $this->baseTheme;
+        }
         if (!is_object($theme)) {
             $themePath = $theme ?: $this->getDefaultThemePath($area);
             $theme = $this->themeRepo->create($themePath, $area);
