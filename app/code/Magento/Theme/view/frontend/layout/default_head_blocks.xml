@@ -15,7 +15,6 @@
         Detail: http://requirejs.org/docs/jquery.html#noconflictmap
         */ -->
         <script src="jquery/jquery.js"/>
-        <script src="app-config.js"/>
     </head>
     <body>
         <referenceContainer name="after.body.start">
