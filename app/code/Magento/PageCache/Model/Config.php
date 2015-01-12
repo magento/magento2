@@ -117,16 +117,16 @@ class Config
     protected function _getReplacements()
     {
         return [
-            '{{ host }}' => $this->_scopeConfig->getValue(
+            '/* {{ host }} */' => $this->_scopeConfig->getValue(
                 self::XML_VARNISH_PAGECACHE_BACKEND_HOST,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ),
-            '{{ port }}' => $this->_scopeConfig->getValue(
+            '/* {{ port }} */' => $this->_scopeConfig->getValue(
                 self::XML_VARNISH_PAGECACHE_BACKEND_PORT,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ),
-            '{{ ips }}' => $this->_getAccessList(),
-            '{{ design_exceptions_code }}' => $this->_getDesignExceptions()
+            '/* {{ ips }} */' => $this->_getAccessList(),
+            '/* {{ design_exceptions_code }} */' => $this->_getDesignExceptions()
         ];
     }
 

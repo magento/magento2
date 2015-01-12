@@ -2,12 +2,12 @@ import std;
 # The minimal Varnish version is 3.0.5
 
 backend default {
-    .host = "{{ host }}";
-    .port = "{{ port }}";
+    .host = "/* {{ host }} */";
+    .port = "/* {{ port }} */";
 }
 
 acl purge {
-{{ ips }}
+/* {{ ips }} */
 }
 
 sub vcl_recv {
@@ -68,7 +68,7 @@ sub vcl_hash {
     if (req.http.cookie ~ "X-Magento-Vary=") {
         hash_data(regsub(req.http.cookie, "^.*?X-Magento-Vary=([^;]+);*.*$", "\1"));
     }
-    {{ design_exceptions_code }}
+    /* {{ design_exceptions_code }} */
 }
 
 sub vcl_fetch {
