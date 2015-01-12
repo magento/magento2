@@ -34,10 +34,12 @@ class RepositoryScanner implements ScannerInterface
                     if (!class_exists($replacementType->nodeValue)) {
                         $persistor = str_replace('\\Repository', 'InterfacePersistor', $replacementType->nodeValue);
                         $factory = str_replace('\\Repository', 'InterfaceFactory', $replacementType->nodeValue);
+                        $dataBuilder = str_replace('\\Repository', 'DataBuilder', $replacementType->nodeValue);
                         $searchResultFactory
                             = str_replace('\\Repository', 'SearchResultInterfaceFactory', $replacementType->nodeValue);
                         $repositoryClassNames[$persistor] = $persistor;
                         $repositoryClassNames[$factory] = $factory;
+                        $repositoryClassNames[$dataBuilder] = $dataBuilder;
                         $repositoryClassNames[$searchResultFactory] = $searchResultFactory;
                         $repositoryClassNames[$replacementType->nodeValue] = $replacementType->nodeValue;
                     }
