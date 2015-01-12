@@ -7,7 +7,6 @@ $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
     'Magento\Catalog\Model\Resource\Setup',
     ['resourceName' => 'catalog_setup']
 );
-require __DIR__ . '/categories_rollback.php';
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
@@ -20,3 +19,6 @@ $productCollection->load()->delete();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
+
+
+require __DIR__ . '/categories_rollback.php';

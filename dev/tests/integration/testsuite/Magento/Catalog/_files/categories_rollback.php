@@ -18,7 +18,7 @@ $collection->addAttributeToSelect('id')->load()->delete();
 $collection = $objectManager->create('Magento\Catalog\Model\Resource\Category\Collection');
 $collection
     ->addAttributeToFilter('entity_id', ['gt' => 2])
-    ->addAttributeToSelect('entity_id')
+    ->setOrder('entity_id', \Zend_Db_Select::SQL_DESC)
     ->load()
     ->delete();
 
