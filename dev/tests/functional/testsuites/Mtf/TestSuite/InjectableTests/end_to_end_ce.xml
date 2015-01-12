@@ -37,6 +37,7 @@
             <!--Customer-->
             <class value="Magento\Customer\Test\TestCase\BackendCustomerCreateTest" />
             <class value="Magento\Customer\Test\TestCase\RegisterCustomerFrontendEntityTest" />
+            <class value="Magento\Customer\Test\TestCase\UpdateCustomerFrontendEntity" />
             <!--Review-->
             <class value="Magento\Review\Test\TestCase\CreateProductReviewFrontendEntityTest" />
             <!--Tax-->
