@@ -143,6 +143,7 @@ class Source extends AbstractEav
             $subSelect->where('d.entity_id IN(?)', $entityIds);
         }
 
+        $ifNullSql = $adapter->getIfNullSql('pis.value', 'pid.value');
         /**@var $select \Magento\Framework\DB\Select*/
         $select = $adapter->select()->distinct(true)->from(
             ['pid' => new \Zend_Db_Expr(sprintf('(%s)', $subSelect->assemble()))],
@@ -156,14 +157,14 @@ class Source extends AbstractEav
                 'pid.entity_id',
                 'pid.attribute_id',
                 'pid.store_id',
-                'value' => $adapter->getIfNullSql('pis.value', 'pid.value'),
+                'value' => $ifNullSql,
             ]
         )->where(
             'pid.attribute_id IN(?)',
             $attrIds
         );
 
-        $select->where($this->_resourceHelper->getIsNullNotNullCondition('pis.value', 'pid.value'));
+        $select->where($ifNullSql . ' IS NOT NULL');
 
         /**
          * Exclude attribute values that contains NULL

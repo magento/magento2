@@ -93,7 +93,7 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
                     'onclick' => "categoryDelete('" . $this->getUrl(
                         'catalog/*/delete',
                         ['_current' => true]
-                    ) . "', true, {$categoryId})",
+                    ) . "')",
                     'class' => 'delete'
                 ]
             );
