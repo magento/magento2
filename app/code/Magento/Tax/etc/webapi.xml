@@ -30,7 +30,7 @@
             <resource ref="Magento_Tax::manage_tax"/>
         </resources>
     </route>
-    <route url="/V1/taxRate/search" method="PUT">
+    <route url="/V1/taxRate/search" method="GET">
         <service class="Magento\Tax\Api\TaxRateRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Tax::manage_tax"/>
@@ -60,7 +60,7 @@
             <resource ref="Magento_Tax::manage_tax"/>
         </resources>
     </route>
-    <route url="/V1/taxRules/search" method="PUT">
+    <route url="/V1/taxRules/search" method="GET">
         <service class="Magento\Tax\Api\TaxRuleRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Tax::manage_tax"/>
@@ -90,7 +90,7 @@
             <resource ref="Magento_Tax::manage_tax"/>
         </resources>
     </route>
-    <route url="/V1/taxClass/search" method="PUT">
+    <route url="/V1/taxClass/search" method="GET">
         <service class="Magento\Tax\Api\TaxClassRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Tax::manage_tax"/>

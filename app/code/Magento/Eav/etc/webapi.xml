@@ -6,7 +6,7 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
-    <route url="/V1/eav/attribute-sets/list" method="PUT">
+    <route url="/V1/eav/attribute-sets/list" method="GET">
         <service class="Magento\Eav\Api\AttributeSetRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Catalog::sets"/>
