@@ -43,7 +43,7 @@ class ExportVarnishConfig extends \Magento\Backend\App\Action
     public function execute()
     {
         $fileName = 'varnish.vcl';
-        $content = $this->config->getVclFile();
+        $content = $this->config->getVclFile(\Magento\PageCache\Model\Config::VARNISH_3_CONFIGURATION_PATH);
         return $this->fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }
 }

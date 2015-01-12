@@ -49,9 +49,14 @@ class Config
     protected $_scopeConfig;
 
     /**
-     * XML path to value for saving temporary .vcl configuration
+     * XML path to Varnish 3 config template path
      */
-    const VARNISH_CONFIGURATION_PATH = 'system/full_page_cache/varnish/path';
+    const VARNISH_3_CONFIGURATION_PATH = 'system/full_page_cache/varnish3/path';
+
+    /**
+     * XML path to Varnish 4 config template path
+     */
+    const VARNISH_4_CONFIGURATION_PATH = 'system/full_page_cache/varnish4/path';
 
     /**
      * @var \Magento\Framework\App\Cache\StateInterface $_cacheState
@@ -101,11 +106,12 @@ class Config
     /**
      * Return generated varnish.vcl configuration file
      *
+     * @param string $vclTemplatePath
      * @return string
      */
-    public function getVclFile()
+    public function getVclFile($vclTemplatePath)
     {
-        $data = $this->_modulesDirectory->readFile($this->_scopeConfig->getValue(self::VARNISH_CONFIGURATION_PATH));
+        $data = $this->_modulesDirectory->readFile($this->_scopeConfig->getValue($vclTemplatePath));
         return strtr($data, $this->_getReplacements());
     }
 
