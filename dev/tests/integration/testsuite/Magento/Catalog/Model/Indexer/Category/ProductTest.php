@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Category;
 /**
  * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
  * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
