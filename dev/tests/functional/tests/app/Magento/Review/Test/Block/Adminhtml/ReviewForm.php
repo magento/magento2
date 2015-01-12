@@ -8,7 +8,6 @@ namespace Magento\Review\Test\Block\Adminhtml;
 use Magento\Backend\Test\Block\Widget\Form;
 use Mtf\Client\Element\Locator;
 
-use Magento\Review\Test\Fixture\Review;
 /**
  * Class Edit
  * Review edit form
