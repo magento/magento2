@@ -55,7 +55,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
     protected $severeness = 'high';
 
     /**
-     * Implementation getCategoryPrices
+     * Implementation for get category prices function
      *
      * @param string $productName
      * @param array $actualPrices
@@ -64,7 +64,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
     abstract protected function getCategoryPrices($productName, $actualPrices);
 
     /**
-     * Implementation getProductPagePrices
+     * Implementation for get product page prices function
      *
      * @param array $actualPrices
      * @return array
@@ -72,7 +72,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
     abstract protected function getProductPagePrices($actualPrices);
 
     /**
-     * Implementation getTotals
+     * Implementation for get totals in cart function
      *
      * @param array $actualPrices
      * @return array

@@ -40,7 +40,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
     protected $severeness = 'high';
 
     /**
-     * Implementation getReviewTotals
+     * Implementation for get order review total prices function
      *
      * @param array $actualPrices
      * @return array
@@ -48,7 +48,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
     abstract protected function getReviewTotals($actualPrices);
 
     /**
-     * Implementation getOrderTotals
+     * Implementation for get order total prices from customer account function
      *
      * @param array $actualPrices
      * @return array

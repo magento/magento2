@@ -46,7 +46,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     protected $severeness = 'high';
 
     /**
-     * Implementation assert
+     * Implementation for get order total prices function
      *
      * @param array $actualPrices
      * @return array
@@ -54,7 +54,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     abstract protected function getOrderTotals($actualPrices);
 
     /**
-     * Implementation assert
+     * Implementation for get invoice creation page total prices function
      *
      * @param array $actualPrices
      * @return array
@@ -62,7 +62,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     abstract protected function getInvoiceNewTotals($actualPrices);
 
     /**
-     * Implementation getCreditMemoNewTotals
+     * Implementation for get credit memo creation page total prices function
      *
      * @param array $actualPrices
      * @return array
