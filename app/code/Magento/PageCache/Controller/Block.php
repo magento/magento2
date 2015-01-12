@@ -9,6 +9,22 @@ namespace Magento\PageCache\Controller;
 class Block extends \Magento\Framework\App\Action\Action
 {
     /**
+     * @var \Magento\Framework\Translate\InlineInterface
+     */
+    protected $translateInline;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Translate\InlineInterface $translateInline
+    ) {
+        parent::__construct($context);
+        $this->translateInline = $translateInline;
+    }
+
+    /**
      * Get blocks from layout by handles
      *
      * @return array [\Element\BlockInterface]

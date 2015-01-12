@@ -5,6 +5,7 @@
 var config = {
     map: {
         '*': {
+            editTrigger:        'mage/edit-trigger',
             translateInline:    'mage/translate-inline',
             form:               'mage/backend/form',
             button:             'mage/backend/button',

@@ -26,6 +26,7 @@ class Render extends \Magento\PageCache\Controller\Block
         }
 
         $this->getResponse()->setPrivateHeaders(\Magento\PageCache\Helper\Data::PRIVATE_MAX_AGE_CACHE);
+        $this->translateInline->processResponseBody($data);
         $this->getResponse()->appendBody(json_encode($data));
     }
 }

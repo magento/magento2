@@ -175,7 +175,9 @@ class Layout extends AbstractResult
      */
     protected function render(ResponseInterface $response)
     {
-        $response->appendBody($this->layout->getOutput());
+        $output = $this->layout->getOutput();
+        $this->translateInline->processResponseBody($output);
+        $response->appendBody($output);
         return $this;
     }
 }

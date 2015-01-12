@@ -27,6 +27,7 @@ class Esi extends \Magento\PageCache\Controller\Block
                 $response->setHeader('X-Magento-Tags', implode(',', $blockInstance->getIdentities()));
             }
         }
+        $this->translateInline->processResponseBody($html);
         $response->appendBody($html);
         $response->setPublicHeaders($ttl);
     }
