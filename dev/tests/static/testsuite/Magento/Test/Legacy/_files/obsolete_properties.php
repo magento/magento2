@@ -290,7 +290,7 @@ return [
     ['_storeManager', 'Magento\Translation\Model\Resource\String'],
     ['_isVdeRequest', 'Magento\DesignEditor\Helper\Data'],
     ['_translator', 'Magento\Framework\Phrase\Renderer\Translate', 'translator'],
-    ['_translator', 'Magento\Core\Model\Validator\Factory'],
+    ['_translator', 'Magento\Framework\Validator\Factory'],
     ['_configFactory', 'Magento\Core\Model\App\Emulation', 'inlineConfig'],
     ['_scopeConfig', 'Magento\Translation\Model\Inline\Config', 'config'],
     ['_translate', 'Magento\Directory\Model\Observer'],

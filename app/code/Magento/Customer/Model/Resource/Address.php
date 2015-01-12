@@ -12,7 +12,7 @@ use Magento\Framework\Exception\InputException;
 class Address extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
-     * @var \Magento\Core\Model\Validator\Factory
+     * @var \Magento\Framework\Validator\Factory
      */
     protected $_validatorFactory;
 
@@ -28,7 +28,7 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\Validator\Factory $validatorFactory
+     * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
      */
@@ -39,7 +39,7 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\Validator\Factory $validatorFactory,
+        \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         $data = []
     ) {

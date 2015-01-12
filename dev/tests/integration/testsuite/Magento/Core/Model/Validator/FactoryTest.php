@@ -1,6 +1,6 @@
 <?php
 /**
- * Integration test for \Magento\Core\Model\Validator\Factory
+ * Integration test for \Magento\Framework\Validator\Factory
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -17,8 +17,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testGetValidatorConfig()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Core\Model\Validator\Factory $factory */
-        $factory = $objectManager->get('Magento\Core\Model\Validator\Factory');
+        /** @var \Magento\Framework\Validator\Factory $factory */
+        $factory = $objectManager->get('Magento\Framework\Validator\Factory');
         $this->assertInstanceOf('Magento\Framework\Validator\Config', $factory->getValidatorConfig());
         // Check that default translator was set
         $translator = \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator();
