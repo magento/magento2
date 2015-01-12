@@ -42,7 +42,7 @@
             <!--Tax-->
             <class value="Magento\Tax\Test\TestCase\TaxRuleTest" />
             <!--Assign products to a category-->
-            <class value="Magento\Catalog\Test\TestCase\Category\AssignProductTest" />
+            <class value="Magento\Catalog\Test\TestCase\Category\CreateCategoryEntityTest" />
         </allow>
     </rule>
     <rule scope="variation">

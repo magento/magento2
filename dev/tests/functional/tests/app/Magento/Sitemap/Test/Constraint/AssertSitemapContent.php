@@ -5,7 +5,7 @@
 
 namespace Magento\Sitemap\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Cms\Test\Fixture\CmsPage;
 use Magento\Sitemap\Test\Fixture\Sitemap;
@@ -29,7 +29,7 @@ class AssertSitemapContent extends AbstractConstraint
      *  - CMS page url
      *
      * @param CatalogProductSimple $product
-     * @param CatalogCategory $catalog
+     * @param Category $catalog
      * @param CmsPage $cmsPage
      * @param Sitemap $sitemap
      * @param SitemapIndex $sitemapIndex
@@ -37,7 +37,7 @@ class AssertSitemapContent extends AbstractConstraint
      */
     public function processAssert(
         CatalogProductSimple $product,
-        CatalogCategory $catalog,
+        Category $catalog,
         CmsPage $cmsPage,
         Sitemap $sitemap,
         SitemapIndex $sitemapIndex

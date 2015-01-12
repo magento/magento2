@@ -5,7 +5,7 @@
 
 namespace Magento\Store\Test\Fixture\StoreGroup;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
 
@@ -30,9 +30,9 @@ class CategoryId implements FixtureInterface
     protected $params;
 
     /**
-     * CatalogCategory fixture
+     * Category fixture
      *
-     * @var CatalogCategory
+     * @var Category
      */
     protected $category;
 
@@ -47,8 +47,8 @@ class CategoryId implements FixtureInterface
     {
         $this->params = $params;
         if (isset($data['dataSet'])) {
-            $category = $fixtureFactory->createByCode('catalogCategory', ['dataSet' => $data['dataSet']]);
-            /** @var CatalogCategory $category */
+            $category = $fixtureFactory->createByCode('category', ['dataSet' => $data['dataSet']]);
+            /** @var Category $category */
             if (!$category->getId()) {
                 $category->persist();
             }
@@ -91,9 +91,9 @@ class CategoryId implements FixtureInterface
     }
 
     /**
-     * Return CatalogCategory fixture
+     * Return Category fixture
      *
-     * @return CatalogCategory
+     * @return Category
      */
     public function getCategory()
     {

@@ -5,157 +5,357 @@
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\Factory\Factory;
-use Mtf\Fixture\DataFixture;
-use Mtf\System\Config;
+use Mtf\Fixture\InjectableFixture;
 
 /**
- * Class Category
+ * Class CatalogCategory
+ * Category fixture
  *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class Category extends DataFixture
+class Category extends InjectableFixture
 {
     /**
-     * Attribute set for mapping data into ui tabs
+     * @var string
      */
-    const GROUP_GENERAL_INFORMATION = 'general_information';
-    const GROUP_DISPLAY_SETTINGS = 'display_setting';
+    protected $repositoryClass = 'Magento\Catalog\Test\Repository\Category';
 
     /**
-     * Contains categories that are needed to create next category
-     *
-     * @var array
+     * @var string
      */
-    protected $_categories;
+    protected $handlerInterface = 'Magento\Catalog\Test\Handler\Category\CategoryInterface';
 
-    /**
-     * Custom constructor to create category with custom parent category
-     *
-     * @param Config $configuration
-     * @param array $placeholders
-     */
-    public function __construct(Config $configuration, $placeholders = [])
+    protected $defaultDataSet = [
+        'name' => 'Category%isolation%',
+        'path' => 'Default Category',
+        'url_key' => 'category%isolation%',
+        'is_active' => 'Yes',
+        'include_in_menu' => 'Yes',
+        'parent_id' => 2,
+    ];
+
+    protected $entity_id = [
+        'attribute_code' => 'entity_id',
+        'backend_type' => 'int',
+        'is_required' => '1',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $entity_type_id = [
+        'attribute_code' => 'entity_type_id',
+        'backend_type' => 'smallint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+    ];
+
+    protected $attribute_set_id = [
+        'attribute_code' => 'attribute_set_id',
+        'backend_type' => 'smallint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+    ];
+
+    protected $description = [
+        'attribute_code' => 'description',
+        'backend_type' => 'text',
+        'is_required' => '0',
+        'default_value' => '',
+        'input' => 'textarea',
+        'group' => 'general_information',
+    ];
+
+    protected $parent_id = [
+        'attribute_code' => 'parent_id',
+        'backend_type' => 'int',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+        'group' => null,
+        'source' => 'Magento\Catalog\Test\Fixture\Category\ParentId',
+    ];
+
+    protected $created_at = [
+        'attribute_code' => 'created_at',
+        'backend_type' => 'timestamp',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $updated_at = [
+        'attribute_code' => 'updated_at',
+        'backend_type' => 'timestamp',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $path = [
+        'attribute_code' => 'path',
+        'backend_type' => 'varchar',
+        'is_required' => '',
+        'default_value' => '',
+        'group' => null,
+        'input' => '',
+    ];
+
+    protected $position = [
+        'attribute_code' => 'position',
+        'backend_type' => 'int',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $level = [
+        'attribute_code' => 'level',
+        'backend_type' => 'int',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+    ];
+
+    protected $children_count = [
+        'attribute_code' => 'children_count',
+        'backend_type' => 'int',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $available_product_listing_config = [
+        'attribute_code' => 'available_product_listing_config',
+        'backend_type' => 'int',
+        'is_required' => '',
+        'default_value' => '',
+        'group' => 'display_setting',
+        'input' => 'checkbox',
+    ];
+
+    protected $available_sort_by = [
+        'attribute_code' => 'available_sort_by',
+        'backend_type' => 'varchar',
+        'is_required' => '0',
+        'default_value' => '',
+        'group' => 'display_setting',
+        'input' => 'multiselect',
+    ];
+
+    protected $default_product_listing_config = [
+        'attribute_code' => 'default_product_listing_config',
+        'backend_type' => 'varchar',
+        'is_required' => '0',
+        'default_value' => '',
+        'group' => 'display_setting',
+        'input' => 'checkbox',
+    ];
+
+    protected $default_sort_by = [
+        'attribute_code' => 'default_sort_by',
+        'backend_type' => 'varchar',
+        'is_required' => '0',
+        'default_value' => '',
+        'group' => 'display_setting',
+        'input' => 'select',
+    ];
+
+    protected $meta_title = [
+        'attribute_code' => 'meta_title',
+        'backend_type' => 'text',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+        'group' => 'general_information',
+    ];
+
+    protected $id = [
+        'attribute_code' => 'id',
+        'backend_type' => 'virtual',
+        'group' => null,
+    ];
+
+    protected $name = [
+        'attribute_code' => 'name',
+        'backend_type' => 'virtual',
+        'group' => 'general_information',
+    ];
+
+    protected $is_active = [
+        'attribute_code' => 'is_active',
+        'backend_type' => 'virtual',
+        'group' => 'general_information',
+    ];
+
+    protected $is_anchor = [
+        'attribute_code' => 'is_anchor',
+        'backend_type' => 'virtual',
+        'group' => 'display_setting',
+    ];
+
+    protected $url_key = [
+        'attribute_code' => 'url_key',
+        'backend_type' => 'virtual',
+        'group' => 'general_information',
+    ];
+
+    protected $include_in_menu = [
+        'attribute_code' => 'include_in_menu',
+        'backend_type' => 'virtual',
+        'group' => 'general_information',
+    ];
+
+    protected $landing_page = [
+        'attribute_code' => 'landing_page',
+        'backend_type' => 'virtual',
+        'input' => 'select',
+        'group' => 'display_setting',
+        'source' => '\Magento\Catalog\Test\Fixture\Category\LandingPage'
+    ];
+
+    protected $display_mode = [
+        'attribute_code' => 'display_mode',
+        'backend_type' => 'virtual',
+        'input' => 'select',
+        'group' => 'display_setting',
+    ];
+
+    protected $category_products = [
+        'attribute_code' => 'category_products',
+        'backend_type' => 'virtual',
+        'group' => 'category_products',
+        'source' => 'Magento\Catalog\Test\Fixture\Category\CategoryProducts',
+    ];
+
+    public function getEntityId()
     {
-        parent::__construct($configuration, $placeholders);
-
-        $this->_placeholders['men::getCategoryName'] = [$this, '_categoryProvider'];
-        $this->_placeholders['men::getCategoryId'] = [$this, '_categoryProvider'];
+        return $this->getData('entity_id');
     }
 
-    /**
-     * Create category needed for placeholders in data and call method for placeholder
-     *
-     * @param string $placeholder
-     * @return string
-     */
-    protected function _categoryProvider($placeholder)
+    public function getEntityTypeId()
     {
-        list($key, $method) = explode('::', $placeholder);
-        if (!isset($this->_categories[$key])) {
-            $category = Factory::getFixtureFactory()->getMagentoCatalogCategory();
-            $category->switchData($key);
-            $category->persist();
-            $this->_categories[$key] = $category;
-        }
-
-        return is_callable([$this->_categories[$key], $method]) ? $this->_categories[$key]->$method() : '';
+        return $this->getData('entity_type_id');
     }
 
-    /**
-     * Get product name
-     *
-     * @return string
-     */
-    public function getCategoryName()
+    public function getAttributeSetId()
     {
-        return $this->getData('fields/name/value');
+        return $this->getData('attribute_set_id');
     }
 
-    /**
-     * Get product name
-     *
-     * @return string
-     */
-    public function getCategoryId()
+    public function getDescription()
     {
-        return $this->getData('fields/category_id/value');
+        return $this->getData('description');
     }
 
-    /**
-     * Create category
-     *
-     * @return Category
-     */
-    public function persist()
+    public function getParentId()
     {
-        $id = Factory::getApp()->magentoCatalogCreateCategory($this);
-        $this->_data['fields']['category_id']['value'] = $id;
-        return $this;
+        return $this->getData('parent_id');
     }
 
-    /**
-     * {inheritdoc}
-     */
-    protected function _initData()
+    public function getCreatedAt()
     {
-        $this->_dataConfig = [
-            'constraint' => 'Success',
-            'request_params' => [
-                'store' => '0',
-            ],
-            'input_prefix' => 'general',
-        ];
-
-        $this->_data = [
-            'fields' => [
-                'name' => [
-                    'value' => 'Subcategory %isolation%',
-                    'group' => static::GROUP_GENERAL_INFORMATION,
-                ],
-                'is_active' => [
-                    'value' => 'Yes',
-                    'input_value' => '1',
-                    'group' => static::GROUP_GENERAL_INFORMATION,
-                    'input' => 'select',
-                ],
-                'include_in_menu' => [
-                    'value' => 'Yes',
-                    'input_value' => '1',
-                    'group' => static::GROUP_GENERAL_INFORMATION,
-                    'input' => 'select',
-                ],
-                'use_config_group_5available_sort_by' => [
-                    'value' => '',
-                    'input_name' => 'use_config[0]',
-                    'input_value' => 'available_sort_by',
-                    'group' => static::GROUP_DISPLAY_SETTINGS,
-                    'input' => 'checkbox',
-                ],
-                'use_config_group_5default_sort_by' => [
-                    'value' => '',
-                    'input_name' => 'use_config[1]',
-                    'input_value' => 'default_sort_by',
-                    'group' => static::GROUP_DISPLAY_SETTINGS,
-                    'input' => 'checkbox',
-                ],
-            ],
-            'category_path' =>  [
-                'value' => 'Default Category',
-                'input_value' => '2',
-            ],
-        ];
-
-        $this->_repository = Factory::getRepositoryFactory()
-            ->getMagentoCatalogCategory($this->_dataConfig, $this->_data);
+        return $this->getData('created_at');
     }
 
-    /**
-     * Get path where to create new category
-     *
-     * @return string
-     */
-    public function getCategoryPath()
+    public function getUpdatedAt()
     {
-        return $this->getData('category_path/value');
+        return $this->getData('updated_at');
+    }
+
+    public function getPath()
+    {
+        return $this->getData('path');
+    }
+
+    public function getPosition()
+    {
+        return $this->getData('position');
+    }
+
+    public function getLevel()
+    {
+        return $this->getData('level');
+    }
+
+    public function getChildrenCount()
+    {
+        return $this->getData('children_count');
+    }
+
+    public function getAvailableProductListingConfig()
+    {
+        return $this->getData('available_product_listing_config');
+    }
+
+    public function getAvailableSortBy()
+    {
+        return $this->getData('available_sort_by');
+    }
+
+    public function getDefaultProductListingConfig()
+    {
+        return $this->getData('default_product_listing_config');
+    }
+
+    public function getDefaultSortBy()
+    {
+        return $this->getData('default_sort_by');
+    }
+
+    public function getMetaTitle()
+    {
+        return $this->getData('meta_title');
+    }
+
+    public function getId()
+    {
+        return $this->getData('id');
+    }
+
+    public function getName()
+    {
+        return $this->getData('name');
+    }
+
+    public function getIsActive()
+    {
+        return $this->getData('is_active');
+    }
+
+    public function getIsAnchor()
+    {
+        return $this->getData('is_anchor');
+    }
+
+    public function getUrlKey()
+    {
+        return $this->getData('url_key');
+    }
+
+    public function getIncludeInMenu()
+    {
+        return $this->getData('include_in_menu');
+    }
+
+    public function getLandingPage()
+    {
+        return $this->getData('landing_page');
+    }
+
+    public function getDisplayMode()
+    {
+        return $this->getData('display_mode');
+    }
+
+    public function getCategoryProducts()
+    {
+        return $this->getData('category_products');
+    }
+
+    public function getBlockId()
+    {
+        return $this->getData('block_id');
     }
 }

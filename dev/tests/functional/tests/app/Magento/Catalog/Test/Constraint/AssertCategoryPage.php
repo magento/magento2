@@ -5,15 +5,15 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Fixture\Category\LandingPage;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureFactory;
 
 /**
- * Class AssertCategoryPage
- * Assert that displayed category data on category page equals to passed from fixture
+ * Assert that displayed category data on category page equals to passed from fixture.
  */
 class AssertCategoryPage extends AbstractConstraint
 {
@@ -21,19 +21,24 @@ class AssertCategoryPage extends AbstractConstraint
     const SEVERITY = 'low';
     /* end tags */
 
+    protected $visibleCmsBlockMode = [
+        'Static block only',
+        'Static block and products'
+    ];
+
     /**
-     * Assert that displayed category data on category page equals to passed from fixture
+     * Assert that displayed category data on category page equals to passed from fixture.
      *
-     * @param CatalogCategory $category
-     * @param CatalogCategory $initialCategory
+     * @param Category $category
+     * @param Category $initialCategory
      * @param FixtureFactory $fixtureFactory
      * @param CatalogCategoryView $categoryView
      * @param Browser $browser
      * @return void
      */
     public function processAssert(
-        CatalogCategory $category,
-        CatalogCategory $initialCategory,
+        Category $category,
+        Category $initialCategory,
         FixtureFactory $fixtureFactory,
         CatalogCategoryView $categoryView,
         Browser $browser
@@ -50,14 +55,19 @@ class AssertCategoryPage extends AbstractConstraint
             ]
         );
         $categoryData = array_merge($initialCategory->getData(), $category->getData());
+        $categoryUrlKey = $category->hasData('url_key')
+            ? strtolower($category->getUrlKey())
+            : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
+        $categoryUrl = $_ENV['app_frontend_url'] . $categoryUrlKey . '.html';
+
         $product->persist();
-        $url = $_ENV['app_frontend_url'] . strtolower($category->getUrlKey()) . '.html';
-        $browser->open($url);
+        $browser->open($categoryUrl);
+
         \PHPUnit_Framework_Assert::assertEquals(
-            $url,
+            $categoryUrl,
             $browser->getUrl(),
             'Wrong page URL.'
-            . "\nExpected: " . $url
+            . "\nExpected: " . $categoryUrl
             . "\nActual: " . $browser->getUrl()
         );
 
@@ -80,6 +90,25 @@ class AssertCategoryPage extends AbstractConstraint
                 'Wrong category description.'
                 . "\nExpected: " . $categoryData['description']
                 . "\nActual: " . $description
+            );
+        }
+
+        if (
+            isset($categoryData['landing_page'])
+            && isset($categoryData['display_mode'])
+            && in_array($categoryData['display_mode'], $this->visibleCmsBlockMode)
+        ) {
+            /** @var LandingPage $sourceLandingPage */
+            $sourceLandingPage = $category->getDataFieldConfig('landing_page')['source'];
+            $fixtureContent = $sourceLandingPage->getCmsBlock()->getContent();
+            $pageContent = $categoryView->getViewBlock()->getContent();
+
+            \PHPUnit_Framework_Assert::assertEquals(
+                $fixtureContent,
+                $pageContent,
+                'Wrong category landing page content.'
+                . "\nExpected: " . $fixtureContent
+                . "\nActual: " . $pageContent
             );
         }
 
@@ -117,7 +146,7 @@ class AssertCategoryPage extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

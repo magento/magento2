@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Magento\Catalog\Test\Fixture\CatalogCategory;
+namespace Magento\Catalog\Test\Fixture\Category;
 
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
@@ -45,7 +45,7 @@ class CategoryProducts implements FixtureInterface
     {
         $this->params = $params;
         if (!empty($data['dataSet']) && $data['dataSet'] !== '-') {
-            $dataSet = explode(',', $data['dataSet']);
+            $dataSet = array_map('trim', explode(',', $data['dataSet']));
             foreach ($dataSet as $value) {
                 $explodeValue = explode('::', $value);
                 $product = $fixtureFactory->createByCode($explodeValue[0], ['dataSet' => $explodeValue[1]]);

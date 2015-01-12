@@ -151,9 +151,7 @@ class ProductForm extends FormTabs
                 $category = reset($categories);
             }
             if ($category) {
-                $tabs['product-details']['category_ids']['value'] = ($category instanceof InjectableFixture)
-                    ? $category->getName()
-                    : $category->getCategoryName();
+                $tabs['product-details']['category_ids']['value'] = $category->getName();
             }
 
             $this->showAdvancedSettings();
@@ -179,7 +177,7 @@ class ProductForm extends FormTabs
         $attribute = $product->getDataFieldConfig('custom_attribute')['source']->getAttribute();
         $this->openTab('product-details');
         if (!$this->checkAttributeLabel($attribute)) {
-            /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab $tab */
+            /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails $tab */
             $tab = $this->openTab($tabName);
             $tab->addNewAttribute($tabName);
             $this->fillAttributeForm($attribute);
