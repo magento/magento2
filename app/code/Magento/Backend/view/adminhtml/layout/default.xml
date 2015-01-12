@@ -22,8 +22,6 @@
         <link src="mage/requirejs/resolver.js"/>
         <link src="jquery/jquery.js"/>
         <link src="mage/jquery-no-conflict.js"/>
-        <link src="extjs/ext-tree.js"/>
-        <link src="extjs/ext-tree-checkbox.js"/>
         <css src="extjs/resources/css/ext-all.css"/>
         <css src="extjs/resources/css/ytheme-magento.css"/>
     </head>

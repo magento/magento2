@@ -3,7 +3,10 @@
  */
 
 var config = {
-    map: {
+    "shim": {
+        "extjs/ext-tree-checkbox": ["extjs/ext-tree", "extjs/defaults"],
+    },
+    "map": {
         "*": {
             "translateInline":    "mage/translate-inline",
             "form":               "mage/backend/form",
@@ -27,13 +30,13 @@ var config = {
             "jstree":             "jquery/jstree/jquery.jstree"
         }
     },
-    deps: [
+    "deps": [
         "js/theme",
         "jquery/jquery-migrate",
         "mage/dropdown_old",
         "mage/backend/bootstrap"
     ],
-    paths: {
+    "paths": {
         "jquery/ui": "jquery/jquery-ui-1.9.2"
     }
 };

@@ -8,6 +8,7 @@ define([
     "js/theme",
     "mage/translate",
     "prototype",
+    "extjs/ext-tree-checkbox",
     "mage/adminhtml/events"
 ], function(jQuery){
 

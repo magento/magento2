@@ -37,7 +37,8 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->_formInitScripts[] = '
             //<![CDATA[
-            var review = function() {
+            require(["extjs/ext-tree-checkbox"], function(){
+            window.review = function() {
                 return {
                     productInfoUrl : null,
                     formHidden : true,
@@ -98,11 +99,12 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                 }
             }();
 
-             Event.observe(window, \'load\', function(){
+            Event.observe(window, \'load\', function(){
                  if ($("select_stores")) {
                      Event.observe($("select_stores"), \'change\', review.updateRating);
                  }
-           });
+            });
+            });
            //]]>
         ';
     }
