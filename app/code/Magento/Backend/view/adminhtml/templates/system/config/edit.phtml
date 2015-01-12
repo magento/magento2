@@ -345,7 +345,7 @@ require([
         handleHash();
 
     });
-
-    jQuery('body').trigger('adminConfigDefined');
+    
+    jQuery(window).load(function(){jQuery('body').trigger('adminConfigDefined')})
 });
 </script>

@@ -5,7 +5,7 @@
 namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Framework\App\Resource;
-use Magento\Framework\Logger as LogWriter;
+use Psr\Log\LoggerInterface as LogWriter;
 use Magento\Framework\Model\Exception;
 
 /**
@@ -30,7 +30,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $stateTable;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 

@@ -60,12 +60,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      */
     public function getPreviewImageUrl(ThemeInterface $theme)
     {
-        return $theme->isPhysical()
-            ? $this->assetRepo->getUrlWithParams(
-                $theme->getPreviewImage(),
-                ['area' => $theme->getData('area'), 'themeModel' => $theme]
-            )
-            : $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
+        return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
                 . self::PREVIEW_DIRECTORY_PATH . '/' . $theme->getPreviewImage();
     }
 
@@ -77,13 +72,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
      */
     public function getPreviewImagePath(ThemeInterface $theme)
     {
-        return $theme->isPhysical()
-            ? $this->assetRepo->createAsset(
-                $theme->getPreviewImage(),
-                ['area' => $theme->getData('area'), 'themeModel' => $theme]
-            )
-            ->getSourceFile()
-            : $this->mediaDirectory->getAbsolutePath(self::PREVIEW_DIRECTORY_PATH . '/' . $theme->getPreviewImage());
+        return $this->mediaDirectory->getAbsolutePath(self::PREVIEW_DIRECTORY_PATH . '/' . $theme->getPreviewImage());
     }
 
     /**

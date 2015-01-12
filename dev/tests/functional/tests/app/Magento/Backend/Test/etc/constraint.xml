@@ -6,15 +6,15 @@
 -->
 <constraint>
     <assertGlobalSearchProductName module="Magento_Backend">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertGlobalSearchProductName>
     <assertGlobalSearchOrderId module="Magento_Backend">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertGlobalSearchOrderId>
     <assertGlobalSearchNoRecordsFound module="Magento_Backend">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertGlobalSearchNoRecordsFound>
     <assertGlobalSearchCustomerName module="Magento_Backend">
-        <severeness>low</severeness>
+        <severity>low</severity>
     </assertGlobalSearchCustomerName>
 </constraint>

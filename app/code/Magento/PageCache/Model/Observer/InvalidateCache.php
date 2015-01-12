@@ -41,6 +41,5 @@ class InvalidateCache
         if ($this->_config->isEnabled()) {
             $this->_typeList->invalidate('full_page');
         }
-        return $this;
     }
 }

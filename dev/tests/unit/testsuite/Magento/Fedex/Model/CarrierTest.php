@@ -33,7 +33,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('ServiceType'));
         $country = $this->getMock(
             'Magento\Directory\Model\Country',
-            ['load', 'getIso2Code', '__wakeup'],
+            ['load', 'getData', '__wakeup'],
             [],
             '',
             false
@@ -77,7 +77,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 'scopeConfig' => $scopeConfig,
                 'rateErrorFactory' =>
                     $this->getMock('Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory', [], [], '', false),
-                'logAdapterFactory' => $this->getMock('Magento\Framework\Logger\AdapterFactory', [], [], '', false),
+                'logger' => $this->getMock('Psr\Log\LoggerInterface'),
                 'xmlElFactory' => $this->getMock('Magento\Shipping\Model\Simplexml\ElementFactory', [], [], '', false),
                 'rateFactory' => $rateFactory,
                 'rateMethodFactory' => $rateMethodFactory,
@@ -91,7 +91,6 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 'currencyFactory' => $this->getMock('Magento\Directory\Model\CurrencyFactory', [], [], '', false),
                 'directoryData' => $this->getMock('Magento\Directory\Helper\Data', [], [], '', false),
                 'stockRegistry' => $this->getMock('Magento\CatalogInventory\Model\StockRegistry', [], [], '', false),
-                'logger' => $this->getMock('Magento\Framework\Logger', [], [], '', false),
                 'storeManager' => $storeManager,
                 'configReader' => $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false),
                 'productCollectionFactory' =>

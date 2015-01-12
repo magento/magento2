@@ -166,7 +166,7 @@ class ConditionsElement extends AbstractElement
      *
      * @var string
      */
-    protected $ruleParamInput = '.element [name^="rule[conditions]"]';
+    protected $ruleParamInput = '.element [name^="rule"]';
 
     /**
      * Set value to conditions

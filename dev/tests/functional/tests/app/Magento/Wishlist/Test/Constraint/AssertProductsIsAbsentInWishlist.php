@@ -20,12 +20,9 @@ use Mtf\Fixture\InjectableFixture;
  */
 class AssertProductsIsAbsentInWishlist extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that product is not present in Wishlist on Frontend

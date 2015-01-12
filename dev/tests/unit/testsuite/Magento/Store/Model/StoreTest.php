@@ -50,7 +50,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactoryMock = $this->getMock(
             'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
-            [],
+            ['createPublicCookieMetadata'],
             [],
             '',
             false
@@ -448,19 +448,18 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testSetCookie()
     {
         $storeCode = 'store code';
-        $cookieMetadata = $this->getMock(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
-            [],
-            [],
-            '',
-            false
-        );
+        $cookieMetadata = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
         $cookieMetadata->expects($this->once())
             ->method('setHttpOnly')
             ->with(true)
             ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setDurationOneYear')
+            ->willReturnSelf();
+        $cookieMetadata->expects($this->once())
+            ->method('setPath')
             ->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
@@ -496,9 +495,18 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteCookie()
     {
+        $cookieMetadata = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->will($this->returnValue($cookieMetadata));
+        $cookieMetadata->expects($this->once())
+            ->method('setPath')
+            ->willReturnSelf();
         $this->cookieManagerMock->expects($this->once())
             ->method('deleteCookie')
-            ->with(Store::COOKIE_NAME);
+            ->with(Store::COOKIE_NAME, $cookieMetadata);
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             'Magento\Store\Model\Store',

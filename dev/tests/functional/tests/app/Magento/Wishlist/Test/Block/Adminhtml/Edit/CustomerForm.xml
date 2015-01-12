@@ -7,7 +7,7 @@
 <tabs>
     <wishlist>
         <class>\Magento\Wishlist\Test\Block\Adminhtml\Customer\Edit\Tab\Wishlist</class>
-        <selector>#customer_info_tabs_wishlist</selector>
+        <selector>#tab_wishlist</selector>
         <strategy>css selector</strategy>
     </wishlist>
 </tabs>

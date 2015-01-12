@@ -79,7 +79,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $this->_appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
 
-        $this->_logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->_layoutValidator = $this->getMock(
             'Magento\Core\Model\Layout\Update\Validator',
@@ -294,12 +294,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function testGetFileLayoutUpdatesXml()
     {
         $errorString = "Theme layout update file '" . __DIR__ . "/_files/layout/file_wrong.xml' is not valid.";
-        $this->_logger->expects($this->atLeastOnce())->method('log')
-            ->with(
-                $this->stringStartsWith($errorString),
-                \Zend_Log::ERR,
-                \Magento\Framework\Logger::LOGGER_SYSTEM
-            );
+        $this->_logger->expects($this->atLeastOnce())->method('info')
+            ->with($this->stringStartsWith($errorString));
 
         $actualXml = $this->_model->getFileLayoutUpdatesXml();
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/merged.xml', $actualXml->asNiceXml());
@@ -406,11 +402,8 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $messages = $this->_layoutValidator->getMessages();
 
         // Testing error message is logged with logger
-        $this->_logger->expects($this->once())->method('log')
-            ->with(
-                'Cache file with merged layout: ' . $cacheId . ': ' . array_shift($messages),
-                \Zend_Log::ERR
-            );
+        $this->_logger->expects($this->once())->method('info')
+            ->with('Cache file with merged layout: ' . $cacheId . ': ' . array_shift($messages));
 
         $this->_model->load();
     }

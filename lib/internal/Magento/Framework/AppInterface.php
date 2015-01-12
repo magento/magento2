@@ -16,7 +16,7 @@ interface AppInterface
     /**
      * Magento version
      */
-    const VERSION = '0.1.0-alpha108';
+    const VERSION = '0.42.0-beta3';
 
     /**
      * Launch application

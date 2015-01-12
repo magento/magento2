@@ -97,6 +97,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
                     . $resultPage->getLayout()->getBlock('category.tree')
                         ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
                 'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml(),
+                'toolbar' => $resultPage->getLayout()->getBlock('page.actions.toolbar')->toHtml()
             ]);
             $this->_eventManager->dispatch(
                 'category_prepare_ajax_response',

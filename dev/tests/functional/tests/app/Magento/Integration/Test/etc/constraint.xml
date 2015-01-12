@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<constraint>
+    <assertIntegrationSuccessSaveMessage module="Magento_Integration">
+        <severity>high</severity>
+        <require>
+            <integrationIndex class="Magento\Integration\Test\Page\Adminhtml\IntegrationIndex" />
+            <integration class="Magento\Integration\Test\Fixture\Integration" />
+        </require>
+    </assertIntegrationSuccessSaveMessage>
+    <assertIntegrationInGrid module="Magento_Integration">
+        <severity>high</severity>
+        <require>
+            <integrationIndex class="Magento\Integration\Test\Page\Adminhtml\IntegrationIndex" />
+            <integration class="Magento\Integration\Test\Fixture\Integration" />
+        </require>
+    </assertIntegrationInGrid>
+    <assertIntegrationForm module="Magento_Integration">
+        <severity>high</severity>
+        <require>
+            <integrationIndex class="Magento\Integration\Test\Page\Adminhtml\IntegrationIndex" />
+            <integrationNew class="Magento\Integration\Test\Page\Adminhtml\IntegrationNew" />
+            <integration class="Magento\Integration\Test\Fixture\Integration" />
+        </require>
+    </assertIntegrationForm>
+    <assertIntegrationSuccessDeleteMessage module="Magento_Integration">
+        <severity>low</severity>
+        <require>
+            <integrationIndex class="Magento\Integration\Test\Page\Adminhtml\IntegrationIndex" />
+            <integration class="Magento\Integration\Test\Fixture\Integration" />
+        </require>
+    </assertIntegrationSuccessDeleteMessage>
+    <assertIntegrationNotInGrid module="Magento_Integration">
+        <severity>high</severity>
+        <require>
+            <integrationIndex class="Magento\Integration\Test\Page\Adminhtml\IntegrationIndex" />
+            <integration class="Magento\Integration\Test\Fixture\Integration" />
+        </require>
+    </assertIntegrationNotInGrid>
+    <assertIntegrationResourcesPopup module="Magento_Integration">
+        <severity>high</severity>
+        <require>
+            <integrationIndex class="Magento\Integration\Test\Page\Adminhtml\IntegrationIndex" />
+            <integration class="Magento\Integration\Test\Fixture\Integration" />
+        </require>
+    </assertIntegrationResourcesPopup>
+    <assertIntegrationTokensPopup module="Magento_Integration">
+        <severity>high</severity>
+        <require>
+            <integrationIndex class="Magento\Integration\Test\Page\Adminhtml\IntegrationIndex" />
+        </require>
+    </assertIntegrationTokensPopup>
+    <assertIntegrationSuccessActivationMessage module="Magento_Integration">
+        <severity>high</severity>
+        <require>
+            <integrationIndex class="Magento\Integration\Test\Page\Adminhtml\IntegrationIndex" />
+            <integration class="Magento\Integration\Test\Fixture\Integration" />
+        </require>
+    </assertIntegrationSuccessActivationMessage>
+    <assertIntegrationSuccessReauthorizeMessage module="Magento_Integration">
+        <severity>high</severity>
+        <require>
+            <integrationIndex class="Magento\Integration\Test\Page\Adminhtml\IntegrationIndex" />
+            <integration class="Magento\Integration\Test\Fixture\Integration" />
+        </require>
+    </assertIntegrationSuccessReauthorizeMessage>
+    <assertIntegrationTokensAfterReauthorize module="Magento_Integration">
+        <severity>high</severity>
+        <require>
+            <integrationIndex class="Magento\Integration\Test\Page\Adminhtml\IntegrationIndex" />
+            <integrationNew class="Magento\Integration\Test\Page\Adminhtml\IntegrationNew" />
+            <integration class="Magento\Integration\Test\Fixture\Integration" />
+        </require>
+    </assertIntegrationTokensAfterReauthorize>
+</constraint>

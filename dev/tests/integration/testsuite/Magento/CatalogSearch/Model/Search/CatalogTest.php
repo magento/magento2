@@ -16,7 +16,7 @@ class CatalogTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->catalogSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('\Magento\CatalogSearch\Model\Search\Catalog');
+            ->create('Magento\CatalogSearch\Model\Search\Catalog');
     }
 
     /**

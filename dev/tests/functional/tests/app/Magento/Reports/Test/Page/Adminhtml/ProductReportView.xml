@@ -12,12 +12,12 @@
             <strategy>css selector</strategy>
         </actionsBlock>
         <gridBlock>
-            <class>Magento\Reports\Test\Block\Adminhtml\Viewed\FilterGrid</class>
+            <class>Magento\Reports\Test\Block\Adminhtml\Review\Products\Viewed\ProductGrid</class>
             <locator>.grid</locator>
             <strategy>css selector</strategy>
         </gridBlock>
         <filterBlock>
-            <class>Magento\Reports\Test\Block\Adminhtml\Viewed\Filter</class>
+            <class>Magento\Sales\Test\Block\Adminhtml\Report\Filter\Form</class>
             <locator>#filter_form</locator>
             <strategy>css selector</strategy>
         </filterBlock>

@@ -47,7 +47,7 @@ table {
         border-top: @table-border-width @table-border-style @table-border-color;
         .table-overflow();
         position: relative; // to hide unnecessary horizontal scrollbar in Safari
-        .table:not(.totals):not(.cart) {
+        .table:not(.totals):not(.cart):not(.table-comparison) {
             .table-responsive();
             tbody {
                 > tr {

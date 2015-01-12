@@ -68,12 +68,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->addressDataBuilder = $this->objectManager->getObject(
-            '\Magento\Checkout\Service\V1\Data\Cart\AddressBuilder',
+            'Magento\Checkout\Service\V1\Data\Cart\AddressBuilder',
             ['regionBuilder' => $builder]
         );
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Checkout\Service\V1\Address\Validator',
+            'Magento\Checkout\Service\V1\Address\Validator',
             [
                 'quoteAddressFactory' => $this->addressFactoryMock,
                 'customerFactory' => $this->customerFactoryMock,

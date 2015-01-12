@@ -43,7 +43,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
         $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $this->wysiwygConfigMock = $this->getMock(
@@ -179,7 +179,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                 $this->throwException(new \Exception())
             );
         $this->loggerMock->expects($this->once())
-            ->method('logException');
+            ->method('critical');
         $this->productMock->expects($this->once())
             ->method('setAttributeSetId')
             ->with(3)

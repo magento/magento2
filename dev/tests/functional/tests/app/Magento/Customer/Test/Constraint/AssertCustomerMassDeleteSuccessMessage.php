@@ -14,17 +14,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertCustomerMassDeleteSuccessMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Message that appears after deletion via mass actions
      */
     const SUCCESS_DELETE_MESSAGE = 'A total of %d record(s) were deleted.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that message "A total of "x" record(s) were deleted."

@@ -100,14 +100,14 @@ class File implements MergeableInterface
 
     /**
      * {@inheritdoc}
-     * @throws \LogicException if file cannot be resolved
+     * @throws File\NotFoundException if file cannot be resolved
      */
     public function getSourceFile()
     {
         if (null === $this->resolvedFile) {
             $this->resolvedFile = $this->source->getFile($this);
             if (false === $this->resolvedFile) {
-                throw new \LogicException("Unable to resolve the source file for '{$this->getPath()}'");
+                throw new File\NotFoundException("Unable to resolve the source file for '{$this->getPath()}'");
             }
         }
         return $this->resolvedFile;

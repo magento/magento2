@@ -728,6 +728,13 @@
     padding: 18px;
 }
 
+.customer-current-activity .action-refresh {
+    float: right;
+    &:hover {
+        text-decoration: none;
+    }
+}
+
 .order-currency {
     padding: 18px;
 }
@@ -1738,7 +1745,8 @@ table.items-to-invoice tbody tr:hover td {
 .packaging-window .col-width,
 .packaging-window .col-height,
 .packaging-window .col-length,
-.packaging-window .data-table .col-total-weight input[type="text"] {
+.packaging-window .data-table .col-total-weight input[type="text"],
+.packaging-window .data-table .col-custom input[type="text"] {
     width: 60px;
 }
 
@@ -1752,7 +1760,8 @@ table.items-to-invoice tbody tr:hover td {
 }
 
 .packaging-window .data-table .col-actions,
-.packaging-window .col-total-weight {
+.packaging-window .col-total-weight,
+.packaging-window .data-table .col-custom {
     white-space: nowrap;
 }
 

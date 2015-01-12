@@ -18,17 +18,18 @@ class EditBilling extends \Magento\Multishipping\Controller\Checkout\Address
         $this->_view->loadLayout();
         $this->_view->getLayout()->initMessages();
         if ($addressForm = $this->_view->getLayout()->getBlock('customer_address_edit')) {
+            $id = $this->getRequest()->getParam('id');
             $addressForm->setTitle(
                 __('Edit Billing Address')
             )->setSuccessUrl(
-                $this->_url->getUrl('*/*/saveBilling', ['id' => $this->getRequest()->getParam('id')])
+                $this->_url->getUrl('*/*/saveBilling', ['id' => $id])
             )->setErrorUrl(
-                $this->_url->getUrl('*/*/*', ['id' => $this->getRequest()->getParam('id')])
+                $this->_url->getUrl('*/*/*', ['id' => $id])
             )->setBackUrl(
                 $this->_url->getUrl('*/checkout/overview')
             );
             $this->_view->getPage()->getConfig()->getTitle()->set(
-                $addressForm->getTitle() . ' - ' . $this->_view->getPage()->getConfig()->getDefaultTitle()
+                $addressForm->getTitle() . ' - ' . $this->_view->getPage()->getConfig()->getTitle()->getDefault()
             );
         }
         $this->_view->renderLayout();

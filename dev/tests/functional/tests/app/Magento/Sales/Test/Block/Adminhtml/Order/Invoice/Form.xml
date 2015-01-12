@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<mapping strict="0">
+    <wrapper>invoice</wrapper>
+    <fields>
+        <do_shipment>
+            <input>checkbox</input>
+        </do_shipment>
+        <comment_text />
+    </fields>
+</mapping>

@@ -243,10 +243,16 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'value' => 'selectedOptionValue2',
                 'count' => 13,
             ],
+            [
+                'label' => 'selectedOptionLabel3',
+                'value' => 'selectedOptionValue3',
+                'count' => 10,
+            ],
         ];
         $facetedData = [
             'selectedOptionValue1' => ['count' => 10],
             'selectedOptionValue2' => ['count' => 45],
+            'selectedOptionValue3' => ['count' => 50],
         ];
 
         $builtData = [
@@ -260,14 +266,25 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'value' => $selectedOptions[1]['value'],
                 'count' => $facetedData[$selectedOptions[1]['value']]['count'],
             ],
+            [
+                'label' => $selectedOptions[2]['label'],
+                'value' => $selectedOptions[2]['value'],
+                'count' => $facetedData[$selectedOptions[2]['value']]['count'],
+            ],
         ];
 
         $this->attribute->expects($this->exactly(2))
             ->method('getAttributeCode')
             ->will($this->returnValue($attributeCode));
-        $this->attribute->expects($this->exactly(count($selectedOptions)))
+        $this->attribute->expects($this->at(3))
             ->method('getIsFilterable')
-            ->will($this->returnValue(true));
+            ->will($this->returnValue(1));
+        $this->attribute->expects($this->at(4))
+            ->method('getIsFilterable')
+            ->will($this->returnValue(2));
+        $this->attribute->expects($this->at(5))
+            ->method('getIsFilterable')
+            ->will($this->returnValue(1));
 
         $this->target->setAttributeModel($this->attribute);
 
@@ -306,6 +323,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $expectedFilterItems = [
             $this->createFilterItem(0, $builtData[0]['label'], $builtData[0]['value'], $builtData[0]['count']),
             $this->createFilterItem(1, $builtData[1]['label'], $builtData[1]['value'], $builtData[1]['count']),
+            $this->createFilterItem(2, $builtData[2]['label'], $builtData[2]['value'], $builtData[2]['count']),
         ];
 
         $result = $this->target->getItems();

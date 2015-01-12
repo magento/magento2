@@ -21,7 +21,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             $this->getMock('Magento\Framework\App\Route\ConfigInterface\Proxy', [], [], '', false),
             $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface', [], [], '', false),
             $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface'),
-            $this->getMock('Magento\Framework\App\Config\ReinitableConfigInterface')
+            $this->getMock('Magento\Framework\ObjectManagerInterface')
         );
         $response = new \Magento\TestFramework\Response(
             $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface'),

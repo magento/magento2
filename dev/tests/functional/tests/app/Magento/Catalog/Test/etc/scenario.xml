@@ -51,12 +51,9 @@
                         <next>saveAttribute</next>
                     </step>
                     <step name="saveAttribute" module="Magento_Catalog">
-                        <next>moveAttributeToProductTemplate</next>
+                        <next>addAttributeToProductTemplate</next>
                     </step>
-                    <step name="moveAttributeToProductTemplate" module="Magento_Catalog">
-                        <next>saveProductTemplate</next>
-                    </step>
-                    <step name="saveProductTemplate" module="Magento_Catalog" />
+                    <step name="addAttributeToProductTemplate" module="Magento_Catalog" />
                 </steps>
             </method>
         </methods>

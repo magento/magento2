@@ -4,6 +4,9 @@
  */
 namespace Magento\Tax\Model;
 
+use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Api\SearchCriteria as SearchCriteria;
+
 class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,7 +57,11 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->ruleFactory = $this->getMock('\Magento\Tax\Model\Calculation\RuleFactory', [], [], '', false);
         $this->collectionFactory = $this->getMock(
-            '\Magento\Tax\Model\Resource\Calculation\Rule\CollectionFactory', ['create'], [], '', false
+            '\Magento\Tax\Model\Resource\Calculation\Rule\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
         );
         $this->resource = $this->getMock('\Magento\Tax\Model\Resource\Calculation\Rule', [], [], '', false);
 
@@ -105,30 +112,83 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($rule, $this->model->save($rule));
     }
 
+    /**
+     * @dataProvider saveExceptionsDataProvider
+     * @param $exceptionObject
+     * @param $exceptionName
+     * @param $exceptionMessage
+     */
+    public function testSaveWithExceptions($exceptionObject, $exceptionName, $exceptionMessage)
+    {
+        $rule = $this->getMock('\Magento\Tax\Model\Calculation\Rule', [], [], '', false);
+        $rule->expects($this->once())->method('getId')->willReturn(10);
+
+        $this->taxRuleRegistry->expects($this->once())->method('retrieveTaxRule')->with(10)->willReturn($rule);
+        $this->resource->expects($this->once())->method('save')->with($rule)
+            ->willThrowException($exceptionObject);
+        $this->taxRuleRegistry->expects($this->never())->method('registerTaxRule');
+
+        $this->setExpectedException($exceptionName, $exceptionMessage);
+        $this->model->save($rule);
+    }
+
+    public function saveExceptionsDataProvider()
+    {
+        return [
+            [
+                new \Magento\Framework\Model\Exception('Could not save'),
+                '\Magento\Framework\Exception\CouldNotSaveException',
+                'Could not save'
+            ], [
+                new \Magento\Framework\Model\Exception('InputError', ModelException::ERROR_CODE_ENTITY_ALREADY_EXISTS),
+                '\Magento\Framework\Exception\InputException',
+                'InputError'
+            ], [
+                new \Magento\Framework\Exception\NoSuchEntityException('No such entity'),
+                '\Magento\Framework\Exception\NoSuchEntityException',
+                'No such entity'
+            ]
+        ];
+    }
+
     public function testGetList()
     {
-        $taxRuleOne = $this->getMock('\Magento\Tax\Api\Data\TaxRuleInterface');
-        $taxRuleTwo = $this->getMock('\Magento\Tax\Api\Data\TaxRuleInterface');
-        $searchCriteria = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $searchCriteria->expects($this->once())->method('getFilterGroups')->willReturn([]);
-        $searchCriteria->expects($this->once())->method('getPageSize')->willReturn(20);
-        $searchCriteria->expects($this->once())->method('getCurrentPage')->willReturn(0);
+        $collectionSize = 1;
+        $currentPage = 42;
+        $pageSize = 4;
 
-        $result = $this->getMock('\Magento\Tax\Api\Data\TaxRuleSearchResultsInterface');
-        $collection = $this->objectManager->getCollectionMock(
-            '\Magento\Tax\Model\Resource\TaxClass\Collection',
-            [$taxRuleOne, $taxRuleTwo]
+        $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $collectionMock = $this->getMock('Magento\Tax\Model\Resource\Calculation\Rule\Collection', [], [], '', false);
+        $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
+        $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
+        $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
+
+        $this->searchResultBuilder->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
+        $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
+        $filterGroupMock->expects($this->exactly(2))->method('getFilters')->willReturn([$filterMock]);
+        $filterMock->expects($this->exactly(2))->method('getConditionType')->willReturn('eq');
+        $filterMock->expects($this->exactly(2))->method('getField')->willReturnOnConsecutiveCalls(
+            'rate.tax_calculation_rate_id',
+            'cd.customer_tax_class_id'
         );
-        $collection->expects($this->any())->method('getSize')->willReturn(2);
-        $collection->expects($this->any())->method('setItems')->with([$taxRuleOne, $taxRuleTwo]);
-        $collection->expects($this->once())->method('setCurPage')->with(0);
-        $collection->expects($this->once())->method('setPageSize')->with(20);
-
-        $this->searchResultBuilder->expects($this->once())->method('setSearchCriteria')->with($searchCriteria);
-        $this->searchResultBuilder->expects($this->once())->method('setTotalCount')->with(2);
-        $this->searchResultBuilder->expects($this->once())->method('create')->willReturn($result);
-        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
-
-        $this->assertEquals($result, $this->model->getList($searchCriteria));
+        $filterMock->expects($this->once())->method('getValue')->willReturn('value');
+        $collectionMock->expects($this->exactly(2))->method('joinCalculationData')->withConsecutive(['rate'], ['cd']);
+        $collectionMock->expects($this->once())->method('addFieldToFilter')
+            ->with([0 => 'rate.tax_calculation_rate_id'], [0 => ['eq' => 'value']]);
+        $collectionMock->expects($this->once())->method('getSize')->willReturn($collectionSize);
+        $this->searchResultBuilder->expects($this->once())->method('setTotalCount')->with($collectionSize);
+        $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
+        $sortOrderMock->expects($this->once())->method('getField')->willReturn('sort_order');
+        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SearchCriteria::SORT_ASC);
+        $collectionMock->expects($this->once())->method('addOrder')->with('position', 'ASC');
+        $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
+        $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
+        $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn($pageSize);
+        $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
+        $collectionMock->expects($this->once())->method('getItems')->willReturn([]);
+        $this->searchResultBuilder->expects($this->once())->method('setItems')->with([]);
+        $this->searchResultBuilder->expects($this->once())->method('create')->willReturnSelf();
+        $this->assertEquals($this->searchResultBuilder, $this->model->getList($searchCriteriaMock));
     }
 }

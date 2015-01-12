@@ -34,21 +34,16 @@ require([
     * This routine get categoryId explicitly, so even if currently selected tree node is out of sync
     * with this form, we surely delete same category in the tree and at backend
     */
-    function categoryDelete(url, useAjax, categoryId) {
+    function categoryDelete(url) {
         if (confirm('<?php echo __('Are you sure you want to delete this category?') ?>')){
-            if (useAjax){
-                tree.nodeForDelete = categoryId;
-                updateContent(url, {}, true, true);
-            } else {
-                location.href = url;
-            }
+            location.href = url;
         }
     }
 
     /**
      * Update category content area
      */
-    function updateContent(url, params, refreshTree, deleteAction) {
+    function updateContent(url, params, refreshTree) {
         var node        = tree.getNodeById(tree.currentNodeId),
             parentNode  = node && node.parentNode,
             parentId,
@@ -64,23 +59,15 @@ require([
         }
 
         (function($){
-            var $categoryContainer = $('#category-edit-container');
+            var $categoryContainer = $('#category-edit-container'),
+                messagesContainer = $('.messages');
+            messagesContainer.html('');
             $.ajax({
                 url: url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true' ),
                 data: params,
                 context: $('body'),
                 showLoader: true
             }).done(function(data){
-                if (deleteAction && parentNode) {
-                    parentId    = parentNode.id;
-
-                    redirectUrl = !parentNode.isRoot ?
-                        tree.buildUrl(parentId) :
-                        tree.getBaseUrl();
-
-                    location.href = redirectUrl;
-                }
-
                 if (data.content) {
                     $('.page-actions').floatingHeader('destroy');
                     try {
@@ -111,7 +98,10 @@ require([
                 }
 
                 if (data.messages && data.messages.length > 0) {
-                    $('.messages').html(data.messages);
+                    messagesContainer.html(data.messages);
+                }
+                if (data.toolbar) {
+                    $('[data-ui-id="page-actions-toolbar-content-header"]').replaceWith(data.toolbar)
                 }
             });
         })(jQuery);

@@ -21,7 +21,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->builder = $this->objectManager->getObject(
-            '\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Builder'
+            'Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Builder'
         );
     }
 

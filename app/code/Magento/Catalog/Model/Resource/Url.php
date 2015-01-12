@@ -49,7 +49,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_rootChildrenIds = [];
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -92,7 +92,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Product $productResource
      * @param \Magento\Catalog\Model\Category $catalogCategory
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
@@ -100,7 +100,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Eav\Model\Config $eavConfig,
         Product $productResource,
         \Magento\Catalog\Model\Category $catalogCategory,
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;

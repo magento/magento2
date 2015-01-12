@@ -47,7 +47,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Catalog\Model\ProductLink\Repository',
+            'Magento\Catalog\Model\ProductLink\Repository',
             [
                 'productRepository' => $this->productRepositoryMock,
                 'entityCollectionProvider' => $this->entityCollectionProviderMock,

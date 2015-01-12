@@ -15,6 +15,7 @@
                  data-captcha="<?php echo $this->getFormId()?>"
                  id="captcha-container-<?php echo $this->getFormId()?>"
                  data-mage-init='{"captcha":{"url": "<?php echo $this->getRefreshUrl()?>",
+                                            "imageLoader": "<?php echo $this->getViewFileUrl('images/loader-2.gif') ?>",
                                              "type": "<?php echo $this->getFormId() ?>"}}'>
                 <div class="control captcha-image">
                     <img alt="<?php echo __('Please type the letters below')?>" class="captcha-img" height="<?php echo $this->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>"/>

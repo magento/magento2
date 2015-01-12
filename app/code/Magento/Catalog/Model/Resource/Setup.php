@@ -59,21 +59,11 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      *
      * @param array $data
      * @return \Magento\Catalog\Model\Category
+     * @codeCoverageIgnore
      */
     public function createCategory($data = [])
     {
         return $this->_categoryFactory->create($data);
-    }
-
-    /**
-     * Creates eav attribute resource model
-     *
-     * @param array $data
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
-     */
-    public function createEavAttributeResource($data = [])
-    {
-        return $this->_eavAttributeResourceFactory->create($data);
     }
 
     /**
@@ -827,42 +817,5 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
                 ],
             ]
         ];
-    }
-
-    /**
-     * Returns category entity row by category id
-     *
-     * @param int $entityId
-     * @return array
-     */
-    protected function _getCategoryEntityRow($entityId)
-    {
-        $select = $this->getConnection()->select();
-
-        $select->from($this->getTable('catalog_category_entity'));
-        $select->where('entity_id = :entity_id');
-
-        return $this->getConnection()->fetchRow($select, ['entity_id' => $entityId]);
-    }
-
-    /**
-     * Returns category path as array
-     *
-     * @param array $category
-     * @param array $path
-     * @return string
-     */
-    protected function _getCategoryPath($category, $path = [])
-    {
-        $path[] = $category['entity_id'];
-
-        if ($category['parent_id'] != 0) {
-            $parentCategory = $this->_getCategoryEntityRow($category['parent_id']);
-            if ($parentCategory) {
-                $path = $this->_getCategoryPath($parentCategory, $path);
-            }
-        }
-
-        return $path;
     }
 }

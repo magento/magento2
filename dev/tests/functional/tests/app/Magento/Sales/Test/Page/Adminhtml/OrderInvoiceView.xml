@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<page mca="sales/order_invoice/view" module="Magento_Sales">
+    <blocks>
+        <titleBlock>
+            <class>Magento\Theme\Test\Block\Html\Title</class>
+            <locator>.page-title</locator>
+            <strategy>css selector</strategy>
+        </titleBlock>
+        <pageActions>
+            <class>Magento\Sales\Test\Block\Adminhtml\Order\Actions</class>
+            <locator>.page-actions</locator>
+            <strategy>css selector</strategy>
+        </pageActions>
+        <itemsBlock>
+            <class>Magento\Sales\Test\Block\Adminhtml\Order\Invoice\View\Items</class>
+            <locator>//div[./div[@id="invoice_item_container"]]</locator>
+            <strategy>xpath</strategy>
+        </itemsBlock>
+    </blocks>
+</page>

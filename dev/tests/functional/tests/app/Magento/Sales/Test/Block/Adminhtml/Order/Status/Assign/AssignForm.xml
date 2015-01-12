@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<mapping strict="1">
+    <fields>
+        <label>
+            <selector>[name="status"]</selector>
+            <input>select</input>
+        </label>
+        <state>
+            <input>select</input>
+        </state>
+        <is_default>
+            <input>checkbox</input>
+        </is_default>
+        <visible_on_front>
+            <input>checkbox</input>
+        </visible_on_front>
+    </fields>
+</mapping>

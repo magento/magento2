@@ -105,7 +105,7 @@ require([
                             $customsValueValidation = '';
                         }
                         ?>
-                        <td <?php echo $customsValueDisplay ?>>
+                        <td class="col-custom" <?php echo $customsValueDisplay ?>>
                             <input type="text" class="customs-value input-text <?php echo $customsValueValidation ?>" name="package_customs_value" />
                             <span class="customs-value-currency">[<?php echo $this->getCustomValueCurrencyCode(); ?>]</span>
                         </td>

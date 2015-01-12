@@ -143,3 +143,5 @@ app/code/Magento/CatalogInventory/Api/Data
 app/code/Magento/Sales/Model/Spi
 Magento/Catalog/Model/ProductLink
 Magento/GroupedProduct/Model/Resource/Product/Type/Grouped
+lib/internal/Magento/Framework/Interception/ObjectManager/Config
+app/code/Magento/OfflinePayments/Model

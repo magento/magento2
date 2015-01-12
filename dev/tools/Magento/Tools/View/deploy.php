@@ -48,6 +48,14 @@ $omFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, []
 $objectManager = $omFactory->create(
     [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]
 );
+
+/** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
+$deploymentConfig = $objectManager->get('Magento\Framework\App\DeploymentConfig');
+$isAppInstalled = $deploymentConfig->isAvailable();
+if (!$isAppInstalled) {
+    throw new \Exception('Please install the Magento application before running this process.');
+}
+
 $logger = new \Magento\Tools\View\Deployer\Log($verbosity);
 /** @var \Magento\Tools\View\Deployer $deployer */
 $deployer = $objectManager->create(

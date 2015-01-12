@@ -31,7 +31,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()->create(
-            '\Magento\Customer\Api\AddressRepositoryInterface'
+            'Magento\Customer\Api\AddressRepositoryInterface'
         );
         $fixtureAddressId = 1;
         $address = $addressRepository->getById($fixtureAddressId);

@@ -17,7 +17,7 @@ class ProductTest extends \Magento\Backend\Utility\Controller
             $this->equalTo(['Unable to save product']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
-        $this->assertRedirect($this->stringContains('/backend/catalog/product/edit'));
+        $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
     }
 
     /**
