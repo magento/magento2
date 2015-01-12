@@ -83,7 +83,7 @@ class ConditionsElement extends SimpleElement
      *
      * @var string
      */
-    protected $created = './/preceding-sibling::li[1]';
+    protected $created = './ul/li[1]';
 
     /**
      * Children condition
@@ -97,7 +97,7 @@ class ConditionsElement extends SimpleElement
      *
      * @var string
      */
-    protected $param = './span[@class="rule-param"]/span/*[substring(@id,(string-length(@id)-%d+1))="%s"]/../..';
+    protected $param = './span[span[*[substring(@id,(string-length(@id)-%d+1))="%s"]]]';
 
     /**
      * Key of last find param
@@ -194,9 +194,9 @@ class ConditionsElement extends SimpleElement
         $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
         $typeNewCondition = $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select');
         $typeNewCondition->setValue($condition['type']);
-        $this->ruleParamWait();
 
-        $createdCondition = $newCondition->find($this->created, Locator::SELECTOR_XPATH);
+        $createdCondition = $context->find($this->created, Locator::SELECTOR_XPATH);
+        $this->waitForCondition($createdCondition);
         if (!empty($condition['rules'])) {
             $this->fillCondition($condition['rules'], $createdCondition);
         }
@@ -243,9 +243,8 @@ class ConditionsElement extends SimpleElement
             }
         );
         $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select')->setValue($condition['type']);
-        $this->ruleParamWait();
-
-        $createdCondition = $newCondition->find($this->created, Locator::SELECTOR_XPATH);
+        $createdCondition = $context->find($this->created, Locator::SELECTOR_XPATH);
+        $this->waitForCondition($createdCondition);
         $this->fillCondition($condition['rules'], $createdCondition);
     }
 
@@ -387,14 +386,11 @@ class ConditionsElement extends SimpleElement
      *
      * @return void
      */
-    protected function ruleParamWait()
+    protected function waitForCondition(SimpleElement $element)
     {
-        $browser = $this;
-        $ruleParamWait = $this->ruleParamWait;
-        $browser->waitUntil(
-            function () use ($browser, $ruleParamWait) {
-                $element = $browser->find($ruleParamWait, Locator::SELECTOR_XPATH);
-                return $element->isVisible() ? null : true;
+        $this->waitUntil(
+            function () use ($element) {
+                return $element->getAttribute('class') == 'rule-param-wait' ? null : true;
             }
         );
     }
