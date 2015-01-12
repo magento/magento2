@@ -264,7 +264,9 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Base hidden tax refunded.
      */
     const BASE_HIDDEN_TAX_REFUNDED = 'base_hidden_tax_refunded';
-    const IS_NOMINAL = 'is_nominal';
+    /*
+     * Tax canceled flag
+     */
     const TAX_CANCELED = 'tax_canceled';
     /*
      * Hidden-tax-canceled flag.
