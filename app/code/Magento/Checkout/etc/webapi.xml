@@ -54,7 +54,7 @@
             <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
-    <route url="/V1/carts" method="PUT">
+    <route url="/V1/carts" method="GET">
         <service class="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" method="getCartList"/>
         <resources>
             <resource ref="Magento_Catalog::products" />

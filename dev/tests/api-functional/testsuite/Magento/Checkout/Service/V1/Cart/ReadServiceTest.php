@@ -204,18 +204,6 @@ class ReadServiceTest extends WebapiAbstract
     {
         $cart = $this->getCart('test01');
 
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/carts',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
-            ],
-            'soap' => [
-                'service' => 'checkoutCartReadServiceV1',
-                'serviceVersion' => 'V1',
-                'operation' => 'checkoutCartReadServiceV1GetCartList',
-            ],
-        ];
-
         // The following two filters are used as alternatives. The target cart does not match the first one.
         $grandTotalFilter = $this->filterBuilder->setField('grand_total')
             ->setConditionType('gteq')
@@ -246,6 +234,17 @@ class ReadServiceTest extends WebapiAbstract
         $searchCriteria = $this->searchBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchCriteria];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts' . '?' . http_build_query($requestData),
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'checkoutCartReadServiceV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'checkoutCartReadServiceV1GetCartList',
+            ],
+        ];
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertArrayHasKey('total_count', $searchResult);
         $this->assertEquals(1, $searchResult['total_count']);
@@ -272,18 +271,6 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetCartListThrowsExceptionIfProvidedSearchFieldIsInvalid()
     {
-        $serviceInfo = [
-            'soap' => [
-                'service' => 'checkoutCartReadServiceV1',
-                'serviceVersion' => 'V1',
-                'operation' => 'checkoutCartReadServiceV1GetCartList',
-            ],
-            'rest' => [
-                'resourcePath' => '/V1/carts',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
-            ],
-        ];
-
         $invalidFilter = $this->filterBuilder->setField('invalid_field')
             ->setConditionType('eq')
             ->setValue(0)
@@ -292,6 +279,17 @@ class ReadServiceTest extends WebapiAbstract
         $this->searchBuilder->addFilter([$invalidFilter]);
         $searchCriteria = $this->searchBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchCriteria];
+        $serviceInfo = [
+            'soap' => [
+                'service' => 'checkoutCartReadServiceV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'checkoutCartReadServiceV1GetCartList',
+            ],
+            'rest' => [
+                'resourcePath' => '/V1/carts' . '?' . http_build_query($requestData),
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+            ],
+        ];
         $this->_webApiCall($serviceInfo, $requestData);
     }
 }

@@ -50,7 +50,7 @@ class ShipmentListTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
-                'httpMethod' => Config::HTTP_METHOD_PUT,
+                'httpMethod' => Config::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_READ_NAME,

@@ -215,8 +215,8 @@ class AttributeSetRepositoryTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/eav/attribute-sets/list',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'resourcePath' => '/V1/eav/attribute-sets/list' . '?' . http_build_query($searchCriteria),
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'eavAttributeSetRepositoryV1',

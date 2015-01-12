@@ -344,10 +344,15 @@ class CustomerRepositoryTest extends WebapiAbstract
             ->setValue($customerData[Customer::EMAIL])
             ->create();
         $this->searchCriteriaBuilder->addFilter([$filter]);
+        $searchData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->searchCriteriaBuilder->create(),
+            'Magento\Framework\Api\SearchCriteriaInterface'
+        );
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -355,11 +360,6 @@ class CustomerRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'getList',
             ],
         ];
-        $searchData = $this->dataObjectProcessor->buildOutputDataArray(
-            $this->searchCriteriaBuilder->create(),
-            'Magento\Framework\Api\SearchCriteriaInterface'
-        );
-        $requestData = ['searchCriteria' => $searchData];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(1, $searchResults['total_count']);
         $this->assertEquals($customerData[Customer::ID], $searchResults['items'][0][Customer::ID]);
@@ -449,10 +449,12 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->searchCriteriaBuilder->setSortOrders([$sortOrder]);
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchData = $searchCriteria->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -460,8 +462,6 @@ class CustomerRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'getList',
             ],
         ];
-        $searchData = $searchCriteria->__toArray();
-        $requestData = ['searchCriteria' => $searchData];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(2, $searchResults['total_count']);
         $this->assertEquals($customerData1[Customer::ID], $searchResults['items'][0][Customer::ID]);
@@ -525,10 +525,12 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->searchCriteriaBuilder->addFilter([$filter1, $filter2]);
         $this->searchCriteriaBuilder->addFilter([$filter3]);
         $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchData = $searchCriteria->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -536,8 +538,6 @@ class CustomerRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'getList',
             ],
         ];
-        $searchData = $searchCriteria->__toArray();
-        $requestData = ['searchCriteria' => $searchData];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(0, $searchResults['total_count'], 'No results expected for non-existent email.');
     }
@@ -602,10 +602,12 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->searchCriteriaBuilder->addFilter([$filter2, $filter3]);
         $this->searchCriteriaBuilder->addFilter([$filter4]);
         $searchCriteria = $this->searchCriteriaBuilder->setCurrentPage(1)->setPageSize(10)->create();
+        $searchData = $searchCriteria->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -613,8 +615,6 @@ class CustomerRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'getList',
             ],
         ];
-        $searchData = $searchCriteria->__toArray();
-        $requestData = ['searchCriteria' => $searchData];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(1, $searchResults['total_count']);
         $this->assertEquals($customerData1[Customer::ID], $searchResults['items'][0][Customer::ID]);
@@ -630,6 +630,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];
+        $serviceInfo['rest']['resourcePath'] = self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData);
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(0, $searchResults['total_count']);
     }

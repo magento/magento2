@@ -432,10 +432,12 @@ class TaxRateRepositoryTest extends WebapiAbstract
 
         $this->searchCriteriaBuilder->addFilter([$filter]);
 
+        $searchData = $this->searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -443,8 +445,6 @@ class TaxRateRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $searchData = $this->searchCriteriaBuilder->create()->__toArray();
-        $requestData = ['searchCriteria' => $searchData];
 
         /** @var \Magento\Framework\Api\SearchResults $searchResults */
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
@@ -483,10 +483,12 @@ class TaxRateRepositoryTest extends WebapiAbstract
         // Order them by descending postcode (not the default order)
         $this->searchCriteriaBuilder->addFilter([$filter])
             ->addSortOrder($sortOrder);
+        $searchData = $this->searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -494,8 +496,6 @@ class TaxRateRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $searchData = $this->searchCriteriaBuilder->create()->__toArray();
-        $requestData = ['searchCriteria' => $searchData];
 
         /** @var \Magento\Framework\Api\SearchResults $searchResults */
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
