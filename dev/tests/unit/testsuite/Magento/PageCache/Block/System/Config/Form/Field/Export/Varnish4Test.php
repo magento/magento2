@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\PageCache\Block\System\Config\Form\Field;
+namespace Magento\PageCache\Block\System\Config\Form\Field\Export;
 
-class ExportTest extends \PHPUnit_Framework_TestCase
+class Varnish4Test extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\PageCache\Block\System\Config\Form\Field\Export
@@ -14,7 +13,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new StubExport();
+        $this->_model = new StubVarnish4();
     }
 
     /**
@@ -43,7 +42,7 @@ class ExportTest extends \PHPUnit_Framework_TestCase
             'getUrl'
         )->with(
             '*/PageCache/exportVarnishConfig',
-            ['website' => 1, 'varnish' => 0]
+            ['website' => 1, 'varnish' => 4]
         )->will(
             $this->returnValue('/PageCache/exportVarnishConfig/')
         );
