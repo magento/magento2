@@ -80,7 +80,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_ACCESS_LIST,
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                         null,
-                        '127.0.0.1, 192.168.0.1'
+                        '127.0.0.1, 192.168.0.1,127.0.0.2'
                     ],
                     [
                         \Magento\PageCache\Model\Config::XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX,

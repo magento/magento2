@@ -155,9 +155,9 @@ class Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (!empty($accessList)) {
-            $ips = explode(', ', $accessList);
+            $ips = explode(',', $accessList);
             foreach ($ips as $ip) {
-                $result[] = sprintf($tpl, $ip);
+                $result[] = sprintf($tpl, trim($ip));
             }
             return implode("\n", $result);
         }
