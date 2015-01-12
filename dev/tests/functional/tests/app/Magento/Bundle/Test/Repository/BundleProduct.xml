@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository>
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Bundle\Test\Repository\BundleProduct">
         <dataset name="BundleDynamic_sku_1073507449" >
             <field name="sku" xsi:type="string">BundleDynamic_sku_10735074493</field>

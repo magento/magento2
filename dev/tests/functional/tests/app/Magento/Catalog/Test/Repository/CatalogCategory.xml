@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository>
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Catalog\Test\Repository\CatalogCategory">
         <dataset name="default_category" >
             <field name="name" xsi:type="string">Default Category</field>

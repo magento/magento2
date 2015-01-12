@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository>
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Integration\Test\Repository\Integration">
         <dataset name="default_with_all_resources" >
             <field name="name" xsi:type="string">default_integration_%isolation%</field>

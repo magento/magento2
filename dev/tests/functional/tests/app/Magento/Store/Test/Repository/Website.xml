@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 -->
-<repository>
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Store\Test\Repository\Website">
         <dataset name="all_websites" >
             <field name="name" xsi:type="string">All Websites</field>
