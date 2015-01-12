@@ -17,7 +17,7 @@ class ConfigTest extends \Magento\Backend\Utility\Controller
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
     public function testChangeBaseUrl()
     {
@@ -45,7 +45,11 @@ class ConfigTest extends \Magento\Backend\Utility\Controller
 
         /** @var array|bool $url */
         $url = parse_url($this->getResponse()->getHeader('Location')['value']);
-        $this->assertArrayNotHasKey('query', $url, 'No GET params, including "SID", were expected, but somewhat exists');
+        $this->assertArrayNotHasKey(
+            'query',
+            $url,
+            'No GET params, including "SID", were expected, but somewhat exists'
+        );
         $this->assertEquals($newHost, $url['host'], 'A new host in the url expected, but there is old one');
     }
 }
