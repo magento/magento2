@@ -7,7 +7,7 @@ namespace Magento\Reports\Test\Constraint;
 
 use Magento\Reports\Test\Page\Adminhtml\ProductReportReview;
 use Magento\Review\Test\Constraint\AssertProductReviewInGrid;
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
 use Mtf\Constraint\AbstractConstraint;
 
@@ -25,14 +25,14 @@ class AssertProductReviewIsAvailableForProduct extends AbstractConstraint
      * Assert that review is visible in review grid for select product
      *
      * @param ReviewIndex $reviewIndex
-     * @param ReviewInjectable $review
+     * @param Review $review
      * @param ProductReportReview $productReportReview
      * @param AssertProductReviewInGrid $assertProductReviewInGrid
      * @return void
      */
     public function processAssert(
         ReviewIndex $reviewIndex,
-        ReviewInjectable $review,
+        Review $review,
         ProductReportReview $productReportReview,
         AssertProductReviewInGrid $assertProductReviewInGrid
     ) {

@@ -7,14 +7,13 @@ namespace Magento\Review\Test\Constraint;
 
 use Magento\Backend\Test\Page\Adminhtml\AdminCache;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AssertProductReviewOnProductPage
- * Assert that product review available on product page
+ * Assert that product review available on product page.
  */
 class AssertProductReviewOnProductPage extends AbstractConstraint
 {
@@ -23,10 +22,10 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
     /* end tags */
 
     /**
-     * Assert that product review available on product page
+     * Assert that product review available on product page.
      *
      * @param CatalogProductView $catalogProductView
-     * @param ReviewInjectable $review
+     * @param Review $review
      * @param FixtureInterface $product
      * @param Browser $browser
      * @param AdminCache $cachePage
@@ -34,7 +33,7 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        ReviewInjectable $review,
+        Review $review,
         FixtureInterface $product,
         Browser $browser,
         AdminCache $cachePage
@@ -45,6 +44,12 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
 
         $reviewBlock = $catalogProductView->getCustomerReviewBlock();
         $catalogProductView->getViewBlock()->selectTab('Reviews');
+
+        \PHPUnit_Framework_Assert::assertContains(
+            sprintf("You're reviewing:\n%s", $product->getName()),
+            $catalogProductView->getReviewFormBlock()->getLegend()->getText()
+        );
+
         foreach ($review->getData() as $name => $value) {
             $reviewValue = $reviewBlock->getFieldValue($name);
             if (($reviewValue !== null) && (0 !== strcasecmp($value, trim($reviewValue)))) {
@@ -59,7 +64,7 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

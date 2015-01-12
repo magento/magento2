@@ -7,31 +7,31 @@
 namespace Magento\Review\Test\Block\Product\View;
 
 use Mtf\Block\Block;
+use Mtf\Client\Element;
 
 /**
- * Reviews frontend block
- *
+ * Reviews frontend block.
  */
 class Summary extends Block
 {
     /**
-     * Add review link selector
+     * Add review link selector.
      *
      * @var string
      */
     protected $addReviewLinkSelector = '.action.add';
 
     /**
-     * View review link selector
+     * View review link selector.
      *
      * @var string
      */
     protected $viewReviewLinkSelector = '.action.view';
 
     /**
-     * Get add review link
+     * Get add review link.
      *
-     * @return \Mtf\Client\Element
+     * @return Element
      */
     public function getAddReviewLink()
     {
@@ -39,9 +39,22 @@ class Summary extends Block
     }
 
     /**
-     * Get view review link
+     * Click on add review link.
      *
-     * @return \Mtf\Client\Element
+     * @return void
+     */
+    public function clickAddReviewLink()
+    {
+        $reviewLink = $this->getAddReviewLink();
+        if ($reviewLink->isVisible()) {
+            $reviewLink->click();
+        }
+    }
+
+    /**
+     * Get view review link.
+     *
+     * @return Element
      */
     public function getViewReviewLink()
     {

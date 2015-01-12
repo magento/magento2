@@ -3,7 +3,7 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-namespace Magento\Review\Test\Fixture\ReviewInjectable;
+namespace Magento\Review\Test\Fixture\Review;
 
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
