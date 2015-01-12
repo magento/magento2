@@ -191,11 +191,11 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     protected $_catalogProduct;
 
     /**
-     * Sales data
+     * Quote validator
      *
-     * @var \Magento\Quote\Helper\Data
+     * @var \Magento\Quote\Model\QuoteValidator
      */
-    protected $quoteDataHelper;
+    protected $quoteValidator;
 
     /**
      * Core store config
@@ -330,7 +330,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Quote\Helper\Data $quoteDataHelper
+     * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -363,7 +363,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Quote\Helper\Data $quoteDataHelper,
+        \Magento\Quote\Model\QuoteValidator $quoteValidator,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -393,7 +393,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        $this->quoteDataHelper = $quoteDataHelper;
+        $this->quoteValidator = $quoteValidator;
         $this->_catalogProduct = $catalogProduct;
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
@@ -1698,8 +1698,8 @@ class Quote extends \Magento\Framework\Model\AbstractModel
             $this->setBaseGrandTotal((float)$this->getBaseGrandTotal() + $address->getBaseGrandTotal());
         }
 
-        $this->quoteDataHelper->checkQuoteAmount($this, $this->getGrandTotal());
-        $this->quoteDataHelper->checkQuoteAmount($this, $this->getBaseGrandTotal());
+        $this->quoteValidator->validateQuoteAmount($this, $this->getGrandTotal());
+        $this->quoteValidator->validateQuoteAmount($this, $this->getBaseGrandTotal());
 
         $this->setData('trigger_recollect', 0);
         $this->_validateCouponCode();

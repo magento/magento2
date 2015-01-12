@@ -2,17 +2,14 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Quote\Helper;
+namespace Magento\Quote\Model;
 
-/**
- * Tests For Quote Data checker
- */
-class DataTest extends \PHPUnit_Framework_TestCase
+class QuoteValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Quote\Helper\Data
+     * @var \Magento\Quote\Model\QuoteValidator
      */
-    protected $helper;
+    protected $quoteValidator;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Quote\Model\Quote
@@ -24,7 +21,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->helper = new \Magento\Quote\Helper\Data();
+        $this->quoteValidator = new \Magento\Quote\Model\QuoteValidator();
 
         $this->quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->setMethods(['getHasError', 'setHasError', 'addMessage', '__wakeup'])
@@ -45,8 +42,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('addMessage');
 
         $this->assertSame(
-            $this->helper,
-            $this->helper->checkQuoteAmount($this->quoteMock, Data::MAXIMUM_AVAILABLE_NUMBER + 1)
+            $this->quoteValidator,
+            $this->quoteValidator->validateQuoteAmount($this->quoteMock, QuoteValidator::MAXIMUM_AVAILABLE_NUMBER + 1)
         );
     }
 
@@ -63,8 +60,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('addMessage');
 
         $this->assertSame(
-            $this->helper,
-            $this->helper->checkQuoteAmount($this->quoteMock, Data::MAXIMUM_AVAILABLE_NUMBER - 1)
+            $this->quoteValidator,
+            $this->quoteValidator->validateQuoteAmount($this->quoteMock, QuoteValidator::MAXIMUM_AVAILABLE_NUMBER - 1)
         );
     }
 
@@ -83,8 +80,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with(__('This item price or quantity is not valid for checkout.'));
 
         $this->assertSame(
-            $this->helper,
-            $this->helper->checkQuoteAmount($this->quoteMock, Data::MAXIMUM_AVAILABLE_NUMBER + 1)
+            $this->quoteValidator,
+            $this->quoteValidator->validateQuoteAmount($this->quoteMock, QuoteValidator::MAXIMUM_AVAILABLE_NUMBER + 1)
         );
     }
 }

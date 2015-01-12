@@ -10,6 +10,27 @@ use Magento\Quote\Model\Quote as QuoteEntity;
 class QuoteValidator
 {
     /**
+     * Maximum available number
+     */
+    const MAXIMUM_AVAILABLE_NUMBER = 99999999;
+
+    /**
+     * Validate quote amount
+     *
+     * @param QuoteEntity $quote
+     * @param float $amount
+     * @return $this
+     */
+    public function validateQuoteAmount(QuoteEntity $quote, $amount)
+    {
+        if (!$quote->getHasError() && $amount >= self::MAXIMUM_AVAILABLE_NUMBER) {
+            $quote->setHasError(true);
+            $quote->addMessage(__('This item price or quantity is not valid for checkout.'));
+        }
+        return $this;
+    }
+
+    /**
      * Validate quote before submit
      *
      * @param Quote $quote
