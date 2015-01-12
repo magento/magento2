@@ -89,13 +89,13 @@ define([
 
         /**
          * @private
-         * Update attribute aria-haspopup (true/false).
+         * @param {Boolean} show Set attribute aria-haspopup to "true/false" for element.
          */
         _updateAriaHasPopup: function(show) {
-            if (show === true) {
-                this.element.attr('aria-haspopup', "true");
+            if (show) {
+                this.element.attr('aria-haspopup', 'true');
             } else {
-                this.element.attr('aria-haspopup', "false");
+                this.element.attr('aria-haspopup', 'false');
             }
         },
 
