@@ -484,28 +484,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractModel imple
     }
 
     /**
-     * Get whether the item is nominal
-     * TODO: fix for multishipping checkout
-     *
-     * @return bool
-     */
-    public function isNominal()
-    {
-        return false;
-    }
-
-    /**
-     * Data getter for 'is_nominal'
-     * Used for converting item to order item
-     *
-     * @return int
-     */
-    public function getIsNominal()
-    {
-        return (int)$this->isNominal();
-    }
-
-    /**
      * Get original price (retrieved from product) for item.
      * Original price value is in quote selected currency
      *

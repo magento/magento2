@@ -4,7 +4,7 @@
  */
 
 /**
- * Sales configuration filesystem loader. Loads all totals (incl. nominal, creditmemo, invoice)
+ * Sales configuration filesystem loader. Loads all totals (incl. creditmemo, invoice)
  * configuration from XML file
  */
 namespace Magento\Sales\Model\Config;

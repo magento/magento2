@@ -48,7 +48,7 @@ class Config implements \Magento\Sales\Model\ConfigInterface
 
     /**
      * Retrieve totals for group
-     * e.g. quote, nominal_totals, etc
+     * e.g. quote, etc
      *
      * @param string $section
      * @param string $group

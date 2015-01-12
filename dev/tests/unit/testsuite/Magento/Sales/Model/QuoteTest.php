@@ -1048,4 +1048,33 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\Magento\Sales\Model\Quote\Payment', $this->quote->getPayment());
     }
+
+    public function testAddItem()
+    {
+        $item = $this->getMock('Magento\Sales\Model\Quote\Item', ['setQuote', 'getId'], [], '', false);
+        $item->expects($this->once())
+            ->method('setQuote');
+        $item->expects($this->once())
+            ->method('getId')
+            ->willReturn(false);
+        $itemsMock = $this->getMock(
+            'Magento\Eav\Model\Entity\Collection\AbstractCollection',
+            ['setQuote', 'addItem'],
+            [],
+            '',
+            false
+        );
+        $itemsMock->expects($this->once())
+            ->method('setQuote');
+        $itemsMock->expects($this->once())
+            ->method('addItem')
+            ->with($item);
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($itemsMock);
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch');
+
+        $this->quote->addItem($item);
+    }
 }

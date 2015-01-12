@@ -113,7 +113,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $addressMock = $this->getMockObject('Magento\Sales\Model\Quote\Address', [
-            'all_non_nominal_items' => [],
+            'all_items' => [],
             'shipping_tax_calculation_amount' => 100,
             'base_shipping_tax_calculation_amount' => 200,
             'shipping_discount_amount' => 10,

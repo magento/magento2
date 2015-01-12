@@ -10,9 +10,6 @@
             <item name="weee" instance="Magento\Weee\Model\Total\Quote\Weee" sort_order="225"/>
             <item name="weee_tax" instance="Magento\Weee\Model\Total\Quote\WeeeTax" sort_order="460"/>
         </group>
-        <group name="nominal_totals">
-            <item name="nominal_weee" instance="Magento\Weee\Model\Total\Quote\Nominal\Weee" sort_order="600"/>
-        </group>
     </section>
     <section name="order_invoice">
         <group name="totals">

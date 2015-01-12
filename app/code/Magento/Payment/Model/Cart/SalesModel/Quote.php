@@ -49,7 +49,7 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
                     'parent_item' => $item->getParentItem(),
                     'name' => $item->getName(),
                     'qty' => (int)$item->getTotalQty(),
-                    'price' => $item->isNominal() ? 0 : (double)$item->getBaseCalculationPrice(),
+                    'price' => (double)$item->getBaseCalculationPrice(),
                     'original_item' => $item,
                 ]
             );

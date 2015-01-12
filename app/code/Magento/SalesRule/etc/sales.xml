@@ -9,8 +9,5 @@
         <group name="totals">
             <item name="discount" instance="Magento\SalesRule\Model\Quote\Discount" sort_order="400"/>
         </group>
-        <group name="nominal_totals">
-            <item name="nominal_discount" instance="Magento\SalesRule\Model\Quote\Nominal\Discount" sort_order="550"/>
-        </group>
     </section>
 </config>

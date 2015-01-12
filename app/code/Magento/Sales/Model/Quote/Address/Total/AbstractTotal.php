@@ -187,14 +187,14 @@ abstract class AbstractTotal
     }
 
     /**
-     * Get all items except nominals
+     * Get all items
      *
      * @param \Magento\Sales\Model\Quote\Address $address
      * @return array
      */
     protected function _getAddressItems(\Magento\Sales\Model\Quote\Address $address)
     {
-        return $address->getAllNonNominalItems();
+        return $address->getAllItems();
     }
 
     /**

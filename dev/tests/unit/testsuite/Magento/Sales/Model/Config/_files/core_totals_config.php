@@ -5,8 +5,7 @@
 
 return [
     // Totals declared in Magento_Sales
-    'nominal' => ['before' => ['subtotal'], 'after' => []],
-    'subtotal' => ['after' => ['nominal'], 'before' => ['grand_total']],
+    'subtotal' => ['after' => [], 'before' => ['grand_total']],
     'shipping' => [
         'after' => ['subtotal', 'freeshipping', 'tax_subtotal'],
         'before' => ['grand_total'],

@@ -288,7 +288,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($address));
 
-        $addressData["cached_items_nonnominal"] = $items;
+        $addressData["cached_items_all"] = $items;
         foreach ($addressData as $key => $value) {
             $address->setData($key, $value);
         }
@@ -549,7 +549,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getBillingAddress')
             ->will($this->returnValue($address));
 
-        $addressData["cached_items_nonnominal"] = $items;
+        $addressData["cached_items_all"] = $items;
         foreach ($addressData as $key => $value) {
             $address->setData($key, $value);
         }
@@ -621,7 +621,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $address = $this->getMock(
             '\Magento\Sales\Model\Quote\Address',
             [
-                'getAppliedTaxes', 'getQuote', 'getAllNonNominalItems', 'getGrandTotal', '__wakeup',
+                'getAppliedTaxes', 'getQuote', 'getAllItems', 'getGrandTotal', '__wakeup',
                 'addTotal', 'getTaxAmount'
             ],
             [],
@@ -638,7 +638,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quote));
         $address
             ->expects($this->once())
-            ->method('getAllNonNominalItems')
+            ->method('getAllItems')
             ->will($this->returnValue($items));
         $address
             ->expects($this->any())
@@ -653,7 +653,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getTaxAmount')
             ->will($this->returnValue(8));
 
-        $addressData["cached_items_nonnominal"] = $items;
+        $addressData["cached_items_all"] = $items;
         foreach ($addressData as $key => $value) {
             $address->setData($key, $value);
         }
@@ -712,7 +712,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                    'getAllNonNominalItems',
+                    'getAllItems',
                     '__wakeup',
                 ]
             )->getMock();
@@ -729,7 +729,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $address->setBaseSubtotalInclTax(1);
 
         $address->expects($this->once())
-            ->method('getAllNonNominalItems')
+            ->method('getAllItems')
             ->will($this->returnValue([]));
 
         $objectManager = new ObjectManager($this);

@@ -478,9 +478,6 @@
             <field name="base_hidden_tax_amount">
                 <aspect name="to_order_item" />
             </field>
-            <field name="is_nominal">
-                <aspect name="to_order_item" />
-            </field>
             <field name="free_shipping">
                 <aspect name="to_order_item" />
             </field>

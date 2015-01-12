@@ -118,7 +118,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Quote\Address',
             [
                 '__wakeup',
-                'getAllNonNominalItems',
+                'getAllItems',
                 'getQuote',
             ],
             [],
@@ -133,7 +133,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency->expects($this->any())->method('convert')->willReturnArgument(0);
         $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
 
-        $addressMock->expects($this->any())->method('getAllNonNominalItems')->will($this->returnValue([$itemMock]));
+        $addressMock->expects($this->any())->method('getAllItems')->will($this->returnValue([$itemMock]));
         $addressMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
 
         return $addressMock;

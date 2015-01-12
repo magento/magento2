@@ -86,7 +86,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             true
         ) &&
             $quote->getItemsSummaryQty() - $quote->getItemVirtualQty() > 0 &&
-            $quote->getItemsSummaryQty() <= $this->getMaximumQty() &&
-            !$quote->hasNominalItems();
+            $quote->getItemsSummaryQty() <= $this->getMaximumQty();
     }
 }

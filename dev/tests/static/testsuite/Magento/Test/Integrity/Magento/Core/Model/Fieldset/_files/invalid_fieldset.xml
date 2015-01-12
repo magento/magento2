@@ -478,9 +478,6 @@
                 <base_hidden_tax_amount>
                     <to_order_item>*</to_order_item>
                 </base_hidden_tax_amount>
-                <is_nominal>
-                    <to_order_item>*</to_order_item>
-                </is_nominal>
                 <free_shipping>
                     <to_order_item>*</to_order_item>
                 </free_shipping>
