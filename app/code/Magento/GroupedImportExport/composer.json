@@ -2,7 +2,7 @@
     "name": "magento/module-grouped-import-export",
     "description": "N/A",
     "require": {
-        "php": "~5.4.11|~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0",
         "magento/module-catalog": "0.42.0-beta3",
         "magento/module-import-export": "0.42.0-beta3",
         "magento/module-catalog-import-export": "0.42.0-beta3",
