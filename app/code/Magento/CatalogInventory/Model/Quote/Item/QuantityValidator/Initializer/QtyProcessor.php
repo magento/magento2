@@ -6,7 +6,7 @@
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
-use Magento\Sales\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Class QtyProcessor

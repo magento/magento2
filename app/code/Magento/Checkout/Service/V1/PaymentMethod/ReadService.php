@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Service\V1\PaymentMethod;
 
-use \Magento\Sales\Model\QuoteRepository;
+use \Magento\Quote\Model\QuoteRepository;
 use \Magento\Store\Model\StoreManagerInterface;
 use Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Converter as QuoteMethodConverter;
 use Magento\Checkout\Service\V1\Data\PaymentMethod\Converter as PaymentMethodConverter;
@@ -73,7 +73,7 @@ class ReadService implements ReadServiceInterface
      */
     public function getPayment($cartId)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $payment = $quote->getPayment();
         if (!$payment->getId()) {
@@ -92,7 +92,7 @@ class ReadService implements ReadServiceInterface
     public function getList($cartId)
     {
         $output = [];
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         foreach ($this->methodList->getAvailableMethods($quote) as $method) {
             $output[] = $this->paymentMethodConverter->toDataObject($method);

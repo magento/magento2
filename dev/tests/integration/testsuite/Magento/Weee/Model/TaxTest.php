@@ -67,8 +67,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Customer\Model\Group $group */
         $group = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Group');
         $fixtureGroupId = $group->load($fixtureGroupCode, 'customer_group_code')->getId();
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->setCustomerGroupId($fixtureGroupId);
         $quote->setCustomerTaxClassId($fixtureTaxClassId);
         $quote->setCustomer($customerDataSet);

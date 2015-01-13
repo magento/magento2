@@ -21,6 +21,7 @@
         "magento/module-authorization": "0.42.0-beta3",
         "magento/module-integration": "0.42.0-beta3",
         "magento/module-ui": "0.42.0-beta3",
+        "magento/module-quote": "0.42.0-beta3",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",

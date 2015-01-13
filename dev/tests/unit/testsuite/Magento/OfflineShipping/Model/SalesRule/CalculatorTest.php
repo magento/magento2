@@ -26,7 +26,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessFreeShipping()
     {
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', ['getAddress', '__wakeup'], [], '', false);
+        $item = $this->getMock('Magento\Quote\Model\Quote\Item', ['getAddress', '__wakeup'], [], '', false);
         $item->expects($this->once())->method('getAddress')->will($this->returnValue(true));
 
         $this->assertInstanceOf(

@@ -21,21 +21,21 @@ class Subtotal extends \Magento\Tax\Model\Sales\Total\Quote\Subtotal
     /**
      * Don't fetch anything
      *
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return array
      */
-    public function fetch(\Magento\Sales\Model\Quote\Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address $address)
     {
-        return \Magento\Sales\Model\Quote\Address\Total\AbstractTotal::fetch($address);
+        return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal::fetch($address);
     }
 
     /**
      * Get nominal items only
      *
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return array
      */
-    protected function _getAddressItems(\Magento\Sales\Model\Quote\Address $address)
+    protected function _getAddressItems(\Magento\Quote\Model\Quote\Address $address)
     {
         return $address->getAllNominalItems();
     }

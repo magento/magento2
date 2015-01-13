@@ -10,6 +10,7 @@
         "magento/module-shipping": "0.42.0-beta3",
         "magento/module-directory": "0.42.0-beta3",
         "magento/module-catalog-inventory": "0.42.0-beta3",
+        "magento/module-quote": "0.42.0-beta3",
         "magento/framework": "0.42.0-beta3",
         "magento/magento-composer-installer": "*"
     },

@@ -80,7 +80,7 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
 
     public function testFetch()
     {
-        $addressMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Address')
+        $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
             ->getMock();
         $this->assertInternalType('array', $this->discount->fetch($addressMock));
@@ -88,7 +88,7 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNominalAddressItems()
     {
-        $item = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $item = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMock();
@@ -106,11 +106,11 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($storeMock);
 
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $addressMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Address')
+        $addressMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
             ->setMethods(['getQuote', 'getAllNominalItems', 'getShippingAmount', '__wakeup'])
             ->getMock();

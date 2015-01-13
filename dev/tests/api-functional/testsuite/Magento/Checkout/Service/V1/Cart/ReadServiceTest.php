@@ -64,13 +64,13 @@ class ReadServiceTest extends WebapiAbstract
      * Retrieve quote by given reserved order ID
      *
      * @param string $reservedOrderId
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      * @throws \InvalidArgumentException
      */
     protected function getCart($reservedOrderId)
     {
-        /** @var $cart \Magento\Sales\Model\Quote */
-        $cart = $this->objectManager->get('Magento\Sales\Model\Quote');
+        /** @var $cart \Magento\Quote\Model\Quote */
+        $cart = $this->objectManager->get('Magento\Quote\Model\Quote');
         $cart->load($reservedOrderId, 'reserved_order_id');
         if (!$cart->getId()) {
             throw new \InvalidArgumentException('There is no quote with provided reserved order ID.');
