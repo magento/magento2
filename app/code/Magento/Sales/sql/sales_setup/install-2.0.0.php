@@ -1648,12 +1648,6 @@ $table = $this->getConnection()->newTable(
     [],
     'Hidden Tax Canceled'
 )->addColumn(
-    'is_nominal',
-    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-    null,
-    ['nullable' => false, 'default' => '0'],
-    'Is Nominal'
-)->addColumn(
     'tax_refunded',
     \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
     '12,4',
