@@ -13,4 +13,22 @@ use Magento\Framework\Exception\InputException;
  */
 class OauthInputException extends InputException
 {
+    /**
+     * Get error messages as a single comma separated string
+     *
+     * @return string
+     */
+    public function getAggregatedErrorMessage()
+    {
+        $errors = [];
+        foreach ($this->getErrors() as $error) {
+            // Clean up any trailing period
+            $errors[] = rtrim($error->getMessage(), '.');
+        }
+        $errorMsg = '';
+        if (!empty($errors)) {
+            $errorMsg = implode(', ', $errors);
+        }
+        return $errorMsg;
+    }
 }
