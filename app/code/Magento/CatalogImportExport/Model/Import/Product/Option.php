@@ -13,7 +13,6 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @todo Need to explode this class because of several responsibilities
- * @todo Refactor in the scope of https://wiki.magento.com/display/MAGE2/Technical+Debt+%28Team-Donetsk-B%29
  */
 class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
