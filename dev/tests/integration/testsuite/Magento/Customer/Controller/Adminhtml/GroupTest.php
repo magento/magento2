@@ -146,7 +146,8 @@ class GroupTest extends \Magento\Backend\Utility\Controller
         $simpleDataObjectConverter = Bootstrap::getObjectManager()
             ->get('Magento\Framework\Api\SimpleDataObjectConverter');
         $customerGroupData = $simpleDataObjectConverter->toFlatArray(
-            $this->groupRepository->getById($groupId)
+            $this->groupRepository->getById($groupId),
+            'Magento\Customer\Api\Data\GroupInterface'
         );
         ksort($customerGroupData);
 
