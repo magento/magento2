@@ -28,6 +28,7 @@ use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\Store\Model\Store;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -199,6 +200,11 @@ class Installer
     private $sampleData;
 
     /**
+     * @var ObjectManagerFactory
+     */
+    private $objectManagerFactory;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -216,6 +222,7 @@ class Installer
      * @param Filesystem $filesystem
      * @param ServiceLocatorInterface $serviceManager
      * @param SampleData $sampleData
+     * @param ObjectManagerFactory $objectManagerFactory
      */
     public function __construct(
         FilePermissions $filePermissions,
@@ -232,7 +239,8 @@ class Installer
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
         ServiceLocatorInterface $serviceManager,
-        SampleData $sampleData
+        SampleData $sampleData,
+        ObjectManagerFactory $objectManagerFactory
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -251,6 +259,7 @@ class Installer
         $this->sampleData = $sampleData;
         $this->installInfo[self::INFO_MESSAGE] = array();
         $this->deploymentConfig = $deploymentConfig;
+        $this->objectManagerFactory = $objectManagerFactory;
     }
 
     /**
@@ -334,14 +343,15 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     * @throws \InvalidArgumentException
      */
     private function createBackendConfig($data)
     {
-        $backendConfigData = array(
-            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_BACKEND_FRONTNAME] =>
-                $data[DeploymentConfigMapper::KEY_BACKEND_FRONTNAME]
-        );
-        return new BackendConfig($backendConfigData);
+        $key = DeploymentConfigMapper::KEY_BACKEND_FRONTNAME;
+        if (empty($data[$key])) {
+            throw new \InvalidArgumentException("Missing value for: '{$key}'");
+        }
+        return new BackendConfig([DeploymentConfigMapper::$paramMap[$key] => $data[$key]]);
     }
 
     /**
@@ -355,7 +365,10 @@ class Installer
      */
     private function createEncryptConfig($data)
     {
-        $key = $data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY];
+        $key = '';
+        if (isset($data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY])) {
+            $key = $data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY];
+        }
         // retrieve old encryption keys
         if ($this->deploymentConfig->isAvailable()) {
             $encryptInfo = $this->deploymentConfig->getSegment(EncryptConfig::CONFIG_KEY);
@@ -378,34 +391,36 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     * @throws \InvalidArgumentException
      */
     private function createDbConfig($data)
     {
-        $defaultConnection = [
-            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_DB_HOST] =>
-                $data[DeploymentConfigMapper::KEY_DB_HOST],
-            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_DB_INIT_STATEMENTS] =>
-                isset($data[DeploymentConfigMapper::KEY_DB_INIT_STATEMENTS]) ?
-                    $data[DeploymentConfigMapper::KEY_DB_INIT_STATEMENTS] : null,
-            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_DB_MODEL] =>
-                isset($data[DeploymentConfigMapper::KEY_DB_MODEL]) ? $data[DeploymentConfigMapper::KEY_DB_MODEL] : null,
-            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_DB_NAME] =>
-                $data[DeploymentConfigMapper::KEY_DB_NAME],
-            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_DB_PASS] =>
-                isset($data[DeploymentConfigMapper::KEY_DB_PASS]) ? $data[DeploymentConfigMapper::KEY_DB_PASS] : null,
-            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_DB_USER] =>
-                $data[DeploymentConfigMapper::KEY_DB_USER],
+        $connection = [];
+        $required = [
+            DeploymentConfigMapper::KEY_DB_HOST,
+            DeploymentConfigMapper::KEY_DB_NAME,
+            DeploymentConfigMapper::KEY_DB_USER,
         ];
-
-        $dbConfigData = [
-            DeploymentConfigMapper::$paramMap[DeploymentConfigMapper::KEY_DB_PREFIX] =>
-                isset($data[DeploymentConfigMapper::KEY_DB_PREFIX]) ?
-                    $data[DeploymentConfigMapper::KEY_DB_PREFIX] : null,
-            'connection' => [
-                'default' => $defaultConnection,
-            ],
+        foreach ($required as $key) {
+            if (!isset($data[$key])) {
+                throw new \InvalidArgumentException("Missing value: {$key}");
+            }
+            $connection[DeploymentConfigMapper::$paramMap[$key]] = $data[$key];
+        }
+        $optional = [
+            DeploymentConfigMapper::KEY_DB_INIT_STATEMENTS,
+            DeploymentConfigMapper::KEY_DB_MODEL,
+            DeploymentConfigMapper::KEY_DB_PASS,
         ];
-        return new DbConfig($dbConfigData);
+        foreach ($optional as $key) {
+            $connection[DeploymentConfigMapper::$paramMap[$key]] = isset($data[$key]) ? $data[$key] : null;
+        }
+        $prefixKey = DeploymentConfigMapper::KEY_DB_PREFIX;
+        $config = [
+            DeploymentConfigMapper::$paramMap[$prefixKey] => isset($data[$prefixKey]) ? $data[$prefixKey] : null,
+            'connection' => ['default' => $connection],
+        ];
+        return new DbConfig($config);
     }
 
     /**
@@ -492,10 +507,7 @@ class Installer
     {
         $results = $this->filePermissions->getMissingWritableDirectoriesForInstallation();
         if ($results) {
-            $errorMsg = 'Missing writing permissions to the following directories: ';
-            foreach ($results as $result) {
-                $errorMsg .= '\'' . $result . '\' ';
-            }
+            $errorMsg = "Missing writing permissions to the following directories: '" . implode("' '", $results) . "'";
             throw new \Exception($errorMsg);
         }
     }
@@ -509,10 +521,8 @@ class Installer
     {
         $results = $this->filePermissions->getUnnecessaryWritableDirectoriesForApplication();
         if ($results) {
-            $errorMsg = 'For security, remove write permissions from these directories: ';
-            foreach ($results as $result) {
-                $errorMsg .= '\'' . $result . '\' ';
-            }
+            $errorMsg = "For security, remove write permissions from these directories: '"
+                . implode("' '", $results) . "'";
             $this->log->log($errorMsg);
             $this->installInfo[self::INFO_MESSAGE][] = $errorMsg;
         }
@@ -765,7 +775,7 @@ class Installer
      *
      * @return void
      */
-    private function cleanupDb()
+    public function cleanupDb()
     {
         // stops cleanup if app/etc/config.php does not exist
         if ($this->deploymentConfig->isAvailable()) {
@@ -849,8 +859,7 @@ class Installer
     {
         if (null === $this->objectManager) {
             $this->assertDeploymentConfigExists();
-            $factory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $this->initParams);
-            $this->objectManager = $factory->create($this->initParams);
+            $this->objectManager = $this->objectManagerFactory->create($this->initParams);
         }
         return $this->objectManager;
     }
@@ -874,7 +883,8 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $dbConfig = new DbConfig($this->deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
+        $segment = $this->deploymentConfig->getSegment(DbConfig::CONFIG_KEY);
+        $dbConfig = new DbConfig($segment);
         $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
         $this->checkDatabaseConnection(
             $config[DbConfig::KEY_NAME],

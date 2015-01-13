@@ -7,6 +7,8 @@
 namespace Magento\Setup\Model;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Magento\Framework\App\Bootstrap;
 
 class InstallerFactory
 {
@@ -35,6 +37,7 @@ class InstallerFactory
      */
     public function create(LoggerInterface $log)
     {
+        $params = $this->serviceLocator->get(InitParamListener::BOOTSTRAP_PARAM);
         return new Installer(
             $this->serviceLocator->get('Magento\Setup\Model\FilePermissions'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Writer'),
@@ -50,7 +53,8 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),
             $this->serviceLocator->get('Magento\Framework\Filesystem'),
             $this->serviceLocator,
-            $this->serviceLocator->get('Magento\Setup\Model\SampleData')
+            $this->serviceLocator->get('Magento\Setup\Model\SampleData'),
+            Bootstrap::createObjectManagerFactory(BP, $params)
         );
     }
 }

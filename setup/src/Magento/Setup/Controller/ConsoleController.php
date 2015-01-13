@@ -423,8 +423,11 @@ class ConsoleController extends AbstractActionController
         }
 
         $this->log->log('Status: maintenance mode is ' . ($this->maintenanceMode->isOn() ? 'active' : 'not active'));
-        $addresses = implode(', ', $this->maintenanceMode->getAddressInfo());
-        $this->log->log('List of exempt IP-addresses: ' . ($addresses ? $addresses : 'none'));
+        $addressInfo = $this->maintenanceMode->getAddressInfo();
+        if(isset($addressInfo) && !empty($addressInfo)) {
+            $addresses = implode(', ', $addressInfo);
+            $this->log->log('List of exempt IP-addresses: ' . ($addresses ? $addresses : 'none'));
+        }
     }
 
     /**
