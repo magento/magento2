@@ -265,14 +265,22 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $returnToEdit = true;
             }
         }
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($returnToEdit) {
             if ($customerId) {
-                $this->_redirect('customer/*/edit', ['id' => $customerId, '_current' => true]);
+                $resultRedirect->setPath(
+                    'customer/*/edit',
+                    ['id' => $customerId, '_current' => true]
+                );
             } else {
-                $this->_redirect('customer/*/new', ['_current' => true]);
+                $resultRedirect->setPath(
+                    'customer/*/new',
+                    ['_current' => true]
+                );
             }
         } else {
-            $this->_redirect('customer/index');
+            $resultRedirect->setPath('customer/index');
         }
+        return $resultRedirect;
     }
 }

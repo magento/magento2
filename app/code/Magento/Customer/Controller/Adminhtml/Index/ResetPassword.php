@@ -16,9 +16,11 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
+        $resultRedirect = $this->resultRedirectFactory->create();
         $customerId = (int)$this->getRequest()->getParam('customer_id', 0);
         if (!$customerId) {
-            return $this->_redirect('customer/index');
+            $resultRedirect->setPath('customer/index');
+            return $resultRedirect;
         }
 
         try {
@@ -30,7 +32,8 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
             );
             $this->messageManager->addSuccess(__('Customer will receive an email with a link to reset password.'));
         } catch (NoSuchEntityException $exception) {
-            return $this->_redirect('customer/index');
+            $resultRedirect->setPath('customer/index');
+            return $resultRedirect;
         } catch (\Magento\Framework\Model\Exception $exception) {
             $messages = $exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR);
             if (!count($messages)) {
@@ -43,7 +46,10 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
                 __('An error occurred while resetting customer password.')
             );
         }
-
-        $this->_redirect('customer/*/edit', ['id' => $customerId, '_current' => true]);
+        $resultRedirect->setPath(
+            'customer/*/edit',
+            ['id' => $customerId, '_current' => true]
+        );
+        return $resultRedirect;
     }
 }

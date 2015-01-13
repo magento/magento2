@@ -26,6 +26,8 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->messageManager->addError($exception->getMessage());
             }
         }
-        $this->_redirect('customer/index');
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('customer/index');
+        return $resultRedirect;
     }
 }

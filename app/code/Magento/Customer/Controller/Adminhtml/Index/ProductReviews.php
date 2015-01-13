@@ -17,12 +17,12 @@ class ProductReviews extends \Magento\Customer\Controller\Adminhtml\Index
     public function execute()
     {
         $this->_initCustomer();
-        $this->_view->loadLayout();
-        $this->prepareDefaultCustomerTitle();
-        $this->_view->getLayout()->getBlock('admin.customer.reviews')->setCustomerId(
+        $resultPage = $this->resultPageFactory->create();
+        $this->prepareDefaultCustomerTitle($resultPage);
+        $resultPage->getLayout()->getBlock('admin.customer.reviews')->setCustomerId(
             $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
         )
             ->setUseAjax(true);
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }

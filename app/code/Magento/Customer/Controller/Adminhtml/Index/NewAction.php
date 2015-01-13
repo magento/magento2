@@ -14,6 +14,8 @@ class NewAction extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        $this->_forward('edit');
+        $resultForward = $this->resultForwardFactory->create();
+        $resultForward->forward('edit');
+        return $resultForward;
     }
 }

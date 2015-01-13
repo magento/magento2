@@ -26,6 +26,8 @@ class MassSubscribe extends \Magento\Customer\Controller\Adminhtml\Index
         if ($customersUpdated) {
             $this->messageManager->addSuccess(__('A total of %1 record(s) were updated.', $customersUpdated));
         }
-        $this->_redirect('customer/*/index');
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('customer/*/index');
+        return $resultRedirect;
     }
 }

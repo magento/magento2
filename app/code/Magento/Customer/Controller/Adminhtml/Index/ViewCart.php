@@ -15,11 +15,11 @@ class ViewCart extends \Magento\Customer\Controller\Adminhtml\Index
     public function execute()
     {
         $this->_initCustomer();
-        $this->_view->loadLayout();
-        $this->prepareDefaultCustomerTitle();
-        $this->_view->getLayout()->getBlock('admin.customer.view.cart')->setWebsiteId(
+        $resultPage = $this->resultPageFactory->create();
+        $this->prepareDefaultCustomerTitle($resultPage);
+        $resultPage->getLayout()->getBlock('admin.customer.view.cart')->setWebsiteId(
             (int)$this->getRequest()->getParam('website_id')
         );
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }

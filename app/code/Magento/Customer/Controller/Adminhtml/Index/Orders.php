@@ -15,8 +15,8 @@ class Orders extends \Magento\Customer\Controller\Adminhtml\Index
     public function execute()
     {
         $this->_initCustomer();
-        $this->_view->loadLayout();
-        $this->prepareDefaultCustomerTitle();
-        $this->_view->renderLayout();
+        $resultPage = $this->resultPageFactory->create();
+        $this->prepareDefaultCustomerTitle($resultPage);
+        return $resultPage;
     }
 }
