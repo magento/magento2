@@ -172,7 +172,11 @@ class Account extends GenericMetadata
         );
         $form->getElement('website_id')->setRenderer($renderer);
 
-        $accountData = $this->_extensibleDataObjectConverter->toFlatArray($this->_getCustomerDataObject());
+        $accountData = $this->_extensibleDataObjectConverter->toFlatArray(
+            $this->_getCustomerDataObject(),
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
 
         if ($this->_getCustomerDataObject()->getId()) {
             $customerFormFields = $this->_addEditCustomerFormFields($fieldset);
