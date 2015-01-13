@@ -66,6 +66,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
                     'getCallbackUrl',
                     'save',
                     'getData',
+                    'isValidForTokenExchange',
                     '__wakeup',
                 ]
             )
@@ -122,8 +123,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $tokenProvider = new \Magento\Integration\Model\Oauth\Token\Provider(
             $this->_consumerFactory,
             $this->_tokenFactory,
-            $this->_dataHelperMock,
-            $this->_dateMock
+            $this->_dataHelperMock
         );
         $this->_oauth = new \Magento\Framework\Oauth\Oauth(
             $this->_oauthHelperMock,
@@ -218,14 +218,11 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     public function testGetRequestTokenOutdatedConsumerKey()
     {
         $this->_setupConsumer();
-        $this->_dateMock->expects($this->any())->method('timestamp')->will($this->returnValue(9999999999));
-        $this->_dataHelperMock->expects(
-            $this->once()
-        )->method(
-            'getConsumerExpirationPeriod'
-        )->will(
-            $this->returnValue(0)
-        );
+        $this->_setupNonce();
+        $this->_consumerMock
+            ->expects($this->any())
+            ->method('isValidForTokenExchange')
+            ->will($this->returnValue(false));
 
         $this->_oauth->getRequestToken($this->_getRequestTokenParams(), self::REQUEST_URL);
     }
@@ -267,14 +264,10 @@ class OauthTest extends \PHPUnit_Framework_TestCase
 
     protected function _makeValidExpirationPeriod()
     {
-        $this->_dateMock->expects($this->any())->method('timestamp')->will($this->returnValue(0));
-        $this->_dataHelperMock->expects(
-            $this->once()
-        )->method(
-            'getConsumerExpirationPeriod'
-        )->will(
-            $this->returnValue(300)
-        );
+        $this->_consumerMock
+            ->expects($this->any())
+            ->method('isValidForTokenExchange')
+            ->will($this->returnValue(true));
     }
 
     /**
@@ -530,7 +523,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /**
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
-     * @expectedException \Magento\Framework\Oauth\Exception
+     * @expectedException \Magento\Framework\Oauth\OauthInputException
      */
     public function testGetAccessTokenTokenRejected()
     {
