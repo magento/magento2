@@ -91,7 +91,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 $existingAdminRoleData,
             ],
         ];
-        $this->dbAdapterMock->expects($this->any())->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock->expects($this->exactly(2))->method('fetchRow')->will($this->returnValueMap($returnValueMap));
         $this->dbAdapterMock->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
         $this->dbAdapterMock->expects($this->once())->method('update')->will($this->returnValue(1));
 
@@ -151,14 +151,12 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->dbAdapterMock->expects($this->any())->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock->expects($this->exactly(3))->method('fetchRow')->will($this->returnValueMap($returnValueMap));
         $this->dbAdapterMock->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
         $this->dbAdapterMock->expects($this->once())->method('update')->will($this->returnValue(1));
 
         // should only insert once (admin role)
-        $this->dbAdapterMock
-            ->expects($this->once())
-            ->method('insert');
+        $this->dbAdapterMock->expects($this->once())->method('insert');
 
         $this->adminAccount->save();
     }
@@ -191,7 +189,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->dbAdapterMock->expects($this->any())->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock->expects($this->exactly(2))->method('fetchRow')->will($this->returnValueMap($returnValueMap));
         // insert only once (new user)
         $this->dbAdapterMock->expects($this->once())->method('insert');
         // after inserting new user
@@ -244,7 +242,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
         ];
 
-        $this->dbAdapterMock->expects($this->any())->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock->expects($this->exactly(3))->method('fetchRow')->will($this->returnValueMap($returnValueMap));
         // after inserting new user
         $this->dbAdapterMock->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
 

@@ -135,21 +135,40 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->adminFactory = $this->getMock('Magento\Setup\Model\AdminAccountFactory', [], [], '', false);
         $this->logger = $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface');
         $this->random = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
-        $connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
         $this->connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
-        $connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $serviceLocator = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface');
-        $serviceLocator->expects($this->once())
-            ->method('get')
-            ->with(InitParamListener::BOOTSTRAP_PARAM)
-            ->willReturn([]);
         $this->sampleData = $this->getMock('Magento\Setup\Model\SampleData', [], [], '', false);
-        $objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
-        $this->object = new Installer(
+        $this->object = $this->createObject();
+    }
+
+    /**
+     * Instantiates the object with mocks
+     *
+     * @param \PHPUnit_Framework_MockObject_MockObject|bool $connectionFactory
+     * @param \PHPUnit_Framework_MockObject_MockObject|bool $serviceLocator
+     * @param \PHPUnit_Framework_MockObject_MockObject|bool $objectManagerFactory
+     * @return Installer
+     */
+    private function createObject($connectionFactory = false, $serviceLocator = false, $objectManagerFactory = false)
+    {
+        if (!$connectionFactory) {
+            $connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
+            $connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
+        }
+        if (!$serviceLocator) {
+            $serviceLocator = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface');
+            $serviceLocator->expects($this->once())
+                ->method('get')
+                ->with(InitParamListener::BOOTSTRAP_PARAM)
+                ->willReturn([]);
+        }
+        if (!$objectManagerFactory) {
+            $objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
+            $objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
+        }
+        return new Installer(
             $this->filePermissions,
             $this->configWriter,
             $this->config,
@@ -183,17 +202,17 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             [DbConfig::CONFIG_KEY, self::$dbConfig],
             [EncryptConfig::CONFIG_KEY, [EncryptConfig::KEY_ENCRYPTION_KEY => 'encryption_key']]
         ]));
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->with('Magento\Framework\Module\Updater')
-            ->willReturn($this->getMock('Magento\Framework\Module\Updater', [], [], '', false));
+        $moduleUpdater = $this->getMock('Magento\Framework\Module\Updater', [], [], '', false);
+        $moduleUpdater->expects($this->once())->method('updateData');
         $cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
         $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
         $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);
-        $this->objectManager->expects($this->at(1))
+        $this->objectManager->expects($this->any())
             ->method('create')
-            ->with('Magento\Framework\App\Cache\Manager')
-            ->willReturn($cacheManager);
+            ->will($this->returnValueMap([
+                ['Magento\Framework\Module\Updater', [], $moduleUpdater],
+                ['Magento\Framework\App\Cache\Manager', [], $cacheManager],
+            ]));
         $this->adminFactory->expects($this->once())->method('create')->willReturn(
             $this->getMock('Magento\Setup\Model\AdminAccount', [], [], '', false)
         );
@@ -221,11 +240,20 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->object->install($request);
     }
 
+    public function testCheckInstallationFilePermissions()
+    {
+        $this->filePermissions
+            ->expects($this->once())
+            ->method('getMissingWritableDirectoriesForInstallation')
+            ->willReturn([]);
+        $this->object->checkInstallationFilePermissions();
+    }
+
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Missing writing permissions to the following directories: 'foo' 'bar'
      */
-    public function testCheckInstallationFilePermissions()
+    public function testCheckInstallationFilePermissionsError()
     {
         $this->filePermissions
             ->expects($this->once())
@@ -251,26 +279,18 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->once())->method('isAvailable')->willReturn(false);
         $varDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $varDir->expects($this->once())->method('getAbsolutePath')->willReturn('/var');
-        $this->filesystem
-            ->expects($this->at(0))
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::VAR_DIR)
-            ->willReturn($varDir);
         $staticDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $staticDir->expects($this->once())->method('getAbsolutePath')->willReturn('/static');
-        $this->filesystem
-            ->expects($this->at(1))
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::STATIC_VIEW)
-            ->willReturn($staticDir);
         $configDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $configDir->expects($this->once())->method('getAbsolutePath')->willReturn('/config/config.php');
         $this->filesystem
-            ->expects($this->at(2))
+            ->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::CONFIG)
-            ->willReturn($configDir);
-
+            ->will($this->returnValueMap([
+                [DirectoryList::VAR_DIR, $varDir],
+                [DirectoryList::STATIC_VIEW, $staticDir],
+                [DirectoryList::CONFIG, $configDir],
+            ]));
         $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
         $this->logger
             ->expects($this->at(1))
@@ -316,6 +336,18 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->with('SELECT version()')
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
         $this->assertEquals(true, $this->object->checkDatabaseConnection('name', 'host', 'user', 'password'));
+    }
+
+    /**
+     * @expectedException \Magento\Setup\Exception
+     * @expectedException Database connection failure.
+     */
+    public function testCheckDatabaseConnectionFailed()
+    {
+        $connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
+        $connectionFactory->expects($this->once())->method('create')->willReturn(false);
+        $object = $this->createObject($connectionFactory);
+        $object->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
     /**

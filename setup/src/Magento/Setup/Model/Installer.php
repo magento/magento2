@@ -361,14 +361,13 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
-     * @throws \InvalidArgumentException
      */
     private function createEncryptConfig($data)
     {
-        if (!isset($data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY])) {
-            throw new \InvalidArgumentException("Missing key: '" . DeploymentConfigMapper::KEY_ENCRYPTION_KEY . "'");
+        $key = '';
+        if (isset($data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY])) {
+            $key = $data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY];
         }
-        $key = $data[DeploymentConfigMapper::KEY_ENCRYPTION_KEY];
         // retrieve old encryption keys
         if ($this->deploymentConfig->isAvailable()) {
             $encryptInfo = $this->deploymentConfig->getSegment(EncryptConfig::CONFIG_KEY);
