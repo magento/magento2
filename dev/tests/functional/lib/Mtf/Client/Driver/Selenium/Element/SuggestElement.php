@@ -42,6 +42,13 @@ class SuggestElement extends Element
     protected $resultItem = './/ul/li/a[text()="%s"]';
 
     /**
+     * Suggest state loader
+     *
+     * @var string
+     */
+    protected $suggestStateLoader = '.mage-suggest-state-loading';
+
+    /**
      * Set value
      *
      * @param string $value
@@ -52,9 +59,16 @@ class SuggestElement extends Element
         $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
         $this->clear();
-        $this->find($this->suggest)->_getWrappedElement()->value($value);
-        $this->waitResult();
-        $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH)->click();
+        foreach(str_split($value) as $symbol) {
+            $this->find($this->suggest)->click();
+            $this->_driver->keys($symbol);
+            $this->waitResult();
+            $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+            if ($searchedItem->isVisible()) {
+                $searchedItem->click();
+                break;
+            }
+        }
     }
 
     /**
@@ -77,11 +91,12 @@ class SuggestElement extends Element
      */
     public function waitResult()
     {
-        $browser = $this;
-        $selector = $this->searchResult;
+        $browser = clone $this;
+        $selector = $this->suggestStateLoader;
         $browser->waitUntil(
             function () use ($browser, $selector) {
-                return $browser->find($selector)->isVisible() ? true : null;
+                $element = $browser->find($selector);
+                return $element->isVisible() == false ? true : null;
             }
         );
     }
