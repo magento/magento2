@@ -23,21 +23,14 @@ class ChangedFiles
     public static function getPhpFiles($changedFilesList)
     {
         $fileHelper = \Magento\Framework\Test\Utility\Files::init();
-        $allPhpFiles = $fileHelper->getPhpFiles();
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
-            try {
-                $phpFiles = Files::readLists($changedFilesList);
-            } catch (\Exception $e){
-                $phpFiles = [];
+            $phpFiles = Files::readLists($changedFilesList);
+            if (!empty($phpFiles)) {
+                $phpFiles = \Magento\Framework\Test\Utility\Files::composeDataSets($phpFiles);
+                $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles());
             }
-
-            foreach ($phpFiles as $key => $phpFile) {
-                $phpFiles[$key] = $fileHelper->getPathToSource() . '/' . $phpFile;
-            }
-            $phpFiles = \Magento\Framework\Test\Utility\Files::composeDataSets($phpFiles);
-            $phpFiles = array_intersect_key($phpFiles, $allPhpFiles);
         } else {
-            $phpFiles = $allPhpFiles;
+            $phpFiles = $fileHelper->getPhpFiles();
         }
 
         return $phpFiles;

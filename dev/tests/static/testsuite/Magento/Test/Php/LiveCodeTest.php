@@ -52,21 +52,17 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     {
         $directoriesToCheck = file(__DIR__ . '/_files/whitelist/common.txt', FILE_IGNORE_NEW_LINES);
 
-        try {
-            $changedFiles = array_filter(
-                Utility\Files::readLists(__DIR__ . '/_files/changed_files'),
-                function ($path) use ($directoriesToCheck) {
-                    foreach ($directoriesToCheck as $directory) {
-                        if (strpos($path, BP . '/' . $directory) === 0) {
-                            return true;
-                        }
+        $changedFiles = array_filter(
+            Utility\Files::readLists(__DIR__ . '/_files/changed_files*'),
+            function ($path) use ($directoriesToCheck) {
+                foreach ($directoriesToCheck as $directory) {
+                    if (strpos($path, BP . '/' . $directory) === 0) {
+                        return true;
                     }
-                    return false;
                 }
-            );
-        } catch (\Exception $e) {
-            $changedFiles = [];
-        }
+                return false;
+            }
+        );
 
         if (!empty($fileTypes)) {
             $changedFiles = array_filter(
