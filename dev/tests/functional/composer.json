@@ -4,7 +4,9 @@
         "php": ">=5.4.0",
         "phpunit/phpunit": "4.1.0",
         "phpunit/phpunit-selenium": ">=1.2",
-        "netwing/selenium-server-standalone": ">=2.35",
+        "netwing/selenium-server-standalone": ">=2.35"
+    },
+    "suggest": {
         "facebook/webdriver": "dev-master"
     },
     "autoload": {
