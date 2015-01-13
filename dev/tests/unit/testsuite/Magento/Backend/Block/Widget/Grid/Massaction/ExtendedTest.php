@@ -6,7 +6,7 @@
 /**
  * Test class for \Magento\Backend\Block\Widget\Grid\Massaction\Extended
  */
-namespace Magento\Backend\Block\Widget\Grid;
+namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
 class ExtendedTest extends \PHPUnit_Framework_TestCase
 {
