@@ -23,16 +23,6 @@ class Provider implements TokenProviderInterface
     protected $_tokenFactory;
 
     /**
-     * @var  \Magento\Integration\Helper\Oauth\Data
-     */
-    protected $_dataHelper;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    protected $_date;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
@@ -40,21 +30,15 @@ class Provider implements TokenProviderInterface
     /**
      * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
      * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
-     * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
         \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory,
-        \Magento\Integration\Helper\Oauth\Data $dataHelper,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_tokenFactory = $tokenFactory;
-        $this->_dataHelper = $dataHelper;
-        $this->_date = $date;
         $this->logger = $logger;
     }
 
@@ -64,9 +48,7 @@ class Provider implements TokenProviderInterface
     public function validateConsumer($consumer)
     {
         // Must use consumer within expiration period.
-        $consumerTS = strtotime($consumer->getCreatedAt());
-        $expiry = $this->_dataHelper->getConsumerExpirationPeriod();
-        if ($this->_date->timestamp() - $consumerTS > $expiry) {
+        if (!$consumer->isValidForTokenExchange()) {
             throw new \Magento\Framework\Oauth\Exception(
                 'Consumer key has expired'
             );
