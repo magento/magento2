@@ -2,7 +2,8 @@
 /**
  * Default acl loader. Used as a fallback when no loaders were defined. Doesn't change ACL object passed.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\Loader;
 
