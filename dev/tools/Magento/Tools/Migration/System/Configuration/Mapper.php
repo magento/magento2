@@ -37,7 +37,7 @@ class Mapper
     public function transform(array $config)
     {
         $output = [];
-        $output['comment'] = $config['comment'];
+        $output['comment'] = isset($config['comment']) ? $config['comment'] : '';
 
         $tabsConfig = isset($config['tabs']) ? $config['tabs'] : [];
         $sectionsConfig = isset($config['sections']) ? $config['sections'] : [];
