@@ -90,7 +90,7 @@ sub vcl_backend_response {
 
 sub vcl_deliver {
     if (resp.http.X-Magento-Debug) {
-        if (obj.hits > 0) {
+        if (resp.http.x-varnish ~ " ") {
             set resp.http.X-Magento-Cache-Debug = "HIT";
         } else {
             set resp.http.X-Magento-Cache-Debug = "MISS";
