@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -22,6 +24,7 @@ class ConfigTest extends \Magento\Backend\Utility\Controller
      */
     public function testChangeBaseUrl()
     {
+        $defaultHost = Bootstrap::getObjectManager()->create('Magento\Framework\Url')->getBaseUrl();
         $newHost = 'm2test123.loc';
         $request = $this->getRequest();
         $request->setPost(
@@ -52,6 +55,31 @@ class ConfigTest extends \Magento\Backend\Utility\Controller
             'No GET params, including "SID", were expected, but somewhat exists'
         );
         $this->assertEquals($newHost, $url['host'], 'A new host in the url expected, but there is old one');
+        $this->resetBaseUrl($defaultHost);
+    }
+
+    /**
+     * Reset test framework default base url
+     */
+    protected function resetBaseUrl($defaultHost)
+    {
+        $baseUrlData = [
+            'section' => 'web',
+            'website' => NULL,
+            'store' => NULL,
+            'groups' => [
+                'unsecure' => [
+                    'fields' => [
+                        'base_url' => [
+                            'value' => $defaultHost
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        Bootstrap::getObjectManager()->create('Magento\Backend\Model\Config\Factory')
+            ->create()
+            ->addData($baseUrlData)
+            ->save();
     }
 }
-
