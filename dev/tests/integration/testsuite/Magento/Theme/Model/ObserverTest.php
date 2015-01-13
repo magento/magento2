@@ -7,7 +7,7 @@
 /**
  * Test theme observer
  */
-namespace Magento\Core\Model;
+namespace Magento\Theme\Model;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,8 +51,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $themeRegistration->expects($this->once())->method('register')->with($this->equalTo($pattern));
         $this->_objectManager->addSharedInstance($themeRegistration, 'Magento\Core\Model\Theme\Registration');
 
-        /** @var $observer \Magento\Core\Model\Observer */
-        $observer = $this->_objectManager->create('Magento\Core\Model\Observer');
+        /** @var $observer \Magento\Theme\Model\Observer */
+        $observer = $this->_objectManager->create('Magento\Theme\Model\Observer');
         $observer->themeRegistration($this->_eventObserver);
     }
 

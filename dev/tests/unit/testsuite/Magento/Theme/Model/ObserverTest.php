@@ -3,7 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model;
+
+namespace Magento\Theme\Model;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +24,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_assetsMock;
 
     /**
-     * @var \Magento\Core\Model\Observer
+     * @var \Magento\Theme\Model\Observer
      */
     protected $_model;
 
@@ -75,7 +76,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
-            'Magento\Core\Model\Observer',
+            'Magento\Theme\Model\Observer',
             [
                 'design' => $designMock,
                 'assets' => $this->_assetsMock,

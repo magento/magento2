@@ -1618,6 +1618,8 @@ return [
     ['Magento\Core\Model\Message\Notice', 'Magento\Framework\Message\Notice'],
     ['Magento\Core\Model\Message\Success', 'Magento\Framework\Message\Success'],
     ['Magento\Core\Block\Html\Date', 'Magento\Framework\View\Element\Html\Date'],
+    ['Magento\Core\Model\Theme\Observer', 'Magento\Theme\Model\Observer'],
+    ['Magento\Core\Model\Observer', 'Magento\Theme\Model\Observer'],
     ['Magento\Core\Block\Html\Select', 'Magento\Framework\View\Element\Html\Select'],
     ['Magento\Core\Block\AbstractBlock', 'Magento\Framework\View\Element\AbstractBlock'],
     ['Magento\Core\Block\Template', 'Magento\Framework\View\Element\Template'],
