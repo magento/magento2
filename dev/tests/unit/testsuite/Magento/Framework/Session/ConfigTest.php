@@ -364,7 +364,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 true,
                 [
                     'session.save_handler' => 'files',
-                    'session.save_path' => null,
                     'session.cache_limiter' => 'files',
                     'session.cookie_lifetime' => 7200,
                     'session.cookie_path' => '/',
@@ -377,7 +376,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 false,
                 [
                     'session.save_handler' => 'files',
-                    'session.save_path' => null,
                     'session.cache_limiter' => 'files',
                     'session.cookie_httponly' => false,
                 ],
@@ -387,7 +385,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 true,
                 [
                     'session.save_handler' => 'files',
-                    'session.save_path' => null,
                     'session.cache_limiter' => 'files',
                     'session.cookie_lifetime' => 3600,
                     'session.cookie_path' => '/',
