@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 require __DIR__ . '/../../Checkout/_files/quote_with_address.php';
@@ -37,7 +38,7 @@ $quote->setReservedOrderId('test_order_item_with_message')
 $quote->collectTotals()->save();
 
 /** @var \Magento\GiftMessage\Model\Message $message */
-$message = $objectManager->create('\Magento\GiftMessage\Model\Message');
+$message = $objectManager->create('Magento\GiftMessage\Model\Message');
 $message->setSender('John Doe');
 $message->setRecipient('Jane Roe');
 $message->setMessage('Gift Message Text');

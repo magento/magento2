@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /** @var \Magento\ToolkitFramework\Application $this */
 $categoriesNumber = \Magento\ToolkitFramework\Config::getInstance()->getValue('categories', 18);
@@ -8,7 +9,7 @@ $maxNestingLevel = \Magento\ToolkitFramework\Config::getInstance()->getValue('ca
 $this->resetObjectManager();
 
 /** @var \Magento\Store\Model\StoreManager $storeManager */
-$storeManager = $this->getObjectManager()->create('\Magento\Store\Model\StoreManager');
+$storeManager = $this->getObjectManager()->create('Magento\Store\Model\StoreManager');
 /** @var $category \Magento\Catalog\Model\Category */
 $category = $this->getObjectManager()->create('Magento\Catalog\Model\Category');
 

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
@@ -97,7 +98,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $customerAddressRegionBuilderMock->expects($this->any())->method('setRegionId')->willReturnSelf();
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Tax\Model\Sales\Total\Quote\Subtotal',
+            'Magento\Tax\Model\Sales\Total\Quote\Subtotal',
             [
                 'taxConfig' => $this->taxConfigMock,
                 'taxCalculationService' => $this->taxCalculationMock,

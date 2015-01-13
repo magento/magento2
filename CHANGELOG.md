@@ -1,3 +1,52 @@
+0.42.0-beta3
+=============
+* Fixed bugs:
+    * Fixed an issue where malicious JavaScript could be executed when adding new User Roles in the backend
+    * Fixed an issue where incorrect output format was returned when invoking the Customer service
+    * Fixed an issue where it was impossible to activate an integration after editing the URLs
+    * Fixed an issue where incorrect class path was used in the ObjectManager calls
+    * Fixed an issue where inconsistent Reflection classes were used for WebApi applications
+    * Fixed an issue where the parent element was removed from theme.xml by mistake
+* API functional tests changes:
+    * Moved API functional tests to CE repository
+* Various improvements:
+    * Removed include-path from composer.json
+* GitHub requests:
+    * [#876](https://github.com/magento/magento2/pull/876) -- [BUGFIX] Fixed german translation "Warenkorbrn"
+    * [#880](https://github.com/magento/magento2/pull/880) -- Naming fix in DI compiler.php - rename binary to igbinary to stay consistent
+    * [#913](https://github.com/magento/magento2/pull/913) -- Specify date fixture and fix expectations
+    * [#874](https://github.com/magento/magento2/pull/874) -- Prevent special characters finding their way into layout handle due to SKU being used
+    * [#903](https://github.com/magento/magento2/pull/903) -- Small cleanup refactoring
+    * [#905](https://github.com/magento/magento2/pull/905), [#907](https://github.com/magento/magento2/pull/907), [#908](https://github.com/magento/magento2/pull/908) -- Change interpret() return value to conform with Layout\ReaderInterface
+    * [#913](https://github.com/magento/magento2/pull/913) -- Specify date fixture and fix expectations
+
+0.42.0-beta2
+=============
+* Framework improvements:
+    * Added composer.lock to the repository
+* Various improvements:
+    * Magento PSR-3 compliance
+    * Updated file iterators to work with symlinks
+    * Replaced end-to-end test for advanced search with injectable test
+    * Replaced end-to-end test for quick search with injectable test
+* Fixed bugs:
+    * Fixed an issue where an exception occurred when adding configurable products to cart from the wishlist
+    * Modify .gitignore CE according to new repos structure (MAGETWO-32095)
+    * Fixed an issue where the 'Not %Username%?' link was displayed for a logged in user while pages were loaded
+    * Fixed an issue where Shopping Cart Price Rules based on product attributes were not applied to configurable products
+    * Fixed an issue where the Tax Class drop-down field on New Customer Group page contained the 'none' value when a tax class already existed
+    * Fixed an issue where the 'Credit Memo' button was absent on the Invoice page for payments
+    * Fixed an issue where incorrect totals were shown in the Coupon Usage report
+    * Fixed an issue where an error occurred and the "Append Comments" checkbox was cleared when submitting an order in the backend
+    * Fixed an issue where the Transactions tab appeared in the backend for orders where offline payment methods were used
+    * Fixed an issue with the extra empty line appearing in the Customer Address template
+* Github requests:
+    * [#853](https://github.com/magento/magento2/pull/853) -- Fix spelling error in Customer module xml
+    * [#858](https://github.com/magento/magento2/pull/858) -- Clicking CMS page in backend takes you to the dashboard
+    * [#858](https://github.com/magento/magento2/issues/816) -- Clicking CMS page takes you to the dashboard
+    * [#859](https://github.com/magento/magento2/pull/859) -- Fix email template creation date not being persisted
+    * [#860](https://github.com/magento/magento2/pull/860) -- Fix currency and price renderer
+
 0.42.0-beta1
 =============
 * Fixed bugs:

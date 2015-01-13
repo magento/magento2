@@ -4,7 +4,8 @@
  *
  * Format: array(<class_name>[, <replacement>])
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['Mage_Admin_Helper_Data', 'Magento\Backend\Helper\Data'],
@@ -2329,6 +2330,7 @@ return [
     ['Magento\TranslateInterface', 'Magento\Framework\TranslateInterface'],
     ['Magento\Locale', 'Magento\Framework\Locale'],
     ['Magento\LocaleFactory', 'Magento\Framework\LocaleFactory'],
+    ['Magento\Integration\Model\Oauth\Token\Factory', 'Magento\Integration\Model\Oauth\TokenFactory'],
     ['Magento\LocaleInterface', 'Magento\Framework\LocaleInterface'],
     ['Magento\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Phrase', 'Magento\Framework\Phrase'],

@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\PaymentMethod;
@@ -49,7 +50,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->validatorMock = $this->getMock('\Magento\Payment\Model\Checks\ZeroTotal', [], [], '', false);
 
         $this->service = $this->objectManager->getObject(
-            '\Magento\Checkout\Service\V1\PaymentMethod\WriteService',
+            'Magento\Checkout\Service\V1\PaymentMethod\WriteService',
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'paymentMethodBuilder' => $this->paymentMethodBuilderMock,

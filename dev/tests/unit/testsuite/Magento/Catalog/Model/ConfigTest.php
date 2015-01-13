@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
 
@@ -22,7 +23,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $model = $objectManager->getObject(
-            '\Magento\Catalog\Model\Config',
+            'Magento\Catalog\Model\Config',
             ['setCollectionFactory' => $setCollectionFactory]
         );
         $setItem = $this->getMock(
@@ -81,7 +82,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $model = $objectManager->getObject(
-            '\Magento\Catalog\Model\Config',
+            'Magento\Catalog\Model\Config',
             ['groupCollectionFactory' => $groupCollectionFactory]
         );
         $setItem = $this->getMock(
@@ -137,7 +138,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $productTypeFactory = $this->getMock('\Magento\Catalog\Model\Product\TypeFactory', ['create'], [], '', false);
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $model = $objectManager->getObject(
-            '\Magento\Catalog\Model\Config',
+            'Magento\Catalog\Model\Config',
             ['productTypeFactory' => $productTypeFactory]
         );
         $typeCollection = $this->getMock('\Magento\Catalog\Model\Product\Type', ['getOptionArray'], [], '', false);
@@ -183,7 +184,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $object = $this->getMock('\Magento\Framework\Object', ['getAllOptions'], [], '', false);
         $object->expects($this->once())->method('getAllOptions')->will($this->returnValue($data));
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $model = $objectManager->getObject('\Magento\Catalog\Model\Config');
+        $model = $objectManager->getObject('Magento\Catalog\Model\Config');
         $this->assertEquals($expected, $model->getSourceOptionId($object, $search));
     }
 
@@ -254,7 +255,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $model = $objectManager->getObject(
-            '\Magento\Catalog\Model\Config',
+            'Magento\Catalog\Model\Config',
             ['configFactory' => $configFactory, 'storeManager' => $storeManager, 'eavConfig' => $eavConfig]
         );
 
@@ -314,7 +315,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $scopeConfig->expects($this->once())->method('getValue')
             ->with('catalog/frontend/default_sort_by', 'store', null)->will($this->returnValue(1));
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $model = $objectManager->getObject('\Magento\Catalog\Model\Config', ['scopeConfig' => $scopeConfig]);
+        $model = $objectManager->getObject('Magento\Catalog\Model\Config', ['scopeConfig' => $scopeConfig]);
         $this->assertEquals(1, $model->getProductListDefaultSortBy());
     }
 }

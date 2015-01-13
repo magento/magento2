@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Oauth;
 
@@ -15,7 +16,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Model\Oauth\Nonce\Factory */
     private $_nonceFactory;
 
-    /** @var \Magento\Integration\Model\Oauth\Token\Factory */
+    /** @var \Magento\Integration\Model\Oauth\TokenFactory */
     private $_tokenFactory;
 
     /** @var \Magento\Integration\Model\Oauth\Consumer */
@@ -76,8 +77,8 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             'Magento\Integration\Model\Oauth\Nonce\Factory'
         )->disableOriginalConstructor()->getMock();
         $this->_tokenFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Token\Factory'
-        )->disableOriginalConstructor()->getMock();
+            'Magento\Integration\Model\Oauth\TokenFactory'
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
             ->disableOriginalConstructor()
             ->setMethods(
@@ -122,8 +123,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             $this->_consumerFactory,
             $this->_tokenFactory,
             $this->_dataHelperMock,
-            $this->_dateMock,
-            $this->_tokenMock
+            $this->_dateMock
         );
         $this->_oauth = new \Magento\Framework\Oauth\Oauth(
             $this->_oauthHelperMock,

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -344,7 +345,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testResetCheckout()
     {
         /** @var $session \Magento\Checkout\Model\Session */
-        $session = $this->_helper->getObject('\Magento\Checkout\Model\Session', [
+        $session = $this->_helper->getObject('Magento\Checkout\Model\Session', [
             'storage' => new \Magento\Framework\Session\Storage()
         ]);
         $session->resetCheckout();
@@ -360,7 +361,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         /** @var $session \Magento\Checkout\Model\Session */
-        $session = $this->_helper->getObject('\Magento\Checkout\Model\Session', [
+        $session = $this->_helper->getObject('Magento\Checkout\Model\Session', [
             'storage' => new \Magento\Framework\Session\Storage()
         ]);
         $session->setSteps($stepData);
@@ -379,7 +380,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         /** @var $session \Magento\Checkout\Model\Session */
-        $session = $this->_helper->getObject('\Magento\Checkout\Model\Session', [
+        $session = $this->_helper->getObject('Magento\Checkout\Model\Session', [
             'storage' => new \Magento\Framework\Session\Storage()
         ]);
         $session->setSteps($stepData);
