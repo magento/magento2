@@ -181,6 +181,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $resultRaw->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true);
             $resultRaw->setHeader('Content-type', 'application/octet-stream', true);
             $resultRaw->setHeader('Content-Disposition', 'attachment; filename="' . $name . '"', true);
+            $resultRaw->setHeader('Last-Modified', date('r'), true);
 //            $this->_fileFactory->create(
 //                $name,
 //                ['type' => 'filename', 'value' => $fileName],
