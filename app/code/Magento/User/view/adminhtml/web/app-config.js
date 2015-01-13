@@ -14,7 +14,6 @@ require.config({
         "mage/adminhtml/varienLoader": ["prototype"],
         "mage/captcha": ["prototype"],
         "mage/common": ["jquery"],
-        "mage/jquery-no-conflict": ["jquery"],
         "mage/requirejs/plugin/id-normalizer": ["jquery"],
         "mage/webapi": ["jquery"],
         "ko": { exports: "ko" },
@@ -34,4 +33,8 @@ require.config({
         "domReady": "requirejs/domReady",
         "ko": "ko/ko"
     }
+});
+
+require(['jquery'], function(jQuery){
+    jQuery.noConflict();
 });

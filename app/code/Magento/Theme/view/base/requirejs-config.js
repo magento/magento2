@@ -15,7 +15,6 @@ var config = {
         "mage/adminhtml/varienLoader": ["prototype"],
         "mage/captcha": ["prototype"],
         "mage/common": ["jquery"],
-        "mage/jquery-no-conflict": ["jquery"],
         "mage/requirejs/plugin/id-normalizer": ["jquery"],
         "mage/webapi": ["jquery"],
         "ko": {

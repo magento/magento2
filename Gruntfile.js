@@ -33,7 +33,10 @@ module.exports = function (grunt) {
                 blank: 'app/design/frontend/Magento/blank',
                 luma: 'app/design/frontend/luma'
             },
-            doc: 'lib/web/css/docs'
+            doc: 'lib/web/css/docs',
+            uglify: {
+                legacy: 'lib/web/legacy-build.min.js'
+            }
         },
         doc: {
             styleName: 'docs'
@@ -110,7 +113,7 @@ module.exports = function (grunt) {
             },
             documentation: {
                 files: {
-                    '<%= config.path.doc %>/<%= config.doc.styleName %>.css': "<%= config.path.doc %>/source/<%= config.doc.styleName %>.less"
+                    '<%= config.path.doc %>/<%= config.doc.styleName %>.css': '<%= config.path.doc %>/source/<%= config.doc.styleName %>.less'
                 }
             }
         },
@@ -131,9 +134,33 @@ module.exports = function (grunt) {
                     '<%= config.path.doc %>': '<%= config.path.doc %>/source' // Todo UI: Check out JS for Styledocco
                 }
             }
-        }
+        },
 
+        uglify: {
+            legacy: {
+                files: {
+                    '<%= config.path.uglify.legacy %>': [
+                        'lib/web/prototype/window.js',
+                        'lib/web/scriptaculous/builder.js',
+                        'lib/web/scriptaculous/effects.js',
+                        'lib/web/lib/ccard.js',
+                        'lib/web/prototype/validation.js',
+                        'lib/web/varien/js.js',
+                        'lib/web/mage/adminhtml/varienLoader.js',
+                        'lib/web/mage/adminhtml/tools.js'
+                    ]
+                }
+            }
+        }
     });
+
+    /**
+     * Creates build of a legacy files.
+     * Mostly prototype dependant libraries.
+     */
+    grunt.registerTask('legacy-build', [
+        'uglify:legacy'
+    ]);
 
     // Default task
     // --------------------------------------

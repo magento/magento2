@@ -8,20 +8,11 @@
     <head>
         <title>Magento Admin</title>
         <link src="prototype/prototype.js"/>
-        <link src="prototype/window.js"/>
-        <link src="scriptaculous/builder.js"/>
-        <link src="scriptaculous/effects.js"/>
-        <link src="lib/ccard.js"/>
-        <link src="prototype/validation.js"/>
-        <link src="varien/js.js"/>
-        <link src="mage/adminhtml/varienLoader.js"/>
-        <link src="mage/adminhtml/tools.js"/>
-        <link src="lib/ds-sleight.js" ie_condition="lt IE 7" defer="defer"/>
+        <link src="legacy-build.min.js"/>
         <css src="mage/calendar.css"/>
         <link src="requirejs/require.js"/>
         <link src="mage/requirejs/resolver.js"/>
         <link src="jquery/jquery.js"/>
-        <link src="mage/jquery-no-conflict.js"/>
         <css src="extjs/resources/css/ext-all.css"/>
         <css src="extjs/resources/css/ytheme-magento.css"/>
     </head>
