@@ -33,7 +33,7 @@ class Provider implements TokenProviderInterface
     protected $_date;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -42,14 +42,14 @@ class Provider implements TokenProviderInterface
      * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
      * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
         \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory,
         \Magento\Integration\Helper\Oauth\Data $dataHelper,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_tokenFactory = $tokenFactory;
@@ -128,7 +128,7 @@ class Provider implements TokenProviderInterface
             );
         }
         $accessToken = $token->convertToAccess();
-        $this->logger->log(
+        $this->logger->info(
             'Request token ' . $token->getToken() . ' was exchanged to obtain access token for consumer ' . $consumerId
         );
         return ['oauth_token' => $accessToken->getToken(), 'oauth_token_secret' => $accessToken->getSecret()];

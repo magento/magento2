@@ -41,7 +41,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     private $_dateMock;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     private $_loggerMock;
 
@@ -118,7 +118,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_loggerMock = $this->getMockBuilder('Magento\Framework\Logger')
+        $this->_loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
