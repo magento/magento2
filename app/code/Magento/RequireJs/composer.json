@@ -3,11 +3,11 @@
     "description": "N/A",
     "require": {
         "php": "~5.4.11|~5.5.0",
-        "magento/framework": "0.42.0-beta2",
+        "magento/framework": "0.42.0-beta3",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.42.0-beta2",
+    "version": "0.42.0-beta3",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

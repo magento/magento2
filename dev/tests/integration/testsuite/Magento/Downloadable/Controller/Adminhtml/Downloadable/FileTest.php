@@ -4,7 +4,8 @@ namespace Magento\Downloadable\Controller\Adminhtml\Downloadable;
 /**
  * Magento\Downloadable\Controller\Adminhtml\Downloadable\File
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  * @magentoAppArea adminhtml
  */
 class FileTest extends \Magento\Backend\Utility\Controller
