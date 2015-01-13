@@ -30,10 +30,21 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
         \Magento\Framework\Registry $coreRegistry,
         GroupRepositoryInterface $groupRepository,
         GroupDataBuilder $groupDataBuilder,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
-        parent::__construct($context, $coreRegistry, $groupRepository, $groupDataBuilder);
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $groupRepository,
+            $groupDataBuilder,
+            $resultRedirectFactory,
+            $resultForwardFactory,
+            $resultPageFactory
+        );
     }
 
     /**
@@ -54,7 +65,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
     /**
      * Create or save customer group.
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
@@ -64,6 +75,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
         $customerGroup = null;
         if ($taxClass) {
             $id = $this->getRequest()->getParam('id');
+            $resultRedirect = $this->resultRedirectFactory->create();
             try {
                 if (!is_null($id)) {
                     $this->groupDataBuilder->populate($this->groupRepository->getById((int)$id));
@@ -79,8 +91,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
                 $this->groupRepository->save($customerGroup);
 
                 $this->messageManager->addSuccess(__('The customer group has been saved.'));
-                $this->getResponse()->setRedirect($this->getUrl('customer/group'));
-                return;
+                $resultRedirect->setPath('customer/group');
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 if ($customerGroup != null) {
@@ -91,11 +102,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
                         )
                     );
                 }
-                $this->getResponse()->setRedirect($this->getUrl('customer/group/edit', ['id' => $id]));
-                return;
+                $resultRedirect->setPath('customer/group/edit', ['id' => $id]);
             }
+            return $resultRedirect;
         } else {
-            $this->_forward('new');
+            return $this->resultForwardFactory->create()->forward('new');
         }
     }
 }

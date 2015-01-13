@@ -15,7 +15,7 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Reset customer's tokens handler
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -34,6 +34,7 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
             }
         }
         $this->messageManager->addError(__('We can\'t find a customer to revoke.'));
-        $this->_redirect('customer/index/index');
+        return $this->resultRedirectFactory->create()->setPath('customer/index/index');
+
     }
 }

@@ -113,6 +113,11 @@ class Index extends \Magento\Backend\App\Action
     protected $dataObjectProcessor;
 
     /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
@@ -132,6 +137,7 @@ class Index extends \Magento\Backend\App\Action
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param ObjectFactory $objectFactory
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -154,7 +160,8 @@ class Index extends \Magento\Backend\App\Action
         AddressDataBuilder $addressDataBuilder,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        ObjectFactory $objectFactory
+        ObjectFactory $objectFactory,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
@@ -174,6 +181,7 @@ class Index extends \Magento\Backend\App\Action
         $this->customerMapper = $customerMapper;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->_objectFactory = $objectFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
