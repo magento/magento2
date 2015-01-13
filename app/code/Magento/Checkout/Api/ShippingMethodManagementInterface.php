@@ -18,7 +18,6 @@ interface ShippingMethodManagementInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException The shipping method could not be saved.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart contains only virtual products so the shipping method does not apply.
      * @throws \Magento\Framework\Exception\StateException The billing or shipping address is not set.
-     * @see \Magento\Checkout\Service\V1\ShippingMethod\WriteServiceInterface::setMethod
      */
     public function set($cartId, $carrierCode, $methodCode);
 
@@ -26,10 +25,9 @@ interface ShippingMethodManagementInterface
      * Returns selected shipping method for a specified quote.
      *
      * @param int $cartId The shopping cart ID.
-     * @return \Magento\Checkout\Api\Data\ShippingMethodInterface Shipping method.
+     * @return \Magento\Checkout\Api\Data\ShippingMethodInterface|null Shipping method.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified shopping cart does not exist.
      * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
-     * @see \Magento\Checkout\Service\V1\ShippingMethod\ReadServiceInterface::getMethod
      */
     public function get($cartId);
 
@@ -40,7 +38,6 @@ interface ShippingMethodManagementInterface
      * @return \Magento\Checkout\Api\Data\ShippingMethodInterface[] An array of shipping methods.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified quote does not exist.
      * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
-     * @see \Magento\Checkout\Service\V1\ShippingMethod\ReadServiceInterface::getList
      */
     public function getList($cartId);
 }

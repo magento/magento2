@@ -86,19 +86,19 @@
         </resources>
     </route>
     <route url="/V1/carts/:cartId/selected-shipping-method" method="PUT">
-        <service class="Magento\Checkout\Service\V1\ShippingMethod\WriteServiceInterface" method="setMethod"/>
+        <service class="Magento\Checkout\Api\ShippingMethodManagementInterface" method="set"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
     <route url="/V1/carts/:cartId/selected-shipping-method" method="GET">
-        <service class="Magento\Checkout\Service\V1\ShippingMethod\ReadServiceInterface" method="getMethod"/>
+        <service class="Magento\Checkout\Api\ShippingMethodManagementInterface" method="get"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
     <route url="/V1/carts/:cartId/shipping-methods" method="GET">
-        <service class="Magento\Checkout\Service\V1\ShippingMethod\ReadServiceInterface" method="getList"/>
+        <service class="Magento\Checkout\Api\ShippingMethodManagementInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>

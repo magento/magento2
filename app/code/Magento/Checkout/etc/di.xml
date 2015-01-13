@@ -32,10 +32,10 @@
     <preference for="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" type="Magento\Checkout\Service\V1\Cart\ReadService" />
     <preference for="Magento\Checkout\Service\V1\Cart\TotalsServiceInterface" type="Magento\Checkout\Service\V1\Cart\TotalsService" />
     <preference for="\Magento\Checkout\Service\V1\Cart\WriteServiceInterface" type="Magento\Checkout\Service\V1\Cart\WriteService" />
-    <preference for="Magento\Checkout\Service\V1\ShippingMethod\WriteServiceInterface" type="Magento\Checkout\Service\V1\ShippingMethod\WriteService" />
     <preference for="Magento\Checkout\Service\V1\Coupon\ReadServiceInterface" type="Magento\Checkout\Service\V1\Coupon\ReadService" />
     <preference for="Magento\Checkout\Service\V1\Coupon\WriteServiceInterface" type="Magento\Checkout\Service\V1\Coupon\WriteService" />
-    <preference for="Magento\Checkout\Service\V1\ShippingMethod\ReadServiceInterface" type="Magento\Checkout\Service\V1\ShippingMethod\ReadService" />
+    <preference for="Magento\Checkout\Api\ShippingMethodManagementInterface" type="Magento\Checkout\Model\ShippingMethodManagement" />
     <preference for="Magento\Checkout\Service\V1\PaymentMethod\ReadServiceInterface" type="\Magento\Checkout\Service\V1\PaymentMethod\ReadService" />
     <preference for="Magento\Checkout\Service\V1\PaymentMethod\WriteServiceInterface" type="\Magento\Checkout\Service\V1\PaymentMethod\WriteService" />
+    <preference for="Magento\Checkout\Api\Data\ShippingMethodInterface" type="Magento\Checkout\Model\Cart\ShippingMethod" />
 </config>

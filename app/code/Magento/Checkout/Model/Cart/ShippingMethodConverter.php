@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Service\V1\Data\Cart;
+namespace Magento\Checkout\Model\Cart;
 
 /**
  * Quote shipping method data.
@@ -15,18 +15,18 @@ class ShippingMethodConverter
     /**
      * Shipping method builder.
      *
-     * @var ShippingMethodBuilder
+     * @var \Magento\Checkout\Api\Data\ShippingMethodDataBuilder
      */
     protected $builder;
 
     /**
      * Constructs a shipping method builder object.
      *
-     * @param ShippingMethodBuilder $builder Shipping method builder.
+     * @param \Magento\Checkout\Api\Data\ShippingMethodDataBuilder $builder Shipping method builder.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager interface.
      */
     public function __construct(
-        \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder $builder,
+        \Magento\Checkout\Api\Data\ShippingMethodDataBuilder $builder,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->builder = $builder;

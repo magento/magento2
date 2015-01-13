@@ -3,50 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Service\V1\Data\Cart;
+namespace Magento\Checkout\Model\Cart;
+
+use Magento\Checkout\Api\Data\ShippingMethodInterface;
 
 /**
  * Quote shipping method data.
  *
  * @codeCoverageIgnore
  */
-class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject
+class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject implements
+    ShippingMethodInterface
 {
-    /**
-     * Shipping carrier code.
-     */
-    const CARRIER_CODE = 'carrier_code';
-
-    /**
-     * Shipping method code.
-     */
-    const METHOD_CODE = 'method_code';
-
-    /**
-     * Shipping carrier title.
-     */
-    const CARRIER_TITLE = 'carrier_title';
-
-    /**
-     * Shipping method title.
-     */
-    const METHOD_TITLE = 'method_title';
-
-    /**
-     * Shipping amount in store currency.
-     */
-    const SHIPPING_AMOUNT = 'amount';
-
-    /**
-     * Shipping amount in base currency.
-     */
-    const BASE_SHIPPING_AMOUNT = 'base_amount';
-
-    /**
-     * Available.
-     */
-    const AVAILABLE = 'available';
-
     /**
      * Returns the shipping carrier code.
      *

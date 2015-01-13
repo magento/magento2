@@ -11,6 +11,41 @@ namespace Magento\Checkout\Api\Data;
 interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
+     * Shipping carrier code.
+     */
+    const CARRIER_CODE = 'carrier_code';
+
+    /**
+     * Shipping method code.
+     */
+    const METHOD_CODE = 'method_code';
+
+    /**
+     * Shipping carrier title.
+     */
+    const CARRIER_TITLE = 'carrier_title';
+
+    /**
+     * Shipping method title.
+     */
+    const METHOD_TITLE = 'method_title';
+
+    /**
+     * Shipping amount in store currency.
+     */
+    const SHIPPING_AMOUNT = 'amount';
+
+    /**
+     * Shipping amount in base currency.
+     */
+    const BASE_SHIPPING_AMOUNT = 'base_amount';
+
+    /**
+     * Available.
+     */
+    const AVAILABLE = 'available';
+
+    /**
      * Returns the shipping carrier code.
      *
      * @return string Shipping carrier code.
