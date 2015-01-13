@@ -4,7 +4,8 @@
  * Responsible for providing the identifier of currently logged in role to \Magento\Framework\Authorization component.
  * Should be implemented by application developer that uses \Magento\Framework\Authorization component.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Authorization;
 
