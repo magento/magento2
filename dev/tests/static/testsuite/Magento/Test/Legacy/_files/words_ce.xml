@@ -62,6 +62,10 @@
             <word>overriden</word>
         </item>
         <item>
+            <path>dev/tests/api-functional/testsuite/Magento/Webapi/Routing/RequestIdOverrideTest.php</path>
+            <word>overriden</word>
+        </item>
+        <item>
             <path>app/code/Magento/Bundle/view/adminhtml/templates/product/edit/bundle.phtml</path>
             <word>head.js</word>
         </item>
