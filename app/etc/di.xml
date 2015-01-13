@@ -200,7 +200,7 @@
     </type>
     <type name="Magento\Framework\Data\Structure" shared="false" />
     <type name="Magento\Framework\View\Layout\Data\Structure" shared="false" />
-    <type name="Magento\Core\Model\View\Design">
+    <type name="Magento\Theme\Model\View\Design">
         <arguments>
             <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManager\Proxy</argument>
         </arguments>

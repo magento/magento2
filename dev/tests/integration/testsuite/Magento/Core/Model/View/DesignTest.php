@@ -110,10 +110,10 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $themes = ['frontend' => 'test_f', 'adminhtml' => 'test_a'];
-        $design = $objectManager->create('Magento\Core\Model\View\Design', ['themes' => $themes]);
-        $objectManager->addSharedInstance($design, 'Magento\Core\Model\View\Design');
+        $design = $objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
+        $objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
 
-        $model = $objectManager->get('Magento\Core\Model\View\Design');
+        $model = $objectManager->get('Magento\Theme\Model\View\Design');
 
         $this->assertEquals('test_f', $model->getConfigurationDesignTheme());
         $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend'));

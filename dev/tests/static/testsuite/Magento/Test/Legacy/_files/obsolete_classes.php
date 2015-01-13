@@ -2831,6 +2831,10 @@ return [
         'Magento\Framework\Interception\ObjectManager\Config',
         'Magento\Framework\Interception\ObjectManager\Config\Developer'
     ],
+    ['\Magento\Core\Model\Design', '\Magento\Theme\Model\Design'],
+    ['\Magento\Core\Model\Resource\Design', '\Magento\Theme\Model\Resource\Design'],
+    ['\Magento\Core\Model\Resource\Design\Collection', '\Magento\Theme\Model\Resource\Design\Collection'],
+    ['\Magento\Core\Model\View\Design', '\Magento\Theme\Model\View\Design'],
     ['\Magento\Core\Model\Design\Backend\Theme', '\Magento\Theme\Model\Design\Backend\Theme'],
     ['\Magento\Core\Model\Design\Backend\Exceptions', '\Magento\Theme\Model\Design\Backend\Exceptions'],
     ['\Magento\Core\Model\Design\Backend\ExceptionsTest', '\Magento\Theme\Model\Design\Backend\ExceptionsTest'],

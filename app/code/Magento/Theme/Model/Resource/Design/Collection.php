@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Design;
+namespace Magento\Theme\Model\Resource\Design;
 
 /**
  * Core Design resource collection
@@ -44,13 +44,13 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Core\Model\Design', 'Magento\Core\Model\Resource\Design');
+        $this->_init('Magento\Theme\Model\Design', 'Magento\Theme\Model\Resource\Design');
     }
 
     /**
      * Join store data to collection
      *
-     * @return \Magento\Core\Model\Resource\Design\Collection
+     * @return \Magento\Theme\Model\Resource\Design\Collection
      */
     public function joinStore()
     {
@@ -80,7 +80,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Add store filter to collection
      *
      * @param int|array $storeId
-     * @return \Magento\Core\Model\Resource\Design\Collection
+     * @return \Magento\Theme\Model\Resource\Design\Collection
      */
     public function addStoreFilter($storeId)
     {

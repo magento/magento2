@@ -13,7 +13,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Core\Model\View\Design::__construct
+     * @var \Magento\Theme\Model\View\Design::__construct
      */
     private $model;
 
@@ -28,7 +28,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManagerInterface');
         $state = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
         $themes = [];
-        $this->model = new \Magento\Core\Model\View\Design(
+        $this->model = new \Magento\Theme\Model\View\Design(
             $storeManager, $flyweightThemeFactory, $config, $themeFactory, $this->objectManager, $state, $themes
         );
     }

@@ -6,4 +6,4 @@
 
 /** @var $cache \Magento\Framework\App\Cache */
 $cache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Framework\App\Cache');
-$cache->clean([\Magento\Core\Model\Design::CACHE_TAG]);
+$cache->clean([\Magento\Theme\Model\Design::CACHE_TAG]);

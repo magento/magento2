@@ -30,7 +30,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
     private $localeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Design
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Design
      */
     private $designMock;
 
@@ -73,7 +73,7 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         // Mocks
-        $this->designMock = $this->getMockBuilder('Magento\Core\Model\Design')
+        $this->designMock = $this->getMockBuilder('Magento\Theme\Model\Design')
             ->disableOriginalConstructor()
             ->setMethods([])->getMock();
         $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')

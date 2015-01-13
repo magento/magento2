@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Core\Model\View;
+namespace Magento\Theme\Model\View;
 
 /**
  * Keeps design settings for current request

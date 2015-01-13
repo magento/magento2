@@ -47,9 +47,9 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             dirname(__DIR__) . '/Core/Model/_files/Magento/Catalog/i18n'
         );
 
-        /** @var \Magento\Core\Model\View\Design $designModel */
+        /** @var \Magento\Theme\Model\View\Design $designModel */
         $designModel = $this->getMock(
-            'Magento\Core\Model\View\Design',
+            'Magento\Theme\Model\View\Design',
             ['getDesignTheme'],
             [
                 $objectManager->get('Magento\Store\Model\StoreManagerInterface'),

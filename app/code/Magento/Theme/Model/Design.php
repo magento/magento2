@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model;
+namespace Magento\Theme\Model;
 
 use Magento\Framework\App\DesignInterface;
 use Magento\Framework\Model\AbstractModel;
@@ -14,13 +14,13 @@ use Magento\Framework\Object\IdentityInterface;
  * Design settings change model
  *
  * @method int getStoreId()
- * @method \Magento\Core\Model\Design setStoreId(int $value)
+ * @method \Magento\Theme\Model\Design setStoreId(int $value)
  * @method string getDesign()
- * @method \Magento\Core\Model\Design setDesign(string $value)
+ * @method \Magento\Theme\Model\Design setDesign(string $value)
  * @method string getDateFrom()
- * @method \Magento\Core\Model\Design setDateFrom(string $value)
+ * @method \Magento\Theme\Model\Design setDateFrom(string $value)
  * @method string getDateTo()
- * @method \Magento\Core\Model\Design setDateTo(string $value)
+ * @method \Magento\Theme\Model\Design setDateTo(string $value)
  */
 class Design extends AbstractModel implements IdentityInterface, DesignInterface
 {
@@ -85,7 +85,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Core\Model\Resource\Design');
+        $this->_init('Magento\Theme\Model\Resource\Design');
     }
 
     /**

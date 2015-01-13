@@ -127,8 +127,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $themes = ['frontend' => 'test_default', 'adminhtml' => 'test_default'];
-        $design = $objectManager->create('Magento\Core\Model\View\Design', ['themes' => $themes]);
-        $objectManager->addSharedInstance($design, 'Magento\Core\Model\View\Design');
+        $design = $objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
+        $objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
 

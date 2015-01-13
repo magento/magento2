@@ -18,7 +18,7 @@ foreach ($designChanges as $designChangeData) {
     )->getStore(
         $designChangeData['store']
     )->getId();
-    $change = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Design');
+    $change = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Theme\Model\Design');
     $change->setStoreId(
         $storeId
     )->setDesign(

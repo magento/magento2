@@ -59,7 +59,7 @@
     <preference for="Magento\Framework\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Less\PreProcessor\ErrorHandler" />
     <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\Resource" />
     <preference for="Magento\Framework\App\Config\Resource\ConfigInterface" type="Magento\Core\Model\Resource\Config" />
-    <preference for="Magento\Framework\App\DesignInterface" type="Magento\Core\Model\Design" />
+    <preference for="Magento\Framework\App\DesignInterface" type="Magento\Theme\Model\Design" />
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
@@ -399,7 +399,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Core\Model\View\Design">
+    <type name="Magento\Theme\Model\View\Design">
         <arguments>
             <argument name="themes" xsi:type="array">
                 <item name="frontend" xsi:type="string">Magento/blank</item>
