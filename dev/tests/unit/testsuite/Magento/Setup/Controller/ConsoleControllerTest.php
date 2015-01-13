@@ -73,7 +73,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         );
         $this->mvcEvent->expects($this->once())->method('getRequest')->willReturn($this->request);
         $this->mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($this->mvcEvent);
-        $routeMatch->expects($this->any())->method('getParam')->willReturn('install');
+        $routeMatch->expects($this->any())->method('getParam')->willReturn('not-found');
         $this->mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
 
         $this->controller = new ConsoleController(
@@ -83,15 +83,33 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->controller->dispatch($this->request, $response);
     }
 
+    public function testGetRouterConfig()
+    {
+        $controller = $this->controller;
+        $actualRoute = $controller::getRouterConfig();
+        $this->assertArrayHasKey($controller::CMD_HELP, $actualRoute);
+        $this->assertArrayHasKey($controller::CMD_INSTALL, $actualRoute);
+        $this->assertArrayHasKey($controller::CMD_INSTALL_CONFIG, $actualRoute);
+        $this->assertArrayHasKey($controller::CMD_INSTALL_SCHEMA, $actualRoute);
+        $this->assertArrayHasKey($controller::CMD_INSTALL_DATA, $actualRoute);
+        $this->assertArrayHasKey($controller::CMD_INSTALL_USER_CONFIG, $actualRoute);
+        $this->assertArrayHasKey($controller::CMD_INSTALL_ADMIN_USER, $actualRoute);
+        $this->assertArrayHasKey($controller::CMD_UPDATE, $actualRoute);
+        $this->assertArrayHasKey($controller::CMD_UNINSTALL, $actualRoute);
+        $this->assertArrayHasKey($controller::CMD_UPDATE, $actualRoute);
+        $this->assertArrayHasKey($controller::CMD_MAINTENANCE, $actualRoute);
+    }
+
     public function testSetEventManager()
     {
-        $controllerMock = $this->controller;
-        $closureMock = function () use ($controllerMock){
+        $controller = $this->controller;
+        $closureMock = function () use ($controller) {
         };
+
         $eventManager = $this->getMock('\Zend\EventManager\EventManagerInterface');
-        $eventManager->expects($this->any())->method('attach')->will($this->returnCallback($closureMock));
+        $eventManager->expects($this->atLeastOnce())->method('attach')->will($this->returnCallback($closureMock));
         $returnValue = $this->controller->setEventManager($eventManager);
-        $this->assertEquals($returnValue, $this->controller);
+        $this->assertSame($returnValue, $this->controller);
     }
 
     /**
@@ -109,19 +127,18 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnDispatch()
     {
-        $this->controller->onDispatch($this->mvcEvent);
+        $returnValue = $this->controller->onDispatch($this->mvcEvent);
+        $this->assertInstanceOf('\Zend\View\Model\ConsoleModel', $returnValue);
     }
 
-    /**
-     * @expectedException        \Zend\Mvc\Exception\DomainException
-     * @expectedExceptionMessage Missing route matches; unsure how to retrieve action
-     */
-    public function testOnDispatchWithException ()
+    public function testOnDispatchWithException()
     {
-        $e = new \Zend\Mvc\Exception\DomainException('Missing route matches; unsure how to retrieve action');
+        $errorMessage = 'Missing route matches; unsure how to retrieve action';
         $event = $this->getMock('\Zend\Mvc\MvcEvent');
+        $exception = $this->getMock('\Magento\Setup\Exception', [], [$errorMessage]);
+        $event->expects($this->once())->method('getRouteMatch')->willThrowException($exception);
+        $this->consoleLogger->expects($this->once())->method('log')->with($errorMessage);
         $this->controller->onDispatch($event);
-        $this->consoleLogger->expects($this->once())->method('log')->with($e->getMessage());
     }
 
     public function testInstallAction()
@@ -176,24 +193,22 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param int $maintenanceMode
-     * @param array $addresses
      * @param int $setCount
      * @param int $logCount
      *
      * @dataProvider maintenanceActionDataProvider
      */
-    public function testMaintenanceAction($maintenanceMode, $addresses, $setCount, $logCount)
+    public function testMaintenanceAction($maintenanceMode, $setCount, $logCount)
     {
         $mapGetParam = [
             ['set', null, $maintenanceMode],
-            ['addresses', null, $addresses],
+            ['addresses', null, null],
         ];
         $this->request->expects($this->exactly(2))->method('getParam')->will($this->returnValueMap($mapGetParam));
         $this->maintenanceMode->expects($this->exactly($setCount))->method('set');
-        $expected = $addresses !== null ? 1 : 0;
-        $this->maintenanceMode->expects($this->exactly($expected))->method('setAddresses');
+        $this->maintenanceMode->expects($this->exactly(0))->method('setAddresses');
         $this->maintenanceMode->expects($this->once())->method('isOn')->willReturn($maintenanceMode);
-        $this->maintenanceMode->expects($this->once())->method('getAddressInfo')->willReturn($addresses);
+        $this->maintenanceMode->expects($this->once())->method('getAddressInfo')->willReturn([]);
         $this->consoleLogger->expects($this->exactly($logCount))->method('log');
         $this->controller->maintenanceAction();
     }
@@ -204,26 +219,67 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     public function maintenanceActionDataProvider()
     {
         return [
-            [1, ['address1', 'address2'], 1, 3],
-            [0, [], 1, 2],
-            [null, ['address1'], 0, 2],
-            [1, null, 1, 2],
-            [0, null, 1, 2],
+            [1, 1, 2],
+            [0, 1, 2],
+            [null, 0, 1],
+        ];
+    }
+
+    /**
+     * @param array $addresses
+     * @param int $logCount
+     * @param int $setAddressesCount
+     *
+     * @dataProvider maintenanceActionWithAddressDataProvider
+     */
+    public function testMaintenanceActionWithAddress($addresses, $logCount, $setAddressesCount)
+    {
+        $mapGetParam = [
+            ['set', null, true],
+            ['addresses', null, $addresses],
+        ];
+        $this->request->expects($this->exactly(2))->method('getParam')->will($this->returnValueMap($mapGetParam));
+        $this->maintenanceMode->expects($this->exactly(1))->method('set');
+        $this->maintenanceMode->expects($this->exactly($setAddressesCount))->method('setAddresses');
+        $this->maintenanceMode->expects($this->once())->method('isOn')->willReturn(true);
+        $this->maintenanceMode->expects($this->once())->method('getAddressInfo')->willReturn($addresses);
+        $this->consoleLogger->expects($this->exactly($logCount))->method('log');
+        $this->controller->maintenanceAction();
+    }
+
+    /**
+     * @return array
+     */
+    public function maintenanceActionWithAddressDataProvider()
+    {
+        return [
+            [['address1', 'address2'], 3, 1],
+            [[], 2, 1],
+            [null, 2, 0],
         ];
     }
 
     /**
      * @param string $type
      * @param string $method
-     * @param array $value
+     * @param array $expectedValue
      *
      * @dataProvider helpActionForLanguageCurrencyTimezoneDataProvider
      */
-    public function testHelpActionForLanguageCurrencyTimezone($type, $method, $value)
+    public function testHelpActionForLanguageCurrencyTimezone($type, $method, $expectedValue)
     {
         $this->request->expects($this->once())->method('getParam')->willReturn($type);
-        $this->options->expects($this->once())->method($method)->willReturn($value);
-        $this->controller->helpAction();
+        $this->options->expects($this->once())->method($method)->willReturn($expectedValue);
+        $returnValue = $this->controller->helpAction();
+
+        //Need to convert from String to Associated Array.
+        $result = explode(PHP_EOL, trim($returnValue));
+        foreach ($result as $value) {
+            $tempArray  = explode(' => ' , $value);
+            $actual[$tempArray[0]] = $tempArray[1];
+        }
+
+        $this->assertSame($expectedValue, $actual);
     }
 
     /**
@@ -269,8 +325,9 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     public function testHelpAction($option, $noParameters)
     {
         $this->request->expects($this->once())->method('getParam')->willReturn($option);
+        
         $usage = $this->controller->getCommandUsage();
-        $expectedValue = explode(' ', (strlen($usage[$option])>0 ? $usage[$option] : $noParameters));
+        $expectedValue = explode(' ', (strlen($usage[$option]) > 0 ? $usage[$option] : $noParameters));
         $returnValue = explode(
             ' ', trim(str_replace([PHP_EOL, 'Available parameters:'], '', $this->controller->helpAction()))
         );
