@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\Address;
@@ -36,7 +37,7 @@ class Mapper
      */
     public function toFlatArray($addressDataObject)
     {
-        $flatAddressArray = $this->extensibleDataObjectConverter->toFlatArray($addressDataObject);
+        $flatAddressArray = $this->extensibleDataObjectConverter->toFlatArray($addressDataObject, [], '\Magento\Customer\Api\Data\AddressInterface');
         //preserve street
         $street = $addressDataObject->getStreet();
         if (!empty($street) && is_array($street)) {
