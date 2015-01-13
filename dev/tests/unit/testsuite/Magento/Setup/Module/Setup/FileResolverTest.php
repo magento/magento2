@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Module\Setup;
@@ -10,12 +11,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class FileResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
      */
     private $directoryListMock;
 
     /**
-     * @var \Magento\Setup\Module\Setup\FileResolver
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Module\Setup\FileResolver
      */
     private $fileResolver;
 
