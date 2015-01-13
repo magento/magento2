@@ -75,7 +75,14 @@ class Request extends \Magento\Webapi\Controller\Request
         $qualityToTypes = [];
         $orderedTypes = [];
 
-        foreach (preg_split('/,\s*/', $this->getHeader('Accept')) as $definition) {
+        $headerAccept  = $this->getHeader('Accept');
+        $defaultAccept = \Magento\Webapi\Controller\Rest\Response\Renderer\Json::MIME_TYPE;
+
+        if(false === $headerAccept) {
+            $headerAccept = $defaultAccept;
+        }
+
+        foreach (preg_split('/,\s*/', $headerAccept) as $definition) {
             $typeWithQ = explode(';', $definition);
             $mimeType = trim(array_shift($typeWithQ));
 
