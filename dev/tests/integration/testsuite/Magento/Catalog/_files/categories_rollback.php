@@ -3,8 +3,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
-/** @var \Magento\Framework\Registry $registry */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var \Magento\Framework\Registry $registry */
 $registry = $objectManager->get('Magento\Framework\Registry');
 
 $registry->unregister('isSecureArea');
@@ -17,8 +17,7 @@ $collection->addAttributeToSelect('id')->load()->delete();
 /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
 $collection = $objectManager->create('Magento\Catalog\Model\Resource\Category\Collection');
 $collection
-    ->addAttributeToFilter('entity_id', ['gt' => 2])
-    ->setOrder('entity_id', \Zend_Db_Select::SQL_DESC)
+    ->addAttributeToFilter('level', 3)
     ->load()
     ->delete();
 

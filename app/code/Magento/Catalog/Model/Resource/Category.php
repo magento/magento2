@@ -231,7 +231,8 @@ class Category extends AbstractResource
             $object->setLevel(1);
         }
 
-        if (!$object->getId()) {
+        $originalData = $object->getOrigData();
+        if (empty($originalData['entity_id'])) {
             $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
             $path = explode('/', $object->getPath());
             $level = count($path);
@@ -239,9 +240,11 @@ class Category extends AbstractResource
             if ($level) {
                 $object->setParentId($path[$level - 1]);
             }
-            $object->setPath($object->getPath() . '/');
+            if (!$object->getId()) {
+                $object->setPath($object->getPath() . '/');
+            }
 
-            $toUpdateChild = explode('/', $object->getPath());
+            $toUpdateChild = array_diff($path, [$object->getId()]);
 
             $this->_getWriteAdapter()->update(
                 $this->getEntityTable(),
