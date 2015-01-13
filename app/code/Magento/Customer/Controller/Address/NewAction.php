@@ -9,10 +9,12 @@ namespace Magento\Customer\Controller\Address;
 class NewAction extends \Magento\Customer\Controller\Address
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
-        $this->_forward('form');
+        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+        $resultForward = $this->resultForwardFactory->create();
+        return $resultForward->forward('form');
     }
 }
