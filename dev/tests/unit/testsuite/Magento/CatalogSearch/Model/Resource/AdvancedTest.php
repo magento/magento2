@@ -49,13 +49,13 @@ class AdvancedTest extends PHPUnit_Framework_TestCase
 
     public function indexableAttributeDataProvider()
     {
-        return array(
+        return [
             ['decimal', '', true],
             ['source', ['from' => 0, 'to' => 0], false],
             [false, ['from' => 0], true],
             ['decimal', ['to' => 0], true],
             ['source', ['from' => 1, 'to' => 1], true]
-        );
+        ];
     }
 
     /**

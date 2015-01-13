@@ -56,6 +56,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Downloadable\Model\Product\TypeHandler\TypeHandler">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="sample" xsi:type="object">Magento\Downloadable\Model\Product\TypeHandler\Sample</item>
+                <item name="link" xsi:type="object">Magento\Downloadable\Model\Product\TypeHandler\Link</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="\Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface" type="\Magento\Downloadable\Model\Product\TypeHandler\TypeHandler" />
     <preference for="\Magento\Downloadable\Service\V1\DownloadableLink\ReadServiceInterface" type="\Magento\Downloadable\Service\V1\DownloadableLink\ReadService" />
     <preference for="\Magento\Downloadable\Service\V1\DownloadableLink\WriteServiceInterface" type="\Magento\Downloadable\Service\V1\DownloadableLink\WriteService" />
     <preference for="\Magento\Downloadable\Service\V1\Data\FileContentUploaderInterface" type="\Magento\Downloadable\Service\V1\Data\FileContentUploader" />
