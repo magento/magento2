@@ -51,11 +51,20 @@ class ToOrderPayment
             'to_order_payment',
             $object
         );
-        return $this->orderPaymentBuilder
+        $payment = $this->orderPaymentBuilder
             ->populateWithArray(array_merge($paymentData, $data))
             ->setAdditionalInformation(
-                serialize([Substitution::INFO_KEY_TITLE => $object->getMethodInstance()->getTitle()])
+                serialize(
+                    array_merge(
+                        $object->getAdditionalInformation(),
+                        [Substitution::INFO_KEY_TITLE => $object->getMethodInstance()->getTitle()]
+                    )
+                )
             )
             ->create();
+        $payment->setCcNumber($object->getCcNumber());
+        $payment->setCcCid($object->getCcCid());
+
+        return $payment;
     }
 }

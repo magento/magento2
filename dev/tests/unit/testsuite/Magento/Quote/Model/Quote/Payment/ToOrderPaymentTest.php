@@ -36,7 +36,13 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $this->paymentMock = $this->getMock(
+            'Magento\Quote\Model\Quote\Payment',
+            ['getCcNumber', 'getCcCid', 'getMethodInstance', 'getAdditionalInformation'],
+            [],
+            '',
+            false
+        );
         $this->objectCopyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
         $this->orderPaymentBuilderMock = $this->getMock(
             'Magento\Sales\Api\Data\OrderPaymentDataBuilder',
@@ -61,10 +67,19 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
     public function testConvert()
     {
         $methodInterface = $this->getMock('Magento\Payment\Model\MethodInterface', [], [], '', false);
-        $orderPayment = $this->getMock('Magento\Sales\Api\Data\OrderPaymentInterface', [], [], '', false);
+        $orderPayment = $this->getMockForAbstractClass(
+            'Magento\Sales\Api\Data\OrderPaymentInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['setCcNumber', 'setCcCid']
+        );
         $paymentData = ['test' => 'test2'];
         $data = ['some_id' => 1];
         $paymentMethodTitle = 'TestTitle';
+        $additionalInfo = ['token' => 'TOKEN-123'];
         $this->paymentMock->expects($this->once())->method('getMethodInstance')->willReturn($methodInterface);
         $methodInterface->expects($this->once())->method('getTitle')->willReturn($paymentMethodTitle);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(
@@ -77,11 +92,31 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
             ->with(array_merge($paymentData, $data))
             ->willReturnSelf();
 
+        $this->paymentMock->expects($this->once())
+            ->method('getAdditionalInformation')
+            ->willReturn($additionalInfo);
+        $ccNumber = 123456798;
+        $ccCid = 1234;
+        $this->paymentMock->expects($this->once())
+            ->method('getCcNumber')
+            ->willReturn($ccNumber);
+        $this->paymentMock->expects($this->once())
+            ->method('getCcCid')
+            ->willReturn($ccCid);
+
         $this->orderPaymentBuilderMock->expects($this->once())
             ->method('setAdditionalInformation')
-            ->with(serialize([Substitution::INFO_KEY_TITLE => $paymentMethodTitle]))
+            ->with(serialize(array_merge($additionalInfo, [Substitution::INFO_KEY_TITLE => $paymentMethodTitle])))
             ->willReturnSelf();
         $this->orderPaymentBuilderMock->expects($this->once())->method('create')->willReturn($orderPayment);
+        $orderPayment->expects($this->once())
+            ->method('setCcNumber')
+            ->with($ccNumber)
+            ->willReturnSelf();
+        $orderPayment->expects($this->once())
+            ->method('setCcCid')
+            ->with($ccCid)
+            ->willReturnSelf();
         $this->assertSame($orderPayment, $this->converter->convert($this->paymentMock, $data));
     }
 }
