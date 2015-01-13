@@ -25,6 +25,8 @@ class DbIsolation
         \PHPUnit_Framework_TestCase $test,
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
+        echo \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        ->create('Magento\Catalog\Model\Category')->load(1)->getChildrenCount();
         $methodIsolation = $this->_getIsolation('method', $test);
         if ($this->_isIsolationActive) {
             if ($methodIsolation === false) {
