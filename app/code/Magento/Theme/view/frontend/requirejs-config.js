@@ -36,8 +36,6 @@ var config = {
         "jquery/ui": "jquery/jquery-ui"
     },
     deps: [
-        "jquery",
-        "jquery/jquery-migrate",
         "jquery/jquery.mobile.custom",
         "js/responsive",
         "mage/common",

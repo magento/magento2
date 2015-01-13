@@ -33,7 +33,6 @@ var config = {
     },
     "deps": [
         "js/theme",
-        "jquery/jquery-migrate",
         "mage/dropdown_old",
         "mage/backend/bootstrap"
     ],
@@ -42,6 +41,6 @@ var config = {
     }
 };
 
-require(['jquery'], function(jQuery){
+require(['jquery'], function (jQuery) {
     jQuery.noConflict();
 });

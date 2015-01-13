@@ -6,6 +6,7 @@
 var config = {
     "waitSeconds": "0",
     "shim": {
+        "jquery/jquery-migrate": ["jquery"],
         "jquery/jquery.hashchange": ["jquery"],
         "jquery/jquery.mousewheel": ["jquery"],
         "jquery/jquery.popups": ["jquery"],
@@ -37,5 +38,8 @@ var config = {
         "text": "requirejs/text",
         "domReady": "requirejs/domReady",
         "ko": "ko/ko"
-    }
+    },
+    "deps": [
+        "jquery/jquery-migrate"
+    ]
 };

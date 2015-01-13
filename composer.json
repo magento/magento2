@@ -166,7 +166,7 @@
             "linkorb/jsmin-php": "lib/internal/JSMin",
             "phpseclib/phpseclib": "lib/internal/phpseclib",
             "components/jquery": [
-                "lib/web/jquery/jquery.js",
+                "lib/web/jquery.js",
                 "lib/web/jquery/jquery.min.js",
                 "lib/web/jquery/jquery-migrate.js",
                 "lib/web/jquery/jquery-migrate.min.js"
