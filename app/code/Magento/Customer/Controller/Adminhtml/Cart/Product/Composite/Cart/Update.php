@@ -15,6 +15,7 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composi
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(

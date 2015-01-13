@@ -23,6 +23,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
      * @param \Magento\Framework\Registry $coreRegistry
      * @param GroupRepositoryInterface $groupRepository
      * @param GroupDataBuilder $groupDataBuilder
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      */
     public function __construct(

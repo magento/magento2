@@ -46,6 +46,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param ObjectFactory $objectFactory
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -70,8 +71,8 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         ObjectFactory $objectFactory,
-        \Magento\Framework\Url\DecoderInterface $urlDecoder,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\Url\DecoderInterface $urlDecoder
     ) {
         parent::__construct(
             $context,
