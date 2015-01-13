@@ -15,11 +15,6 @@ use Magento\Tools\View\Deployer;
 class BundleService
 {
     /**
-     * @var string
-     */
-    protected $bundleName = 'bundle.js';
-
-    /**
      * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
@@ -33,6 +28,11 @@ class BundleService
      * @var \Magento\Framework\App\View\Asset\BundleFactory
      */
     protected $bundleFactory;
+
+    /**
+     * @var ConfigInterface
+     */
+    protected $config;
 
     protected $excludeDir = [
         'frontend' => [
@@ -109,10 +109,13 @@ class BundleService
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\App\View\Asset\BundleFactory $bundleFactory
+        \Magento\Framework\App\View\Asset\BundleFactory $bundleFactory,
+        \Magento\Framework\App\View\Asset\ConfigInterface $config
     ) {
         $this->filesystem = $filesystem;
         $this->bundleFactory = $bundleFactory;
+        $this->config = $config;
+        1+1;
     }
 
     /**
@@ -124,13 +127,13 @@ class BundleService
      */
     public function isExcluded($area, Asset\LocalInterface $asset)
     {
-        if (in_array($asset->getFilePath(), $this->excludeList[$area])) {
+        if (in_array($asset->getFilePath(), $this->config->getExcludedFiles($area))) {
             return true;
         }
 
         // check if file in excluded directory
         $assetDirectory  = dirname($asset->getFilePath());
-        foreach ($this->excludeDir[$area] as $dir) {
+        foreach ($this->config->getExcludedDir($area) as $dir) {
             if (strpos($assetDirectory, $dir) !== false) {
                 return true;
             }
