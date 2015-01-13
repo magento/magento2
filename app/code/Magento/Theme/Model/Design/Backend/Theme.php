@@ -3,9 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Design\Backend;
+namespace Magento\Theme\Model\Design\Backend;
 
-class Theme extends \Magento\Framework\App\Config\Value
+use Magento\Framework\App\Config\Value;
+
+class Theme extends Value
 {
     /**
      * Design package instance
@@ -15,6 +17,8 @@ class Theme extends \Magento\Framework\App\Config\Value
     protected $_design = null;
 
     /**
+     * Initialize dependencies
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config

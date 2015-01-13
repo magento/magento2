@@ -3,19 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Design\Backend;
+namespace Magento\Theme\Model\Design\Backend;
 
 class ExceptionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Design\Backend\Exceptions
+     * @var \Magento\Theme\Model\Design\Backend\Exceptions
      */
     protected $_model = null;
 
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Design\Backend\Exceptions'
+            'Magento\Theme\Model\Design\Backend\Exceptions'
         );
         $this->_model->setScope('default');
         $this->_model->setScopeId(0);

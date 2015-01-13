@@ -222,6 +222,11 @@ return [
     ['/dev/tests/unit/testsuite/Magento/Object', '/dev/tests/unit/testsuite/Magento/Framework/Object'],
     ['/dev/tests/integration/testsuite/Magento/Object', '/dev/tests/integration/testsuite/Magento/Framework/Object'],
     ['/downloader'],
+    ['/app/code/Magento/Core/Model/Design/Backend', '/app/code/Magento/Theme/Model/Design/Backend'],
+    [
+        '/dev/tests/integration/testsuite/Magento/Core/Model/Design/Backend',
+        '/dev/tests/integration/testsuite/Magento/Theme/Model/Design/Backend'
+    ],
     ['/app/code/Magento/Install'],
     ['/dev/tests/integration/testsuite/Magento/Install'],
     ['/dev/tests/static/testsuite/Magento/Test/Integrity/Magento/Install'],

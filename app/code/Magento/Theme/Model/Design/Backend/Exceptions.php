@@ -3,9 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Design\Backend;
+namespace Magento\Theme\Model\Design\Backend;
 
-class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArraySerialized
+use Magento\Backend\Model\Config\Backend\Serialized\ArraySerialized;
+
+class Exceptions extends ArraySerialized
 {
     /**
      * Design package instance
@@ -15,6 +17,8 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
     protected $_design = null;
 
     /**
+     * Initialize dependencies
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config

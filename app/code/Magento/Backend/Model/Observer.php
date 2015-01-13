@@ -21,6 +21,8 @@ class Observer
     private $cacheFrontendPool;
 
     /**
+     * Initialize dependencies
+     *
      * @param Session $backendSession
      * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
      */

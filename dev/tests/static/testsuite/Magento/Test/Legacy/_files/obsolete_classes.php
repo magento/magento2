@@ -2831,6 +2831,9 @@ return [
         'Magento\Framework\Interception\ObjectManager\Config',
         'Magento\Framework\Interception\ObjectManager\Config\Developer'
     ],
+    ['\Magento\Core\Model\Design\Backend\Theme', '\Magento\Theme\Model\Design\Backend\Theme'],
+    ['\Magento\Core\Model\Design\Backend\Exceptions', '\Magento\Theme\Model\Design\Backend\Exceptions'],
+    ['\Magento\Core\Model\Design\Backend\ExceptionsTest', '\Magento\Theme\Model\Design\Backend\ExceptionsTest'],
     ['Magento\Framework\ObjectManager\Config\ProxyConfig'],
     ['Magento\Catalog\Block\Product\Send'],
     ['Magento\Catalog\Helper\Product\Options'],
