@@ -6,15 +6,12 @@
 <?php /** @var \Magento\PageCache\Block\Javascript $this */ ?>
 <script type="text/javascript">
 require([
-	"jquery",
-	"mage/mage"
-], function(jQuery){
+    'jquery',
+    'pageCache',
+    'domReady!'
+], function($){
+    'use strict';
 
-    //<![CDATA[
-    jQuery(function () {
-        jQuery('body').mage('pageCache', <?php echo $this->getScriptOptions(); ?>);
-    });
-    //]]>
-
+    $('body').pageCache(<?php echo $this->getScriptOptions(); ?>);
 });
 </script>
