@@ -33,9 +33,24 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     protected $response;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewMock;
+    protected $redirectFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $redirectResultMock;
+
+    /**
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultPageMock;
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageFactoryMock;
 
     protected function setUp()
     {
@@ -51,15 +66,33 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
+        $this->redirectResultMock = $this->getMock(
+            'Magento\Framework\Controller\Result\Redirect',
+            ['setPath', 'setUrl'],
+            [],
+            '',
+            false
+        );
+        $this->redirectFactoryMock = $this->getMock(
+            'Magento\Framework\Controller\Result\RedirectFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+
+        $this->resultPageMock = $this->getMock('Magento\Framework\View\Result\Page', [], [], '', false );
+        $this->pageFactoryMock = $this->getMock('Magento\Framework\View\Result\PageFactory', [], [], '', false);
+
         $this->object = $objectManager->getObject('Magento\Customer\Controller\Account\Create',
             [
-                'view' => $this->viewMock,
                 'request' => $this->request,
                 'response' => $this->response,
                 'customerSession' => $this->customerSession,
                 'registration' => $this->registrationMock,
                 'redirect' => $this->redirectMock,
+                'resultRedirectFactory' => $this->redirectFactoryMock,
+                'resultPageFactory' => $this->pageFactoryMock
             ]
         );
     }
@@ -77,17 +110,17 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('isAllowed')
             ->will($this->returnValue(false));
 
-        $this->redirectMock->expects($this->once())
-            ->method('redirect')
-            ->with($this->response, '*/*', [])
-            ->will($this->returnValue(false));
+        $this->redirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->redirectResultMock);
 
-        $this->viewMock->expects($this->never())
-            ->method('loadLayout');
-        $this->viewMock->expects($this->never())
+        $this->redirectResultMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/*')
+            ->will($this->returnSelf());
+
+        $this->resultPageMock->expects($this->never())
             ->method('getLayout');
-        $this->viewMock->expects($this->never())
-            ->method('renderLayout');
 
         $this->object->execute();
     }
@@ -119,15 +152,13 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->method('initMessages')
             ->will($this->returnSelf());
 
-        $this->viewMock->expects($this->once())
-            ->method('loadLayout')
-            ->will($this->returnSelf());
-        $this->viewMock->expects($this->once())
+        $this->pageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultPageMock);
+
+        $this->resultPageMock->expects($this->once())
             ->method('getLayout')
             ->will($this->returnValue($layoutMock));
-        $this->viewMock->expects($this->once())
-            ->method('renderLayout')
-            ->will($this->returnSelf());
 
         $this->object->execute();
     }

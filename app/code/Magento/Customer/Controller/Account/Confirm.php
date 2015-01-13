@@ -9,6 +9,8 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -45,6 +47,8 @@ class Confirm extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
+     * @param RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
@@ -55,6 +59,8 @@ class Confirm extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
+        RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $customerAccountManagement,
@@ -68,19 +74,22 @@ class Confirm extends \Magento\Customer\Controller\Account
         $this->customerRepository = $customerRepository;
         $this->addressHelper = $addressHelper;
         $this->urlModel = $urlFactory->create();
-        parent::__construct($context, $customerSession);
+        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
     }
 
     /**
      * Confirm customer account by id and confirmation key
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+
         if ($this->_getSession()->isLoggedIn()) {
-            $this->_redirect('*/*/');
-            return;
+            $resultRedirect->setPath('*/*/');
+            return $resultRedirect;
         }
         try {
             $customerId = $this->getRequest()->getParam('id', false);
@@ -95,8 +104,8 @@ class Confirm extends \Magento\Customer\Controller\Account
             $this->_getSession()->setCustomerDataAsLoggedIn($customer);
 
             $this->messageManager->addSuccess($this->getSuccessMessage());
-            $this->getResponse()->setRedirect($this->getSuccessRedirect());
-            return;
+            $resultRedirect->setUrl($this->getSuccessRedirect());
+            return $resultRedirect;
         } catch (StateException $e) {
             $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
         } catch (\Exception $e) {
@@ -104,8 +113,8 @@ class Confirm extends \Magento\Customer\Controller\Account
         }
         // die unhappy
         $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
-        $this->getResponse()->setRedirect($this->_redirect->error($url));
-        return;
+        $resultRedirect->setUrl($this->_redirect->error($url));
+        return $resultRedirect;
     }
 
     /**

@@ -89,6 +89,11 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
      */
     protected $contextMock;
 
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $redirectResultMock;
+
     protected function setUp()
     {
         $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
@@ -118,6 +123,23 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->addressHelperMock = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->redirectResultMock = $this->getMock(
+            'Magento\Framework\Controller\Result\Redirect',
+            ['setPath', 'setUrl'],
+            [],
+            '',
+            false
+        );
+        $redirectFactoryMock = $this->getMock(
+            'Magento\Framework\Controller\Result\RedirectFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $redirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->redirectResultMock);
 
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
@@ -137,15 +159,21 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('getMessageManager')
             ->will($this->returnValue($this->messageManagerMock));
 
-        $this->model = new \Magento\Customer\Controller\Account\Confirm(
-            $this->contextMock,
-            $this->customerSessionMock,
-            $this->scopeConfigMock,
-            $this->storeManagerMock,
-            $this->customerAccountManagementMock,
-            $this->customerRepositoryMock,
-            $this->addressHelperMock,
-            $urlFactoryMock
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+
+        $this->model = $objectManagerHelper->getObject(
+            'Magento\Customer\Controller\Account\Confirm',
+            [
+                'context' => $this->contextMock,
+                'customerSession' => $this->customerSessionMock,
+                'scopeConfig' => $this->scopeConfigMock,
+                'storeManager' => $this->storeManagerMock,
+                'customerAccountManagement' => $this->customerAccountManagementMock,
+                'customerRepository' => $this->customerRepositoryMock,
+                'addressHelper' => $this->addressHelperMock,
+                'urlFactory' => $urlFactoryMock,
+                'resultRedirectFactory' => $redirectFactoryMock
+            ]
         );
     }
 
@@ -155,12 +183,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('isLoggedIn')
             ->will($this->returnValue(true));
 
-        $this->redirectMock->expects($this->once())
-            ->method('redirect')
-            ->with($this->responseMock, '*/*/', [])
-            ->will($this->returnValue(false));
+        $this->redirectResultMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/*/')
+            ->will($this->returnSelf());
 
-        $this->model->execute();
+        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->execute());
     }
 
     /**
@@ -197,12 +225,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($testUrl))
             ->will($this->returnValue($testUrl));
 
-        $this->responseMock->expects($this->once())
-            ->method('setRedirect')
+        $this->redirectResultMock->expects($this->once())
+            ->method('setUrl')
             ->with($this->equalTo($testUrl))
             ->will($this->returnSelf());
 
-        $this->model->execute();
+        $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->execute());
     }
 
     /**

@@ -66,6 +66,16 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
     protected $customerAccountManagementMock;
 
     /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $redirectFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $redirectResultMock;
+
+    /**
      * List of actions that are allowed for not authorized users
      *
      * @var array
@@ -147,6 +157,20 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
         $this->customerAccountManagementMock =
             $this->getMockForAbstractClass('Magento\Customer\Api\AccountManagementInterface');
 
+        $this->redirectResultMock = $this->getMock(
+            'Magento\Framework\Controller\Result\Redirect',
+            ['setUrl'],
+            [],
+            '',
+            false
+        );
+        $this->redirectFactoryMock = $this->getMock(
+            'Magento\Framework\Controller\Result\RedirectFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
             'Magento\Customer\Controller\Account\LoginPost',
@@ -161,6 +185,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
                 'redirect' => $this->redirectMock,
                 'view' => $this->viewMock,
                 'customerAccountManagement' => $this->customerAccountManagementMock,
+                'resultRedirectFactory' => $this->redirectFactoryMock,
             ]
         );
     }
@@ -213,6 +238,14 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('referer')
         );
         $this->url->expects($this->once())->method('isOwnOriginUrl')->with();
+
+        $this->redirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->redirectResultMock);
+
+        $this->redirectResultMock->expects($this->once())
+            ->method('setUrl')
+            ->will($this->returnSelf());
 
         $this->object->execute();
     }

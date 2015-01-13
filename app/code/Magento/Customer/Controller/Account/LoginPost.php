@@ -7,6 +7,8 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -42,6 +44,8 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
+     * @param RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
@@ -54,6 +58,8 @@ class LoginPost extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
+        RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $customerAccountManagement,
@@ -67,13 +73,13 @@ class LoginPost extends \Magento\Customer\Controller\Account
         $this->urlDecoder = $urlDecoder;
         $this->customerUrl = $customerHelperData;
         $this->formKeyValidator = $formKeyValidator;
-        parent::__construct($context, $customerSession);
+        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
     }
 
     /**
      * Define target URL and redirect customer after logging in
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function loginPostRedirect()
@@ -120,20 +126,25 @@ class LoginPost extends \Magento\Customer\Controller\Account
                 $this->_getSession()->setBeforeAuthUrl($this->_getSession()->getAfterAuthUrl(true));
             }
         }
-        $this->getResponse()->setRedirect($this->_getSession()->getBeforeAuthUrl(true));
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setUrl($this->_getSession()->getBeforeAuthUrl(true));
+        return $resultRedirect;
     }
 
     /**
      * Login post action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect|void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
         if ($this->_getSession()->isLoggedIn() || !$this->formKeyValidator->validate($this->getRequest())) {
-            $this->_redirect('*/*/');
-            return;
+            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('*/*/');
+            return $resultRedirect;
         }
 
         if ($this->getRequest()->isPost()) {
@@ -167,6 +178,6 @@ class LoginPost extends \Magento\Customer\Controller\Account
             }
         }
 
-        $this->loginPostRedirect();
+        return $this->loginPostRedirect();
     }
 }

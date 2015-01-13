@@ -7,6 +7,8 @@ namespace Magento\Customer\Controller;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Customer account controller
@@ -40,14 +42,30 @@ class Account extends \Magento\Framework\App\Action\Action
     protected $session;
 
     /**
+     * @var RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
+     * @param RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
-        Session $customerSession
+        Session $customerSession,
+        RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory
     ) {
         $this->session = $customerSession;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 
