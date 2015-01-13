@@ -15,11 +15,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Observer
 {
     /**
-     * @var \Magento\Framework\App\Cache\Frontend\Pool
-     */
-    private $_cacheFrontendPool;
-
-    /**
      * @var Theme
      */
     private $_currentTheme;
@@ -50,7 +45,6 @@ class Observer
     protected $_logger;
 
     /**
-     * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\View\Asset\GroupedCollection $assets
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
@@ -59,7 +53,6 @@ class Observer
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\View\Asset\GroupedCollection $assets,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
@@ -67,28 +60,11 @@ class Observer
         \Magento\Core\Model\Theme\Registration $registration,
         \Psr\Log\LoggerInterface $logger
     ) {
-        $this->_cacheFrontendPool = $cacheFrontendPool;
         $this->_currentTheme = $design->getDesignTheme();
         $this->_pageAssets = $assets;
         $this->_assetRepo = $assetRepo;
         $this->_registration = $registration;
         $this->_logger = $logger;
-    }
-
-    /**
-     * Cron job method to clean old cache resources
-     *
-     * @param \Magento\Cron\Model\Schedule $schedule
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function cleanCache(\Magento\Cron\Model\Schedule $schedule)
-    {
-        /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
-        foreach ($this->_cacheFrontendPool as $cacheFrontend) {
-            // Magento cache frontend does not support the 'old' cleaning mode, that's why backend is used directly
-            $cacheFrontend->getBackend()->clean(\Zend_Cache::CLEANING_MODE_OLD);
-        }
     }
 
     /**

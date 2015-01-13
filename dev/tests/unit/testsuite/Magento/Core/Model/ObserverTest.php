@@ -10,16 +10,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cacheFrontendMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_frontendPoolMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_themeCustomization;
 
     /**
@@ -39,24 +29,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_cacheFrontendMock = $this->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface');
-
-        $this->_frontendPoolMock = $this->getMock(
-            'Magento\Framework\App\Cache\Frontend\Pool',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->_frontendPoolMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
-        $this->_frontendPoolMock->expects(
-            $this->any()
-        )->method(
-            'current'
-        )->will(
-            $this->returnValue($this->_cacheFrontendMock)
-        );
-
         $this->_themeCustomization = $this->getMock(
             'Magento\Framework\View\Design\Theme\Customization',
             [],
@@ -105,7 +77,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_model = $objectManagerHelper->getObject(
             'Magento\Core\Model\Observer',
             [
-                'cacheFrontendPool' => $this->_frontendPoolMock,
                 'design' => $designMock,
                 'assets' => $this->_assetsMock,
                 'assetRepo' => $this->_assetRepo,
@@ -115,26 +86,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->_cacheFrontendMock = null;
-        $this->_frontendPoolMock = null;
         $this->_themeCustomization = null;
         $this->_assetsMock = null;
         $this->_model = null;
-    }
-
-    public function testCleanCache()
-    {
-        $cacheBackendMock = $this->getMockForAbstractClass('Zend_Cache_Backend_Interface');
-        $cacheBackendMock->expects($this->once())->method('clean')->with(\Zend_Cache::CLEANING_MODE_OLD, []);
-        $this->_cacheFrontendMock->expects(
-            $this->once()
-        )->method(
-            'getBackend'
-        )->will(
-            $this->returnValue($cacheBackendMock)
-        );
-        $cronScheduleMock = $this->getMock('Magento\Cron\Model\Schedule', [], [], '', false);
-        $this->_model->cleanCache($cronScheduleMock);
     }
 
     public function testApplyThemeCustomization()

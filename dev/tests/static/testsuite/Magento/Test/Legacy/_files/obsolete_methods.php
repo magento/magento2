@@ -293,6 +293,7 @@ return [
     ['checkDateTime', 'Magento\Framework\Stdlib\DateTime\DateTime'],
     ['chooseTemplate', 'Magento\Checkout\Block\Cart'],
     ['cleanCache', 'Magento\Core\Model\Config'],
+    ['cleanCache', '\Magento\Core\Model\Observer', '\Magento\Backend\Model\Observer'],
     ['cleanDbRow', 'Magento\Framework\App\Resource'],
     ['cleanMergedJsCss', 'Magento\Core\Model\Design\Package', 'Magento\Framework\View\Asset\MergeService'],
     ['cleanMergedJsCss', 'Magento\Core\Model\Design\Package\Proxy', 'Magento\Framework\View\Asset\MergeService'],
