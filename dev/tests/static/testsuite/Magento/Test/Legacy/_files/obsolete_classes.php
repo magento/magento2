@@ -2845,4 +2845,5 @@ return [
     ['Magento\Framework\App\Cache\State\Options', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\App\Cache\State\OptionsInterface', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\Logger', 'Psr\Log\LoggerInterface'],
+    ['Magento\Core\Model\Validator\Factory', 'Magento\Framework\Validator\Factory'],
 ];
