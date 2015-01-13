@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
 
@@ -26,6 +27,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
+    /**
+     * @var string Default value for session.save_path setting
+     */
+    protected $defaultSavePath;
+
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $deploymentConfigMock;
+
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -34,24 +45,27 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         if ($sessionManager->isSessionExists()) {
             $sessionManager->writeClose();
         }
-        $deploymentConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $deploymentConfigMock->expects($this->at(0))
+        $this->deploymentConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->deploymentConfigMock->expects($this->at(0))
             ->method('get')
             ->with(Config::PARAM_SESSION_SAVE_METHOD, 'files')
             ->will($this->returnValue('files'));
-        $deploymentConfigMock->expects($this->at(1))
+        $this->deploymentConfigMock->expects($this->at(1))
             ->method('get')
             ->with(Config::PARAM_SESSION_SAVE_PATH)
             ->will($this->returnValue(null));
-        $deploymentConfigMock->expects($this->at(2))
+        $this->deploymentConfigMock->expects($this->at(2))
             ->method('get')
             ->with(Config::PARAM_SESSION_CACHE_LIMITER)
             ->will($this->returnValue($this->_cacheLimiter));
 
         $this->_model = $this->_objectManager->create(
             'Magento\Framework\Session\Config',
-            ['deploymentConfig' => $deploymentConfigMock]
+            ['deploymentConfig' => $this->deploymentConfigMock]
         );
+        $this->defaultSavePath = $this->_objectManager
+            ->get('Magento\Framework\Filesystem\DirectoryList')
+            ->getPath(DirectoryList::SESSION);
     }
 
     protected function tearDown()
@@ -281,5 +295,48 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setSavePath('some_save_path');
         $this->assertEquals($this->_model->getOption('save_path'), 'some_save_path');
+    }
+
+    /**
+     * @dataProvider savePathDataProvider
+     */
+    public function testConstructorSavePath($existing, $given, $expected)
+    {
+        $sessionSavePath = ini_get('session.save_path');
+        if ($expected === 'default') {
+            $expected = $this->defaultSavePath . '/';
+        }
+        $setup = ini_set('session.save_path', $existing);
+        if ($setup === false) {
+            $this->markTestSkipped('Cannot set session.save_path with ini_set');
+        }
+
+        $this->deploymentConfigMock->expects($this->at(1))
+            ->method('get')
+            ->with(Config::PARAM_SESSION_SAVE_PATH)
+            ->will($this->returnValue($given));
+
+        $this->_model = $this->_objectManager->create(
+            'Magento\Framework\Session\Config',
+            ['deploymentConfig' => $this->deploymentConfigMock]
+        );
+        $this->assertEquals($expected, $this->_model->getOption('save_path'));
+
+        if ($sessionSavePath != ini_get('session.save_path')) {
+            ini_set('session.save_path', $sessionSavePath);
+        }
+    }
+
+    public function savePathDataProvider()
+    {
+        // preset value (null = not set), input value (null = not set), expected value
+        $savePathGiven = 'explicit_save_path';
+        $presetPath = 'preset_save_path';
+        return [
+            [null, $savePathGiven, $savePathGiven],
+            [null, null, 'default'],
+            [$presetPath, $savePathGiven, $savePathGiven],
+            [$presetPath, null, $presetPath],
+        ];
     }
 }

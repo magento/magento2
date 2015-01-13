@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Api;
 
@@ -26,11 +27,14 @@ class SimpleDataObjectConverter
      * Convert nested array into flat array.
      *
      * @param ExtensibleDataInterface $dataObject
+     * @param string $dataObjectType
      * @return array
      */
-    public function toFlatArray(ExtensibleDataInterface $dataObject)
+    public function toFlatArray(ExtensibleDataInterface $dataObject, $dataObjectType = null)
     {
-        $dataObjectType = get_class($dataObject);
+        if ($dataObjectType === null) {
+            $dataObjectType = get_class($dataObject);
+        }
         $data = $this->dataObjectProcessor->buildOutputDataArray($dataObject, $dataObjectType);
         return ConvertArray::toFlatArray($data);
     }

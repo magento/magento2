@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model;
 
@@ -57,7 +58,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ['metadataService' => $customerMetadataService]
         );
         $expected = $this->_extensibleDataObjectConverter->toFlatArray(
-            $customerRepository->getById(1)
+            $customerRepository->getById(1), [], '\Magento\Customer\Api\Data\CustomerInterface'
         );
         $customerBuilder->populateWithArray($expected);
         $customerDataSet = $customerBuilder->create();
