@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 'use strict';
@@ -9,6 +10,7 @@ angular.module('landing', ['ngStorage'])
         '$location',
         '$localStorage',
         function ($scope, $location, $localStorage) {
+            $localStorage.$reset();
             $scope.selectLanguage = function () {
                 $localStorage.lang = $scope.modelLanguage;
                 window.location = 'index.php/' + $scope.modelLanguage + '/index';
