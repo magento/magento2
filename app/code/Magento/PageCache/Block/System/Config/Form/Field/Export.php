@@ -29,7 +29,7 @@ class Export extends \Magento\Backend\Block\System\Config\Form\Field
         $url = $this->getUrl("*/PageCache/exportVarnishConfig", $params);
         $data = [
             'id' => 'system_full_page_cache_varnish_export_button_version' . $this->getVarnishVersion(),
-            'label' => __('Export VCL for Varnish') . $this->getVarnishVersion(),
+            'label' => __('Export VCL for Varnish ') . $this->getVarnishVersion(),
             'onclick' => "setLocation('" . $url . "')",
         ];
 
