@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
@@ -168,7 +169,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
         $homeUrl = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Backend\Helper\Data'
         )->getHomePageUrl();
-        $expected = '<script type="text/javascript">parent.window.location =';
+        $expected = '<script>parent.window.location =';
         $this->assertStringStartsWith($expected, $this->getResponse()->getBody());
         $this->assertContains($homeUrl, $this->getResponse()->getBody());
         $this->_logout();
