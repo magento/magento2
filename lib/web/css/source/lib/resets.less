@@ -46,6 +46,14 @@
         border: 0;
     }
 
+    img,
+    object,
+    video,
+    embed {
+        max-width: 100%;
+        height: auto;
+    }
+
     svg:not(:root) {
         overflow: hidden;
     }
@@ -89,12 +97,9 @@
     textarea:not([disabled]),
     select:not([disabled]) {
         &:focus {
-            box-shadow: @focus-box-shadow;
+            .css(box-shadow, @focus-box-shadow);
         }
     }
-
-
-
 }
 
 //
