@@ -14,7 +14,7 @@ class Grid extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        $resultPage = $this->resultLayoutFactory->create();
-        return $resultPage;
+        $resultLayout = $this->resultLayoutFactory->create();
+        return $resultLayout;
     }
 }
