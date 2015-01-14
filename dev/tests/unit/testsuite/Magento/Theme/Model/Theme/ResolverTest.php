@@ -18,7 +18,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     protected $designMock;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeCollectionFactoryMock;
 

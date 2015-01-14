@@ -11,7 +11,7 @@ namespace Magento\Theme\Model\Resource;
 class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
-     * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
      */
     protected $_themeResourceFactory;
 
@@ -23,7 +23,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     /**
      * @param \Magento\Framework\Module\Setup\Context $context
      * @param string $resourceName
-     * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory
+     * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeResourceFactory
      * @param \Magento\Theme\Model\Theme\CollectionFactory $themeFactory
      * @param string $moduleName
      * @param string $connectionName
@@ -31,7 +31,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     public function __construct(
         \Magento\Framework\Module\Setup\Context $context,
         $resourceName,
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
+        \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeResourceFactory,
         \Magento\Theme\Model\Theme\CollectionFactory $themeFactory,
         $moduleName = 'Magento_Core',
         $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION

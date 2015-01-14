@@ -19,7 +19,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
     protected $_layoutProcessorFactory;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
      */
     protected $_themesFactory;
 
@@ -31,14 +31,14 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
     /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory
-     * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory
+     * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $themesFactory
      * @param \Magento\Framework\App\State $appState
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory,
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $themesFactory,
+        \Magento\Theme\Model\Resource\Theme\CollectionFactory $themesFactory,
         \Magento\Framework\App\State $appState,
         array $data = []
     ) {

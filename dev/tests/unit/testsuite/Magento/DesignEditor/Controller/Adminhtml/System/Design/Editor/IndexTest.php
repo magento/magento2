@@ -101,7 +101,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * Return mocked theme collection factory model
      *
      * @param int $countCustomization
-     * @return \Magento\Core\Model\Resource\Theme\CollectionFactory
+     * @return \Magento\Theme\Model\Resource\Theme\CollectionFactory
      */
     protected function getThemeCollectionFactory($countCustomization)
     {
@@ -123,7 +123,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $themeCollectionMock->expects($this->once())->method('getSize')->will($this->returnValue($countCustomization));
 
-        /** @var \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory */
+        /** @var \Magento\Theme\Model\Resource\Theme\CollectionFactory $collectionFactory */
         $collectionFactory = $this->getMock(
             'Magento\Theme\Model\Resource\Theme\CollectionFactory',
             ['create'],

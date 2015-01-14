@@ -8,7 +8,7 @@ namespace Magento\Theme\Model\Theme;
 class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProviderInterface
 {
     /**
-     * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -18,11 +18,11 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
     protected $themeFactory;
 
     /**
-     * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory
+     * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $collectionFactory
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory,
+        \Magento\Theme\Model\Resource\Theme\CollectionFactory $collectionFactory,
         \Magento\Theme\Model\ThemeFactory $themeFactory
     ) {
         $this->collectionFactory = $collectionFactory;

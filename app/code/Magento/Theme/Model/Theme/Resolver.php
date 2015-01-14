@@ -16,7 +16,7 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
     protected $design;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
      */
     protected $themeFactory;
 
@@ -28,12 +28,12 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
     /**
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Core\Model\Resource\Theme\CollectionFactory $themeFactory
+     * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeFactory
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         \Magento\Framework\View\DesignInterface $design,
-        \Magento\Core\Model\Resource\Theme\CollectionFactory $themeFactory
+        \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeFactory
     ) {
         $this->design = $design;
         $this->themeFactory = $themeFactory;
