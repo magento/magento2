@@ -108,7 +108,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         foreach ($this->_attributes as $attributeData) {
             $arguments = $objectManagerHelper->getConstructArguments(
                 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-                ['eavTypeFactory' => $this->getMock('Magento\Eav\Model\Entity\TypeFactory')]
+                ['eavTypeFactory' => $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false)]
             );
             $arguments['data'] = $attributeData;
             $attribute = $this->getMockForAbstractClass(
