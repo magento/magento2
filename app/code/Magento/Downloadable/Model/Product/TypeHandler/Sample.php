@@ -78,6 +78,7 @@ class Sample extends AbstractTypeHandler
      * @param ComponentInterface $model
      * @param array $data
      * @param Product $product
+     * @return void
      */
     protected function setDataToModel(ComponentInterface $model, array $data, Product $product)
     {
