@@ -132,7 +132,7 @@ require(['jquery', 'jquery/ui', "mage/mage", "mage/translate"], function($){
         }});
 });
 
-<?php if (($block = $block->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject = $block->getJsObjectName())): ?>
+<?php if ($block->getLayout()->getBlock('category.product.grid') && ($_gridJsObject = $block->getJsObjectName())): ?>
 require([
     "mage/adminhtml/grid"
 ], function(){
@@ -197,7 +197,7 @@ require([
         }
 });
 <?php endif; ?>
-<?php if ($block->isAjax() && ($block = $block->getLayout()->getBlock('tabs')) && ($_tabsJsObject = $block->getJsObjectName())): ?>
+<?php if ($block->isAjax() && $block->getLayout()->getBlock('tabs') && ($_tabsJsObject = $block->getJsObjectName())): ?>
     // Temporary solution, will be replaced after refactoring of manage category functionality
     <?php $tabsBlock = $block->getLayout()->getBlock('tabs'); ?>
     require(["jquery","mage/backend/tabs"],function($){
