@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\PageCache\Controller\Block;
@@ -27,6 +28,11 @@ class RenderTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\PageCache\Controller\Block
      */
     protected $action;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\InlineInterface
+     */
+    protected $translateInline;
 
     /**
      * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
@@ -57,7 +63,13 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
         $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
 
-        $this->action = new \Magento\PageCache\Controller\Block\Render($contextMock);
+        $this->translateInline = $this->getMock('Magento\Framework\Translate\InlineInterface');
+
+        $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->action = $helperObjectManager->getObject(
+            'Magento\PageCache\Controller\Block\Render',
+            ['context' => $contextMock, 'translateInline' => $this->translateInline]
+        );
     }
 
     public function testExecuteNotAjax()
@@ -110,54 +122,33 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $blockInstance2->expects($this->once())->method('toHtml')->will($this->returnValue($expectedData['block2']));
 
         $this->requestMock->expects($this->once())->method('isAjax')->will($this->returnValue(true));
-        $this->requestMock->expects(
-            $this->at(1)
-        )->method(
-                'getParam'
-            )->with(
-                $this->equalTo('blocks'),
-                $this->equalTo('')
-            )->will(
-                $this->returnValue(json_encode($blocks))
-            );
-        $this->requestMock->expects(
-            $this->at(2)
-        )->method(
-                'getParam'
-            )->with(
-                $this->equalTo('handles'),
-                $this->equalTo('')
-            )->will(
-                $this->returnValue(json_encode($handles))
-            );
+        $this->requestMock->expects($this->at(1))
+            ->method('getParam')
+            ->with($this->equalTo('blocks'), $this->equalTo(''))
+            ->will($this->returnValue(json_encode($blocks)));
+        $this->requestMock->expects($this->at(2))
+            ->method('getParam')
+            ->with($this->equalTo('handles'), $this->equalTo(''))
+            ->will($this->returnValue(json_encode($handles)));
         $this->viewMock->expects($this->once())->method('loadLayout')->with($this->equalTo($handles));
         $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
-        $this->layoutMock->expects(
-            $this->at(0)
-        )->method(
-                'getBlock'
-            )->with(
-                $this->equalTo($blocks[0])
-            )->will(
-                $this->returnValue($blockInstance1)
-            );
-        $this->layoutMock->expects(
-            $this->at(1)
-        )->method(
-                'getBlock'
-            )->with(
-                $this->equalTo($blocks[1])
-            )->will(
-                $this->returnValue($blockInstance2)
-            );
+        $this->layoutMock->expects($this->at(0))
+            ->method('getBlock')
+            ->with($this->equalTo($blocks[0]))
+            ->will($this->returnValue($blockInstance1));
+        $this->layoutMock->expects($this->at(1))
+            ->method('getBlock')
+            ->with($this->equalTo($blocks[1]))
+            ->will($this->returnValue($blockInstance2));
 
-        $this->responseMock->expects(
-            $this->once()
-        )->method(
-                'appendBody'
-            )->with(
-                $this->equalTo(json_encode($expectedData))
-            );
+        $this->translateInline->expects($this->once())
+            ->method('processResponseBody')
+            ->with($expectedData)
+            ->willReturnSelf();
+
+        $this->responseMock->expects($this->once())
+            ->method('appendBody')
+            ->with($this->equalTo(json_encode($expectedData)));
 
         $this->action->execute();
     }

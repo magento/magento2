@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Controller\Block;
 
@@ -27,6 +28,7 @@ class Esi extends \Magento\PageCache\Controller\Block
                 $response->setHeader('X-Magento-Tags', implode(',', $blockInstance->getIdentities()));
             }
         }
+        $this->translateInline->processResponseBody($html);
         $response->appendBody($html);
         $response->setPublicHeaders($ttl);
     }
