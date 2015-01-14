@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Model\Resource\Group\Grid;
 
-use Magento\Core\Model\EntityFactory;
+use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\AbstractServiceCollection;

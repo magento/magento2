@@ -17,7 +17,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     {
         $className = 'Magento\Sales\Model\Order\Invoice';
         $result = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false)
+            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = [

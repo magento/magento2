@@ -14,7 +14,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $entityFactory = $this->getMock('\Magento\Core\Model\EntityFactory', [], [], '', false);
+        $entityFactory = $this->getMock('\Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $logger = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
         $fetchStrategy = $this->getMock('\Magento\Framework\Data\Collection\Db\FetchStrategy\Query', [], [], '', false);
         $eventManager = $this->getMock('\Magento\Framework\Event\Manager', [], [], '', false);

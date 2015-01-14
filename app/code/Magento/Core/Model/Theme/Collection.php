@@ -39,12 +39,12 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     protected $themeConfigFactory;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Config\ThemeFactory $themeConfigFactory
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Config\ThemeFactory $themeConfigFactory
     ) {
