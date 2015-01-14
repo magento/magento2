@@ -142,7 +142,7 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $this->webLogger->log("Message1\n");
+        $this->webLogger->log('Message1' . PHP_EOL);
         $this->webLogger->log('Message2');
 
         $expected = [
