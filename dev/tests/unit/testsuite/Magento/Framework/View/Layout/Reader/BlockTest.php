@@ -38,26 +38,28 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $xml
+     * @param string $elementType
      * @return \Magento\Framework\View\Layout\Element
      */
-    protected function getElement($xml)
+    protected function getElement($xml, $elementType)
     {
         $xml = '<' . \Magento\Framework\View\Layout\Reader\Block::TYPE_BLOCK . '>'
             . $xml
             . '</' . \Magento\Framework\View\Layout\Reader\Block::TYPE_BLOCK . '>';
 
         $xml = simplexml_load_string($xml, 'Magento\Framework\View\Layout\Element');
-        return current($xml->children());
+        return $xml->{$elementType};
     }
 
     /**
      * Prepare reader pool
      *
      * @param string $xml
+     * @param string $elementType
      */
-    protected function prepareReaderPool($xml)
+    protected function prepareReaderPool($xml, $elementType)
     {
-        $this->currentElement = $this->getElement($xml);
+        $this->currentElement = $this->getElement($xml, $elementType);
         $this->readerPool->expects($this->once())->method('interpret')->with($this->context, $this->currentElement);
     }
 
@@ -124,7 +126,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $scopeResolver = $this->getMock('Magento\Framework\App\ScopeResolverInterface', [], [], '', false);
         $scopeResolver->expects($getScopeCount)->method('getScope')->will($this->returnValue($scope));
 
-        $this->prepareReaderPool('<' . $literal . ' ifconfig="' . $testValue . '"/>');
+        $this->prepareReaderPool('<' . $literal . ' ifconfig="' . $testValue . '"/>', $literal);
 
         /** @var \Magento\Framework\View\Layout\Reader\Block $block */
         $block = $this->getBlock(
@@ -152,7 +154,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $this->scheduledStructure->expects($this->once())->method('setStructureElementData')
             ->with($testName, ['actions' => [], 'arguments' => []]);
 
-        $this->prepareReaderPool('<' . $literal . ' name="' . $testName . '"/>');
+        $this->prepareReaderPool('<' . $literal . ' name="' . $testName . '"/>', $literal);
 
         /** @var \Magento\Framework\View\Layout\Reader\Block $block */
         $block = $this->getBlock(['readerPool' => $this->readerPool]);

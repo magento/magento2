@@ -47,10 +47,10 @@ class ArgumentsReader
                     } else {
                         $default = is_null(
                             $parameter->getDefaultValue()
-                        ) ? 'null' : "'" . $parameter->getDefaultValue() . "'";
+                        ) ? null : $parameter->getDefaultValue();
                     }
                 } elseif ($parameter->allowsNull()) {
-                    $default = 'null';
+                    $default = null;
                 }
             }
 

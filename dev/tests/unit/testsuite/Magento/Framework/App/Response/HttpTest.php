@@ -128,13 +128,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $ttl = 120;
         $pragma = 'cache';
         $cacheControl = 'public, max-age=' . $ttl . ', s-maxage=' . $ttl;
-        $between = 1000;
+        $expiresResult = gmdate('D, d M Y H:i:s T', time() + $ttl);
 
         $this->model->setPublicHeaders($ttl);
         $this->assertEquals($pragma, $this->model->getHeader('Pragma')['value']);
         $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')['value']);
-        $expiresResult = time($this->model->getHeader('Expires')['value']);
-        $this->assertTrue($expiresResult > $between || $expiresResult < $between);
+        $this->assertEquals($expiresResult, $this->model->getHeader('Expires')['value']);
     }
 
     /**

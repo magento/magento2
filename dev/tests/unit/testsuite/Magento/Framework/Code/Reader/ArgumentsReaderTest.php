@@ -48,7 +48,7 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
                 'position' => 3,
                 'type' => null,
                 'isOptional' => true,
-                'default' => "'Const Value'",
+                'default' => "Const Value",
             ],
             'optionalNumValue' => [
                 'name' => 'optionalNumValue',
@@ -62,7 +62,7 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
                 'position' => 5,
                 'type' => null,
                 'isOptional' => true,
-                'default' => "'optional string'",
+                'default' => "optional string",
             ],
             'optionalArrayValue' => [
                 'name' => 'optionalArrayValue',
@@ -115,7 +115,7 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
                 'position' => 3,
                 'type' => null,
                 'isOptional' => true,
-                'default' => "'Const Value'",
+                'default' => "Const Value",
             ],
             'optionalNumValue' => [
                 'name' => 'optionalNumValue',
@@ -129,7 +129,7 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
                 'position' => 5,
                 'type' => null,
                 'isOptional' => true,
-                'default' => "'optional string'",
+                'default' => "optional string",
             ],
             'optionalArrayValue' => [
                 'name' => 'optionalArrayValue',
@@ -177,24 +177,24 @@ class ArgumentsReaderTest extends \PHPUnit_Framework_TestCase
                 'position' => 0,
                 'type' => null,
                 'isOptional' => true,
-                'default' => null,
+                'default' => '',
             ],
             'code' => [
                 'name' => 'code',
                 'position' => 1,
                 'type' => null,
                 'isOptional' => true,
-                'default' => null,
+                'default' => 0,
             ],
             'previous' => [
                 'name' => 'previous',
                 'position' => 2,
-                'type' => null,
+                'type' => '\Exception',
                 'isOptional' => true,
                 'default' => null,
             ],
         ];
-        $class = new \ReflectionClass('ClassExtendsDefaultPhpType');
+        $class = new \ReflectionClass('ClassExtendsDefaultPhpTypeWithIOverrideConstructor');
         $actualResult = $this->_model->getConstructorArguments($class, false, true);
 
         $this->assertEquals($expectedResult, $actualResult);

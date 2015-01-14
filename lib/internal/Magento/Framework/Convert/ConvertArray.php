@@ -67,7 +67,7 @@ XML;
      * @return \SimpleXMLElement
      * @throws Exception
      */
-    private function _assocToXml(array $array, $rootName, \SimpleXMLElement &$xml)
+    private function _assocToXml(array $array, $rootName, \SimpleXMLElement $xml)
     {
         $hasNumericKey = false;
         $hasStringKey = false;
@@ -78,12 +78,13 @@ XML;
                         throw new Exception('Associative key must not be the same as its parent associative key.');
                     }
                     $hasStringKey = true;
-                    $xml->{$key} = $value;
+                    $xml->addChild($key, $value);
                 } elseif (is_int($key)) {
                     $hasNumericKey = true;
-                    $xml->{$rootName}[$key] = $value;
+                    $xml->addChild($key, $value);
                 }
             } else {
+                $xml->addChild($key);
                 self::_assocToXml($value, $key, $xml->{$key});
             }
         }

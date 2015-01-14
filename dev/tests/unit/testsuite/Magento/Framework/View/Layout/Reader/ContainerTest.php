@@ -101,7 +101,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'container' => [
-                'elementCurrent' => $this->getElement('<container name="container" id="id_add" tag="body"/>'),
+                'elementCurrent' => $this->getElement(
+                    '<container name="container" id="id_add" tag="body"/>',
+                    'container'
+                ),
                 'containerName' => 'container',
                 'structureElement' => [
                     'attributes' => [
@@ -120,7 +123,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ],
             'referenceContainer' => [
                 'elementCurrent' => $this->getElement(
-                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" label="Add"/>'
+                    '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" label="Add"/>',
+                    'referenceContainer'
                 ),
                 'containerName' => 'reference',
                 'structureElement' => [],
@@ -138,14 +142,15 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $xml
+     * @param string $elementType
      * @return \Magento\Framework\View\Layout\Element
      */
-    protected function getElement($xml)
+    protected function getElement($xml, $elementType)
     {
         $xml = simplexml_load_string(
             '<parent_element>' . $xml . '</parent_element>',
             'Magento\Framework\View\Layout\Element'
         );
-        return current($xml->children());
+        return $xml->{$elementType};
     }
 }

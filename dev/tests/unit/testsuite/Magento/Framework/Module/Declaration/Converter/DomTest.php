@@ -28,7 +28,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $xmlString
-     * @dataProvider testConvertWithInvalidDomDataProvider
+     * @dataProvider convertWithInvalidDomDataProvider
      * @expectedException \Exception
      */
     public function testConvertWithInvalidDom($xmlString)
@@ -38,12 +38,12 @@ class DomTest extends \PHPUnit_Framework_TestCase
         $this->_converter->convert($dom);
     }
 
-    public function testConvertWithInvalidDomDataProvider()
+    public function convertWithInvalidDomDataProvider()
     {
         return [
             'Module node without "name" attribute' => ['<?xml version="1.0"?><config><module /></config>'],
             'Sequence module node without "name" attribute' => [
-                '<?xml dbversion="1.0"?><config><module name="Module_One" schema_version="1.0.0.0">' .
+                '<?xml version="1.0"?><config><module name="Module_One" schema_version="1.0.0.0">' .
                 '<sequence><module/></sequence></module></config>',
             ],
         ];

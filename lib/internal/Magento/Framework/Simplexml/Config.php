@@ -490,8 +490,11 @@ class Config
      */
     public function loadDom($dom)
     {
-        $xml = simplexml_import_dom($dom, $this->_elementClass);
-
+        if ($dom instanceof $this->_elementClass) {
+            $xml = $dom;
+        } else {
+            $xml = simplexml_import_dom($dom, $this->_elementClass);
+        }
         if ($xml) {
             $this->_xml = $xml;
             return true;

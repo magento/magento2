@@ -27,24 +27,4 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $expectedResult = include $convertedFile;
         $this->assertEquals($expectedResult, $this->_model->convert($dom));
     }
-
-    /**
-     * @param string $xmlData
-     * @dataProvider wrongXmlDataProvider
-     * @expectedException \Exception
-     */
-    public function testMapThrowsExceptionWhenXmlHasWrongFormat($xmlData)
-    {
-        $dom = new \DOMDocument();
-        $dom->loadXML($xmlData);
-        $this->_model->convert($dom);
-    }
-
-    /**
-     * @return array
-     */
-    public function wrongXmlDataProvider()
-    {
-        return [['<?xml version="1.0"?><config>']];
-    }
 }
