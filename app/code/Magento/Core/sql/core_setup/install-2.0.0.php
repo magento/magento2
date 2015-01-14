@@ -191,9 +191,9 @@ $table = $connection->newTable(
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $installer->getFkName('core_layout_link', 'theme_id', 'core_theme', 'theme_id'),
+    $installer->getFkName('core_layout_link', 'theme_id', 'theme', 'theme_id'),
     'theme_id',
-    $installer->getTable('core_theme'),
+    $installer->getTable('theme'),
     'theme_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE

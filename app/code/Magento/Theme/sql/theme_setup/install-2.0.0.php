@@ -13,10 +13,10 @@ $connection = $installer->getConnection();
 $installer->startSetup();
 
 /**
- * Create table 'core_theme'
+ * Create table 'theme'
  */
 $table = $connection->newTable(
-    $installer->getTable('core_theme')
+    $installer->getTable('theme')
 )->addColumn(
     'theme_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -83,10 +83,10 @@ $table = $connection->newTable(
 $connection->createTable($table);
 
 /**
- * Create table 'core_theme_file'
+ * Create table 'theme_file'
  */
 $table = $connection->newTable(
-    $installer->getTable('core_theme_file')
+    $installer->getTable('theme_file')
 )->addColumn(
     'theme_files_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -130,9 +130,9 @@ $table = $connection->newTable(
     ['nullable' => false, 'default' => 0],
     'Is Temporary File'
 )->addForeignKey(
-    $installer->getFkName('core_theme_file', 'theme_id', 'core_theme', 'theme_id'),
+    $installer->getFkName('theme_file', 'theme_id', 'theme', 'theme_id'),
     'theme_id',
-    $installer->getTable('core_theme'),
+    $installer->getTable('theme'),
     'theme_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE

@@ -17,6 +17,6 @@ class File extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('core_theme_file', 'theme_files_id');
+        $this->_init('theme_file', 'theme_files_id');
     }
 }

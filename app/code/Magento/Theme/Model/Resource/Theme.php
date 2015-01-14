@@ -17,6 +17,6 @@ class Theme extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('core_theme', 'theme_id');
+        $this->_init('theme', 'theme_id');
     }
 }

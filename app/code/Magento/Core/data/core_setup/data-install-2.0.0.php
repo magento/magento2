@@ -40,11 +40,12 @@ if ($tableName) {
     $installer->getConnection()->delete($tableName, ['code = ?' => 'admin_setup']);
 }
 
+
 /**
- * Update rows in core_theme
+ * Update rows in theme
  */
 $installer->getConnection()->update(
-    $installer->getTable('core_theme'),
+    $installer->getTable('theme'),
     ['area' => 'frontend'],
     ['area = ?' => '']
 );
