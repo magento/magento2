@@ -143,6 +143,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
