@@ -23,6 +23,8 @@
         <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
+    </resources>
+    </route>
     <route url="/V1/carts/:cartId/items" method="GET">
         <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="getList"/>
         <resources>
