@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+    <storage class="Magento\Shipping\Test\Repository\ConfigData">
+        <dataset name="shipping_origin" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/country_id</item>
+                    <item name="scope" xsi:type="string">shipping</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">US</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/region_id</item>
+                    <item name="scope" xsi:type="string">shipping</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">12</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/postcode</item>
+                    <item name="scope" xsi:type="string">shipping</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">90232</item>
+                </item>
+                <item name="3" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/city</item>
+                    <item name="scope" xsi:type="string">shipping</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">Culver City</item>
+                </item>
+                <item name="4" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/street_line1</item>
+                    <item name="scope" xsi:type="string">shipping</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">10441 Jefferson Blvd</item>
+                </item>
+                <item name="5" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/street_line2</item>
+                    <item name="scope" xsi:type="string">shipping</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">Suite 200</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="fedex" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/country_id</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">US</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/region_id</item>
+                    <item name="scope" xsi:type="string">shipping</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">12</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/postcode</item>
+                    <item name="scope" xsi:type="string">shipping</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">90024</item>
+                </item>
+                <item name="3" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/city</item>
+                    <item name="scope" xsi:type="string">shipping</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">Los Angeles</item>
+                </item>
+                <item name="4" xsi:type="array">
+                    <item name="path" xsi:type="string">shipping/origin/street_line1</item>
+                    <item name="scope" xsi:type="string">shipping</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">1419 Westwood Blvd</item>
+                </item>
+            </field>
+        </dataset>
+    </storage>
+</repository>

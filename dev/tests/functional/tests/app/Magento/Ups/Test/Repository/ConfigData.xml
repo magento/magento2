@@ -1,0 +1,156 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+    <storage class="Magento\Ups\Test\Repository\ConfigData">
+        <dataset name="disable_shipping_all" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="ups" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">1</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/active_rma</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">1</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/type</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">UPS_XML</item>
+                </item>
+                <item name="3" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/is_account_live</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+                <item name="4" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/password</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">magento200</item>
+                </item>
+                <item name="5" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/username</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">magento</item>
+                </item>
+                <item name="6" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/mode_xml</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+                <item name="7" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/gateway_url</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">https://wwwcie.ups.com/ups.app/xml/Rate</item>
+                </item>
+                <item name="8" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/origin_shipment</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">Shipments Originating in United States</item>
+                </item>
+                <item name="9" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/access_license_number</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">ECAB751ABF189ECA</item>
+                </item>
+                <item name="10" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/negotiated_active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+                <item name="11" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/shipper_number</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">207W88</item>
+                </item>
+                <item name="12" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/container</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">CP</item>
+                </item>
+                <item name="13" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/dest_type</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">RES</item>
+                </item>
+                <item name="14" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/tracking_xml_url</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">https://wwwcie.ups.com/ups.app/xml/Track</item>
+                </item>
+                <item name="15" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/unit_of_measure</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">LBS</item>
+                </item>
+                <item name="16" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/allowed_methods</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="array">
+                        <item name="0" xsi:type="string">11</item>
+                        <item name="1" xsi:type="string">12</item>
+                        <item name="2" xsi:type="string">14</item>
+                        <item name="3" xsi:type="string">54</item>
+                        <item name="4" xsi:type="string">59</item>
+                        <item name="5" xsi:type="string">65</item>
+                        <item name="6" xsi:type="string">01</item>
+                        <item name="7" xsi:type="string">02</item>
+                        <item name="8" xsi:type="string">03</item>
+                        <item name="9" xsi:type="string">07</item>
+                        <item name="10" xsi:type="string">08</item>
+                    </item>
+                </item>
+                <item name="17" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/sallowspecific</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+                <item name="18" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/showmethod</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+                <item name="19" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/ups/debug</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">1</item>
+                </item>
+            </field>
+        </dataset>
+    </storage>
+</repository>

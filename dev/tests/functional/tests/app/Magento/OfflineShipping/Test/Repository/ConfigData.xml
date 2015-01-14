@@ -1,0 +1,130 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+    <storage class="Magento\OfflineShipping\Test\Repository\ConfigData">
+        <dataset name="freeshipping" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/freeshipping/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">1</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="freeshipping_rollback" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/freeshipping/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="freeshipping_specificcountry_gb" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/freeshipping/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">1</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/freeshipping/sallowspecific</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">1</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/freeshipping/specificcountry/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">GB</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="freeshipping_specificcountry_gb_rollback" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/freeshipping/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/freeshipping/sallowspecific</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="disable_shipping_all" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/flatrate/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/freeshipping/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="flatrate" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/flatrate/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">1</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/flatrate/title</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">Flat Rate</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/flatrate/name</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">Fixed</item>
+                </item>
+                <item name="3" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/flatrate/type</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">I</item>
+                </item>
+                <item name="4" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/flatrate/price</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">5</item>
+                </item>
+                <item name="5" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/flatrate/handling_type</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">F</item>
+                </item>
+                <item name="6" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/flatrate/specificerrmsg</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">This shipping method is not available. To use this shipping method, please contact us.</item>
+                </item>
+            </field>
+        </dataset>
+    </storage>
+</repository>

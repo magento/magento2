@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+    <storage class="Magento\Fedex\Test\Repository\ConfigData">
+        <dataset name="disable_shipping_all" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/fedex/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">0</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="fedex" xsi:type="array">
+            <field name="section" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/fedex/active</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">1</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/fedex/account</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">510087801</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/fedex/meter_number</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">100047915</item>
+                </item>
+                <item name="3" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/fedex/key</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">INdxa6ug7qZ2KD7y</item>
+                </item>
+                <item name="4" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/fedex/password</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">pTfh4K0nkHcHVginelU4HmJkA</item>
+                </item>
+                <item name="5" xsi:type="array">
+                    <item name="path" xsi:type="string">carriers/fedex/sandbox_mode</item>
+                    <item name="scope" xsi:type="string">carriers</item>
+                    <item name="scope_id" xsi:type="string">1</item>
+                    <item name="value" xsi:type="string">1</item>
+                </item>
+            </field>
+        </dataset>
+    </storage>
+</repository>
