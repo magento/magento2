@@ -3,6 +3,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\App\Action;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;

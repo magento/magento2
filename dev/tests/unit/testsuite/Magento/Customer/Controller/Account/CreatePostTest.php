@@ -3,6 +3,9 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;

@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Shipping\Block\Tracking;
 
 class Popup extends \Magento\Framework\View\Element\Template

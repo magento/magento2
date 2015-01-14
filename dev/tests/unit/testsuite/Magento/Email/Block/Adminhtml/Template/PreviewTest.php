@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Email\Block\Adminhtml\Template;
 
 class PreviewTest extends \PHPUnit_Framework_TestCase

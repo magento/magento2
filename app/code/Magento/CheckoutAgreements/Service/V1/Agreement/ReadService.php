@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\CheckoutAgreements\Service\V1\Agreement;
 
 use \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;

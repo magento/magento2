@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 class SaveTest extends \PHPUnit_Framework_TestCase

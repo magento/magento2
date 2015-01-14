@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Block\Order\Item\Renderer;
 
 use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;

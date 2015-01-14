@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 require __DIR__ . '/../../Customer/_files/customer.php';
 require __DIR__ . '/../../Customer/_files/customer_address.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_virtual.php';

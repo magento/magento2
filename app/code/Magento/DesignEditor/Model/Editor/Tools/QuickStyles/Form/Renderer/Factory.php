@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Renderer;
 
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;

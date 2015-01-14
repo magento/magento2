@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Resource\Product;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;

@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Model\Resource\Type\Db\Pdo;
 
 use Magento\Framework\App\Resource\ConnectionAdapterInterface;

@@ -3,6 +3,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Theme\Model\Url\Plugin;
 
 class SignatureTest extends \PHPUnit_Framework_TestCase

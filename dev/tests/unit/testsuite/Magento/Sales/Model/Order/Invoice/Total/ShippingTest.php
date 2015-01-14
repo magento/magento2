@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\Order\Invoice\Total;
 
 class ShippingTest extends \PHPUnit_Framework_TestCase

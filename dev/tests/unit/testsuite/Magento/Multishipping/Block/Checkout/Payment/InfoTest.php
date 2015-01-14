@@ -4,6 +4,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Multishipping\Block\Checkout\Payment;
 
 class InfoTest extends \PHPUnit_Framework_TestCase

@@ -3,6 +3,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\UrlRewrite\Block\Catalog\Edit;
 
 use Magento\TestFramework\Helper\ObjectManager;

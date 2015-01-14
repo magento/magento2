@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
 class CleanMediaTest extends \PHPUnit_Framework_TestCase

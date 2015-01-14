@@ -4,6 +4,9 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Model\Config\Backend\Cookie;
 
 use Magento\Framework\Session\Config\Validator\CookiePathValidator;

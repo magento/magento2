@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\SalesRule\Model\Resource\Report;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase

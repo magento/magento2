@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Downloadable\Block\Sales\Order\Email\Items\Order;
 
 use Magento\Downloadable\Model\Link\Purchased\Item;

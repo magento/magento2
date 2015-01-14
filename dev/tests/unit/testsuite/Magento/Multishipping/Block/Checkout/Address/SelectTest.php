@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Multishipping\Block\Checkout\Address;
 
 use Magento\TestFramework\Helper\ObjectManager;

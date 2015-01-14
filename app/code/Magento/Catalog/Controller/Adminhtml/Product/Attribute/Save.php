@@ -3,6 +3,9 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
 use Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException;

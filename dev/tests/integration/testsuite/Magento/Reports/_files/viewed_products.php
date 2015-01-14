@@ -3,6 +3,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
     ->getArea('adminhtml')
     ->load(\Magento\Framework\App\Area::PART_CONFIG);

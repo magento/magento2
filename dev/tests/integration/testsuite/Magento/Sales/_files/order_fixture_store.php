@@ -3,6 +3,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 require __DIR__ . '/../../../Magento/Core/_files/store.php';
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_duplicated.php';

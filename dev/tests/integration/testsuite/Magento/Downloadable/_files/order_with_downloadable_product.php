@@ -3,6 +3,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Sales\Model\Order\Address',
     [

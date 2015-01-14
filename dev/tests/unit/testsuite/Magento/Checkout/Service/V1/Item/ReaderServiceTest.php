@@ -4,6 +4,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Service\V1\Item;
 
 use Magento\Checkout\Service\V1\Data\Cart\Item as Item;

@@ -4,6 +4,9 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Test\Integrity;
 
 class LayoutTest extends \PHPUnit_Framework_TestCase

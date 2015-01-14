@@ -4,6 +4,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\PageCache\Controller\Block;
 
 class RenderTest extends \PHPUnit_Framework_TestCase

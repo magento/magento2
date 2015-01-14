@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\DesignEditor\Controller\Varien\Router;
 
 class StandardTest extends \PHPUnit_Framework_TestCase

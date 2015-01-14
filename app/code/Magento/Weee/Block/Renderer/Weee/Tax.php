@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Weee\Block\Renderer\Weee;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;

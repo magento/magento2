@@ -3,6 +3,9 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items;
 
 use Magento\Backend\App\Action;

@@ -3,6 +3,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Extended version of \Magento\Framework\Archive\Tar that supports filtering
  *

@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Tab;
 
 class CssTest extends \PHPUnit_Framework_TestCase

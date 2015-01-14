@@ -6,6 +6,9 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 return [
     ['_addresses', 'Magento\Customer\Model\Customer'],
     ['_addMinimalPrice', 'Magento\Catalog\Model\Resource\Product\Collection'],

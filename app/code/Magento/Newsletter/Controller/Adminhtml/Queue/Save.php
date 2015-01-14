@@ -3,6 +3,9 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue

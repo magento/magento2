@@ -8,6 +8,9 @@
  * @return string
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+
+// @codingStandardsIgnoreFile
+
 function thereGoesFunc($a,
     $b
 ) {

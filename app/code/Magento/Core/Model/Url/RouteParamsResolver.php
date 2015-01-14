@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Core\Model\Url;
 
 class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\Framework\Url\RouteParamsResolverInterface

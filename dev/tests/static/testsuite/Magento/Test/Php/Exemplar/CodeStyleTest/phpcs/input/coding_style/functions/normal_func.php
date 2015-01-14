@@ -6,6 +6,9 @@
  * @param string|null $inParam
  * @return string
  */
+
+// @codingStandardsIgnoreFile
+
 function someFunc($inParam)
 {
     if ($inParam === null) {

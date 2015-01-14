@@ -4,6 +4,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Bundle\Model;
 
 use Magento\TestFramework\Helper\ObjectManager;

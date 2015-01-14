@@ -3,6 +3,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Interception\Code;
 
 class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase

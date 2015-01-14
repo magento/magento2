@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 require 'default_rollback.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 /** @var \Magento\Catalog\Model\Product $product */

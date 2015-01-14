@@ -4,6 +4,9 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
 class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer

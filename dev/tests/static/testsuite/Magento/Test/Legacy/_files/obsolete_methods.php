@@ -4,6 +4,9 @@
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 return [
     ['__get', 'Magento\Framework\Object'],
     ['__set', 'Magento\Framework\Object'],

@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
 
 class GridTest extends \PHPUnit_Framework_TestCase

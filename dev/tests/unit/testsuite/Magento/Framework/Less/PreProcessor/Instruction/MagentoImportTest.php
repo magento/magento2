@@ -3,6 +3,8 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Less\PreProcessor\Instruction;
 
 class MagentoImportTest extends \PHPUnit_Framework_TestCase

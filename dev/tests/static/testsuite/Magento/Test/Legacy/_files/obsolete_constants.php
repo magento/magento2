@@ -6,6 +6,9 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 return [
     ['ADMIN_STORE_ID', 'Magento\Framework\AppInterface'],
     ['BACKORDERS_BELOW'],

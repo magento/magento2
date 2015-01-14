@@ -10,6 +10,9 @@
  * @return string
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
+
+// @codingStandardsIgnoreFile
+
 function thereGoesFunc($someLongParam, $anotherLongParam, $moreEvenLongerParamForAllThatRoutineStuff,
     $andThereGoesOneParameter
 ) {

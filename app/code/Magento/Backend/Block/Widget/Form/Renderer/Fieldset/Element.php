@@ -2,6 +2,9 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
