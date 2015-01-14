@@ -3,21 +3,21 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CheckoutAgreements\Service\V1\Agreement;
+namespace Magento\CheckoutAgreements\Model;
 
-use \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
-use \Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
-use \Magento\CheckoutAgreements\Model\Agreement;
-use \Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
+use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use \Magento\Store\Model\ScopeInterface;
-use \Magento\CheckoutAgreements\Service\V1\Data\AgreementBuilder;
-use \Magento\CheckoutAgreements\Service\V1\Data\Agreement as AgreementDataObject;
+use Magento\Store\Model\ScopeInterface;
+use Magento\CheckoutAgreements\Api\Data\AgreementDataBuilder;
+use Magento\CheckoutAgreements\Model\Agreement as AgreementDataObject;
+use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 
 /**
  * Checkout agreement service.
  */
-class ReadService implements ReadServiceInterface
+class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterface
 {
     /**
      * Collection factory.
@@ -29,7 +29,7 @@ class ReadService implements ReadServiceInterface
     /**
      * Agreement builder.
      *
-     * @var AgreementBuilder
+     * @var AgreementDataBuilder
      */
     private $agreementBuilder;
 
@@ -51,13 +51,13 @@ class ReadService implements ReadServiceInterface
      * Constructs a checkout agreement service object.
      *
      * @param AgreementCollectionFactory $collectionFactory Collection factory.
-     * @param AgreementBuilder $agreementBuilder Agreement builder.
+     * @param AgreementDataBuilder $agreementBuilder Agreement builder.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager.
      * @param ScopeConfigInterface $scopeConfig Scope config.
      */
     public function __construct(
         AgreementCollectionFactory $collectionFactory,
-        AgreementBuilder $agreementBuilder,
+        AgreementDataBuilder $agreementBuilder,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig
     ) {
@@ -70,7 +70,7 @@ class ReadService implements ReadServiceInterface
     /**
      * {@inheritdoc}
      *
-     * @return array|\Magento\CheckoutAgreements\Service\V1\Data\Agreement[] Array of checkout agreement service objects.
+     * @return \Magento\CheckoutAgreements\Api\Data\AgreementInterface[] Array of checkout agreement service objects.
      */
     public function getList()
     {
@@ -100,13 +100,13 @@ class ReadService implements ReadServiceInterface
     protected function createAgreementDataObject(Agreement $agreement)
     {
         $this->agreementBuilder->populateWithArray([
-            AgreementDataObject::ID => $agreement->getId(),
-            AgreementDataObject::NAME => $agreement->getName(),
-            AgreementDataObject::CONTENT => $agreement->getContent(),
-            AgreementDataObject::CONTENT_HEIGHT => $agreement->getContentHeight(),
-            AgreementDataObject::CHECKBOX_TEXT => $agreement->getCheckboxText(),
-            AgreementDataObject::ACTIVE => (bool)$agreement->getIsActive(),
-            AgreementDataObject::HTML => (bool)$agreement->getIsHtml(),
+            'id' => $agreement->getId(),
+            'name' => $agreement->getName(),
+            'content' => $agreement->getContent(),
+            'content_height' => $agreement->getContentHeight(),
+            'checkbox_text' => $agreement->getCheckboxText(),
+            'is_active' => (bool)$agreement->getIsActive(),
+            'is_html' => (bool)$agreement->getIsHtml(),
         ]);
         return $this->agreementBuilder->create();
     }

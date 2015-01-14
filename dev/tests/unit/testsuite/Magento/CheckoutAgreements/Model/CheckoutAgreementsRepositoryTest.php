@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CheckoutAgreements\Service\V1\Agreement;
+namespace Magento\CheckoutAgreements\Model;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
-class ReadServiceTest extends \PHPUnit_Framework_TestCase
+class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ReadService
+     * @var CheckoutAgreementsRepository
      */
     private $service;
 
@@ -52,7 +52,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->agreementBuilderMock = $this->getMock(
-            'Magento\CheckoutAgreements\Service\V1\Data\AgreementBuilder',
+            'Magento\CheckoutAgreements\Api\Data\AgreementDataBuilder',
             [],
             [],
             '',
@@ -60,7 +60,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->service = new ReadService(
+        $this->service = new CheckoutAgreementsRepository(
             $this->factoryMock,
             $this->agreementBuilderMock,
             $this->storeManagerMock,
@@ -91,8 +91,8 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             'content' => 'Agreement content: <b>HTML</b>',
             'content_height' => '100px',
             'checkbox_text' => 'Checkout Agreement Checkbox Text',
-            'active' => true,
-            'html' => true,
+            'is_active' => true,
+            'is_html' => true,
         ];
 
         $storeId = 1;
@@ -151,9 +151,9 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $agreementMock->expects($this->any())->method('getCheckboxText')
             ->will($this->returnValue($agreementData['checkbox_text']));
         $agreementMock->expects($this->any())->method('getIsActive')
-            ->will($this->returnValue($agreementData['active']));
+            ->will($this->returnValue($agreementData['is_active']));
         $agreementMock->expects($this->any())->method('getIsHtml')
-            ->will($this->returnValue($agreementData['html']));
+            ->will($this->returnValue($agreementData['is_html']));
         return $agreementMock;
     }
 }
