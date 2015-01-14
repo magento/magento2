@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Service\V1\Data\Cart;
+namespace Magento\Checkout\Model\Cart;
 
 class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,7 +48,7 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->builderMock = $this->getMock(
-            '\Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder',
+            '\Magento\Checkout\Api\Data\ShippingMethodDataBuilder',
             ['populateWithArray', 'create'],
             [],
             '',
@@ -57,7 +57,7 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->currencyMock = $this->getMock('\Magento\Directory\Model\Currency', [], [], '', false);
         $this->shippingMethodMock =
-            $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\ShippingMethod', [], [], '', false);
+            $this->getMock('\Magento\Checkout\Model\Cart\ShippingMethod', [], [], '', false);
         $this->rateModelMock = $this->getMock('\Magento\Quote\Model\Quote\Address\Rate',
             [
                 'getPrice',
@@ -73,7 +73,7 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
 
         $this->converter = $objectManager->getObject(
-            'Magento\Checkout\Service\V1\Data\Cart\ShippingMethodConverter',
+            'Magento\Checkout\Model\Cart\ShippingMethodConverter',
             [
                 'builder' => $this->builderMock,
                 'storeManager' => $this->storeManagerMock,

@@ -3,27 +3,111 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Checkout\Api;
 
-namespace Magento\Checkout\Service\V1\ShippingMethod;
-
-use Magento\Checkout\Service\V1\Data\Cart\ShippingMethod;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Checkout\Api\Data\ShippingMethodInterface;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
-class ReadServiceTest extends WebapiAbstract
+class ShippingMethodManagementTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'checkoutShippingMethodReadServiceV1';
+    const SERVICE_NAME = 'checkoutShippingMethodManagementV1';
     const RESOURCE_PATH = '/V1/carts/';
 
     /**
-     * @var \Magento\TestFramework\ObjectManager
+     * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
+
+    /**
+     * @var \Magento\Quote\Model\Quote
+     */
+    protected $quote;
 
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+    }
+
+    protected function getServiceInfo()
+    {
+        return [
+            'rest' => [
+                'resourcePath' => '/V1/carts/' . $this->quote->getId() . '/selected-shipping-method',
+                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Set',
+            ],
+        ];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testSetMethod()
+    {
+        $this->quote->load('test_order_1', 'reserved_order_id');
+        $serviceInfo = $this->getServiceInfo();
+
+        $requestData = [
+            'cartId' => $this->quote->getId(),
+            'carrierCode' => 'flatrate',
+            'methodCode' => 'flatrate',
+        ];
+        $result = $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertEquals(true, $result);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testSetMethodWrongMethod()
+    {
+        $this->quote->load('test_order_1', 'reserved_order_id');
+        $serviceInfo = $this->getServiceInfo();
+
+        $requestData = [
+            'cartId' => $this->quote->getId(),
+            'carrierCode' => 'flatrate',
+            'methodCode' => 'wrongMethod',
+        ];
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $message = $e->getMessage();
+        } catch (\Exception $e) {
+            $message = json_decode($e->getMessage())->message;
+        }
+        $this->assertEquals('Carrier with such method not found: flatrate, wrongMethod', $message);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     */
+    public function testSetMethodWithoutShippingAddress()
+    {
+        $this->quote->load('test_order_with_simple_product_without_address', 'reserved_order_id');
+        $serviceInfo = $this->getServiceInfo();
+
+        $requestData = [
+            'cartId' => $this->quote->getId(),
+            'carrierCode' => 'flatrate',
+            'methodCode' => 'flatrate',
+        ];
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $message = $e->getMessage();
+        } catch (\Exception $e) {
+            $message = json_decode($e->getMessage())->message;
+        }
+        $this->assertEquals('Shipping address is not set', $message);
     }
 
     /**
@@ -41,13 +125,13 @@ class ReadServiceTest extends WebapiAbstract
         list($carrierCode, $methodCode) = explode('_', $shippingAddress->getShippingMethod());
         list($carrierTitle, $methodTitle) = explode(' - ', $shippingAddress->getShippingDescription());
         $data = [
-            ShippingMethod::CARRIER_CODE => $carrierCode,
-            ShippingMethod::METHOD_CODE => $methodCode,
-            ShippingMethod::CARRIER_TITLE => $carrierTitle,
-            ShippingMethod::METHOD_TITLE => $methodTitle,
-            ShippingMethod::SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
-            ShippingMethod::BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
-            ShippingMethod::AVAILABLE => true,
+            ShippingMethodInterface::CARRIER_CODE => $carrierCode,
+            ShippingMethodInterface::METHOD_CODE => $methodCode,
+            ShippingMethodInterface::CARRIER_TITLE => $carrierTitle,
+            ShippingMethodInterface::METHOD_TITLE => $methodTitle,
+            ShippingMethodInterface::SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
+            ShippingMethodInterface::BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
+            ShippingMethodInterface::AVAILABLE => true,
         ];
 
         $requestData = ["cartId" => $cartId];
@@ -127,7 +211,7 @@ class ReadServiceTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'GetMethod',
+                'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
     }
@@ -163,8 +247,8 @@ class ReadServiceTest extends WebapiAbstract
     protected function convertRates($groupedRates, $currencyCode)
     {
         $result = [];
-        /** @var \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodConverter $converter */
-        $converter = $this->objectManager->create('Magento\Checkout\Service\V1\Data\Cart\ShippingMethodConverter');
+        /** @var \Magento\Checkout\Model\Cart\ShippingMethodConverter $converter */
+        $converter = $this->objectManager->create('\Magento\Checkout\Model\Cart\ShippingMethodConverter');
         foreach ($groupedRates as $carrierRates) {
             foreach ($carrierRates as $rate) {
                 $result[] = $converter->modelToDataObject($rate, $currencyCode)->__toArray();

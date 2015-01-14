@@ -242,6 +242,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $addressMapper;
 
     /**
+     * @var Address\RateRequestFactory
+     */
+    protected $_rateRequestFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
