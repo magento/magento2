@@ -17,7 +17,7 @@ $collection->addAttributeToSelect('id')->load()->delete();
 /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
 $collection = $objectManager->create('Magento\Catalog\Model\Resource\Category\Collection');
 $collection
-    ->addAttributeToFilter('level', 3)
+    ->addAttributeToFilter('level', 2)
     ->load()
     ->delete();
 

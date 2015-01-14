@@ -10,7 +10,12 @@ $registry = $objectManager->get('Magento\Framework\Registry');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-$objectManager->create('Magento\Catalog\Model\Category')->load(3)->delete();
+/** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
+$collection = $objectManager->create('Magento\Catalog\Model\Resource\Category\Collection');
+$collection
+    ->addAttributeToFilter('level', 2)
+    ->load()
+    ->delete();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

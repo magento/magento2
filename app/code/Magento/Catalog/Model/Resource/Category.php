@@ -227,17 +227,15 @@ class Category extends AbstractResource
         if (!$object->getChildrenCount()) {
             $object->setChildrenCount(0);
         }
-        if ($object->getLevel() === null) {
-            $object->setLevel(1);
-        }
 
-        $originalData = $object->getOrigData();
-        if (empty($originalData['entity_id'])) {
+        if ($object->isObjectNew()) {
             $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
             $path = explode('/', $object->getPath());
-            $level = count($path);
-            $object->setLevel($level);
-            if ($level) {
+            $level = count($path)  - ($object->getId() ? 1 : 0);
+            if (!$object->hasLevel()) {
+                $object->setLevel($level);
+            }
+            if (!$object->hasParentId() && $level) {
                 $object->setParentId($path[$level - 1]);
             }
             if (!$object->getId()) {
