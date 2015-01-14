@@ -56,6 +56,7 @@ Magento/Core/Model/Store
 Magento/Store/Model
 Magento/Cron/Model/Config/Backend/Product
 Magento/Customer/Block/Account/Dashboard
+Magento/Customer/Controller/Adminhtml/Index/Viewfile
 Magento/Customer/Model/Config/Backend/Show
 Magento/Customer/Model/Metadata
 Magento/Customer/Model/Resource/Customer
