@@ -8,6 +8,7 @@ namespace Magento\Framework\Module;
 
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\State\Cleanup;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * A service for controlling module status
@@ -43,6 +44,11 @@ class Status
     private $cleanup;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Constructor
      *
      * @param ModuleList\Loader $loader
@@ -50,12 +56,13 @@ class Status
      * @param Writer $writer
      * @param Cleanup $cleanup
      */
-    public function __construct(ModuleList\Loader $loader, ModuleList $list, Writer $writer, Cleanup $cleanup)
+    public function __construct(ModuleList\Loader $loader, ModuleList $list, Writer $writer, Cleanup $cleanup, DeploymentConfig $deploymentConfig)
     {
         $this->loader = $loader;
         $this->list = $list;
         $this->writer = $writer;
         $this->cleanup = $cleanup;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -69,7 +76,61 @@ class Status
      */
     public function checkSetEnabledErrors($isEnable, $modules)
     {
-        return [];
+        // TODO: deploymentConfig only works when application exists
+        $enabledModules = [];
+        $all = $this->deploymentConfig->getSegment(ModuleList\DeploymentConfig::CONFIG_KEY);
+        foreach ($all as $module => $enabled) {
+            if ($enabled) {
+                $enabledModules[] = $module;
+            }
+        }
+
+        $errorMessages = [];
+
+        if ($isEnable) {
+            $dependencyChecker = new DependencyChecker(
+                new DependencyGraphFactory(),
+                array_keys($all),
+                array_unique(array_merge($enabledModules, $modules)) // union, consider to-be-enable modules
+            );
+            foreach ($modules as $moduleName) {
+                $errorModules = $dependencyChecker->checkDependencyWhenEnableModule($moduleName);
+                if (!empty($errorModules)) {
+                    $errorMessages[] = "Cannot enable $moduleName, depending on inactive modules:";
+                    foreach ($errorModules as $errorModule) {
+                        $errorMessages [] = "\t$errorModule";
+                    }
+                }
+            }
+            // TODO: consolidate to one for loop
+            $conflictChecker = new ConflictChecker(array_keys($all), array_unique(array_merge($enabledModules, $modules)));
+            foreach ($modules as $moduleName) {
+                $errorModules = $conflictChecker->checkConflictWhenEnableModule($moduleName);
+                if (!empty($errorModules)) {
+                    $errorMessages[] = "Cannot enable $moduleName, conflicting active modules:";
+                    foreach ($errorModules as $errorModule) {
+                        $errorMessages [] = "\t$errorModule";
+                    }
+                }
+            }
+        } else {
+            $dependencyChecker = new DependencyChecker(
+                new DependencyGraphFactory(),
+                array_keys($all),
+                $enabledModules
+            );
+            foreach ($modules as $moduleName) {
+                $errorModules = $dependencyChecker->checkDependencyWhenDisableModule($moduleName);
+                if (!empty($errorModules)) {
+                    $errorMessages[] = "Cannot disable $moduleName, active modules depending on it:";
+                    foreach ($errorModules as $errorModule) {
+                        $errorMessages [] = "\t$errorModule";
+                    }
+                }
+            }
+        }
+
+        return $errorMessages;
     }
 
     /**
