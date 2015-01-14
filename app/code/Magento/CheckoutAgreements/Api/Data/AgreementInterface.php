@@ -12,7 +12,7 @@ interface AgreementInterface
      *
      * @return int Agreement ID.
      */
-    public function getId();
+    public function getAgreementId();
 
     /**
      * Returns the agreement name.
