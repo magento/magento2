@@ -10,12 +10,10 @@ use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementC
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\CheckoutAgreements\Api\Data\AgreementDataBuilder;
-use Magento\CheckoutAgreements\Model\Agreement as AgreementDataObject;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 
 /**
- * Checkout agreement service.
+ * Checkout agreement repository.
  */
 class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterface
 {
@@ -25,13 +23,6 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @var AgreementCollectionFactory
      */
     private $collectionFactory;
-
-    /**
-     * Agreement builder.
-     *
-     * @var AgreementDataBuilder
-     */
-    private $agreementBuilder;
 
     /**
      * Store manager.
@@ -48,21 +39,18 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     private $scopeConfig;
 
     /**
-     * Constructs a checkout agreement service object.
+     * Constructs a checkout agreement data object.
      *
      * @param AgreementCollectionFactory $collectionFactory Collection factory.
-     * @param AgreementDataBuilder $agreementBuilder Agreement builder.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager.
      * @param ScopeConfigInterface $scopeConfig Scope config.
      */
     public function __construct(
         AgreementCollectionFactory $collectionFactory,
-        AgreementDataBuilder $agreementBuilder,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->agreementBuilder = $agreementBuilder;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
     }
@@ -70,7 +58,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\CheckoutAgreements\Api\Data\AgreementInterface[] Array of checkout agreement service objects.
+     * @return \Magento\CheckoutAgreements\Api\Data\AgreementInterface[] Array of checkout agreement data objects.
      */
     public function getList()
     {
@@ -85,29 +73,9 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
 
         $agreementDataObjects = [];
         foreach ($agreementCollection as $agreement) {
-            $agreementDataObjects[] = $this->createAgreementDataObject($agreement);
+            $agreementDataObjects[] = $agreement;
         }
 
         return $agreementDataObjects;
-    }
-
-    /**
-     * Creates an agreement data object based on a specified agreement model.
-     *
-     * @param Agreement $agreement The agreement model.
-     * @return AgreementDataObject Agreement data object.
-     */
-    protected function createAgreementDataObject(Agreement $agreement)
-    {
-        $this->agreementBuilder->populateWithArray([
-            'id' => $agreement->getId(),
-            'name' => $agreement->getName(),
-            'content' => $agreement->getContent(),
-            'content_height' => $agreement->getContentHeight(),
-            'checkbox_text' => $agreement->getCheckboxText(),
-            'is_active' => (bool)$agreement->getIsActive(),
-            'is_html' => (bool)$agreement->getIsHtml(),
-        ]);
-        return $this->agreementBuilder->create();
     }
 }

@@ -68,7 +68,7 @@ class Agreement extends AbstractExtensibleModel implements AgreementInterface
     /**
      * @inheritdoc
      */
-    public function getId()
+    public function getAgreementId()
     {
         return $this->getData('agreement_id');
     }

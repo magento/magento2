@@ -70,5 +70,6 @@ return [
     ['Magento\RecurringPayment'],
     ['Magento\PayPalRecurringPayment'],
     ['Magento\ConfigurableProduct\Service'],
-    ['Magento\Catalog\Service']
+    ['Magento\Catalog\Service'],
+    ['Magento\CheckoutAgreements\Service']
 ];
