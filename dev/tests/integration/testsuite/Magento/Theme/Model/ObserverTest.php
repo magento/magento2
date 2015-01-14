@@ -40,16 +40,16 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_eventObserver->getEvent()->setPathPattern($pattern);
 
         $themeRegistration = $this->getMock(
-            'Magento\Core\Model\Theme\Registration',
+            'Magento\Theme\Model\Theme\Registration',
             ['register'],
             [
                 $this->_objectManager->create('Magento\Core\Model\Resource\Theme\Data\CollectionFactory'),
-                $this->_objectManager->create('Magento\Core\Model\Theme\Data\Collection'),
+                $this->_objectManager->create('Magento\Theme\Model\Theme\Data\Collection'),
                 $this->_objectManager->create('Magento\Framework\Filesystem')
             ]
         );
         $themeRegistration->expects($this->once())->method('register')->with($this->equalTo($pattern));
-        $this->_objectManager->addSharedInstance($themeRegistration, 'Magento\Core\Model\Theme\Registration');
+        $this->_objectManager->addSharedInstance($themeRegistration, 'Magento\Theme\Model\Theme\Registration');
 
         /** @var $observer \Magento\Theme\Model\Observer */
         $observer = $this->_objectManager->create('Magento\Theme\Model\Observer');

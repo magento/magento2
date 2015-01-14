@@ -98,7 +98,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      * Retrieve theme instance by its identifier
      *
      * @param int $themeId
-     * @return \Magento\Core\Model\Theme|null
+     * @return \Magento\Theme\Model\Theme|null
      */
     protected function _getThemeInstance($themeId)
     {

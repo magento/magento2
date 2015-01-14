@@ -21,7 +21,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * Package theme
      *
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\Theme\Model\Theme
      */
     protected $_theme;
 
@@ -46,7 +46,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     protected $_flyweightFactory;
 
     /**
-     * @var \Magento\Core\Model\ThemeFactory
+     * @var \Magento\Theme\Model\ThemeFactory
      */
     protected $_themeFactory;
 
@@ -74,7 +74,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Core\Model\ThemeFactory $themeFactory
+     * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
      * @param array $themes
@@ -83,7 +83,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Core\Model\ThemeFactory $themeFactory,
+        \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
         array $themes
@@ -210,7 +210,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * Design theme model getter
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      */
     public function getDesignTheme()
     {

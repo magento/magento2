@@ -24,7 +24,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Core\Model\Theme', 'Magento\Core\Model\Resource\Theme');
+        $this->_init('Magento\Theme\Model\Theme', 'Magento\Core\Model\Resource\Theme');
     }
 
     /**
@@ -129,7 +129,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Get theme from DB by area and theme_path
      *
      * @param string $fullPath
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      */
     public function getThemeByFullPath($fullPath)
     {

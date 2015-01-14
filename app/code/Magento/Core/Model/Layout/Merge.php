@@ -39,7 +39,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     const PAGE_LAYOUT_CACHE_SUFFIX = 'page_layout';
 
     /**
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\Theme\Model\Theme
      */
     private $_theme;
 
@@ -734,7 +734,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Find the closest physical theme among ancestors and a theme itself
      *
      * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      * @throws \Magento\Framework\Exception
      */
     protected function _getPhysicalTheme(\Magento\Framework\View\Design\ThemeInterface $theme)

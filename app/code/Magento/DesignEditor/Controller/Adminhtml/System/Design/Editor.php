@@ -55,7 +55,7 @@ class Editor extends \Magento\Backend\App\Action
      * Load theme by id
      *
      * @param int $themeId
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      * @throws CoreException
      */
     protected function _loadThemeById($themeId)

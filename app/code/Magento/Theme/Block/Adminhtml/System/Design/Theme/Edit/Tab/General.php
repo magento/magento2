@@ -86,7 +86,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      *
      * @param \Magento\Framework\Data\Form $form
      * @param array $formData
-     * @param \Magento\Core\Model\Theme|ThemeInterface $theme
+     * @param \Magento\Theme\Model\Theme|ThemeInterface $theme
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -99,8 +99,8 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
             $themeFieldset->addField('theme_id', 'hidden', ['name' => 'theme_id']);
         }
 
-        /** @var $themesCollections \Magento\Core\Model\Theme\Collection */
-        $themesCollections = $this->_objectManager->create('Magento\Core\Model\Theme\Collection');
+        /** @var $themesCollections \Magento\Theme\Model\Theme\Collection */
+        $themesCollections = $this->_objectManager->create('Magento\Theme\Model\Theme\Collection');
 
         /** @var $helper \Magento\Core\Helper\Data */
         $helper = $this->_objectManager->get('Magento\Core\Helper\Data');

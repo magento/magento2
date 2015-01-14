@@ -8,7 +8,7 @@ namespace Magento\Theme\Model;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Model\Exception;
-use Magento\Core\Model\Theme;
+use Magento\Theme\Model\Theme;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
@@ -57,7 +57,7 @@ class Observer
     protected $_assetRepo;
 
     /**
-     * @var \Magento\Core\Model\Theme\Registration
+     * @var \Magento\Theme\Model\Theme\Registration
      */
     protected $_registration;
 
@@ -89,7 +89,7 @@ class Observer
         \Magento\Framework\View\Asset\GroupedCollection $assets,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Core\Model\Theme\Registration $registration,
+        \Magento\Theme\Model\Theme\Registration $registration,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->_themeImageFactory = $themeImageFactory;
@@ -167,7 +167,7 @@ class Observer
      */
     public function applyThemeCustomization(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $themeFile \Magento\Core\Model\Theme\File */
+        /** @var $themeFile \Magento\Theme\Model\Theme\File */
         foreach ($this->_currentTheme->getCustomization()->getFiles() as $themeFile) {
             try {
                 $service = $themeFile->getCustomizationService();

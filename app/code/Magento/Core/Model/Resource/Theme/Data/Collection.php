@@ -17,6 +17,6 @@ class Collection extends \Magento\Core\Model\Resource\Theme\Collection implement
      */
     protected function _construct()
     {
-        $this->_init('Magento\Core\Model\Theme\Data', 'Magento\Core\Model\Resource\Theme');
+        $this->_init('Magento\Theme\Model\Theme\Data', 'Magento\Core\Model\Resource\Theme');
     }
 }

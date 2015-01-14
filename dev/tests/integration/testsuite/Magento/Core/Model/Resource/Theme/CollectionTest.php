@@ -12,7 +12,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
-            ['preferences' => ['Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data']]
+            ['preferences' => ['Magento\Theme\Model\Theme' => 'Magento\Theme\Model\Theme\Data']]
         );
     }
 

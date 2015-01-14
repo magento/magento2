@@ -38,7 +38,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
         $themeMock = $this->getMock(
-            'Magento\Core\Model\Theme',
+            'Magento\Theme\Model\Theme',
             ['__wakeup', 'getCustomization'],
             [],
             '',
@@ -95,7 +95,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testApplyThemeCustomization()
     {
         $asset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
-        $file = $this->getMock('Magento\Core\Model\Theme\File', [], [], '', false);
+        $file = $this->getMock('Magento\Theme\Model\Theme\File', [], [], '', false);
         $fileService = $this->getMockForAbstractClass(
             '\Magento\Framework\View\Design\Theme\Customization\FileAssetInterface'
         );

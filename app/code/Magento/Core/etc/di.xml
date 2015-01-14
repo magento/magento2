@@ -18,15 +18,15 @@
     <preference for="Magento\Framework\App\Config\ReinitableConfigInterface" type="Magento\Framework\App\ReinitableConfig" />
     <preference for="Magento\Framework\App\Config\MutableScopeConfigInterface" type="Magento\Framework\App\MutableScopeConfig" />
     <preference for="Magento\Framework\App\Config\Storage\WriterInterface" type="Magento\Framework\App\Config\Storage\Writer" />
-    <preference for="Magento\Framework\View\Design\Theme\FileInterface" type="Magento\Core\Model\Theme\File" />
+    <preference for="Magento\Framework\View\Design\Theme\FileInterface" type="Magento\Theme\Model\Theme\File" />
     <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\Config\Converter\Dom"/>
     <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Framework\App\DefaultPath\DefaultPath" />
     <preference for="Magento\Framework\Encryption\EncryptorInterface" type="Magento\Framework\Encryption\Encryptor" />
     <preference for="Magento\Framework\Filter\Encrypt\AdapterInterface" type="Magento\Framework\Filter\Encrypt\Basic" />
     <preference for="Magento\Framework\Cache\ConfigInterface" type="Magento\Framework\Cache\Config" />
-    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Core\Model\Theme\ThemeProvider" />
-    <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface" type="Magento\Core\Model\Theme\FileProvider" />
-    <preference for="Magento\Framework\View\Design\Theme\Customization\ConfigInterface" type="Magento\Core\Model\Theme\Customization\Config" />
+    <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Theme\Model\Theme\ThemeProvider" />
+    <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface" type="Magento\Theme\Model\Theme\FileProvider" />
+    <preference for="Magento\Framework\View\Design\Theme\Customization\ConfigInterface" type="Magento\Theme\Model\Theme\Customization\Config" />
     <preference for="Magento\Framework\View\Asset\ConfigInterface" type="Magento\Core\Model\Asset\Config" />
     <preference for="Magento\Framework\View\Asset\MergeStrategyInterface" type="Magento\Framework\View\Asset\MergeStrategy\Direct" />
     <preference for="Magento\Framework\App\ViewInterface" type="Magento\Framework\App\View" />
@@ -66,7 +66,7 @@
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria" />
     <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
-    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Core\Model\Theme\Collection" />
+    <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Theme\Model\Theme\Collection" />
     <type name="Magento\Framework\App\DefaultPath\DefaultPath">
         <arguments>
             <argument name="parts" xsi:type="array">
@@ -106,7 +106,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\View\Asset\Collection" shared="false" />
-    <type name="Magento\Core\Model\Theme\Collection" shared="false" />
+    <type name="Magento\Theme\Model\Theme\Collection" shared="false" />
     <type name="Magento\Core\Model\Layout\Merge">
         <arguments>
             <argument name="fileSource" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated\Proxy</argument>
@@ -489,7 +489,7 @@
     <type name="Magento\Framework\App\Area">
         <arguments>
             <argument name="translator" xsi:type="object">Magento\Framework\Translate</argument>
-            <argument name="design" xsi:type="object">Magento\Core\Model\Design\Proxy</argument>
+            <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\FrontController">

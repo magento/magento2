@@ -17,7 +17,7 @@ class Save extends \Magento\Backend\Block\Widget\Button\SplitButton
     /**
      * Current theme used for preview
      *
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\Theme\Model\Theme
      */
     protected $_theme;
 
@@ -51,7 +51,7 @@ class Save extends \Magento\Backend\Block\Widget\Button\SplitButton
     /**
      * Get current theme
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      * @throws \InvalidArgumentException
      */
     public function getTheme()

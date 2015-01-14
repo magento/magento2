@@ -32,7 +32,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Core\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockBuilder
+     * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockBuilder
      */
     protected $themeProviderMock;
 
@@ -75,9 +75,9 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         $collectionFactory->expects($this->any())->method('create')->will($this->returnValue($this->_themeCollection));
 
         $this->themeProviderMock = $this->getMock(
-            '\Magento\Core\Model\Theme\ThemeProvider',
+            '\Magento\Theme\Model\Theme\ThemeProvider',
             ['getThemeCustomizations', 'getThemeByFullPath'],
-            [$collectionFactory, $this->getMock('\Magento\Core\Model\ThemeFactory', [], [], '', false)],
+            [$collectionFactory, $this->getMock('\Magento\Theme\Model\ThemeFactory', [], [], '', false)],
             '',
             false
         );

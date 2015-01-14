@@ -15,10 +15,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
     ],
 ]);
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
-    ['preferences' => ['Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data']]
+    ['preferences' => ['Magento\Theme\Model\Theme' => 'Magento\Theme\Model\Theme\Data']]
 );
-/** @var $registration \Magento\Core\Model\Theme\Registration */
+/** @var $registration \Magento\Theme\Model\Theme\Registration */
 $registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Core\Model\Theme\Registration'
+    'Magento\Theme\Model\Theme\Registration'
 );
 $registration->register(implode('/', ['*', '*', '*', 'theme.xml']));

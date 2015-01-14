@@ -18,7 +18,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Core\Model\Theme\File', 'Magento\Core\Model\Resource\Theme\File');
+        $this->_init('Magento\Theme\Model\Theme\File', 'Magento\Core\Model\Resource\Theme\File');
     }
 
     /**
