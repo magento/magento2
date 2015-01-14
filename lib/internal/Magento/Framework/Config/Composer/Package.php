@@ -23,7 +23,7 @@ class Package
      *
      * @param \StdClass $json
      */
-    public function __construct(\StdClass $json)
+    public function __construct(\stdClass $json)
     {
         $this->json = $json;
     }
