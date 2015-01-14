@@ -181,7 +181,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function filterPhysicalThemes(
         $page = null,
-        $pageSize = \Magento\Core\Model\Resource\Theme\Collection::DEFAULT_PAGE_SIZE
+        $pageSize = \Magento\Theme\Model\Resource\Theme\Collection::DEFAULT_PAGE_SIZE
     ) {
         $this->addAreaFilter(
             \Magento\Framework\App\Area::AREA_FRONTEND

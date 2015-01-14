@@ -16,7 +16,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Registration
 {
     /**
-     * @var \Magento\Core\Model\Resource\Theme\Data\CollectionFactory
+     * @var \Magento\Theme\Model\Resource\Theme\Data\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -55,12 +55,12 @@ class Registration
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Core\Model\Resource\Theme\Data\CollectionFactory $collectionFactory
+     * @param \Magento\Theme\Model\Resource\Theme\Data\CollectionFactory $collectionFactory
      * @param \Magento\Theme\Model\Theme\Data\Collection $filesystemCollection
      * @param Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Theme\Data\CollectionFactory $collectionFactory,
+        \Magento\Theme\Model\Resource\Theme\Data\CollectionFactory $collectionFactory,
         \Magento\Theme\Model\Theme\Data\Collection $filesystemCollection,
         Filesystem $filesystem
     ) {

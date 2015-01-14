@@ -113,7 +113,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture setThemeFixture
      * @magentoDbIsolation enabled
      * @dataProvider addTypeFilterDataProvider
-     * @covers \Magento\Core\Model\Resource\Theme\Collection::addAreaFilter
+     * @covers \Magento\Theme\Model\Resource\Theme\Collection::addAreaFilter
      */
     public function testAddTypeFilter($themeType, $themeCount)
     {
@@ -144,7 +144,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture setThemeFixture
      * @magentoDbIsolation enabled
-     * @covers \Magento\Core\Model\Resource\Theme\Collection::filterVisibleThemes
+     * @covers \Magento\Theme\Model\Resource\Theme\Collection::filterVisibleThemes
      */
     public function testFilterVisibleThemes()
     {
@@ -345,7 +345,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Model\Resource\Theme\Collection::filterPhysicalThemes
+     * @covers \Magento\Theme\Model\Resource\Theme\Collection::filterPhysicalThemes
      */
     public function testFilterPhysicalThemesPerPage()
     {
@@ -365,7 +365,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Core\Model\Resource\Theme\Collection::filterPhysicalThemes
+     * @covers \Magento\Theme\Model\Resource\Theme\Collection::filterPhysicalThemes
      */
     public function testFilterPhysicalThemes()
     {
