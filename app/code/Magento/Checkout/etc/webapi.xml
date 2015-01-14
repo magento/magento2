@@ -122,19 +122,19 @@
         </resources>
     </route>
     <route url="/V1/carts/:cartId/selected-payment-methods" method="GET">
-        <service class="Magento\Checkout\Service\V1\PaymentMethod\ReadServiceInterface" method="getPayment"/>
+        <service class="Magento\Checkout\Api\PaymentMethodManagementInterface" method="get"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
     <route url="/V1/carts/:cartId/selected-payment-methods" method="PUT">
-        <service class="Magento\Checkout\Service\V1\PaymentMethod\WriteServiceInterface" method="set"/>
+        <service class="Magento\Checkout\Api\PaymentMethodManagementInterface" method="set"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
     <route url="/V1/carts/:cartId/payment-methods" method="GET">
-        <service class="Magento\Checkout\Service\V1\PaymentMethod\ReadServiceInterface" method="getList"/>
+        <service class="Magento\Checkout\Api\PaymentMethodManagementInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>

@@ -5,64 +5,19 @@
  */
 namespace Magento\Checkout\Api\Data;
 
-/**
- * @see \Magento\Checkout\Service\V1\Data\Cart\PaymentMethod
- */
-interface PaymentMethodInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface PaymentMethodInterface
 {
-    /**
-     * Get purchase order number
-     *
-     * @return string|null
-     */
-    public function getPoNumber();
-
     /**
      * Get payment method code
      *
      * @return string
      */
-    public function getMethod();
+    public function getCode();
 
     /**
-     * Get credit card owner
+     * Get payment method title
      *
-     * @return string|null
+     * @return string
      */
-    public function getCcOwner();
-
-    /**
-     * Get credit card number
-     *
-     * @return string|null
-     */
-    public function getCcNumber();
-
-    /**
-     * Get credit card type
-     *
-     * @return string|null
-     */
-    public function getCcType();
-
-    /**
-     * Get credit card expiration year
-     *
-     * @return string|null
-     */
-    public function getCcExpYear();
-
-    /**
-     * Get credit card expiration month
-     *
-     * @return string|null
-     */
-    public function getCcExpMonth();
-
-    /**
-     * Get payment additional details
-     *
-     * @return string|null
-     */
-    public function getPaymentDetails();
+    public function getTitle();
 }
