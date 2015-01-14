@@ -8,7 +8,7 @@ namespace Magento\Framework\Interception;
 /**
  * Class TwoPluginTest
  */
-class TwoPluginTest extends GeneralTest
+class TwoPluginTest extends AbstractPlugin
 {
     public function setUp()
     {
