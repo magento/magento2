@@ -8,8 +8,6 @@ var config = {
     "shim": {
         "jquery/jquery-migrate": ["jquery"],
         "jquery/jquery.hashchange": ["jquery"],
-        "jquery/jquery.mousewheel": ["jquery"],
-        "jquery/jquery.popups": ["jquery"],
         "jquery/jstree/jquery.hotkeys": ["jquery"],
         "jquery/hover-intent": ["jquery"],
         "mage/adminhtml/backup": ["prototype"],

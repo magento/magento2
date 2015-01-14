@@ -6,14 +6,13 @@
 define([
     "jquery",
     'mage/smart-keyboard-handler',
-    "mage/backend/floating-header",
     'mage/ie-class-fixer',
     "jquery/ui",
     "jquery/hover-intent",
     "jquery/jquery.details",
     "jquery/jquery.tabs",
-    "jquery/farbtastic"  // $(..).farbtastic()
-],function($, keyboardHandler) {
+    "jquery/farbtastic" // $(..).farbtastic()
+], function ($, keyboardHandler) {
     'use strict';
 
     $.widget('mage.globalSearch', {
@@ -23,23 +22,25 @@ define([
             input: '#search-global'
         },
 
-        _create: function() {
+        _create: function () {
             this.field = $(this.options.field);
             this.input = $(this.options.input);
             this._events();
         },
 
-        _events: function() {
+        _events: function () {
             var self = this;
+
             this.input
-                .on('blur.resetGlobalSearchForm', function() {
+                .on('blur.resetGlobalSearchForm', function () {
                     if (!self.input.val()) {
                         self.field.removeClass(self.options.fieldActiveClass)
                     }
                 });
+
             this.input
-                .on('focus.activateGlobalSearchForm', function() {
-                        self.field.addClass(self.options.fieldActiveClass)
+                .on('focus.activateGlobalSearchForm', function () {
+                    self.field.addClass(self.options.fieldActiveClass)
                 });
         }
     });
@@ -55,32 +56,34 @@ define([
             }
         },
 
-        _create: function() {
+        _create: function () {
             this.menu = this.element;
             this.menuCategory = $(this.options.menuCategory, this.menu);
             this.menuLinks = $(this.options.menuLinks, this.menuCategory);
             this._bind();
         },
 
-        _menuCategoryBind: function(category, config) {
+        _menuCategoryBind: function (category, config) {
             category
                 .hoverIntent($.extend({}, this.options.hoverIntentConfig, {
                     over: !config.open ? this._hoverEffects : $.noop,
                     out: !config.close ? this._leaveEffects : $.noop
                 }));
+            
             if (config.open) {
                 category.on(config.open, this._hoverEffects);
             }
+
             if (config.close) {
                 category.on(config.close, this._leaveEffects);
             }
         },
 
-        _menuCategoryEvents: function() {
-            this.menuCategory.each($.proxy(function(i, category) {
+        _menuCategoryEvents: function () {
+            this.menuCategory.each($.proxy(function (i, category) {
                 var itemConfig = {};
                 if (this.options.categoriesConfig) {
-                    $.each(this.options.categoriesConfig, $.proxy(function(selector, conf) {
+                    $.each(this.options.categoriesConfig, $.proxy(function (selector, conf) {
                         if ($(category).is(selector)) {
                             itemConfig = conf;
                         }
@@ -90,13 +93,13 @@ define([
             }, this));
         },
 
-        _bind: function() {
+        _bind: function () {
             this._menuCategoryEvents();
             this.menuLinks
-                .on('focus.tabFocus', function(e) {
+                .on('focus.tabFocus', function (e) {
                     $(e.target).trigger('mouseenter');
                 })
-                .on('blur.tabFocus', function(e) {
+                .on('blur.tabFocus', function (e) {
                     $(e.target).trigger('mouseleave');
                 });
         },
@@ -104,14 +107,14 @@ define([
         _hoverEffects: function (e) {
             $(this)
                 .addClass('hover recent')
-                .siblings('.level-0').each(function() {
-                     clearTimeout($(this).prop('hoverIntent_t'));
+                .siblings('.level-0').each(function () {
+                    clearTimeout($(this).prop('hoverIntent_t'));
                     $(this).prop('hoverIntent_s', 0);
                     $(this).removeClass('recent hover');
                 });
 
             var targetSubmenu = $(e.target).closest('.submenu');
-            if(targetSubmenu.length && targetSubmenu.is(':visible')) {
+            if (targetSubmenu.length && targetSubmenu.is(':visible')) {
                 return;
             }
             var availableWidth = parseInt($(this).parent().css('width')) - $(this).position().left,
@@ -120,11 +123,11 @@ define([
 
             submenu.show();
 
-            $.each($('> .submenu > ul li.column', this), function() {
+            $.each($('> .submenu > ul li.column', this), function () {
                 colsWidth = colsWidth + parseInt($(this).css('width'));
             });
 
-            var containerPaddings =  parseInt(submenu.css('padding-left')) + parseInt(submenu.css('padding-right'));
+            var containerPaddings = parseInt(submenu.css('padding-left')) + parseInt(submenu.css('padding-right'));
 
             $(this).toggleClass('reverse', (containerPaddings + colsWidth) > availableWidth);
 
@@ -135,15 +138,15 @@ define([
 
         _leaveEffects: function (e) {
             var targetSubmenu = $(e.target).closest('.submenu'),
-            self = $(this),
-            submenu = $('> .submenu', this);
+                self = $(this),
+                submenu = $('> .submenu', this);
 
-            if(targetSubmenu.length && targetSubmenu.is(':hidden')) {
+            if (targetSubmenu.length && targetSubmenu.is(':hidden')) {
                 return;
             }
 
-            if(submenu.length) {
-                submenu.slideUp('fast', function() {
+            if (submenu.length) {
+                submenu.slideUp('fast', function () {
                     self.removeClass('hover');
                 });
             } else {
@@ -160,7 +163,7 @@ define([
             btnHide: '[data-hide="popup"]'
         },
 
-        _create: function() {
+        _create: function () {
             this.fade = this.element;
             this.popup = $(this.options.popup, this.fade);
             this.btnDismiss = $(this.options.btnDismiss, this.popup);
@@ -169,16 +172,16 @@ define([
             this._events();
         },
 
-        _events: function() {
+        _events: function () {
             var self = this;
 
             this.btnDismiss
-                .on('click.dismissModalPopup', function() {
+                .on('click.dismissModalPopup', function () {
                     self.fade.remove();
                 });
 
             this.btnHide
-                .on('click.hideModalPopup', function() {
+                .on('click.hideModalPopup', function () {
                     self.fade.hide();
                 });
         }
@@ -193,10 +196,10 @@ define([
             template: null
         },
 
-        _create: function() {
+        _create: function () {
             this.template =
                 '<div class="popup popup-loading">' +
-                    '<div class="popup-inner">' + this.options.message + '</div>' +
+                '<div class="popup-inner">' + this.options.message + '</div>' +
                 '</div>';
 
             this.popup = $(this.template);
@@ -205,34 +208,34 @@ define([
             this._events();
         },
 
-        _events: function() {
+        _events: function () {
             var self = this;
 
             this.element
-                .on('showLoadingPopup', function() {
+                .on('showLoadingPopup', function () {
                     self._show();
                 })
-                .on('hideLoadingPopup', function() {
+                .on('hideLoadingPopup', function () {
                     self._hide();
                 });
         },
 
-        _show: function() {
+        _show: function () {
             var options = this.options,
                 timeout = options.timeout;
 
             $('body').trigger('processStart');
 
             if (timeout) {
-                options.timeoutId = setTimeout( this._delayedHide.bind(this), timeout);
+                options.timeoutId = setTimeout(this._delayedHide.bind(this), timeout);
             }
         },
 
-        _hide: function() {
+        _hide: function () {
             $('body').trigger('processStop');
         },
 
-        _delayedHide: function(){
+        _delayedHide: function () {
             this._hide();
 
             this.options.callback && this.options.callback();
@@ -249,7 +252,7 @@ define([
             label: '.use-default-label'
         },
 
-        _create: function() {
+        _create: function () {
             this.el = this.element;
             this.field = $(this.el).closest(this.options.field);
             this.useDefault = $(this.options.useDefault, this.field);
@@ -260,7 +263,7 @@ define([
             this._events();
         },
 
-        _events: function() {
+        _events: function () {
             var self = this;
 
             this.el
@@ -268,7 +271,7 @@ define([
                 .trigger('change.toggleUseDefaultVisibility');
 
             this.checkbox
-                .on('change.setOrigValue', function() {
+                .on('change.setOrigValue', function () {
                     if ($(this).prop('checked')) {
                         self.el
                             .val(self.origValue)
@@ -279,18 +282,18 @@ define([
                 });
         },
 
-        _toggleUseDefaultVisibility: function() {
+        _toggleUseDefaultVisibility: function () {
             var curValue = this.el.val(),
                 origValue = this.origValue;
 
             this[curValue != origValue ? '_show' : '_hide']();
         },
 
-        _show: function() {
+        _show: function () {
             this.useDefault.show();
         },
 
-        _hide: function() {
+        _hide: function () {
             this.useDefault.hide();
         }
     });
@@ -302,11 +305,11 @@ define([
             wrapper: '.fieldset-wrapper'
         },
 
-        _create: function() {
+        _create: function () {
             this._events();
         },
 
-        _events: function() {
+        _events: function () {
             var self = this;
 
             this.element
@@ -325,8 +328,8 @@ define([
         }
     });
 
-    var updateColorPickerValues = function() {
-        $('.element-color-picker').each(function(){
+    var updateColorPickerValues = function () {
+        $('.element-color-picker').each(function () {
             var _this = $(this);
             _this.find('.color-box.active').removeClass('active');
             if (_this.find('.farbtastic').is(':visible')) {
@@ -345,8 +348,7 @@ define([
         colorPicker.offset() && colorPicker.toggleClass('vertical', parseInt(colorPicker.offset().left, 10) + colorPickerWidth > $(window).width());
     };
 
-    $(document).ready(function() {
-        $('.search-global.miniform').globalSearch();
+    $(document).ready(function () {
         $('.navigation').globalNavigation({
             categoriesConfig: {
                 '[data-ui-id="menu-mage-adminhtml-system"]': {
@@ -357,22 +359,20 @@ define([
                 }
             }
         });
-        $('.fade').modalPopup();
         $('details').details();
-        $('.page-actions').floatingHeader();
         $('[data-store-label]').useDefault();
 
         /* @TODO refactor collapsable as widget and avoid logic binding with such a general selectors */
         $('.collapse').collapsable();
-        $.each($('.entry-edit'), function(i, entry) {
-            $('.collapse:first', entry).filter(function(){
-                return $(this).data('collapsed') !== true;    
+        $.each($('.entry-edit'), function (i, entry) {
+            $('.collapse:first', entry).filter(function () {
+                return $(this).data('collapsed') !== true;
             }).collapse('show');
         });
 
         // TODO: Move to VDE js widjets
-        $.each($('.color-box'), function(index, elem) {
-            $(elem).farbtastic(function(color) {
+        $.each($('.color-box'), function (index, elem) {
+            $(elem).farbtastic(function (color) {
                 $(elem).css({
                     'backgroundColor': color
                 });
@@ -380,24 +380,26 @@ define([
             });
         });
 
-        $(document).on('click', function(e) {
+        $(document).on('click', function (e) {
             var target = $(e.target);
+
             if (target.closest('.control').find('.color-box').length < 1) {
                 updateColorPickerValues();
             }
         });
+
         $(window)
             .on('resize.vdeColorPicker', function () {
                 this.vdeColorPickerTimeoutId && clearTimeout(this.vdeColorPickerTimeoutId);
 
-                this.vdeColorPickerTimeoutId = setTimeout(function() {
+                this.vdeColorPickerTimeoutId = setTimeout(function () {
                     toggleColorPickerPosition();
                 }, 500);
             });
 
         $('.color-box')
-            .on('click.showColorPicker', function() {
-                updateColorPickerValues();  // Update values is other color picker is not closed yet
+            .on('click.showColorPicker', function () {
+                updateColorPickerValues(); // Update values is other color picker is not closed yet
                 $(this)
                     .addClass('active')
                     .siblings('input').trigger('focus.quickStyleElement')
@@ -408,7 +410,7 @@ define([
         keyboardHandler.apply();
     });
 
-    $(document).on('ajaxComplete', function() {
+    $(document).on('ajaxComplete', function () {
         $('details').details();
     });
 

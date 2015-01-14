@@ -4,6 +4,5 @@
  * See COPYING.txt for license details.
  */
 require([
-    "jquery/file-uploader",
     "Magento_Catalog/catalog/category/edit"
 ]);

@@ -6,8 +6,6 @@ require.config({
     "waitSeconds":"0",
     "shim": {
         "jquery/jquery.hashchange": ["jquery"],
-        "jquery/jquery.mousewheel": ["jquery"],
-        "jquery/jquery.popups": ["jquery"],
         "jquery/jstree/jquery.hotkeys": ["jquery"],
         "jquery/hover-intent": ["jquery"],
         "mage/adminhtml/backup": ["prototype"],

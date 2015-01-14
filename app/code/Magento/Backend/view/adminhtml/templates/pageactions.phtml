@@ -5,7 +5,7 @@
  */
 ?>
 <?php if ($this->getChildHtml()):?>
-    <div class="page-actions" <?php echo $this->getUiId('content-header') ?>>
+    <div data-mage-init='{"floatingHeader": {}}' class="page-actions" <?php echo $this->getUiId('content-header') ?>>
         <?php echo $this->getChildHtml(); ?>
     </div>
 <?php endif; ?>

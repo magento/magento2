@@ -26,6 +26,8 @@ var config = {
             "calendar":           "mage/calendar",
             "dropdown":           "mage/dropdown_old",
             "collapsable":        "js/theme",
+            "globalSearch":       "js/theme",
+            "modalPopup":         "js/theme",
             "collapsible":        "mage/collapsible",
             "menu":               "mage/backend/menu",
             "jstree":             "jquery/jstree/jquery.jstree"

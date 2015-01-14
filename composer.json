@@ -178,7 +178,6 @@
             ],
             "twbs/bootstrap": [
                 "lib/web/jquery/jquery.tabs.js",
-                "lib/web/jquery/jquery.popups.js"
             ],
             "tinymce/tinymce": "lib/web/tiny_mce"
         }
