@@ -7,7 +7,6 @@
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.TooManyMethods)
- * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 abstract class Foo
 {

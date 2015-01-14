@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @SuppressWarnings(PHPMD.NumberOfChildren)
- */
 class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_descendant_count
 {
 }

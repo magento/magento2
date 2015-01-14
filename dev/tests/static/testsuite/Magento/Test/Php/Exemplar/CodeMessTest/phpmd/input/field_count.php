@@ -2,7 +2,6 @@
 
 /**
  * Class that violates the allowed field number
- * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class Foo
 {

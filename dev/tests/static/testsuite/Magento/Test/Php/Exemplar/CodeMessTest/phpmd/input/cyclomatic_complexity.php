@@ -4,7 +4,6 @@ abstract class Foo
 {
     /**
      * Method that violates the allowed cyclomatic complexity
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function bar()
     {
