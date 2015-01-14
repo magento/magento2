@@ -227,15 +227,6 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
             'resultLayoutFactory' => $this->resultLayoutFactoryMock
         ];
 
-//        $this->viewInterfaceMock->expects($this->any())->method('getPage')->will(
-//            $this->returnValue($this->resultPageMock)
-//        );
-//        $this->resultPageMock->expects($this->any())->method('getConfig')->will(
-//            $this->returnValue($this->pageConfigMock)
-//        );
-//
-//        $this->pageConfigMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
-
         $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_testedObject = $helperObjectManager->getObject(
             'Magento\Customer\Controller\Adminhtml\Index\Newsletter',
@@ -255,10 +246,6 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
         $this->resultLayoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultLayoutMock);
-//        $this->titleMock->expects($this->once())->method('prepend')->with(__('Customers'));
-//        $this->viewInterfaceMock->expects($this->any())->method('getLayout')->will(
-//            $this->returnValue($this->layoutInterfaceMock)
-//        );
         $subscriberMock->expects($this->once())
             ->method('loadByCustomerId');
         $this->_objectManager
