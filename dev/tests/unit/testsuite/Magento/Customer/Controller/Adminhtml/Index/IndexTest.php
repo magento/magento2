@@ -78,6 +78,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
             ->disableOriginalConstructor()
+            ->setMethods('create')
             ->getMock();
         $this->resultForwardMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
             ->disableOriginalConstructor()
