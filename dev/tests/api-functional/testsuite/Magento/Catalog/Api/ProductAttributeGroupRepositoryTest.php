@@ -112,8 +112,8 @@ class ProductAttributeGroupRepositoryTest extends \Magento\TestFramework\TestCas
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "/groups/list",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+                'resourcePath' => self::RESOURCE_PATH . '/groups/list' . '?' . http_build_query($searchCriteria),
+                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
