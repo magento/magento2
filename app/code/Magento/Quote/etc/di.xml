@@ -13,4 +13,6 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Quote\Api\Data\CartItemInterface" type="Magento\Quote\Model\Quote\Item" />
+    <preference for="Magento\Quote\Api\CartItemRepositoryInterface" type="Magento\Quote\Model\Quote\Item\Repository" />
 </config>

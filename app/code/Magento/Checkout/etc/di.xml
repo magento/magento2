@@ -23,8 +23,6 @@
             <argument name="storage" xsi:type="object">Magento\Checkout\Model\Session\Storage</argument>
         </arguments>
     </type>
-    <preference for="Magento\Checkout\Service\V1\Item\ReadServiceInterface" type="Magento\Checkout\Service\V1\Item\ReadService" />
-    <preference for="\Magento\Checkout\Service\V1\Item\WriteServiceInterface" type="Magento\Checkout\Service\V1\Item\WriteService" />
     <preference for="\Magento\Checkout\Service\V1\Address\Shipping\ReadServiceInterface" type="Magento\Checkout\Service\V1\Address\Shipping\ReadService" />
     <preference for="\Magento\Checkout\Service\V1\Address\Shipping\WriteServiceInterface" type="Magento\Checkout\Service\V1\Address\Shipping\WriteService" />
     <preference for="\Magento\Checkout\Service\V1\Address\Billing\ReadServiceInterface" type="Magento\Checkout\Service\V1\Address\Billing\ReadService" />

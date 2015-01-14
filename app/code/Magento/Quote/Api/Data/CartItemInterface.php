@@ -3,12 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Api\Data;
+namespace Magento\Quote\Api\Data;
 
-/**
- * @see \Magento\Checkout\Service\V1\Data\Cart\Item
- * can be implemented by \Magento\Sales\Model\Quote\Item
- */
 interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**

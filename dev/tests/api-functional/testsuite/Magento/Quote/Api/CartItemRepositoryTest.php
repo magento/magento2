@@ -1,18 +1,18 @@
 <?php
 /**
+ *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Checkout\Service\V1\Item;
+namespace Magento\Quote\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
-class WriteServiceTest extends WebapiAbstract
+class CartItemRepositoryTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'checkoutItemWriteServiceV1';
+    const SERVICE_NAME = 'quoteCartItemRepositoryV1';
     const RESOURCE_PATH = '/V1/carts/';
 
     /**
@@ -26,11 +26,52 @@ class WriteServiceTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     */
+    public function testGetList()
+    {
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_order_item_with_items', 'reserved_order_id');
+        $cartId = $quote->getId();
+        $output = [];
+        /** @var  \Magento\Quote\Api\Data\CartItemInterface $item */
+        foreach ($quote->getAllItems() as $item) {
+            $data = [
+                'item_id' => $item->getItemId(),
+                'sku' => $item->getSku(),
+                'name' => $item->getName(),
+                'price' => $item->getPrice(),
+                'qty' => $item->getQty(),
+                'product_type' => $item->getProductType(),
+                'quote_id' => $item->getQuoteId()
+            ];
+
+            $output[] = $data;
+        }
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items',
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        $requestData = ["cartId" => $cartId];
+        $this->assertEquals($output, $this->_webApiCall($serviceInfo, $requestData));
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testAddItem()
     {
+        /** @var  \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create('Magento\Catalog\Model\Product')->load(2);
         $productSku = $product->getSku();
         /** @var \Magento\Quote\Model\Quote  $quote */
@@ -39,21 +80,21 @@ class WriteServiceTest extends WebapiAbstract
         $cartId = $quote->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items',
+                'resourcePath' => self::RESOURCE_PATH . 'items',
                 'httpMethod' => RestConfig::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'AddItem',
+                'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
 
         $requestData = [
-            "cartId" => $cartId,
-            "data" => [
+            "cartItem" => [
                 "sku" => $productSku,
                 "qty" => 7,
+                "quote_id" => $cartId,
             ],
         ];
         $this->_webApiCall($serviceInfo, $requestData);
@@ -82,7 +123,7 @@ class WriteServiceTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'RemoveItem',
+                'operation' => self::SERVICE_NAME . 'DeleteById',
             ],
         ];
 
@@ -111,27 +152,38 @@ class WriteServiceTest extends WebapiAbstract
         $itemId = $quote->getItemByProduct($product)->getId();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items/' . $itemId,
+                'resourcePath' => self::RESOURCE_PATH . 'items/' . $itemId,
                 'httpMethod' => RestConfig::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'UpdateItem',
+                'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
 
-        $requestData = [
-            "cartId" => $cartId,
-            "itemId" => $itemId,
-            "data" => [
-                "qty" => 5,
-            ],
-        ];
-        $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $requestData = [
+                "cartItem" => [
+                    "qty" => 5,
+                    "quote_id" => $cartId,
+                    "itemId" => $itemId,
+                ],
+            ];
+        } else {
+            $requestData = [
+                "cartItem" => [
+                    "qty" => 5,
+                    "quote_id" => $cartId,
+                ],
+            ];
+        }
+        $this->_webApiCall($serviceInfo, $requestData);
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $this->assertTrue($quote->hasProductId(1));
-        $this->assertEquals(5, $quote->getItemByProduct($product)->getQty());
+        $item = $quote->getItemByProduct($product);
+        $this->assertEquals(5, $item->getQty());
+        $this->assertEquals($itemId, $item->getItemId());
     }
 }

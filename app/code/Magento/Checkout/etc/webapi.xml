@@ -19,30 +19,6 @@
             <resource ref="Magento_Sales::create" />
         </resources>
     </route>
-    <route url="/V1/carts/:cartId/items" method="GET">
-        <service class="Magento\Checkout\Service\V1\Item\ReadServiceInterface" method="getList"/>
-        <resources>
-            <resource ref="Magento_Catalog::products" />
-        </resources>
-    </route>
-    <route url="/V1/carts/:cartId/items" method="POST">
-        <service class="Magento\Checkout\Service\V1\Item\WriteServiceInterface" method="addItem"/>
-        <resources>
-            <resource ref="Magento_Catalog::products" />
-        </resources>
-    </route>
-    <route url="/V1/carts/:cartId/items/:itemId" method="PUT">
-        <service class="Magento\Checkout\Service\V1\Item\WriteServiceInterface" method="updateItem"/>
-        <resources>
-            <resource ref="Magento_Catalog::products" />
-        </resources>
-    </route>
-    <route url="/V1/carts/:cartId/items/:itemId" method="DELETE">
-        <service class="Magento\Checkout\Service\V1\Item\WriteServiceInterface" method="removeItem"/>
-        <resources>
-            <resource ref="Magento_Catalog::products" />
-        </resources>
-    </route>
     <route url="/V1/carts/:cartId" method="GET">
         <service class="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" method="getCart"/>
         <resources>
