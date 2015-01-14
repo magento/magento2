@@ -44,6 +44,13 @@ class Grid extends GridInterface
     protected $editLink = 'td[class*=col-action] a';
 
     /**
+     * First row selector
+     *
+     * @var string
+     */
+    protected $firstRowSelector = '//tbody/tr[1]//a';
+
+    /**
      * {@inheritdoc}
      */
     protected $filters = [
