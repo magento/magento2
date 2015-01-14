@@ -41,7 +41,6 @@ var config = {
         "mage/common",
         "mage/dataPost",
         "js/theme",
-        "mage/terms",
         "mage/bootstrap"
     ]
 };

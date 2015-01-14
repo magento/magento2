@@ -24,6 +24,9 @@ var config = {
         },
         "moment": {
             "exports": "moment"
+        },
+        "matchMedia": {
+            "exports": "mediaCheck"
         }
     },
     "paths": {
