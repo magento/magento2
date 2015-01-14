@@ -2,7 +2,7 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Framework\App\View\Asset\Config;
+namespace Magento\Framework\App\View\Asset\Bundle\Config;
 
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -24,8 +24,8 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Magento\Framework\App\View\Asset\Config\Converter $converter,
-        \Magento\Framework\App\View\Asset\Config\SchemaLocator $schemaLocator,
+        \Magento\Framework\App\View\Asset\Bundle\Config\Converter $converter,
+        \Magento\Framework\App\View\Asset\Bundle\Config\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'dev\tools\Magento\Tools\View\Config\bundle_black_list.xml',
         $idAttributes = [],
@@ -41,5 +41,4 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
             $domDocumentClass
         );
     }
-
 }

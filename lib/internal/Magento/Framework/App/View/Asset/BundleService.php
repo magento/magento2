@@ -34,75 +34,6 @@ class BundleService
      */
     protected $config;
 
-    protected $excludeDir = [
-        'frontend' => [
-            'jquery/fileUploader',
-            'jquery/jstree',
-            'mage/adminhtml',
-            'mage/backend',
-            'requirejs',
-            'prototype'
-        ],
-        'adminhtml' => [
-            'requirejs',
-            'prototype'
-        ]
-    ];
-
-    /** @var array  */
-    protected $excludeList = [
-        'adminhtml' => [
-            'mage/common.js',
-            'mage/cookies.js',
-            'mage/dataPost.js',
-            'mage/decorate.js',
-            'mage/deletable-item.js',
-            'mage/dialog.js',
-            'mage/dropdown.js',
-            'mage/dropdowns.js',
-            'mage/fieldset-controls.js',
-            'mage/gallery-fullscreen.js',
-            'mage/gallery.js',
-            'mage/item-table.js',
-            'mage/list.js',
-            'mage/loader.js',
-            'mage/menu.js',
-            'mage/popup-window.js',
-            'mage/redirect-url.js',
-            'mage/sticky.js',
-            'mage/terms.js',
-            'mage/toggle.js',
-            'mage/tooltip.js',
-            'mage/translate-inline-vde.js',
-            'mage/webapi.js',
-            'mage/zoom.js',
-            'mage/validation/dob-rule.js',
-            'mage/validation/validation.js',
-            'jquery/jquery.parsequery.js',
-            'jquery/jquery.mobile.custom.js',
-            'jquery/jquery-ui.js',
-            'jquery/autocomplete/jquery.autocomplete.js',
-            'matchMedia.js',
-            'jquery/jquery.js'
-        ],
-        'frontend' => [
-            'mage/captcha.js',
-            'mage/dropdown_old.js',
-            'mage/list.js',
-            'mage/loader_old.js',
-            'mage/webapi.js',
-            'jquery/jquery-ui-1.9.2.js',
-            'jquery/jquery.ba-hashchange.min.js',
-            'jquery/jquery.details.js',
-            'jquery/jquery.hoverIntent.js',
-            'jquery/autocomplete/jquery.autocomplete.js',
-            'jquery/editableMultiselect/js/jquery.editable.js',
-            'jquery/editableMultiselect/js/jquery.multiselect.js',
-            'jquery/farbtastic/jquery.farbtastic.js',
-            'jquery/jquery.js'
-        ]
-    ];
-
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\View\Asset\BundleFactory $bundleFactory
@@ -110,19 +41,18 @@ class BundleService
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\View\Asset\BundleFactory $bundleFactory,
-        \Magento\Framework\App\View\Asset\ConfigInterface $config
+        \Magento\Framework\App\View\Asset\Bundle\ConfigInterface $config
     ) {
         $this->filesystem = $filesystem;
         $this->bundleFactory = $bundleFactory;
         $this->config = $config;
-        1+1;
     }
 
     /**
      * Check if asset in exclude list
      *
      * @param $area
-     * @param $key
+     * @param Asset\LocalInterface $asset
      * @return bool
      */
     public function isExcluded($area, Asset\LocalInterface $asset)

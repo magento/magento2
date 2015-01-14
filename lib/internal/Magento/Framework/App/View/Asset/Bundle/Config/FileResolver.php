@@ -4,7 +4,7 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Framework\App\View\Asset\Config;
+namespace Magento\Framework\App\View\Asset\Bundle\Config;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\FileIteratorFactory;
