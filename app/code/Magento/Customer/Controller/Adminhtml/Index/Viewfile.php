@@ -1,7 +1,7 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
@@ -45,12 +45,6 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param ObjectFactory $objectFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -75,12 +69,6 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         ObjectFactory $objectFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Url\DecoderInterface $urlDecoder
     ) {
         parent::__construct(
@@ -102,13 +90,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $addressDataBuilder,
             $customerMapper,
             $dataObjectProcessor,
-            $objectFactory,
-            $layoutFactory,
-            $resultPageFactory,
-            $resultRedirectFactory,
-            $resultForwardFactory,
-            $resultJsonFactory,
-            $resultRawFactory
+            $objectFactory
         );
         $this->urlDecoder  = $urlDecoder;
     }
@@ -151,11 +133,6 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             throw new NotFoundException();
         }
 
-        $stat = $directory->stat($fileName);
-        $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setHeader('Pragma', 'public', true);
-        $resultRaw->setHeader('Content-Length', $stat['size']);
-
         if ($plain) {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
             switch (strtolower($extension)) {
@@ -172,23 +149,33 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
                     $contentType = 'application/octet-stream';
                     break;
             }
+            $stat = $directory->stat($path);
+            $contentLength = $stat['size'];
             $contentModify = $stat['mtime'];
 
-            $resultRaw->setHeader('Content-type', $contentType, true);
-            $resultRaw->setHeader('Last-Modified', date('r', $contentModify));
+            $this->getResponse()
+                ->setHttpResponseCode(200)
+                ->setHeader('Pragma', 'public', true)
+                ->setHeader(
+                    'Content-type',
+                    $contentType,
+                    true
+                )
+                ->setHeader('Content-Length', $contentLength)
+                ->setHeader('Last-Modified', date('r', $contentModify))
+                ->clearBody();
+            $this->getResponse()->sendHeaders();
+
+            echo $directory->readFile($fileName);
         } else {
             $name = pathinfo($path, PATHINFO_BASENAME);
-            $resultRaw->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true);
-            $resultRaw->setHeader('Content-type', 'application/octet-stream', true);
-            $resultRaw->setHeader('Content-Disposition', 'attachment; filename="' . $name . '"', true);
-            $resultRaw->setHeader('Last-Modified', date('r'), true);
-//            $this->_fileFactory->create(
-//                $name,
-//                ['type' => 'filename', 'value' => $fileName],
-//                DirectoryList::MEDIA
-//            )->sendResponse();
+            $this->_fileFactory->create(
+                $name,
+                ['type' => 'filename', 'value' => $fileName],
+                DirectoryList::MEDIA
+            )->sendResponse();
         }
-        $resultRaw->setContents($directory->readFile($fileName));
-        return $resultRaw;
+
+        exit;
     }
 }
