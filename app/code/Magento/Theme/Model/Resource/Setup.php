@@ -42,7 +42,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
     }
 
     /**
-     * @return \Magento\Core\Model\Resource\Theme\Collection
+     * @return \Magento\Theme\Model\Resource\Theme\Collection
      */
     public function createThemeResourceFactory()
     {

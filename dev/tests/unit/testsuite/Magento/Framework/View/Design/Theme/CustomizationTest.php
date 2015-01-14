@@ -41,7 +41,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
             false
         );
         $collectionFactory = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\File\CollectionFactory',
+            'Magento\Theme\Model\Resource\Theme\File\CollectionFactory',
             ['create'],
             [],
             '',

@@ -22,7 +22,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     protected $_designPackage;
 
     /**
-     * @var \Magento\Core\Model\Resource\Theme\Collection
+     * @var \Magento\Theme\Model\Resource\Theme\Collection
      */
     protected $_themeCollection;
 
@@ -57,7 +57,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
             ['getConfigurationDesignTheme']
         );
         $this->_themeCollection = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\Collection',
+            'Magento\Theme\Model\Resource\Theme\Collection',
             ['filterThemeCustomizations', 'load'],
             [],
             '',
@@ -65,7 +65,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
         );
 
         $collectionFactory = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\CollectionFactory',
+            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
             ['create'],
             [],
             '',

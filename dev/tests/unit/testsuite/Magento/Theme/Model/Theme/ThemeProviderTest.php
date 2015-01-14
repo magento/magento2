@@ -11,13 +11,13 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         $path = 'frontend/Magento/luma';
         $collectionFactory = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\CollectionFactory',
+            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
-        $collectionMock = $this->getMock('Magento\Core\Model\Resource\Theme\Collection', [], [], '', false);
+        $collectionMock = $this->getMock('Magento\Theme\Model\Resource\Theme\Collection', [], [], '', false);
         $theme = $this->getMock('Magento\Framework\View\Design\ThemeInterface', [], [], '', false);
         $collectionMock->expects(
             $this->once()
@@ -39,7 +39,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         $themeId = 755;
         $collectionFactory = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\CollectionFactory',
+            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
             [],
             [],
             '',

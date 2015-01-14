@@ -167,7 +167,7 @@ class Customization
      */
     protected function _prepareThemeCustomizations()
     {
-        /** @var \Magento\Core\Model\Resource\Theme\Collection $themeCollection */
+        /** @var \Magento\Theme\Model\Resource\Theme\Collection $themeCollection */
         $themeCollection = $this->themeProvider->getThemeCustomizations(\Magento\Framework\App\Area::AREA_FRONTEND);
 
         $assignedThemes = $this->getStoresByThemes();

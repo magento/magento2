@@ -3,7 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Theme\File;
+namespace Magento\Theme\Model\Resource\Theme\File;
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 
 /**
  * Theme files collection
@@ -18,7 +19,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\Theme\File', 'Magento\Core\Model\Resource\Theme\File');
+        $this->_init('Magento\Theme\Model\Theme\File', 'Magento\Theme\Model\Resource\Theme\File');
     }
 
     /**

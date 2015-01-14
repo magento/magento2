@@ -3,7 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Theme;
+namespace Magento\Theme\Model\Resource\Theme;
+use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 
 /**
  * Theme collection
@@ -24,7 +25,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\Theme', 'Magento\Core\Model\Resource\Theme');
+        $this->_init('Magento\Theme\Model\Theme', 'Magento\Theme\Model\Resource\Theme');
     }
 
     /**

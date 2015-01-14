@@ -106,7 +106,7 @@ class FirstEntranceTest extends \PHPUnit_Framework_TestCase
     protected function getThemeCollectionFactory($countCustomization)
     {
         $themeCollectionMock = $this->getMockBuilder(
-            'Magento\Core\Model\Resource\Theme\Collection'
+            'Magento\Theme\Model\Resource\Theme\Collection'
         )->disableOriginalConstructor()->setMethods(
             ['addTypeFilter', 'getSize']
         )->getMock();
@@ -125,7 +125,7 @@ class FirstEntranceTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Core\Model\Resource\Theme\CollectionFactory $collectionFactory */
         $collectionFactory = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\CollectionFactory',
+            'Magento\Theme\Model\Resource\Theme\CollectionFactory',
             ['create'],
             [],
             '',
@@ -201,7 +201,7 @@ class FirstEntranceTest extends \PHPUnit_Framework_TestCase
 
         return [
             [
-                'Magento\Core\Model\Resource\Theme\CollectionFactory',
+                'Magento\Theme\Model\Resource\Theme\CollectionFactory',
                 $this->getThemeCollectionFactory($countCustomization),
             ],
             ['Magento\Framework\TranslateInterface', $translate],

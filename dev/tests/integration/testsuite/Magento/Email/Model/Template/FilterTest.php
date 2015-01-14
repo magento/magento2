@@ -132,7 +132,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
 
-        $collection = $objectManager->create('Magento\Core\Model\Resource\Theme\Collection');
+        $collection = $objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
         $themeId = $collection->getThemeByFullPath('frontend/test_default')->getId();
         $objectManager->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'

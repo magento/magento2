@@ -52,7 +52,7 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
             return $this->design->getDesignTheme();
         }
 
-        /** @var \Magento\Core\Model\Resource\Theme\Collection $themeCollection */
+        /** @var \Magento\Theme\Model\Resource\Theme\Collection $themeCollection */
         $themeCollection = $this->themeFactory->create();
         $themeIdentifier = $this->design->getConfigurationDesignTheme($area);
         if (is_numeric($themeIdentifier)) {

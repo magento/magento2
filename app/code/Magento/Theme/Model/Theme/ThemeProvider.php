@@ -34,7 +34,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      */
     public function getThemeByFullPath($fullPath)
     {
-        /** @var $themeCollection \Magento\Core\Model\Resource\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\Resource\Theme\Collection */
         $themeCollection = $this->collectionFactory->create();
         return $themeCollection->getThemeByFullPath($fullPath);
     }
@@ -46,7 +46,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         $area = \Magento\Framework\App\Area::AREA_FRONTEND,
         $type = \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
     ) {
-        /** @var $themeCollection \Magento\Core\Model\Resource\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\Resource\Theme\Collection */
         $themeCollection = $this->collectionFactory->create();
         $themeCollection->addAreaFilter($area)->addTypeFilter($type);
         return $themeCollection;

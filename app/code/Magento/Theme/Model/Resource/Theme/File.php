@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Theme\Customization;
+namespace Magento\Theme\Model\Resource\Theme;
 
 /**
- * Theme customization link resource model
+ * Theme files resource model
  */
-class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class File extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
@@ -17,6 +17,6 @@ class Update extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('core_theme_file_update', 'file_update_id');
+        $this->_init('core_theme_file', 'theme_files_id');
     }
 }

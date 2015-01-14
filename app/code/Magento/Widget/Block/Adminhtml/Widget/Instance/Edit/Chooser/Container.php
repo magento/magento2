@@ -102,7 +102,7 @@ class Container extends \Magento\Framework\View\Element\Html\Select
      */
     protected function _getThemeInstance($themeId)
     {
-        /** @var \Magento\Core\Model\Resource\Theme\Collection $themeCollection */
+        /** @var \Magento\Theme\Model\Resource\Theme\Collection $themeCollection */
         $themeCollection = $this->_themesFactory->create();
         return $themeCollection->getItemById($themeId);
     }

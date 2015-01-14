@@ -19,7 +19,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $model = Bootstrap::getObjectManager()->create('Magento\Theme\Model\Theme\Source\Theme');
 
         /** @var $expectedCollection \Magento\Theme\Model\Theme\Collection */
-        $expectedCollection = Bootstrap::getObjectManager()->create('Magento\Core\Model\Resource\Theme\Collection');
+        $expectedCollection = Bootstrap::getObjectManager()->create('Magento\Theme\Model\Resource\Theme\Collection');
         $expectedCollection->addFilter('area', 'frontend');
 
         $expectedItemsCount = count($expectedCollection);

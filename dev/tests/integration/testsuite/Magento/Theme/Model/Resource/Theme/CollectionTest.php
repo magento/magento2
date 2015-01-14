@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Theme;
+namespace Magento\Theme\Model\Resource\Theme;
 
 use Magento\Framework\View\Design\ThemeInterface;
 
@@ -17,12 +17,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Core\Model\Resource\Theme\Collection
+     * @return \Magento\Theme\Model\Resource\Theme\Collection
      */
     protected static function _getThemesCollection()
     {
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Theme\Collection'
+            'Magento\Theme\Model\Resource\Theme\Collection'
         );
     }
 
@@ -89,9 +89,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddAreaFilter($area, $themeCount)
     {
-        /** @var $themeCollection \Magento\Core\Model\Resource\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\Resource\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Theme\Collection'
+            'Magento\Theme\Model\Resource\Theme\Collection'
         );
         $themeCollection->addAreaFilter($area);
         $this->assertCount($themeCount, $themeCollection);
@@ -117,9 +117,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddTypeFilter($themeType, $themeCount)
     {
-        /** @var $themeCollection \Magento\Core\Model\Resource\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\Resource\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Theme\Collection'
+            'Magento\Theme\Model\Resource\Theme\Collection'
         );
         $themeCollection->addAreaFilter('test_area3');
         if ($themeType !== false) {
@@ -148,9 +148,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testFilterVisibleThemes()
     {
-        /** @var $themeCollection \Magento\Core\Model\Resource\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\Resource\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Resource\Theme\Collection'
+            'Magento\Theme\Model\Resource\Theme\Collection'
         );
         $themeCollection->addAreaFilter('test_area3')->filterVisibleThemes();
         $this->assertCount(2, $themeCollection);
@@ -194,7 +194,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * Set themes fixtures
      *
-     * @return \Magento\Core\Model\Resource\Theme\Collection
+     * @return \Magento\Theme\Model\Resource\Theme\Collection
      */
     public static function setThemeFixture()
     {
@@ -350,10 +350,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testFilterPhysicalThemesPerPage()
     {
         $collection = $this->_getThemesCollection();
-        $collection->filterPhysicalThemes(1, \Magento\Core\Model\Resource\Theme\Collection::DEFAULT_PAGE_SIZE);
+        $collection->filterPhysicalThemes(1, \Magento\Theme\Model\Resource\Theme\Collection::DEFAULT_PAGE_SIZE);
 
         $this->assertLessThanOrEqual(
-            \Magento\Core\Model\Resource\Theme\Collection::DEFAULT_PAGE_SIZE,
+            \Magento\Theme\Model\Resource\Theme\Collection::DEFAULT_PAGE_SIZE,
             $collection->count()
         );
 

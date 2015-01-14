@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Theme;
+namespace Magento\Theme\Model\Resource;
 
 /**
- * Theme files resource model
+ * Theme resource model
  */
-class File extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Theme extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
@@ -17,6 +17,6 @@ class File extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('core_theme_file', 'theme_files_id');
+        $this->_init('core_theme', 'theme_id');
     }
 }

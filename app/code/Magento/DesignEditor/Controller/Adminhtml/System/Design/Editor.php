@@ -87,7 +87,7 @@ class Editor extends \Magento\Backend\App\Action
     protected function _isFirstEntrance()
     {
         $isCustomized = (bool)$this->_objectManager->get(
-            'Magento\Core\Model\Resource\Theme\CollectionFactory'
+            'Magento\Theme\Model\Resource\Theme\CollectionFactory'
         )->create()->addTypeFilter(
             ThemeInterface::TYPE_VIRTUAL
         )->getSize();

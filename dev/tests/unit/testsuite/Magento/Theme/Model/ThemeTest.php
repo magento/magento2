@@ -36,7 +36,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             false
         );
         $resourceCollection = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\Collection',
+            'Magento\Theme\Model\Resource\Theme\Collection',
             [],
             [],
             '',

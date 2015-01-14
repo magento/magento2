@@ -3,21 +3,21 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource\Theme\Grid;
+namespace Magento\Theme\Model\Resource\Theme\Grid;
 
 /**
  * Theme grid collection
  */
-class Collection extends \Magento\Core\Model\Resource\Theme\Collection
+class Collection extends \Magento\Theme\Model\Resource\Theme\Collection
 {
     /**
      * Add area filter
      *
-     * @return $this
+     * @return \Magento\Theme\Model\Resource\Theme\Collection
      */
     protected function _initSelect()
     {
-        parent::_initSelect();
+        \Magento\Theme\Model\Resource\Theme\Collection::_initSelect();
         $this->filterVisibleThemes()->addAreaFilter(\Magento\Framework\App\Area::AREA_FRONTEND)->addParentTitle();
         return $this;
     }
