@@ -275,7 +275,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         //Need to convert from String to Associated Array.
         $result = explode(PHP_EOL, trim($returnValue));
         foreach ($result as $value) {
-            $tempArray  = explode(' => ' , $value);
+            $tempArray  = explode(' => ', $value);
             $actual[$tempArray[0]] = $tempArray[1];
         }
 
