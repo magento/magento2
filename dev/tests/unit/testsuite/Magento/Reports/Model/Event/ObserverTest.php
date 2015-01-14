@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\Event;
 
@@ -35,6 +36,16 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeMock;
+
+    /**
+     * @var \Magento\Reports\Model\Product\Index\ComparedFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productCompFactoryMock;
+
+    /**
+     * @var \Magento\Reports\Model\Product\Index\Compared|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productCompModelMock;
 
     public function setUp()
     {
@@ -73,6 +84,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
+        $this->productCompFactoryMock = $this->getMockBuilder('Magento\Reports\Model\Product\Index\ComparedFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->productCompModelMock = $this->getMockBuilder('Magento\Reports\Model\Product\Index\Compared')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->observer = $objectManager->getObject(
             'Magento\Reports\Model\Event\Observer',
@@ -80,6 +98,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 'customerSession' => $this->customerSessionMock,
                 'customerVisitor' => $this->customerVisitorMock,
                 'productIndxFactory' => $productIndexFactoryMock,
+                'productCompFactory' => $this->productCompFactoryMock,
                 'storeManager' => $storeManager,
                 'event' => $reportEventFactory
             ]
@@ -156,6 +175,63 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->prepareReportEventModel($expectedEventData);
         $eventObserver = $this->getObserverMock($productId);
         $this->observer->catalogProductView($eventObserver);
+    }
+
+    /**
+     * @param bool $isLoggedIn
+     * @param str $userKey
+     * @param int $userId
+     * @dataProvider catalogProductCompareAddProductDataProvider
+     */
+    public function testCatalogProductCompareAddProduct($isLoggedIn, $userKey, $userId)
+    {
+        $productId = 111;
+        $customerId = 222;
+        $visitorId = 333;
+        $viewData = [
+            'product_id' => $productId,
+            $userKey => $userId
+        ];
+        $observerMock = $this->getObserverMock($productId);
+        $this->customerSessionMock->expects($this->any())
+            ->method('isLoggedIn')
+            ->willReturn($isLoggedIn);
+        $this->customerSessionMock->expects($this->any())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+        $this->customerVisitorMock->expects($this->any())
+            ->method('getId')
+            ->willReturn($visitorId);
+        $this->productCompFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->productCompModelMock);
+        $this->productCompModelMock->expects($this->any())
+            ->method('setData')
+            ->with($viewData)
+            ->willReturnSelf();
+        $this->productCompModelMock->expects($this->any())
+            ->method('save')
+            ->willReturnSelf();
+        $this->productCompModelMock->expects($this->any())
+            ->method('calculate')
+            ->willReturnSelf();
+        $this->assertEquals($this->observer, $this->observer->catalogProductCompareAddProduct($observerMock));
+    }
+
+    public function catalogProductCompareAddProductDataProvider()
+    {
+        return [
+            'logged in' => [
+                'isLoggedIn' => true,
+                'userKey' => 'customer_id',
+                'userId' => 222
+            ],
+            'not logged in' => [
+                'isLoggedIn' => false,
+                'userKey' => 'visitor_id',
+                'userId' => 333
+            ]
+        ];
     }
 
     /**

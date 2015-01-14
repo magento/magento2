@@ -2,7 +2,8 @@
 /**
  * Obsolete methods
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['__get', 'Magento\Framework\Object'],
@@ -2015,9 +2016,10 @@ return [
     ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
     ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
     ['cleanTransactions', 'Magento\Paypal\Model\Observer'],
+    ['getSkinImagePlaceholderUrl', 'Magento\Cms\Model\Wysiwyg\Config'],
     ['compareIndexColumnProperties', 'Magento\Catalog\Model\Resource\Helper'],
     ['getIsNullNotNullCondition', 'Magento\Catalog\Model\Resource\Helper'],
     ['_getCategoryPath', 'Magento\Catalog\Model\Resource\Setup'],
     ['_getCategoryEntityRow', 'Magento\Catalog\Model\Resource\Setup'],
-    ['createEavAttributeResource', 'Magento\Catalog\Model\Resource\Setup'],
+    ['createEavAttributeResource', 'Magento\Catalog\Model\Resource\Setup']
 ];

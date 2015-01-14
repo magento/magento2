@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Wysiwyg;
 
@@ -12,7 +13,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
-    protected $this;
+    protected $wysiwygConfig;
 
     /**
      * @var \Magento\Backend\Model\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -45,6 +46,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfigMock;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManagerMock;
+
+    /**
+     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeMock;
+
+    /**
+     * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $assetFileMock;
+
+    /**
      * @var array
      */
     protected $windowSize = [];
@@ -69,13 +85,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->assetFileMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->windowSize = [
             'width' => 1200,
             'height' => 800,
         ];
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->this = $objectManager->getObject(
+        $this->wysiwygConfig = $objectManager->getObject(
             'Magento\Cms\Model\Wysiwyg\Config',
             [
                 'backendUrl' => $this->backendUrlMock,
@@ -84,7 +109,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'variableConfig' => $this->variableConfigMock,
                 'widgetConfig' => $this->widgetConfigMock,
                 'scopeConfig' => $this->scopeConfigMock,
-                'windowSize' => $this->windowSize
+                'windowSize' => $this->windowSize,
+                'storeManager' => $this->storeManagerMock
             ]
         );
     }
@@ -130,7 +156,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getPluginSettings')
             ->willReturn($pluginSettings);
 
-        $config = $this->this->getConfig($data);
+        $config = $this->wysiwygConfig->getConfig($data);
         $this->assertInstanceOf('Magento\Framework\Object', $config);
         $this->assertEquals($expectedResults[0], $config->getData('someData'));
         $this->assertEquals($expectedResults[1], $config->getData('wysiwygPluginSettings'));
@@ -161,18 +187,29 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Cms\Model\Wysiwyg\Config::getSkinImagePlaceholderUrl
+     * @covers \Magento\Cms\Model\Wysiwyg\Config::getSkinImagePlaceholderPath
      */
-    public function testGetSkinImagePlaceholderUrl()
+    public function testGetSkinImagePlaceholderPath()
     {
-        $url = '/some/url';
+        $staticPath = 'pub/static';
+        $placeholderPath = 'adminhtml/Magento/backend/en_US/Magento_Cms/images/wysiwyg_skin_image.png';
+        $expectedResult = 'pub/static/adminhtml/Magento/backend/en_US/Magento_Cms/images/wysiwyg_skin_image.png';
 
-        $this->assetRepoMock->expects($this->atLeastOnce())
-            ->method('getUrl')
-            ->with('Magento_Cms::images/wysiwyg_skin_image.png')
-            ->willReturn($url);
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+        $this->storeMock->expects($this->any())
+            ->method('getBaseStaticDir')
+            ->willReturn($staticPath);
+        $this->assetRepoMock->expects($this->any())
+            ->method('createAsset')
+            ->with(\Magento\Cms\Model\Wysiwyg\Config::WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID)
+            ->willReturn($this->assetFileMock);
+        $this->assetFileMock->expects($this->once())
+            ->method('getPath')
+            ->willReturn($placeholderPath);
 
-        $this->assertEquals($url, $this->this->getSkinImagePlaceholderUrl());
+        $this->assertEquals($expectedResult, $this->wysiwygConfig->getSkinImagePlaceholderPath());
     }
 
     /**
@@ -185,16 +222,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testIsEnabled($wysiwygState, $expectedResult)
     {
         $storeId = 1;
-        $this->this->setStoreId($storeId);
+        $this->wysiwygConfig->setStoreId($storeId);
 
         $this->scopeConfigMock->expects($this->atLeastOnce())
             ->method('getValue')
             ->with('cms/wysiwyg/enabled', 'store', $storeId)
             ->willReturn($wysiwygState);
 
-        $this->assertEquals($expectedResult, $this->this->isEnabled());
+        $this->assertEquals($expectedResult, $this->wysiwygConfig->isEnabled());
     }
 
+    /**
+     * @return array
+     */
     public function isEnabledDataProvider()
     {
         return [
@@ -218,9 +258,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->with('cms/wysiwyg/enabled', 'store')
             ->willReturn($status);
 
-        $this->assertEquals($expectedResult, $this->this->isHidden());
+        $this->assertEquals($expectedResult, $this->wysiwygConfig->isHidden());
     }
 
+    /**
+     * @return array
+     */
     public function isHiddenDataProvider()
     {
         return [

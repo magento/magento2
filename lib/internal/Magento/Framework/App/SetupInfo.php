@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
@@ -56,7 +57,7 @@ class SetupInfo
         if (empty($server['DOCUMENT_ROOT'])) {
             throw new \InvalidArgumentException('DOCUMENT_ROOT variable is unavailable.');
         }
-        $this->docRoot = str_replace('\\', '/', $server['DOCUMENT_ROOT']);
+        $this->docRoot = rtrim(str_replace('\\', '/', $server['DOCUMENT_ROOT']), '/');
         $this->projectRoot = $projectRoot ?: $this->detectProjectRoot();
         $this->projectRoot = str_replace('\\', '/', $this->projectRoot);
     }

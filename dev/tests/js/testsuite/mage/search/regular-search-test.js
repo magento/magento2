@@ -1,7 +1,8 @@
 /**
  * @category    mage.js
  * @package     test
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 //Code to be tested for /app/code/Magento/Search/view/frontend/form-mini.js (_onSubmit)
 function regularSearch() {
