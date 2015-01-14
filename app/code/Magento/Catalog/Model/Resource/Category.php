@@ -229,9 +229,13 @@ class Category extends AbstractResource
         }
 
         if ($object->isObjectNew()) {
-            $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
             $path = explode('/', $object->getPath());
             $level = count($path)  - ($object->getId() ? 1 : 0);
+            $toUpdateChild = array_diff($path, [$object->getId()]);
+
+            if (!$object->hasPosition()) {
+                $object->setPosition($this->_getMaxPosition(implode('/', $toUpdateChild)) + 1);
+            }
             if (!$object->hasLevel()) {
                 $object->setLevel($level);
             }
@@ -241,8 +245,6 @@ class Category extends AbstractResource
             if (!$object->getId()) {
                 $object->setPath($object->getPath() . '/');
             }
-
-            $toUpdateChild = array_diff($path, [$object->getId()]);
 
             $this->_getWriteAdapter()->update(
                 $this->getEntityTable(),
