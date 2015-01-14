@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="storeInitial/dataSet">custom</data>
+        <data name="store/data/group_id/dataSet">default</data>
+        <data name="store/data/name">storename_updated%isolation%</data>
+        <data name="store/data/code">storecode_updated%isolation%</data>
+        <data name="store/data/is_active">Enabled</data>
+        <data name="constraint">assertStoreSuccessSaveMessage, assertStoreInGrid, assertStoreForm, assertStoreBackend, assertStoreFrontend</data>
+    </variation>
+</variations>

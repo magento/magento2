@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="sharingInfo/emails">JohnDoe123456789@example.com,JohnDoe987654321@example.com,JohnDoe123456abc@example.com</data>
+        <data name="sharingInfo/message">Sharing message.</data>
+        <data name="constraint">assertWishlistShareMessage</data>
+    </variation>
+</variations>

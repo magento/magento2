@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="product/dataSet">default</data>
+        <data name="carts">1</data>
+        <data name="isGuest">0</data>
+        <data name="constraint">assertProductInCartResult</data>
+    </variation>
+    <variation>
+        <data name="product/dataSet">default</data>
+        <data name="carts">2</data>
+        <data name="isGuest">1</data>
+        <data name="constraint">assertProductInCartResult</data>
+    </variation>
+</variations>

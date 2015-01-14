@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="createProduct">simple</data>
+        <data name="product">configurableProductInjectable::default</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart, assertChildProductIsNotDisplayedSeparately</data>
+    </variation>
+    <variation>
+        <data name="createProduct">simple</data>
+        <data name="product">catalogProductVirtual::default</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+    </variation>
+    <variation>
+        <data name="createProduct">configurable</data>
+        <data name="product">catalogProductSimple::default</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+    </variation>
+    <variation>
+        <data name="createProduct">configurable</data>
+        <data name="product">catalogProductVirtual::default</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+    </variation>
+    <variation>
+        <data name="createProduct">virtual</data>
+        <data name="product">catalogProductSimple::default</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+    </variation>
+    <variation>
+        <data name="createProduct">virtual</data>
+        <data name="product">configurableProductInjectable::not_virtual_for_type_switching</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart, assertChildProductIsNotDisplayedSeparately</data>
+    </variation>
+    <variation>
+        <data name="createProduct">virtual</data>
+        <data name="product">downloadableProductInjectable::default</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertDownloadableProductForm, assertProductPage, assertProductInStock</data>
+    </variation>
+    <variation>
+        <data name="createProduct">downloadable</data>
+        <data name="product">catalogProductSimple::default</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid</data>
+    </variation>
+    <variation>
+        <data name="createProduct">downloadable</data>
+        <data name="product">configurableProductInjectable::not_virtual_for_type_switching</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart, assertChildProductIsNotDisplayedSeparately</data>
+    </variation>
+</variations>

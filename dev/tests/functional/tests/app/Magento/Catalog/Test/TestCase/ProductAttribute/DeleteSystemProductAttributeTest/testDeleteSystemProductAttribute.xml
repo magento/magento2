@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="productAttribute/data/attribute_code">news_from_date</data>
+        <data name="productAttribute/data/is_user_defined">Yes</data>
+        <data name="constraint">assertAbsenceDeleteAttributeButton </data>
+    </variation>
+</variations>

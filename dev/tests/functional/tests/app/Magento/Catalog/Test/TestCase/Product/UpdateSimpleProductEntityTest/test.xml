@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="product/data/category_ids/presets">-</data>
+        <data name="product/data/name">Test simple product %isolation%</data>
+        <data name="product/data/sku">test_simple_product_%isolation%</data>
+        <data name="product/data/price/value">245.00</data>
+        <data name="product/data/quantity_and_stock_status/qty">200.0000</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+        <data name="product/data/url_key">test-simple-product-%isolation%</data>
+        <data name="product/data/weight">120.0000</data>
+        <data name="product/data/visibility">Catalog, Search</data>
+        <data name="product/data/status">-</data>
+        <data name="constraint">assertProductSaveMessage, assertProductForm, assertProductInStock, assertProductVisibleInCategory, assertProductPage</data>
+    </variation>
+    <variation>
+        <data name="product/data/category_ids/presets">-</data>
+        <data name="product/data/name">Test simple product %isolation%</data>
+        <data name="product/data/sku">test_simple_product_%isolation%</data>
+        <data name="product/data/price/value">325.00</data>
+        <data name="product/data/quantity_and_stock_status/qty">123.0000</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+        <data name="product/data/url_key">test-simple-product-%isolation%</data>
+        <data name="product/data/weight">129.0000</data>
+        <data name="product/data/visibility">Not Visible Individually</data>
+        <data name="product/data/status">-</data>
+        <data name="constraint">assertProductSaveMessage, assertProductForm, assertProductIsNotDisplayingOnFrontend</data>
+    </variation>
+    <variation>
+        <data name="product/data/category_ids/presets">-</data>
+        <data name="product/data/name">Test simple product %isolation%</data>
+        <data name="product/data/sku">test_simple_product_%isolation%</data>
+        <data name="product/data/price/value">325.01</data>
+        <data name="product/data/quantity_and_stock_status/qty">125.0000</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+        <data name="product/data/url_key">test-simple-product-%isolation%</data>
+        <data name="product/data/weight">25.0000</data>
+        <data name="product/data/visibility">Catalog</data>
+        <data name="product/data/status">-</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInStock, assertProductForm, assertProductSearchableBySku, assertProductVisibleInCategory, assertProductPage</data>
+    </variation>
+    <variation>
+        <data name="product/data/category_ids/presets">-</data>
+        <data name="product/data/name">Test simple product %isolation%</data>
+        <data name="product/data/sku">test_simple_product_%isolation%</data>
+        <data name="product/data/price/value">325.02</data>
+        <data name="product/data/quantity_and_stock_status/qty">89.0000</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+        <data name="product/data/url_key">test-simple-product-%isolation%</data>
+        <data name="product/data/weight">89.0000</data>
+        <data name="product/data/visibility">Search</data>
+        <data name="product/data/status">-</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInStock, assertProductForm, assertProductVisibleInCategory, assertProductPage, assertProductSearchableBySku, assertProductPage</data>
+    </variation>
+    <variation>
+        <data name="product/data/category_ids/presets">-</data>
+        <data name="product/data/name">Test simple product %isolation%</data>
+        <data name="product/data/sku">test_simple_product_%isolation%</data>
+        <data name="product/data/price/value">325.03</data>
+        <data name="product/data/quantity_and_stock_status/qty">25.0000</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
+        <data name="product/data/url_key">test-simple-product-%isolation%</data>
+        <data name="product/data/weight">125.0000</data>
+        <data name="product/data/visibility">-</data>
+        <data name="product/data/status">-</data>
+        <data name="constraint">assertProductSaveMessage, assertProductForm, assertProductOutOfStock, assertProductPage, assertProductVisibleInCategory, assertProductSearchableBySku</data>
+    </variation>
+    <variation>
+        <data name="product/data/category_ids/presets">-</data>
+        <data name="product/data/name">Test simple product %isolation%</data>
+        <data name="product/data/sku">test_simple_product_%isolation%</data>
+        <data name="product/data/price/value">74.00</data>
+        <data name="product/data/quantity_and_stock_status/qty">87.0000</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+        <data name="product/data/url_key">test-simple-product-%isolation%</data>
+        <data name="product/data/weight">333.0000</data>
+        <data name="product/data/visibility">-</data>
+        <data name="product/data/status">Product offline</data>
+        <data name="constraint">assertProductSaveMessage, assertProductForm, assertProductIsNotDisplayingOnFrontend</data>
+    </variation>
+    <variation>
+        <data name="product/data/category_ids/presets">default</data>
+        <data name="product/data/name">Test simple product %isolation%</data>
+        <data name="product/data/sku">test_simple_product_%isolation%</data>
+        <data name="product/data/price/value">74.00</data>
+        <data name="product/data/quantity_and_stock_status/qty">87.0000</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+        <data name="product/data/url_key">test-simple-product-%isolation%</data>
+        <data name="product/data/weight">333.0000</data>
+        <data name="product/data/visibility">-</data>
+        <data name="product/data/status">-</data>
+        <data name="constraint">assertProductSaveMessage, assertProductForm, assertUrlRewriteUpdatedProductInGrid, assertProductVisibleInCategory</data>
+    </variation>
+</variations>

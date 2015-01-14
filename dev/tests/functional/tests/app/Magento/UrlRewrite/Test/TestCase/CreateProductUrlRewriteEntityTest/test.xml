@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="urlRewrite/data/entity_type">For product</data>
+        <data name="product/dataSet">default</data>
+        <data name="urlRewrite/data/store_id">Main Website/Main Website Store/Default Store View</data>
+        <data name="urlRewrite/data/request_path">test_%isolation%.html</data>
+        <data name="urlRewrite/data/redirect_type">No</data>
+        <data name="urlRewrite/data/description">description_%isolation%</data>
+        <data name="constraint">assertUrlRewriteSaveMessage</data>
+    </variation>
+    <variation>
+        <data name="urlRewrite/data/entity_type">For product</data>
+        <data name="product/dataSet">default</data>
+        <data name="urlRewrite/data/store_id">Main Website/Main Website Store/Default Store View</data>
+        <data name="urlRewrite/data/request_path">test_%isolation%.html</data>
+        <data name="urlRewrite/data/redirect_type">Temporary (302)</data>
+        <data name="urlRewrite/data/description">description_%isolation%</data>
+        <data name="constraint">assertUrlRewriteSaveMessage, assertUrlRewriteProductRedirect</data>
+    </variation>
+    <variation>
+        <data name="urlRewrite/data/entity_type">For product</data>
+        <data name="product/dataSet">default</data>
+        <data name="urlRewrite/data/store_id">Main Website/Main Website Store/Default Store View</data>
+        <data name="urlRewrite/data/request_path">test_%isolation%.html</data>
+        <data name="urlRewrite/data/redirect_type">Permanent (301)</data>
+        <data name="urlRewrite/data/description">description_%isolation%</data>
+        <data name="constraint">assertUrlRewriteSaveMessage, assertUrlRewriteProductRedirect</data>
+    </variation>
+</variations>

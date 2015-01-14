@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="customerGroup/data/tax_class_id/dataSet">Retail Customer</data>
+        <data name="customerGroup/data/customer_group_code">GroupName%isolation%</data>
+        <data name="constraint">assertCustomerGroupSuccessSaveMessage, assertCustomerGroupInGrid, assertCustomerGroupOnCustomerForm</data>
+    </variation>
+    <variation>
+        <data name="customerGroup/data/tax_class_id/dataSet">Retail Customer</data>
+        <data name="customerGroup/data/customer_group_code">General</data>
+        <data name="constraint">assertCustomerGroupAlreadyExists</data>
+    </variation>
+    <variation>
+        <data name="customerGroup/data/tax_class_id/dataSet">customer_tax_class</data>
+        <data name="customerGroup/data/customer_group_code">GroupName%isolation%</data>
+        <data name="constraint">assertCustomerGroupSuccessSaveMessage, assertCustomerGroupInGrid, assertCustomerGroupOnCustomerForm</data>
+    </variation>
+</variations>

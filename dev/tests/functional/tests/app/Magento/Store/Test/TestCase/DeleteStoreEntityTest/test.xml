@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="store/dataSet">custom</data>
+        <data name="createBackup">Yes</data>
+        <data name="constraint">assertStoreSuccessDeleteAndBackupMessages, assertStoreNotInGrid, assertBackupInGrid, assertStoreNotOnFrontend</data>
+    </variation>
+    <variation>
+        <data name="store/dataSet">custom</data>
+        <data name="createBackup">No</data>
+        <data name="constraint">assertStoreSuccessDeleteMessage, assertStoreNotInGrid, assertStoreNotOnFrontend</data>
+    </variation>
+</variations>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="productRating/data/rating_code">productRating_%isolation%</data>
+        <data name="productRating/data/stores">Main Website/Main Website Store/Default Store View</data>
+        <data name="productRating/data/is_active">Yes</data>
+        <data name="constraint">assertProductRatingSuccessSaveMessage, assertProductRatingInGrid, assertProductRatingInProductPage</data>
+    </variation>
+    <variation>
+        <data name="productRating/data/rating_code">productRating_%isolation%</data>
+        <data name="productRating/data/stores">Main Website/Main Website Store/Default Store View</data>
+        <data name="productRating/data/is_active">No</data>
+        <data name="constraint">assertProductRatingSuccessSaveMessage, assertProductRatingInGrid, assertProductRatingNotInProductPage</data>
+    </variation>
+</variations>

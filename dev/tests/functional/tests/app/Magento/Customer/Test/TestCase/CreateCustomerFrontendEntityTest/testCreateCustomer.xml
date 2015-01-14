@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="customer/data/firstname">john</data>
+        <data name="customer/data/lastname">doe</data>
+        <data name="customer/data/email">johndoe%isolation%@example.com</data>
+        <data name="customer/data/is_subscribed">No</data>
+        <data name="customer/data/password">123123q</data>
+        <data name="customer/data/password_confirmation">123123q</data>
+        <data name="constraint">assertCustomerSuccessRegisterMessage, assertCustomerInGrid</data>
+    </variation>
+    <variation>
+        <data name="customer/data/firstname">john</data>
+        <data name="customer/data/lastname">doe</data>
+        <data name="customer/data/email">johndoe%isolation%@example.com</data>
+        <data name="customer/data/is_subscribed">Yes</data>
+        <data name="customer/data/password">123123q</data>
+        <data name="customer/data/password_confirmation">123123q</data>
+        <data name="constraint">assertCustomerSuccessRegisterMessage, assertCustomerInGrid, assertCustomerForm, assertCustomerIsSubscribedToNewsletter</data>
+    </variation>
+</variations>
