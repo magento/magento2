@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Model;
+namespace Magento\Quote\Model;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\StateException;
-use Magento\Quote\Model\QuoteRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Checkout\Api\ShippingMethodManagementInterface;
-use Magento\Checkout\Api\Data\ShippingMethodInterface;
+use Magento\Quote\Api\ShippingMethodManagementInterface;
+use Magento\Quote\Api\Data\ShippingMethodInterface;
 
 
 /**
@@ -30,14 +29,14 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     /**
      * Shipping method builder.
      *
-     * @var \Magento\Checkout\Api\Data\ShippingMethodDataBuilder
+     * @var \Magento\Quote\Api\Data\ShippingMethodDataBuilder
      */
     protected $methodBuilder;
 
     /**
      * Shipping method converter
      *
-     * @var \Magento\Checkout\Model\Cart\ShippingMethodConverter
+     * @var \Magento\Quote\Model\Cart\ShippingMethodConverter
      */
     protected $converter;
 
@@ -45,13 +44,13 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
      * Constructs a shipping method read service object.
      *
      * @param QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Checkout\Api\Data\ShippingMethodDataBuilder $methodBuilder Shipping method builder.
-     * @param \Magento\Checkout\Model\Cart\ShippingMethodConverter $converter Shipping method builder converter.
+     * @param \Magento\Quote\Api\Data\ShippingMethodDataBuilder $methodBuilder Shipping method builder.
+     * @param \Magento\Quote\Model\Cart\ShippingMethodConverter $converter Shipping method builder converter.
      */
     public function __construct(
         QuoteRepository $quoteRepository,
-        \Magento\Checkout\Api\Data\ShippingMethodDataBuilder $methodBuilder,
-        \Magento\Checkout\Model\Cart\ShippingMethodConverter $converter
+        \Magento\Quote\Api\Data\ShippingMethodDataBuilder $methodBuilder,
+        Cart\ShippingMethodConverter $converter
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->methodBuilder = $methodBuilder;

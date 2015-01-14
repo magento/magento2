@@ -6,6 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Quote\Api\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
+    <preference for="Magento\Quote\Api\Data\ShippingMethodInterface" type="Magento\Quote\Model\Cart\ShippingMethod" />
     <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">

@@ -3,17 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Api;
+namespace Magento\Quote\Api;
 
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Checkout\Api\Data\ShippingMethodInterface;
+use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class ShippingMethodManagementTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'checkoutShippingMethodManagementV1';
+    const SERVICE_NAME = 'quoteShippingMethodManagementV1';
     const RESOURCE_PATH = '/V1/carts/';
 
     /**
@@ -247,8 +247,8 @@ class ShippingMethodManagementTest extends WebapiAbstract
     protected function convertRates($groupedRates, $currencyCode)
     {
         $result = [];
-        /** @var \Magento\Checkout\Model\Cart\ShippingMethodConverter $converter */
-        $converter = $this->objectManager->create('\Magento\Checkout\Model\Cart\ShippingMethodConverter');
+        /** @var \Magento\Quote\Model\Cart\ShippingMethodConverter $converter */
+        $converter = $this->objectManager->create('\Magento\Quote\Model\Cart\ShippingMethodConverter');
         foreach ($groupedRates as $carrierRates) {
             foreach ($carrierRates as $rate) {
                 $result[] = $converter->modelToDataObject($rate, $currencyCode)->__toArray();

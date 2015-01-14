@@ -3,30 +3,29 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Model\Cart;
+namespace Magento\Quote\Model\Cart;
 
 /**
  * Quote shipping method data.
  *
- * @codeCoverageIgnore
  */
 class ShippingMethodConverter
 {
     /**
      * Shipping method builder.
      *
-     * @var \Magento\Checkout\Api\Data\ShippingMethodDataBuilder
+     * @var \Magento\Quote\Api\Data\ShippingMethodDataBuilder
      */
     protected $builder;
 
     /**
      * Constructs a shipping method builder object.
      *
-     * @param \Magento\Checkout\Api\Data\ShippingMethodDataBuilder $builder Shipping method builder.
+     * @param \Magento\Quote\Api\Data\ShippingMethodDataBuilder $builder Shipping method builder.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager interface.
      */
     public function __construct(
-        \Magento\Checkout\Api\Data\ShippingMethodDataBuilder $builder,
+        \Magento\Quote\Api\Data\ShippingMethodDataBuilder $builder,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->builder = $builder;

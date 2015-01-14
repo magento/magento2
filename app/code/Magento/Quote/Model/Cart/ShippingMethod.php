@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Model\Cart;
+namespace Magento\Quote\Model\Cart;
 
-use Magento\Checkout\Api\Data\ShippingMethodInterface;
+use Magento\Quote\Api\Data\ShippingMethodInterface;
 
 /**
  * Quote shipping method data.

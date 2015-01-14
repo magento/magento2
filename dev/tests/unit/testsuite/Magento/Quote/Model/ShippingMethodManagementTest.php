@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Model;
+namespace Magento\Quote\Model;
 
-use Magento\Checkout\Api\Data\ShippingMethodInterface;
+use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
@@ -52,7 +52,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->methodBuilderMock = $this->getMock(
-            '\Magento\Checkout\Api\Data\ShippingMethodDataBuilder',
+            '\Magento\Quote\Api\Data\ShippingMethodDataBuilder',
             ['populateWithArray', 'create'],
             [],
             '',
@@ -94,7 +94,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->converterMock = $this->getMock(
-            '\Magento\Checkout\Model\Cart\ShippingMethodConverter',
+            '\Magento\Quote\Model\Cart\ShippingMethodConverter',
             [],
             [],
             '',
@@ -102,7 +102,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Checkout\Model\ShippingMethodManagement',
+            'Magento\Quote\Model\ShippingMethodManagement',
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'methodBuilder' => $this->methodBuilderMock,

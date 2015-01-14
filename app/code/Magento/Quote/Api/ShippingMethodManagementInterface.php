@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Api;
+namespace Magento\Quote\Api;
 
 interface ShippingMethodManagementInterface
 {
@@ -25,7 +25,7 @@ interface ShippingMethodManagementInterface
      * Returns selected shipping method for a specified quote.
      *
      * @param int $cartId The shopping cart ID.
-     * @return \Magento\Checkout\Api\Data\ShippingMethodInterface|null Shipping method.
+     * @return \Magento\Quote\Api\Data\ShippingMethodInterface|null Shipping method.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified shopping cart does not exist.
      * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
      */
@@ -35,7 +35,7 @@ interface ShippingMethodManagementInterface
      * Lists applicable shipping methods for a specified quote.
      *
      * @param int $cartId The shopping cart ID.
-     * @return \Magento\Checkout\Api\Data\ShippingMethodInterface[] An array of shipping methods.
+     * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified quote does not exist.
      * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
      */
