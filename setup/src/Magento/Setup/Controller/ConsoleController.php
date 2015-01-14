@@ -18,7 +18,7 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
-
+use Magento\Setup\Model\ObjectManagerFactory;
 
 /**
  * Controller that handles all setup commands via command line interface.
@@ -40,6 +40,8 @@ class ConsoleController extends AbstractActionController
     const CMD_UPDATE = 'update';
     const CMD_UNINSTALL = 'uninstall';
     const CMD_MAINTENANCE = 'maintenance';
+    const CMD_MODULE_ENABLE = 'module-enable';
+    const CMD_MODULE_DISABLE = 'module-disable';
     /**#@- */
 
     /**
@@ -58,6 +60,8 @@ class ConsoleController extends AbstractActionController
         self::CMD_UPDATE => 'update',
         self::CMD_UNINSTALL => 'uninstall',
         self::CMD_MAINTENANCE => 'maintenance',
+        self::CMD_MODULE_ENABLE => 'module',
+        self::CMD_MODULE_DISABLE => 'module',
     ];
 
     /**
@@ -75,6 +79,8 @@ class ConsoleController extends AbstractActionController
         self::CMD_UPDATE,
         self::CMD_UNINSTALL,
         self::CMD_MAINTENANCE,
+        self::CMD_MODULE_ENABLE,
+        self::CMD_MODULE_DISABLE,
         UserConfig::KEY_LANGUAGE,
         UserConfig::KEY_CURRENCY,
         UserConfig::KEY_TIMEZONE,
@@ -100,6 +106,20 @@ class ConsoleController extends AbstractActionController
      * @var Installer
      */
     private $installer;
+
+    /**
+     * Object manager factory
+     *
+     * @var ObjectManagerFactory
+     */
+    private $objectManagerFactory;
+
+    /**
+     * Object manager
+     *
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
 
     /**
      * Gets router configuration to be used in module definition
@@ -244,6 +264,18 @@ class ConsoleController extends AbstractActionController
                 'usage_short' => self::CMD_MAINTENANCE,
                 'usage_desc' => 'Set maintenance mode, optionally for specified addresses',
             ],
+            self::CMD_MODULE_ENABLE => [
+                'route' => self::CMD_MODULE_ENABLE . ' --modules= [--force]',
+                'usage' => '--modules=Module_Foo,Module_Bar [--force]',
+                'usage_short' => self::CMD_MODULE_ENABLE,
+                'usage_desc' => 'Enable specified modules'
+            ],
+            self::CMD_MODULE_DISABLE => [
+                'route' => self::CMD_MODULE_DISABLE . ' --modules= [--force]',
+                'usage' => '--modules=Module_Foo,Module_Bar [--force]',
+                'usage_short' => self::CMD_MODULE_DISABLE,
+                'usage_desc' => 'Disable specified modules'
+            ],
             self::CMD_HELP => [
                 'route' => self::CMD_HELP . ' [' . implode('|', self::$helpOptions) . ']:type',
                 'usage' => '<' . implode('|', self::$helpOptions) . '>',
@@ -260,17 +292,20 @@ class ConsoleController extends AbstractActionController
      * @param Lists $options
      * @param InstallerFactory $installerFactory
      * @param MaintenanceMode $maintenanceMode
+     * @param ObjectManagerFactory $objectManagerFactory
      */
     public function __construct(
         ConsoleLogger $consoleLogger,
         Lists $options,
         InstallerFactory $installerFactory,
-        MaintenanceMode $maintenanceMode
+        MaintenanceMode $maintenanceMode,
+        ObjectManagerFactory $objectManagerFactory
     ) {
         $this->log = $consoleLogger;
         $this->options = $options;
         $this->installer = $installerFactory->create($consoleLogger);
         $this->maintenanceMode = $maintenanceMode;
+        $this->objectManagerFactory = $objectManagerFactory;
     }
 
     /**
@@ -428,6 +463,44 @@ class ConsoleController extends AbstractActionController
             $addresses = implode(', ', $addressInfo);
             $this->log->log('List of exempt IP-addresses: ' . ($addresses ? $addresses : 'none'));
         }
+    }
+
+    /**
+     * Action for enabling or disabling modules
+     *
+     * @return void
+     * @throws \Magento\Setup\Exception
+     */
+    public function moduleAction()
+    {
+        /** @var \Zend\Console\Request $request */
+        $request = $this->getRequest();
+        $isEnable = $request->getParam(0) == self::CMD_MODULE_ENABLE;
+        $modules = explode(',', $request->getParam('modules'));
+        /** @var \Magento\Framework\Module\Status $status */
+        $status = $this->getObjectManager()->get('Magento\Framework\Module\Status');
+        if (!$request->getParam('force')) {
+            if (!$status->isSetEnabledAllowed($isEnable, $modules)) {
+                $message = "Unable to change status of modules because of the following errors:\n"
+                    . implode("\n", $status->getErrors());
+                throw new \Magento\Setup\Exception($message);
+            }
+        }
+        $status->setEnabled($isEnable, $modules);
+        $this->log->log("Modules' status has been updated.");
+    }
+
+    /**
+     * Getter for object manager
+     *
+     * @return \Magento\Framework\ObjectManagerInterface
+     */
+    private function getObjectManager()
+    {
+        if (!$this->objectManager) {
+            $this->objectManager = $this->objectManagerFactory->create();
+        }
+        return $this->objectManager;
     }
 
     /**

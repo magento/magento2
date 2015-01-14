@@ -147,25 +147,17 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      * Instantiates the object with mocks
      *
      * @param \PHPUnit_Framework_MockObject_MockObject|bool $connectionFactory
-     * @param \PHPUnit_Framework_MockObject_MockObject|bool $serviceLocator
      * @param \PHPUnit_Framework_MockObject_MockObject|bool $objectManagerFactory
      * @return Installer
      */
-    private function createObject($connectionFactory = false, $serviceLocator = false, $objectManagerFactory = false)
+    private function createObject($connectionFactory = false, $objectManagerFactory = false)
     {
         if (!$connectionFactory) {
             $connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
             $connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
         }
-        if (!$serviceLocator) {
-            $serviceLocator = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface');
-            $serviceLocator->expects($this->once())
-                ->method('get')
-                ->with(InitParamListener::BOOTSTRAP_PARAM)
-                ->willReturn([]);
-        }
         if (!$objectManagerFactory) {
-            $objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
+            $objectManagerFactory = $this->getMock('Magento\Setup\Model\ObjectManagerFactory', [], [], '', false);
             $objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
         }
         return new Installer(
@@ -182,7 +174,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $connectionFactory,
             $this->maintenanceMode,
             $this->filesystem,
-            $serviceLocator,
             $this->sampleData,
             $objectManagerFactory
         );

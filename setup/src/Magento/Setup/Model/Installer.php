@@ -25,10 +25,7 @@ use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\SetupFactory;
-use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\Store\Model\Store;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -178,13 +175,6 @@ class Installer
     private $installInfo = [];
 
     /**
-     * Initialization parameters for Magento application bootstrap
-     *
-     * @var string
-     */
-    private $initParams;
-
-    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
@@ -220,7 +210,6 @@ class Installer
      * @param ConnectionFactory $connectionFactory
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
-     * @param ServiceLocatorInterface $serviceManager
      * @param SampleData $sampleData
      * @param ObjectManagerFactory $objectManagerFactory
      */
@@ -238,7 +227,6 @@ class Installer
         ConnectionFactory $connectionFactory,
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
-        ServiceLocatorInterface $serviceManager,
         SampleData $sampleData,
         ObjectManagerFactory $objectManagerFactory
     ) {
@@ -255,7 +243,6 @@ class Installer
         $this->shellRenderer = new CommandRenderer;
         $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
-        $this->initParams = $serviceManager->get(InitParamListener::BOOTSTRAP_PARAM);
         $this->sampleData = $sampleData;
         $this->installInfo[self::INFO_MESSAGE] = array();
         $this->deploymentConfig = $deploymentConfig;
@@ -859,7 +846,7 @@ class Installer
     {
         if (null === $this->objectManager) {
             $this->assertDeploymentConfigExists();
-            $this->objectManager = $this->objectManagerFactory->create($this->initParams);
+            $this->objectManager = $this->objectManagerFactory->create();
         }
         return $this->objectManager;
     }

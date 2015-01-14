@@ -5,14 +5,11 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Mvc\Bootstrap\InitParamListener;
-
 class InstallerFactoryTest Extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
         $returnValueMap = [
-            [InitParamListener::BOOTSTRAP_PARAM, []],
             [
                 'Magento\Setup\Model\FilePermissions',
                 $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false),
@@ -64,6 +61,10 @@ class InstallerFactoryTest Extends \PHPUnit_Framework_TestCase
             [
                 'Magento\Setup\Model\SampleData',
                 $this->getMock('Magento\Setup\Model\SampleData', [], [], '', false),
+            ],
+            [
+                'Magento\Setup\Model\ObjectManagerFactory',
+                $this->getMock('Magento\Setup\Model\ObjectManagerFactory', [], [], '', false),
             ],
         ];
         $serviceLocatorMock = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);

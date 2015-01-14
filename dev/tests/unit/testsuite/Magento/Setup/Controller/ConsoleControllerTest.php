@@ -49,6 +49,11 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
      */
     private $controller;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
     public function setUp()
     {
         $this->consoleLogger = $this->getMock('\Magento\Setup\Model\ConsoleLogger', [], [], '', false);
@@ -76,8 +81,16 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $routeMatch->expects($this->any())->method('getParam')->willReturn('install');
         $this->mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
 
+        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $objectManagerFactory = $this->getMock('Magento\Setup\Model\ObjectManagerFactory', [], [], '', false);
+        $objectManagerFactory->expects($this->any())->method('create')->willReturn($this->objectManager);
+
         $this->controller = new ConsoleController(
-            $this->consoleLogger, $this->options, $installerFactory, $this->maintenanceMode
+            $this->consoleLogger,
+            $this->options,
+            $installerFactory,
+            $this->maintenanceMode,
+            $objectManagerFactory
         );
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $response);
@@ -258,6 +271,72 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())->method('getParam')->willReturn(false);
         $returnValue = $this->controller->helpAction();
         $this->assertStringStartsWith($beginHelpString, $returnValue);
+    }
+
+    /**
+     * @param string $command
+     * @param string $modules
+     * @param bool $isForce
+     * @param bool $expectedIsEnabled
+     * @param string[] $expectedModules
+     * @dataProvider moduleActionDataProvider
+     */
+    public function testModuleAction($command, $modules, $isForce, $expectedIsEnabled, $expectedModules)
+    {
+        $status = $this->getModuleActionMocks($command, $modules, $isForce);
+        if (!$isForce) {
+            $status->expects($this->once())->method('isSetEnabledAllowed')->willReturn(true);
+        }
+        $status->expects($this->once())->method('setEnabled')->with($expectedIsEnabled, $expectedModules);
+        $this->consoleLogger->expects($this->once())->method('log');
+        $this->controller->moduleAction();
+    }
+
+    /**
+     * @return array
+     */
+    public function moduleActionDataProvider()
+    {
+        return [
+            [ConsoleController::CMD_MODULE_ENABLE, 'Module_Foo,Module_Bar', false, true, ['Module_Foo', 'Module_Bar']],
+            [ConsoleController::CMD_MODULE_ENABLE, 'Module_Foo,Module_Bar', true, true, ['Module_Foo', 'Module_Bar']],
+            [ConsoleController::CMD_MODULE_DISABLE, 'Module_Foo', false, false, ['Module_Foo']],
+            [ConsoleController::CMD_MODULE_DISABLE, 'Module_Bar', true, false, ['Module_Bar']],
+        ];
+    }
+
+    /**
+     * Prepares a set of mocks for testing module action
+     *
+     * @param string $command
+     * @param string $modules
+     * @param bool $isForce
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getModuleActionMocks($command, $modules, $isForce)
+    {
+        $this->request->expects($this->at(0))->method('getParam')->with(0)->willReturn($command);
+        $this->request->expects($this->at(1))->method('getParam')->with('modules')->willReturn($modules);
+        $this->request->expects($this->at(2))->method('getParam')->with('force')->willReturn($isForce);
+        $status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
+        $this->objectManager->expects($this->once())
+            ->method('get')
+            ->with('Magento\Framework\Module\Status')
+            ->willReturn($status);
+        return $status;
+    }
+
+    /**
+     * @expectedException \Magento\Setup\Exception
+     * @expectedExceptionMessage Unable to change status of modules because of the following errors:
+     */
+    public function testModuleActionNotAllowed()
+    {
+        $status = $this->getModuleActionMocks(ConsoleController::CMD_MODULE_ENABLE, 'Module_Foo,Module_Bar', false);
+        $status->expects($this->once())->method('isSetEnabledAllowed')->willReturn(false);
+        $status->expects($this->once())->method('getErrors')->willReturn(['Circular dependency of Foo and Bar']);
+        $status->expects($this->never())->method('setEnabled');
+        $this->controller->moduleAction();
     }
 
     /**
