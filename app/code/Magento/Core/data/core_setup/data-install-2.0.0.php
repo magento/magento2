@@ -40,15 +40,4 @@ if ($tableName) {
     $installer->getConnection()->delete($tableName, ['code = ?' => 'admin_setup']);
 }
 
-
-/**
- * Update rows in theme
- */
-$installer->getConnection()->update(
-    $installer->getTable('theme'),
-    ['area' => 'frontend'],
-    ['area = ?' => '']
-);
-$installer->getEventManager()->dispatch('theme_registration_from_filesystem');
-
 $installer->endSetup();
