@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @SuppressWarnings(PHPMD.ConstantNamingConventions)
- */
 class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_naming
 {
     const nonUppercaseName = false;
@@ -31,7 +28,6 @@ class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_naming
 
     /**
      * Too short method name
-     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     protected function _x()
     {
@@ -40,7 +36,6 @@ class Magento_Test_Php_Exemplar_CodeMessTest_phpmd_input_naming
     /**
      * Getter that returns boolean value should be named 'is...()' or 'has...()'
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getBoolValue()
     {
