@@ -63,9 +63,9 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
     protected $messageManager;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Layout|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultPageMock;
+    protected $resultLayoutMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -88,9 +88,9 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
     protected $viewInterfaceMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultPageFactoryMock;
+    protected $resultLayoutFactoryMock;
 
     /**
      * Prepare required values
@@ -208,7 +208,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
 
         $this->viewInterfaceMock->expects($this->any())->method('loadLayout')->will($this->returnSelf());
         $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewInterfaceMock));
-        $this->resultPageMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
+        $this->resultLayoutMock = $this->getMockBuilder('Magento\Framework\View\Result\Layout')
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
@@ -217,24 +217,24 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
         $this->customerAccountManagement = $this->getMockBuilder(
             'Magento\Customer\Api\AccountManagementInterface'
         )->getMock();
-        $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+        $this->resultLayoutFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\LayoutFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
         $args = [
             'context' => $contextMock,
             'customerAccountManagement' => $this->customerAccountManagement,
-            'resultPageFactory' => $this->resultPageFactoryMock
+            'resultLayoutFactory' => $this->resultLayoutFactoryMock
         ];
 
-        $this->viewInterfaceMock->expects($this->any())->method('getPage')->will(
-            $this->returnValue($this->resultPageMock)
-        );
-        $this->resultPageMock->expects($this->any())->method('getConfig')->will(
-            $this->returnValue($this->pageConfigMock)
-        );
-
-        $this->pageConfigMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
+//        $this->viewInterfaceMock->expects($this->any())->method('getPage')->will(
+//            $this->returnValue($this->resultPageMock)
+//        );
+//        $this->resultPageMock->expects($this->any())->method('getConfig')->will(
+//            $this->returnValue($this->pageConfigMock)
+//        );
+//
+//        $this->pageConfigMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
 
         $helperObjectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_testedObject = $helperObjectManager->getObject(
@@ -252,14 +252,15 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->resultPageFactoryMock->expects($this->once())
+        $this->resultLayoutFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->resultPageMock);
-        $this->titleMock->expects($this->once())->method('prepend')->with(__('Customers'));
-        $this->viewInterfaceMock->expects($this->any())->method('getLayout')->will(
-            $this->returnValue($this->layoutInterfaceMock)
-        );
-        $subscriberMock->expects($this->once())->method('loadByCustomerId');
+            ->willReturn($this->resultLayoutMock);
+//        $this->titleMock->expects($this->once())->method('prepend')->with(__('Customers'));
+//        $this->viewInterfaceMock->expects($this->any())->method('getLayout')->will(
+//            $this->returnValue($this->layoutInterfaceMock)
+//        );
+        $subscriberMock->expects($this->once())
+            ->method('loadByCustomerId');
         $this->_objectManager
             ->expects($this->at(1))
             ->method('create')
@@ -267,7 +268,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($subscriberMock));
 
         $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Page',
+            'Magento\Framework\View\Result\Layout',
             $this->_testedObject->execute()
         );
     }
