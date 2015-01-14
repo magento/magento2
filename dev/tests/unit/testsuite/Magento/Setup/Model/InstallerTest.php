@@ -5,7 +5,6 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\Framework\App\DeploymentConfig\DbConfig;
 use Magento\Framework\App\DeploymentConfig\EncryptConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -331,7 +330,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Setup\Exception
-     * @expectedException Database connection failure.
+     * @expectedExceptionMessage Database connection failure.
      */
     public function testCheckDatabaseConnectionFailed()
     {

@@ -67,7 +67,7 @@ class Status
      * @param string[] $modules
      * @return string[]
      */
-    public function checkSetEnabledErrors($isEnable, $modules)
+    public function checkConstraints($isEnable, $modules)
     {
         return [];
     }
@@ -78,26 +78,19 @@ class Status
      * Performs other necessary routines, such as cache cleanup
      * Returns list of modules that have changed
      *
-     * @param bool $isEnable
+     * @param bool $isEnabled
      * @param string[] $modules
      * @return string[]
-     * @throws \LogicException
      */
-    public function setEnabled($isEnable, $modules)
+    public function setIsEnabled($isEnabled, $modules)
     {
-        $changed = [];
-        $all = $this->loader->load();
-        foreach ($modules as $name) {
-            if (!isset($all[$name])) {
-                throw new \LogicException("Unknown module: '{$name}'");
-            }
-        }
         $result = [];
-        foreach (array_keys($all) as $name) {
+        $changed = [];
+        foreach ($this->getAllModules($modules) as $name) {
             $currentStatus = $this->list->has($name);
             if (in_array($name, $modules)) {
-                $result[$name] = $isEnable;
-                if ($isEnable != $currentStatus) {
+                $result[$name] = $isEnabled;
+                if ($isEnabled != $currentStatus) {
                     $changed[] = $name;
                 }
             } else {
@@ -111,5 +104,27 @@ class Status
             $this->cleanup->clearCodeGeneratedFiles();
         }
         return $changed;
+    }
+
+    /**
+     * Gets all modules and filters against the specified list
+     *
+     * @param string[] $modules
+     * @return string[]
+     * @throws \LogicException
+     */
+    private function getAllModules($modules)
+    {
+        $all = $this->loader->load();
+        $unknown = [];
+        foreach ($modules as $name) {
+            if (!isset($all[$name])) {
+                $unknown[] = $name;
+            }
+        }
+        if ($unknown) {
+            throw new \LogicException("Unknown module(s): '" . implode("', '", $unknown) . "'");
+        }
+        return array_keys($all);
     }
 }
