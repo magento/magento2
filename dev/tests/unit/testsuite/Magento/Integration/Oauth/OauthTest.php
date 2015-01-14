@@ -28,9 +28,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Oauth\Helper\Oauth */
     private $_oauthHelperMock;
 
-    /** @var \Magento\Integration\Helper\Oauth\Data */
-    private $_dataHelperMock;
-
     /** @var \Magento\Framework\Oauth\Oauth */
     private $_oauth;
 
@@ -39,6 +36,11 @@ class OauthTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Framework\Stdlib\DateTime\DateTime */
     private $_dateMock;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $_loggerMock;
 
     private $_oauthToken;
 
@@ -105,13 +107,13 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_oauthHelperMock = $this->getMockBuilder('Magento\Framework\Oauth\Helper\Oauth')
             ->setConstructorArgs([new \Magento\Framework\Math\Random()])
             ->getMock();
-        $this->_dataHelperMock = $this->getMockBuilder(
-            'Magento\Integration\Helper\Oauth\Data'
-        )->disableOriginalConstructor()->getMock();
         $this->_httpUtilityMock = $this->getMockBuilder('Zend_Oauth_Http_Utility')
             ->setMethods(['sign'])
             ->getMock();
         $this->_dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -123,7 +125,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $tokenProvider = new \Magento\Integration\Model\Oauth\Token\Provider(
             $this->_consumerFactory,
             $this->_tokenFactory,
-            $this->_dataHelperMock
+            $this->_loggerMock
         );
         $this->_oauth = new \Magento\Framework\Oauth\Oauth(
             $this->_oauthHelperMock,
@@ -144,7 +146,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         unset($this->_nonceFactory);
         unset($this->_tokenFactory);
         unset($this->_oauthHelperMock);
-        unset($this->_dataHelperMock);
         unset($this->_httpUtilityMock);
         unset($this->_dateMock);
         unset($this->_oauth);

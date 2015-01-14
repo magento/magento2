@@ -983,11 +983,11 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         $this->assertContains('{"error":1,"html_message":', $body);
-        $this->assertContains('Please correct this email address: \"*\".', $body);
-        $this->assertContains('\"First Name\" is a required value.', $body);
-        $this->assertContains('\"Last Name\" is a required value.', $body);
-        $this->assertContains('\"Phone Number\" is a required value.', $body);
-        $this->assertContains('\"Country\" is a required value.', $body);
+        $this->assertContains('Please correct this email address: &quot;*&quot;.', $body);
+        $this->assertContains('&quot;First Name&quot; is a required value.', $body);
+        $this->assertContains('&quot;Last Name&quot; is a required value.', $body);
+        $this->assertContains('&quot;Phone Number&quot; is a required value.', $body);
+        $this->assertContains('&quot;Country&quot; is a required value.', $body);
     }
 
     /**
