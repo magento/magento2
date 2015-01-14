@@ -37,3 +37,17 @@ Model3
 \Magento\Wonderland\Model\Data\FakeRegion
 \Magento\Wonderland\Model\Data\FakeAddress
 \Magento\Framework\Error\Processor
+\Magento\TestModule3\Service\V1\Entity\Parameter
+\Magento\TestModule3\Service\V1\Entity\ParameterBuilder
+\Magento\TestModuleMSC\Api\Data\ItemInterface
+\Magento\TestModule5\Service\V1\Entity\AllSoapAndRest
+\Magento\TestModule5\Service\V2\Entity\AllSoapAndRest
+\Magento\TestModule5\Service\V2\Entity\AllSoapAndRestBuilder
+\Magento\TestModule1\Service\V1\Entity\Item
+\Magento\TestModule1\Service\V1\Entity\ItemBuilder
+\Magento\TestModule1\Service\V2\Entity\Item
+\Magento\TestModule1\Service\V2\Entity\ItemBuilder
+\Magento\TestModule2\Service\V1\Entity\Item
+\Magento\TestModule2\Service\V1\Entity\ItemBuilder
+\Magento\TestModule4\Service\V1\Entity\DataObjectResponse
+\Magento\TestModule4\Service\V1\Entity\DataObjectRequest
