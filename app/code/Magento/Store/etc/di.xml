@@ -9,7 +9,7 @@
     <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
-                <item name="store_setup" xsi:type="string">Magento\Core\Model\Resource\Setup</item>
+                <item name="store_setup" xsi:type="string">Magento\Framework\Module\DataSetup</item>
             </argument>
         </arguments>
     </type>

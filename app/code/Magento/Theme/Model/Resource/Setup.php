@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Resource;
+namespace Magento\Theme\Model\Resource;
 
 /**
  * Core resource setup

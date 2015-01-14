@@ -1626,6 +1626,7 @@ return [
     ['Magento\Core\Block\Text\TextList\Link', 'Magento\Framework\View\Element\Text\TextList\Link'],
     ['Magento\Core\Block\Messages', 'Magento\Framework\View\Element\Messages'],
     ['Magento\Core\Model\Message', 'Magento\Framework\Message\Factory'],
+    ['Magento\Core\Model\Resource\Setup', 'Magento\Theme\Model\Resource\Setup'],
     ['Magento\Core\Model\Message\AbstractMessage', 'Magento\Framework\Message\AbstractMessage'],
     ['Magento\Core\Model\Message\Collection', 'Magento\Framework\Message\Collection'],
     ['Magento\Core\Model\Message\CollectionFactory', 'Magento\Framework\Message\CollectionFactory'],
