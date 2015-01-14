@@ -4,14 +4,14 @@
  */
 namespace Magento\Catalog\Model\Resource\Product\Attribute\Backend;
 
-use Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice\AbstractGroupprice;
+use Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice;
 
 /**
  * Catalog product group price backend attribute model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Groupprice extends AbstractGroupprice
+class GroupPrice extends AbstractGroupPrice
 {
     /**
      * Initialize connection and define main table
