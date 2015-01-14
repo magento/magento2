@@ -300,9 +300,8 @@ abstract class AbstractEntity
     protected function _getExportAttributeCodes()
     {
         if (null === $this->_attributeCodes) {
-            if (!empty($this->_parameters[Export::FILTER_ELEMENT_SKIP]) && is_array(
-                    $this->_parameters[Export::FILTER_ELEMENT_SKIP]
-                )
+            if (!empty($this->_parameters[Export::FILTER_ELEMENT_SKIP])
+                && is_array($this->_parameters[Export::FILTER_ELEMENT_SKIP])
             ) {
                 $skippedAttributes = array_flip(
                     $this->_parameters[Export::FILTER_ELEMENT_SKIP]
@@ -314,12 +313,8 @@ abstract class AbstractEntity
 
             /** @var $attribute AbstractAttribute */
             foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
-                if (!isset(
-                        $skippedAttributes[$attribute->getAttributeId()]
-                    ) || in_array(
-                        $attribute->getAttributeCode(),
-                        $this->_permanentAttributes
-                    )
+                if (!isset($skippedAttributes[$attribute->getAttributeId()])
+                    || in_array($attribute->getAttributeCode(), $this->_permanentAttributes)
                 ) {
                     $attributeCodes[] = $attribute->getAttributeCode();
                 }

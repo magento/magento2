@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\Framework\Filesystem\DirectoryList;
@@ -12,6 +13,7 @@ class ValidateTest extends \Magento\Backend\Utility\Controller
 {
     /**
      * @backupGlobals enabled
+     * @magentoDbIsolation enabled
      */
     public function testFieldStateAfterValidation()
     {
@@ -36,7 +38,6 @@ class ValidateTest extends \Magento\Backend\Utility\Controller
         $target = $tmpDir->getAbsolutePath("{$subDir}/{$name}");
         copy(__DIR__ . "/_files/{$name}", $target);
 
-
         $_FILES = [
             'import_file' => [
                 'name' => $name,
@@ -60,6 +61,9 @@ class ValidateTest extends \Magento\Backend\Utility\Controller
 
         $this->assertContains('File is valid', $this->getResponse()->getBody());
         $this->assertNotContains('File was not uploaded', $this->getResponse()->getBody());
-        $this->assertNotRegExp('/clear[^\[]*\[[^\]]*(import_file|import_image_archive)[^\]]*\]/m', $this->getResponse()->getBody());
+        $this->assertNotRegExp(
+            '/clear[^\[]*\[[^\]]*(import_file|import_image_archive)[^\]]*\]/m',
+            $this->getResponse()->getBody()
+        );
     }
 }
