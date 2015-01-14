@@ -12,7 +12,7 @@ use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
-use PHP_PMD_TextUI_Command;
+use PHPMD\TextUI\Command;
 use PHPUnit_Framework_TestCase;
 use Magento\Framework\Test\Utility\Files;
 
@@ -170,7 +170,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals(
-            PHP_PMD_TextUI_Command::EXIT_SUCCESS,
+            Command::EXIT_SUCCESS,
             $codeMessDetector->run(self::getWhitelist(['php'])),
             "PHP Code Mess has found error(s): See detailed report in {$reportFile}"
         );

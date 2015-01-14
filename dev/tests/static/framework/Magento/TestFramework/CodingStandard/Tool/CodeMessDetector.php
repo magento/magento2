@@ -45,7 +45,7 @@ class CodeMessDetector implements ToolInterface
      */
     public function canRun()
     {
-        return class_exists('PHP_PMD_TextUI_Command');
+        return class_exists('PHPMD\TextUI\Command');
     }
 
     /**
@@ -54,7 +54,7 @@ class CodeMessDetector implements ToolInterface
     public function run(array $whiteList)
     {
         if (empty($whiteList)) {
-            return \PHP_PMD_TextUI_Command::EXIT_SUCCESS;
+            return \PHPMD\TextUI\Command::EXIT_SUCCESS;
         }
 
         $commandLineArguments = [
@@ -66,10 +66,10 @@ class CodeMessDetector implements ToolInterface
             $this->reportFile,
         ];
 
-        $options = new \PHP_PMD_TextUI_CommandLineOptions($commandLineArguments);
+        $options = new \PHPMD\TextUI\CommandLineOptions($commandLineArguments);
 
-        $command = new \PHP_PMD_TextUI_Command();
+        $command = new \PHPMD\TextUI\Command();
 
-        return $command->run($options, new \PHP_PMD_RuleSetFactory());
+        return $command->run($options, new \PHPMD\RuleSetFactory());
     }
 }
