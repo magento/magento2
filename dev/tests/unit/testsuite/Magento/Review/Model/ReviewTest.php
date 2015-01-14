@@ -55,14 +55,32 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $this->registryMock = $this->getMock('Magento\Framework\Registry');
         $this->productFactoryMock = $this->getMock(
             'Magento\Review\Model\Resource\Review\Product\CollectionFactory',
-            ['create']
+            ['create'],
+            [],
+            '',
+            false
         );
         $this->statusFactoryMock = $this->getMock(
             'Magento\Review\Model\Resource\Review\Status\CollectionFactory',
-            ['create']
+            ['create'],
+            [],
+            '',
+            false
         );
-        $this->reviewSummaryMock = $this->getMock('Magento\Review\Model\Resource\Review\Summary\CollectionFactory');
-        $this->summaryModMock = $this->getMock('Magento\Review\Model\Review\SummaryFactory', ['create']);
+        $this->reviewSummaryMock = $this->getMock(
+            'Magento\Review\Model\Resource\Review\Summary\CollectionFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->summaryModMock = $this->getMock(
+            'Magento\Review\Model\Review\SummaryFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->summaryMock = $this->getMock('Magento\Review\Model\Review\Summary', [], [], '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->urlInterfaceMock = $this->getMock('Magento\Framework\UrlInterface');

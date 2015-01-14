@@ -136,13 +136,14 @@ class Config implements ConfigInterface
 
         $this->setSaveHandler($saveMethod === 'db' ? 'user' : $saveMethod);
 
-        if (!$savePath) {
+        if (!$savePath && !ini_get('session.save_path')) {
             $sessionDir = $filesystem->getDirectoryWrite(DirectoryList::SESSION);
             $savePath = $sessionDir->getAbsolutePath();
             $sessionDir->create();
         }
-        $this->setSavePath($savePath);
-
+        if ($savePath) {
+            $this->setSavePath($savePath);
+        }
         if ($cacheLimiter) {
             $this->setOption('session.cache_limiter', $cacheLimiter);
         }
