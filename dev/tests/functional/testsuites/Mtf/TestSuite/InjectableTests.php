@@ -96,7 +96,9 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
             $configurationFileName = isset($_ENV['testsuite_rule'])
                 ? $_ENV['testsuite_rule']
                 : 'basic';
-            $confFilePath = __DIR__ . '/InjectableTests/' . $configurationFileName . '.xml';
+            $confFilePath = realpath(
+                __DIR__ . '/../../../testsuites/' . $_ENV['testsuite_rule_path'] . '/' . $configurationFileName . '.xml'
+            );
             /** @var \Mtf\TestRunner\Configuration $testRunnerConfiguration */
             $testRunnerConfiguration = $objectManagerFactory->getObjectManager()->get('\Mtf\TestRunner\Configuration');
             $testRunnerConfiguration->load($confFilePath);
