@@ -5,31 +5,31 @@
  */
 ?>
 <?php
-/** @var $this \Magento\Backend\Block\Widget\Button\SplitButton */
+/** @var $block \Magento\Backend\Block\Widget\Button\SplitButton */
 /** @var $_helper \Magento\Core\Helper\Data */
 $_helper = $this->helper('Magento\Core\Helper\Data');
 ?>
 
-<div <?php echo $this->getAttributesHtml(); ?>>
-    <button <?php echo $this->getButtonAttributesHtml(); ?>>
-        <span><?php echo $this->escapeHtml($this->getLabel()); ?></span>
+<div <?php echo $block->getAttributesHtml(); ?>>
+    <button <?php echo $block->getButtonAttributesHtml(); ?>>
+        <span><?php echo $block->escapeHtml($block->getLabel()); ?></span>
     </button>
-    <?php if ($this->hasSplit()): ?>
-        <button <?php echo $this->getToggleAttributesHtml() ?>>
+    <?php if ($block->hasSplit()): ?>
+        <button <?php echo $block->getToggleAttributesHtml() ?>>
             <span>Select</span>
         </button>
 
-        <?php if (!$this->getDisabled()): ?>
-            <ul class="dropdown-menu" <?php echo $this->getUiId("dropdown-menu"); ?>>
-                <?php foreach ($this->getOptions() as $key => $option): ?>
+        <?php if (!$block->getDisabled()): ?>
+            <ul class="dropdown-menu" <?php echo $block->getUiId("dropdown-menu"); ?>>
+                <?php foreach ($block->getOptions() as $key => $option): ?>
                 <li>
-                    <span <?php echo $this->getOptionAttributesHtml($key, $option); ?>>
-                        <?php echo $this->escapeHtml($option['label']); ?>
+                    <span <?php echo $block->getOptionAttributesHtml($key, $option); ?>>
+                        <?php echo $block->escapeHtml($option['label']); ?>
                     </span>
                     <?php if (isset($option['hint'])): ?>
-                    <div class="tooltip" <?php echo $this->getUiId('item', $key, 'tooltip'); ?>>
-                        <a href="<?php echo $this->escapeHtml($option['hint']['href']) ?>" class="help">
-                            <?php echo $this->escapeHtml($option['hint']['label']) ?>
+                    <div class="tooltip" <?php echo $block->getUiId('item', $key, 'tooltip'); ?>>
+                        <a href="<?php echo $block->escapeHtml($option['hint']['href']) ?>" class="help">
+                            <?php echo $block->escapeHtml($option['hint']['label']) ?>
                         </a>
                     </div>
                     <?php endif; ?>

@@ -7,23 +7,23 @@
 <legend class="legend"><span><?php echo __('Order Totals') ?></span></legend>
 <table class="data-table" cellspacing="0">
     <tbody>
-        <?php echo $this->renderTotals(); ?>
-        <?php echo $this->renderTotals('footer'); ?>
+        <?php echo $block->renderTotals(); ?>
+        <?php echo $block->renderTotals('footer'); ?>
     </tbody>
 </table>
 <div class="divider"></div>
 <div class="order-totals-bottom">
     <div class="field choice field-append-comments">
-        <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]" value="1"<?php if ($this->getNoteNotify()): ?> checked="checked"<?php endif; ?>/>
+        <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]" value="1"<?php if ($block->getNoteNotify()): ?> checked="checked"<?php endif; ?>/>
         <label for="notify_customer" class="normal"><?php echo __('Append Comments') ?></label>
     </div>
-    <?php if ($this->canSendNewOrderConfirmationEmail()): ?>
+    <?php if ($block->canSendNewOrderConfirmationEmail()): ?>
     <div class="field choice field-email-order-confirmation">
         <input type="checkbox" id="send_confirmation" name="order[send_confirmation]" value="1" checked="checked"/>
         <label for="send_confirmation" class="normal"><?php echo __('Email Order Confirmation') ?></label>
     </div>
     <?php endif; ?>
-    <div class="actions"><?php echo $this->getButtonHtml(__('Submit Order'), 'order.submit()', 'save primary'); ?></div>
+    <div class="actions"><?php echo $block->getButtonHtml(__('Submit Order'), 'order.submit()', 'save primary'); ?></div>
 </div>
 
 <script type="text/javascript">

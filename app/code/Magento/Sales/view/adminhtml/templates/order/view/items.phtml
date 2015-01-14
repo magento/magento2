@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php $_order = $this->getOrder() ?>
+<?php $_order = $block->getOrder() ?>
 <div class="grid">
   <div class="hor-scroll">
     <table cellspacing="0" class="data-table">
@@ -22,7 +22,7 @@
                 <th class="col-total last"><span><?php echo __('Row Total') ?></span></th>
             </tr>
         </thead>
-        <?php $_items = $this->getItemsCollection() ?>
+        <?php $_items = $block->getItemsCollection() ?>
         <?php $i = 0; foreach ($_items as $_item):?>
             <?php if ($_item->getParentItem()) {
     continue;
@@ -30,8 +30,8 @@
     $i++;
 }?>
             <tbody class="<?php echo $i%2 ? 'even' : 'odd' ?>">
-                <?php echo $this->getItemHtml($_item) ?>
-                <?php echo $this->getItemExtraInfoHtml($_item) ?>
+                <?php echo $block->getItemHtml($_item) ?>
+                <?php echo $block->getItemExtraInfoHtml($_item) ?>
             </tbody>
         <?php endforeach; ?>
     </table>

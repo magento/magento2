@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php if ($this->getAuthenticationStart()):?>
-    <div class="centinel" id="centinel-authenticate-block" data-mage-init='{"centinelAuthenticate": {"frameUrl": "<?php echo $this->getFrameUrl() ?>"}}'>
+<?php if ($block->getAuthenticationStart()):?>
+    <div class="centinel" id="centinel-authenticate-block" data-mage-init='{"centinelAuthenticate": {"frameUrl": "<?php echo $block->getFrameUrl() ?>"}}'>
         <h3><?php echo __('Card Verification')?></h3>
         <p><?php echo __('Please verify the card with the issuer bank:') ?></p>
         <div class="authentication">

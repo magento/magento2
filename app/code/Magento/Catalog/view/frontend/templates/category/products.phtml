@@ -8,9 +8,9 @@
 /**
  * Category view template
  *
- * @var $this \Magento\Catalog\Block\Category\View
+ * @var $block \Magento\Catalog\Block\Category\View
  */
 ?>
-<?php if (!$this->isContentMode() || $this->isMixedMode()): ?>
-    <?php echo $this->getProductListHtml() ?>
+<?php if (!$block->isContentMode() || $block->isMixedMode()): ?>
+    <?php echo $block->getProductListHtml() ?>
 <?php endif; ?>

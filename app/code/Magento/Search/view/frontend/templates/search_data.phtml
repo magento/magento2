@@ -6,20 +6,20 @@
 ?>
 <?php
 /**
- * @var \Magento\Search\Block\SearchDataInterface $this
+ * @var \Magento\Search\Block\SearchDataInterface $block
  */
 ?>
 <?php
 /** @var \Magento\Search\Model\QueryResult[] $data */
-$data = $this->getSearchData();
+$data = $block->getSearchData();
 if (count($data)):?>
     <dl class="block">
-        <dt class="title"><?php echo __($this->getTitle()); ?></dt>
+        <dt class="title"><?php echo __($block->getTitle()); ?></dt>
         <?php foreach ($data as $additionalInfo) : ?>
             <dd class="item">
-                <a href="<?php echo $this->getLink($additionalInfo->getQueryText()) ?>"
+                <a href="<?php echo $block->getLink($additionalInfo->getQueryText()) ?>"
                     ><?php echo $additionalInfo->getQueryText() ?></a>
-                <?php if ($this->isCountResultsEnabled()): ?>
+                <?php if ($block->isCountResultsEnabled()): ?>
                     <span class="count"><?php echo $additionalInfo->getResultsCount() ?></span>
                 <?php endif; ?>
             </dd>

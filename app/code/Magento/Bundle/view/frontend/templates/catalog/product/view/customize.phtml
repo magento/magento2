@@ -5,8 +5,8 @@
  */
 ?>
 
-<?php $_product = $this->getProduct() ?>
-<?php if ($_product->isSaleable() && $this->hasOptions()):?>
+<?php $_product = $block->getProduct() ?>
+<?php if ($_product->isSaleable() && $block->hasOptions()):?>
     <div class="bundle-actions">
         <button id="bundle-slide"
                 class="action primary customize"

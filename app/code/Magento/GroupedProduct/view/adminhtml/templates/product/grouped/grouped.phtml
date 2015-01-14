@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Framework\View\Element\Template */
+/** @var $block \Magento\Framework\View\Element\Template */
 
-/** @var $this \Magento\Framework\View\Element\Template */
-$_gridPopupBlock = $this->getChildBlock('catalog.product.group.grid.popup.container')->getChildBlock('grid');
+/** @var $block \Magento\Framework\View\Element\Template */
+$_gridPopupBlock = $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildBlock('grid');
 $_gridPopupBlock->setRowClickCallback('function(){}');
 /** @var $_helper \Magento\Core\Helper\Data */
 $_helper = $this->helper('Magento\Core\Helper\Data');
@@ -16,9 +16,9 @@ $_helper = $this->helper('Magento\Core\Helper\Data');
     <div class="no-products-message">
         <?php echo __('There are no grouped products.')?>
     </div>
-    <?php echo $this->getChildHtml('list'); ?>
+    <?php echo $block->getChildHtml('list'); ?>
     <div data-role="add-product-dialog" class="no-display">
-        <?php echo $this->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid');?>
+        <?php echo $block->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid');?>
     </div>
     <button type="button" data-role="add-product">Add Products to Group</button>
 </div>

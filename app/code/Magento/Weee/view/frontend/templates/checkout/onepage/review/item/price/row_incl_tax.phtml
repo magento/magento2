@@ -4,34 +4,34 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Weee\Block\Item\Price\Renderer */
+/** @var $block \Magento\Weee\Block\Item\Price\Renderer */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 /** @var $_weeeHelper \Magento\Weee\Helper\Data */
 $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
 ?>
 <?php $_incl = $_item->getRowTotalInclTax(); ?>
-<?php if ($this->displayPriceWithWeeeDetails()): ?>
+<?php if ($block->displayPriceWithWeeeDetails()): ?>
     <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#subtotal-item-tax-details<?php echo $_item->getId(); ?>"}'>
 <?php else: ?>
     <span class="cart-price">
 <?php endif; ?>
-<?php echo $this->formatPrice($this->getRowDisplayPriceInclTax()); ?>
+<?php echo $block->formatPrice($block->getRowDisplayPriceInclTax()); ?>
     </span>
 
 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
     <span class="cart-tax-info" id="subtotal-item-tax-details<?php echo $_item->getId(); ?>" style="display: none;">
-        <?php if ($this->displayPriceWithWeeeDetails()): ?>
+        <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                <span class="weee" data-label="<?php echo $tax['title']; ?>"><?php echo $this->formatPrice($tax['row_amount_incl_tax'], true, true); ?></span>
+                <span class="weee" data-label="<?php echo $tax['title']; ?>"><?php echo $block->formatPrice($tax['row_amount_incl_tax'], true, true); ?></span>
             <?php endforeach; ?>
         <?php endif; ?>
     </span>
 
-    <?php if ($this->displayFinalPrice()): ?>
+    <?php if ($block->displayFinalPrice()): ?>
         <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#subtotal-item-tax-details<?php echo $_item->getId(); ?>"}'>
             <span class="weee" data-label="<?php echo __('Total incl. tax'); ?>">
-                <?php echo $this->formatPrice($this->getFinalRowDisplayPriceInclTax()); ?>
+                <?php echo $block->formatPrice($block->getFinalRowDisplayPriceInclTax()); ?>
             </span>
         </span>
     <?php endif; ?>

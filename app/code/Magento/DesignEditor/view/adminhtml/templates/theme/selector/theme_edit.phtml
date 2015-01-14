@@ -16,7 +16,7 @@ require([
             dialogSelector: '#dialog-message-confirm',
             title: '<?php echo __('Edit Theme') ?>',
             confirmMessage: '<?php echo __('When you edit a theme, we save it as a unique version in "My Customizations."') ?>',
-            launchUrl: '<?php echo $this->getUrl('*/*/launch') ?>'
+            launchUrl: '<?php echo $block->getUrl('*/*/launch') ?>'
         });
     });
 

@@ -8,7 +8,7 @@
     <caption class="table-caption"><?php echo __('Feed'); ?></caption>
     <tbody>
         <th colspan="2" scope="col"><?php echo __('Miscellaneous Feeds') ?></th>
-    <?php foreach ($this->getFeeds() as $feed): ?>
+    <?php foreach ($block->getFeeds() as $feed): ?>
         <?php if (!isset($feed['group'])): ?>
         <tr>
             <td class="col feed"><?php echo $feed['label'] ?></td>

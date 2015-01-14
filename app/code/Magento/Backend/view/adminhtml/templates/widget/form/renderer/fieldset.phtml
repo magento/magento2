@@ -6,7 +6,7 @@
 ?>
 <?php
 /** @var $element \Magento\Framework\Data\Form\Element\Fieldset */
-$element = $this->getElement();
+$element = $block->getElement();
 $containerId = $element->getFieldsetContainerId();
 $id = $element->getHtmlId();
 $isCollapsable = $element->getCollapsable();
@@ -59,7 +59,7 @@ if ($isField) {
     <?php endif; ?>
 
     <?php if ($element->getComment() && !$isField): ?>
-        <div class="comment"><?php echo $this->escapeHtml($element->getComment()) ?></div>
+        <div class="comment"><?php echo $block->escapeHtml($element->getComment()) ?></div>
     <?php endif; ?>
 
     <?php echo($isField) ? '<div class="control">' : ''; ?>
@@ -77,7 +77,7 @@ if ($isField) {
         <?php echo($isField && $count > 1) ? '</div>' : '' ?>
 
         <?php if ($element->getComment() && $isField): ?>
-            <div class="note"><?php echo $this->escapeHtml($element->getComment()) ?></div>
+            <div class="note"><?php echo $block->escapeHtml($element->getComment()) ?></div>
         <?php endif; ?>
 
         <?php if ($element->hasAdvanced() && !$isField): ?>

@@ -68,49 +68,6 @@ class Php implements TemplateEngineInterface
     }
 
     /**
-     * Redirects methods calls to the current block
-     *
-     * This is needed because the templates are included in the context of this engine
-     * rather than in the context of the block.
-     *
-     * @param   string $method
-     * @param   array  $args
-     * @return  mixed
-     */
-    public function __call($method, $args)
-    {
-        return call_user_func_array([$this->_currentBlock, $method], $args);
-    }
-
-    /**
-     * Redirects isset calls to the current block
-     *
-     * This is needed because the templates are included in the context of this engine rather than
-     * in the context of the block.
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function __isset($name)
-    {
-        return isset($this->_currentBlock->{$name});
-    }
-
-    /**
-     * Allows read access to properties of the current block
-     *
-     * This is needed because the templates are included in the context of this engine rather
-     * than in the context of the block.
-     *
-     * @param string $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        return $this->_currentBlock->{$name};
-    }
-
-    /**
      * Get helper singleton
      *
      * @param string $className

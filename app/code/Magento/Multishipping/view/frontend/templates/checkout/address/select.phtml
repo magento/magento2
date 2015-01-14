@@ -4,26 +4,26 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Multishipping\Block\Checkout\Address\Select $this */
+/** @var \Magento\Multishipping\Block\Checkout\Address\Select $block */
 ?>
 <div class="multicheckout">
     <div class="block block-billing">
-    <?php foreach ($this->getAddress() as $_address): ?>
+    <?php foreach ($block->getAddress() as $_address): ?>
         <div class="box box-billing-address">
             <div class="box-content">
                 <address>
-                    <?php echo $this->getAddressAsHtml($_address) ?>
-                    <?php if ($this->isAddressDefaultBilling($_address)): ?>
+                    <?php echo $block->getAddressAsHtml($_address) ?>
+                    <?php if ($block->isAddressDefaultBilling($_address)): ?>
                         <br /><strong><?php echo __('Default Billing') ?></strong>
                     <?php endif; ?>
-                    <?php if ($this->isAddressDefaultShipping($_address)): ?>
+                    <?php if ($block->isAddressDefaultShipping($_address)): ?>
                         <br /><strong><?php echo __('Default Shipping') ?></strong>
                     <?php endif; ?>
                 </address>
             </div>
             <div class="box-actions">
-                <a href="<?php echo $this->getEditAddressUrl($_address) ?>" class="action edit"><span><?php echo __('Edit Address') ?></span></a>
-                <a href="<?php echo $this->getSetAddressUrl($_address) ?>" class="action select"><span><?php echo __('Select Address') ?></span></a>
+                <a href="<?php echo $block->getEditAddressUrl($_address) ?>" class="action edit"><span><?php echo __('Edit Address') ?></span></a>
+                <a href="<?php echo $block->getSetAddressUrl($_address) ?>" class="action select"><span><?php echo __('Select Address') ?></span></a>
             </div>
         </div>
     <?php endforeach; ?>
@@ -33,7 +33,7 @@
             <button type="button" class="action add primary" role="add-address" title="<?php echo __('Add New Address') ?>"><span><?php echo __('Add New Address') ?></span></button>
         </div>
         <div class="secondary">
-            <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
+            <a href="<?php echo $block->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
         </div>
     </div>
 </div>
@@ -42,7 +42,7 @@ require(['jquery', 'mage/mage'], function(jQuery){
 
     jQuery('.actions').mage('address', {
         addAddress: "button[role='add-address']",
-        addAddressLocation: '<?php echo $this->getAddNewUrl() ?>'
+        addAddressLocation: '<?php echo $block->getAddNewUrl() ?>'
     });
 
 });

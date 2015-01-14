@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Catalog\Block\Product\View */
+/** @var $block \Magento\Catalog\Block\Product\View */
 ?>
-<?php $_product = $this->getProduct(); ?>
+<?php $_product = $block->getProduct(); ?>
 <?php $buttonTitle = __('Update Cart'); ?>
 <?php if ($_product->isSaleable()): ?>
     <div class="box-tocart update">
         <fieldset class="fieldset">
-            <?php if ($this->shouldRenderQuantity()): ?>
+            <?php if ($block->shouldRenderQuantity()): ?>
             <div class="field qty">
                 <label class="label" for="qty"><span><?php echo __('Qty') ?></span></label>
                 <div class="control">
-                    <input type="number" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" data-validate="{'required-number':true,digits:true}"/>
+                    <input type="number" name="qty" id="qty" maxlength="12" value="<?php echo $block->getProductDefaultQty() * 1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" data-validate="{'required-number':true,digits:true}"/>
                 </div>
             </div>
             <?php endif; ?>
@@ -26,7 +26,7 @@
                         id="product-updatecart-button">
                     <span><?php echo $buttonTitle ?></span>
                 </button>
-                <?php echo $this->getChildHtml('', true) ?>
+                <?php echo $block->getChildHtml('', true) ?>
             </div>
         </fieldset>
     </div>

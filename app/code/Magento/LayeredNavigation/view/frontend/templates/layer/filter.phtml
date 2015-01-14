@@ -8,7 +8,7 @@
 /**
  * Template for filter items block
  *
- * @var $this \Magento\LayeredNavigation\Block\Layer\Filter\Renderer
+ * @var $block \Magento\LayeredNavigation\Block\Layer\Filter\Renderer
  */
 ?>
 
@@ -16,7 +16,7 @@
     <?php foreach ($filterItems as $filterItem): ?>
         <li class="item">
             <?php if ($filterItem->getCount() > 0): ?>
-                <a href="<?php echo $this->escapeUrl($filterItem->getUrl()) ?>"><?php echo $filterItem->getLabel() ?></a>
+                <a href="<?php echo $block->escapeUrl($filterItem->getUrl()) ?>"><?php echo $filterItem->getLabel() ?></a>
             <?php else: echo $filterItem->getLabel() ?>
             <?php endif; ?>
             <?php if ($this->helper('\Magento\Catalog\Helper\Data')->shouldDisplayProductCountOnLayer()): ?>

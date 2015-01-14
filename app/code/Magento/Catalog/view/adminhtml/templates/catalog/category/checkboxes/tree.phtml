@@ -68,7 +68,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 Ext.onReady(function()
 {
     var categoryLoader = new Ext.tree.TreeLoader({
-       dataUrl: '<?php echo $this->getLoadTreeUrl() ?>'
+       dataUrl: '<?php echo $block->getLoadTreeUrl() ?>'
     });
 
     categoryLoader.createNode = function(config) {
@@ -153,31 +153,31 @@ Ext.onReady(function()
         enableDD:         false,
         containerScroll:  true,
         selModel:         new Ext.tree.CheckNodeMultiSelectionModel(),
-        rootVisible:      '<?php echo $this->getRoot()->getIsVisible() ?>',
-        useAjax:          <?php echo $this->getUseAjax() ?>,
-        currentNodeId:    <?php echo (int) $this->getCategoryId() ?>,
+        rootVisible:      '<?php echo $block->getRoot()->getIsVisible() ?>',
+        useAjax:          <?php echo $block->getUseAjax() ?>,
+        currentNodeId:    <?php echo (int) $block->getCategoryId() ?>,
         addNodeTo:        false,
         rootUIProvider:   Ext.tree.CheckboxNodeUI
     });
 
     tree.on('check', function(node, checked) {
-        <?php echo $this->getJsFormObject() ?>.updateElement.value = this.getChecked().join(', ');
+        <?php echo $block->getJsFormObject() ?>.updateElement.value = this.getChecked().join(', ');
         varienElementMethods.setHasChanges(node.getUI().checkbox);
     }, tree);
 
     // set the root node
     var parameters = {
-        text:        '<?php echo htmlentities($this->getRoot()->getName()) ?>',
+        text:        '<?php echo htmlentities($block->getRoot()->getName()) ?>',
         draggable:   false,
-        checked:'<?php echo $this->getRoot()->getChecked() ?>',
+        checked:'<?php echo $block->getRoot()->getChecked() ?>',
         uiProvider: Ext.tree.CheckboxNodeUI,
-        allowDrop:   <?php if ($this->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-        id:          <?php echo (int) $this->getRoot()->getId() ?>,
-        expanded:    <?php echo (int) $this->getIsWasExpanded() ?>,
-        category_id: <?php echo (int) $this->getCategoryId() ?>
+        allowDrop:   <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
+        id:          <?php echo (int) $block->getRoot()->getId() ?>,
+        expanded:    <?php echo (int) $block->getIsWasExpanded() ?>,
+        category_id: <?php echo (int) $block->getCategoryId() ?>
     };
 
-    tree.loadTree({parameters:parameters, data:<?php echo $this->getTreeJson() ?>},true);
+    tree.loadTree({parameters:parameters, data:<?php echo $block->getTreeJson() ?>},true);
 
 });
 //]]>

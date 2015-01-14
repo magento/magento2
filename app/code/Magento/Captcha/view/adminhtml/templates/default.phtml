@@ -5,17 +5,17 @@
  */
 ?>
 <?php /* @var $captcha \Magento\Captcha\Model\DefaultModel */ ?>
-<?php /* @var $this \Magento\Captcha\Block\Captcha\DefaultCaptcha */ ?>
-<?php $captcha = $this->getCaptchaModel() ?>
+<?php /* @var $block \Magento\Captcha\Block\Captcha\DefaultCaptcha */ ?>
+<?php $captcha = $block->getCaptchaModel() ?>
 <div class="clear"></div>
 <div class="captcha">
     <div class="captcha-input input-box input-left">
         <label for="captcha"><?php echo __('Please enter the letters from the image:') ?></label><br />
-        <input type="text" name="<?php echo \Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $this->getFormId()?>]" id="captcha" class="required-entry input-text validation-failed"/>
+        <input type="text" name="<?php echo \Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $block->getFormId()?>]" id="captcha" class="required-entry input-text validation-failed"/>
     </div>
     <div class="captcha-image input-right">
-        <img id="captcha-reload" class="captcha-reload" src="<?php echo $this->getViewFileUrl('Magento_Captcha::reload.png') ?>" alt="<?php echo __('Reload captcha') ?>"/>
-        <img id="<?php echo $this->getFormId() ?>" width="<?php echo $this->getImgWidth() ?>" height="<?php echo $this->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>" />
+        <img id="captcha-reload" class="captcha-reload" src="<?php echo $block->getViewFileUrl('Magento_Captcha::reload.png') ?>" alt="<?php echo __('Reload captcha') ?>"/>
+        <img id="<?php echo $block->getFormId() ?>" width="<?php echo $block->getImgWidth() ?>" height="<?php echo $block->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>" />
     </div>
 </div>
 <?php if ($captcha->isCaseSensitive()) :?>
@@ -27,7 +27,7 @@
 require(["prototype", "mage/captcha"], function(){
 
 //<![CDATA[
-        var captcha = new Captcha('<?php echo $this->getRefreshUrl() ?>', '<?php echo $this->getFormId() ?>');
+        var captcha = new Captcha('<?php echo $block->getRefreshUrl() ?>', '<?php echo $block->getFormId() ?>');
 
         $('captcha-reload').observe('click', function () {
             captcha.refresh(this);

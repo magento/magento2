@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\Checkout\Block\Onepage\Success */ ?>
+<?php /** @var $block \Magento\Checkout\Block\Onepage\Success */ ?>
 
-<?php if ($this->getCanViewOrder() && $this->getCanPrintOrder()) :?>
-    <?php echo __('<a href="%1" onclick="this.target=\'_blank\'" class="print">Print receipt</a>', $this->getPrintUrl()) ?>
-    <?php echo $this->getChildHtml() ?>
+<?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()) :?>
+    <?php echo __('<a href="%1" onclick="this.target=\'_blank\'" class="print">Print receipt</a>', $block->getPrintUrl()) ?>
+    <?php echo $block->getChildHtml() ?>
 <?php endif;?>

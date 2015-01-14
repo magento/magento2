@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* @var $this \Magento\Wishlist\Block\Share\Wishlist */
-$imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+/* @var $block \Magento\Wishlist\Block\Share\Wishlist */
+$imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
 ?>
 
-<?php if ($this->hasWishlistItems()): ?>
-    <form class="form shared wishlist" action="<?php echo $this->getUrl('*/*/update') ?>" method="post">
+<?php if ($block->hasWishlistItems()): ?>
+    <form class="form shared wishlist" action="<?php echo $block->getUrl('*/*/update') ?>" method="post">
         <div class="wishlist table-wrapper">
             <table class="table data wishlist" id="wishlist-table">
                 <caption class="table-caption"><?php echo __('Wish List'); ?></caption>
@@ -20,41 +20,41 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($this->getWishlistItems() as $item): ?>
+                <?php foreach ($block->getWishlistItems() as $item): ?>
                     <?php
                     $product = $item->getProduct();
                     $isVisibleProduct = $product->isVisibleInSiteVisibility();
                     ?>
                     <tr>
-                        <td data-th="<?php echo $this->escapeHtml(__('Product')) ?>" class="col product">
-                            <a class="product photo" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
+                        <td data-th="<?php echo $block->escapeHtml(__('Product')) ?>" class="col product">
+                            <a class="product photo" href="<?php echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>">
                                 <?php echo $imageBlock->init($product, 'customer_shared_wishlist')->toHtml() ?>
                             </a>
                             <strong class="product name">
-                                <a href="<?php echo $this->getProductUrl($item) ?>">
-                                    <?php echo $this->escapeHtml($product->getName()) ?>
+                                <a href="<?php echo $block->getProductUrl($item) ?>">
+                                    <?php echo $block->escapeHtml($product->getName()) ?>
                                 </a>
                             </strong>
                             <?php
-                                echo $this->getProductPriceHtml(
+                                echo $block->getProductPriceHtml(
                                     $product,
                                     \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
                                     \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
                                     ['item' => $item]
                                 );
                             ?>
-                            <?php echo $this->getDetailsHtml($item) ?>
+                            <?php echo $block->getDetailsHtml($item) ?>
                         </td>
-                        <td data-th="<?php echo $this->escapeHtml(__('Comment')) ?>" class="col comment"><?php echo $this->getEscapedDescription($item) ?></td>
-                        <td data-th="<?php echo $this->escapeHtml(__('Add to Cart')) ?>" class="col actions" data-role="add-to-links">
+                        <td data-th="<?php echo $block->escapeHtml(__('Comment')) ?>" class="col comment"><?php echo $block->getEscapedDescription($item) ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Add to Cart')) ?>" class="col actions" data-role="add-to-links">
                             <?php if ($product->isSaleable()): ?>
                                 <?php if ($isVisibleProduct): ?>
-                                    <button type="button" title="<?php echo __('Add to Cart') ?>" onclick="location.assign('<?php echo $this->getSharedItemAddToCartUrl($item) ?>')" class="action tocart">
+                                    <button type="button" title="<?php echo __('Add to Cart') ?>" onclick="location.assign('<?php echo $block->getSharedItemAddToCartUrl($item) ?>')" class="action tocart">
                                         <span><?php echo __('Add to Cart') ?></span>
                                     </button>
                                 <?php endif ?>
                             <?php endif; ?>
-                            <a href="#" data-post='<?php echo $this->getAddToWishlistParams($item); ?>'  onclick="location.assign(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
+                            <a href="#" data-post='<?php echo $block->getAddToWishlistParams($item); ?>'  onclick="location.assign(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
                                 <span><?php echo __('Add to Wishlist') ?></span>
                             </a>
                         </td>
@@ -65,18 +65,18 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
         </div>
 
         <div class="actions-toolbar">
-            <?php if ($this->isSaleable()):?>
+            <?php if ($block->isSaleable()):?>
                 <div class="primary">
                     <button type="button"
                             title="<?php echo __('Add All to Cart') ?>"
-                            onclick="location.assign('<?php echo $this->getUrl('*/*/allcart', ['_current' => true]) ?>')"
+                            onclick="location.assign('<?php echo $block->getUrl('*/*/allcart', ['_current' => true]) ?>')"
                             class="action tocart primary">
                         <span><?php echo __('Add All to Cart') ?></span>
                     </button>
                 </div>
             <?php endif;?>
             <div class="secondary">
-                <a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>" class="action back">
+                <a href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
                     <span><?php echo __('Back') ?></span>
                 </a>
             </div>

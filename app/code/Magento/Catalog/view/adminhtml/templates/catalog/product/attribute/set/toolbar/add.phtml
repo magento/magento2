@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php echo $this->getFormHtml() ?>
+<?php echo $block->getFormHtml() ?>
 <script type="text/javascript">
 require(['jquery', "mage/mage"], function(jQuery){
 
-    jQuery('#<?php echo $this->getFormId();?>').mage('form').mage('validation');
+    jQuery('#<?php echo $block->getFormId();?>').mage('form').mage('validation');
 
 });
 </script>

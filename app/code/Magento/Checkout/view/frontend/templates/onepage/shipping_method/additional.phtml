@@ -4,6 +4,6 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php if (!$this->getQuote()->isVirtual()): ?>
-    <?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getInline('onepage_checkout', $this->getQuote(), $this->getDontDisplayContainer()) ?>
+<?php if (!$block->getQuote()->isVirtual()): ?>
+    <?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getInline('onepage_checkout', $block->getQuote(), $block->getDontDisplayContainer()) ?>
 <?php endif; ?>

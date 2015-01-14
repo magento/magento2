@@ -5,6 +5,6 @@
  */
 ?>
 <?php
-/** @var \Magento\Framework\Pricing\Render\Amount $this */
+/** @var \Magento\Framework\Pricing\Render\Amount $block */
 ?>
-<?php echo $this->formatCurrency($this->getDisplayValue(), (bool) $this->getIncludeContainer()) ?>
+<?php echo $block->formatCurrency($block->getDisplayValue(), (bool) $block->getIncludeContainer()) ?>

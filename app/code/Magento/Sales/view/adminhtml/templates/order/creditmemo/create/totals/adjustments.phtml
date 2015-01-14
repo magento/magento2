@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php $_source  = $this->getSource() ?>
+<?php $_source  = $block->getSource() ?>
 <?php if ($_source): ?>
     <tr>
-        <td class="label"><?php echo $this->getShippingLabel() ?><div id="shipping_amount_adv"></div></td>
-        <td><input type="text" name="creditmemo[shipping_amount]" value="<?php echo $this->getShippingAmount()?>" class="input-text not-negative-amount" id="shipping_amount" /></td>
+        <td class="label"><?php echo $block->getShippingLabel() ?><div id="shipping_amount_adv"></div></td>
+        <td><input type="text" name="creditmemo[shipping_amount]" value="<?php echo $block->getShippingAmount()?>" class="input-text not-negative-amount" id="shipping_amount" /></td>
     </tr>
     <tr>
         <td class="label"><?php echo __('Adjustment Refund') ?><div id="adjustment_positive_adv"></div></td>

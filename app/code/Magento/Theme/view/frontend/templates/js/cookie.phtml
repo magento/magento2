@@ -22,8 +22,8 @@
 
 	    $.extend($.mage.cookies.defaults, {
 	        expires: null,
-	        path: '<?php echo $this->getPath()?>',
-	        domain: '<?php echo $this->getDomain()?>',
+	        path: '<?php echo $block->getPath()?>',
+	        domain: '<?php echo $block->getDomain()?>',
 	        secure: false
 	    });
 

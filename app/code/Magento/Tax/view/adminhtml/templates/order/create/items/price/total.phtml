@@ -5,24 +5,24 @@
  */
 ?>
 <?php
-/** @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer $this */
+/** @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer $block */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 ?>
 
-<?php if ($this->displayPriceExclTax() || $this->displayBothPrices()): ?>
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
     <?php $_rowTotalWithoutDiscount = $_item->getRowTotal() - $_item->getTotalDiscountAmount(); ?>
-    <?php if ($this->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices()): ?>
         <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
     <?php endif; ?>
-    <?php echo $this->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
+    <?php echo $block->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
 <?php endif; ?>
 
 
-<?php if ($this->displayPriceInclTax() || $this->displayBothPrices()): ?>
-    <?php if ($this->displayBothPrices($this->getStore())): ?>
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices($block->getStore())): ?>
         <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
     <?php endif; ?>
     <?php $_incl = $_item->getPriceInclTax() * $_item->getQty() - $_item->getTotalDiscountAmount(); ?>
-    <?php echo $this->formatPrice($_incl) ?>
+    <?php echo $block->formatPrice($_incl) ?>
 <?php endif; ?>

@@ -129,8 +129,8 @@
 </div>
 
 <?php
-    $rollbackUrl = $this->getUrl('*/*/rollback');
-    $backupUrl = $this->getUrl('*/*/create');
+    $rollbackUrl = $block->getUrl('*/*/rollback');
+    $backupUrl = $block->getUrl('*/*/create');
 ?>
 
 <script type="text/javascript">
@@ -141,8 +141,8 @@ require([
 
 //<![CDATA[
     backup = new AdminBackup();
-    backup.rollbackUrl = '<?php echo $this->escapeJsQuote($rollbackUrl);?>';
-    backup.backupUrl = '<?php echo $this->escapeJsQuote($backupUrl);?>';
+    backup.rollbackUrl = '<?php echo $block->escapeJsQuote($rollbackUrl);?>';
+    backup.backupUrl = '<?php echo $block->escapeJsQuote($backupUrl);?>';
 //]]>
 
 });

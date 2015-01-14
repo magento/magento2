@@ -48,9 +48,9 @@ require([
             showTime: false,
             showHour: false,
             showMinute: false,
-            localTimezone: <?php echo $this->getTimezoneOffsetSeconds() ?>,
-            serverTimezoneSeconds:<?php echo $this->getStoreTimestamp() ?>,
-            yearRange: '<?php echo $this->getYearRange() ?>'
+            localTimezone: <?php echo $block->getTimezoneOffsetSeconds() ?>,
+            serverTimezoneSeconds:<?php echo $block->getStoreTimestamp() ?>,
+            yearRange: '<?php echo $block->getYearRange() ?>'
         }
     });
 

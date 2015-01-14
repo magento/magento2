@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php if ($links = $this->getLinks()): ?>
+<?php if ($links = $block->getLinks()): ?>
     <dl class="cart item options">
-        <dt><?php echo $this->getLinksTitle() ?></dt>
+        <dt><?php echo $block->getLinksTitle() ?></dt>
         <?php foreach ($links as $link): ?>
-            <dd><?php echo $this->escapeHtml($link->getTitle()) ?></dd>
+            <dd><?php echo $block->escapeHtml($link->getTitle()) ?></dd>
         <?php endforeach; ?>
     </dl>
 <?php endif; ?>

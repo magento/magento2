@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 /**
- * @var \Magento\Theme\Block\Html\Header $this
+ * @var \Magento\Theme\Block\Html\Header $block
  */
 ?>
-<?php switch ($this->getShowPart()):
+<?php switch ($block->getShowPart()):
     case 'welcome': ?>
-        <li class="greet welcome"><?php echo $this->getWelcome() ?></li>
+        <li class="greet welcome"><?php echo $block->getWelcome() ?></li>
     <?php break; ?>
 
     <?php case 'other': ?>
-        <?php echo $this->getChildHtml(); ?>
+        <?php echo $block->getChildHtml(); ?>
     <?php break; ?>
 
 <?php endswitch; ?>

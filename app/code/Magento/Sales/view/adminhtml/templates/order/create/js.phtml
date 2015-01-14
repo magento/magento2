@@ -15,10 +15,10 @@ require([
     Event.observe(window, 'load',  function() {
         if (window.productConfigure) {
             productConfigure.addListType('product_to_add', {
-                urlFetch: '<?php echo $this->getUrl('sales/order_create/configureProductToAdd') ?>'
+                urlFetch: '<?php echo $block->getUrl('sales/order_create/configureProductToAdd') ?>'
             });
             productConfigure.addListType('quote_items', {
-                urlFetch: '<?php echo $this->getUrl('sales/order_create/configureQuoteItems') ?>'
+                urlFetch: '<?php echo $block->getUrl('sales/order_create/configureQuoteItems') ?>'
             });
         }
     });

@@ -5,7 +5,7 @@
  */
 ?>
 
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Tools */ ?>
 <section class="vde-tools">
     <header class="vde-tools-header">
         <div class="vde-tools-header-inner">
@@ -17,14 +17,14 @@
     <div class="vde-tools-content">
         <div class="vde-tools-content-inner">
             <div class="vde-tools-handler-container"></div>
-            <?php echo join('', $this->getTabContents()) ?>
+            <?php echo join('', $block->getTabContents()) ?>
         </div>
     </div>
     <footer class="vde-tools-footer">
         <div class="vde-tools-footer-inner">
             <div class="vde-tools-tabs">
                 <ul class="vde-tab-controls">
-                    <?php echo join('', $this->getTabHandles()) ?>
+                    <?php echo join('', $block->getTabHandles()) ?>
                 </ul>
             </div>
             <div data-translate-container class="vde-tools-menu">
@@ -91,7 +91,7 @@ require([
       '#vde-tab-quick-styles .element-color-picker input,' +
       '#vde-tab-quick-styles .element-background .element-checkbox'
     ).quickStyleElement({
-        saveQuickStylesUrl: '<?php echo $this->getSaveUrl(); ?>'
+        saveQuickStylesUrl: '<?php echo $block->getSaveUrl(); ?>'
     });
 
     $('[class^="action-"][href="#vde-tab-custom"]').on('click.activateCustomCodeTab', function() {

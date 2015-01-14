@@ -9,7 +9,7 @@ require([
     "mage/adminhtml/grid"
 ], function(){
 
-<?php $myBlock = $this->getLayout()->getBlock('user.roles.grid'); ?>
+<?php $myBlock = $block->getLayout()->getBlock('user.roles.grid'); ?>
 <?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
     var radioBoxes = $H({});
     var warning = false;

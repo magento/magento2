@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php if ($this->getCanDisplayTotalRefunded()): ?>
+<?php if ($block->getCanDisplayTotalRefunded()): ?>
 <tr>
     <td class="label"><strong><?php echo __('Total Refunded') ?></strong></td>
-    <td class="emph"><?php echo $this->displayPriceAttribute('total_refunded', true) ?></td>
+    <td class="emph"><?php echo $block->displayPriceAttribute('total_refunded', true) ?></td>
 </tr>
 <?php endif; ?>

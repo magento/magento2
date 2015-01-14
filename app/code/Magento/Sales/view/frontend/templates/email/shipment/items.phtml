@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php $_shipment = $this->getShipment() ?>
-<?php $_order    = $this->getOrder() ?>
+<?php $_shipment = $block->getShipment() ?>
+<?php $_order    = $block->getOrder() ?>
 <?php if ($_shipment && $_order): ?>
 <table cellspacing="0" cellpadding="0" border="0" width="650" style="border:1px solid #EAEAEA;">
     <thead>
@@ -23,7 +23,7 @@
     $i++;
 } ?>
     <tbody<?php echo $i%2 ? ' bgcolor="#F6F6F6"' : '' ?>>
-        <?php echo $this->getItemHtml($_item) ?>
+        <?php echo $block->getItemHtml($_item) ?>
     </tbody>
     <?php endforeach; ?>
 

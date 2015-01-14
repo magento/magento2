@@ -5,59 +5,59 @@
  */
 ?>
 <?php
-/** @var \Magento\Weee\Block\Item\Price\Renderer $this */
+/** @var \Magento\Weee\Block\Item\Price\Renderer $block */
 
 $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
-$_item = $this->getItem();
+$_item = $block->getItem();
 ?>
 
-<?php if ($this->displayPriceExclTax() || $this->displayBothPrices()): ?>
-    <?php $_rowTotalWithoutDiscount = $this->getRowDisplayPriceExclTax() - $_item->getTotalDiscountAmount(); ?>
-    <?php if ($this->displayBothPrices()): ?>
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
+    <?php $_rowTotalWithoutDiscount = $block->getRowDisplayPriceExclTax() - $_item->getTotalDiscountAmount(); ?>
+    <?php if ($block->displayBothPrices()): ?>
         <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
     <?php endif; ?>
-    <?php echo $this->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
+    <?php echo $block->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>
 
 
     <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
         <br />
-        <?php if ($this->displayPriceWithWeeeDetails()): ?>
+        <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount'], true, true); ?></span><br />
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $block->formatPrice($tax['row_amount'], true, true); ?></span><br />
                 <?php endforeach; ?>
             </small>
         <?php endif; ?>
 
-        <?php if ($this->displayFinalPrice()): ?>
+        <?php if ($block->displayFinalPrice()): ?>
             <br />
             <span class="nobr"><?php echo __('Total'); ?>:<br />
-                <?php echo $this->formatPrice($this->getFinalRowDisplayPriceExclTax() - $_item->getTotalDiscountAmount()); ?>
+                <?php echo $block->formatPrice($block->getFinalRowDisplayPriceExclTax() - $_item->getTotalDiscountAmount()); ?>
             </span>
         <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>
 
 
-<?php if ($this->displayPriceInclTax() || $this->displayBothPrices()): ?>
-    <?php if ($this->displayBothPrices()): ?>
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
+    <?php if ($block->displayBothPrices()): ?>
         <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
     <?php endif; ?>
-    <?php $_incl = $this->getRowDisplayPriceInclTax() - $_item->getTotalDiscountAmount(); ?>
-    <?php echo $this->formatPrice(max(0, $_incl)) ?>
+    <?php $_incl = $block->getRowDisplayPriceInclTax() - $_item->getTotalDiscountAmount(); ?>
+    <?php echo $block->formatPrice(max(0, $_incl)) ?>
     <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
         <br />
-        <?php if ($this->displayPriceWithWeeeDetails()): ?>
+        <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'], true, true); ?></span><br />
+                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $block->formatPrice($tax['row_amount_incl_tax'], true, true); ?></span><br />
                 <?php endforeach; ?>
             </small>
         <?php endif; ?>
 
-        <?php if ($this->displayFinalPrice()): ?>
+        <?php if ($block->displayFinalPrice()): ?>
             <span class="nobr"><?php echo __('Total incl. tax'); ?>:<br />
-                <?php echo $this->formatPrice($this->getFinalRowDisplayPriceInclTax() - $_item->getTotalDiscountAmount()); ?>
+                <?php echo $block->formatPrice($block->getFinalRowDisplayPriceInclTax() - $_item->getTotalDiscountAmount()); ?>
             </span>
         <?php endif; ?>
     <?php endif; ?>

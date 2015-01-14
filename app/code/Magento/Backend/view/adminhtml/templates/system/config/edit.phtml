@@ -13,10 +13,10 @@
  *  getForm() - html
  */
 ?>
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
-    <?php echo $this->getBlockHtml('formkey')?>
+<form action="<?php echo $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+    <?php echo $block->getBlockHtml('formkey')?>
     <div class="accordion">
-        <?php echo $this->getChildHtml('form') ?>
+        <?php echo $block->getChildHtml('form') ?>
     </div>
 </form>
 <script type="text/javascript">

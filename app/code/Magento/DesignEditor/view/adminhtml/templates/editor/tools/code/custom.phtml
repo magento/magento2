@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Custom */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Custom */ ?>
 <div id="vde-tab-custom-messages-placeholder"></div>
 <div class="custom-code-description">
     <p><?php echo __('Update the CSS code to overwrite the default styles or upload your own CSS file.'); ?></p>
@@ -12,13 +12,13 @@
     <div class="custom-file">
         <span data-action="add" class="action-add" title="<?php echo __('Upload File'); ?>">
             <span><?php echo __('Upload File'); ?></span>
-            <?php echo $this->getFormHtml() ?>
+            <?php echo $block->getFormHtml() ?>
         </span>
-        <label for="<?php echo $this->getFileElementName() ?>"><?php echo __('Upload Custom CSS'); ?></label>
+        <label for="<?php echo $block->getFileElementName() ?>"><?php echo __('Upload Custom CSS'); ?></label>
         <div class="uploaded-file-wrapper" data-file="uploaded-css">
             <div class="uploaded-css">
                 <div class="file-row">
-                    <span id="custom-file-name" class="label"><?php echo $this->getCustomFileName() ?></span>
+                    <span id="custom-file-name" class="label"><?php echo $block->getCustomFileName() ?></span>
                     <button data-action="delete" class="action-delete" title="<?php echo __('Delete File'); ?>">
                         <span><?php echo __('Delete File'); ?></span>
                     </button>
@@ -40,7 +40,7 @@
 </div>
 <div class="custom-code">
     <div class="textarea-container">
-        <textarea name="custom_code" id="custom_code" cols="30" rows="10"><?php echo $this->getCustomCssContent() ?></textarea>
+        <textarea name="custom_code" id="custom_code" cols="30" rows="10"><?php echo $block->getCustomCssContent() ?></textarea>
     </div>
     <button data-action="update" class="action-update primary" title="<?php echo __('Update'); ?>">
         <span><?php echo __('Update'); ?></span>
@@ -59,29 +59,29 @@ require([
 
     $('[data-manage="fonts"]').on('click', function() {
         MediabrowserUtility.openDialog(
-            '<?php echo $this->getMediaBrowserUrl('custom_code', \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT) ?>',
+            '<?php echo $block->getMediaBrowserUrl('custom_code', \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT) ?>',
             null,
             null,
-            '<?php echo $this->escapeQuote(__('Font Assets'), true); ?>'
+            '<?php echo $block->escapeQuote(__('Font Assets'), true); ?>'
         );
     });
     $('[data-manage="images"]').on('click', function() {
         MediabrowserUtility.openDialog(
-            '<?php echo $this->getMediaBrowserUrl('custom_code', \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE) ?>',
+            '<?php echo $block->getMediaBrowserUrl('custom_code', \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE) ?>',
             null,
             null,
-            '<?php echo $this->escapeQuote(__('Image Assets'), true); ?>'
+            '<?php echo $block->escapeQuote(__('Image Assets'), true); ?>'
         );
     });
     $('#vde-tab-custom').customCssPanel({
-        saveCustomCssUrl: '<?php echo $this->getSaveCustomCssUrl() ?>',
-        downloadCustomCssUrl: '<?php echo $this->getDownloadCustomCssUrl() ?>'
+        saveCustomCssUrl: '<?php echo $block->getSaveCustomCssUrl() ?>',
+        downloadCustomCssUrl: '<?php echo $block->getDownloadCustomCssUrl() ?>'
     });
 
-    $( '#' + '<?php echo $this->getFileElementName() ?>' ).fileupload({
+    $( '#' + '<?php echo $block->getFileElementName() ?>' ).fileupload({
         dataType: 'json',
         replaceFileInput: false,
-        url : '<?php echo $this->getUploadUrl() ?>',
+        url : '<?php echo $block->getUploadUrl() ?>',
 
         /**
          * Handler of "file selected" event

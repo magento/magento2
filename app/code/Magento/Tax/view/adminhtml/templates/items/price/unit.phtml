@@ -5,9 +5,9 @@
  */
 ?>
 <?php
-/** @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer $this */
+/** @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer $block */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 ?>
 
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
@@ -16,7 +16,7 @@ $_item = $this->getItem();
             <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
         <?php endif; ?>
 
-        <?php echo $this->displayPrices($_item->getBasePrice(), $_item->getPrice()) ?>
+        <?php echo $block->displayPrices($_item->getBasePrice(), $_item->getPrice()) ?>
     </div>
 <?php endif; ?>
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceInclTax()): ?>
@@ -27,7 +27,7 @@ $_item = $this->getItem();
         <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item); ?>
         <?php $_baseIncl = $this->helper('Magento\Checkout\Helper\Data')->getBasePriceInclTax($_item); ?>
 
-        <?php echo $this->displayPrices($_baseIncl, $_incl) ?>
+        <?php echo $block->displayPrices($_baseIncl, $_incl) ?>
 
     </div>
 <?php endif; ?>

@@ -6,7 +6,7 @@
 ?>
 
 <div id="product-review-container"></div>
-<?php echo $this->getChildHtml(); ?>
+<?php echo $block->getChildHtml(); ?>
 
 <script type="text/javascript">
 //<![CDATA[
@@ -32,7 +32,7 @@ function processReviews(url,fromPages) {
     });
 })(jQuery);
 }
-processReviews('<?php echo $this->getProductReviewUrl();?>');
+processReviews('<?php echo $block->getProductReviewUrl();?>');
 
 jQuery(function() {
     jQuery('.product-info-main .reviews-actions a').click(function(event) {

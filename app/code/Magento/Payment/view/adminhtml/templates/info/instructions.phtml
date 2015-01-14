@@ -9,12 +9,12 @@
  * @see \Magento\Payment\Block\Info
  */
 ?>
-<p><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></p>
-<?php if ($this->getInstructions()): ?>
+<p><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></p>
+<?php if ($block->getInstructions()): ?>
 <table>
     <tbody>
         <tr>
-            <td><?php echo nl2br($this->getInstructions()) ?></td>
+            <td><?php echo nl2br($block->getInstructions()) ?></td>
         </tr>
     </tbody>
 </table>

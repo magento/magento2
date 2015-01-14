@@ -8,16 +8,16 @@
  * Template for block \Magento\Log\Block\Adminhtml\Customer\Edit\Tab\View\Status
  */
 
-$lastLoginDateAdmin = $this->getLastLoginDate();
-$lastLoginDateStore = $this->getStoreLastLoginDate();
+$lastLoginDateAdmin = $block->getLastLoginDate();
+$lastLoginDateStore = $block->getStoreLastLoginDate();
 ?>
 <tr>
     <th><?php echo __('Last Logged In:') ?></th>
-    <td><?php echo $lastLoginDateAdmin ?> (<?php echo $this->getCurrentStatus() ?>)</td>
+    <td><?php echo $lastLoginDateAdmin ?> (<?php echo $block->getCurrentStatus() ?>)</td>
 </tr>
 <?php if ($lastLoginDateAdmin != $lastLoginDateStore): ?>
 <tr>
-    <th><?php echo __('Last Logged In (%1):', $this->getStoreLastLoginDateTimezone()) ?></th>
-    <td><?php echo $lastLoginDateStore ?> (<?php echo $this->getCurrentStatus() ?>)</td>
+    <th><?php echo __('Last Logged In (%1):', $block->getStoreLastLoginDateTimezone()) ?></th>
+    <td><?php echo $lastLoginDateStore ?> (<?php echo $block->getCurrentStatus() ?>)</td>
 </tr>
 <?php endif; ?>

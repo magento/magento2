@@ -5,25 +5,25 @@
  */
 ?>
 <?php
-/** @var $this \Magento\Weee\Block\Renderer\Weee\Tax */
+/** @var $block \Magento\Weee\Block\Renderer\Weee\Tax */
 $data = ['fptAttribute' => [
     'region' => $this->helper('Magento\Core\Helper\Data')->jsonDecode(
         $this->helper('Magento\Directory\Helper\Data')->getRegionJson()
     ),
-    'itemsData' => $this->getValues(),
+    'itemsData' => $block->getValues(),
     'bundlePriceType' => '#price_type',
 ]];
 ?>
-<div id="attribute-<?php echo $this->getElement()->getHtmlId(); ?>-container" class="field"
-     data-attribute-code="<?php echo $this->getElement()->getHtmlId(); ?>"
-     data-mage-init="<?=$this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($data))?>">
-    <label class="label"><span><?php echo $this->getElement()->getLabel() ?></span></label>
+<div id="attribute-<?php echo $block->getElement()->getHtmlId(); ?>-container" class="field"
+     data-attribute-code="<?php echo $block->getElement()->getHtmlId(); ?>"
+     data-mage-init="<?=$block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($data))?>">
+    <label class="label"><span><?php echo $block->getElement()->getLabel() ?></span></label>
 
     <div class="control">
         <table class="data-table" cellspacing="0">
             <thead>
                 <tr>
-                    <th class="col-website" <?php if (!$this->isMultiWebsites()): ?>style="display: none;"<?php endif; ?>><?php echo __('Website'); ?></th>
+                    <th class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none;"<?php endif; ?>><?php echo __('Website'); ?></th>
                     <th class="col-country required"><?php echo __('Country/State'); ?></th>
                     <th class="col-tax required"><?php echo __('Tax'); ?></th>
                     <th class="col-action"><?php echo __('Action'); ?></th>
@@ -31,7 +31,7 @@ $data = ['fptAttribute' => [
             </thead>
             <tfoot>
                 <tr>
-                    <td colspan="4" class="col-actions-add"><?php echo $this->getAddButtonHtml(); ?></td>
+                    <td colspan="4" class="col-actions-add"><?php echo $block->getAddButtonHtml(); ?></td>
                 </tr>
             </tfoot>
             <tbody data-role="fpt-item-container" class="fpt-item-container">
@@ -41,41 +41,41 @@ $data = ['fptAttribute' => [
             Hidden field below with attribute code id is necessary for jQuery validation plugin.
             Validation message will be displayed after this field.
         -->
-        <input type="hidden" name="<?php echo $this->getElement()->getHtmlId(); ?>" id="<?php echo $this->getElement()->getHtmlId(); ?>" disabled="disabled">
+        <input type="hidden" name="<?php echo $block->getElement()->getHtmlId(); ?>" id="<?php echo $block->getElement()->getHtmlId(); ?>" disabled="disabled">
     </div>
 
     <script data-role="row-template" type="text/x-jquery-tmpl">
-        <tr id="<?php echo $this->getElement()->getHtmlId() ?>_weee_tax_row_${index}" data-role="fpt-item-row">
-            <td class="col-website" <?php if (!$this->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
-                <select name="<?php echo $this->getElement()->getName() ?>[${index}][website_id]"
-                        class="<?php echo $this->getElement()->getClass() ?> website required-entry" data-role="select-website">
-                    <?php foreach ($this->getWebsites() as $_websiteId => $_info): ?>
+        <tr id="<?php echo $block->getElement()->getHtmlId() ?>_weee_tax_row_${index}" data-role="fpt-item-row">
+            <td class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
+                <select name="<?php echo $block->getElement()->getName() ?>[${index}][website_id]"
+                        class="<?php echo $block->getElement()->getClass() ?> website required-entry" data-role="select-website">
+                    <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
                     <option value="<?php echo $_websiteId ?>"><?php echo $_info['name'] ?><?php if (!empty($_info['currency'])): ?>[<?php echo $_info['currency'] ?>]<?php endif; ?></option>
                     <?php endforeach ?>
                 </select>
             </td>
             <td class="col-country">
-                <select id="<?php echo $this->getElement()->getName() ?>_weee_tax_row_${index}_country"
-                        name="<?php echo $this->getElement()->getName() ?>[${index}][country]"
-                        class="<?php echo $this->getElement()->getClass() ?> country required-entry" data-role="select-country">
-                    <?php foreach ($this->getCountries() as $_country): ?>
+                <select id="<?php echo $block->getElement()->getName() ?>_weee_tax_row_${index}_country"
+                        name="<?php echo $block->getElement()->getName() ?>[${index}][country]"
+                        class="<?php echo $block->getElement()->getClass() ?> country required-entry" data-role="select-country">
+                    <?php foreach ($block->getCountries() as $_country): ?>
                     <option value="<?php echo $_country['value'] ?>"><?php echo htmlspecialchars($_country['label']) ?></option>
                     <?php endforeach ?>
                 </select>
-                <select id="<?php echo $this->getElement()->getName() ?>_weee_tax_row_${index}_state"
-                        name="<?php echo $this->getElement()->getName() ?>[${index}][state]"
-                        class="<?php echo $this->getElement()->getClass() ?> state" disabled="" data-role="select-state">
+                <select id="<?php echo $block->getElement()->getName() ?>_weee_tax_row_${index}_state"
+                        name="<?php echo $block->getElement()->getName() ?>[${index}][state]"
+                        class="<?php echo $block->getElement()->getClass() ?> state" disabled="" data-role="select-state">
                     <option value="0">*</option>
                 </select>
             </td>
             <td class="col-tax">
-                <input name="<?php echo $this->getElement()->getName() ?>[${index}][price]"
-                       class="<?php echo $this->getElement()->getClass() ?> required-entry validate-greater-than-zero"
+                <input name="<?php echo $block->getElement()->getName() ?>[${index}][price]"
+                       class="<?php echo $block->getElement()->getClass() ?> required-entry validate-greater-than-zero"
                        type="text" value="${value}"/>
             </td>
             <td class="col-action">
-                <input name="<?php echo $this->getElement()->getName() ?>[${index}][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
-                <?php echo $this->getChildHtml('delete_button') ?>
+                <input name="<?php echo $block->getElement()->getName() ?>[${index}][delete]" class="delete" type="hidden" value="" data-role="delete-fpt-item"/>
+                <?php echo $block->getChildHtml('delete_button') ?>
             </td>
         </tr>
     </script>

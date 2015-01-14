@@ -5,10 +5,10 @@
  */
 ?>
 <?php
-$_element = $this->getElement();
+$_element = $block->getElement();
 $_note = $_element->getNote();
 $_class = $_element->getFieldsetHtmlClass();
-$_validateButton = $this->getValidateButton();
+$_validateButton = $block->getValidateButton();
 ?>
 <?php if (!$_element->getNoDisplay()): ?>
 <div class="field field-vat-number">

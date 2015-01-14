@@ -3,18 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/** @var $this \Magento\UrlRewrite\Block\Catalog\Category\Tree */
+/** @var $block \Magento\UrlRewrite\Block\Catalog\Category\Tree */
 ?>
 <fieldset class="fieldset" data-ui-id="category-selector">
     <legend class="legend"><span><?php echo __('Select Category') ?></span></legend>
     <div class="content" style="clear: both;">
         <input type="hidden" name="categories" id="product_categories" value="" />
-        <?php if ($this->getRoot()): ?>
+        <?php if ($block->getRoot()): ?>
         <div data-mage-init='<?php
-            echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode([
+            echo $block->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode([
                 'categoryTree' => [
-                    'data' => $this->getTreeArray(null),
-                    'url' => $this->getLoadTreeUrl(),
+                    'data' => $block->getTreeArray(null),
+                    'url' => $block->getLoadTreeUrl(),
                 ],
             ]));
         ?>' class="jstree-default"></div>

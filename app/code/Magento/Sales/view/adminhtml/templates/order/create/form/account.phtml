@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
  ?>
-<div class="fieldset-wrapper-title <?php echo $this->getHeaderCssClass() ?>">
-	<span class="title"><?php echo $this->getHeaderText() ?></span>
+<div class="fieldset-wrapper-title <?php echo $block->getHeaderCssClass() ?>">
+	<span class="title"><?php echo $block->getHeaderText() ?></span>
 	<div class="actions"></div>
 </div>
 <div class="form-inline" id="customer_account_fieds">
-    <?php echo $this->getForm()->getHtml() ?>
+    <?php echo $block->getForm()->getHtml() ?>
 </div>
 <script type="text/javascript">
 	require(["prototype", "Magento_Sales/order/create/form"], function(){

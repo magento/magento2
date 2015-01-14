@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\Shipping\Block\Adminhtml\Order\Packaging */ ?>
+<?php /** @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging */ ?>
 <?php
-$shippingMethod = $this->getShipment()->getOrder()->getShippingMethod();
-$sizeSource = $this->getSourceSizeModel()->toOptionArray();
-$girthEnabled = $this->isDisplayGirthValue() && $this->isGirthAllowed() ? 1 : 0;
+$shippingMethod = $block->getShipment()->getOrder()->getShippingMethod();
+$sizeSource = $block->getSourceSizeModel()->toOptionArray();
+$girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 0;
 ?>
 <script type="text/javascript">
 require([
@@ -17,7 +17,7 @@ require([
     "Magento_Shipping/order/packaging"
 ], function(jQuery){
 
-    packaging = new Packaging(<?php echo $this->getConfigDataJson() ?>);
+    packaging = new Packaging(<?php echo $block->getConfigDataJson() ?>);
     packaging.changeContainerType($$('select[name=package_container]')[0]);
     packaging.checkSizeAndGirthParameter(
             $$('select[name=package_container]')[0],
@@ -52,7 +52,7 @@ require([
                         <th class="col-girth"><?php echo __('Girth') ?></th>
                         <th>&nbsp;</th>
                             <?php endif; ?>
-                        <th class="col-custom" <?php echo $this->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
+                        <th class="col-custom" <?php echo $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
                             <?php echo __('Customs Value') ?>
                         </th>
                         <th class="col-total-weight"><?php echo __('Total Weight') ?></th>
@@ -60,19 +60,19 @@ require([
                         <th class="col-width"><?php echo __('Width') ?></th>
                         <th class="col-height"><?php echo __('Height') ?></th>
                         <th>&nbsp;</th>
-                        <?php if ($this->getDeliveryConfirmationTypes()): ?>
+                        <?php if ($block->getDeliveryConfirmationTypes()): ?>
                         <th class="col-signature"><?php echo __('Signature Confirmation') ?></th>
                             <?php endif; ?>
                         <th class="col-actions">&nbsp;</th>
                     </thead>
                     <tbody>
                         <td class="col-type">
-                            <?php $containers = $this->getContainers(); ?>
+                            <?php $containers = $block->getContainers(); ?>
                             <select name="package_container" onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?php echo  $girthEnabled ?>);"<?php if (empty($containers)):?>
                                     title="<?php echo __('USPS domestic shipments don\'t use package types.') ?>"
                                     disabled="" class="disabled"
                                 <?php endif; ?>>
-                                <?php foreach ($this->getContainers() as $key => $value): ?>
+                                <?php foreach ($block->getContainers() as $key => $value): ?>
                                 <option value="<?php echo $key ?>" >
                                     <?php echo $value ?>
                                 </option>
@@ -98,7 +98,7 @@ require([
                         </td>
                             <?php endif; ?>
                         <?php
-                        if ($this->displayCustomsValue()) {
+                        if ($block->displayCustomsValue()) {
                             $customsValueDisplay = '';
                             $customsValueValidation = ' validate-zero-or-greater ';
                         } else {
@@ -108,7 +108,7 @@ require([
                         ?>
                         <td class="col-custom" <?php echo $customsValueDisplay ?>>
                             <input type="text" class="customs-value input-text <?php echo $customsValueValidation ?>" name="package_customs_value" />
-                            <span class="customs-value-currency">[<?php echo $this->getCustomValueCurrencyCode(); ?>]</span>
+                            <span class="customs-value-currency">[<?php echo $block->getCustomValueCurrencyCode(); ?>]</span>
                         </td>
                         <td class="col-total-weight">
                             <input type="text" class="options-weight input-text required-entry validate-greater-than-zero" name="container_weight" />
@@ -132,10 +132,10 @@ require([
                                 <option value="<?php echo Zend_Measure_Length::CENTIMETER ?>" ><?php echo __('cm') ?></option>
                             </select>
                         </td>
-                        <?php if ($this->getDeliveryConfirmationTypes()): ?>
+                        <?php if ($block->getDeliveryConfirmationTypes()): ?>
                         <td>
                             <select name="delivery_confirmation_types">
-                                <?php foreach ($this->getDeliveryConfirmationTypes() as $key => $value): ?>
+                                <?php foreach ($block->getDeliveryConfirmationTypes() as $key => $value): ?>
                                 <option value="<?php echo $key ?>" >
                                     <?php echo $value ?>
                                 </option>
@@ -154,7 +154,7 @@ require([
                     </tbody>
                 </table>
 
-                <?php if ($this->getContentTypes()): ?>
+                <?php if ($block->getContentTypes()): ?>
                 <table class="package-options package-options-contents data-table" cellspacing="0">
                     <thead>
                         <th><?php echo __('Contents') ?></th>
@@ -163,7 +163,7 @@ require([
                     <tbody>
                         <td>
                             <select name="content_type" onchange="packaging.changeContentTypes(this);">
-                                <?php foreach ($this->getContentTypes() as $key => $value): ?>
+                                <?php foreach ($block->getContentTypes() as $key => $value): ?>
                                 <option value="<?php echo $key ?>" >
                                     <?php echo $value ?>
                                 </option>

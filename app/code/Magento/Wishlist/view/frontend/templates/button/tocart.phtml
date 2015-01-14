@@ -5,7 +5,7 @@
  */
 ?>
 
-<?php if ($this->getWishlist()->getItemsCount() && $this->getWishlist()->isSalable()): ?>
+<?php if ($block->getWishlist()->getItemsCount() && $block->getWishlist()->isSalable()): ?>
     <button type="button" data-role="all-tocart" title="<?php echo __('Add All to Cart') ?>" class="action tocart">
         <span><?php echo __('Add All to Cart') ?></span>
     </button>

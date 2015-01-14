@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $this \Magento\Tax\Block\Adminhtml\Rule\Edit\Form */
+/** @var $block \Magento\Tax\Block\Adminhtml\Rule\Edit\Form */
 ?>
 <script type="text/javascript">
 require([
@@ -149,7 +149,7 @@ require([
                                 form_key: $('input[name="form_key"]').val()
                             },
                             dataType: 'json',
-                            url: '<?php echo $this->getTaxRateDeleteUrl()?>',
+                            url: '<?php echo $block->getTaxRateDeleteUrl()?>',
                             success: function(result, status) {
                                 if (result.success) {
                                     that.parent().remove();
@@ -178,7 +178,7 @@ require([
             taxRateForm.dialogRates({
                 title: '<?php echo __('Tax Rate'); ?>',
                 autoOpen: false,
-                id: '<?php echo $this->getJsId() ?>',
+                id: '<?php echo $block->getJsId() ?>',
                 minWidth: 560,
                 modal: true,
                 zIndex: 1003,
@@ -186,7 +186,7 @@ require([
                 resizable: false,
                 buttons: [{
                     text: '<?php echo __('Save'); ?>',
-                    id: '<?php echo $this->getJsId('apply-button') ?>',
+                    id: '<?php echo $block->getJsId('apply-button') ?>',
                     'class' :'action-save primary',
                     click: function() {
                         $(this).dialogRates('updateItemRate');
@@ -204,7 +204,7 @@ require([
                             type: 'POST',
                             data: itemRateData,
                             dataType: 'json',
-                            url: '<?php echo $this->getTaxRateSaveUrl()?>',
+                            url: '<?php echo $block->getTaxRateSaveUrl()?>',
                             success: function(result, status) {
                                 if (result.success) {
                                     itemRate.code = result.code;
@@ -232,7 +232,7 @@ require([
                     }
                 }, {
                     text: '<?php echo __('Cancel'); ?>',
-                    id: '<?php echo $this->getJsId('close-button') ?>',
+                    id: '<?php echo $block->getJsId('close-button') ?>',
                     'class': 'action-cancel',
                     click: function() {
                         $(this).dialogRates("close");

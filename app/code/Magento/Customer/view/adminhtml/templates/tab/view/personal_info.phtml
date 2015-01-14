@@ -8,8 +8,8 @@
  * Template for block \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Status\PersonalInfo
  */
 
-$createDateAdmin    = $this->getCreateDate();
-$createDateStore    = $this->getStoreCreateDate();
+$createDateAdmin    = $block->getCreateDate();
+$createDateStore    = $block->getStoreCreateDate();
 ?>
 
 <div class="fieldset-wrapper customer-information">
@@ -18,10 +18,10 @@ $createDateStore    = $this->getStoreCreateDate();
     </div>
     <table class="data-table">
         <tbody>
-        <?php echo $this->getChildHtml(); ?>
+        <?php echo $block->getChildHtml(); ?>
         <tr>
             <th><?php echo __('Confirmed email:') ?></th>
-            <td><?php echo $this->getIsConfirmedStatus() ?></td>
+            <td><?php echo $block->getIsConfirmedStatus() ?></td>
         </tr>
         <tr>
             <th><?php echo __('Account Created on:') ?></th>
@@ -29,23 +29,23 @@ $createDateStore    = $this->getStoreCreateDate();
         </tr>
         <?php if ($createDateAdmin != $createDateStore): ?>
             <tr>
-                <th><?php echo __('Account Created on (%1):', $this->getStoreCreateDateTimezone()) ?></th>
+                <th><?php echo __('Account Created on (%1):', $block->getStoreCreateDateTimezone()) ?></th>
                 <td><?php echo $createDateStore ?></td>
             </tr>
         <?php endif; ?>
         <tr>
             <th><?php echo __('Account Created in:') ?></th>
-            <td><?php echo $this->getCreatedInStore() ?></td>
+            <td><?php echo $block->getCreatedInStore() ?></td>
         </tr>
         <tr>
             <th><?php echo __('Customer Group:') ?></th>
-            <td><?php echo $this->getGroupName() ?></td>
+            <td><?php echo $block->getGroupName() ?></td>
         </tr>
         </tbody>
     </table>
     <address>
         <strong><?php echo __('Default Billing Address') ?></strong><br/>
-        <?php echo $this->getBillingAddressHtml() ?>
+        <?php echo $block->getBillingAddressHtml() ?>
     </address>
 
 </div>

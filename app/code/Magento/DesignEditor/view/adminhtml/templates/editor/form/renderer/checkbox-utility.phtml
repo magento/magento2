@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Checkbox */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Checkbox */ ?>
 <?php
 /** @var $element \Magento\Framework\Data\Form\Element\Checkbox */
-$element = $this->getElement();
+$element = $block->getElement();
 ?>
 
-<?php echo $this->getHtml() ?>
+<?php echo $block->getHtml() ?>
 
 <script type="text/javascript">
 require(['jquery'], function($){

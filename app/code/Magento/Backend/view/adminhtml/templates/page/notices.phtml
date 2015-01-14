@@ -9,7 +9,7 @@
  * @see \Magento\Backend\Block\Page\Notices
  */
 ?>
-<?php if ($this->displayNoscriptNotice()): ?>
+<?php if ($block->displayNoscriptNotice()): ?>
     <noscript>
         <div class="message message-noscript">
             <div class="message-inner">
@@ -21,7 +21,7 @@
         </div>
     </noscript>
 <?php endif; ?>
-<?php if ($this->displayDemoNotice()): ?>
+<?php if ($block->displayDemoNotice()): ?>
     <div class="message message-demo-mode">
         <div class="message-inner">
             <div class="message-content">

@@ -10,7 +10,7 @@
     Ext.UpdateManager.defaults.disableCaching = true;
 </script>
 
-<script type="text/javascript" src="<?php echo $this->getViewFileUrl('tiny_mce/tiny_mce_src.js') ?>"></script>
+<script type="text/javascript" src="<?php echo $block->getViewFileUrl('tiny_mce/tiny_mce_src.js') ?>"></script>
 
 <script type="text/javascript">
     Fieldset.addToPrefix(<?php echo $this->helper('Magento\Backend\Helper\Data')->getCurrentUserId() ?>);

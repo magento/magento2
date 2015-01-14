@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php $_source  = $this->getSource() ?>
-<?php $_order   = $this->getOrder() ?>
-<?php $this->setPriceDataObject($_source) ?>
+<?php $_source  = $block->getSource() ?>
+<?php $_order   = $block->getOrder() ?>
+<?php $block->setPriceDataObject($_source) ?>
 
 <?php if ((float) $_source->getDiscountAmount()): ?>
     <tr>
@@ -17,6 +17,6 @@
                 <?php echo __('Discount') ?>
             <?php endif; ?>
         </td>
-        <td><?php echo $this->displayPriceAttribute('discount_amount') ?></td>
+        <td><?php echo $block->displayPriceAttribute('discount_amount') ?></td>
     </tr>
 <?php endif; ?>

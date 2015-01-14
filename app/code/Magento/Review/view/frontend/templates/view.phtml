@@ -4,29 +4,29 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php if ($this->getProductData()->getId()): ?>
+<?php if ($block->getProductData()->getId()): ?>
 <div class="product-review">
     <div class="page-title">
         <h1><?php echo __('Review Details') ?></h1>
     </div>
     <div class="product-img-box">
-        <a href="<?php echo $this->getProductData()->getProductUrl() ?>"><img src="<?php echo $this->getBaseImageUrl($this->getProductData()); ?>" height="<?php echo $this->getBaseImageSize()?>" width="<?php echo $this->getBaseImageSize()?>" alt="<?php echo $this->escapeHtml($this->getProductData()->getName()) ?>" class="product-image" /></a>
-        <?php if ($this->getRating() && $this->getRating()->getSize()): ?>
+        <a href="<?php echo $block->getProductData()->getProductUrl() ?>"><img src="<?php echo $block->getBaseImageUrl($block->getProductData()); ?>" height="<?php echo $block->getBaseImageSize()?>" width="<?php echo $block->getBaseImageSize()?>" alt="<?php echo $block->escapeHtml($block->getProductData()->getName()) ?>" class="product-image" /></a>
+        <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
           <p><?php echo __('Average Customer Rating') ?>:</p>
-          <?php echo $this->getReviewsSummaryHtml($this->getProductData()) ?>
+          <?php echo $block->getReviewsSummaryHtml($block->getProductData()) ?>
         <?php endif; ?>
     </div>
     <div class="details">
-        <h3 class="product-name"><?php echo $this->escapeHtml($this->getProductData()->getName()) ?></h3>
-        <?php if ($this->getRating() && $this->getRating()->getSize()): ?>
+        <h3 class="product-name"><?php echo $block->escapeHtml($block->getProductData()->getName()) ?></h3>
+        <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
             <h4><?php echo __('Product Rating:') ?></h4>
             <div class="table-wrapper">
                 <table class="data-table review-summary-table">
                     <caption class="table-caption"><?php echo __('Product Rating'); ?></caption>
-                    <?php foreach ($this->getRating() as $_rating): ?>
+                    <?php foreach ($block->getRating() as $_rating): ?>
                         <?php if ($_rating->getPercent()): ?>
                             <tr>
-                                <td class="label"><?php echo __($this->escapeHtml($_rating->getRatingCode())) ?></td>
+                                <td class="label"><?php echo __($block->escapeHtml($_rating->getRatingCode())) ?></td>
                                 <td class="value">
                                     <div class="rating-box">
                                         <div class="rating" style="width:<?php echo ceil($_rating->getPercent()) ?>%;"></div>
@@ -37,12 +37,12 @@
                 </table>
             </div>
         <?php endif; ?>
-        <p class="date"><?php echo __('Product Review (submitted on %1):', $this->dateFormat($this->getReviewData()->getCreatedAt())) ?></p>
-        <p><?php echo nl2br($this->escapeHtml($this->getReviewData()->getDetail())) ?></p>
+        <p class="date"><?php echo __('Product Review (submitted on %1):', $block->dateFormat($block->getReviewData()->getCreatedAt())) ?></p>
+        <p><?php echo nl2br($block->escapeHtml($block->getReviewData()->getDetail())) ?></p>
     </div>
     <div class="actions">
         <div class="secondary">
-            <a class="action back" href="<?php echo $this->getBackUrl() ?>">
+            <a class="action back" href="<?php echo $block->getBackUrl() ?>">
                 <span><?php echo __('Back to Product Reviews') ?></a></span>
             </a>
         </div>
