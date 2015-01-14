@@ -70,7 +70,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             [
                 Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
                     DirectoryList::THEMES => [
-                        'path' => realpath(__DIR__ . '/../_files/design'),
+                        'path' => realpath(__DIR__ . '/../../../Core/Model/_files/design'),
                     ],
                 ],
             ]

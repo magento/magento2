@@ -64,7 +64,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $designModel->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
-        $objectManager->addSharedInstance($designModel, 'Magento\Core\Model\View\Design\Proxy');
+        $objectManager->addSharedInstance($designModel, 'Magento\Theme\Model\View\Design\Proxy');
 
         $model = $objectManager->create('Magento\Framework\Translate');
         $objectManager->addSharedInstance($model, 'Magento\Framework\Translate');
