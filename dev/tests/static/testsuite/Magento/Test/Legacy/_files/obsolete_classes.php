@@ -2854,7 +2854,6 @@ return [
     ['Magento\Core\Model\View\Design', 'Magento\Theme\Model\View\Design'],
     ['Magento\Core\Model\Design\Backend\Theme', 'Magento\Theme\Model\Design\Backend\Theme'],
     ['Magento\Core\Model\Design\Backend\Exceptions', 'Magento\Theme\Model\Design\Backend\Exceptions'],
-    ['Magento\Core\Model\Design\Backend\ExceptionsTest', 'Magento\Theme\Model\Design\Backend\ExceptionsTest'],
     ['Magento\Core\Model\Resource\Theme', 'Magento\Theme\Model\Resource\Theme'],
     [
         'Magento\Core\Model\Resource\Theme\Customization\Update',
@@ -2865,7 +2864,6 @@ return [
     ['Magento\Core\Model\Resource\Theme\Grid\Collection', 'Magento\Theme\Model\Resource\Theme\Grid\Collection'],
     ['Magento\Core\Model\Resource\Theme\Collection', 'Magento\Theme\Model\Resource\Theme\Collection'],
     ['Magento\Core\Model\Resource\Theme\File', 'Magento\Core\Model\Resource\Theme\File'],
-    ['Magento\Core\Model\Resource\Theme\CollectionTest', '\Magento\Theme\Model\Resource\Theme\CollectionTest'],
     ['Magento\Framework\ObjectManager\Config\ProxyConfig'],
     ['Magento\Catalog\Block\Product\Send'],
     ['Magento\Catalog\Helper\Product\Options'],
