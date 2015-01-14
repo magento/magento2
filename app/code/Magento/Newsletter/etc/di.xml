@@ -16,6 +16,11 @@
             <argument name="storage" xsi:type="object">Magento\Newsletter\Model\Session\Storage</argument>
         </arguments>
     </type>
+    <type name="Magento\Newsletter\Helper\Data">
+        <arguments>
+            <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="update_newsletter_subscription_on_customer_update"
                 type="Magento\Newsletter\Model\Plugin\CustomerPlugin"/>
