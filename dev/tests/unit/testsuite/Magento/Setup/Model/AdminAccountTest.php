@@ -41,7 +41,11 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
         $this->setUpMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnCallback(function ($table) {return $table;}));
+            ->will($this->returnCallback(
+                function ($table) {
+                    return $table;
+                }
+            ));
 
         $this->randomMock = $this->getMock('Magento\Framework\Math\Random');
         $this->randomMock->expects($this->any())->method('getRandomString')->will($this->returnValue('salt'));
@@ -91,7 +95,10 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 $existingAdminRoleData,
             ],
         ];
-        $this->dbAdapterMock->expects($this->exactly(2))->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock
+            ->expects($this->exactly(2))
+            ->method('fetchRow')
+            ->will($this->returnValueMap($returnValueMap));
         $this->dbAdapterMock->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
         $this->dbAdapterMock->expects($this->once())->method('update')->will($this->returnValue(1));
 
@@ -151,7 +158,10 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->dbAdapterMock->expects($this->exactly(3))->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock
+            ->expects($this->exactly(3))
+            ->method('fetchRow')
+            ->will($this->returnValueMap($returnValueMap));
         $this->dbAdapterMock->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
         $this->dbAdapterMock->expects($this->once())->method('update')->will($this->returnValue(1));
 
@@ -189,7 +199,10 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->dbAdapterMock->expects($this->exactly(2))->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock
+            ->expects($this->exactly(2))
+            ->method('fetchRow')
+            ->will($this->returnValueMap($returnValueMap));
         // insert only once (new user)
         $this->dbAdapterMock->expects($this->once())->method('insert');
         // after inserting new user
@@ -242,7 +255,10 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
 
         ];
 
-        $this->dbAdapterMock->expects($this->exactly(3))->method('fetchRow')->will($this->returnValueMap($returnValueMap));
+        $this->dbAdapterMock
+            ->expects($this->exactly(3))
+            ->method('fetchRow')
+            ->will($this->returnValueMap($returnValueMap));
         // after inserting new user
         $this->dbAdapterMock->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
 

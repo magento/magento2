@@ -33,7 +33,7 @@ class ProgressTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorExceptionCurrentExceedsTotal()
     {
-        new Progress(1,2);
+        new Progress(1, 2);
     }
 
     public function testSetNext()

@@ -17,7 +17,10 @@ class ListsTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->lists = new Lists($objectManager->getObject('Zend_Locale'), $objectManager->getObject('Magento\Framework\Locale\Config'));
+        $this->lists = new Lists(
+            $objectManager->getObject('Zend_Locale'),
+            $objectManager->getObject('Magento\Framework\Locale\Config')
+        );
     }
 
     public function testGetTimezoneList()

@@ -83,8 +83,8 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
         $this->webLogger->logSuccess('Success2');
         $this->assertEquals(
             '<span class="text-success">[SUCCESS] ' . 'Success1' . '</span><br/>' .
-            '<span class="text-success">[SUCCESS] ' . 'Success2' . '</span><br/>'
-            , self::$log);
+            '<span class="text-success">[SUCCESS] ' . 'Success2' . '</span><br/>',
+            self::$log);
     }
 
     public function testLogError()
