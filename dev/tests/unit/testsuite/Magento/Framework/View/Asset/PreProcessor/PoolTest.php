@@ -46,7 +46,10 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         return [
             'css => css' => [
                 'css', 'css',
-                ['Magento\Framework\View\Asset\PreProcessor\ModuleNotation'],
+                [
+                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
+                    'Magento\Framework\Minifier\CssInterface'
+                ],
             ],
             'css => less (irrelevant)' => [
                 'css', 'less',
@@ -57,6 +60,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                 [
                     'Magento\Framework\Css\PreProcessor\Less',
                     'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
+                    'Magento\Framework\Minifier\CssInterface'
                 ],
             ],
             'less => less' => [
