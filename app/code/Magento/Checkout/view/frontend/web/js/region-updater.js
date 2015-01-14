@@ -60,9 +60,10 @@ define([
          */
         _renderSelectOption: function(selectElement, key, value) {
             selectElement.append($.proxy(function() {
-                if (value.code &&  $(value.name).is('span')) {
+                var name = value.name.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&");
+                if (value.code &&  $(name).is('span')) {
                     key = value.code;
-                    value.name = $(value.name).text();
+                    value.name = $(name).text();
                 }
                 $.template('regionTemplate', this.options.regionTemplate);
                 if (this.options.defaultRegion === key) {
