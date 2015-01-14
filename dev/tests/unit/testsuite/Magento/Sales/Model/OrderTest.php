@@ -192,6 +192,23 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->order->canCancel());
     }
 
+    public function testCanEditIfHasInvoices()
+    {
+        $invoiceCollection = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Invoice\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['count'])
+            ->getMock();
+
+        $invoiceCollection->expects($this->once())
+            ->method('count')
+            ->willReturn(2);
+
+        $this->order->setInvoiceCollection($invoiceCollection);
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
+
+        $this->assertFalse($this->order->canEdit());
+    }
+
     public function testCanCancelCanReviewPayment()
     {
         $paymentMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
