@@ -58,12 +58,12 @@ class FirstPlugin
 
     public function beforeW(Intercepted $subject, $param1)
     {
-        return ['<F:bV/>'];
+        return ['<F:bW/>'];
     }
 
     public function aroundW(Intercepted $subject, \Closure $next, $param1)
     {
-        return '<F:V>' . $param1 . '<F:V/>';
+        return '<F:W>' . $param1 . '<F:W/>';
     }
 
     public function afterW(Intercepted $subject, $result)

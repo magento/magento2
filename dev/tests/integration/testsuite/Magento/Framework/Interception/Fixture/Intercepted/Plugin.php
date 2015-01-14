@@ -58,12 +58,12 @@ class Plugin
 
     public function beforeW(Intercepted $subject, $param1)
     {
-        return ['<P:bV/>'];
+        return ['<P:bW/>'];
     }
 
     public function aroundW(Intercepted $subject, \Closure $next, $param1)
     {
-        return '<P:V>' . $param1 . '<P:V/>';
+        return '<P:W>' . $param1 . '<P:W/>';
     }
 
     public function afterW(Intercepted $subject, $result)
