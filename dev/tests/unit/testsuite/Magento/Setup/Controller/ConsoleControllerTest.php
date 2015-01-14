@@ -285,7 +285,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     {
         $status = $this->getModuleActionMocks($command, $modules, $isForce);
         if (!$isForce) {
-            $status->expects($this->once())->method('isSetEnabledAllowed')->willReturn(true);
+            $status->expects($this->once())->method('checkSetEnabledErrors')->willReturn([]);
         }
         $status->expects($this->once())->method('setEnabled')->with($expectedIsEnabled, $expectedModules);
         $this->consoleLogger->expects($this->once())->method('log');
@@ -333,8 +333,9 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     public function testModuleActionNotAllowed()
     {
         $status = $this->getModuleActionMocks(ConsoleController::CMD_MODULE_ENABLE, 'Module_Foo,Module_Bar', false);
-        $status->expects($this->once())->method('isSetEnabledAllowed')->willReturn(false);
-        $status->expects($this->once())->method('getErrors')->willReturn(['Circular dependency of Foo and Bar']);
+        $status->expects($this->once())
+            ->method('checkSetEnabledErrors')
+            ->willReturn(['Circular dependency of Foo and Bar']);
         $status->expects($this->never())->method('setEnabled');
         $this->controller->moduleAction();
     }

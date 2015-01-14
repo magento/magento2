@@ -43,13 +43,6 @@ class Status
     private $cleanup;
 
     /**
-     * Error messages collected during last command
-     *
-     * @var string[]
-     */
-    private $errors = [];
-
-    /**
      * Constructor
      *
      * @param ModuleList\Loader $loader
@@ -72,37 +65,27 @@ class Status
      *
      * @param bool $isEnable
      * @param string[] $modules
-     * @return bool
-     */
-    public function isSetEnabledAllowed($isEnable, $modules)
-    {
-        $this->errors = [];
-        return true;
-    }
-
-    /**
-     * Gets error messages that may have occurred during last command
-     *
      * @return string[]
      */
-    public function getErrors()
+    public function checkSetEnabledErrors($isEnable, $modules)
     {
-        return $this->errors;
+        return [];
     }
 
     /**
      * Sets specified modules to enabled or disabled state
      *
      * Performs other necessary routines, such as cache cleanup
+     * Returns list of modules that have changed
      *
      * @param bool $isEnable
      * @param string[] $modules
-     * @return void
+     * @return string[]
      * @throws \LogicException
      */
     public function setEnabled($isEnable, $modules)
     {
-        $this->errors = [];
+        $changed = [];
         $all = $this->loader->load();
         foreach ($modules as $name) {
             if (!isset($all[$name])) {
@@ -111,15 +94,22 @@ class Status
         }
         $result = [];
         foreach (array_keys($all) as $name) {
+            $currentStatus = $this->list->has($name);
             if (in_array($name, $modules)) {
                 $result[$name] = $isEnable;
+                if ($isEnable != $currentStatus) {
+                    $changed[] = $name;
+                }
             } else {
-                $result[$name] = $this->list->has($name);
+                $result[$name] = $currentStatus;
             }
         }
-        $segment = new ModuleList\DeploymentConfig($result);
-        $this->writer->update($segment);
-        $this->cleanup->clearCaches();
-        $this->cleanup->clearCodeGeneratedFiles();
+        if ($changed) {
+            $segment = new ModuleList\DeploymentConfig($result);
+            $this->writer->update($segment);
+            $this->cleanup->clearCaches();
+            $this->cleanup->clearCodeGeneratedFiles();
+        }
+        return $changed;
     }
 }

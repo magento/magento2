@@ -46,16 +46,17 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $modules = ['Module_Foo' => '', 'Module_Bar' => '', 'Module_Baz' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
-        $this->moduleList->expects($this->once())->method('has')->with('Module_Baz');
+        $this->moduleList->expects($this->at(0))->method('has')->with('Module_Foo')->willReturn(true);
+        $this->moduleList->expects($this->at(1))->method('has')->with('Module_Bar')->willReturn(false);
+        $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn(true);
         $constraint = new \PHPUnit_Framework_Constraint_IsInstanceOf(
             'Magento\Framework\Module\ModuleList\DeploymentConfig'
         );
         $this->writer->expects($this->once())->method('update')->with($constraint);
         $this->cleanup->expects($this->once())->method('clearCaches');
         $this->cleanup->expects($this->once())->method('clearCodeGeneratedFiles');
-        $this->assertEquals([], $this->object->getErrors());
-        $this->object->setEnabled(true, ['Module_Foo', 'Module_Bar']);
-        $this->assertEquals([], $this->object->getErrors());
+        $result = $this->object->setEnabled(true, ['Module_Foo', 'Module_Bar']);
+        $this->assertEquals(['Module_Bar'], $result);
     }
 
     /**
