@@ -2,12 +2,12 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Downloadable\Service\V1\DownloadableLink\Data;
+namespace Magento\Downloadable\Model\Link;
 
-class DownloadableLinkContentValidatorTest extends \PHPUnit_Framework_TestCase
+class ContentValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DownloadableLinkContentValidator
+     * @var ContentValidator
      */
     protected $validator;
 
@@ -34,7 +34,7 @@ class DownloadableLinkContentValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->fileValidatorMock = $this->getMock(
-            '\Magento\Downloadable\Service\V1\Data\FileContentValidator',
+            '\Magento\Downloadable\Model\File\ContentValidator',
             [],
             [],
             '',
@@ -47,21 +47,9 @@ class DownloadableLinkContentValidatorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->linkFileMock = $this->getMock(
-            '\Magento\Downloadable\Service\V1\Data\FileContent',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->sampleFileMock = $this->getMock(
-            '\Magento\Downloadable\Service\V1\Data\FileContent',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->validator = new DownloadableLinkContentValidator($this->fileValidatorMock, $this->urlValidatorMock);
+        $this->linkFileMock = $this->getMock('\Magento\Downloadable\Api\Data\File\ContentInterface');
+        $this->sampleFileMock = $this->getMock('\Magento\Downloadable\Api\Data\File\ContentInterface');
+        $this->validator = new ContentValidator($this->fileValidatorMock, $this->urlValidatorMock);
     }
 
     public function testIsValid()
@@ -191,13 +179,7 @@ class DownloadableLinkContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function getLinkContentMock(array $linkContentData)
     {
-        $contentMock = $this->getMock(
-            '\Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkContent',
-            [],
-            [],
-            '',
-            false
-        );
+        $contentMock = $this->getMock('\Magento\Downloadable\Api\Data\LinkContentInterface');
         $contentMock->expects($this->any())->method('getTitle')->will($this->returnValue(
             $linkContentData['title']
         ));

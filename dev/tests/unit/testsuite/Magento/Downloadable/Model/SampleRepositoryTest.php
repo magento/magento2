@@ -3,9 +3,9 @@
  *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Downloadable\Service\V1\DownloadableSample;
+namespace Magento\Downloadable\Model;
 
-class WriteServiceTest extends \PHPUnit_Framework_TestCase
+class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -38,7 +38,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     protected $productMock;
 
     /**
-     * @var WriteService
+     * @var SampleRepository
      */
     protected $service;
 
@@ -53,14 +53,14 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->repositoryMock = $this->getMock('\Magento\Catalog\Model\ProductRepository', [], [], '', false);
         $this->contentValidatorMock = $this->getMock(
-            '\Magento\Downloadable\Service\V1\DownloadableSample\Data\DownloadableSampleContentValidator',
+            'Magento\Downloadable\Model\Sample\ContentValidator',
             [],
             [],
             '',
             false
         );
         $this->contentUploaderMock = $this->getMock(
-            '\Magento\Downloadable\Service\V1\Data\FileContentUploaderInterface'
+            'Magento\Downloadable\Api\Data\File\ContentUploaderInterface'
         );
         $this->jsonEncoderMock = $this->getMock(
             '\Magento\Framework\Json\EncoderInterface'
@@ -73,7 +73,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->service = new WriteService(
+        $this->service = new SampleRepository(
             $this->repositoryMock,
             $this->contentValidatorMock,
             $this->contentUploaderMock,
@@ -88,17 +88,9 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected function getSampleContentMock(array $sampleContentData)
     {
-        $contentMock = $this->getMock(
-            '\Magento\Downloadable\Service\V1\DownloadableSample\Data\DownloadableSampleContent',
-            [],
-            [],
-            '',
-            false
-        );
+        $contentMock = $this->getMock('\Magento\Downloadable\Api\Data\SampleContentInterface');
 
-        $contentMock->expects($this->any())->method('getTitle')->will($this->returnValue(
-            $sampleContentData['title']
-        ));
+        $contentMock->expects($this->any())->method('getTitle')->will($this->returnValue($sampleContentData['title']));
         $contentMock->expects($this->any())->method('getSortOrder')->will($this->returnValue(
             $sampleContentData['sort_order']
         ));
@@ -145,7 +137,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
         $this->productMock->expects($this->once())->method('save');
-        $this->service->create($productSku, $sampleContentMock);
+        $this->service->save($productSku, null, $sampleContentMock);
     }
 
     /**
@@ -171,7 +163,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->never())->method('save');
 
-        $this->service->create($productSku, $sampleContentMock);
+        $this->service->save($productSku, null, $sampleContentMock);
     }
 
     public function testUpdate()
@@ -211,7 +203,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $sampleMock->expects($this->once())->method('setStoreId')->will($this->returnSelf());
         $sampleMock->expects($this->once())->method('save')->will($this->returnSelf());
 
-        $this->assertTrue($this->service->update($productSku, $sampleId, $sampleContentMock));
+        $this->assertTrue($this->service->save($productSku, $sampleId, $sampleContentMock));
     }
 
     /**
@@ -247,7 +239,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
         $sampleMock->expects($this->never())->method('save');
 
-        $this->service->update($productSku, $sampleId, $sampleContentMock, true);
+        $this->service->save($productSku, $sampleId, $sampleContentMock, true);
     }
 
     public function testDelete()

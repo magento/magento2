@@ -2,12 +2,12 @@
 /**
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
-namespace Magento\Downloadable\Service\V1\Data;
+namespace Magento\Downloadable\Model\File;
 
-class FileContentValidatorTest extends \PHPUnit_Framework_TestCase
+class ContentValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var FileContentValidator
+     * @var ContentValidator
      */
     protected $validator;
 
@@ -18,14 +18,9 @@ class FileContentValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->validator = new FileContentValidator();
-        $this->fileContentMock = $this->getMock(
-            '\Magento\Downloadable\Service\V1\Data\FileContent',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->validator = new ContentValidator();
+
+        $this->fileContentMock = $this->getMock('\Magento\Downloadable\Api\Data\File\ContentInterface');
     }
 
     public function testIsValid()
@@ -36,10 +31,6 @@ class FileContentValidatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('valid_name'));
 
         $this->assertTrue($this->validator->isValid($this->fileContentMock));
-    }
-
-    public function testValidateLinkResourceInputExceptionUrl()
-    {
     }
 
     /**

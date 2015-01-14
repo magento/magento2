@@ -5,6 +5,7 @@
  */
 namespace Magento\Downloadable\Model\File;
 
+use Magento\Downloadable\Api\Data\File\ContentInterface;
 use Magento\Framework\Exception\InputException;
 
 class ContentValidator
@@ -12,11 +13,11 @@ class ContentValidator
     /**
      * Check if gallery entry content is valid
      *
-     * @param Content $fileContent
-     * @return bool
+     * @param ContentInterface $fileContent
      * @throws InputException
+     * @return bool
      */
-    public function isValid(Content $fileContent)
+    public function isValid(ContentInterface $fileContent)
     {
         $decodedContent = @base64_decode($fileContent->getData(), true);
         if (empty($decodedContent)) {

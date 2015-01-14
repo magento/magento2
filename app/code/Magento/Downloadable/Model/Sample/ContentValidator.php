@@ -67,7 +67,6 @@ class ContentValidator
             throw new InputException('Provided file content must be valid base64 encoded data.');
         }
 
-        $a = $sampleContent->getSampleUrl();
         if ($sampleContent->getSampleType() == 'url'
             && !$this->urlValidator->isValid($sampleContent->getSampleUrl())
         ) {
