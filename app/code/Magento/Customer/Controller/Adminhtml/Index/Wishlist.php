@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,7 +12,7 @@ class Wishlist extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Wishlist Action
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
@@ -28,8 +27,7 @@ class Wishlist extends \Magento\Customer\Controller\Adminhtml\Index
             }
         }
 
-        $resultPage = $this->resultPageFactory->create();
-        $this->prepareDefaultCustomerTitle($resultPage);
-        return $resultPage;
+        $resultLayout = $this->resultLayoutFactory->create();
+        return $resultLayout;
     }
 }

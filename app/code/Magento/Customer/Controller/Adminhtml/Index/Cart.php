@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,7 +12,7 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Handle and then get cart grid contents
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
@@ -43,9 +42,8 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
             }
         }
 
-        $resultPage = $this->resultPageFactory->create();
-        $this->prepareDefaultCustomerTitle($resultPage);
-        $resultPage->getLayout()->getBlock('admin.customer.view.edit.cart')->setWebsiteId($websiteId);
-        return $resultPage;
+        $resultLayout = $this->resultLayoutFactory->create();
+        $resultLayout->getLayout()->getBlock('admin.customer.view.edit.cart')->setWebsiteId($websiteId);
+        return $resultLayout;
     }
 }

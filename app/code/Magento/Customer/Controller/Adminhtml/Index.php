@@ -118,6 +118,11 @@ class Index extends \Magento\Backend\App\Action
     protected $layoutFactory;
 
     /**
+     * @var \Magento\Framework\View\Result\LayoutFactory
+     */
+    protected $resultLayoutFactory;
+
+    /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
@@ -136,11 +141,6 @@ class Index extends \Magento\Backend\App\Action
      * @var \Magento\Framework\Controller\Result\JSONFactory
      */
     protected $resultJsonFactory;
-
-    /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
-     */
-    protected $resultRawFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -163,11 +163,11 @@ class Index extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param ObjectFactory $objectFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -192,11 +192,11 @@ class Index extends \Magento\Backend\App\Action
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         ObjectFactory $objectFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
@@ -217,11 +217,11 @@ class Index extends \Magento\Backend\App\Action
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->_objectFactory = $objectFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->resultLayoutFactory = $resultLayoutFactory;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->resultRawFactory = $resultRawFactory;
         parent::__construct($context);
     }
 

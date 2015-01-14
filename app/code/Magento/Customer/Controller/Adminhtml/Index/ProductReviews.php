@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,17 +12,16 @@ class ProductReviews extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Get customer's product reviews list
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
         $this->_initCustomer();
-        $resultPage = $this->resultPageFactory->create();
-        $this->prepareDefaultCustomerTitle($resultPage);
-        $resultPage->getLayout()->getBlock('admin.customer.reviews')->setCustomerId(
+        $resultLayout = $this->resultLayoutFactory->create();
+        $resultLayout->getLayout()->getBlock('admin.customer.reviews')->setCustomerId(
             $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
         )
             ->setUseAjax(true);
-        return $resultPage;
+        return $resultLayout;
     }
 }

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -99,7 +98,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * AJAX customer validation action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {

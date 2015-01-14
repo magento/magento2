@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,7 +12,7 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Reset password handler
      *
-     * @return \Magento\Framework\App\ResponseInterface
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {

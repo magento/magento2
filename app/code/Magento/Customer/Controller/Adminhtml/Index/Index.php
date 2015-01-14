@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,7 +10,7 @@ class Index extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customers list action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
