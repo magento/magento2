@@ -2,7 +2,8 @@
 /**
  * Obsolete methods
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['__get', 'Magento\Framework\Object'],
@@ -328,6 +329,12 @@ return [
     ['displayFullSummary', 'Magento\Tax\Model\Config'],
     ['displayZeroTax', 'Magento\Tax\Model\Config'],
     ['drawItem', 'Magento\Catalog\Block\Navigation'],
+    ['getStoreCategories', 'Magento\Catalog\Block\Navigation'],
+    ['_getItemPosition', 'Magento\Catalog\Block\Navigation'],
+    ['_renderCategoryMenuItemHtml', 'Magento\Catalog\Block\Navigation'],
+    ['getCurrentCategoryPath', 'Magento\Catalog\Block\Navigation'],
+    ['drawOpenCategoryItem', 'Magento\Catalog\Block\Navigation'],
+    ['renderCategoriesMenuHtml', 'Magento\Catalog\Block\Navigation'],
     ['dropKey', 'Magento\Framework\DB\Adapter\Pdo\Mysql'],
     ['escapeJs', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config'],
     ['eventClean', 'Magento\Reports\Model\Event\Observer'],
@@ -2008,5 +2015,11 @@ return [
     ],
     ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
     ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
-    ['cleanTransactions', 'Magento\Paypal\Model\Observer']
+    ['cleanTransactions', 'Magento\Paypal\Model\Observer'],
+    ['getSkinImagePlaceholderUrl', 'Magento\Cms\Model\Wysiwyg\Config'],
+    ['compareIndexColumnProperties', 'Magento\Catalog\Model\Resource\Helper'],
+    ['getIsNullNotNullCondition', 'Magento\Catalog\Model\Resource\Helper'],
+    ['_getCategoryPath', 'Magento\Catalog\Model\Resource\Setup'],
+    ['_getCategoryEntityRow', 'Magento\Catalog\Model\Resource\Setup'],
+    ['createEavAttributeResource', 'Magento\Catalog\Model\Resource\Setup']
 ];
