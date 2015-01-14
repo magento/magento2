@@ -546,7 +546,7 @@ class Onepage
         $quote = $this->getQuote();
         $isCustomerNew = !$quote->getCustomerId();
         $customer = $quote->getCustomer();
-        $customerData = $this->extensibleDataObjectConverter->toFlatArray($customer);
+        $customerData = $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface');
 
         /** @var Form $customerForm */
         $customerForm = $this->_formFactory->create(
@@ -610,7 +610,7 @@ class Onepage
         $this->_objectCopyService->copyFieldsetToTarget(
             'customer_account',
             'to_quote',
-            $this->extensibleDataObjectConverter->toFlatArray($customer),
+            $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface'),
             $quote
         );
 
