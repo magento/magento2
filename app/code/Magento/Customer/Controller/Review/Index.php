@@ -20,8 +20,7 @@ class Index extends \Magento\Framework\App\Action\Action
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
     }
