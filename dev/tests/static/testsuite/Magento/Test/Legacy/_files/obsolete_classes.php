@@ -1636,6 +1636,7 @@ return [
     ['Magento\Adminhtml\Controller\Report\Sales', 'Magento\Reports\Controller\Adminhtml\Sales'],
     ['Magento\Adminhtml\Controller\Report\Shopcart', 'Magento\Reports\Controller\Adminhtml\Shopcart'],
     ['Magento\Adminhtml\Controller\Report\Statistics', 'Magento\Reports\Controller\Adminhtml\Statistics'],
+    ['Magento\Core\Model\Url\ScopeResolver', 'Magento\Framework\Url\ScopeResolver'],
     [
         'Magento\Adminhtml\Block\Report\Config\Form\Field\MtdStart',
         'Magento\Reports\Block\Adminhtml\Config\Form\Field\MtdStart'

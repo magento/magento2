@@ -528,7 +528,7 @@
     <type name="Magento\Framework\View\Asset\MergeService">
         <plugin name="cleanMergedJsCss" type="Magento\Core\Model\Asset\Plugin\CleanMergedJsCss"/>
     </type>
-    <type name="Magento\Core\Model\Url\ScopeResolver">
+    <type name="Magento\Framework\Url\ScopeResolver">
         <arguments>
             <argument name="areaCode" xsi:type="string">frontend</argument>
         </arguments>
