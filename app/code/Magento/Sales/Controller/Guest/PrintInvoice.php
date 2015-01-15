@@ -6,7 +6,9 @@
  */
 namespace Magento\Sales\Controller\Guest;
 
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
 class PrintInvoice extends \Magento\Sales\Controller\AbstractController\PrintInvoice
 {
@@ -16,35 +18,29 @@ class PrintInvoice extends \Magento\Sales\Controller\AbstractController\PrintInv
     protected $orderLoader;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Context $context
      * @param OrderViewAuthorization $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param OrderLoader $orderLoader
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Context $context,
         OrderViewAuthorization $orderAuthorization,
         \Magento\Framework\Registry $registry,
         OrderLoader $orderLoader,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+        PageFactory $resultPageFactory,
+        RedirectFactory $resultRedirectFactory
     ) {
         $this->orderLoader = $orderLoader;
-        parent::__construct($context, $orderAuthorization, $registry);
-        $this->resultPageFactory = $resultPageFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
+        parent::__construct(
+            $context,
+            $orderAuthorization,
+            $registry,
+            $resultPageFactory,
+            $resultRedirectFactory
+        );
     }
 
     /**

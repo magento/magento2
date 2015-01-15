@@ -14,7 +14,7 @@ interface OrderLoaderInterface
      * Load order
      *
      * @param RequestInterface $request
-     * @return \Magento\Sales\Model\Order
+     * @return bool|\Magento\Framework\Controller\ResultInterface
      */
     public function load(RequestInterface $request);
 }

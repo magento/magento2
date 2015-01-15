@@ -15,8 +15,9 @@ class View extends \Magento\Sales\Controller\AbstractController\View
      */
     public function execute()
     {
-        if (!$this->orderLoader->load($this->_request, $this->_response)) {
-            return;
+        $result = $this->orderLoader->load($this->_request);
+        if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
+            return $result;
         }
 
         $resultPage = $this->resultPageFactory->create();
