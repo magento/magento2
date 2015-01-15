@@ -1573,6 +1573,7 @@ return [
     ['Magento\Core\Model\View\FileSystem', 'Magento\Framework\View\FileSystem'],
     ['Magento\Core\Model\View\Service', 'Magento\Framework\View\Asset\Repository'],
     ['Magento\Core\Model\View\Url', 'Magento\Framework\View\Asset\Repository'],
+    ['Magento\Core\Model\View\Url\Config', 'Magento\Framework\View\Url\Config'],
     ['Magento\Core\Model\View\Config', 'Magento\Framework\View\Config'],
     ['Magento\Core\Model\Image\Factory', 'Magento\Framework\Image\Factory'],
     ['Magento\Core\Model\Theme\Image', 'Magento\Framework\View\Design\Theme\Image'],
