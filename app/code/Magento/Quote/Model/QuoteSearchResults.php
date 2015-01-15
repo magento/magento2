@@ -10,12 +10,12 @@ namespace Magento\Quote\Model;
  */
 class QuoteSearchResults
     extends \Magento\Framework\Api\SearchResults
-    implements \Magento\Quote\Api\Data\QuoteSearchResultsInterface
+    implements \Magento\Quote\Api\Data\CartSearchResultsInterface
 {
     /**
      * Get items
      *
-     * @return \Magento\Quote\Api\Data\QuoteInterface[]
+     * @return \Magento\Quote\Api\Data\CartInterface[]
      */
     public function getItems()
     {

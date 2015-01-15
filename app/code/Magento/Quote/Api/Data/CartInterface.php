@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Api\Data;
 
-interface QuoteInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Returns the cart/quote ID.

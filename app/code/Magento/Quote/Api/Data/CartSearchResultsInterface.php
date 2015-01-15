@@ -5,12 +5,12 @@
  */
 namespace Magento\Quote\Api\Data;
 
-interface QuoteSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
+interface CartSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
      * Get carts list.
      *
-     * @return \Magento\Quote\Api\Data\QuoteInterface[]
+     * @return \Magento\Quote\Api\Data\CartInterface[]
      */
     public function getItems();
 }

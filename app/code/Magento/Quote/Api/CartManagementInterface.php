@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Api;
 
-interface QuoteManagementInterface
+interface CartManagementInterface
 {
     /**
      * Enables an administrative or guest user to create an empty cart and quote for an anonymous customer.
@@ -21,7 +21,7 @@ interface QuoteManagementInterface
      * Returns information for the cart for a specified customer.
      *
      * @param int $customerId The customer ID.
-     * @return \Magento\Quote\Api\Data\QuoteInterface Cart object.
+     * @return \Magento\Quote\Api\Data\CartInterface Cart object.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified customer does not exist.
      * @see \Magento\Checkout\Service\V1\Cart\ReadServiceInterface::getCartForCustomer
      */

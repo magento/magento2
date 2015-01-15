@@ -13,7 +13,7 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
 use Magento\Framework\Exception\InputException;
 
-class QuoteRepository implements \Magento\Quote\Api\QuoteRepositoryInterface
+class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 {
     /**
      * @var Quote[]
@@ -41,7 +41,7 @@ class QuoteRepository implements \Magento\Quote\Api\QuoteRepositoryInterface
     protected $quoteCollection;
 
     /**
-     * @var \Magento\Quote\Api\Data\QuoteSearchResultsDataBuilder
+     * @var \Magento\Quote\Api\Data\CartSearchResultsDataBuilder
      */
     protected $searchResultsBuilder;
 
@@ -49,13 +49,13 @@ class QuoteRepository implements \Magento\Quote\Api\QuoteRepositoryInterface
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection
-     * @param \Magento\Quote\Api\Data\QuoteSearchResultsDataBuilder $searchResultsBuilder
+     * @param \Magento\Quote\Api\Data\CartSearchResultsDataBuilder $searchResultsBuilder
      */
     public function __construct(
         QuoteFactory $quoteFactory,
         StoreManagerInterface $storeManager,
         \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection,
-        \Magento\Quote\Api\Data\QuoteSearchResultsDataBuilder $searchResultsBuilder
+        \Magento\Quote\Api\Data\CartSearchResultsDataBuilder $searchResultsBuilder
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
