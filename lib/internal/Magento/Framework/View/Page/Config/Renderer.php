@@ -218,22 +218,16 @@ class Renderer
      */
     public function renderAssets()
     {
-        $result = '';
-        $groups = $this->pageConfig->getAssetCollection()->getGroups();
+        $resultGroups = array_fill_keys($this->assetTypeOrder, '');
         /** @var $group \Magento\Framework\View\Asset\PropertyGroup */
-        foreach ($this->assetTypeOrder as $contentType) {
-            foreach ($groups as $group) {
-                if ($group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE) == $contentType) {
-                    $result .= $this->renderAssetGroup($group);
-                }
+        foreach ($this->pageConfig->getAssetCollection()->getGroups() as $group) {
+            $type = $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE);
+            if (!isset($resultGroups[$type])) {
+                $resultGroups[$type] = '';
             }
+            $resultGroups[$type] .= $this->renderAssetGroup($group);
         }
-        foreach ($groups as $group) {
-            if (!in_array($group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE), $this->assetTypeOrder)) {
-                $result .= $this->renderAssetGroup($group);
-            }
-        }
-        return $result;
+        return implode('', $resultGroups);
     }
 
     /**
