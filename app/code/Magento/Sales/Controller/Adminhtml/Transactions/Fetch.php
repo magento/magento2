@@ -7,13 +7,14 @@
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\Redirect;
 
 class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**
      * Fetch transaction details action
      *
-     * @return void
+     * @return Redirect
      */
     public function execute()
     {
@@ -31,6 +32,6 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
             $this->messageManager->addError(__('We can\'t update the transaction details.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
-        $this->_redirect('sales/transactions/view', ['_current' => true]);
+        return $this->resultRedirectFactory->create()->setPath('sales/transactions/view', ['_current' => true]);
     }
 }

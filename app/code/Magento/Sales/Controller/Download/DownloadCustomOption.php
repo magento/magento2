@@ -6,24 +6,44 @@
  */
 namespace Magento\Sales\Controller\Download;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Catalog\Model\Product\Type\AbstractType\AbstractProductType;
 
 class DownloadCustomOption extends \Magento\Framework\App\Action\Action
 {
     /**
+     * @var ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
+     * @param Context $context
+     * @param ForwardFactory $resultForwardFactory
+     */
+    public function __construct(
+        Context $context,
+        ForwardFactory $resultForwardFactory
+    ) {
+        parent::__construct($context);
+        $this->resultForwardFactory = $resultForwardFactory;
+    }
+
+    /**
      * Custom options download action
      *
-     * @return void
+     * @return void|\Magento\Framework\Controller\Result\Forward
      */
     public function execute()
     {
         $quoteItemOptionId = $this->getRequest()->getParam('id');
-        /** @var $option \Magento\Quote\Model\Quote\Item\Option */
-        $option = $this->_objectManager->create('Magento\Quote\Model\Quote\Item\Option')->load($quoteItemOptionId);
+        /** @var $option \Magento\Sales\Model\Quote\Item\Option */
+        $option = $this->_objectManager->create('Magento\Sales\Model\Quote\Item\Option')->load($quoteItemOptionId);
+        /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+        $resultForward = $this->resultForwardFactory->create();
 
         if (!$option->getId()) {
-            $this->_forward('noroute');
-            return;
+            return $resultForward->forward('noroute');
         }
 
         $optionId = null;
@@ -43,19 +63,17 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
             $productOption->getProductId() != $option->getProductId() ||
             $productOption->getType() != 'file'
         ) {
-            $this->_forward('noroute');
-            return;
+            return $resultForward->forward('noroute');
         }
 
         try {
             $info = unserialize($option->getValue());
             if ($this->getRequest()->getParam('key') != $info['secret_key']) {
-                $this->_forward('noroute');
-                return;
+                return $resultForward->forward('noroute');
             }
             $this->_download->downloadFile($info);
         } catch (\Exception $e) {
-            $this->_forward('noroute');
+            $resultForward->forward('noroute');
         }
         exit(0);
     }
