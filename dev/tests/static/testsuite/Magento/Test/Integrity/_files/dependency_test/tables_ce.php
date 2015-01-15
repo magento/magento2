@@ -314,6 +314,5 @@ return [
     'admin_system_messages' => 'Magento_AdminNotification',
     'theme' => 'Magento_Theme',
     'theme_files' => 'Magento_Theme',
-    'core_theme_files_link' => 'Magento_Core',
     'vde_theme_change' => 'Magento_DesignEditor'
 ];
