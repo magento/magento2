@@ -45,7 +45,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     {
         $iterator = $this->iteratorFactory->create(
             $this->directoryRead,
-            $this->directoryRead->search('/*/*/etc/data_source/*')
+            $this->directoryRead->search('/*/*/etc/data_source/' . $filename)
         );
         return $iterator;
     }

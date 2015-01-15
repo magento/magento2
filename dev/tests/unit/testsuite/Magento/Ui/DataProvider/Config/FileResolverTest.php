@@ -35,10 +35,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         $this->fileResolver = new FileResolver($stubFilesystem, $stubFileIteratorFactory);
     }
 
-    /**
-     * @test
-     */
-    public function itShouldApplyTheFilenamePattern()
+    public function testItAppliesTheFilenamePattern()
     {
         $this->mockDirectoryRead->expects($this->once())
             ->method('search')
