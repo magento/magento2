@@ -45,7 +45,6 @@ class Integration implements \Magento\Integration\Service\V1\IntegrationInterfac
     {
         $this->_checkIntegrationByName($integrationData['name']);
         $integration = $this->_integrationFactory->create($integrationData);
-        // TODO: Think about double save issue
         $integration->save();
         $consumerName = 'Integration' . $integration->getId();
         $consumer = $this->_oauthService->createConsumer(['name' => $consumerName]);
