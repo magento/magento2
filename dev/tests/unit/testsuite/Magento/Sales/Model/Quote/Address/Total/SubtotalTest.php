@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Quote\Address\Total;
 
@@ -98,7 +99,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $address->expects($this->any())->method('getAllNonNominalItems')->will(
+        $address->expects($this->any())->method('getAllItems')->will(
             $this->returnValue([$quoteItem])
         );
 
@@ -134,7 +135,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $quoteItem->setProduct($product)->setQuote($quote)->setOriginalCustomPrice($price);
 
-        $address->expects($this->any())->method('getAllNonNominalItems')->will(
+        $address->expects($this->any())->method('getAllItems')->will(
             $this->returnValue([$quoteItem])
         );
         $address->expects($this->any())->method('getQuote')->will($this->returnValue($quote));

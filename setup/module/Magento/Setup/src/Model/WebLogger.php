@@ -1,9 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
 /**
  * Web UI Logger
@@ -22,16 +26,16 @@ class WebLogger implements LoggerInterface
     /**
      * Currently open file resource
      *
-     * @var resource
+     * @var Filesystem
      */
-    protected $resource;
+    protected $filesystem;
 
     /**
-     * Whether the log contains an error message
+     * Currently open file resource
      *
-     * @var bool
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    protected $hasError = false;
+    protected $directory;
 
     /**
      * Indicator of whether inline output is started
@@ -42,31 +46,15 @@ class WebLogger implements LoggerInterface
 
     /**
      * Constructor
+     * @param Filesystem $filesystem
+     * @param string $logFile
      */
-    public function __construct()
+    public function __construct(Filesystem $filesystem, $logFile = null)
     {
-        $this->logFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $this->logFile;
-    }
-
-    /**
-     * Opens log file in the specified mode
-     *
-     * @param string $mode
-     * @return void
-     */
-    private function open($mode)
-    {
-        $this->resource = fopen($this->logFile, $mode);
-    }
-
-    /**
-     * Closes the log file
-     *
-     * @return void
-     */
-    private function close()
-    {
-        fclose($this->resource);
+        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::LOG);
+        if ($logFile) {
+            $this->logFile = $logFile;
+        }
     }
 
     /**
@@ -122,19 +110,7 @@ class WebLogger implements LoggerInterface
      */
     private function writeToFile($message)
     {
-        $this->open('a+');
-        fwrite($this->resource, $message);
-        $this->close();
-    }
-
-    /**
-     * Whether there is an error in the log
-     *
-     * @return bool
-     */
-    public function hasError()
-    {
-        return $this->hasError;
+        $this->directory->writeFile($this->logFile, $message, 'a+');
     }
 
     /**
@@ -144,17 +120,8 @@ class WebLogger implements LoggerInterface
      */
     public function get()
     {
-        $this->open('r+');
-        fseek($this->resource, 0);
-        $messages = [];
-        while (($string = fgets($this->resource)) !== false) {
-            if (strpos($string, '[ERROR]') !== false) {
-                $this->hasError = true;
-            }
-            $messages[] = $string;
-        }
-        $this->close();
-        return $messages;
+        $fileContents = explode('\n', $this->directory->readFile($this->logFile));
+        return $fileContents;
     }
 
     /**
@@ -164,8 +131,8 @@ class WebLogger implements LoggerInterface
      */
     public function clear()
     {
-        if (file_exists($this->logFile)) {
-            unlink($this->logFile);
+        if ($this->directory->isExist($this->logFile)) {
+            $this->directory->delete($this->logFile);
         }
     }
 

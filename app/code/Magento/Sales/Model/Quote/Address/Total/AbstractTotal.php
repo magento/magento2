@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Quote\Address\Total;
 
@@ -187,14 +188,14 @@ abstract class AbstractTotal
     }
 
     /**
-     * Get all items except nominals
+     * Get all items
      *
      * @param \Magento\Sales\Model\Quote\Address $address
      * @return array
      */
     protected function _getAddressItems(\Magento\Sales\Model\Quote\Address $address)
     {
-        return $address->getAllNonNominalItems();
+        return $address->getAllItems();
     }
 
     /**

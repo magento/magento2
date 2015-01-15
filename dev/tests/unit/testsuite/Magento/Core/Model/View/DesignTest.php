@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\View;
 
@@ -23,7 +24,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\View\Design\Theme\FlyweightFactory', [], [], '', false
         );
         $config = $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $themeFactory = $this->getMock('\Magento\Core\Model\ThemeFactory');
+        $themeFactory = $this->getMock('\Magento\Core\Model\ThemeFactory', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManagerInterface');
         $state = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
         $themes = [];

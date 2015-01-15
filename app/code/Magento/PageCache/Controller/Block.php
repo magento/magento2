@@ -2,12 +2,30 @@
 /**
  * PageCache controller
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Controller;
 
 class Block extends \Magento\Framework\App\Action\Action
 {
+    /**
+     * @var \Magento\Framework\Translate\InlineInterface
+     */
+    protected $translateInline;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Translate\InlineInterface $translateInline
+    ) {
+        parent::__construct($context);
+        $this->translateInline = $translateInline;
+    }
+
     /**
      * Get blocks from layout by handles
      *

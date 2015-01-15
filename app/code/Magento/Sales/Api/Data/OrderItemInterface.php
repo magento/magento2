@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
 
@@ -265,11 +266,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     const BASE_HIDDEN_TAX_REFUNDED = 'base_hidden_tax_refunded';
     /*
-     * Is-nominal flag.
-     */
-    const IS_NOMINAL = 'is_nominal';
-    /*
-     * Tax-canceled flag.
+     * Tax canceled flag
      */
     const TAX_CANCELED = 'tax_canceled';
     /*
@@ -749,13 +746,6 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return float Hidden tax refunded.
      */
     public function getHiddenTaxRefunded();
-
-    /**
-     * Gets the is-nominal flag value for the order item.
-     *
-     * @return int Is-nominal flag value.
-     */
-    public function getIsNominal();
 
     /**
      * Gets the is-quantity-decimal flag value for the order item.

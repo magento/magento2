@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Model;
 
@@ -68,6 +69,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setWishlistItemCount', 'isLoggedIn', 'getCustomerId'])
             ->getMock();
         $this->wishlistFactory = $this->getMockBuilder('Magento\Wishlist\Model\WishlistFactory')
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->wishlist = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
