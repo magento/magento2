@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Service\V1\Address;
+namespace Magento\Quote\Model;
 
-/** Quote shipping address validator service. */
-class Validator
+/** Quote shipping/billing address validator service. */
+class QuoteAddressValidator
 {
     /**
      * Address factory.
@@ -39,12 +39,12 @@ class Validator
     /**
      * Validates the fields in a specified address data object.
      *
-     * @param \Magento\Checkout\Service\V1\Data\Cart\Address $addressData The address data object.
+     * @param \Magento\Quote\Api\Data\AddressInterface $addressData The address data object.
      * @return bool
      * @throws \Magento\Framework\Exception\InputException The specified address belongs to another customer.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified customer ID or address ID is not valid.
      */
-    public function validate($addressData)
+    public function validate(\Magento\Quote\Api\Data\AddressInterface $addressData)
     {
         //validate customer id
         if ($addressData->getCustomerId()) {

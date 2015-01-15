@@ -3,13 +3,56 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Api\Data;
+namespace Magento\Quote\Api\Data;
 
 /**
  * @see \Magento\Checkout\Service\V1\Data\Cart\Address
  */
 interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_EMAIL = 'email';
+
+    const KEY_COUNTRY_ID = 'country_id';
+
+    const KEY_ID = 'id';
+
+    const REGION_ID = 'region_id';
+
+    const REGION_CODE = 'region_code';
+
+    const REGION = 'region';
+
+    const KEY_CUSTOMER_ID = 'customer_id';
+
+    const KEY_STREET = 'street';
+
+    const KEY_COMPANY = 'company';
+
+    const KEY_TELEPHONE = 'telephone';
+
+    const KEY_FAX = 'fax';
+
+    const KEY_POSTCODE = 'postcode';
+
+    const KEY_CITY = 'city';
+
+    const KEY_FIRSTNAME = 'firstname';
+
+    const KEY_LASTNAME = 'lastname';
+
+    const KEY_MIDDLENAME = 'middlename';
+
+    const KEY_PREFIX = 'prefix';
+
+    const KEY_SUFFIX = 'suffix';
+
+    const KEY_VAT_ID = 'vat_id';
+
+    /**#@-*/
+
     /**
      * Get id
      *
@@ -18,12 +61,25 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getId();
 
     /**
-     * Get region
+     * Get region name
      *
-     * @TODO RegionInterface must be in Directory module
-     * @return \Magento\Customer\Api\Data\RegionInterface|null
+     * @return string
      */
     public function getRegion();
+
+    /**
+     * Get region id
+     *
+     * @return string
+     */
+    public function getRegionId();
+
+    /**
+     * Get region code
+     *
+     * @return string
+     */
+    public function getRegionCode();
 
     /**
      * Get country id

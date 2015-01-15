@@ -25,30 +25,6 @@
             <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
-    <route url="/V1/carts/:cartId/shipping-address" method="GET">
-        <service class="Magento\Checkout\Service\V1\Address\Shipping\ReadServiceInterface" method="getAddress"/>
-        <resources>
-            <resource ref="Magento_Sales::sales" />
-        </resources>
-    </route>
-    <route url="/V1/carts/:cartId/shipping-address" method="POST">
-        <service class="Magento\Checkout\Service\V1\Address\Shipping\WriteServiceInterface" method="setAddress"/>
-        <resources>
-            <resource ref="Magento_Sales::sales" />
-        </resources>
-    </route>
-    <route url="/V1/carts/:cartId/billing-address" method="GET">
-        <service class="Magento\Checkout\Service\V1\Address\Billing\ReadServiceInterface" method="getAddress"/>
-        <resources>
-            <resource ref="Magento_Sales::sales" />
-        </resources>
-    </route>
-    <route url="/V1/carts/:cartId/billing-address" method="POST">
-        <service class="Magento\Checkout\Service\V1\Address\Billing\WriteServiceInterface" method="setAddress"/>
-        <resources>
-            <resource ref="Magento_Sales::sales" />
-        </resources>
-    </route>
     <route url="/V1/carts/:cartId/coupons" method="GET">
         <service class="Magento\Checkout\Service\V1\Coupon\ReadServiceInterface" method="get"/>
         <resources>

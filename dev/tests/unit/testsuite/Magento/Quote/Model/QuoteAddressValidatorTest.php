@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Service\V1\Address;
+namespace Magento\Quote\Model;
 
 use Magento\Checkout\Service\V1\Data\Cart\Address;
 
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Checkout\Service\V1\Address\Validator
+     * @var QuoteAddressValidator
      */
     protected $model;
 
@@ -37,11 +37,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected $quoteAddressMock;
 
     /**
-     * @var \Magento\Checkout\Service\V1\Data\Cart\AddressBuilder
-     */
-    protected $addressDataBuilder;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerMock;
@@ -64,22 +59,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             '\Magento\Customer\Model\CustomerFactory', ['create', '__wakeup'], [], '', false);
         $this->customerMock = $this->getMock('\Magento\Customer\Model\Customer', [], [], '', false);
 
-        $builder = $this->getMock(
-            '\Magento\Checkout\Service\V1\Data\Cart\Address\RegionBuilder', ['create'], [], '', false
-        );
-
-        $this->addressDataBuilder = $this->objectManager->getObject(
-            'Magento\Checkout\Service\V1\Data\Cart\AddressBuilder',
-            ['regionBuilder' => $builder]
-        );
-
-        $this->model = $this->objectManager->getObject(
-            'Magento\Checkout\Service\V1\Address\Validator',
-            [
-                'quoteAddressFactory' => $this->addressFactoryMock,
-                'customerFactory' => $this->customerFactoryMock,
-            ]
-        );
+        $this->model = new QuoteAddressValidator($this->addressFactoryMock, $this->customerFactoryMock);
     }
 
     /**
@@ -97,11 +77,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->customerMock->expects($this->once())->method('load')->with($customerId);
         $this->customerMock->expects($this->once())->method('getId')->will($this->returnValue(null));
 
-        $addressData = $this->addressDataBuilder
-            ->setCustomerId($customerId)
-            ->setCompany('eBay Inc')
-            ->create();
-        $this->model->validate($addressData);
+        $address = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $address->expects($this->atLeastOnce())->method('getCustomerId')->willReturn($customerId);
+        $this->model->validate($address);
     }
 
     /**
@@ -116,11 +94,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->addressFactoryMock->expects($this->once())->method('create')
             ->will($this->returnValue($this->quoteAddressMock));
 
-        $addressData = $this->addressDataBuilder
-            ->setId(101)
-            ->setCompany('eBay Inc')
-            ->create();
-        $this->model->validate($addressData);
+        $address = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $address->expects($this->atLeastOnce())->method('getId')->willReturn(101);
+        $this->model->validate($address);
     }
 
     /**
@@ -131,8 +107,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->customerFactoryMock->expects($this->never())->method('create');
         $this->addressFactoryMock->expects($this->never())->method('create');
 
-        $addressData = $this->addressDataBuilder->setCompany('eBay Inc')->create();
-        $this->assertTrue($this->model->validate($addressData));
+        $address = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $this->assertTrue($this->model->validate($address));
     }
 
     /**
@@ -144,12 +120,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $addressCustomer = 100;
         $addressId = 100;
 
-        /** Address data object */
-        $addressData = $this->addressDataBuilder
-            ->setId($addressId)
-            ->setCompany('eBay Inc')
-            ->setCustomerId($addressCustomer)
-            ->create();
+        $address = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $address->expects($this->atLeastOnce())->method('getId')->willReturn($addressId);
+        $address->expects($this->atLeastOnce())->method('getCustomerId')->willReturn($addressCustomer);
 
         /** Customer mock */
         $this->customerFactoryMock->expects($this->once())
@@ -169,7 +142,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(10));
 
         /** Validate */
-        $this->model->validate($addressData);
+        $this->model->validate($address);
     }
 
     public function testValidateWithValidAddress()
@@ -177,12 +150,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $addressCustomer = 100;
         $addressId = 100;
 
-        /** Address data object */
-        $addressData = $this->addressDataBuilder
-            ->setId($addressId)
-            ->setCompany('eBay Inc')
-            ->setCustomerId($addressCustomer)
-            ->create();
+        $address = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $address->expects($this->atLeastOnce())->method('getId')->willReturn($addressId);
+        $address->expects($this->atLeastOnce())->method('getCustomerId')->willReturn($addressCustomer);
 
         /** Customer mock */
         $this->customerFactoryMock->expects($this->once())
@@ -202,6 +172,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($addressCustomer));
 
         /** Validate */
-        $this->model->validate($addressData);
+        $this->model->validate($address);
     }
 }

@@ -57,7 +57,7 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->currencyMock = $this->getMock('\Magento\Directory\Model\Currency', [], [], '', false);
         $this->shippingMethodMock =
-            $this->getMock('\Magento\Quote\Model\Cart\ShippingMethod', [], [], '', false);
+            $this->getMock('\Magento\Quote\Api\Data\ShippingMethodInterface');
         $this->rateModelMock = $this->getMock('\Magento\Quote\Model\Quote\Address\Rate',
             [
                 'getPrice',

@@ -79,4 +79,28 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/carts/:cartId/billing-address" method="GET">
+        <service class="Magento\Quote\Api\BillingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/billing-address" method="POST">
+        <service class="Magento\Quote\Api\BillingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <!--<route url="/V1/carts/:cartId/shipping-address" method="GET">-->
+        <!--<service class="Magento\Checkout\Service\V1\Address\Shipping\ReadServiceInterface" method="getAddress"/>-->
+        <!--<resources>-->
+            <!--<resource ref="Magento_Sales::sales" />-->
+        <!--</resources>-->
+    <!--</route>-->
+    <!--<route url="/V1/carts/:cartId/shipping-address" method="POST">-->
+        <!--<service class="Magento\Checkout\Service\V1\Address\Shipping\WriteServiceInterface" method="setAddress"/>-->
+        <!--<resources>-->
+            <!--<resource ref="Magento_Sales::sales" />-->
+        <!--</resources>-->
+    <!--</route>-->
 </routes>
