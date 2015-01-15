@@ -31,6 +31,7 @@ class AdvancedSearchEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'MX';
+    const TEST_TYPE = 'acceptance_test';
     /* end tags */
 
     /**

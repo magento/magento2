@@ -7,7 +7,7 @@
 namespace Magento\Bundle\Test\Constraint;
 
 use Magento\Bundle\Test\Fixture\BundleProduct;
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
@@ -27,14 +27,14 @@ class AssertBundleInCategory extends AbstractConstraint
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
      * @param BundleProduct $product
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
     public function processAssert(
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
         BundleProduct $product,
-        CatalogCategory $category
+        Category $category
     ) {
         //Open category view page
         $cmsIndex->open();

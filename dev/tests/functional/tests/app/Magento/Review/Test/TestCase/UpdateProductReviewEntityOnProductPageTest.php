@@ -9,7 +9,7 @@ namespace Magento\Review\Test\TestCase;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
@@ -75,7 +75,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     /**
      * Review fixture
      *
-     * @var ReviewInjectable
+     * @var Review
      */
     protected $reviewInitial;
 
@@ -102,7 +102,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     public function __prepare(FixtureFactory $fixtureFactory)
     {
         $this->reviewInitial = $fixtureFactory->createByCode(
-            'reviewInjectable',
+            'review',
             ['dataSet' => 'review_for_simple_product_with_rating']
         );
         $this->reviewInitial->persist();
@@ -136,11 +136,11 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     /**
      * Update product review on product page
      *
-     * @param ReviewInjectable $review
+     * @param Review $review
      * @param int $rating
      * @return array
      */
-    public function test(ReviewInjectable $review, $rating)
+    public function test(Review $review, $rating)
     {
         // Steps
         $review = $this->createReview($review, $rating);
@@ -165,9 +165,9 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     /**
      * Create review
      *
-     * @param ReviewInjectable $review
+     * @param Review $review
      * @param int $rating
-     * @return ReviewInjectable
+     * @return Review
      */
     protected function createReview($review, $rating)
     {
@@ -175,7 +175,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
         $fixtureRating = $this->reviewInitial->getDataFieldConfig('ratings')['source']->getRatings()[0];
         $reviewData['ratings'][0] = ['fixtureRating' => $fixtureRating, 'rating' => $rating];
 
-        return $this->fixtureFactory->createByCode('reviewInjectable', ['data' => $reviewData]);
+        return $this->fixtureFactory->createByCode('review', ['data' => $reviewData]);
     }
 
     /**
@@ -185,7 +185,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
      */
     public function tearDown()
     {
-        if (!$this->reviewInitial instanceof ReviewInjectable) {
+        if (!$this->reviewInitial instanceof Review) {
             return;
         }
         $this->ratingIndex->open();

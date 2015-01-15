@@ -8,7 +8,7 @@ namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category;
 
 use Mtf\Block\Block;
 use Mtf\Client\Element\Locator;
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Categories tree block.
@@ -25,7 +25,7 @@ class Tree extends Block
     /**
      * Select category by its name.
      *
-     * @param null|CatalogCategory $category
+     * @param Category|null $category
      * @return void
      */
     public function selectCategory($category)

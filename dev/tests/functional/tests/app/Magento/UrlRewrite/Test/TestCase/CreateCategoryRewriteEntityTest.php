@@ -6,7 +6,7 @@
 
 namespace Magento\UrlRewrite\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteEdit;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
@@ -37,6 +37,7 @@ class CreateCategoryRewriteEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'PS';
+    const TEST_TYPE = 'acceptance_test';
     /* end tags */
 
     /**
@@ -69,7 +70,7 @@ class CreateCategoryRewriteEntityTest extends Injectable
         $this->urlRewriteEdit = $urlRewriteEdit;
         $this->urlRewriteIndex = $urlRewriteIndex;
         $category = $fixtureFactory->createByCode(
-            'catalogCategory',
+            'category',
             ['dataSet' => 'default_subcategory']
         );
         $category->persist();
@@ -80,10 +81,10 @@ class CreateCategoryRewriteEntityTest extends Injectable
      * Test check create category rewrites
      *
      * @param UrlRewrite $urlRewrite
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function test(UrlRewrite $urlRewrite, CatalogCategory $category)
+    public function test(UrlRewrite $urlRewrite, Category $category)
     {
         //Steps
         $this->urlRewriteIndex->open();

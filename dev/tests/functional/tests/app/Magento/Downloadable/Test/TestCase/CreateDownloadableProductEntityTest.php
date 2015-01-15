@@ -6,7 +6,7 @@
 
 namespace Magento\Downloadable\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
@@ -37,7 +37,7 @@ class CreateDownloadableProductEntityTest extends Injectable
     /**
      * Fixture category
      *
-     * @var CatalogCategory
+     * @var Category
      */
     protected $category;
 
@@ -58,10 +58,10 @@ class CreateDownloadableProductEntityTest extends Injectable
     /**
      * Persist category
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return array
      */
-    public function __prepare(CatalogCategory $category)
+    public function __prepare(Category $category)
     {
         $category->persist();
         return [
@@ -72,13 +72,13 @@ class CreateDownloadableProductEntityTest extends Injectable
     /**
      * Filling objects of the class
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @param CatalogProductIndex $catalogProductIndexNewPage
      * @param CatalogProductNew $catalogProductNewPage
      * @return void
      */
     public function __inject(
-        CatalogCategory $category,
+        Category $category,
         CatalogProductIndex $catalogProductIndexNewPage,
         CatalogProductNew $catalogProductNewPage
     ) {
@@ -91,10 +91,10 @@ class CreateDownloadableProductEntityTest extends Injectable
      * Test create downloadable product
      *
      * @param DownloadableProductInjectable $product
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function test(DownloadableProductInjectable $product, CatalogCategory $category)
+    public function test(DownloadableProductInjectable $product, Category $category)
     {
         // Steps
         $this->catalogProductIndex->open();

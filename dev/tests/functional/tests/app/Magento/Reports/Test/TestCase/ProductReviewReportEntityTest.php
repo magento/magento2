@@ -6,7 +6,7 @@
 
 namespace Magento\Reports\Test\TestCase;
 
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Mtf\TestCase\Injectable;
 
 /**
@@ -34,10 +34,10 @@ class ProductReviewReportEntityTest extends Injectable
     /**
      * Creation product review report entity
      *
-     * @param ReviewInjectable $review
+     * @param Review $review
      * @return void
      */
-    public function test(ReviewInjectable $review)
+    public function test(Review $review)
     {
         // Preconditions
         $review->persist();
