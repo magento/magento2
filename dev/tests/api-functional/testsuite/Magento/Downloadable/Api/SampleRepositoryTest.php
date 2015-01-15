@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Downloadable\Service\V1\DownloadableSample;
+namespace Magento\Downloadable\Api;
 
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Sample;
@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
-class WriteServiceTest extends WebapiAbstract
+class SampleRepositoryTest extends WebapiAbstract
 {
     /**
      * @var array
@@ -41,9 +41,9 @@ class WriteServiceTest extends WebapiAbstract
                 'httpMethod' => RestConfig::HTTP_METHOD_POST,
             ],
             'soap' => [
-                'service' => 'downloadableDownloadableSampleWriteServiceV1',
+                'service' => 'downloadableSampleRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'downloadableDownloadableSampleWriteServiceV1Create',
+                'operation' => 'downloadableSampleRepositoryV1Create',
             ],
         ];
 
@@ -52,9 +52,9 @@ class WriteServiceTest extends WebapiAbstract
                 'httpMethod' => RestConfig::HTTP_METHOD_PUT,
             ],
             'soap' => [
-                'service' => 'downloadableDownloadableSampleWriteServiceV1',
+                'service' => 'downloadableSampleRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'downloadableDownloadableSampleWriteServiceV1Update',
+                'operation' => 'downloadableSampleRepositoryV1Update',
             ],
         ];
 
@@ -63,14 +63,14 @@ class WriteServiceTest extends WebapiAbstract
                 'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
             ],
             'soap' => [
-                'service' => 'downloadableDownloadableSampleWriteServiceV1',
+                'service' => 'downloadableSampleRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'downloadableDownloadableSampleWriteServiceV1Delete',
+                'operation' => 'downloadableSampleRepositoryV1Delete',
             ],
         ];
 
         $this->testImagePath = __DIR__
-            . str_replace('/', DIRECTORY_SEPARATOR, '/../DownloadableLink/_files/test_image.jpg');
+            . str_replace('/', DIRECTORY_SEPARATOR, '/_files/test_image.jpg');
     }
 
     /**
@@ -124,7 +124,7 @@ class WriteServiceTest extends WebapiAbstract
                 'title' => 'Title',
                 'sort_order' => 1,
                 'sample_file' => [
-                    'data' => base64_encode(file_get_contents($this->testImagePath)),
+                    'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'image.jpg',
                 ],
                 'sample_type' => 'file',
@@ -229,7 +229,7 @@ class WriteServiceTest extends WebapiAbstract
                 'sort_order' => 1,
                 'sample_type' => 'file',
                 'sample_file' => [
-                    'data' => 'not_a_base64_encoded_content',
+                    'file_data' => 'not_a_base64_encoded_content',
                     'name' => 'image.jpg',
                 ],
             ],
@@ -253,7 +253,7 @@ class WriteServiceTest extends WebapiAbstract
                 'sort_order' => 15,
                 'sample_type' => 'file',
                 'sample_file' => [
-                    'data' => base64_encode(file_get_contents($this->testImagePath)),
+                    'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'name/with|forbidden{characters',
                 ],
             ],

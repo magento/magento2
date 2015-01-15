@@ -20,7 +20,7 @@ class ContentValidator
      */
     public function isValid(ContentInterface $fileContent)
     {
-        $decodedContent = @base64_decode($fileContent->getData(), true);
+        $decodedContent = @base64_decode($fileContent->getFileData(), true);
         if (empty($decodedContent)) {
             throw new InputException('Provided content must be valid base64 encoded data.');
         }

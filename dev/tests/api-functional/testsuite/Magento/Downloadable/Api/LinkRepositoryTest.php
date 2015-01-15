@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Downloadable\Service\V1\DownloadableLink;
+namespace Magento\Downloadable\Api;
 
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Link;
@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
-class WriteServiceTest extends WebapiAbstract
+class LinkRepositoryTest extends WebapiAbstract
 {
     /**
 
@@ -42,9 +42,9 @@ class WriteServiceTest extends WebapiAbstract
                 'httpMethod' => RestConfig::HTTP_METHOD_POST,
             ],
             'soap' => [
-                'service' => 'downloadableDownloadableLinkWriteServiceV1',
+                'service' => 'downloadableLinkRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'downloadableDownloadableLinkWriteServiceV1Create',
+                'operation' => 'downloadableLinkRepositoryV1Create',
             ],
         ];
 
@@ -53,9 +53,9 @@ class WriteServiceTest extends WebapiAbstract
                 'httpMethod' => RestConfig::HTTP_METHOD_PUT,
             ],
             'soap' => [
-                'service' => 'downloadableDownloadableLinkWriteServiceV1',
+                'service' => 'downloadableLinkRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'downloadableDownloadableLinkWriteServiceV1Update',
+                'operation' => 'downloadableLinkRepositoryV1Update',
             ],
         ];
 
@@ -64,9 +64,9 @@ class WriteServiceTest extends WebapiAbstract
                 'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
             ],
             'soap' => [
-                'service' => 'downloadableDownloadableLinkWriteServiceV1',
+                'service' => 'downloadableLinkRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'downloadableDownloadableLinkWriteServiceV1Delete',
+                'operation' => 'downloadableLinkRepositoryV1Delete',
             ],
         ];
 
@@ -122,11 +122,11 @@ class WriteServiceTest extends WebapiAbstract
                 'number_of_downloads' => 100,
                 'link_type' => 'file',
                 'link_file' => [
-                    'data' => base64_encode(file_get_contents($this->testImagePath)),
+                    'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'image.jpg',
                 ],
                 'sample_file' => [
-                    'data' => base64_encode(file_get_contents($this->testImagePath)),
+                    'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'image.jpg',
                 ],
                 'sample_type' => 'file',
@@ -267,7 +267,7 @@ class WriteServiceTest extends WebapiAbstract
                 'link_url' => 'http://www.example.com/',
                 'sample_type' => 'file',
                 'sample_file' => [
-                    'data' => 'not_a_base64_encoded_content',
+                    'file_data' => 'not_a_base64_encoded_content',
                     'name' => 'image.jpg',
                 ],
             ],
@@ -294,7 +294,7 @@ class WriteServiceTest extends WebapiAbstract
                 'number_of_downloads' => 100,
                 'link_type' => 'file',
                 'link_file' => [
-                    'data' => 'not_a_base64_encoded_content',
+                    'file_data' => 'not_a_base64_encoded_content',
                     'name' => 'image.jpg',
                 ],
             ],
@@ -321,7 +321,7 @@ class WriteServiceTest extends WebapiAbstract
                 'number_of_downloads' => 100,
                 'link_type' => 'file',
                 'link_file' => [
-                    'data' => base64_encode(file_get_contents($this->testImagePath)),
+                    'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'name/with|forbidden{characters',
                 ],
             ],
@@ -350,7 +350,7 @@ class WriteServiceTest extends WebapiAbstract
                 'link_url' => 'http://www.example.com/',
                 'sample_type' => 'file',
                 'sample_file' => [
-                    'data' => base64_encode(file_get_contents($this->testImagePath)),
+                    'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'name/with|forbidden{characters',
                 ],
             ],
@@ -793,5 +793,131 @@ class WriteServiceTest extends WebapiAbstract
         ];
 
         $this->_webApiCall($this->deleteServiceInfo, $requestData);
+    }
+
+    /**
+     * @dataProvider getListForAbsentProductProvider()
+     */
+    public function testGetListForAbsentProduct($urlTail, $method)
+    {
+        $sku = 'absent-product' . time();
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/' . $sku . $urlTail,
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'downloadableLinkRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'downloadableLinkRepositoryV1' . $method,
+            ],
+        ];
+
+        $requestData = ['productSku' => $sku];
+
+        $expectedMessage = 'Requested product doesn\'t exist';
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+        } catch (\SoapFault $e) {
+            $this->assertEquals($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $this->assertContains($expectedMessage, $e->getMessage());
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @dataProvider getListForAbsentProductProvider
+     */
+    public function testGetListForSimpleProduct($urlTail, $method)
+    {
+        $sku = 'simple';
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/' . $sku . $urlTail,
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'downloadableLinkRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'downloadableLinkRepositoryV1' . $method,
+            ],
+        ];
+
+        $requestData = ['productSku' => $sku];
+
+        $list = $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertEmpty($list);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
+     * @dataProvider getListForAbsentProductProvider
+     */
+    public function testGetList($urlTail, $method, $expectations)
+    {
+        $sku = 'downloadable-product';
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/' . $sku . $urlTail,
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'downloadableLinkRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'downloadableLinkRepositoryV1' . $method,
+            ],
+        ];
+
+        $requestData = ['productSku' => $sku];
+
+        $list = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertEquals(1, count($list));
+
+        $link = reset($list);
+        foreach ($expectations['fields'] as $index => $value) {
+            $this->assertEquals($value, $link[$index]);
+        }
+    }
+
+    public function getListForAbsentProductProvider()
+    {
+        $linkExpectation = [
+            'fields' => [
+                'is_shareable' => 2,
+                'price' => 15,
+                'number_of_downloads' => 15,
+                'sample_file' => '/n/d/jellyfish_1_3.jpg',
+                'sample_type' => 'file',
+                'link_file' => '/j/e/jellyfish_2_4.jpg',
+                'link_type' => 'file'
+            ]
+        ];
+
+        $sampleExpectation = [
+            'fields' => [
+                'title' => 'Downloadable Product Sample Title',
+                'sort_order' => 0,
+                'sample_file' => '/f/u/jellyfish_1_4.jpg',
+                'sample_type' => 'file'
+            ]
+        ];
+
+        return [
+            'links' => [
+                '/downloadable-links',
+                'GetLinks',
+                $linkExpectation,
+            ],
+            'samples' => [
+                '/downloadable-links/samples',
+                'GetSamples',
+                $sampleExpectation,
+            ],
+        ];
     }
 }

@@ -83,7 +83,7 @@ class ContentUploader extends Uploader implements \Magento\Downloadable\Api\Data
     protected function decodeContent(ContentInterface $fileContent)
     {
         $tmpFileName = $this->getTmpFileName();
-        $fileSize = $this->systemTmpDirectory->writeFile($tmpFileName, base64_decode($fileContent->getData()));
+        $fileSize = $this->systemTmpDirectory->writeFile($tmpFileName, base64_decode($fileContent->getFileData()));
 
         return [
             'name' => $fileContent->getName(),

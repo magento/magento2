@@ -10,14 +10,14 @@ namespace Magento\Downloadable\Model\File;
  */
 class Content extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Downloadable\Api\Data\File\ContentInterface
 {
-    const DATA = 'data';
+    const DATA = 'file_data';
     const NAME = 'name';
 
     /**
      * {@inheritdoc}
      * @codeCoverageIgnore
      */
-    public function getData()
+    public function getFileData()
     {
         return $this->getData(self::DATA);
     }

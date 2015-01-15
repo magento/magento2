@@ -15,7 +15,7 @@ interface ContentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return string
      */
-    public function getData();
+    public function getFileData();
 
     /**
      * Retrieve file name
