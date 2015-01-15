@@ -11,15 +11,6 @@ use Magento\Framework\App\Action;
 class View extends \Magento\Sales\Controller\AbstractController\View
 {
     /**
-     * @param Action\Context $context
-     * @param OrderLoader $orderLoader
-     */
-    public function __construct(Action\Context $context, OrderLoader $orderLoader)
-    {
-        parent::__construct($context, $orderLoader);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function execute()
@@ -28,8 +19,8 @@ class View extends \Magento\Sales\Controller\AbstractController\View
             return;
         }
 
-        $this->_view->loadLayout();
-        $this->_objectManager->get('Magento\Sales\Helper\Guest')->getBreadcrumbs();
-        $this->_view->renderLayout();
+        $resultPage = $this->resultPageFactory->create();
+        $this->_objectManager->get('Magento\Sales\Helper\Guest')->getBreadcrumbs($resultPage);
+        return $resultPage;
     }
 }

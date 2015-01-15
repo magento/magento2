@@ -16,28 +16,45 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
     protected $orderLoader;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param Context $context
      * @param OrderViewAuthorization $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param OrderLoader $orderLoader
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Context $context,
         OrderViewAuthorization $orderAuthorization,
         \Magento\Framework\Registry $registry,
-        OrderLoader $orderLoader
+        OrderLoader $orderLoader,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->orderLoader = $orderLoader;
         parent::__construct($context, $orderAuthorization, $registry);
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @return \Magento\Framework\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
-        if (!$this->orderLoader->load($this->_request, $this->_response)) {
-            return;
+        $result = $this->orderLoader->load($this->_request);
+        if ($result instanceof \Magento\Framework\Controller\Result\Redirect) {
+            return $result;
         }
 
         $creditmemoId = (int)$this->getRequest()->getParam('creditmemo_id');
@@ -52,10 +69,9 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
             if (isset($creditmemo)) {
                 $this->_coreRegistry->register('current_creditmemo', $creditmemo);
             }
-            $this->_view->loadLayout('print');
-            $this->_view->renderLayout();
+            return $this->resultPageFactory->create()->addHandle('print');
         } else {
-            $this->_redirect('sales/guest/form');
+            return $this->resultRedirectFactory->create()->setPath('sales/guest/form');
         }
     }
 }
