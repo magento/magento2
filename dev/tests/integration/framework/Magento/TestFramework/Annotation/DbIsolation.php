@@ -10,6 +10,7 @@ namespace Magento\TestFramework\Annotation;
  */
 class DbIsolation
 {
+    const MAGENTO_DB_ISOLATION = 'magentoDbIsolation';
     /**
      * @var bool
      */
@@ -84,9 +85,9 @@ class DbIsolation
      */
     protected function _getIsolation($scope, \PHPUnit_Framework_TestCase $test)
     {
-        $annotations = $test->getAnnotations();
-        if (isset($annotations[$scope]['magentoDbIsolation'])) {
-            $isolation = $annotations[$scope]['magentoDbIsolation'];
+        $annotations = $this->getAnnotations($test);
+        if (isset($annotations[self::MAGENTO_DB_ISOLATION])) {
+            $isolation = $annotations[self::MAGENTO_DB_ISOLATION];
             if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
                 throw new \Magento\Framework\Exception(
                     'Invalid "@magentoDbIsolation" annotation, can be "enabled" or "disabled" only.'
@@ -95,5 +96,14 @@ class DbIsolation
             return $isolation === ['enabled'];
         }
         return null;
+    }
+
+    /**
+     * @param \PHPUnit_Framework_TestCase $test
+     * @return array
+     */
+    private function getAnnotations(\PHPUnit_Framework_TestCase $test) {
+        $annotations = $test->getAnnotations();
+        return array_replace($annotations['class'], $annotations['method']);
     }
 }
