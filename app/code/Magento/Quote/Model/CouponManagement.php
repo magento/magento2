@@ -1,19 +1,21 @@
 <?php
 /**
+ *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Service\V1\Coupon;
 
-use Magento\Checkout\Service\V1\Data\Cart\CouponBuilder as CouponBuilder;
+namespace Magento\Quote\Model;
+
+use \Magento\Quote\Api\CouponManagementInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Coupon write service object.
+ * Coupon management object.
  */
-class WriteService implements WriteServiceInterface
+class CouponManagement implements CouponManagementInterface
 {
     /**
      * Quote repository.
@@ -23,36 +25,30 @@ class WriteService implements WriteServiceInterface
     protected $quoteRepository;
 
     /**
-     * Coupon builder.
-     *
-     * @var CouponBuilder
-     */
-    protected $couponBuilder;
-
-    /**
-     * Constructs a coupon write service object.
+     * Constructs a coupon read service object.
      *
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
-     * @param CouponBuilder $couponBuilder Coupon builder.
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        CouponBuilder $couponBuilder
+        \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         $this->quoteRepository = $quoteRepository;
-        $this->couponBuilder = $couponBuilder;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @param int $cartId The cart ID.
-     * @param \Magento\Checkout\Service\V1\Data\Cart\Coupon $couponCodeData The coupon code data.
-     * @return bool
-     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
-     * @throws \Magento\Framework\Exception\CouldNotSaveException The specified coupon could not be added.
      */
-    public function set($cartId, \Magento\Checkout\Service\V1\Data\Cart\Coupon $couponCodeData)
+    public function get($cartId)
+    {
+        /** @var  \Magento\Quote\Model\Quote $quote */
+        $quote = $this->quoteRepository->getActive($cartId);
+        return $quote->getCouponCode();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function set($cartId, $couponCode)
     {
         /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
@@ -60,7 +56,6 @@ class WriteService implements WriteServiceInterface
             throw new NoSuchEntityException("Cart $cartId doesn't contain products");
         }
         $quote->getShippingAddress()->setCollectShippingRates(true);
-        $couponCode = trim($couponCodeData->getCouponCode());
 
         try {
             $quote->setCouponCode($couponCode);
@@ -76,13 +71,8 @@ class WriteService implements WriteServiceInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @param int $cartId The cart ID.
-     * @return bool
-     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException The specified coupon could not be deleted.
      */
-    public function delete($cartId)
+    public function remove($cartId)
     {
         /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);

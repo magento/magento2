@@ -1,19 +1,19 @@
 <?php
 /**
+ *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Service\V1\Coupon;
+namespace Magento\Quote\Api;
 
-use Magento\Checkout\Service\V1\Data\Cart\Coupon;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
-class WriteServiceTest extends WebapiAbstract
+class CouponManagementTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'checkoutCouponWriteServiceV1';
+    const SERVICE_NAME = 'quoteCouponManagementV1';
     const RESOURCE_PATH = '/V1/carts/';
 
     /**
@@ -24,6 +24,32 @@ class WriteServiceTest extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_coupon_saved.php
+     */
+    public function testGet()
+    {
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_order_1', 'reserved_order_id');
+        $cartId = $quote->getId();
+        $couponCode = $quote->getCouponCode();
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' ,
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+
+        $requestData = ["cartId" => $cartId];
+        $this->assertEquals($couponCode, $this->_webApiCall($serviceInfo, $requestData));
     }
 
     /**
@@ -43,7 +69,7 @@ class WriteServiceTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Delete',
+                'operation' => self::SERVICE_NAME . 'Remove',
             ],
         ];
         $requestData = ["cartId" => $cartId];
@@ -64,9 +90,11 @@ class WriteServiceTest extends WebapiAbstract
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
+        $couponCode = 'invalid_coupon_code';
+
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' . $couponCode,
                 'httpMethod' => RestConfig::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -76,11 +104,9 @@ class WriteServiceTest extends WebapiAbstract
             ],
         ];
 
-        $data = [Coupon::COUPON_CODE => 'invalid_coupon_code'];
-
         $requestData = [
             "cartId" => $cartId,
-            "couponCodeData" => $data,
+            "couponCode" => $couponCode,
         ];
 
         $this->_webApiCall($serviceInfo, $requestData);
@@ -96,10 +122,12 @@ class WriteServiceTest extends WebapiAbstract
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
-
+        $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
+        $salesRule->load('Test Coupon', 'name');
+        $couponCode = $salesRule->getCouponCode();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' . $couponCode,
                 'httpMethod' => RestConfig::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -109,15 +137,9 @@ class WriteServiceTest extends WebapiAbstract
             ],
         ];
 
-        $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
-        $salesRule->load('Test Coupon', 'name');
-
-        $couponCode = $salesRule->getCouponCode();
-        $data = [Coupon::COUPON_CODE => $couponCode];
-
         $requestData = [
             "cartId" => $cartId,
-            "couponCodeData" => $data,
+            "couponCode" => $couponCode,
         ];
 
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));

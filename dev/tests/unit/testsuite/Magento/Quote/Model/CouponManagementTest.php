@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Service\V1\Coupon;
+namespace Magento\Quote\Model;
 
-class WriteServiceTest extends \PHPUnit_Framework_TestCase
+class CouponManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var WriteService
+     * @var CouponManagement
      */
-    protected $service;
+    protected $couponManagement;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -27,17 +27,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $couponBuilderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $storeMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $couponCodeDataMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -46,10 +36,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
-        $this->couponBuilderMock =
-            $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\CouponBuilder', [], [], '', false);
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->quoteMock = $this->getMock(
             '\Magento\Quote\Model\Quote',
@@ -66,7 +53,6 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->couponCodeDataMock = $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\Coupon', [], [], '', false);
         $this->quoteAddressMock = $this->getMock(
             '\Magento\Quote\Model\Quote\Address',
             [
@@ -76,13 +62,26 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false);
-        $this->service = $objectManager->getObject(
-            'Magento\Checkout\Service\V1\Coupon\WriteService',
-            [
-                'quoteRepository' => $this->quoteRepositoryMock,
-                'couponBuilder' => $this->couponBuilderMock,
-            ]
+        $this->couponManagement = new CouponManagement(
+            $this->quoteRepositoryMock
         );
+    }
+
+    public function testGetCoupon()
+    {
+        $cartId = 11;
+        $couponCode = 'test_coupon_code';
+
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', ['getCouponCode', '__wakeup'], [], '', false);
+        $quoteMock->expects($this->any())->method('getCouponCode')->will($this->returnValue($couponCode));
+
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('getActive')
+            ->with($cartId)
+            ->will($this->returnValue($quoteMock));
+
+
+        $this->assertEquals($couponCode, $this->couponManagement->get($cartId));
     }
 
     /**
@@ -97,7 +96,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
 
-        $this->service->set($cartId, $this->couponCodeDataMock);
+        $this->couponManagement->set($cartId, 'coupon_code');
     }
 
     /**
@@ -115,8 +114,6 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
-        $this->couponCodeDataMock->expects($this->once())
-            ->method('getCouponCode')->will($this->returnValue($couponCode));
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode);
         $exceptionMessage = 'Could not apply coupon code';
         $exception = new \Magento\Framework\Exception\CouldNotDeleteException($exceptionMessage);
@@ -126,7 +123,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->with($this->quoteMock)
             ->willThrowException($exception);
 
-        $this->service->set($cartId, $this->couponCodeDataMock);
+        $this->couponManagement->set($cartId, $couponCode);
     }
 
     /**
@@ -144,14 +141,12 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
-        $this->couponCodeDataMock->expects($this->once())
-            ->method('getCouponCode')->will($this->returnValue($couponCode));
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode);
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->quoteMock->expects($this->once())->method('getCouponCode')->will($this->returnValue('invalidCoupon'));
 
-        $this->service->set($cartId, $this->couponCodeDataMock);
+        $this->couponManagement->set($cartId, $couponCode);
     }
 
     public function testSet()
@@ -165,14 +160,12 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->quoteAddressMock));
         $this->quoteAddressMock->expects($this->once())->method('setCollectShippingRates')->with(true);
-        $this->couponCodeDataMock->expects($this->once())
-            ->method('getCouponCode')->will($this->returnValue($couponCode));
         $this->quoteMock->expects($this->once())->method('setCouponCode')->with($couponCode);
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->quoteMock->expects($this->once())->method('getCouponCode')->will($this->returnValue($couponCode));
 
-        $this->assertTrue($this->service->set($cartId, $this->couponCodeDataMock));
+        $this->assertTrue($this->couponManagement->set($cartId, $couponCode));
     }
 
     /**
@@ -188,7 +181,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
         $this->quoteMock->expects($this->never())->method('getShippingAddress');
 
-        $this->service->delete($cartId);
+        $this->couponManagement->remove($cartId);
     }
 
     /**
@@ -215,7 +208,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->with($this->quoteMock)
             ->willThrowException($exception);
 
-        $this->service->delete($cartId);
+        $this->couponManagement->remove($cartId);
     }
 
     /**
@@ -238,7 +231,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->quoteMock->expects($this->once())->method('getCouponCode')->will($this->returnValue('123_ABC'));
 
-        $this->service->delete($cartId);
+        $this->couponManagement->remove($cartId);
     }
 
     public function testDelete()
@@ -257,6 +250,6 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->quoteMock->expects($this->once())->method('getCouponCode')->will($this->returnValue(''));
 
-        $this->assertTrue($this->service->delete($cartId));
+        $this->assertTrue($this->couponManagement->remove($cartId));
     }
 }

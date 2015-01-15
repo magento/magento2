@@ -103,4 +103,22 @@
             <!--<resource ref="Magento_Sales::sales" />-->
         <!--</resources>-->
     <!--</route>-->
+    <route url="/V1/carts/:cartId/coupons" method="GET">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons/:couponCode" method="PUT">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="set"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons" method="DELETE">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="remove"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote" />
+        </resources>
+    </route>
 </routes>

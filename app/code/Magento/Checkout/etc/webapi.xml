@@ -25,24 +25,6 @@
             <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
-    <route url="/V1/carts/:cartId/coupons" method="GET">
-        <service class="Magento\Checkout\Service\V1\Coupon\ReadServiceInterface" method="get"/>
-        <resources>
-            <resource ref="Magento_SalesRule::quote" />
-        </resources>
-    </route>
-    <route url="/V1/carts/:cartId/coupons" method="PUT">
-        <service class="Magento\Checkout\Service\V1\Coupon\WriteServiceInterface" method="set"/>
-        <resources>
-            <resource ref="Magento_SalesRule::quote" />
-        </resources>
-    </route>
-    <route url="/V1/carts/:cartId/coupons" method="DELETE">
-        <service class="Magento\Checkout\Service\V1\Coupon\WriteServiceInterface" method="delete"/>
-        <resources>
-            <resource ref="Magento_SalesRule::quote" />
-        </resources>
-    </route>
     <route url="/V1/carts/:cartId/totals" method="GET">
         <service class="Magento\Checkout\Service\V1\Cart\TotalsServiceInterface" method="getTotals"/>
         <resources>
