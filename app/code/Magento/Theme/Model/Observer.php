@@ -19,52 +19,52 @@ class Observer
     /**
      * @var \Magento\Framework\View\Design\Theme\ImageFactory
      */
-    protected $_themeImageFactory;
+    protected $themeImageFactory;
 
     /**
      * @var \Magento\Core\Model\Resource\Layout\Update\Collection
      */
-    protected $_updateCollection;
+    protected $updateCollection;
 
     /**
      * @var \Magento\Theme\Model\Config\Customization
      */
-    protected $_themeConfig;
+    protected $themeConfig;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventDispatcher;
+    protected $eventDispatcher;
 
     /**
      * @var Theme
      */
-    private $_currentTheme;
+    private $currentTheme;
 
     /**
      * @var \Magento\Framework\View\Asset\GroupedCollection
      */
-    private $_pageAssets;
+    private $pageAssets;
 
     /**
      * @var \Magento\Framework\App\Config\ReinitableConfigInterface
      */
-    protected $_config;
+    protected $config;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_assetRepo;
+    protected $assetRepo;
 
     /**
      * @var \Magento\Theme\Model\Theme\Registration
      */
-    protected $_registration;
+    protected $registration;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $_logger;
+    protected $logger;
 
     /**
      * Initialize dependencies.
@@ -92,15 +92,15 @@ class Observer
         \Magento\Theme\Model\Theme\Registration $registration,
         \Psr\Log\LoggerInterface $logger
     ) {
-        $this->_themeImageFactory = $themeImageFactory;
-        $this->_updateCollection = $updateCollection;
-        $this->_themeConfig = $themeConfig;
-        $this->_eventDispatcher = $eventDispatcher;
-        $this->_currentTheme = $design->getDesignTheme();
-        $this->_pageAssets = $assets;
-        $this->_assetRepo = $assetRepo;
-        $this->_registration = $registration;
-        $this->_logger = $logger;
+        $this->themeImageFactory = $themeImageFactory;
+        $this->updateCollection = $updateCollection;
+        $this->themeConfig = $themeConfig;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->currentTheme = $design->getDesignTheme();
+        $this->pageAssets = $assets;
+        $this->assetRepo = $assetRepo;
+        $this->registration = $registration;
+        $this->logger = $logger;
     }
 
     /**
@@ -113,15 +113,15 @@ class Observer
     public function cleanThemeRelatedContent(EventObserver $observer)
     {
         $theme = $observer->getEvent()->getData('theme');
-        if ($theme instanceof \Magento\Framework\View\Design\ThemeInterface) {
+        if (!($theme instanceof \Magento\Framework\View\Design\ThemeInterface)) {
             return;
         }
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
-        if ($this->_themeConfig->isThemeAssignedToStore($theme)) {
+        if ($this->themeConfig->isThemeAssignedToStore($theme)) {
             throw new Exception(__('Theme isn\'t deletable.'));
         }
-        $this->_themeImageFactory->create(['theme' => $theme])->removePreviewImage();
-        $this->_updateCollection->addThemeFilter($theme->getId())->delete();
+        $this->themeImageFactory->create(['theme' => $theme])->removePreviewImage();
+        $this->updateCollection->addThemeFilter($theme->getId())->delete();
     }
 
     /**
@@ -135,8 +135,8 @@ class Observer
         $theme = $observer->getEvent()->getData('theme');
         if ($theme instanceof \Magento\Framework\View\Design\ThemeInterface) {
             /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
-            if ($this->_themeConfig->isThemeAssignedToStore($theme)) {
-                $this->_eventDispatcher->dispatch('assigned_theme_changed', ['theme' => $this]);
+            if ($this->themeConfig->isThemeAssignedToStore($theme)) {
+                $this->eventDispatcher->dispatch('assigned_theme_changed', ['theme' => $theme]);
             }
         }
     }
@@ -151,9 +151,9 @@ class Observer
     {
         $pathPattern = $observer->getEvent()->getPathPattern();
         try {
-            $this->_registration->register($pathPattern);
+            $this->registration->register($pathPattern);
         } catch (\Magento\Framework\Model\Exception $e) {
-            $this->_logger->critical($e);
+            $this->logger->critical($e);
         }
         return $this;
     }
@@ -168,23 +168,23 @@ class Observer
     public function applyThemeCustomization(\Magento\Framework\Event\Observer $observer)
     {
         /** @var $themeFile \Magento\Theme\Model\Theme\File */
-        foreach ($this->_currentTheme->getCustomization()->getFiles() as $themeFile) {
+        foreach ($this->currentTheme->getCustomization()->getFiles() as $themeFile) {
             try {
                 $service = $themeFile->getCustomizationService();
                 if ($service instanceof \Magento\Framework\View\Design\Theme\Customization\FileAssetInterface) {
                     $identifier = $themeFile->getData('file_path');
                     $dirPath = \Magento\Framework\View\Design\Theme\Customization\Path::DIR_NAME
-                        . '/' . $this->_currentTheme->getId();
-                    $asset = $this->_assetRepo->createArbitrary(
+                        . '/' . $this->currentTheme->getId();
+                    $asset = $this->assetRepo->createArbitrary(
                         $identifier,
                         $dirPath,
                         DirectoryList::MEDIA,
                         \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
                     );
-                    $this->_pageAssets->add($identifier, $asset);
+                    $this->pageAssets->add($identifier, $asset);
                 }
             } catch (\InvalidArgumentException $e) {
-                $this->_logger->critical($e);
+                $this->logger->critical($e);
             }
         }
     }
