@@ -13,11 +13,6 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
     protected $_menuModel;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Filter\Iterator
-     */
-    protected $_filterIteratorModel;
-
-    /**
      * @var \Magento\Backend\Model\Menu\Item[]
      */
     protected $_items = [];
@@ -51,12 +46,12 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
-        $this->_filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+        $filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
             $this->_menuModel->getIterator()
         );
 
         $items = [];
-        foreach ($this->_filterIteratorModel as $item) {
+        foreach ($filterIteratorModel as $item) {
             $items[] = $item;
         }
         $this->assertCount(0, $items);
@@ -71,12 +66,12 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
 
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
-        $this->_filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+        $filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
             $this->_menuModel->getIterator()
         );
 
         $items = [];
-        foreach ($this->_filterIteratorModel as $item) {
+        foreach ($filterIteratorModel as $item) {
             $items[] = $item;
         }
         $this->assertCount(1, $items);
@@ -92,12 +87,12 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
 
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
-        $this->_filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+        $filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
             $this->_menuModel->getIterator()
         );
 
         $items = [];
-        foreach ($this->_filterIteratorModel as $item) {
+        foreach ($filterIteratorModel as $item) {
             $items[] = $item;
         }
         $this->assertCount(1, $items);
@@ -113,12 +108,12 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
 
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
-        $this->_filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+        $filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
             $this->_menuModel->getIterator()
         );
 
         $items = [];
-        foreach ($this->_filterIteratorModel as $item) {
+        foreach ($filterIteratorModel as $item) {
             $items[] = $item;
         }
         $this->assertCount(1, $items);
@@ -135,12 +130,12 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
 
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
         $this->_menuModel->add($this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false));
-        $this->_filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+        $filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
             $this->_menuModel->getIterator()
         );
 
         $items = [];
-        foreach ($this->_filterIteratorModel as $item) {
+        foreach ($filterIteratorModel as $item) {
             $items[] = $item;
         }
         $this->assertCount(1, $items);
