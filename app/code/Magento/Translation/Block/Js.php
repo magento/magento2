@@ -48,8 +48,8 @@ class Js extends \Magento\Framework\View\Element\Template
      */
     public function getTranslatedJson()
     {
-        $json = \Zend_Json::encode($this->dataProvider->getTranslateData());
-        $this->translateInline->processResponseBody($json, false);
-        return $json;
+        $data = $this->dataProvider->getTranslateData();
+        $this->translateInline->processResponseBody($data);
+        return \Zend_Json::encode($data);
     }
 }
