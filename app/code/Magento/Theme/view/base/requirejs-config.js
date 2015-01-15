@@ -17,6 +17,7 @@ var config = {
         "mage/common": ["jquery"],
         "mage/requirejs/plugin/id-normalizer": ["jquery"],
         "mage/webapi": ["jquery"],
+        "jquery/ui": ["jquery"],
         "tinymce": {
             "exports": "tinymce"
         },
