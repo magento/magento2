@@ -233,6 +233,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
+     * @codeCoverageIgnoreStart
+     *
      * {@inheritdoc}
      */
     public function getPoNumber()
@@ -304,4 +306,5 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         }
         return null;
     }
+    //@codeCoverageIgnoreEnd
 }
