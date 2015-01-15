@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\Product\Attribute\Backend\Groupprice;
+namespace Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice\AbstractGroupprice
+     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
      */
     protected $_model;
 
@@ -31,7 +31,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $groupManagement = $this->getMock('Magento\Customer\Api\GroupManagementInterface', [], [], '', false);
 
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\Catalog\Model\Product\Attribute\Backend\Groupprice\AbstractGroupprice',
+            'Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice',
             [
                 'currencyFactory' => $currencyFactoryMock,
                 'storeManager' => $storeManagerMock,

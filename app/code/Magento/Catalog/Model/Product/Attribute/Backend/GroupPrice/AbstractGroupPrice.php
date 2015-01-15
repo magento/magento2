@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\Product\Attribute\Backend\Groupprice;
+namespace Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice;
 
 use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 use Magento\Customer\Api\GroupManagementInterface;
@@ -11,7 +11,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 /**
  * Catalog product abstract group price backend attribute model
  */
-abstract class AbstractGroupprice extends Price
+abstract class AbstractGroupPrice extends Price
 {
     /**
      * Website currency codes and rates
@@ -100,7 +100,7 @@ abstract class AbstractGroupprice extends Price
     /**
      * Retrieve resource instance
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice
+     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice
      */
     abstract protected function _getResource();
 

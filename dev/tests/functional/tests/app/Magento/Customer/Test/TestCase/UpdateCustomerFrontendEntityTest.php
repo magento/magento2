@@ -38,7 +38,7 @@ use Mtf\TestCase\Injectable;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateCustomerFrontendEntity extends Injectable
+class UpdateCustomerFrontendEntityTest extends Injectable
 {
     /**
      * Factory for Fixtures
