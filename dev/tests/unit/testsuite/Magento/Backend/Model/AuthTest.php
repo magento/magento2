@@ -36,7 +36,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     {
         $this->_eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
         $this->_credentialStorage = $this->getMock('\Magento\Backend\Model\Auth\Credential\StorageInterface');
-        $this->_modelFactoryMock = $this->getMock('\Magento\Core\Model\Factory', [], [], '', false);
+        $this->_modelFactoryMock = $this->getMock('\Magento\Framework\Data\Collection\Factory', [], [], '', false);
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(
             'Magento\Backend\Model\Auth',
