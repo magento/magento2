@@ -100,17 +100,19 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         if ($intercepted !== false) {
             $this->_intercepted = unserialize($intercepted);
         } else {
-            $this->initialize();
+            $this->initialize($this->_classDefinitions->getClasses());
         }
     }
 
     /**
      * Initialize interception config
      *
+     * @param array $classDefinitions
      * @return void
      */
-    protected function initialize()
+    public function initialize($classDefinitions = [])
     {
+        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$this->_cacheId]);
         $config = [];
         foreach ($this->_scopeList->getAllScopes() as $scope) {
             $config = array_replace_recursive($config, $this->_reader->read($scope));
@@ -124,7 +126,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         foreach ($config as $typeName => $typeConfig) {
             $this->hasPlugins(ltrim($typeName, '\\'));
         }
-        foreach ($this->_classDefinitions->getClasses() as $class) {
+        foreach ($classDefinitions as $class) {
             $this->hasPlugins($class);
         }
         $this->_cache->save(serialize($this->_intercepted), $this->_cacheId);
