@@ -285,9 +285,9 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     {
         $status = $this->getModuleActionMocks($command, $modules, $isForce);
         if (!$isForce) {
-            $status->expects($this->once())->method('checkSetEnabledErrors')->willReturn([]);
+            $status->expects($this->once())->method('checkConstraints')->willReturn([]);
         }
-        $status->expects($this->once())->method('setEnabled')->with($expectedIsEnabled, $expectedModules);
+        $status->expects($this->once())->method('setIsEnabled')->with($expectedIsEnabled, $expectedModules);
         $this->consoleLogger->expects($this->once())->method('log');
         $this->controller->moduleAction();
     }
@@ -328,15 +328,15 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Setup\Exception
-     * @expectedExceptionMessage Unable to change status of modules because of the following errors:
+     * @expectedExceptionMessage Unable to change status of modules because of the following constraints:
      */
     public function testModuleActionNotAllowed()
     {
         $status = $this->getModuleActionMocks(ConsoleController::CMD_MODULE_ENABLE, 'Module_Foo,Module_Bar', false);
         $status->expects($this->once())
-            ->method('checkSetEnabledErrors')
+            ->method('checkConstraints')
             ->willReturn(['Circular dependency of Foo and Bar']);
-        $status->expects($this->never())->method('setEnabled');
+        $status->expects($this->never())->method('setIsEnabled');
         $this->controller->moduleAction();
     }
 

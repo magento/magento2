@@ -42,7 +42,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->object = new Status($this->loader, $this->moduleList, $this->writer, $this->cleanup);
     }
 
-    public function testSetEnabled()
+    public function testSetIsEnabled()
     {
         $modules = ['Module_Foo' => '', 'Module_Bar' => '', 'Module_Baz' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
@@ -55,18 +55,18 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->writer->expects($this->once())->method('update')->with($constraint);
         $this->cleanup->expects($this->once())->method('clearCaches');
         $this->cleanup->expects($this->once())->method('clearCodeGeneratedFiles');
-        $result = $this->object->setEnabled(true, ['Module_Foo', 'Module_Bar']);
+        $result = $this->object->setIsEnabled(true, ['Module_Foo', 'Module_Bar']);
         $this->assertEquals(['Module_Bar'], $result);
     }
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Unknown module: 'Module_Baz'
+     * @expectedExceptionMessage Unknown module(s): 'Module_Baz'
      */
-    public function testSetEnabledUnknown()
+    public function testSetIsEnabledUnknown()
     {
         $modules = ['Module_Foo' => '', 'Module_Bar' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
-        $this->object->setEnabled(true, ['Module_Baz']);
+        $this->object->setIsEnabled(true, ['Module_Baz']);
     }
 }

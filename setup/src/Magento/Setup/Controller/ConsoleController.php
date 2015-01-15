@@ -480,16 +480,21 @@ class ConsoleController extends AbstractActionController
         /** @var \Magento\Framework\Module\Status $status */
         $status = $this->getObjectManager()->get('Magento\Framework\Module\Status');
         if (!$request->getParam('force')) {
-            $errors = $status->checkSetEnabledErrors($isEnable, $modules);
-            if ($errors) {
-                $message = "Unable to change status of modules because of the following errors:\n"
-                    . implode("\n", $errors);
+            $constraints = $status->checkConstraints($isEnable, $modules);
+            if ($constraints) {
+                $message = "Unable to change status of modules because of the following constraints:\n"
+                    . implode("\n", $constraints);
                 throw new \Magento\Setup\Exception($message);
             }
         }
-        $changed = $status->setEnabled($isEnable, $modules);
+        $changed = $status->setIsEnabled($isEnable, $modules);
         if ($changed) {
-            $message = "The following modules' status has been updated: " . implode(', ', $changed);
+            if ($isEnable) {
+                $message = 'The following modules have been enabled:';
+            } else {
+                $message = 'The following modules have been disabled:';
+            }
+            $message .= ' ' . implode(', ', $changed);
         } else {
             $message = 'There have been no changes to any modules.';
         }
