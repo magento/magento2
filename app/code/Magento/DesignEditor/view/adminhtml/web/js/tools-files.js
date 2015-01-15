@@ -4,6 +4,7 @@
  */
 define([
     "jquery",
+    "tinymce",
     "jquery/ui",
     "Magento_DesignEditor/js/dialog",
     "js/theme",
@@ -11,7 +12,7 @@ define([
     "prototype",
     "extjs/ext-tree-checkbox",
     "mage/adminhtml/events"
-], function(jQuery){
+], function(jQuery, tinyMCE){
 
     window.MediabrowserUtility = {
         getMaxZIndex: function() {

@@ -10,10 +10,10 @@
         <title>Magento Admin</title>
         <link src="prototype/prototype.js"/>
         <link src="legacy-build.min.js"/>
-        <css src="mage/calendar.css"/>
         <link src="requirejs/require.js"/>
         <link src="mage/requirejs/resolver.js"/>
         <link src="jquery.js"/>
+        <css src="mage/calendar.css"/>
         <css src="extjs/resources/css/ext-all.css"/>
         <css src="extjs/resources/css/ytheme-magento.css"/>
     </head>

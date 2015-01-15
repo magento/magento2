@@ -4,14 +4,14 @@
  */
 
 define([
-    "jquery",
+    'jquery',
     'mage/smart-keyboard-handler',
     'mage/ie-class-fixer',
-    "jquery/ui",
-    "jquery/hover-intent",
-    "jquery/jquery.details",
-    "jquery/jquery.tabs",
-    "jquery/farbtastic" // $(..).farbtastic()
+    'jquery/ui',
+    'jquery/hover-intent',
+    'jquery/jquery.details',
+    'jquery/jquery.tabs',
+    'jquery/farbtastic'
 ], function ($, keyboardHandler) {
     'use strict';
 

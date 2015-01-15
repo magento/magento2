@@ -31,7 +31,12 @@
     </div>
 </form>
 <script type="text/javascript">
-require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
+require([
+    'jquery',
+    'tinymce',
+    'mage/mage',
+    'prototype'
+], function(jQuery, tinyMCE){
 
 //<![CDATA[
 jQuery('#queue_edit_form').mage('form').mage('validation');

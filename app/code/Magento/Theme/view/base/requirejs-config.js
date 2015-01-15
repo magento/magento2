@@ -17,6 +17,9 @@ var config = {
         "mage/common": ["jquery"],
         "mage/requirejs/plugin/id-normalizer": ["jquery"],
         "mage/webapi": ["jquery"],
+        "tinymce": {
+            "exports": "tinymce"
+        },
         "ko": {
             "exports": "ko"
         },
@@ -38,7 +41,8 @@ var config = {
         "prototype": "prototype/prototype-amd",
         "text": "requirejs/text",
         "domReady": "requirejs/domReady",
-        "ko": "ko/ko"
+        "ko": "ko/ko",
+        "tinymce": "tiny_mce/tiny_mce"
     },
     "deps": [
         "jquery/jquery-migrate"
