@@ -425,6 +425,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * @param string $currencyCode
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canUseForCurrency($currencyCode)
     {

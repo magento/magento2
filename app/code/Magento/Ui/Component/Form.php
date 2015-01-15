@@ -18,6 +18,7 @@ use Magento\Ui\DataProvider\Manager;
 
 /**
  * Class Form
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Form extends AbstractView
 {

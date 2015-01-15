@@ -123,6 +123,7 @@ class Http extends File
      * @param string $mode
      * @return resource file
      * @throws FilesystemException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fileOpen($path, $mode)
     {
@@ -202,6 +203,7 @@ class Http extends File
      * @param string $path
      * @param string|null $scheme
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAbsolutePath($basePath, $path, $scheme = null)
     {

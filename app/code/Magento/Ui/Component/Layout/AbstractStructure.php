@@ -19,6 +19,7 @@ use Magento\Ui\DataProvider\Metadata;
 
 /**
  * Class AbstractStructure
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractStructure extends AbstractView
 {

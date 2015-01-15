@@ -22,6 +22,7 @@ use Magento\Sales\Model\AbstractModel;
  * @method \Magento\Sales\Model\Order\Shipment\Track setUpdatedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Track extends AbstractModel implements ShipmentTrackInterface
 {

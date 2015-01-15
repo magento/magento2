@@ -79,6 +79,7 @@ class Calculator implements BundleCalculatorInterface
      * @param null|string $exclude
      * @param null|array $context
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null, $context = [])
     {

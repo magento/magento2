@@ -165,6 +165,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param Request $request
      * @return \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function requestToShipment($request)
     {
@@ -177,6 +178,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param Request $request
      * @return \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function returnOfShipment($request)
     {
@@ -188,6 +190,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param \Magento\Framework\Object|null $params
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getContainerTypes(\Magento\Framework\Object $params = null)
     {
@@ -264,6 +267,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param \Magento\Framework\Object|null $params
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDeliveryConfirmationTypes(\Magento\Framework\Object $params = null)
     {
@@ -320,6 +324,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
      * @return $this|bool|Error
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function proccessAdditionalValidation(\Magento\Sales\Model\Quote\Address\RateRequest $request)
     {
@@ -562,6 +567,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param string|null $countryId
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isZipCodeRequired($countryId = null)
     {
@@ -618,6 +624,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @param \Magento\Framework\Object $params
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getContentTypes(\Magento\Framework\Object $params)
     {

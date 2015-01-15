@@ -38,6 +38,7 @@ class PriceBox extends PriceBoxRender
      * @param Data $coreDataHelper
      * @param Random $mathRandom
      * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,

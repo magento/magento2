@@ -307,6 +307,7 @@ class Transaction extends AbstractExtensibleModel implements TransactionInterfac
      * @return Transaction[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getChildTransactions($types = null, $txnId = null, $recursive = false)
     {

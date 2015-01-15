@@ -440,6 +440,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      * @param bool $withDefault
      * @param bool $codeKey
      * @return Group[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getGroups($withDefault = false, $codeKey = false)
     {

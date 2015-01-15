@@ -41,6 +41,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method \Magento\Sales\Model\Quote\Payment setCcSsIssue(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Payment extends \Magento\Payment\Model\Info
 {

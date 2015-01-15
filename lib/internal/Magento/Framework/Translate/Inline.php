@@ -168,6 +168,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      *
      * @param mixed|string|null $tagName
      * @return null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAdditionalHtmlAttribute($tagName = null)
     {

@@ -17,6 +17,7 @@ use Magento\Ui\DataProvider\Manager;
 
 /**
  * Class Listing
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Listing extends AbstractView
 {

@@ -523,6 +523,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      *
      * @param array $arr
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setOptions($arr)
     {
@@ -535,6 +536,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
      * @param string $name
      * @param string $value
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setOption($name, $value)
     {

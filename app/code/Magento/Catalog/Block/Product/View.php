@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product;
 
 /**
  * Product View block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View extends AbstractProduct implements \Magento\Framework\View\Block\IdentityInterface
 {

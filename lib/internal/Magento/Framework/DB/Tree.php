@@ -15,6 +15,9 @@ use Magento\Framework\DB\Tree\TreeException;
  * Magento Library
  */
 require_once 'Tree/TreeException.php';
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Tree
 {
     /**
