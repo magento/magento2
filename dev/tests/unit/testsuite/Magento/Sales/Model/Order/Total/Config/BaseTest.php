@@ -109,6 +109,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTotalModelsSortingSubroutine()
     {
+        $this->markTestIncomplete('MAGETWO-32722');
         $total = $this->getMockForAbstractClass('Magento\Sales\Model\Order\Total\AbstractTotal');
         $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
             $this->returnValue([
