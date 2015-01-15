@@ -39,41 +39,51 @@ class Order extends \Magento\Backend\App\Action
     protected $_translateInline;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Framework\Translate\InlineInterface $translateInline
+        \Magento\Framework\Translate\InlineInterface $translateInline,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
         $this->_translateInline = $translateInline;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
     /**
      * Init layout, menu and breadcrumb
      *
-     * @return $this
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     protected function _initAction()
     {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu(
-            'Magento_Sales::sales_order'
-        )->_addBreadcrumb(
-            __('Sales'),
-            __('Sales')
-        )->_addBreadcrumb(
-            __('Orders'),
-            __('Orders')
-        );
-        return $this;
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Sales::sales_order');
+        $resultPage->addBreadcrumb(__('Sales'), __('Sales'));
+        $resultPage->addBreadcrumb(__('Orders'), __('Orders'));
+        return $resultPage;
     }
 
     /**
@@ -88,7 +98,6 @@ class Order extends \Magento\Backend\App\Action
 
         if (!$order->getId()) {
             $this->messageManager->addError(__('This order no longer exists.'));
-            $this->_redirect('sales/*/');
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }
