@@ -62,7 +62,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Core\Model\TemplateEngine\Decorator\DebugHints',
+            'Magento\Developer\Model\TemplateEngine\Decorator\DebugHints',
             $this->identicalTo(['subject' => $engine, 'showBlockHints' => $showBlockHints])
         )->will(
             $this->returnValue($engineDecorated)
