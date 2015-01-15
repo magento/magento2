@@ -19,9 +19,9 @@ class CheckoutAgreementsRepositoryTest extends WebapiAbstract
     {
         $this->listServiceInfo = [
             'soap' => [
-                'service' => 'checkoutAgreementsRepositoryInterfaceV1',
+                'service' => 'checkoutAgreementsCheckoutAgreementsRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'checkoutAgreementsRepositoryInterfaceV1GetList',
+                'operation' => 'checkoutAgreementsCheckoutAgreementsRepositoryV1getList',
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/licence/',
@@ -74,7 +74,7 @@ class CheckoutAgreementsRepositoryTest extends WebapiAbstract
         $agreements = $this->_webApiCall($this->listServiceInfo, []);
         $this->assertCount(1, $agreements);
         $agreementData = $agreements[0];
-        $this->assertEquals($agreementModel->getId(), $agreementData['id']);
+        $this->assertEquals($agreementModel->getId(), $agreementData['agreement_id']);
         $this->assertEquals($agreementModel->getName(), $agreementData['name']);
         $this->assertEquals($agreementModel->getContent(), $agreementData['content']);
         $this->assertEquals($agreementModel->getContentHeight(), $agreementData['content_height']);
