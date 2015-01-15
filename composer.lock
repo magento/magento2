@@ -3144,7 +3144,7 @@
     },
     "prefer-stable": false,
     "platform": {
-        "php": "~5.4.11|~5.5.0"
+        "php": ">=5.4.11"
     },
     "platform-dev": {
         "lib-libxml": "*",
