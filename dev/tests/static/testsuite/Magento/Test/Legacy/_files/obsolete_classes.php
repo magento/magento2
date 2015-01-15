@@ -2851,6 +2851,8 @@ return [
     ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Subtotal'],
     ['Magento\SalesRule\Model\Quote\Nominal\Discount'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal'],
+    ['Magento\Core\Model\Url\RouteParamsResolver', 'Magento\Framework\Url\RouteParamsResolver'],
+    ['Magento\Core\Model\Url\SecurityInfo', 'Magento\Framework\Url\SecurityInfo'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Collector'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Url;
+namespace Magento\Framework\Url;
 
 class SecurityInfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,14 +13,14 @@ class SecurityInfoTest extends \PHPUnit_Framework_TestCase
     protected $_scopeConfigMock;
 
     /**
-     * @var \Magento\Core\Model\Url\SecurityInfo
+     * @var \Magento\Framework\Url\SecurityInfo
      */
     protected $_model;
 
     protected function setUp()
     {
         $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_model = new \Magento\Core\Model\Url\SecurityInfo($this->_scopeConfigMock, ['/account', '/cart']);
+        $this->_model = new \Magento\Framework\Url\SecurityInfo($this->_scopeConfigMock, ['/account', '/cart']);
     }
 
     public function testIsSecureReturnsFalseIfDisabledInConfig()
