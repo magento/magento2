@@ -35,7 +35,6 @@ var config = {
         "jquery/validate": "jquery/jquery.validate",
         "jquery/hover-intent": "jquery/jquery.hoverIntent",
         "jquery/template": "jquery/jquery.tmpl.min",
-        "jquery/farbtastic": "jquery/farbtastic/jquery.farbtastic",
         "jquery/file-uploader": "jquery/fileUploader/jquery.fileupload-fp",
         "handlebars": "jquery/handlebars/handlebars-v1.3.0",
         "jquery/jquery.hashchange": "jquery/jquery.ba-hashchange.min",

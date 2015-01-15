@@ -9,9 +9,7 @@ define([
     'mage/ie-class-fixer',
     'jquery/ui',
     'jquery/hover-intent',
-    'jquery/jquery.details',
-    'jquery/jquery.tabs',
-    'jquery/farbtastic'
+    'jquery/jquery.tabs'
 ], function ($, keyboardHandler) {
     'use strict';
 
@@ -53,6 +51,14 @@ define([
             hoverIntentConfig: {
                 interval: 100,
                 timeout: 500 // number = milliseconds delay before onMouseOut
+            },
+            categoriesConfig: {
+                '[data-ui-id="menu-mage-adminhtml-system"]': {
+                    open: 'click'
+                },
+                '[data-ui-id="menu-mage-adminhtml-stores"]': {
+                    open: 'click'
+                }
             }
         },
 
@@ -328,40 +334,7 @@ define([
         }
     });
 
-    var updateColorPickerValues = function () {
-        $('.element-color-picker').each(function () {
-            var _this = $(this);
-            _this.find('.color-box.active').removeClass('active');
-            if (_this.find('.farbtastic').is(':visible')) {
-                _this
-                    .find('.farbtastic').hide()
-                    .end()
-                    .find('input').trigger('change.quickStyleElement');
-            }
-        });
-    };
-
-    var toggleColorPickerPosition = function () {
-        var colorPicker = $('.farbtastic:visible'),
-            colorPickerWidth = 350;
-
-        colorPicker.offset() && colorPicker.toggleClass('vertical', parseInt(colorPicker.offset().left, 10) + colorPickerWidth > $(window).width());
-    };
-
     $(document).ready(function () {
-        $('.navigation').globalNavigation({
-            categoriesConfig: {
-                '[data-ui-id="menu-mage-adminhtml-system"]': {
-                    open: 'click'
-                },
-                '[data-ui-id="menu-mage-adminhtml-stores"]': {
-                    open: 'click'
-                }
-            }
-        });
-        $('details').details();
-        $('[data-store-label]').useDefault();
-
         /* @TODO refactor collapsable as widget and avoid logic binding with such a general selectors */
         $('.collapse').collapsable();
         $.each($('.entry-edit'), function (i, entry) {
@@ -370,48 +343,7 @@ define([
             }).collapse('show');
         });
 
-        // TODO: Move to VDE js widjets
-        $.each($('.color-box'), function (index, elem) {
-            $(elem).farbtastic(function (color) {
-                $(elem).css({
-                    'backgroundColor': color
-                });
-                $(elem).siblings('input').val(color);
-            });
-        });
-
-        $(document).on('click', function (e) {
-            var target = $(e.target);
-
-            if (target.closest('.control').find('.color-box').length < 1) {
-                updateColorPickerValues();
-            }
-        });
-
-        $(window)
-            .on('resize.vdeColorPicker', function () {
-                this.vdeColorPickerTimeoutId && clearTimeout(this.vdeColorPickerTimeoutId);
-
-                this.vdeColorPickerTimeoutId = setTimeout(function () {
-                    toggleColorPickerPosition();
-                }, 500);
-            });
-
-        $('.color-box')
-            .on('click.showColorPicker', function () {
-                updateColorPickerValues(); // Update values is other color picker is not closed yet
-                $(this)
-                    .addClass('active')
-                    .siblings('input').trigger('focus.quickStyleElement')
-                    .end()
-                    .find('.farbtastic').show();
-                toggleColorPickerPosition();
-            });
         keyboardHandler.apply();
-    });
-
-    $(document).on('ajaxComplete', function () {
-        $('details').details();
     });
 
     return {
