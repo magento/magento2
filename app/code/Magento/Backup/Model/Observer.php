@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -43,7 +44,7 @@ class Observer
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -74,7 +75,7 @@ class Observer
     /**
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Backup\Factory $backupFactory
@@ -83,7 +84,7 @@ class Observer
     public function __construct(
         \Magento\Backup\Helper\Data $backupData,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Backup\Factory $backupFactory,
@@ -139,12 +140,12 @@ class Observer
 
             $backupManager->create();
             $message = $this->_backupData->getCreateSuccessMessageByType($type);
-            $this->_logger->log($message);
+            $this->_logger->info($message);
         } catch (\Exception $e) {
             $this->_errors[] = $e->getMessage();
             $this->_errors[] = $e->getTrace();
-            $this->_logger->log($e->getMessage(), \Zend_Log::ERR);
-            $this->_logger->logException($e);
+            $this->_logger->info($e->getMessage());
+            $this->_logger->critical($e);
         }
 
         if ($this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_MAINTENANCE_MODE, ScopeInterface::SCOPE_STORE)) {

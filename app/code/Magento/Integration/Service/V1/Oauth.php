@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Service\V1;
 
@@ -9,7 +10,7 @@ use Magento\Integration\Helper\Oauth\Data as IntegrationOauthHelper;
 use Magento\Integration\Model\Oauth\Consumer as ConsumerModel;
 use Magento\Integration\Model\Oauth\Consumer\Factory as ConsumerFactory;
 use Magento\Integration\Model\Oauth\Token as OauthTokenModel;
-use Magento\Integration\Model\Oauth\Token\Factory as TokenFactory;
+use Magento\Integration\Model\Oauth\TokenFactory as TokenFactory;
 use Magento\Integration\Model\Oauth\Token\Provider as TokenProvider;
 
 /**
@@ -46,7 +47,7 @@ class Oauth implements OauthInterface
     protected $_httpClient;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -68,7 +69,7 @@ class Oauth implements OauthInterface
      * @param TokenFactory $tokenFactory
      * @param IntegrationOauthHelper $dataHelper
      * @param \Magento\Framework\HTTP\ZendClient $httpClient
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param OauthHelper $oauthHelper
      * @param TokenProvider $tokenProvider
      */
@@ -78,7 +79,7 @@ class Oauth implements OauthInterface
         TokenFactory $tokenFactory,
         IntegrationOauthHelper $dataHelper,
         \Magento\Framework\HTTP\ZendClient $httpClient,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         OauthHelper $oauthHelper,
         TokenProvider $tokenProvider
     ) {
@@ -220,7 +221,7 @@ class Oauth implements OauthInterface
         } catch (\Magento\Framework\Oauth\Exception $exception) {
             throw $exception;
         } catch (\Exception $exception) {
-            $this->_logger->logException($exception);
+            $this->_logger->critical($exception);
             throw new \Magento\Framework\Oauth\Exception(
                 'Unable to post data to consumer due to an unexpected error'
             );

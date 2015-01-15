@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\File\Storage\Directory;
 
@@ -201,7 +202,7 @@ class Database extends \Magento\Core\Model\File\Storage\Database\AbstractDatabas
                     throw new \Magento\Framework\Model\Exception(__('Parent directory does not exist: %1', $dir['path']));
                 }
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
 

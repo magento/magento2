@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
@@ -11,7 +12,7 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
-    public static $attributeData = [
+    private $attributeData = [
         1 => [
             'id' => 1,
             'code' => 'someattr',
@@ -93,7 +94,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
         $this->_productFactoryMock = $this->getMock(
             'Magento\Catalog\Model\ProductFactory',
             ['create'],
@@ -115,7 +119,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-       // $setFactoryMock = $this->getMock('Magento\Eav\Model\Entity\Attribute\SetFactory', [], [], '', false);
         $attributeFactoryMock = $this->getMock(
             'Magento\Catalog\Model\Resource\Eav\AttributeFactory',
             [],
@@ -197,7 +200,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $product->expects($this->any())->method('dataHasChangedFor')->will($this->returnValue('false'));
         $product->expects($this->any())->method('getConfigurableAttributesData')
-            ->will($this->returnValue(self::$attributeData));
+            ->will($this->returnValue($this->attributeData));
         $product->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(true));
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
         $product->expects($this->any())->method('getId')->will($this->returnValue(1));
@@ -211,7 +214,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['addData', 'setStoreId', 'setProductId', 'save', '__wakeup', '__sleep'])
             ->getMock();
-        $expectedAttributeData = self::$attributeData[1];
+        $expectedAttributeData = $this->attributeData[1];
         unset($expectedAttributeData['id']);
         $attribute->expects($this->once())->method('addData')->with($expectedAttributeData)->will($this->returnSelf());
         $attribute->expects($this->once())->method('setStoreId')->with(1)->will($this->returnSelf());
@@ -295,7 +298,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ])->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->any())->method('getConfigurableAttributesData')
-            ->will($this->returnValue(self::$attributeData));
+            ->will($this->returnValue($this->attributeData));
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue(5));
         $product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $product->expects($this->any())->method('getAssociatedProductIds')->will($this->returnValue([2]));
@@ -496,7 +499,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $optionMock->expects($this->once())->method('getValue')->willReturn(serialize(self::$attributeData));
+        $optionMock->expects($this->once())->method('getValue')->willReturn(serialize($this->attributeData));
         $productMock->expects($this->once())->method('getCustomOption')->with('attributes')->willReturn($optionMock);
         $productMock->expects($this->once())->method('hasData')->willReturn(true);
         $productMock->expects($this->at(2))->method('getData')->willReturn(true);
@@ -622,11 +625,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $eavAttributeMock->expects($this->once())->method('getAttributeCode')->willReturn('attr_code');
         $usedProductMock->expects($this->once())
             ->method('getData')->with('attr_code')
-            ->willReturn(self::$attributeData[1]);
+            ->willReturn($this->attributeData[1]);
 
         $this->assertEquals(
             $usedProductMock,
-            $this->_model->getProductByAttributes(self::$attributeData, $productMock)
+            $this->_model->getProductByAttributes($this->attributeData, $productMock)
         );
     }
 
@@ -671,7 +674,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $firstItemMock,
-            $this->_model->getProductByAttributes(self::$attributeData, $productMock)
+            $this->_model->getProductByAttributes($this->attributeData, $productMock)
         );
     }
 

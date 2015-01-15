@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Model;
@@ -55,7 +56,7 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->contextMock = new \Magento\Framework\Model\Context(
-            $this->getMock('Magento\Framework\Logger', [], [], '', false),
+            $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false),
             $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false),
             $this->getMock('Magento\Framework\App\State', [], [], '', false),

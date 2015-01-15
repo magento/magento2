@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GoogleShopping\Model;
 
@@ -43,7 +44,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $coreRegistryMock->expects($this->any())->method('registry')->will($this->returnValue(1));
 
         $arguments = ['contentFactory' => $contentFactoryMock, 'coreRegistry' => $coreRegistryMock];
-        $this->_model = $this->_helper->getObject('\Magento\GoogleShopping\Model\Service', $arguments);
+        $this->_model = $this->_helper->getObject('Magento\GoogleShopping\Model\Service', $arguments);
     }
 
     public function testGetService()

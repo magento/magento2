@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Model;
@@ -61,13 +62,7 @@ class OrderNotifierTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->loggerMock = $this->getMock(
-            'Magento\Framework\Logger',
-            ['logException'],
-            [],
-            '',
-            false
-        );
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->notifier = new OrderNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -139,7 +134,7 @@ class OrderNotifierTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->order))
             ->will($this->throwException($exception));
         $this->loggerMock->expects($this->once())
-            ->method('logException')
+            ->method('critical')
             ->with($this->equalTo($exception));
         $this->assertFalse($this->notifier->notify($this->order));
     }

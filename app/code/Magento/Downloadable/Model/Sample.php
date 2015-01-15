@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
 
@@ -13,7 +14,7 @@ namespace Magento\Downloadable\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Downloadable\Api\Data\SampleInterface
+class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, \Magento\Downloadable\Api\Data\SampleInterface
 {
     const XML_PATH_SAMPLES_TITLE = 'catalog/downloadable/samples_title';
 

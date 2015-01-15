@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
 
@@ -48,7 +49,7 @@ class ErrorProcessor
     protected $_appState;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -67,13 +68,13 @@ class ErrorProcessor
     /**
      * @param \Magento\Core\Helper\Data $helper
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Helper\Data $helper,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem
     ) {
         $this->_coreHelper = $helper;
@@ -134,7 +135,7 @@ class ErrorProcessor
             //if not in Dev mode, make sure the message and code is masked for unanticipated exceptions
             if (!$isDevMode) {
                 /** Log information about actual exception */
-                $reportId = $this->_logException($exception);
+                $reportId = $this->_critical($exception);
                 $message = sprintf(self::INTERNAL_SERVER_ERROR_MSG, $reportId);
                 $code = 0;
             }
@@ -166,7 +167,7 @@ class ErrorProcessor
         if ($this->_appState->getMode() == State::MODE_DEVELOPER || $exception instanceof \Magento\Webapi\Exception) {
             $this->render($exception->getMessage(), $exception->getTraceAsString(), $httpCode);
         } else {
-            $reportId = $this->_logException($exception);
+            $reportId = $this->_critical($exception);
             $this->render(
                 __('Internal Error. Details are available in Magento log file. Report ID: %1', $reportId),
                 'Trace is not available.',
@@ -182,16 +183,16 @@ class ErrorProcessor
      * @param \Exception $exception
      * @return string $reportId
      */
-    protected function _logException(\Exception $exception)
+    protected function _critical(\Exception $exception)
     {
         $exceptionClass = get_class($exception);
         $reportId = uniqid("webapi-");
         $exceptionForLog = new $exceptionClass(
-            /** Trace is added separately by logException. */
+            /** Trace is added separately by critical. */
             "Report ID: {$reportId}; Message: {$exception->getMessage()}",
             $exception->getCode()
         );
-        $this->_logger->logException($exceptionForLog);
+        $this->_logger->critical($exceptionForLog);
         return $reportId;
     }
 

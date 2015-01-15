@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
 
@@ -123,7 +124,7 @@ abstract class AbstractType
     protected $_eventManager;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -164,7 +165,7 @@ abstract class AbstractType
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
@@ -176,7 +177,7 @@ abstract class AbstractType
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository
     ) {
         $this->_catalogProductOption = $catalogProductOption;
@@ -1005,7 +1006,7 @@ abstract class AbstractType
         } catch (\Magento\Framework\Model\Exception $e) {
             $errors[] = $e->getMessages();
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             $errors[] = __('Something went wrong while processing the request.');
         }
 

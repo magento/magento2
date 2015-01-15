@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
 
@@ -20,14 +21,14 @@ class FreeTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentData  = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
-        $logAdapterFactory = $this->getMock('Magento\Framework\Logger\AdapterFactory', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->currencyPrice = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
 
         $this->methodFree = new \Magento\Payment\Model\Method\Free(
             $eventManager,
             $paymentData,
             $this->scopeConfig,
-            $logAdapterFactory,
+            $logger,
             $this->currencyPrice
         );
     }

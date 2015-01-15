@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model;
 
@@ -79,7 +80,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $this->taxCalculationService = $objectManager->getObject(
-            '\Magento\Tax\Model\TaxCalculation',
+            'Magento\Tax\Model\TaxCalculation',
             [
                 'calculation' => $this->calculationTool,
                 'calculatorFactory' => $this->calculatorFactory,

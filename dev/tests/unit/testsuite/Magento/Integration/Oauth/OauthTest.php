@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Oauth;
 
@@ -15,7 +16,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Model\Oauth\Nonce\Factory */
     private $_nonceFactory;
 
-    /** @var \Magento\Integration\Model\Oauth\Token\Factory */
+    /** @var \Magento\Integration\Model\Oauth\TokenFactory */
     private $_tokenFactory;
 
     /** @var \Magento\Integration\Model\Oauth\Consumer */
@@ -65,6 +66,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
                     'getCallbackUrl',
                     'save',
                     'getData',
+                    'isValidForTokenExchange',
                     '__wakeup',
                 ]
             )
@@ -76,8 +78,8 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             'Magento\Integration\Model\Oauth\Nonce\Factory'
         )->disableOriginalConstructor()->getMock();
         $this->_tokenFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Token\Factory'
-        )->disableOriginalConstructor()->getMock();
+            'Magento\Integration\Model\Oauth\TokenFactory'
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
             ->disableOriginalConstructor()
             ->setMethods(
@@ -121,9 +123,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $tokenProvider = new \Magento\Integration\Model\Oauth\Token\Provider(
             $this->_consumerFactory,
             $this->_tokenFactory,
-            $this->_dataHelperMock,
-            $this->_dateMock,
-            $this->_tokenMock
+            $this->_dataHelperMock
         );
         $this->_oauth = new \Magento\Framework\Oauth\Oauth(
             $this->_oauthHelperMock,
@@ -218,14 +218,11 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     public function testGetRequestTokenOutdatedConsumerKey()
     {
         $this->_setupConsumer();
-        $this->_dateMock->expects($this->any())->method('timestamp')->will($this->returnValue(9999999999));
-        $this->_dataHelperMock->expects(
-            $this->once()
-        )->method(
-            'getConsumerExpirationPeriod'
-        )->will(
-            $this->returnValue(0)
-        );
+        $this->_setupNonce();
+        $this->_consumerMock
+            ->expects($this->any())
+            ->method('isValidForTokenExchange')
+            ->will($this->returnValue(false));
 
         $this->_oauth->getRequestToken($this->_getRequestTokenParams(), self::REQUEST_URL);
     }
@@ -267,14 +264,10 @@ class OauthTest extends \PHPUnit_Framework_TestCase
 
     protected function _makeValidExpirationPeriod()
     {
-        $this->_dateMock->expects($this->any())->method('timestamp')->will($this->returnValue(0));
-        $this->_dataHelperMock->expects(
-            $this->once()
-        )->method(
-            'getConsumerExpirationPeriod'
-        )->will(
-            $this->returnValue(300)
-        );
+        $this->_consumerMock
+            ->expects($this->any())
+            ->method('isValidForTokenExchange')
+            ->will($this->returnValue(true));
     }
 
     /**
@@ -530,7 +523,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /**
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
-     * @expectedException \Magento\Framework\Oauth\Exception
+     * @expectedException \Magento\Framework\Oauth\OauthInputException
      */
     public function testGetAccessTokenTokenRejected()
     {

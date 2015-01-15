@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\ScheduledStructure;
 
@@ -26,15 +27,15 @@ class Helper
     protected $counter = 0;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->logger = $logger;
     }
@@ -169,7 +170,7 @@ class Helper
         $data = $scheduledStructure->getStructureElementData($key);
         // if we have reference container to not existed element
         if (!isset($row[self::SCHEDULED_STRUCTURE_INDEX_TYPE])) {
-            $this->logger->log("Broken reference: missing declaration of the element '{$key}'.", \Zend_Log::CRIT);
+            $this->logger->info("Broken reference: missing declaration of the element '{$key}'.");
             $scheduledStructure->unsetPathElement($key);
             $scheduledStructure->unsetStructureElement($key);
             return;
@@ -185,13 +186,12 @@ class Helper
                 try {
                     $structure->setAsChild($name, $parentName, $alias);
                 } catch (\Exception $e) {
-                    $this->logger->log($e->getMessage());
+                    $this->logger->critical($e);
                 }
             } else {
-                $this->logger->log(
+                $this->logger->info(
                     "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
-                    'because the latter doesn\'t exist',
-                    \Zend_Log::CRIT
+                    'because the latter doesn\'t exist'
                 );
             }
         }

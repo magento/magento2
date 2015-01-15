@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tax\Model\Sales\Total\Quote;
@@ -106,11 +107,11 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $address = $quote->getShippingAddress();
 
         /** @var \Magento\Sales\Model\Quote\Address\Total\Subtotal $addressSubtotalCollector */
-        $addressSubtotalCollector = $this->objectManager->create('\Magento\Sales\Model\Quote\Address\Total\Subtotal');
+        $addressSubtotalCollector = $this->objectManager->create('Magento\Sales\Model\Quote\Address\Total\Subtotal');
         $addressSubtotalCollector->collect($address);
 
         /** @var \Magento\Tax\Model\Sales\Total\Quote\Subtotal $subtotalCollector */
-        $subtotalCollector = $this->objectManager->create('\Magento\Tax\Model\Sales\Total\Quote\Subtotal');
+        $subtotalCollector = $this->objectManager->create('Magento\Tax\Model\Sales\Total\Quote\Subtotal');
         $subtotalCollector->collect($address);
 
         $this->assertEquals($expected['subtotal'], $address->getSubtotal());
@@ -221,11 +222,11 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $address = $quote->getShippingAddress();
 
         /** @var \Magento\Sales\Model\Quote\Address\Total\Subtotal $addressSubtotalCollector */
-        $addressSubtotalCollector = $this->objectManager->create('\Magento\Sales\Model\Quote\Address\Total\Subtotal');
+        $addressSubtotalCollector = $this->objectManager->create('Magento\Sales\Model\Quote\Address\Total\Subtotal');
         $addressSubtotalCollector->collect($address);
 
         /** @var \Magento\Tax\Model\Sales\Total\Quote\Subtotal $subtotalCollector */
-        $subtotalCollector = $this->objectManager->create('\Magento\Tax\Model\Sales\Total\Quote\Subtotal');
+        $subtotalCollector = $this->objectManager->create('Magento\Tax\Model\Sales\Total\Quote\Subtotal');
         $subtotalCollector->collect($address);
 
         $this->assertEquals($expected['subtotal'], $address->getSubtotal());

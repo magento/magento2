@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <legend class="legend"><span><?php echo __('Order Totals') ?></span></legend>
@@ -13,7 +14,7 @@
 <div class="divider"></div>
 <div class="order-totals-bottom">
     <div class="field choice field-append-comments">
-        <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]" value="1" <?php if ($this->getNoteNotify()): ?>checked="true"<?php endif; ?>/>
+        <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]" value="1"<?php if ($this->getNoteNotify()): ?> checked="checked"<?php endif; ?>/>
         <label for="notify_customer" class="normal"><?php echo __('Append Comments') ?></label>
     </div>
     <?php if ($this->canSendNewOrderConfirmationEmail()): ?>

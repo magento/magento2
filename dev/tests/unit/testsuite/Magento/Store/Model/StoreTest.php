@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
@@ -12,6 +13,11 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
  */
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Store\Model\Store
+     */
+    protected $store;
+
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
      */
@@ -31,6 +37,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     protected $cookieMetadataFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystemMock;
 
     public function setUp()
     {
@@ -54,6 +65,13 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false
+        );
+        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->store = $this->objectManagerHelper->getObject(
+            'Magento\Store\Model\Store',
+            ['filesystem' => $this->filesystemMock]
         );
     }
 
@@ -574,5 +592,31 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'unsecure request, no secure base url registered' => [false, ['SERVER_PORT' => 443], false, null],
             'unsecure request, not using registered port' => [false, ['SERVER_PORT' => 80]],
         ];
+    }
+
+    /**
+     * @covers \Magento\Store\Model\Store::getBaseMediaDir
+     */
+    public function testGetBaseMediaDir()
+    {
+        $expectedResult = 'pub/media';
+        $this->filesystemMock->expects($this->once())
+            ->method('getUri')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+            ->willReturn($expectedResult);
+        $this->assertEquals($expectedResult, $this->store->getBaseMediaDir());
+    }
+
+    /**
+     * @covers \Magento\Store\Model\Store::getBaseStaticDir
+     */
+    public function testGetBaseStaticDir()
+    {
+        $expectedResult = 'pub/static';
+        $this->filesystemMock->expects($this->once())
+            ->method('getUri')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::STATIC_VIEW)
+            ->willReturn($expectedResult);
+        $this->assertEquals($expectedResult, $this->store->getBaseStaticDir());
     }
 }

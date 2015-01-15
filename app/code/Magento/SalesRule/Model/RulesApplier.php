@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
 
@@ -59,7 +60,18 @@ class RulesApplier
             }
 
             if (!$skipValidation && !$rule->getActions()->validate($item)) {
-                continue;
+                $childItems = $item->getChildren();
+                $isContinue = true;
+                if (!empty($childItems)) {
+                    foreach ($childItems as $childItem) {
+                        if ($rule->getActions()->validate($childItem)) {
+                            $isContinue = false;
+                        }
+                    }
+                }
+                if ($isContinue) {
+                    continue;
+                }
             }
 
             $this->applyRule($item, $rule, $address, $couponCode);

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Config\Backend;
 
@@ -11,7 +12,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
         $eventDispatcher = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $cacheManager = $this->getMock('Magento\Framework\App\CacheInterface');
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $actionValidatorMock = $this->getMock(
             'Magento\Framework\Model\ActionValidator\RemoveAction',
             [],

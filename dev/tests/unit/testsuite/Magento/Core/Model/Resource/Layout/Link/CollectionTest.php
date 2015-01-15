@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\Resource\Layout\Link;
 
@@ -28,7 +29,7 @@ class CollectionTest extends \Magento\Core\Model\Resource\Layout\AbstractTestCas
 
         return new \Magento\Core\Model\Resource\Layout\Link\Collection(
             $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false),
-            $this->getMock('Magento\Framework\Logger', [], [], '', false),
+            $this->getMock('Psr\Log\LoggerInterface'),
             $this->getMockForAbstractClass('Magento\Framework\Data\Collection\Db\FetchStrategyInterface'),
             $eventManager,
             $this->getMock('Magento\Framework\Stdlib\DateTime', null, [], '', true),

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Model\Oauth\Token;
@@ -17,44 +18,20 @@ class Provider implements TokenProviderInterface
     protected $_consumerFactory;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Token\Factory
+     * @var \Magento\Integration\Model\Oauth\TokenFactory
      */
     protected $_tokenFactory;
 
     /**
-     * @var  \Magento\Integration\Helper\Oauth\Data
-     */
-    protected $_dataHelper;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    protected $_date;
-
-    /**
-     * @var Token
-     */
-    protected $token;
-
-    /**
      * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
-     * @param \Magento\Integration\Model\Oauth\Token\Factory $tokenFactory
-     * @param \Magento\Integration\Helper\Oauth\Data $dataHelper
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param Token $token
+     * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
-        \Magento\Integration\Model\Oauth\Token\Factory $tokenFactory,
-        \Magento\Integration\Helper\Oauth\Data $dataHelper,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        Token $token
+        \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_tokenFactory = $tokenFactory;
-        $this->_dataHelper = $dataHelper;
-        $this->_date = $date;
-        $this->token = $token;
     }
 
     /**
@@ -63,9 +40,7 @@ class Provider implements TokenProviderInterface
     public function validateConsumer($consumer)
     {
         // Must use consumer within expiration period.
-        $consumerTS = strtotime($consumer->getCreatedAt());
-        $expiry = $this->_dataHelper->getConsumerExpirationPeriod();
-        if ($this->_date->timestamp() - $consumerTS > $expiry) {
+        if (!$consumer->isValidForTokenExchange()) {
             throw new \Magento\Framework\Oauth\Exception(
                 'Consumer key has expired'
             );
@@ -293,7 +268,9 @@ class Provider implements TokenProviderInterface
      */
     public function getIntegrationTokenByConsumerId($consumerId)
     {
-        $token = $this->token->loadByConsumerIdAndUserType($consumerId, UserContextInterface::USER_TYPE_INTEGRATION);
+        /** @var \Magento\Integration\Model\Oauth\Token $token */
+        $token = $this->_tokenFactory->create();
+        $token->loadByConsumerIdAndUserType($consumerId, UserContextInterface::USER_TYPE_INTEGRATION);
 
         if (!$token->getId()) {
             throw new \Magento\Framework\Oauth\Exception(

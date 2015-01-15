@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Api;
@@ -34,7 +35,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->repository = $this->_objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
         $this->_addressBuilder = $this->_objectManager->create('Magento\Customer\Api\Data\AddressDataBuilder');
 
-        $builder = $this->_objectManager->create('\Magento\Customer\Api\Data\RegionDataBuilder');
+        $builder = $this->_objectManager->create('Magento\Customer\Api\Data\RegionDataBuilder');
         $region = $builder
             ->setRegionCode('AL')
             ->setRegion('Alabama')

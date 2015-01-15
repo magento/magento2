@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Design\Theme;
 
@@ -63,7 +64,7 @@ class Image
     /**
      * Logger
      *
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -88,7 +89,7 @@ class Image
      * @param \Magento\Framework\Image\Factory $imageFactory
      * @param Image\Uploader $uploader
      * @param Image\PathInterface $themeImagePath
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $imageParams
      * @param ThemeInterface $theme
      * @codingStandardsIgnoreStart
@@ -98,7 +99,7 @@ class Image
         \Magento\Framework\Image\Factory $imageFactory,
         Image\Uploader $uploader,
         Image\PathInterface $themeImagePath,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         array $imageParams = [self::PREVIEW_IMAGE_WIDTH, self::PREVIEW_IMAGE_HEIGHT],
         ThemeInterface $theme = null
     ) {
@@ -158,7 +159,7 @@ class Image
             $this->theme->setPreviewImage($destinationFileName);
         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
             $this->theme->setPreviewImage(null);
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
         return $isCopied;
     }

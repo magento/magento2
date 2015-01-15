@@ -2,7 +2,8 @@
 /**
  * test Magento\Customer\Model\Metadata\Form\AbstractData
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
@@ -19,7 +20,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Locale\ResolverInterface */
     protected $_localeResolverMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Logger */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Psr\Log\LoggerInterface */
     protected $_loggerMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
@@ -42,7 +43,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         $this->_localeResolverMock = $this->getMockBuilder(
             'Magento\Framework\Locale\ResolverInterface'
         )->disableOriginalConstructor()->getMock();
-        $this->_loggerMock = $this->getMockBuilder('Magento\Framework\Logger')->disableOriginalConstructor()->getMock();
+        $this->_loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
         $this->_attributeMock = $this->getMock('Magento\Customer\Api\Data\AttributeMetadataInterface');
         $this->_value = 'VALUE';
         $this->_entityTypeCode = 'ENTITY_TYPE_CODE';

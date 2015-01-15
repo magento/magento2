@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
 
@@ -11,14 +12,13 @@ use Magento\Downloadable\Model\Resource\Link as Resource;
 /**
  * Downloadable link model
  *
- * @method Resource _getResource()
  * @method Resource getResource()
  * @method int getProductId()
  * @method Link setProductId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Downloadable\Api\Data\LinkInterface
+class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, \Magento\Downloadable\Api\Data\LinkInterface
 {
     const XML_PATH_LINKS_TITLE = 'catalog/downloadable/links_title';
 
@@ -85,8 +85,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements \
     }
 
     /**
-     * Enter description here...
-     *
      * @return $this
      */
     public function afterSave()

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
 
@@ -51,7 +52,7 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_assetRepo;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -111,7 +112,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * @param \Magento\Framework\Stdlib\String $string
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -127,7 +128,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function __construct(
         \Magento\Framework\Stdlib\String $string,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -615,7 +616,7 @@ class Filter extends \Magento\Framework\Filter\Template
             $value = parent::filter($value);
         } catch (\Exception $e) {
             $value = '';
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
         return $value;
     }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\Attribute\Data;
@@ -31,7 +32,7 @@ class PostcodeTest extends \PHPUnit_Framework_TestCase
     private $localeResolverMock;
 
     /**
-     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $loggerMock;
 
@@ -41,8 +42,7 @@ class PostcodeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->localeResolverMock = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
             ->getMock();
-        $this->loggerMock = $this->getMockBuilder('Magento\Framework\Logger')
-            ->disableOriginalConstructor()
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
             ->getMock();
         $this->directoryHelperMock = $this->getMockBuilder('Magento\Directory\Helper\Data')
             ->disableOriginalConstructor()

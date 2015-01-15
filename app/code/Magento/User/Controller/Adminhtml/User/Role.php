@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
@@ -44,12 +45,18 @@ class Role extends \Magento\Backend\App\AbstractAction
     protected $_authSession;
 
     /**
+     * @var \Magento\Framework\Filter\FilterManager
+     */
+    protected $_filterManager;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\User\Model\UserFactory $userFactory
      * @param \Magento\Authorization\Model\RulesFactory $rulesFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -57,7 +64,8 @@ class Role extends \Magento\Backend\App\AbstractAction
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\User\Model\UserFactory $userFactory,
         \Magento\Authorization\Model\RulesFactory $rulesFactory,
-        \Magento\Backend\Model\Auth\Session $authSession
+        \Magento\Backend\Model\Auth\Session $authSession,
+        \Magento\Framework\Filter\FilterManager $filterManager
     ) {
         parent::__construct($context);
         $this->_coreRegistry = $coreRegistry;
@@ -65,6 +73,7 @@ class Role extends \Magento\Backend\App\AbstractAction
         $this->_userFactory = $userFactory;
         $this->_rulesFactory = $rulesFactory;
         $this->_authSession = $authSession;
+        $this->_filterManager = $filterManager;
     }
 
     /**

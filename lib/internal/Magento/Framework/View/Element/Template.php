@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
 
@@ -251,7 +252,7 @@ class Template extends AbstractBlock
             $html = $templateEngine->render($this->templateContext, $fileName, $this->_viewVars);
         } else {
             $html = '';
-            $this->_logger->log("Invalid template file: '{$fileName}'", \Zend_Log::CRIT);
+            $this->_logger->info("Invalid template file: '{$fileName}'");
         }
 
         \Magento\Framework\Profiler::stop('TEMPLATE:' . $fileName);

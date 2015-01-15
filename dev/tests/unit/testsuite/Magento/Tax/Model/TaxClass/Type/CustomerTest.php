@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\TaxClass\Type;
 
@@ -19,9 +20,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['randomValue']));
 
         $filterBuilder = $objectManagerHelper
-            ->getObject('\Magento\Framework\Api\FilterBuilder');
+            ->getObject('Magento\Framework\Api\FilterBuilder');
         $filterGroupBuilder = $objectManagerHelper
-            ->getObject('\Magento\Framework\Api\Search\FilterGroupBuilder');
+            ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
         $searchCriteriaBuilder = $objectManagerHelper->getObject(
             'Magento\Framework\Api\SearchCriteriaBuilder',
             [

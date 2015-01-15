@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Result;
@@ -78,7 +79,7 @@ class Page extends Layout
     protected $assetRepo;
 
     /**
-     * @var Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -238,9 +239,10 @@ class Page extends Layout
             ]);
 
             $output = $this->getLayout()->getOutput();
-            $this->translateInline->processResponseBody($output);
             $this->assign('layoutContent', $output);
-            $response->appendBody($this->renderPage());
+            $output = $this->renderPage();
+            $this->translateInline->processResponseBody($output);
+            $response->appendBody($output);
         } else {
             parent::render($response);
         }
@@ -327,7 +329,7 @@ class Page extends Layout
             $params = array_merge(['_secure' => $this->request->isSecure()], $params);
             return $this->assetRepo->getUrlWithParams($fileId, $params);
         } catch (\Magento\Framework\Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             return $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
         }
     }

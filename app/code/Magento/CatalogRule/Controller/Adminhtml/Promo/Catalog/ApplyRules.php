@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
@@ -29,7 +30,7 @@ class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                 $this->messageManager->addError($errorMessage . ' ' . $ruleJob->getError());
             }
         } catch (\Exception $e) {
-            $this->_objectManager->create('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->create('Psr\Log\LoggerInterface')->critical($e);
             $this->messageManager->addError($errorMessage);
         }
         $this->_redirect('catalog_rule/*');

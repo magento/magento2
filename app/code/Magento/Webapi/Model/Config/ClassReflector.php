@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Config;
 
 use Zend\Server\Reflection;
 use Zend\Server\Reflection\ReflectionMethod;
+use Zend\Code\Reflection\MethodReflection;
 
 /**
  * Class reflector.
@@ -84,7 +86,7 @@ class ClassReflector
      */
     public function extractMethodData(ReflectionMethod $method)
     {
-        $methodData = ['documentation' => $method->getDescription(), 'interface' => []];
+        $methodData = ['documentation' => $this->extractMethodDescription($method), 'interface' => []];
         $prototypes = $method->getPrototypes();
         /** Take the fullest interface that also includes optional parameters. */
         /** @var \Zend\Server\Reflection\Prototype $prototype */
@@ -110,5 +112,23 @@ class ClassReflector
         }
 
         return $methodData;
+    }
+
+    /**
+     * Retrieve method full documentation description.
+     *
+     * @param ReflectionMethod $method
+     * @return string
+     */
+    protected function extractMethodDescription(ReflectionMethod $method)
+    {
+        $methodReflection = new MethodReflection(
+            $method->getDeclaringClass()->getName(),
+            $method->getName()
+        );
+
+        $docBlock = $methodReflection->getDocBlock();
+
+        return $this->_typeProcessor->getDescription($docBlock);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Helper\Oauth;
 
@@ -18,7 +19,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\HTTP\ZendClient */
     protected $_httpClientMock;
 
-    /** @var \Magento\Integration\Model\Oauth\Token\Factory */
+    /** @var \Magento\Integration\Model\Oauth\TokenFactory */
     protected $_tokenFactory;
 
     /** @var \Magento\Integration\Model\Oauth\Token */
@@ -33,7 +34,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Service\V1\OauthInterface */
     protected $_oauthService;
 
-    /** @var \Magento\Framework\Logger */
+    /** @var \Psr\Log\LoggerInterface */
     protected $_loggerMock;
 
     protected function setUp()
@@ -53,8 +54,8 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_tokenFactory = $this->getMockBuilder(
-            'Magento\Integration\Model\Oauth\Token\Factory'
-        )->disableOriginalConstructor()->getMock();
+            'Magento\Integration\Model\Oauth\TokenFactory'
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder(
             'Magento\Integration\Model\Oauth\Token'
         )->disableOriginalConstructor()->getMock();
@@ -90,9 +91,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\HTTP\ZendClient'
         )->disableOriginalConstructor()->getMock();
         $this->_loggerMock = $this->getMockBuilder(
-            'Magento\Framework\Logger'
-        )->disableOriginalConstructor()->setMethods(
-            ['logException']
+            'Psr\Log\LoggerInterface'
         )->getMock();
 
         $this->_oauthService = new \Magento\Integration\Service\V1\Oauth(
