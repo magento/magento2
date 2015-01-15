@@ -1624,7 +1624,7 @@ return [
     ['Magento\Core\Block\Html\Calendar', 'Magento\Framework\View\Element\Html\Calendar'],
     ['Magento\Core\Block\Html\Link', 'Magento\Framework\View\Element\Html\Link'],
     ['Magento\Core\Block\Context', 'Magento\Framework\View\Element\Context'],
-    ['Magento\Framework\Data\Collection\Factory\Helper'],
+    ['Magento\Core\Model\Factory\Helper'],
     ['Magento\Framework\App\Helper\HelperFactory'],
     ['Magento\Core\Helper\AbstractHelper', 'Magento\Framework\App\Helper\AbstractHelper'],
     ['Magento\Core\Helper\Context', 'Magento\Framework\App\Helper\Context'],
