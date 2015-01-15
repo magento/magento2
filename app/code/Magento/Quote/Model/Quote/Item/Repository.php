@@ -42,7 +42,6 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Quote\Api\Data\CartItemDataBuilder $itemDataBuilder
-
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->productRepository = $productRepository;
@@ -95,14 +94,12 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             }
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            if ($e instanceof NoSuchEntityException)
-            {
+            if ($e instanceof NoSuchEntityException) {
                 throw $e;
             }
             throw new CouldNotSaveException('Could not save quote');
         }
         return $quote->getItemByProduct($product);
-
     }
 
     /**
