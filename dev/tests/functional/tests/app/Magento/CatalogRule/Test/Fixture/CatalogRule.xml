@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\CatalogRule\Test\Fixture\CatalogRule">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\CatalogRule\Test\Fixture\CatalogRule">
     <module>Magento_CatalogRule</module>
     <type>eav</type>
     <entity_type>catalog_rule</entity_type>
@@ -59,7 +61,7 @@
             <attribute_code>from_date</attribute_code>
             <backend_type>date</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>rule_information</group>
         </field>
@@ -67,7 +69,7 @@
             <attribute_code>to_date</attribute_code>
             <backend_type>date</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>rule_information</group>
         </field>
@@ -117,13 +119,13 @@
         </field>
         <field name="sort_order" >
             <attribute_code>sort_order</attribute_code>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>rule_information</group>
         </field>
         <field name="stop_rules_processing" >
             <attribute_code>stop_rules_processing</attribute_code>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>rule_information</group>
         </field>

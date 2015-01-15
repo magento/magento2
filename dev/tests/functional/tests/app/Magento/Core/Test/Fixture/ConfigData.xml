@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Core\Test\Fixture\ConfigData">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Core\Test\Fixture\ConfigData">
     <module>Magento_Core</module>
     <type>flat</type>
     <entity_type>core_config_data</entity_type>
@@ -13,44 +15,44 @@
     <repository_class>Magento\Core\Test\Repository\ConfigData</repository_class>
     <handler_interface>Magento\Core\Test\Handler\ConfigData\ConfigDataInterface</handler_interface>
     <fields>
-        <field name="section" >
+        <field name="section">
             <attribute_code>section</attribute_code>
             <backend_type>virtual</backend_type>
         </field>
-        <field name="config_id" >
+        <field name="config_id">
             <attribute_code>config_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
+            <default_value xsi:type="null" />
+            <input />
         </field>
-        <field name="scope" >
+        <field name="scope">
             <attribute_code>scope</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>default</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="scope_id" >
+        <field name="scope_id">
             <attribute_code>scope_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="path" >
+        <field name="path">
             <attribute_code>path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value>general</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="value" >
+        <field name="value">
             <attribute_code>value</attribute_code>
             <backend_type>text</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
+            <default_value xsi:type="null" />
+            <input />
         </field>
     </fields>
 </fixture>

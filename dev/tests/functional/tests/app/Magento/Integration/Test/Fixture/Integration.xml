@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Integration\Test\Fixture\Integration">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Integration\Test\Fixture\Integration">
     <module>Magento_Integration</module>
     <type>composite</type>
     <entities>
@@ -22,7 +24,7 @@
             <attribute_code>integration_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="name" >
@@ -45,7 +47,7 @@
             <attribute_code>endpoint</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
             <group>integration_info</group>
         </field>
@@ -53,14 +55,14 @@
             <attribute_code>status</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="consumer_id" >
             <attribute_code>consumer_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="created_at" >
@@ -74,7 +76,7 @@
             <attribute_code>updated_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="setup_type" >
@@ -88,7 +90,7 @@
             <attribute_code>identity_link_url</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
             <group>integration_info</group>
         </field>
@@ -96,56 +98,56 @@
             <attribute_code>entity_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="admin_id" >
             <attribute_code>admin_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="customer_id" >
             <attribute_code>customer_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="type" >
             <attribute_code>type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="token" >
             <attribute_code>token</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="secret" >
             <attribute_code>secret</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="verifier" >
             <attribute_code>verifier</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="callback_url" >
             <attribute_code>callback_url</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="revoked" >
@@ -166,21 +168,21 @@
             <attribute_code>user_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="key" >
             <attribute_code>key</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="rejected_callback_url" >
             <attribute_code>rejected_callback_url</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="resource_access" >

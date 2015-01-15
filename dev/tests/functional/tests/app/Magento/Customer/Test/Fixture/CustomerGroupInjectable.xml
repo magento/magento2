@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Customer\Test\Fixture\CustomerGroupInjectable">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Customer\Test\Fixture\CustomerGroupInjectable">
     <module>Magento_Customer</module>
     <type>flat</type>
     <entity_type>customer_group</entity_type>

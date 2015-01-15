@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Store\Test\Fixture\StoreGroup">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Store\Test\Fixture\StoreGroup">
     <module>Magento_Store</module>
     <type>flat</type>
     <entity_type>store_group</entity_type>
@@ -18,7 +20,7 @@
             <attribute_code>group_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="website_id" >

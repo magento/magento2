@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Customer\Test\Fixture\CustomerInjectable">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Customer\Test\Fixture\CustomerInjectable">
     <module>Magento_Customer</module>
     <type>eav</type>
     <entity_type>customer</entity_type>
@@ -23,7 +25,7 @@
             <attribute_code>confirmation</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="id" >
@@ -35,14 +37,14 @@
             <attribute_code>created_at</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
         </field>
         <field name="created_in" >
             <attribute_code>created_in</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>account_information</group>
         </field>
@@ -50,21 +52,21 @@
             <attribute_code>default_billing</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="default_shipping" >
             <attribute_code>default_shipping</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="disable_auto_group_change" >
             <attribute_code>disable_auto_group_change</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>boolean</input>
             <group>account_information</group>
         </field>
@@ -72,7 +74,7 @@
             <attribute_code>dob</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
             <group>account_information</group>
         </field>
@@ -96,7 +98,7 @@
             <attribute_code>gender</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>account_information</group>
         </field>
@@ -104,7 +106,7 @@
             <attribute_code>group_id</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>account_information</group>
             <source>Magento\Customer\Test\Fixture\CustomerInjectable\GroupId</source>
@@ -121,7 +123,7 @@
             <attribute_code>middlename</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>account_information</group>
         </field>
@@ -129,14 +131,14 @@
             <attribute_code>password_hash</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>hidden</input>
         </field>
         <field name="prefix" >
             <attribute_code>prefix</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>account_information</group>
         </field>
@@ -144,21 +146,21 @@
             <attribute_code>rp_token</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>hidden</input>
         </field>
         <field name="rp_token_created_at" >
             <attribute_code>rp_token_created_at</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
         </field>
         <field name="store_id" >
             <attribute_code>store_id</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>account_information</group>
         </field>
@@ -166,7 +168,7 @@
             <attribute_code>suffix</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>account_information</group>
         </field>
@@ -174,7 +176,7 @@
             <attribute_code>taxvat</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>account_information</group>
         </field>
@@ -182,7 +184,7 @@
             <attribute_code>website_id</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>account_information</group>
         </field>
@@ -190,7 +192,7 @@
             <attribute_code>amount_delta</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>store_credit</group>
         </field>

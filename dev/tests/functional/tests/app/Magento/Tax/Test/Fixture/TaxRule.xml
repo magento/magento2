@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Tax\Test\Fixture\TaxRule">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Tax\Test\Fixture\TaxRule">
     <module>Magento_Tax</module>
     <type>flat</type>
     <entity_type>tax_calculation_rule</entity_type>
@@ -18,7 +20,7 @@
             <attribute_code>tax_calculation_rule_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="code" >
@@ -32,14 +34,14 @@
             <attribute_code>priority</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="position" >
             <attribute_code>position</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="tax_rate" >

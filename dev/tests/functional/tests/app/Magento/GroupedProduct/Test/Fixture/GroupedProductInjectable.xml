@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable">
     <module>Magento_GroupedProduct</module>
     <type>eav</type>
     <entity_type>catalog_product</entity_type>
@@ -27,7 +29,7 @@
             <attribute_code>category_ids</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>product-details</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds</source>
@@ -36,21 +38,21 @@
             <attribute_code>country_of_manufacture</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
         </field>
         <field name="created_at" >
             <attribute_code>created_at</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="custom_design" >
             <attribute_code>custom_design</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
         </field>
         <field name="associated" >
@@ -64,21 +66,21 @@
             <attribute_code>custom_design_from</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
         </field>
         <field name="custom_design_to" >
             <attribute_code>custom_design_to</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
         </field>
         <field name="custom_layout_update" >
             <attribute_code>custom_layout_update</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>textarea</input>
         </field>
         <field name="description" >
@@ -93,35 +95,35 @@
             <attribute_code>gallery</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>gallery</input>
         </field>
         <field name="gift_message_available" >
             <attribute_code>gift_message_available</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
         </field>
         <field name="has_options" >
             <attribute_code>has_options</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="image" >
             <attribute_code>image</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>media_image</input>
         </field>
         <field name="image_label" >
             <attribute_code>image_label</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="is_returnable" >
@@ -135,28 +137,28 @@
             <attribute_code>media_gallery</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>gallery</input>
         </field>
         <field name="meta_description" >
             <attribute_code>meta_description</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>textarea</input>
         </field>
         <field name="meta_keyword" >
             <attribute_code>meta_keyword</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>textarea</input>
         </field>
         <field name="meta_title" >
             <attribute_code>meta_title</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="name" >
@@ -171,21 +173,21 @@
             <attribute_code>news_from_date</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
         </field>
         <field name="news_to_date" >
             <attribute_code>news_to_date</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>date</input>
         </field>
         <field name="old_id" >
             <attribute_code>old_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="options_container" >
@@ -199,7 +201,7 @@
             <attribute_code>page_layout</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
         </field>
         <field name="quantity_and_stock_status" >
@@ -221,21 +223,21 @@
             <attribute_code>related_tgtr_position_behavior</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="related_tgtr_position_limit" >
             <attribute_code>related_tgtr_position_limit</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="required_options" >
             <attribute_code>required_options</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="short_description" >
@@ -258,14 +260,14 @@
             <attribute_code>small_image</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>media_image</input>
         </field>
         <field name="small_image_label" >
             <attribute_code>small_image_label</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="status" >
@@ -279,42 +281,42 @@
             <attribute_code>thumbnail</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>media_image</input>
         </field>
         <field name="thumbnail_label" >
             <attribute_code>thumbnail_label</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="updated_at" >
             <attribute_code>updated_at</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="upsell_tgtr_position_behavior" >
             <attribute_code>upsell_tgtr_position_behavior</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="upsell_tgtr_position_limit" >
             <attribute_code>upsell_tgtr_position_limit</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="url_key" >
             <attribute_code>url_key</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
             <group>search-engine-optimization</group>
         </field>
@@ -322,7 +324,7 @@
             <attribute_code>url_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="visibility" >

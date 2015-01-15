@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery">
     <module>Magento_CatalogSearch</module>
     <type>flat</type>
     <entity_type>search_query</entity_type>
@@ -17,14 +19,14 @@
             <attribute_code>query_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="query_text" >
             <attribute_code>query_text</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
             <source>Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\QueryText</source>
         </field>
@@ -46,14 +48,14 @@
             <attribute_code>redirect</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="synonym_for" >
             <attribute_code>synonym_for</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="store_id" >

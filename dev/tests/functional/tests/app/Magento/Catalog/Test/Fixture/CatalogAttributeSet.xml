@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Catalog\Test\Fixture\CatalogAttributeSet">
     <module>Magento_Catalog</module>
     <type>flat</type>
     <entity_type>eav_attribute_set</entity_type>
@@ -17,7 +19,7 @@
             <attribute_code>attribute_set_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="entity_type_id" >

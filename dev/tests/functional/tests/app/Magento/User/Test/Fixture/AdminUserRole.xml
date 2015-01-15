@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\User\Test\Fixture\AdminUserRole">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\User\Test\Fixture\AdminUserRole">
     <module>Magento_User</module>
     <type>flat</type>
     <entity_type>authorization_role</entity_type>
@@ -17,7 +19,7 @@
             <attribute_code>role_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="parent_id" >
@@ -67,7 +69,7 @@
             <attribute_code>user_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="resource_access" >

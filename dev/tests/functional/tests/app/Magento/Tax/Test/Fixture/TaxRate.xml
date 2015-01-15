@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Tax\Test\Fixture\TaxRate">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Tax\Test\Fixture\TaxRate">
     <module>Magento_Tax</module>
     <type>flat</type>
     <entity_type>tax_calculation_rate</entity_type>
@@ -18,7 +20,7 @@
             <attribute_code>tax_calculation_rate_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="tax_country_id" >
@@ -60,21 +62,21 @@
             <attribute_code>zip_is_range</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="zip_from" >
             <attribute_code>zip_from</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="zip_to" >
             <attribute_code>zip_to</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="id" >

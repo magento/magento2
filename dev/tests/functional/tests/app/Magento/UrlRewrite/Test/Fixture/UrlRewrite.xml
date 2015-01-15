@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
     <module>Magento_UrlRewrite</module>
     <type>virtual</type>
     <entity_type>url_rewrite</entity_type>
@@ -43,7 +45,7 @@
             <attribute_code>entity_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input>text</input>
         </field>
         <field name="target_path" >

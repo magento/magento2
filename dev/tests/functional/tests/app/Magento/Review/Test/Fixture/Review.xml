@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Review\Test\Fixture\Review">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Review\Test\Fixture\Review">
     <module>Magento_Review</module>
     <type>composite</type>
     <entities>
@@ -58,7 +60,7 @@
             <attribute_code>detail_id</attribute_code>
             <backend_type>bigint</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="store_id" >
@@ -93,7 +95,7 @@
             <attribute_code>customer_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="select_stores" >

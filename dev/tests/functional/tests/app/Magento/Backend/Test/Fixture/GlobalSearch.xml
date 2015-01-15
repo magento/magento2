@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Backend\Test\Fixture\GlobalSearch">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Backend\Test\Fixture\GlobalSearch">
     <module>Magento_Backend</module>
     <fields>
         <field name="query" >

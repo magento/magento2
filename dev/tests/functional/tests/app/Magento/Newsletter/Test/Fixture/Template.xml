@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Newsletter\Test\Fixture\Template">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Newsletter\Test\Fixture\Template">
     <module>Magento_Newsletter</module>
     <type>flat</type>
     <entity_type>newsletter_template</entity_type>
@@ -18,7 +20,7 @@
             <attribute_code>template_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="code" >
@@ -39,21 +41,21 @@
             <attribute_code>template_text_preprocessed</attribute_code>
             <backend_type>text</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="styles" >
             <attribute_code>template_styles</attribute_code>
             <backend_type>text</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="type" >
             <attribute_code>template_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="subject" >
@@ -88,14 +90,14 @@
             <attribute_code>added_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="modified_at" >
             <attribute_code>modified_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
     </fields>

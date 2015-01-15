@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\GiftMessage\Test\Fixture\GiftMessage">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\GiftMessage\Test\Fixture\GiftMessage">
     <module>Magento_GiftMessage</module>
     <type>flat</type>
     <entity_type>gift_message</entity_type>
@@ -17,7 +19,7 @@
             <attribute_code>gift_message_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="customer_id" >

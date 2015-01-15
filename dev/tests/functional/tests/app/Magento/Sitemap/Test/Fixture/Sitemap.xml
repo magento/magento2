@@ -5,7 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Sitemap\Test\Fixture\Sitemap">
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+        class="Magento\Sitemap\Test\Fixture\Sitemap">
     <module>Magento_Sitemap</module>
     <type>flat</type>
     <entity_type>sitemap</entity_type>
@@ -17,14 +19,14 @@
             <attribute_code>sitemap_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="sitemap_type" >
             <attribute_code>sitemap_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="sitemap_filename" >
@@ -45,7 +47,7 @@
             <attribute_code>sitemap_time</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required></is_required>
-            <default_value></default_value>
+            <default_value xsi:type="null" />
             <input></input>
         </field>
         <field name="store_id" >
