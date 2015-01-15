@@ -93,7 +93,7 @@ class Option extends Form
         $this->_fill($mapping);
         $selections = $this->_rootElement->getElements($this->removeSelection);
         if (count($selections)) {
-            foreach ($selections as $itemSelection) {
+            foreach (array_reverse($selections) as $itemSelection) {
                 $itemSelection->click();
             }
         }

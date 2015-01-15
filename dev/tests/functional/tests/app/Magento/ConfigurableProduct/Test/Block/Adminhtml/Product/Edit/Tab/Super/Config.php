@@ -200,7 +200,7 @@ class Config extends Tab
     {
         $attributeElements = $this->_rootElement->getElements($this->attributeElement);
         $this->_rootElement->find($this->variationsContent)->click();
-        foreach ($attributeElements as $element) {
+        foreach (array_reverse($attributeElements) as $element) {
             $element->find($this->deleteVariationButton)->click();
         }
     }

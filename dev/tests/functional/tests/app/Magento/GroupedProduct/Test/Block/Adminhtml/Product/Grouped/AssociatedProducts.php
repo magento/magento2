@@ -83,7 +83,7 @@ class AssociatedProducts extends Tab
         if (isset($fields['associated'])) {
             $options = $this->_rootElement->getElements($this->deleteButton);
             if (count($options)) {
-                foreach ($options as $option) {
+                foreach (array_reverse($options) as $option) {
                     $option->click();
                 }
             }
