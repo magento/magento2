@@ -122,7 +122,7 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->dataHelper = $this->getMock(
             '\Magento\Core\Helper\Data',
-            ['jsonDecode', 'jsonEncode'],
+            ['jsonDecode'],
             [],
             '',
             false
@@ -193,12 +193,6 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->with($jsonRequest)
             ->willReturn(['username' => 'customer@example.com', 'password' => 'password']);
 
-        $this->dataHelper
-            ->expects($this->any())
-            ->method('jsonEncode')
-            ->with(['message' => 'Login successful.'])
-            ->willReturn($loginSuccessResponse);
-
         $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
         $this->customerAccountManagementMock
             ->expects($this->any())
@@ -214,7 +208,11 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRaw->expects($this->never())->method('setHttpResponseCode');
 
-        $this->resultJson->expects($this->once())->method('setJsonData')->with($loginSuccessResponse);
+        $this->resultJson
+            ->expects($this->once())
+            ->method('setData')
+            ->with(['message' => 'Login successful.'])
+            ->willReturn($loginSuccessResponse);
 
         $this->object->execute();
     }
@@ -249,12 +247,6 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->with($jsonRequest)
             ->willReturn(['username' => 'invalid@example.com', 'password' => 'invalid']);
 
-        $this->dataHelper
-            ->expects($this->any())
-            ->method('jsonEncode')
-            ->with(['message' => 'Invalid login or password.'])
-            ->willReturn($loginFailureResponse);
-
         $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
         $this->customerAccountManagementMock
             ->expects($this->any())
@@ -268,7 +260,11 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSession->expects($this->never())->method('regenerateId');
 
-        $this->resultJson->expects($this->never())->method('setJsonData')->with($loginFailureResponse);
+        $this->resultJson
+            ->expects($this->never())
+            ->method('setData')
+            ->with(['message' => 'Invalid login or password.'])
+            ->willReturn($loginFailureResponse);
 
         $this->resultRaw->expects($this->once())->method('setHttpResponseCode')->with(401);
 

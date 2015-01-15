@@ -27,7 +27,6 @@ class Index extends \Magento\Customer\Controller\Address
      * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -42,7 +41,6 @@ class Index extends \Magento\Customer\Controller\Address
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         CustomerRepositoryInterface $customerRepository
     ) {
@@ -58,7 +56,6 @@ class Index extends \Magento\Customer\Controller\Address
             $dataProcessor,
             $resultRedirectFactory,
             $resultForwardFactory,
-            $layoutFactory,
             $resultPageFactory
         );
     }
@@ -74,15 +71,14 @@ class Index extends \Magento\Customer\Controller\Address
         if (count($addresses)) {
             /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
             $resultPage = $this->resultPageFactory->create();
-            $layout = $this->layoutFactory->create();
-            $layout->initMessages();
+            $resultPage->getLayout()->initMessages();
             $block = $resultPage->getLayout()->getBlock('address_book');
             if ($block) {
                 $block->setRefererUrl($this->_redirect->getRefererUrl());
             }
             return $resultPage;
         } else {
-            return $this->resultRedirectFactory->create()->setUrl($this->_buildUrl('*/*/new'));
+            return $this->resultRedirectFactory->create()->setPath('*/*/new');
         }
     }
 }

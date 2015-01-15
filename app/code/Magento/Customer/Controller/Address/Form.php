@@ -17,8 +17,7 @@ class Form extends \Magento\Customer\Controller\Address
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $layout = $this->layoutFactory->create();
-        $layout->initMessages();
+        $resultPage->getLayout()->initMessages();
         $navigationBlock = $resultPage->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock) {
             $navigationBlock->setActive('customer/address');

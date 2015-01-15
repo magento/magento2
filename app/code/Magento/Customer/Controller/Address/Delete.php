@@ -28,6 +28,6 @@ class Delete extends \Magento\Customer\Controller\Address
                 $this->messageManager->addException($other, __('An error occurred while deleting the address.'));
             }
         }
-        return $this->resultRedirectFactory->create()->setUrl($this->_buildUrl('*/*/index'));
+        return $this->resultRedirectFactory->create()->setPath('*/*/index');
     }
 }

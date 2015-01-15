@@ -114,6 +114,6 @@ class Login extends \Magento\Framework\App\Action\Action
         }
         /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
         $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setJsonData($this->helper->jsonEncode(['message' => $responseText]));
+        return $resultJson->setData(['message' => $responseText]);
     }
 }

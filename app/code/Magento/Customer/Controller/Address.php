@@ -60,11 +60,6 @@ class Address extends \Magento\Framework\App\Action\Action
     protected $resultForwardFactory;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory
-     */
-    protected $layoutFactory;
-
-    /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
@@ -80,7 +75,6 @@ class Address extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -95,7 +89,6 @@ class Address extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->_customerSession = $customerSession;
@@ -107,7 +100,6 @@ class Address extends \Magento\Framework\App\Action\Action
         $this->_dataProcessor = $dataProcessor;
         $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->layoutFactory = $layoutFactory;
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
