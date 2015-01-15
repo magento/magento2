@@ -56,7 +56,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
     /**
      * Get url to preview image
      *
-     * @param \Magento\Theme\Model\Theme|ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @return string
      */
     public function getPreviewImageUrl(ThemeInterface $theme)
@@ -68,7 +68,7 @@ class Path implements \Magento\Framework\View\Design\Theme\Image\PathInterface
     /**
      * Get path to preview image
      *
-     * @param \Magento\Theme\Model\Theme|ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @return string
      */
     public function getPreviewImagePath(ThemeInterface $theme)
