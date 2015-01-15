@@ -78,7 +78,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
      * @param TypeHandler\TypeHandlerInterface $typeHandler
-     * @internal param \Magento\Downloadable\Helper\File $downloadableFile
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Option $catalogProductOption,

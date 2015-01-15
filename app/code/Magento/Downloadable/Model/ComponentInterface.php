@@ -6,7 +6,7 @@
 namespace Magento\Downloadable\Model;
 
 /**
- * Downloadable link model
+ * Downloadable component interface
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
