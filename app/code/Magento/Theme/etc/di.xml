@@ -52,4 +52,7 @@
     <type name="Magento\Framework\Url\ScopeInterface">
         <plugin name="urlSignature" type="Magento\Theme\Model\Url\Plugin\Signature"/>
     </type>
+    <type name="Magento\Framework\View\Element\Html\Link\Current">
+        <plugin name="saleOrderViewMenu" type="Magento\Framework\View\Plugin\Element\Html\Link\Current"/>
+    </type>
 </config>
