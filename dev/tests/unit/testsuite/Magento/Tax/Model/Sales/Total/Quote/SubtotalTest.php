@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
@@ -112,7 +113,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([
                 'getAssociatedTaxables', 'getQuote', 'getBillingAddress',
-                'getRegionId', 'getAllNonNominalItems', '__wakeup',
+                'getRegionId', 'getAllItems', '__wakeup',
                 'getParentItem',
             ])->getMock();
 
@@ -127,7 +128,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectEmptyAddresses()
     {
-        $this->addressMock->expects($this->once())->method('getAllNonNominalItems')->willReturn(null);
+        $this->addressMock->expects($this->once())->method('getAllItems')->willReturn(null);
         $this->taxConfigMock->expects($this->never())->method('priceIncludesTax');
         $this->model->collect($this->addressMock);
     }
@@ -154,7 +155,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
     {
         $customerTaxClassId = 2425;
         $this->addressMock->expects($this->atLeastOnce())
-            ->method('getAllNonNominalItems')->willReturn([$this->addressMock]);
+            ->method('getAllItems')->willReturn([$this->addressMock]);
 
         // calls in populateAddressData()
         $this->quoteDetailsBuilder->expects($this->atLeastOnce())->method('setBillingAddress');

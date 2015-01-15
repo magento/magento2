@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model;
@@ -119,7 +120,7 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
             'id' => 1,
             'website_id' => 1,
             'store_id' => 1,
-            'group_id' => '1',
+            'group_id' => 1,
             'firstname' => 'John',
             'lastname' => 'Smith',
             'email' => 'customer@example.com',
@@ -131,7 +132,11 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
         $customer = $this->customerRepository->getById(1);
         $this->assertNotNull($customer);
 
-        $attributes = $this->_extensibleDataObjectConverter->toFlatArray($customer);
+        $attributes = $this->_extensibleDataObjectConverter->toFlatArray(
+            $customer,
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         $this->assertNotEmpty($attributes);
 
         foreach ($attributes as $attributeCode => $attributeValue) {

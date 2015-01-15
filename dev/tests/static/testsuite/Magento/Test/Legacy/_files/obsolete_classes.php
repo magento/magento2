@@ -4,7 +4,8 @@
  *
  * Format: array(<class_name>[, <replacement>])
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['Mage_Admin_Helper_Data', 'Magento\Backend\Helper\Data'],
@@ -2844,4 +2845,12 @@ return [
     ['Magento\Framework\App\Cache\State\Options', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\App\Cache\State\OptionsInterface', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\Logger', 'Psr\Log\LoggerInterface'],
+    ['Magento\Weee\Model\Total\Quote\Nominal\Weee'],
+    ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Tax'],
+    ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Subtotal'],
+    ['Magento\SalesRule\Model\Quote\Nominal\Discount'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal\Collector'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
 ];

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Cart\SalesModel;
 
@@ -49,7 +50,7 @@ class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterfac
                     'parent_item' => $item->getParentItem(),
                     'name' => $item->getName(),
                     'qty' => (int)$item->getTotalQty(),
-                    'price' => $item->isNominal() ? 0 : (double)$item->getBaseCalculationPrice(),
+                    'price' => (double)$item->getBaseCalculationPrice(),
                     'original_item' => $item,
                 ]
             );

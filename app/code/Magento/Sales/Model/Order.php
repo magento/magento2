@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
 
@@ -811,6 +812,10 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
             return false;
         }
 
+        if ($this->hasInvoices()) {
+            return false;
+        }
+
         if (!$this->getPayment()->getMethodInstance()->canEdit()) {
             return false;
         }
@@ -1501,21 +1506,6 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         return $this;
     }
 
-    /**
-     * Whether the order has nominal items only
-     *
-     * @return bool
-     */
-    public function isNominal()
-    {
-        foreach ($this->getAllVisibleItems() as $item) {
-            if ('0' == $item->getIsNominal()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     /*********************** PAYMENTS ***************************/
 
     /**
@@ -1829,6 +1819,18 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
             }
         }
         return $this->_invoices;
+    }
+
+    /**
+     * Set order invoices collection
+     *
+     * @param InvoiceCollection $invoices
+     * @return $this
+     */
+    public function setInvoiceCollection(InvoiceCollection $invoices)
+    {
+        $this->_invoices = $invoices;
+        return $this;
     }
 
     /**

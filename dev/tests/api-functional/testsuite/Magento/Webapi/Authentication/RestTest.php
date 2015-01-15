@@ -2,7 +2,8 @@
 /**
  * Test authentication mechanisms in REST.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Authentication;
 
@@ -175,7 +176,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage HTTP/1.1 401
+     * @expectedExceptionMessage HTTP/1.1 400
      */
     public function testAccessApiInvalidAccessToken()
     {

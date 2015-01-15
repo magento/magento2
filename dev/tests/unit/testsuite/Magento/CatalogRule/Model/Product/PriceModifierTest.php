@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\Product;
 
@@ -28,7 +29,13 @@ class PriceModifierTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ruleFactoryMock = $this->getMock('Magento\CatalogRule\Model\RuleFactory', ['create']);
+        $this->ruleFactoryMock = $this->getMock(
+            'Magento\CatalogRule\Model\RuleFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
         $this->priceModifier = new \Magento\CatalogRule\Model\Product\PriceModifier($this->ruleFactoryMock);

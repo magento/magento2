@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Resource\Group\Grid;
 
@@ -66,7 +67,7 @@ class ServiceCollection extends AbstractServiceCollection
             $groups = $searchResults->getItems();
             foreach ($groups as $group) {
                 $groupItem = new \Magento\Framework\Object();
-                $groupItem->addData($this->simpleDataObjectConverter->toFlatArray($group));
+                $groupItem->addData($this->simpleDataObjectConverter->toFlatArray($group, '\Magento\Customer\Api\Data\GroupInterface'));
                 $this->_addItem($groupItem);
             }
             $this->_setIsLoaded();

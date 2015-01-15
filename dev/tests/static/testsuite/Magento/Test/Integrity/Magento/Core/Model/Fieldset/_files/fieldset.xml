@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -476,9 +477,6 @@
                 <aspect name="to_order_item" />
             </field>
             <field name="base_hidden_tax_amount">
-                <aspect name="to_order_item" />
-            </field>
-            <field name="is_nominal">
                 <aspect name="to_order_item" />
             </field>
             <field name="free_shipping">

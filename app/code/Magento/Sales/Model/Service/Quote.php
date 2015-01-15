@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Service;
 
@@ -40,7 +41,7 @@ class Quote
     protected $_order = null;
 
     /**
-     * If it is true, quote will be inactivate after submitting order or nominal items
+     * If it is true, quote will be inactivate after submitting order
      *
      * @var bool
      */
@@ -216,7 +217,6 @@ class Quote
      */
     public function submitOrderWithDataObject()
     {
-        $this->_deleteNominalItems();
         $this->_validate();
         $quote = $this->_quote;
         $isVirtual = $quote->isVirtual();
@@ -306,22 +306,6 @@ class Quote
     }
 
     /**
-     * Submit nominal items
-     *
-     * @return void
-     */
-    public function submitNominalItems()
-    {
-        $this->_validate();
-        $this->_eventManager->dispatch(
-            'sales_model_service_quote_submit_nominal_items',
-            ['quote' => $this->_quote]
-        );
-        $this->_inactivateQuote();
-        $this->_deleteNominalItems();
-    }
-
-    /**
      * Submit all available items
      * All created items will be set to the object
      *
@@ -330,16 +314,6 @@ class Quote
      */
     public function submitAllWithDataObject()
     {
-        // don't allow submitNominalItems() to inactivate quote
-        $inactivateQuoteOld = $this->_shouldInactivateQuote;
-        $this->_shouldInactivateQuote = false;
-        try {
-            $this->submitNominalItems();
-            $this->_shouldInactivateQuote = $inactivateQuoteOld;
-        } catch (\Exception $e) {
-            $this->_shouldInactivateQuote = $inactivateQuoteOld;
-            throw $e;
-        }
         // no need to submit the order if there are no normal items remained
         if (!$this->_quote->getAllVisibleItems()) {
             $this->_inactivateQuote();
@@ -406,19 +380,5 @@ class Quote
         }
 
         return $this;
-    }
-
-    /**
-     * Get rid of all nominal items
-     *
-     * @return void
-     */
-    protected function _deleteNominalItems()
-    {
-        foreach ($this->_quote->getAllVisibleItems() as $item) {
-            if ($item->isNominal()) {
-                $item->isDeleted(true);
-            }
-        }
     }
 }
