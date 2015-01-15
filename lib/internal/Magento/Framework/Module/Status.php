@@ -9,6 +9,7 @@ namespace Magento\Framework\Module;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\State\Cleanup;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Tools\Dependency\Report\Framework\Data\Dependency;
 
 /**
  * A service for controlling module status
@@ -49,20 +50,42 @@ class Status
     private $deploymentConfig;
 
     /**
+     * @var DependencyChecker
+     */
+    private $dependencyChecker;
+
+    /**
+     * @var ConflictChecker
+     */
+    private $conflictChecker;
+
+    /**
      * Constructor
      *
      * @param ModuleList\Loader $loader
      * @param ModuleList $list
      * @param Writer $writer
      * @param Cleanup $cleanup
+     * @param ConflictChecker $conflictChecker
+     * @param DependencyChecker $dependencyChecker
+     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(ModuleList\Loader $loader, ModuleList $list, Writer $writer, Cleanup $cleanup, DeploymentConfig $deploymentConfig)
-    {
+    public function __construct(
+        ModuleList\Loader $loader,
+        ModuleList $list,
+        Writer $writer,
+        Cleanup $cleanup,
+        ConflictChecker $conflictChecker,
+        DependencyChecker $dependencyChecker,
+        DeploymentConfig $deploymentConfig
+    ) {
         $this->loader = $loader;
         $this->list = $list;
         $this->writer = $writer;
         $this->cleanup = $cleanup;
         $this->deploymentConfig = $deploymentConfig;
+        $this->conflictChecker = $conflictChecker;
+        $this->dependencyChecker = $dependencyChecker;
     }
 
     /**
@@ -88,24 +111,24 @@ class Status
         $errorMessages = [];
 
         if ($isEnable) {
-            $dependencyChecker = new DependencyChecker(
-                new DependencyGraphFactory(),
-                array_keys($all),
-                array_unique(array_merge($enabledModules, $modules)) // union, consider to-be-enable modules
-            );
+            $this->dependencyChecker->setModules(array_keys($all));
+            $this->dependencyChecker->setEnabledModules(array_unique(array_merge($enabledModules, $modules)));
+
             foreach ($modules as $moduleName) {
-                $errorModules = $dependencyChecker->checkDependencyWhenEnableModule($moduleName);
+                $errorModules = $this->dependencyChecker->checkDependencyWhenEnableModule($moduleName);
                 if (!empty($errorModules)) {
                     $errorMessages[] = "Cannot enable $moduleName, depending on inactive modules:";
-                    foreach ($errorModules as $errorModule) {
-                        $errorMessages [] = "\t$errorModule";
+                    foreach ($errorModules as $errorModule => $path) {
+                        $errorMessages [] = "\t$errorModule: " . implode('->', $path);
                     }
                 }
             }
             // TODO: consolidate to one for loop
-            $conflictChecker = new ConflictChecker(array_keys($all), array_unique(array_merge($enabledModules, $modules)));
+            $this->conflictChecker->setModules($modules);
+            $this->conflictChecker->setEnabledModules(array_unique(array_merge($enabledModules, $modules)));
+
             foreach ($modules as $moduleName) {
-                $errorModules = $conflictChecker->checkConflictWhenEnableModule($moduleName);
+                $errorModules = $this->conflictChecker->checkConflictWhenEnableModule($moduleName);
                 if (!empty($errorModules)) {
                     $errorMessages[] = "Cannot enable $moduleName, conflicting active modules:";
                     foreach ($errorModules as $errorModule) {
@@ -114,17 +137,15 @@ class Status
                 }
             }
         } else {
-            $dependencyChecker = new DependencyChecker(
-                new DependencyGraphFactory(),
-                array_keys($all),
-                $enabledModules
-            );
+            $this->dependencyChecker->setModules(array_keys($all));
+            $this->dependencyChecker->setEnabledModules(array_diff($enabledModules, $modules));
+
             foreach ($modules as $moduleName) {
-                $errorModules = $dependencyChecker->checkDependencyWhenDisableModule($moduleName);
+                $errorModules = $this->dependencyChecker->checkDependencyWhenDisableModule($moduleName);
                 if (!empty($errorModules)) {
                     $errorMessages[] = "Cannot disable $moduleName, active modules depending on it:";
-                    foreach ($errorModules as $errorModule) {
-                        $errorMessages [] = "\t$errorModule";
+                    foreach ($errorModules as $errorModule => $path) {
+                        $errorMessages [] = "\t$errorModule: " . implode('->', $path);
                     }
                 }
             }

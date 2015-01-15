@@ -1,83 +1,90 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\Module;
 
-class ConflictChecker
+use Magento\Framework\Filesystem;
+
+class ConflictChecker extends Checker
 {
+    /**
+     * Key to conflicting packages array in composer.json files
+     */
     const KEY_CONFLICT = 'conflict';
 
     /**
-     * @var array
+     * Filesystem
+     *
+     * @var Filesystem
      */
-    private $modules;
+    protected $filesystem;
 
     /**
-     * @var array
+     * @param Filesystem $filesystem
+     * @param Mapper $mapper
      */
-    private $enabledModules;
-
-    /**
-     * @param array $modules
-     * @param array $enabledModules
-     */
-    public function __construct(array $modules, array $enabledModules)
+    public function __construct(Filesystem $filesystem, Mapper $mapper)
     {
-        $this->modules = $modules;
-        $this->enabledModules = $enabledModules;
+        parent::__construct($mapper);
+        $this->filesystem = $filesystem;
     }
 
     /**
+     * Check if enabling module will conflict any modules
+     *
      * @param $moduleName
      * @return array
      */
     public function checkConflictWhenEnableModule($moduleName)
     {
         $conflicts = [];
-        foreach (array_keys($this->getMagentoConflicts($moduleName)) as $module) {
-            if ($this->checkIfEnabled($this->getRealName($module))) {
-                $conflicts[] = $this->getRealName($module);
+        foreach ($this->enabledModules as $enabledModule) {
+            if ($this->checkIfConflict($enabledModule, $moduleName)) {
+                $conflicts[] = $enabledModule;
             }
         }
         return $conflicts;
     }
 
     /**
-     * @param $moduleName
-     * @return mixed
-     */
-    public function getMagentoConflicts($moduleName)
-    {
-        $jsonDecoder = new \Magento\Framework\Json\Decoder();
-        // workaround: convert Magento_X to X
-        $module = substr($moduleName, 8);
-        $data = $jsonDecoder->decode(file_get_contents(BP . '/app/code/Magento/' . $module . '/composer.json'));
-        return $data[self::KEY_CONFLICT];
-    }
-
-    /**
-     * Check if module is enabled
+     * Check if module is conflicted
      *
      * @param string $moduleName
      * @return bool
      */
-    private function checkIfEnabled($moduleName)
+    private function checkIfConflict($enabledModule, $moduleName)
     {
-        return array_search($moduleName, $this->enabledModules) !== false;
-    }
+        $jsonDecoder = new \Magento\Framework\Json\Decoder();
 
-    /**
-     * Convert alias used in composer.json to Magento_X format
-     *
-     * @param $alias
-     * @return string
-     */
-    private function getRealName($alias)
-    {
-        // workaround: convert composer.json alias to magento_x
-        $lowerCaseModuleName = 'magento_' . str_replace('-', '', substr($alias, strlen(DependencyGraphFactory::ALIAS_PREFIX)));
-        foreach ($this->modules as $module) {
-            if (strtolower($module) == $lowerCaseModuleName) {
-                return $module;
+        $vendorA = $this->mapper->moduleFullNameToVendorName($enabledModule);
+        $vendorB = $this->mapper->moduleFullNameToVendorName($moduleName);
+        $moduleA = $this->mapper->moduleFullNameToModuleName($enabledModule);
+        $moduleB = $this->mapper->moduleFullNameToModuleName($moduleName);
+
+        $readAdapter = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MODULES);
+
+        $data1 = $jsonDecoder->decode($readAdapter->readFile("$vendorA/$moduleA/composer.json"));
+        $data2 = $jsonDecoder->decode($readAdapter->readFile("$vendorB/$moduleB/composer.json"));
+
+        if (isset($data1[self::KEY_CONFLICT])) {
+            foreach (array_keys($data1[self::KEY_CONFLICT]) as $packageName) {
+                $module = $this->mapper->packageNameToModuleFullName($packageName);
+                if ($module == $moduleName) {
+                    return true;
+                }
             }
         }
+
+        if (isset($data2[self::KEY_CONFLICT])) {
+            foreach (array_keys($data2[self::KEY_CONFLICT]) as $packageName) {
+                $module = $this->mapper->packageNameToModuleFullName($packageName);
+                if ($module == $enabledModule) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

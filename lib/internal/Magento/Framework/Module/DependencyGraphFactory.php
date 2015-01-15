@@ -1,40 +1,72 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\Module;
+
+use Magento\Framework\Filesystem;
 
 class DependencyGraphFactory
 {
-    const ALIAS_PREFIX = 'magento/module-';
-
     const KEY_REQUIRE = 'require';
 
     /**
-     * @param array $modules
-     *
-     * @return \Magento\Framework\Data\Graph
+     * @var Mapper
      */
-    public function create(array $modules)
+    private $mapper;
+
+    /**
+     * @var array
+     */
+    private $modules;
+
+    /**
+     * Filesystem
+     *
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @param Mapper $mapper
+     */
+    public function __construct(Filesystem $filesystem, Mapper $mapper)
     {
+        $this->filesystem = $filesystem;
+        $this->mapper = $mapper;
+    }
+
+    /**
+     * @param array $modules
+     * @return DependencyGraph
+     */
+    public function create($modules)
+    {
+        $readAdapter = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MODULES);
+
+        $this->modules = $modules;
+        $this->mapper->setModules($modules);
+
         $nodes = [];
         $dependencies = [];
 
         // build the graph data
-        foreach ($modules as $module) {
+        foreach ($this->modules as $module) {
             $jsonDecoder = new \Magento\Framework\Json\Decoder();
-            // workaround: convert Magento_X to X
-            $module = substr($module, 8);
-            $data = $jsonDecoder->decode(file_get_contents(BP . '/app/code/Magento/' . $module . '/composer.json'));
-            $nodes[] = strtolower($module);
+            $module_partial = $this->mapper->moduleFullNameToModuleName($module);
+            $vendor = $this->mapper->moduleFullNameToVendorName($module);
+            $data = $jsonDecoder->decode($readAdapter->readFile("$vendor/$module_partial/composer.json"));
+            $nodes[] = $module;
             foreach (array_keys($data[self::KEY_REQUIRE]) as $depend) {
-                if (strpos($depend, self::ALIAS_PREFIX) === 0) {
-                    // workaround: convert composer.json to alias x
-                    $depend = substr($depend, strlen(self::ALIAS_PREFIX));
-                    $depend = str_replace('-', '', $depend);
-                    $dependencies[] = [strtolower($module), $depend];
+                $depend = $this->mapper->packageNameToModuleFullName($depend);
+                if ($depend) {
+                    $dependencies[] = [$module, $depend];
                 }
             }
         }
         $nodes = array_unique($nodes);
 
-        return new \Magento\Framework\Data\Graph($nodes, $dependencies);
+        return new DependencyGraph($nodes, $dependencies);
     }
 }
