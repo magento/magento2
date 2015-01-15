@@ -12,6 +12,7 @@ namespace Magento\OfflineShipping\Model\Resource\Carrier;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Io;
 
 class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
@@ -255,12 +256,14 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->_importErrors = [];
         $this->_importedRows = 0;
 
-        $tmpDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
-        $path = $tmpDirectory->getRelativePath($csvFile);
-        $stream = $tmpDirectory->openFile($path);
+        $stream     = new \Magento\Framework\Io\File();
+        $info   = pathinfo($csvFile);
+        $stream->open(array('path' => $info['dirname']));
+        $stream->streamOpen($info['basename'], 'r');
 
         // check and skip headers
-        $headers = $stream->readCsv();
+        $headers = $stream->streamReadCsv();
+
         if ($headers === false || count($headers) < 5) {
             $stream->close();
             throw new \Magento\Framework\Model\Exception(__('Please correct Table Rates File Format.'));
@@ -290,7 +293,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ];
             $adapter->delete($this->getMainTable(), $condition);
 
-            while (false !== ($csvLine = $stream->readCsv())) {
+            while (false !== ($csvLine = $stream->streamReadCsv())) {
                 $rowNumber++;
 
                 if (empty($csvLine)) {
