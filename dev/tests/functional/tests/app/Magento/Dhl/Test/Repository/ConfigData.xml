@@ -7,61 +7,17 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/config.xsd">
     <storage class="Magento\Dhl\Test\Repository\ConfigData">
-        <dataset name="disable_shipping_all" xsi:type="array">
-            <field name="section" xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="path" xsi:type="string">carriers/dhl/active</item>
-                    <item name="scope" xsi:type="string">carriers</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">0</item>
-                </item>
-            </field>
+        <dataset name="disable_shipping_all">
+            <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
         </dataset>
-        <dataset name="dhl_eu" xsi:type="array">
-            <field name="section" xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="path" xsi:type="string">carriers/dhl/active</item>
-                    <item name="scope" xsi:type="string">carriers</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">1</item>
-                </item>
-                <item name="1" xsi:type="array">
-                    <item name="path" xsi:type="string">carriers/dhl/gateway_url</item>
-                    <item name="scope" xsi:type="string">carriers</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">https://xmlpitest-ea.dhl.com/XMLShippingServlet</item>
-                </item>
-                <item name="2" xsi:type="array">
-                    <item name="path" xsi:type="string">carriers/dhl/id</item>
-                    <item name="scope" xsi:type="string">carriers</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">EvgeniyDE</item>
-                </item>
-                <item name="3" xsi:type="array">
-                    <item name="path" xsi:type="string">carriers/dhl/password</item>
-                    <item name="scope" xsi:type="string">carriers</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">aplNb6Rop</item>
-                </item>
-                <item name="4" xsi:type="array">
-                    <item name="path" xsi:type="string">carriers/dhl/account</item>
-                    <item name="scope" xsi:type="string">carriers</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">152691811</item>
-                </item>
-                <item name="5" xsi:type="array">
-                    <item name="path" xsi:type="string">carriers/dhl/showmethod</item>
-                    <item name="scope" xsi:type="string">carriers</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">1</item>
-                </item>
-                <item name="6" xsi:type="array">
-                    <item name="path" xsi:type="string">carriers/dhl/debug</item>
-                    <item name="scope" xsi:type="string">carriers</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">1</item>
-                </item>
-            </field>
+        <dataset name="dhl_eu">
+            <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/dhl/gateway_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://xmlpitest-ea.dhl.com/XMLShippingServlet</field>
+            <field path="carriers/dhl/id" scope="carriers" scope_id="1" label="" xsi:type="string">EvgeniyDE</field>
+            <field path="carriers/dhl/password" scope="carriers" scope_id="1" label="" xsi:type="string">aplNb6Rop</field>
+            <field path="carriers/dhl/account" scope="carriers" scope_id="1" label="" xsi:type="string">152691811</field>
+            <field path="carriers/dhl/showmethod" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/dhl/debug" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>
     </storage>
 </repository>

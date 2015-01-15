@@ -7,45 +7,17 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/config.xsd">
     <storage class="Magento\CatalogInventory\Test\Repository\ConfigData">
-        <dataset name="display_out_of_stock" xsi:type="array">
-            <field name="section" xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="path" xsi:type="string">cataloginventory/options/show_out_of_stock</item>
-                    <item name="scope" xsi:type="string">cataloginventory</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">1</item>
-                </item>
-            </field>
+        <dataset name="display_out_of_stock">
+            <field path="cataloginventory/options/show_out_of_stock" scope="cataloginventory" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>
-        <dataset name="backorders_allow_qty_below" xsi:type="array">
-            <field name="section" xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="path" xsi:type="string">cataloginventory/item_options/backorders</item>
-                    <item name="scope" xsi:type="string">cataloginventory</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">1</item>
-                </item>
-            </field>
+        <dataset name="backorders_allow_qty_below">
+            <field path="cataloginventory/item_options/backorders" scope="cataloginventory" scope_id="1" label="Allow Qty Below 0" xsi:type="string">1</field>
         </dataset>
-        <dataset name="display_out_of_stock_rollback" xsi:type="array">
-            <field name="section" xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="path" xsi:type="string">cataloginventory/options/show_out_of_stock</item>
-                    <item name="scope" xsi:type="string">cataloginventory</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">0</item>
-                </item>
-            </field>
+        <dataset name="display_out_of_stock_rollback">
+            <field path="cataloginventory/options/show_out_of_stock" scope="cataloginventory" scope_id="1" label="No" xsi:type="string">0</field>
         </dataset>
-        <dataset name="backorders_allow_qty_below_rollback" xsi:type="array">
-            <field name="section" xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="path" xsi:type="string">cataloginventory/item_options/backorders</item>
-                    <item name="scope" xsi:type="string">cataloginventory</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">0</item>
-                </item>
-            </field>
+        <dataset name="backorders_allow_qty_below_rollback">
+            <field path="cataloginventory/item_options/backorders" scope="cataloginventory" scope_id="1" label="No Backorders" xsi:type="string">0</field>
         </dataset>
     </storage>
 </repository>

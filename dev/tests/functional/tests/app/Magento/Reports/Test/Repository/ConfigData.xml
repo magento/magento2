@@ -5,29 +5,12 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/config.xsd">
     <storage class="Magento\Reports\Test\Repository\ConfigData">
-        <dataset name="compare_products" xsi:type="array">
-            <field name="section" xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="path" xsi:type="string">catalog/recently_products/scope</item>
-                    <item name="scope" xsi:type="string">catalog</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">Website</item>
-                </item>
-                <item name="1" xsi:type="array">
-                    <item name="path" xsi:type="string">catalog/recently_products/viewed_count</item>
-                    <item name="scope" xsi:type="string">catalog</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">5</item>
-                </item>
-                <item name="2" xsi:type="array">
-                    <item name="path" xsi:type="string">catalog/recently_products/compared_count</item>
-                    <item name="scope" xsi:type="string">catalog</item>
-                    <item name="scope_id" xsi:type="string">1</item>
-                    <item name="value" xsi:type="string">12</item>
-                </item>
-            </field>
+        <dataset name="compare_products">
+            <field path="catalog/recently_products/scope" scope="catalog" scope_id="1" label="Website" xsi:type="string">website</field>
+            <field path="catalog/recently_products/viewed_count" scope="catalog" scope_id="1" label="" xsi:type="string">5</field>
+            <field path="catalog/recently_products/compared_count" scope="catalog" scope_id="1" label="" xsi:type="string">12</field>
         </dataset>
     </storage>
 </repository>
