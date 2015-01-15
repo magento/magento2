@@ -7,6 +7,18 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <route url="/V1/carts/:cartId" method="GET">
+        <service class="Magento\Quote\Api\QuoteRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/carts" method="PUT">
+        <service class="Magento\Quote\Api\QuoteRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
     <route url="/V1/carts/:cartId/selected-shipping-method" method="PUT">
         <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="set"/>
         <resources>

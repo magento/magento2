@@ -3,12 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Api\Data;
+namespace Magento\Quote\Api\Data;
 
-/**
- * @see \Magento\Checkout\Service\V1\Data\Cart
- */
-interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface QuoteInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Returns the cart/quote ID.
@@ -57,7 +54,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Lists items in the cart.
      *
-     * @return \Magento\Checkout\Api\Data\CartItemInterface[]|null Array of items. Otherwise, null.
+     * @return \Magento\Quote\Api\Data\CartItemInterface[]|null Array of items. Otherwise, null.
      */
     public function getItems();
 
