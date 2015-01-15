@@ -177,7 +177,7 @@
                 "lib/web/jquery/jquery-ui.min.js"
             ],
             "twbs/bootstrap": [
-                "lib/web/jquery/jquery.tabs.js",
+                "lib/web/jquery/jquery.tabs.js"
             ],
             "tinymce/tinymce": "lib/web/tiny_mce"
         }
