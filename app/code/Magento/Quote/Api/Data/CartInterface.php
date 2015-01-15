@@ -89,14 +89,14 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Returns the cart shipping address.
      *
-     * @return \Magento\Checkout\Api\Data\AddressInterface|null Cart shipping address. Otherwise, null.
+     * @return \Magento\Quote\Api\Data\AddressInterface|null Cart shipping address. Otherwise, null.
      */
     public function getShippingAddress();
 
     /**
      * Returns the cart billing address.
      *
-     * @return \Magento\Checkout\Api\Data\AddressInterface|null Cart billing address. Otherwise, null.
+     * @return \Magento\Quote\Api\Data\AddressInterface|null Cart billing address. Otherwise, null.
      */
     public function getBillingAddress();
 

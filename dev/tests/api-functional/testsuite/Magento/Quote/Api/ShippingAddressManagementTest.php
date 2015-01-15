@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Service\V1\Address\Shipping;
+namespace Magento\Quote\Api;
 
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
