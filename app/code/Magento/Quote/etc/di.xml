@@ -9,6 +9,7 @@
     <preference for="Magento\Quote\Api\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
     <preference for="Magento\Quote\Api\Data\ShippingMethodInterface" type="Magento\Quote\Model\Cart\ShippingMethod" />
     <preference for="Magento\Quote\Api\BillingAddressManagementInterface" type="Magento\Quote\Model\BillingAddressManagement" />
+    <preference for="Magento\Quote\Api\ShippingAddressManagementInterface" type="Magento\Quote\Model\ShippingAddressManagement" />
     <preference for="Magento\Quote\Api\Data\AddressInterface" type="Magento\Quote\Model\Quote\Address" />
     <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>

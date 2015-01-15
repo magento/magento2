@@ -5,12 +5,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Service\V1\Address\Shipping;
+namespace Magento\Quote\Model;
 
-class WriteServiceTest extends \PHPUnit_Framework_TestCase
+class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var WriteService
+     * @var ShippingAddressManagement
      */
     protected $service;
 
@@ -18,11 +18,6 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteRepositoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $addressFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -35,11 +30,6 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     protected $validatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $converterMock;
-
-    /**
      * @var \Magento\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
@@ -47,38 +37,21 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
-        $this->addressFactoryMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\AddressFactory', ['create', '__wakeup'], [], '', false
-        );
 
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->quoteAddressMock = $this->getMock(
             '\Magento\Quote\Model\Quote\Address',
-            ['getCustomerId', 'load', 'getData', 'setData', 'setStreet', 'setRegionId', 'setRegion', '__wakeup'],
+            ['setSameAsBilling', 'setCollectShippingRates', '__wakeup'],
             [],
             '',
             false
         );
-        $this->addressFactoryMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->quoteAddressMock));
-
         $this->validatorMock = $this->getMock(
-            '\Magento\Checkout\Service\V1\Address\Validator', [], [], '', false
+            'Magento\Quote\Model\QuoteAddressValidator', [], [], '', false
         );
-
-        $this->converterMock = $this->getMock(
-            '\Magento\Checkout\Service\V1\Address\Converter', [], [], '', false
-        );
-
-        $this->service = $this->objectManager->getObject(
-            'Magento\Checkout\Service\V1\Address\Shipping\WriteService',
-            [
-                'quoteRepository' => $this->quoteRepositoryMock,
-                'quoteAddressFactory' => $this->addressFactoryMock,
-                'addressValidator' => $this->validatorMock,
-                'addressConverter' => $this->converterMock,
-            ]
+        $this->service = new ShippingAddressManagement(
+            $this->quoteRepositoryMock,
+            $this->validatorMock,
+            $this->getMock('\Psr\Log\LoggerInterface')
         );
     }
 
@@ -97,7 +70,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->validatorMock->expects($this->once())->method('validate')
             ->will($this->throwException(new \Magento\Framework\Exception\NoSuchEntityException('error345')));
 
-        $this->service->setAddress('cart654', null);
+        $this->service->assign('cart654', $this->quoteAddressMock);
     }
 
     public function testSetAddress()
@@ -109,26 +82,10 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
 
-        $builder = $this->getMock(
-            '\Magento\Checkout\Service\V1\Data\Cart\Address\RegionBuilder', ['create'], [], '', false
-        );
-
-        /** @var \Magento\Checkout\Service\V1\Data\Cart\AddressBuilder $addressDataBuilder */
-        $addressDataBuilder = $this->objectManager->getObject(
-            'Magento\Checkout\Service\V1\Data\Cart\AddressBuilder',
-            ['regionBuilder' => $builder]
-        );
-
-        /** @var \Magento\Checkout\Service\V1\Data\Cart\Address $addressData */
-        $addressData = $addressDataBuilder->setId(356)->create();
 
         $this->validatorMock->expects($this->once())->method('validate')
-            ->with($addressData)
+            ->with($this->quoteAddressMock)
             ->will($this->returnValue(true));
-
-        $this->converterMock->expects($this->once())->method('convertDataObjectToModel')
-            ->with($addressData, $this->quoteAddressMock)
-            ->will($this->returnValue($this->quoteAddressMock));
 
         $quoteMock->expects($this->once())->method('setShippingAddress')->with($this->quoteAddressMock);
         $quoteMock->expects($this->once())->method('setDataChanges')->with(true);
@@ -140,7 +97,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('getShippingAddress')
             ->will($this->returnValue($shippingAddressMock));
 
-        $this->assertEquals($addressId, $this->service->setAddress('cart867', $addressData));
+        $this->assertEquals($addressId, $this->service->assign('cart867', $this->quoteAddressMock));
     }
 
     /**
@@ -156,25 +113,12 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
 
-        $builder = $this->getMock(
-            '\Magento\Checkout\Service\V1\Data\Cart\Address\RegionBuilder', ['create'], [], '', false
-        );
-
-        /** @var \Magento\Checkout\Service\V1\Data\Cart\AddressBuilder $addressDataBuilder */
-        $addressDataBuilder = $this->objectManager->getObject(
-            'Magento\Checkout\Service\V1\Data\Cart\AddressBuilder',
-            ['regionBuilder' => $builder]
-        );
-
-        /** @var \Magento\Checkout\Service\V1\Data\Cart\Address $addressData */
-        $addressData = $addressDataBuilder->setId(356)->create();
-
         $this->validatorMock->expects($this->never())->method('validate');
 
         $quoteMock->expects($this->never())->method('setShippingAddress');
         $quoteMock->expects($this->never())->method('save');
 
-        $this->service->setAddress('cart867', $addressData);
+        $this->service->assign('cart867', $this->quoteAddressMock);
     }
 
     /**
@@ -190,26 +134,9 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
 
-        $builder = $this->getMock(
-            '\Magento\Checkout\Service\V1\Data\Cart\Address\RegionBuilder', ['create'], [], '', false
-        );
-
-        /** @var \Magento\Checkout\Service\V1\Data\Cart\AddressBuilder $addressDataBuilder */
-        $addressDataBuilder = $this->objectManager->getObject(
-            'Magento\Checkout\Service\V1\Data\Cart\AddressBuilder',
-            ['regionBuilder' => $builder]
-        );
-
-        /** @var \Magento\Checkout\Service\V1\Data\Cart\Address $addressData */
-        $addressData = $addressDataBuilder->setId(356)->create();
-
         $this->validatorMock->expects($this->once())->method('validate')
-            ->with($addressData)
+            ->with($this->quoteAddressMock)
             ->will($this->returnValue(true));
-
-        $this->converterMock->expects($this->once())->method('convertDataObjectToModel')
-            ->with($addressData, $this->quoteAddressMock)
-            ->will($this->returnValue($this->quoteAddressMock));
 
         $quoteMock->expects($this->once())->method('setShippingAddress')->with($this->quoteAddressMock);
         $quoteMock->expects($this->once())->method('setDataChanges')->with(true);
@@ -219,6 +146,36 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(
                 new \Exception('Some DB Error')
             );
-        $this->service->setAddress('cart867', $addressData);
+        $this->service->assign('cart867', $this->quoteAddressMock);
+    }
+
+    public function testGetAddress()
+    {
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
+            $this->returnValue($quoteMock)
+        );
+
+        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $quoteMock->expects($this->any())->method('getShippingAddress')->will($this->returnValue($addressMock));
+        $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue(false));
+        $this->assertEquals($addressMock, $this->service->get('cartId'));
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Cart contains virtual product(s) only. Shipping address is not applicable
+     */
+    public function testGetAddressOfQuoteWithVirtualProducts()
+    {
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
+            $this->returnValue($quoteMock)
+        );
+
+        $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue(true));
+        $quoteMock->expects($this->never())->method('getShippingAddress');
+
+        $this->service->get('cartId');
     }
 }
