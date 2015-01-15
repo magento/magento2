@@ -34,7 +34,4 @@
     <preference for="Magento\Checkout\Service\V1\Coupon\WriteServiceInterface" type="Magento\Checkout\Service\V1\Coupon\WriteService" />
     <preference for="Magento\Checkout\Service\V1\PaymentMethod\ReadServiceInterface" type="\Magento\Checkout\Service\V1\PaymentMethod\ReadService" />
     <preference for="Magento\Checkout\Service\V1\PaymentMethod\WriteServiceInterface" type="\Magento\Checkout\Service\V1\PaymentMethod\WriteService" />
-    <preference for="Magento\Checkout\Api\PaymentMethodManagementInterface" type="\Magento\Checkout\Model\PaymentMethodManagement" />
-    <preference for="Magento\Checkout\Api\Data\PaymentInterface" type="\Magento\Quote\Model\Quote\Payment" />
-    <preference for="Magento\Checkout\Api\Data\PaymentMethodInterface" type="\Magento\Checkout\Model\Cart\PaymentMethod" />
 </config>

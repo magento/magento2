@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Api;
+namespace Magento\Quote\Api;
 
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'checkoutPaymentMethodManagementV1';
+    const SERVICE_NAME = 'quotePaymentMethodManagementV1';
     const RESOURCE_PATH = '/V1/carts/';
 
     /**

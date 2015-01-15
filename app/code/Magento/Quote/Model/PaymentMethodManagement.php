@@ -3,21 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Model;
+namespace Magento\Quote\Model;
 
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
-class PaymentMethodManagement implements \Magento\Checkout\Api\PaymentMethodManagementInterface
+class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagementInterface
 {
     /**
      * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
-
-    /**
-     * @var \Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Builder
-     */
-    protected $paymentMethodBuilder;
 
     /**
      * @var \Magento\Payment\Model\Checks\ZeroTotal
@@ -30,19 +25,16 @@ class PaymentMethodManagement implements \Magento\Checkout\Api\PaymentMethodMana
     protected $methodList;
 
     /**
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param QuoteRepository $quoteRepository
      * @param \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator
      * @param \Magento\Payment\Model\MethodList $methodList
-     * @param \Magento\Checkout\Api\Data\PaymentMethodDataBuilder $paymentMethodBuilder
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator,
-        \Magento\Payment\Model\MethodList $methodList,
-        \Magento\Checkout\Api\Data\PaymentMethodDataBuilder $paymentMethodBuilder
+        \Magento\Payment\Model\MethodList $methodList
     ) {
         $this->quoteRepository = $quoteRepository;
-        $this->paymentMethodBuilder = $paymentMethodBuilder;
         $this->zeroTotalValidator = $zeroTotalValidator;
         $this->methodList = $methodList;
     }
@@ -50,7 +42,7 @@ class PaymentMethodManagement implements \Magento\Checkout\Api\PaymentMethodMana
     /**
      * {@inheritdoc}
      */
-    public function set(\Magento\Checkout\Api\Data\PaymentInterface $method, $cartId)
+    public function set($cartId, \Magento\Quote\Api\Data\PaymentInterface $method)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
@@ -108,15 +100,8 @@ class PaymentMethodManagement implements \Magento\Checkout\Api\PaymentMethodMana
      */
     public function getList($cartId)
     {
-        $output = [];
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
-        foreach ($this->methodList->getAvailableMethods($quote) as $method) {
-            $output[] = $this->paymentMethodBuilder
-                ->setTitle($method->getTitle())
-                ->setCode($method->getCode())
-                ->create();
-        }
-        return $output;
+        return $this->methodList->getAvailableMethods($quote);
     }
 }

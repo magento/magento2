@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Model;
+namespace Magento\Quote\Model;
 
 class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Checkout\Model\PaymentMethodManagement
+     * @var \Magento\Quote\Model\PaymentMethodManagement
      */
     protected $model;
 
@@ -42,10 +42,10 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->methodListMock = $this->getMock('\Magento\Payment\Model\MethodList', [], [], '', false);
         $this->zeroTotalMock = $this->getMock('\Magento\Payment\Model\Checks\ZeroTotal', [], [], '', false);
-        $this->paymentMethodBuilder = $this->getMock('\Magento\Checkout\Api\Data\PaymentMethodDataBuilder', [], [], '', false);
+        $this->paymentMethodBuilder = $this->getMock('\Magento\Quote\Api\Data\PaymentMethodDataBuilder', [], [], '', false);
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Checkout\Model\PaymentMethodManagement',
+            '\Magento\Quote\Model\PaymentMethodManagement',
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'methodList' => $this->methodListMock,
@@ -91,38 +91,18 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $cartId = 10;
-        $title = 'title';
-        $code = 'code';
-
         $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
-        $paymentMethod = $this->getMock('\Magento\Payment\Model\MethodInterface');
-        $paymentMethod->expects($this->once())->method('getTitle')->willReturn($title);
-        $paymentMethod->expects($this->once())->method('getCode')->willReturn($code);
-
+        $paymentMethod = $this->getMock('\Magento\Quote\Api\Data\PaymentMethodInterface');
         $this->methodListMock->expects($this->once())
             ->method('getAvailableMethods')
             ->with($quoteMock)
             ->will($this->returnValue([$paymentMethod]));
-
-        $paymentMethodMock = $this->getMock('\Magento\Checkout\Api\Data\PaymentMethodInterface');
-        $this->paymentMethodBuilder->expects($this->once())
-            ->method('setTitle')
-            ->with($title)
-            ->willReturnSelf();
-        $this->paymentMethodBuilder->expects($this->once())
-            ->method('setCode')
-            ->with($code)
-            ->willReturnSelf();
-        $this->paymentMethodBuilder->expects($this->once())
-            ->method('create')
-            ->willReturn($paymentMethodMock);
-
-        $this->assertEquals([$paymentMethodMock], $this->model->getList($cartId));
+        $this->assertEquals([$paymentMethod], $this->model->getList($cartId));
     }
 
     public function testSetVirtualProduct()
@@ -193,7 +173,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('save')->willReturnSelf();
 
         $paymentMock->expects($this->once())->method('getId')->willReturn($paymentId);
-        $this->assertEquals($paymentId, $this->model->set($methodMock, $cartId));
+        $this->assertEquals($paymentId, $this->model->set($cartId, $methodMock));
     }
 
     /**
@@ -236,7 +216,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('isVirtual')->willReturn(true);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
 
-        $this->model->set($methodMock, $cartId);
+        $this->model->set($cartId, $methodMock);
     }
 
     /**
@@ -304,7 +284,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
             ->method('isApplicable')
             ->with($methodInstance, $quoteMock)
             ->willReturn(false);
-        $this->model->set($methodMock, $cartId);
+        $this->model->set($cartId, $methodMock);
     }
 
     public function testSetSimpleProduct()
@@ -375,7 +355,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('save')->willReturnSelf();
 
         $paymentMock->expects($this->once())->method('getId')->willReturn($paymentId);
-        $this->assertEquals($paymentId, $this->model->set($methodMock, $cartId));
+        $this->assertEquals($paymentId, $this->model->set($cartId, $methodMock));
     }
 
     /**
@@ -418,6 +398,6 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($shippingAddressMock);
 
-        $this->model->set($methodMock, $cartId);
+        $this->model->set($cartId, $methodMock);
     }
 }

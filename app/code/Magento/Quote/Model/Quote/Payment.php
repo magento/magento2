@@ -39,7 +39,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Payment extends \Magento\Payment\Model\Info implements \Magento\Checkout\Api\Data\PaymentInterface
+class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\Data\PaymentInterface
 {
     /**
      * @var string
