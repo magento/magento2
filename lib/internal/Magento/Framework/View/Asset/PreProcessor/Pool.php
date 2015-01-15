@@ -54,7 +54,6 @@ class Pool
         }
         if ($targetContentType == 'css') {
             $result[] = $this->objectManager->get('Magento\Framework\View\Asset\PreProcessor\ModuleNotation');
-            $result[] = $this->objectManager->get('Magento\Framework\Minifier\CssInterface');
         }
         return $result;
     }

@@ -63,27 +63,17 @@ class MinifyService
      * Assets applicable for minification are wrapped with the minified asset
      *
      * @param array|\Iterator $assets
-     * @return \Magento\Framework\View\Asset\Minified[]
+     * @return \Magento\Framework\View\Asset\Minified\AbstractAsset[]
      */
     public function getAssets($assets)
     {
         $resultAssets = [];
         $strategy = $this->appMode == \Magento\Framework\App\State::MODE_PRODUCTION
-            ? Minified::FILE_EXISTS : Minified::MTIME;
+            ? Minified\AbstractAsset::FILE_EXISTS : Minified\AbstractAsset::MTIME;
         /** @var $asset AssetInterface */
         foreach ($assets as $asset) {
-            $contentType = $asset->getContentType();
-            if ($this->isEnabled($contentType)) {
-                /** @var \Magento\Framework\View\Asset\Minified $asset */
-                $asset = $this->objectManager
-                    ->create(
-                        'Magento\Framework\View\Asset\Minified',
-                        [
-                            'asset' => $asset,
-                            'strategy' => $strategy,
-                            'adapter' => $this->getAdapter($contentType),
-                        ]
-                    );
+            if ($this->isEnabled($asset->getContentType())) {
+                $asset = $this->getAssetDecorated($asset, $strategy);
             }
             $resultAssets[] = $asset;
         }
@@ -130,5 +120,37 @@ class MinifyService
             $this->adapters[$contentType] = $adapter;
         }
         return $this->adapters[$contentType];
+    }
+
+    /**
+     * @param AssetInterface $asset
+     * @param string $strategy
+     * @return AssetInterface
+     * @throws \Magento\Framework\Exception
+     */
+    protected function getAssetDecorated(AssetInterface $asset, $strategy)
+    {
+        return $this->objectManager->create(
+                    $this->getDecoratorClass($asset),
+                    [
+                        'asset' => $asset,
+                        'strategy' => $strategy,
+                        'adapter' => $this->getAdapter($asset->getContentType()),
+                    ]
+        );
+    }
+
+    /**
+     * @param AssetInterface $asset
+     * @return string
+     */
+    protected function getDecoratorClass(AssetInterface $asset)
+    {
+        if ($asset->getContentType() == 'css') {
+            $result = 'Magento\Framework\View\Asset\Minified\ImmutablePathAsset';
+        } else {
+            $result = 'Magento\Framework\View\Asset\Minified\MutablePathAsset';
+        }
+        return $result;
     }
 }
