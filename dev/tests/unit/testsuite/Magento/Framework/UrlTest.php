@@ -13,7 +13,7 @@ namespace Magento\Framework;
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Url\RouteParamsResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\RouteParamsResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $routeParamsResolverMock;
 
@@ -50,7 +50,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->routeParamsResolverMock = $this->getMock(
-            'Magento\Core\Model\Url\RouteParamsResolver',
+            'Magento\Framework\Url\RouteParamsResolver',
             ['getType', 'hasData', 'getData', 'getRouteParams'],
             [],
             '',
