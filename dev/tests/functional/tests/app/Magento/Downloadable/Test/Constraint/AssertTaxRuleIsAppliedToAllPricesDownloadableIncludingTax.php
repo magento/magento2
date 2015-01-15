@@ -9,8 +9,8 @@ namespace Magento\Downloadable\Test\Constraint;
 /**
  * Checks that prices incl tax on category, product and cart pages are equal to specified in dataset.
  */
-class AssertTaxRuleIsAppliedToAllPricesDownloadableIncludingTax
-    extends AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable
+class AssertTaxRuleIsAppliedToAllPricesDownloadableIncludingTax extends
+ AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable
 {
     /**
      * Constraint severeness.

@@ -7,11 +7,12 @@
 namespace Magento\Tax\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+
 /**
  * Checks that prices excl and incl tax on category, product and cart pages are equal to specified in dataset
  */
-class AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax
-    extends AbstractAssertTaxRuleIsAppliedToAllPrices
+class AssertTaxRuleIsAppliedToAllPricesExcludingIncludingTax extends
+ AbstractAssertTaxRuleIsAppliedToAllPrices
 {
     /**
      * Constraint severeness.

@@ -12,6 +12,8 @@ use Mtf\Client\Element\Locator;
 /**
  * Class View
  * View block on order's view page
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class View extends Block
 {

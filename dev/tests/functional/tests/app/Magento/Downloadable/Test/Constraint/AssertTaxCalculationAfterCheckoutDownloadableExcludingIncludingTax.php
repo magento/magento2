@@ -9,8 +9,8 @@ namespace Magento\Downloadable\Test\Constraint;
 /**
  * Checks that prices excl and incl tax on order review and customer order pages are equal to specified in dataset.
  */
-class AssertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax
-    extends AbstractAssertTaxCalculationAfterCheckoutDownloadable
+class AssertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax extends
+ AbstractAssertTaxCalculationAfterCheckoutDownloadable
 {
     /**
      * Constraint severeness
