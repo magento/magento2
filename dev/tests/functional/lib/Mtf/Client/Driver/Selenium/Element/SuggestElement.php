@@ -59,7 +59,7 @@ class SuggestElement extends Element
         $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
         $this->clear();
-        foreach(str_split($value) as $symbol) {
+        foreach (str_split($value) as $symbol) {
             $this->find($this->suggest)->click();
             $this->_driver->keys($symbol);
             $this->waitResult();

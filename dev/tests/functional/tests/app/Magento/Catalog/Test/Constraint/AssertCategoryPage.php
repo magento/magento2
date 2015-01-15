@@ -22,10 +22,29 @@ class AssertCategoryPage extends AbstractConstraint
     const SEVERITY = 'low';
     /* end tags */
 
+    /**
+     * CMS Block display mode
+     *
+     * @var array
+     */
     protected $visibleCmsBlockMode = [
         'Static block only',
         'Static block and products'
     ];
+
+    /**
+     * Category view page
+     *
+     * @var CatalogCategoryView
+     */
+    protected $categoryViewPage;
+
+    /**
+     * Browser instance
+     *
+     * @var Browser
+     */
+    protected $browser;
 
     /**
      * Assert that displayed category data on category page equals to passed from fixture.
@@ -44,6 +63,22 @@ class AssertCategoryPage extends AbstractConstraint
         CatalogCategoryView $categoryView,
         Browser $browser
     ) {
+        $this->browser = $browser;
+        $this->categoryViewPage = $categoryView;
+        $categoryData = $this->prepareData($fixtureFactory, $category, $initialCategory);
+        $this->browser->open($this->getCategoryUrl($category));
+        $this->assertGeneralInformation($category, $categoryData);
+        $this->assertDisplaySetting($category, $categoryData);
+    }
+
+    /**
+     * @param FixtureFactory $fixtureFactory
+     * @param Category $category
+     * @param Category $initialCategory
+     * @return array
+     */
+    protected function prepareData(FixtureFactory $fixtureFactory, Category $category, Category $initialCategory)
+    {
         $product = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
@@ -55,25 +90,45 @@ class AssertCategoryPage extends AbstractConstraint
                 ]
             ]
         );
-        $categoryData = array_merge($initialCategory->getData(), $category->getData());
+        $product->persist();
+
+        return array_merge($initialCategory->getData(), $category->getData());
+    }
+
+    /**
+     * Get category url to open
+     *
+     * @param Category $category
+     * @return string
+     */
+    protected function getCategoryUrl(Category $category)
+    {
         $categoryUrlKey = $category->hasData('url_key')
             ? strtolower($category->getUrlKey())
             : trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $category->getName())), '-');
-        $categoryUrl = $_ENV['app_frontend_url'] . $categoryUrlKey . '.html';
+        return $_ENV['app_frontend_url'] . $categoryUrlKey . '.html';
+    }
 
-        $product->persist();
-        $browser->open($categoryUrl);
-
+    /**
+     * Assert category general information
+     *
+     * @param Category $category
+     * @param array $categoryData
+     * @return void
+     */
+    protected function assertGeneralInformation(Category $category, array $categoryData)
+    {
+        $categoryUrl = $this->getCategoryUrl($category);
         \PHPUnit_Framework_Assert::assertEquals(
             $categoryUrl,
-            $browser->getUrl(),
+            $this->browser->getUrl(),
             'Wrong page URL.'
             . "\nExpected: " . $categoryUrl
-            . "\nActual: " . $browser->getUrl()
+            . "\nActual: " . $this->browser->getUrl()
         );
 
         if (isset($categoryData['name'])) {
-            $title = $categoryView->getTitleBlock()->getTitle();
+            $title = $this->categoryViewPage->getTitleBlock()->getTitle();
             \PHPUnit_Framework_Assert::assertEquals(
                 $categoryData['name'],
                 $title,
@@ -84,7 +139,7 @@ class AssertCategoryPage extends AbstractConstraint
         }
 
         if (isset($categoryData['description'])) {
-            $description = $categoryView->getViewBlock()->getDescription();
+            $description = $this->categoryViewPage->getViewBlock()->getDescription();
             \PHPUnit_Framework_Assert::assertEquals(
                 $categoryData['description'],
                 $description,
@@ -93,7 +148,17 @@ class AssertCategoryPage extends AbstractConstraint
                 . "\nActual: " . $description
             );
         }
+    }
 
+    /**
+     * Assert category display settings
+     *
+     * @param Category $category
+     * @param array $categoryData
+     * @return void
+     */
+    protected function assertDisplaySetting(Category $category, array $categoryData)
+    {
         if (
             isset($categoryData['landing_page'])
             && isset($categoryData['display_mode'])
@@ -102,7 +167,7 @@ class AssertCategoryPage extends AbstractConstraint
             /** @var LandingPage $sourceLandingPage */
             $sourceLandingPage = $category->getDataFieldConfig('landing_page')['source'];
             $fixtureContent = $sourceLandingPage->getCmsBlock()->getContent();
-            $pageContent = $categoryView->getViewBlock()->getContent();
+            $pageContent = $this->categoryViewPage->getViewBlock()->getContent();
 
             \PHPUnit_Framework_Assert::assertEquals(
                 $fixtureContent,
@@ -112,10 +177,9 @@ class AssertCategoryPage extends AbstractConstraint
                 . "\nActual: " . $pageContent
             );
         }
-
         if (isset($categoryData['default_sort_by'])) {
             $sortBy = strtolower($categoryData['default_sort_by']);
-            $sortType = $categoryView->getTopToolbar()->getSelectSortType();
+            $sortType = $this->categoryViewPage->getTopToolbar()->getSelectSortType();
             \PHPUnit_Framework_Assert::assertEquals(
                 $sortBy,
                 $sortType,
@@ -134,7 +198,7 @@ class AssertCategoryPage extends AbstractConstraint
             );
             if ($availableSortType) {
                 $availableSortType = array_values($availableSortType);
-                $availableSortTypeOnPage = $categoryView->getTopToolbar()->getSortType();
+                $availableSortTypeOnPage = $this->categoryViewPage->getTopToolbar()->getSortType();
                 \PHPUnit_Framework_Assert::assertEquals(
                     $availableSortType,
                     $availableSortTypeOnPage,
