@@ -113,13 +113,13 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $addressMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllNonNominalItems', 'getShippingAmount', '__wakeup'])
+            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
             ->getMock();
         $addressMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($quoteMock);
         $addressMock->expects($this->any())
-            ->method('getAllNonNominalItems')
+            ->method('getAllItems')
             ->willReturn([$itemNoDiscount]);
         $addressMock->expects($this->any())
             ->method('getShippingAmount')
@@ -165,13 +165,13 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $addressMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllNonNominalItems', 'getShippingAmount', '__wakeup'])
+            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
             ->getMock();
         $addressMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($quoteMock);
         $addressMock->expects($this->any())
-            ->method('getAllNonNominalItems')
+            ->method('getAllItems')
             ->willReturn([$itemWithParentId]);
         $addressMock->expects($this->any())
             ->method('getShippingAmount')
@@ -249,13 +249,13 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $addressMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllNonNominalItems', 'getShippingAmount', '__wakeup'])
+            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
             ->getMock();
         $addressMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($quoteMock);
         $addressMock->expects($this->any())
-            ->method('getAllNonNominalItems')
+            ->method('getAllItems')
             ->willReturn([$itemWithChildren]);
         $addressMock->expects($this->any())
             ->method('getShippingAmount')
@@ -368,13 +368,13 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $addressMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getAllNonNominalItems', 'getShippingAmount', '__wakeup'])
+            ->setMethods(['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup'])
             ->getMock();
         $addressMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($quoteMock);
         $addressMock->expects($this->any())
-            ->method('getAllNonNominalItems')
+            ->method('getAllItems')
             ->willReturn([$itemWithChildren]);
         $addressMock->expects($this->any())
             ->method('getShippingAmount')

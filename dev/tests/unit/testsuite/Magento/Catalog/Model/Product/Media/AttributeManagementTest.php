@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Product\Media;
 
-use \Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product;
 
 class AttributeManagementTest extends \PHPUnit_Framework_TestCase
 {
