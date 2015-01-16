@@ -3,45 +3,12 @@
  * See COPYING.txt for license details.
  */
 
-define([
+define('globalNavigation', [
     'jquery',
-    'mage/smart-keyboard-handler',
-    'mage/ie-class-fixer',
-    'jquery/ui',
-    'jquery/hover-intent',
-    'jquery/jquery.tabs'
-], function ($, keyboardHandler) {
+    'jquery/jquery-ui',
+    'jquery/hover-intent'
+], function ($) {
     'use strict';
-
-    $.widget('mage.globalSearch', {
-        options: {
-            field: '.search-global-field',
-            fieldActiveClass: 'active',
-            input: '#search-global'
-        },
-
-        _create: function () {
-            this.field = $(this.options.field);
-            this.input = $(this.options.input);
-            this._events();
-        },
-
-        _events: function () {
-            var self = this;
-
-            this.input
-                .on('blur.resetGlobalSearchForm', function () {
-                    if (!self.input.val()) {
-                        self.field.removeClass(self.options.fieldActiveClass)
-                    }
-                });
-
-            this.input
-                .on('focus.activateGlobalSearchForm', function () {
-                    self.field.addClass(self.options.fieldActiveClass)
-                });
-        }
-    });
 
     $.widget('mage.globalNavigation', {
         options: {
@@ -162,7 +129,55 @@ define([
         }
     });
 
-    $.widget('mage.modalPopup', {
+    return $.mage.globalNavigation;
+});
+
+define('globalSearch', [
+    'jquery',
+    'jquery/jquery-ui'
+], function ($) {
+    'use strict';
+
+    $.widget('mage.globalSearch', {
+        options: {
+            field: '.search-global-field',
+            fieldActiveClass: 'active',
+            input: '#search-global'
+        },
+
+        _create: function () {
+            this.field = $(this.options.field);
+            this.input = $(this.options.input);
+            this._events();
+        },
+
+        _events: function () {
+            var self = this;
+
+            this.input
+                .on('blur.resetGlobalSearchForm', function () {
+                    if (!self.input.val()) {
+                        self.field.removeClass(self.options.fieldActiveClass)
+                    }
+                });
+
+            this.input
+                .on('focus.activateGlobalSearchForm', function () {
+                    self.field.addClass(self.options.fieldActiveClass)
+                });
+        }
+    });
+
+    return $.mage.globalSearch;
+});
+
+define('modalPopup', [
+    'jquery',
+    'jquery/jquery-ui'
+], function ($) {
+    'use strict';
+
+     $.widget('mage.modalPopup', {
         options: {
             popup: '.popup',
             btnDismiss: '[data-dismiss="popup"]',
@@ -192,6 +207,78 @@ define([
                 });
         }
     });
+
+    return $.mage.modalPopup;
+});
+
+define('useDefault', [
+    'jquery',
+    'jquery/jquery-ui'
+], function ($) {
+    'use strict';
+
+    $.widget('mage.useDefault', {
+        options: {
+            field: '.field',
+            useDefault: '.use-default',
+            checkbox: '.use-default-control',
+            label: '.use-default-label'
+        },
+
+        _create: function () {
+            this.el = this.element;
+            this.field = $(this.el).closest(this.options.field);
+            this.useDefault = $(this.options.useDefault, this.field);
+            this.checkbox = $(this.options.checkbox, this.useDefault);
+            this.label = $(this.options.label, this.useDefault);
+            this.origValue = this.el.attr('data-store-label');
+
+            this._events();
+        },
+
+        _events: function () {
+            var self = this;
+
+            this.el
+                .on('change.toggleUseDefaultVisibility keyup.toggleUseDefaultVisibility', $.proxy(this._toggleUseDefaultVisibility, this))
+                .trigger('change.toggleUseDefaultVisibility');
+
+            this.checkbox
+                .on('change.setOrigValue', function () {
+                    if ($(this).prop('checked')) {
+                        self.el
+                            .val(self.origValue)
+                            .trigger('change.toggleUseDefaultVisibility');
+
+                        $(this).prop('checked', false);
+                    }
+                });
+        },
+
+        _toggleUseDefaultVisibility: function () {
+            var curValue = this.el.val(),
+                origValue = this.origValue;
+
+            this[curValue != origValue ? '_show' : '_hide']();
+        },
+
+        _show: function () {
+            this.useDefault.show();
+        },
+
+        _hide: function () {
+            this.useDefault.hide();
+        }
+    });
+
+    return $.mage.useDefault;
+});
+
+define('loadingPopup', [
+    'jquery',
+    'jquery/jquery-ui'
+], function ($) {
+    'use strict';
 
     $.widget('mage.loadingPopup', {
         options: {
@@ -250,59 +337,15 @@ define([
         }
     });
 
-    $.widget('mage.useDefault', {
-        options: {
-            field: '.field',
-            useDefault: '.use-default',
-            checkbox: '.use-default-control',
-            label: '.use-default-label'
-        },
+    return $.mage.loadingPopup;
+});
 
-        _create: function () {
-            this.el = this.element;
-            this.field = $(this.el).closest(this.options.field);
-            this.useDefault = $(this.options.useDefault, this.field);
-            this.checkbox = $(this.options.checkbox, this.useDefault);
-            this.label = $(this.options.label, this.useDefault);
-            this.origValue = this.el.attr('data-store-label');
-
-            this._events();
-        },
-
-        _events: function () {
-            var self = this;
-
-            this.el
-                .on('change.toggleUseDefaultVisibility keyup.toggleUseDefaultVisibility', $.proxy(this._toggleUseDefaultVisibility, this))
-                .trigger('change.toggleUseDefaultVisibility');
-
-            this.checkbox
-                .on('change.setOrigValue', function () {
-                    if ($(this).prop('checked')) {
-                        self.el
-                            .val(self.origValue)
-                            .trigger('change.toggleUseDefaultVisibility');
-
-                        $(this).prop('checked', false);
-                    }
-                });
-        },
-
-        _toggleUseDefaultVisibility: function () {
-            var curValue = this.el.val(),
-                origValue = this.origValue;
-
-            this[curValue != origValue ? '_show' : '_hide']();
-        },
-
-        _show: function () {
-            this.useDefault.show();
-        },
-
-        _hide: function () {
-            this.useDefault.hide();
-        }
-    });
+define('collapsable', [
+    'jquery',
+    'jquery/jquery-ui',
+    'jquery/jquery.tabs'
+], function ($) {
+    'use strict';
 
     $.widget('mage.collapsable', {
         options: {
@@ -334,24 +377,26 @@ define([
         }
     });
 
-    $(document).ready(function () {
-        /* @TODO refactor collapsable as widget and avoid logic binding with such a general selectors */
-        $('.collapse').collapsable();
-        $.each($('.entry-edit'), function (i, entry) {
-            $('.collapse:first', entry).filter(function () {
-                return $(this).data('collapsed') !== true;
-            }).collapse('show');
-        });
+    return $.mage.collapsable;
+});
 
-        keyboardHandler.apply();
+define('js/theme', [
+    'jquery',
+    'mage/smart-keyboard-handler',
+    'mage/ie-class-fixer',
+    'collapsable',
+    'domReady'
+], function ($, keyboardHandler) {
+    'use strict';
+
+    /* @TODO refactor collapsable as widget and avoid logic binding with such a general selectors */
+    $('.collapse').collapsable();
+
+    $.each($('.entry-edit'), function (i, entry) {
+        $('.collapse:first', entry).filter(function () {
+            return $(this).data('collapsed') !== true;
+        }).collapse('show');
     });
 
-    return {
-        collapsable:        $.mage.collapsable,
-        useDefault:         $.mage.useDefault,
-        loadingPopup:       $.mage.loadingPopup,
-        modalPopup:         $.mage.modalPopup,
-        globalNavigation:   $.mage.globalNavigation,
-        globalSearch:       $.mage.globalSearch
-    };
+    keyboardHandler.apply();
 });

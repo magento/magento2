@@ -7,7 +7,7 @@ define([
     "tinymce",
     "jquery/ui",
     "Magento_DesignEditor/js/dialog",
-    "js/theme",
+    "loadingPopup",
     "mage/translate",
     "prototype",
     "extjs/ext-tree-checkbox",

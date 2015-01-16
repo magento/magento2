@@ -5,7 +5,20 @@
 
 var config = {
     "shim": {
-        "extjs/ext-tree-checkbox": ["extjs/ext-tree", "extjs/defaults"],
+        "extjs/ext-tree-checkbox": [
+            "extjs/ext-tree",
+            "extjs/defaults"
+        ]
+    },
+    "bundles": {
+        "js/theme": [
+            "globalNavigation",
+            "globalSearch",
+            "modalPopup",
+            "useDefault",
+            "loadingPopup",
+            "collapsable"
+        ]
     },
     "map": {
         "*": {
@@ -25,11 +38,6 @@ var config = {
             "treeSuggest":          "mage/backend/tree-suggest",
             "calendar":             "mage/calendar",
             "dropdown":             "mage/dropdown_old",
-            "collapsable":          "js/theme",
-            "globalSearch":         "js/theme",
-            "modalPopup":           "js/theme",
-            "useDefault":           "js/theme",
-            "globalNavigation":     "js/theme",
             "collapsible":          "mage/collapsible",
             "menu":                 "mage/backend/menu",
             "jstree":               "jquery/jstree/jquery.jstree",
@@ -38,7 +46,6 @@ var config = {
     },
     "deps": [
         "js/theme",
-        "mage/dropdown_old",
         "mage/backend/bootstrap"
     ],
     "paths": {
