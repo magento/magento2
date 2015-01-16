@@ -2833,7 +2833,10 @@ return [
     ['Magento\Catalog\Block\Product\Send'],
     ['Magento\Catalog\Helper\Product\Options'],
     ['Magento\Cms\Model\Resource\Page\Service'],
-    ['Magento\Core\Model\TemplateEngine\Decorator\DebugHints'],
+    [
+        'Magento\Core\Model\TemplateEngine\Decorator\DebugHints',
+        'Magento\Theme\Model\TemplateEngine\Decorator\DebugHints'
+    ],
     ['Magento\Directory\Helper\Url'],
     ['Magento\GiftMessage\Helper\Url'],
     ['Magento\Rss\Helper\Data'],
