@@ -26,7 +26,7 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testIsValid()
     {
-        $this->fileContentMock->expects($this->any())->method('getData')
+        $this->fileContentMock->expects($this->any())->method('getFileData')
             ->will($this->returnValue(base64_encode('test content')));
         $this->fileContentMock->expects($this->any())->method('getName')
             ->will($this->returnValue('valid_name'));
@@ -40,7 +40,7 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidThrowsExceptionIfProvidedContentIsNotBase64Encoded()
     {
-        $this->fileContentMock->expects($this->any())->method('getData')
+        $this->fileContentMock->expects($this->any())->method('getFileData')
             ->will($this->returnValue('not_a_base64_encoded_content'));
         $this->fileContentMock->expects($this->any())->method('getName')
             ->will($this->returnValue('valid_name'));
@@ -55,7 +55,7 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidThrowsExceptionIfProvidedImageNameContainsForbiddenCharacters($fileName)
     {
-        $this->fileContentMock->expects($this->any())->method('getData')
+        $this->fileContentMock->expects($this->any())->method('getFileData')
             ->will($this->returnValue(base64_encode('test content')));
         $this->fileContentMock->expects($this->any())->method('getName')
             ->will($this->returnValue($fileName));
