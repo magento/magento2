@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -832,12 +833,17 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     }
 
     /**
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
-    public function validate(\Magento\Framework\Object $object)
+    public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
-        return $this->validateAttribute($object->getData($this->getAttribute()));
+        if (!$model->hasData($this->getAttribute())) {
+            $model->load($model->getId());
+        }
+        $attributeValue = $model->getData($this->getAttribute());
+
+        return $this->validateAttribute($attributeValue);
     }
 
     /**

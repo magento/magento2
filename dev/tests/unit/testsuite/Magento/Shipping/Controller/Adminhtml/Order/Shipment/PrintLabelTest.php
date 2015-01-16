@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
@@ -301,13 +302,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
         $labelContent = 'Label-content';
         $incrementId = '1000001';
 
-        $loggerMock = $this->getMock(
-            'Magento\Framework\Logger',
-            ['logException'],
-            [],
-            '',
-            false
-        );
+        $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
@@ -332,10 +327,10 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Framework\Logger')
+            ->with('Psr\Log\LoggerInterface')
             ->will($this->returnValue($loggerMock));
         $loggerMock->expects($this->once())
-            ->method('logException');
+            ->method('critical');
         $this->requestMock->expects($this->at(4))
             ->method('getParam')
             ->with('shipment_id')

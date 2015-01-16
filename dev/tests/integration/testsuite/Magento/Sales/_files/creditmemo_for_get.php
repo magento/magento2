@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 require 'default_rollback.php';
@@ -20,7 +21,7 @@ $creditmemo->setIncrementId('100000001');
 $creditmemo->save();
 
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
-$orderItem = $objectManager->get('\Magento\Sales\Model\Order\Item');
+$orderItem = $objectManager->get('Magento\Sales\Model\Order\Item');
 $orderItem->setName('Test item')
     ->setQtyRefunded(1)
     ->setQtyInvoiced(10)

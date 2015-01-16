@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogRule\Model\Indexer;
@@ -31,7 +32,7 @@ class IndexBuilder
     protected $ruleCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -75,7 +76,7 @@ class IndexBuilder
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateFormat
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
@@ -87,7 +88,7 @@ class IndexBuilder
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Stdlib\DateTime $dateFormat,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
@@ -129,7 +130,7 @@ class IndexBuilder
         try {
             $this->doReindexByIds($ids);
         } catch (\Exception $e) {
-            $this->logException($e);
+            $this->critical($e);
             throw new CatalogRuleException($e->getMessage(), $e->getCode(), $e);
         }
     }
@@ -162,7 +163,7 @@ class IndexBuilder
         try {
             $this->doReindexFull();
         } catch (\Exception $e) {
-            $this->logException($e);
+            $this->critical($e);
             throw new CatalogRuleException($e->getMessage(), $e->getCode(), $e);
         }
     }
@@ -551,7 +552,7 @@ class IndexBuilder
     /**
      * @param int $websiteId
      * @param int|null $productId
-     * @return \Zend\Db\Adapter\Driver\StatementInterface|\Zend_Db_Statement_Interface
+     * @return \Zend_Db_Statement_Interface
      * @throws \Magento\Eav\Exception
      */
     protected function getRuleProductsStmt($websiteId, $productId = null)
@@ -691,8 +692,8 @@ class IndexBuilder
      * @param \Exception $e
      * @return void
      */
-    protected function logException($e)
+    protected function critical($e)
     {
-        $this->logger->logException($e);
+        $this->logger->critical($e);
     }
 }

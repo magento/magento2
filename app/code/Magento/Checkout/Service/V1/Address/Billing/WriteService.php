@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Service\V1\Address\Billing;
 
@@ -9,7 +10,7 @@ use Magento\Checkout\Service\V1\Address\Validator;
 use Magento\Sales\Model\Quote\AddressFactory;
 use Magento\Sales\Model\QuoteRepository;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 
 /** Quote billing address write service object. */
 class WriteService implements WriteServiceInterface
@@ -105,7 +106,7 @@ class WriteService implements WriteServiceInterface
         try {
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             throw new InputException('Unable to save address. Please, check input data.');
         }
         return $quote->getBillingAddress()->getId();

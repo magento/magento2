@@ -4,7 +4,8 @@
  *
  * Format: array(<namespace>[, <replacement>])
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['Magento\App', 'Magento\Framework\App'],
@@ -28,7 +29,7 @@ return [
     ['Magento\Phrase', 'Magento\Framework\Phrase'],
     ['Magento\Locale', 'Magento\Framework\Locale'],
     ['Magento\Message', 'Magento\Framework\Message'],
-    ['Magento\Logger', 'Magento\Framework\Logger'],
+    ['Magento\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Error', 'Magento\Framework\Error'],
     ['Magento\Filter', 'Magento\Framework\Filter'],
     ['Magento\DomDocument', 'Magento\Framework\DomDocument'],

@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
@@ -29,7 +30,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Save integration action.
      *
      * @return void
-     * @todo: Fix cyclomatic complexity.
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -46,7 +46,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
                     $this->_redirect('*/*/');
                     return;
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                     $this->messageManager->addError(__('Internal error. Check exception log for details.'));
                     $this->_redirect('*/*');
                     return;
@@ -55,7 +55,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             /** @var array $data */
             $data = $this->getRequest()->getPost();
             if (!empty($data)) {
-                // TODO: Move out work with API permissions to Web API module
                 if (!isset($data['resource'])) {
                     $integrationData['resource'] = [];
                 }
@@ -94,7 +93,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
         }

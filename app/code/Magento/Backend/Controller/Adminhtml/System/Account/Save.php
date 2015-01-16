@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
 
@@ -53,11 +54,9 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 
         if ($this->_objectManager->get('Magento\Framework\Locale\Validator')->isValid($interfaceLocale)) {
             $user->setInterfaceLocale($interfaceLocale);
-            $this->_objectManager->get(
-                'Magento\Backend\Model\Locale\Manager'
-            )->switchBackendInterfaceLocale(
-                $interfaceLocale
-            );
+            /** @var \Magento\Backend\Model\Locale\Manager $localeManager */
+            $localeManager = $this->_objectManager->get('Magento\Backend\Model\Locale\Manager');
+            $localeManager->switchBackendInterfaceLocale($interfaceLocale);
         }
         /** Before updating admin user data, ensure that password of current admin user is entered and is correct */
         $currentUserPasswordField = \Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD;
@@ -74,7 +73,10 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
                 $user->setPasswordConfirmation($passwordConfirmation);
             }
             $user->save();
-            $user->sendPasswordResetNotificationEmail();
+            /** Send password reset email notification only when password was changed */
+            if ($password !== '') {
+                $user->sendPasswordResetNotificationEmail();
+            }
             $this->messageManager->addSuccess(__('The account has been saved.'));
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addMessages($e->getMessages());

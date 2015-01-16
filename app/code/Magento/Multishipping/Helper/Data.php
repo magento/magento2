@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Helper;
 
@@ -86,7 +87,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             true
         ) &&
             $quote->getItemsSummaryQty() - $quote->getItemVirtualQty() > 0 &&
-            $quote->getItemsSummaryQty() <= $this->getMaximumQty() &&
-            !$quote->hasNominalItems();
+            $quote->getItemsSummaryQty() <= $this->getMaximumQty();
     }
 }

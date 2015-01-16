@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
 
@@ -683,7 +684,9 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         $this->setCustomerId($customer->getId());
         $customerData = $this->objectFactory->create(
             $this->extensibleDataObjectConverter->toFlatArray(
-                $this->customerBuilder->populate($customer)->setAddresses([])->create()
+                $this->customerBuilder->populate($customer)->setAddresses([])->create(),
+                [],
+                '\Magento\Customer\Api\Data\CustomerInterface'
             )
         );
         $this->_objectCopyService->copyFieldsetToTarget('customer_account', 'to_quote', $customerData, $this);
@@ -1243,22 +1246,6 @@ class Quote extends \Magento\Framework\Model\AbstractModel
      */
     public function addItem(\Magento\Sales\Model\Quote\Item $item)
     {
-        /**
-         * Temporary workaround for purchase process: it is too dangerous to purchase more than one nominal item
-         * or a mixture of nominal and non-nominal items, although technically possible.
-         *
-         * The problem is that currently it is implemented as sequential submission of nominal items and order,
-         * by one click. It makes logically impossible to make the process of the purchase failsafe.
-         * Proper solution is to submit items one by one with customer confirmation each time.
-         */
-        if ($item->isNominal() && $this->hasItems() || $this->hasNominalItems()) {
-            throw new \Magento\Framework\Model\Exception(
-                // @codingStandardsIgnoreStart
-                __('Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself.')
-                // @codingStandardsIgnoreEnd
-            );
-        }
-
         $item->setQuote($this);
         if (!$item->getId()) {
             $this->getItemsCollection()->addItem($item);
@@ -2185,41 +2172,6 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         );
 
         return $this;
-    }
-
-    /**
-     * Getter whether quote has nominal items
-     * Can bypass treating virtual items as nominal
-     *
-     * @param bool $countVirtual
-     * @return bool
-     */
-    public function hasNominalItems($countVirtual = true)
-    {
-        foreach ($this->getAllVisibleItems() as $item) {
-            if ($item->isNominal()) {
-                if (!$countVirtual && $item->getProduct()->isVirtual()) {
-                    continue;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Whether quote has nominal items only
-     *
-     * @return bool
-     */
-    public function isNominal()
-    {
-        foreach ($this->getAllVisibleItems() as $item) {
-            if (!$item->isNominal()) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**

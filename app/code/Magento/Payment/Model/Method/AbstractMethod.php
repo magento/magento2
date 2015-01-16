@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
 
@@ -69,6 +70,13 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      * @var bool
      */
     protected $_isGateway = false;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_isOffline = false;
 
     /**
      * Payment Method feature
@@ -197,33 +205,29 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     protected $_eventManager;
 
     /**
-     * Log adapter factory
-     *
-     * @var \Magento\Framework\Logger\AdapterFactory
+     * @var \Psr\Log\LoggerInterface
      */
-    protected $_logAdapterFactory;
+    protected $logger;
 
     /**
-     * Construct
-     *
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         array $data = []
     ) {
         parent::__construct($data);
+        $this->logger = $logger;
         $this->_eventManager = $eventManager;
         $this->_paymentData = $paymentData;
         $this->_scopeConfig = $scopeConfig;
-        $this->_logAdapterFactory = $logAdapterFactory;
     }
 
     /**
@@ -368,6 +372,16 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     public function isGateway()
     {
         return $this->_isGateway;
+    }
+
+    /**
+     * Retrieve payment method online/offline flag
+     *
+     * @return bool
+     */
+    public function isOffline()
+    {
+        return $this->_isOffline;
     }
 
     /**
@@ -773,13 +787,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->_logAdapterFactory->create(
-                ['fileName' => 'payment_' . $this->getCode() . '.log']
-            )->setFilterDataKeys(
-                $this->_debugReplacePrivateDataKeys
-            )->log(
-                $debugData
-            );
+            $this->logger->debug($debugData);
         }
     }
 

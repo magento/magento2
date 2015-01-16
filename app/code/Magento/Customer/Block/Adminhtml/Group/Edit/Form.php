@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Group\Edit;
 
@@ -115,7 +116,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Tax Class'),
                 'class' => 'required-entry',
                 'required' => true,
-                'values' => $this->_taxCustomer->toOptionArray(true),
+                'values' => $this->_taxCustomer->toOptionArray(),
             ]
         );
 

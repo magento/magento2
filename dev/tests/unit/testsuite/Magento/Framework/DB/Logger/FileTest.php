@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Logger;
 
@@ -128,7 +129,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->object->logStats('unknown', 'SELECT something');
     }
 
-    public function testLogException()
+    public function testcritical()
     {
         $exception = new \Exception('error message');
         $expected = "%aEXCEPTION%a'Exception'%a'error message'%a";
@@ -137,6 +138,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->method('write')
             ->with($this->matches($expected));
 
-        $this->object->logException($exception);
+        $this->object->critical($exception);
     }
 }

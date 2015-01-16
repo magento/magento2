@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\Layout;
 
@@ -113,7 +114,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected $_layoutValidator;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -133,6 +134,27 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected $cacheSuffix;
 
     /**
+     * Status for new added handle
+     *
+     * @var int
+     */
+    protected $handleAdded = 1;
+
+    /**
+     * Status for handle being processed
+     *
+     * @var int
+     */
+    protected $handleProcessing = 2;
+
+    /**
+     * Status for processed handle
+     *
+     * @var int
+     */
+    protected $handleProcessed = 3;
+
+    /**
      * Init merge model
      *
      * @param \Magento\Framework\View\DesignInterface $design
@@ -143,7 +165,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Core\Model\Layout\Update\Validator $validator
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
      * @param string $cacheSuffix
@@ -157,7 +179,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Core\Model\Layout\Update\Validator $validator,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Design\ThemeInterface $theme = null,
         $cacheSuffix = ''
@@ -217,10 +239,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     {
         if (is_array($handleName)) {
             foreach ($handleName as $name) {
-                $this->_handles[$name] = 1;
+                $this->_handles[$name] = $this->handleAdded;
             }
         } else {
-            $this->_handles[$handleName] = 1;
+            $this->_handles[$handleName] = $this->handleAdded;
         }
         return $this;
     }
@@ -436,8 +458,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
                 $messages = $this->_layoutValidator->getMessages();
                 //Add first message to exception
                 $message = reset($messages);
-                $this->_logger->addStreamLog(\Magento\Framework\Logger::LOGGER_SYSTEM);
-                $this->_logger->log('Cache file with merged layout: ' . $cacheId . ': ' . $message, \Zend_Log::ERR);
+                $this->_logger->info('Cache file with merged layout: ' . $cacheId . ': ' . $message);
             }
         }
         return $this;
@@ -477,8 +498,16 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     protected function _merge($handle)
     {
-        $this->_fetchPackageLayoutUpdates($handle);
-        $this->_fetchDbLayoutUpdates($handle);
+        if (!isset($this->_handles[$handle]) || $this->_handles[$handle] == $this->handleAdded) {
+            $this->_handles[$handle] = $this->handleProcessing;
+            $this->_fetchPackageLayoutUpdates($handle);
+            $this->_fetchDbLayoutUpdates($handle);
+            $this->_handles[$handle] = $this->handleProcessed;
+        } elseif ($this->_handles[$handle] == $this->handleProcessing
+            && $this->_appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER
+        ) {
+            $this->_logger->info('Cyclic dependency in merged layout for handle: ' . $handle);
+        }
         return $this;
     }
 
@@ -573,8 +602,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         foreach ($updateXml->children() as $child) {
             if (strtolower($child->getName()) == 'update' && isset($child['handle'])) {
                 $this->_merge((string)$child['handle']);
-                // Adding merged layout handle to the list of applied handles
-                $this->addHandle((string)$child['handle']);
             }
         }
         if (isset($updateXml['layout'])) {
@@ -697,9 +724,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
                 $errors[] = "{$error->message} Line: {$error->line}";
             }
 
-            $this->_logger->log(
-                sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $errors)),
-                \Zend_Log::ERR
+            $this->_logger->info(
+                sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $errors))
             );
         }
     }

@@ -1,18 +1,19 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model;
 
-use \Magento\Framework\Exception\NoSuchEntityException;
-use \Magento\Webapi\Exception;
-use \Magento\Framework\Exception\StateException;
-use \Magento\Framework\Exception\InputException;
-use \Magento\Framework\Exception\CouldNotSaveException;
-use \Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
-use \Magento\Catalog\Model\Product\Type as ProductType;
-use \Magento\Store\Model\Store;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Webapi\Exception;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
+use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

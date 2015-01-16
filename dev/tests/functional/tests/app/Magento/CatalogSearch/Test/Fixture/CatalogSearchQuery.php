@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\Fixture;
@@ -42,7 +43,7 @@ class CatalogSearchQuery extends InjectableFixture
         'is_required' => '',
         'default_value' => '',
         'input' => '',
-        'source' => 'Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\SearchData',
+        'source' => 'Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\QueryText',
     ];
 
     protected $num_results = [

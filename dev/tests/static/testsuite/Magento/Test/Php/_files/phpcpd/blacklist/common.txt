@@ -113,8 +113,6 @@ lib/internal/Magento/Framework/App/Config
 Magento/Cron/Model
 Magento/SalesRule/Model/Resource/Report/Rule
 Magento/SalesRule/Model/Resource/Rule
-Magento/SalesRule/Model/Quote/Nominal
-Magento/Tax/Model/Sales/Total/Quote/Nominal
 Magento/Theme/Block/Adminhtml/System/Design/Theme/Edit
 Magento/User/Block/User/Edit
 var/generation
@@ -144,3 +142,4 @@ app/code/Magento/Sales/Model/Spi
 Magento/Catalog/Model/ProductLink
 Magento/GroupedProduct/Model/Resource/Product/Type/Grouped
 lib/internal/Magento/Framework/Interception/ObjectManager/Config
+app/code/Magento/OfflinePayments/Model

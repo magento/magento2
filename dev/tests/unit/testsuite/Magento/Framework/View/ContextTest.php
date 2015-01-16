@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -117,7 +118,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLogger()
     {
-        $this->assertInstanceOf('\Magento\Framework\Logger', $this->context->getLogger());
+        $this->assertInstanceOf('\Psr\Log\LoggerInterface', $this->context->getLogger());
     }
 
     public function testGetAppState()

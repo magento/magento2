@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config;
 
@@ -59,8 +60,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $config = $this->objectManager->getObject(
             'Magento\Framework\Config\Theme',
             [
-                'configContent' => file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml'),
-                'composerContent' => file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/composer.json'),
+                'configContent' => file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml')
             ]
         );
         $this->assertSame($expected['version'], $config->getThemeVersion());
@@ -89,7 +89,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                     'version' => '0.1.1',
                     'media' => ['preview_image' => ''],
                     'title' => 'Test',
-                    'parent' => ['Magento', 'default_default'],
+                    'parent' => ['default_default'],
                 ]]],
             [
                 'default_test2',
@@ -97,7 +97,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                     'version' => '0.1.2',
                     'media' => ['preview_image' => ''],
                     'title' => 'Test2',
-                    'parent' => ['Magento', 'default_test'],
+                    'parent' => ['default_test'],
                 ]]],
             [
                 'test_default',
@@ -113,7 +113,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                     'version' => '0.1.4',
                     'media' => ['preview_image' => ''],
                     'title' => 'Default',
-                    'parent' => ['Magento', 'default_test2'],
+                    'parent' => ['default_test2'],
                 ]]],
         ];
     }

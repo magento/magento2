@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Types;
 
@@ -71,7 +72,7 @@ class Save extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
                 );
             }
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->messageManager->addError(__("We can't save Attribute Set Mapping."));
         }
         $this->_redirect('adminhtml/*/index', ['store' => $this->_getStore()->getId()]);

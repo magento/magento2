@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor;
 
@@ -31,9 +32,9 @@ class QuickEdit extends \Magento\DesignEditor\Controller\Adminhtml\System\Design
             $response = ['success' => true];
         } catch (CoreException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $response = ['error' => true, 'message' => __('This theme is not saved.')];
         }
         $this->getResponse()->representJson($coreHelper->jsonEncode($response));

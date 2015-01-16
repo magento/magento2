@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Model\Resource\Order\Status\History;
@@ -97,7 +98,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->historyItemMock));
 
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->collection = new \Magento\Sales\Model\Resource\Order\Status\History\Collection(
             $this->entityFactoryMock,
             $logger,

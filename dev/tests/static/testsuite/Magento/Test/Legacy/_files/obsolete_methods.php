@@ -2,7 +2,8 @@
 /**
  * Obsolete methods
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['__get', 'Magento\Framework\Object'],
@@ -328,6 +329,12 @@ return [
     ['displayFullSummary', 'Magento\Tax\Model\Config'],
     ['displayZeroTax', 'Magento\Tax\Model\Config'],
     ['drawItem', 'Magento\Catalog\Block\Navigation'],
+    ['getStoreCategories', 'Magento\Catalog\Block\Navigation'],
+    ['_getItemPosition', 'Magento\Catalog\Block\Navigation'],
+    ['_renderCategoryMenuItemHtml', 'Magento\Catalog\Block\Navigation'],
+    ['getCurrentCategoryPath', 'Magento\Catalog\Block\Navigation'],
+    ['drawOpenCategoryItem', 'Magento\Catalog\Block\Navigation'],
+    ['renderCategoriesMenuHtml', 'Magento\Catalog\Block\Navigation'],
     ['dropKey', 'Magento\Framework\DB\Adapter\Pdo\Mysql'],
     ['escapeJs', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config'],
     ['eventClean', 'Magento\Reports\Model\Event\Observer'],
@@ -1652,6 +1659,7 @@ return [
     ['_isDataChanged', 'Magento\Catalog\Model\Product'],
     ['getVisibleOnFrontStates', 'Magento\Sales\Model\Order\Config', 'getVisibleOnFrontStatuses'],
     ['getInvisibleOnFrontStates', 'Magento\Sales\Model\Order\Config', 'getInvisibleOnFrontStatuses'],
+    ['_authorize', 'Magento\Sales\Model\Order\Payment'],
     ['_shouldBeConverted', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_beforeSave', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_afterSave', 'Magento\Sales\Model\Resource\AbstractResource'],
@@ -1929,7 +1937,7 @@ return [
     ['setTablePrefix', 'Magento\Framework\App\Magento\Framework\App\Resource', 'Can be passed through constructor only'],
     ['_debugTimer', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\LoggerAbstract::startTimer'],
     ['_debugStat', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::logStats'],
-    ['_debugException', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::logException'],
+    ['_debugException', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::critical'],
     ['_debugWriteToFile', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::log'],
     ['applyDataUpdates', 'Magento\Framework\Module\Setup', 'Magento\Framework\Module\DataSetup::applyDataUpdates'],
     ['_installData', 'Magento\Framework\Module\Setup', 'Magento\Framework\Module\DataSetup::_installData'],
@@ -2001,7 +2009,22 @@ return [
     ['getScriptTranslation', 'Magento\Framework\LocaleInterface'],
     ['getCountryTranslation', 'Magento\Framework\LocaleInterface'],
     ['getTerritoryTranslation', 'Magento\Framework\LocaleInterface'],
+    [
+        'getNoteNotify',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Comment',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Totals'
+    ],
     ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
     ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
-    ['cleanTransactions', 'Magento\Paypal\Model\Observer']
+    ['cleanTransactions', 'Magento\Paypal\Model\Observer'],
+    ['getSkinImagePlaceholderUrl', 'Magento\Cms\Model\Wysiwyg\Config'],
+    ['compareIndexColumnProperties', 'Magento\Catalog\Model\Resource\Helper'],
+    ['getIsNullNotNullCondition', 'Magento\Catalog\Model\Resource\Helper'],
+    ['_getCategoryPath', 'Magento\Catalog\Model\Resource\Setup'],
+    ['_getCategoryEntityRow', 'Magento\Catalog\Model\Resource\Setup'],
+    ['createEavAttributeResource', 'Magento\Catalog\Model\Resource\Setup'],
+    ['getAllNonNominalItems', 'Magento\Sales\Model\Quote\Address'],
+    ['getAllNominalItems', 'Magento\Sales\Model\Quote\Address'],
+    ['isNominal', 'Magento\Sales\Model\Order\Item'],
+    ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem']
 ];

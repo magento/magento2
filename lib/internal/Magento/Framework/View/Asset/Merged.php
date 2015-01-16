@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset;
 
@@ -10,7 +11,7 @@ namespace Magento\Framework\View\Asset;
 class Merged implements \Iterator
 {
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -40,14 +41,14 @@ class Merged implements \Iterator
     protected $isInitialized = false;
 
     /**
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param MergeStrategyInterface $mergeStrategy
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param MergeableInterface[] $assets
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         MergeStrategyInterface $mergeStrategy,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         array $assets
@@ -91,7 +92,7 @@ class Merged implements \Iterator
                 $this->mergeStrategy->merge($this->assets, $mergedAsset);
                 $this->assets = [$mergedAsset];
             } catch (\Exception $e) {
-                $this->logger->logException($e);
+                $this->logger->critical($e);
             }
         }
     }

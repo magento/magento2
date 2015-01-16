@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\AdminOrder;
 
@@ -83,7 +84,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $registryMock = $this->getMock('Magento\Framework\Registry');
         $configMock = $this->getMock('Magento\Sales\Model\Config', [], [], '', false);
         $this->sessionQuoteMock = $this->getMock('Magento\Backend\Model\Session\Quote', [], [], '', false);
-        $loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $copyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
         $messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
         $this->formFactoryMock = $this->getMock(

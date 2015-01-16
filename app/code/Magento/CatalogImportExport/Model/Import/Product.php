@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
@@ -481,7 +482,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $indexerRegistry;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     private $_logger;
 
@@ -520,7 +521,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param array $data
      * @throws \Magento\Framework\Model\Exception
@@ -555,7 +556,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         array $data = []
     ) {
@@ -1102,7 +1103,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             if ($linkedId == null) {
                                 // Import file links to a SKU which is skipped for some reason, which leads to a "NULL"
                                 // link causing fatal errors.
-                                $this->_logger->logException(
+                                $this->_logger->critical(
                                     new \Exception(
                                         sprintf(
                                             'WARNING: Orphaned link skipped: From SKU %s (ID %d) to SKU %s, ' .

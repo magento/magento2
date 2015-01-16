@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
@@ -28,24 +29,24 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Validate Product Rule Condition
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
-    public function validate(\Magento\Framework\Object $object)
+    public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
         //@todo reimplement this method when is fixed MAGETWO-5713
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $object->getProduct();
+        $product = $model->getProduct();
         if (!$product instanceof \Magento\Catalog\Model\Product) {
-            $product = $this->productRepository->getById($object->getProductId());
+            $product = $this->productRepository->getById($model->getProductId());
         }
 
         $product->setQuoteItemQty(
-            $object->getQty()
+            $model->getQty()
         )->setQuoteItemPrice(
-            $object->getPrice() // possible bug: need to use $object->getBasePrice()
+            $model->getPrice() // possible bug: need to use $model->getBasePrice()
         )->setQuoteItemRowTotal(
-            $object->getBaseRowTotal()
+            $model->getBaseRowTotal()
         );
 
         return parent::validate($product);

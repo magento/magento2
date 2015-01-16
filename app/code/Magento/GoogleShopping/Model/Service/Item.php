@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GoogleShopping\Model\Service;
 
@@ -24,7 +25,7 @@ class Item extends \Magento\GoogleShopping\Model\Service
     protected $_date;
 
     /**
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\Framework\Gdata\Gshopping\ContentFactory $contentFactory
@@ -33,7 +34,7 @@ class Item extends \Magento\GoogleShopping\Model\Service
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\Framework\Gdata\Gshopping\ContentFactory $contentFactory,
@@ -43,7 +44,7 @@ class Item extends \Magento\GoogleShopping\Model\Service
     ) {
         $this->_date = $date;
         $this->_googleShoppingHelper = $googleShoppingHelper;
-        parent::__construct($logAdapterFactory, $coreRegistry, $config, $contentFactory, $data);
+        parent::__construct($logger, $coreRegistry, $config, $contentFactory, $data);
     }
 
     /**

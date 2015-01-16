@@ -1,12 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tax\Model\TaxClass\Source;
 
-use Magento\Tax\Api\Data\TaxClassInterface as TaxClass;
+use Magento\Framework\Exception\StateException;
 use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Api\Data\TaxClassInterface as TaxClass;
 
 /**
  * Customer tax class source model.
@@ -48,33 +50,27 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * Retrieve all customer tax classes as an options array.
      *
-     * @param bool $withEmpty
      * @return array
+     * @throws StateException
      */
-    public function getAllOptions($withEmpty = true)
+    public function getAllOptions()
     {
-        if (!$this->_options) {
-            $filter = $this->filterBuilder
-                ->setField(TaxClass::KEY_TYPE)
+        if (empty($this->_options)) {
+            $options = [];
+            $filter = $this->filterBuilder->setField(TaxClass::KEY_TYPE)
                 ->setValue(TaxClassManagementInterface::TYPE_CUSTOMER)
                 ->create();
             $searchCriteria = $this->searchCriteriaBuilder->addFilter([$filter])->create();
             $searchResults = $this->taxClassRepository->getList($searchCriteria);
             foreach ($searchResults->getItems() as $taxClass) {
-                $this->_options[] = [
+                $options[] = [
                     'value' => $taxClass->getClassId(),
                     'label' => $taxClass->getClassName(),
                 ];
             }
+            $this->_options = $options;
         }
 
-        if ($withEmpty) {
-            if (!$this->_options) {
-                return [['value' => '0', 'label' => __('None')]];
-            } else {
-                return array_merge([['value' => '0', 'label' => __('None')]], $this->_options);
-            }
-        }
         return $this->_options;
     }
 }

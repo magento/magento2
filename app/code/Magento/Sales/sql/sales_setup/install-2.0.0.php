@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /** @var $this \Magento\Sales\Model\Resource\Setup */
@@ -1634,12 +1635,6 @@ $table = $this->getConnection()->newTable(
     '12,4',
     [],
     'Base Hidden Tax Refunded'
-)->addColumn(
-    'is_nominal',
-    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-    null,
-    ['nullable' => false, 'default' => '0'],
-    'Is Nominal'
 )->addColumn(
     'tax_canceled',
     \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,

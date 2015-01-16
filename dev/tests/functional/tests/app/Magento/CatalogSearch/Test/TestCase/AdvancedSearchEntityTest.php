@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\TestCase;
@@ -12,7 +13,6 @@ use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Two specific simple product is created(unique sku,name,short/full description, tax class)
  *
@@ -29,7 +29,7 @@ use Mtf\TestCase\Injectable;
 class AdvancedSearchEntityTest extends Injectable
 {
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param FixtureFactory $fixtureFactory
      * @return array
@@ -59,18 +59,14 @@ class AdvancedSearchEntityTest extends Injectable
     }
 
     /**
-     * Run test creation for advanced search entity
+     * Run test creation for advanced search entity.
      *
-     * @param array $products
      * @param CatalogProductSimple $productSearch
      * @param CmsIndex $cmsIndex
      * @param AdvancedSearch $searchPage
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function test(
-        array $products,
         CatalogProductSimple $productSearch,
         CmsIndex $cmsIndex,
         AdvancedSearch $searchPage

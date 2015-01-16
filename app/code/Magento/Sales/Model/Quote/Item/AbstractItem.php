@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Quote\Item;
 
@@ -481,28 +482,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractModel imple
             $this->setBaseCalculationPrice($price);
         }
         return $this->_getData('base_calculation_price');
-    }
-
-    /**
-     * Get whether the item is nominal
-     * TODO: fix for multishipping checkout
-     *
-     * @return bool
-     */
-    public function isNominal()
-    {
-        return false;
-    }
-
-    /**
-     * Data getter for 'is_nominal'
-     * Used for converting item to order item
-     *
-     * @return int
-     */
-    public function getIsNominal()
-    {
-        return (int)$this->isNominal();
     }
 
     /**

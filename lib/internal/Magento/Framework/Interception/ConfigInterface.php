@@ -2,7 +2,8 @@
 /**
  * Interception config. Tells whether plugins have been added for type.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception;
 
@@ -15,4 +16,12 @@ interface ConfigInterface
      * @return bool
      */
     public function hasPlugins($type);
+
+    /**
+     * Initialize interception config
+     *
+     * @param array $classDefinitions
+     * @return void
+     */
+    public function initialize($classDefinitions = []);
 }

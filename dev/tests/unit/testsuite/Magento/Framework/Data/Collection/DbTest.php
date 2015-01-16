@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Collection;
 
@@ -12,7 +13,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     protected $collection;
 
     /**
-     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $loggerMock;
 
@@ -34,7 +35,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->entityFactoryMock = $this->getMock(
             'Magento\Core\Model\EntityFactory', ['create'], [], '', false
         );
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', ['log'], [], '', false);
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->collection = new \Magento\Framework\Data\Collection\Db(
             $this->entityFactoryMock,
             $this->loggerMock,
@@ -306,7 +307,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     public function testPrintLogQueryLogging($logQuery, $logFlag, $expectedCalls)
     {
         $this->collection->setFlag('log_query', $logFlag);
-        $this->loggerMock->expects($this->exactly($expectedCalls))->method('log');
+        $this->loggerMock->expects($this->exactly($expectedCalls))->method('info');
         $this->collection->printLogQuery(false, $logQuery, 'some_query');
     }
 

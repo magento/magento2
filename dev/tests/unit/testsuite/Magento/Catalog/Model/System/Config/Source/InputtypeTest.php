@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\System\Config\Source;
 
@@ -19,7 +20,7 @@ class InputtypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_model = $this->_helper->getObject('\Magento\Catalog\Model\System\Config\Source\Inputtype');
+        $this->_model = $this->_helper->getObject('Magento\Catalog\Model\System\Config\Source\Inputtype');
     }
 
     public function testToOptionArrayIsArray()

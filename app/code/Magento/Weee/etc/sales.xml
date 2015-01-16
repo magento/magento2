@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Sales/etc/sales.xsd">
@@ -9,9 +10,6 @@
         <group name="totals">
             <item name="weee" instance="Magento\Weee\Model\Total\Quote\Weee" sort_order="225"/>
             <item name="weee_tax" instance="Magento\Weee\Model\Total\Quote\WeeeTax" sort_order="460"/>
-        </group>
-        <group name="nominal_totals">
-            <item name="nominal_weee" instance="Magento\Weee\Model\Total\Quote\Nominal\Weee" sort_order="600"/>
         </group>
     </section>
     <section name="order_invoice">

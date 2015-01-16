@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
@@ -14,13 +15,23 @@ use Magento\Backend\App\Action;
 class Create extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param \Magento\Framework\Escaper $escaper
      */
-    public function __construct(Action\Context $context, \Magento\Catalog\Helper\Product $productHelper)
-    {
+    public function __construct(
+        Action\Context $context,
+        \Magento\Catalog\Helper\Product $productHelper,
+        \Magento\Framework\Escaper $escaper
+    ) {
         parent::__construct($context);
         $productHelper->setSkipSaleableCheck(true);
+        $this->escaper = $escaper;
     }
 
     /**
@@ -270,16 +281,33 @@ class Create extends \Magento\Backend\App\Action
         if (isset($data) && isset($data['coupon']['code'])) {
             $couponCode = trim($data['coupon']['code']);
         }
+
         if (!empty($couponCode)) {
-            if ($this->_getQuote()->getCouponCode() !== $couponCode) {
+            $isApplyDiscount = false;
+            foreach ($this->_getQuote()->getAllItems() as $item) {
+                if (!$item->getNoDiscount()) {
+                    $isApplyDiscount = true;
+                    break;
+                }
+            }
+            if (!$isApplyDiscount) {
                 $this->messageManager->addError(
                     __(
-                        '"%1" coupon code is not valid.',
-                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                        '"%1" coupon code was not applied. Do not apply discount is selected for item(s)',
+                        $this->escaper->escapeHtml($couponCode)
                     )
                 );
             } else {
-                $this->messageManager->addSuccess(__('The coupon code has been accepted.'));
+                if ($this->_getQuote()->getCouponCode() !== $couponCode) {
+                    $this->messageManager->addError(
+                        __(
+                            '"%1" coupon code is not valid.',
+                            $this->escaper->escapeHtml($couponCode)
+                        )
+                    );
+                } else {
+                    $this->messageManager->addSuccess(__('The coupon code has been accepted.'));
+                }
             }
         }
 
