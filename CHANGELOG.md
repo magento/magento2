@@ -81,7 +81,7 @@
     * Replaced end-to-end test for quick search with injectable test
 * Fixed bugs:
     * Fixed an issue where an exception occurred when adding configurable products to cart from the wishlist
-    * Modify .gitignore CE according to new repos structure (MAGETWO-32095)
+    * Modify .gitignore CE according to new repos structure
     * Fixed an issue where the 'Not %Username%?' link was displayed for a logged in user while pages were loaded
     * Fixed an issue where Shopping Cart Price Rules based on product attributes were not applied to configurable products
     * Fixed an issue where the Tax Class drop-down field on New Customer Group page contained the 'none' value when a tax class already existed
