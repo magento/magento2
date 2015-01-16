@@ -93,9 +93,9 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
                 'httpMethod' => RestConfig::HTTP_METHOD_GET,
             ],
             'soap' => [
-                'service' => 'quoteQuoteRepositoryV1',
+                'service' => 'quoteCartRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'quoteQuoteRepositoryV1GetCart',
+                'operation' => 'quoteCartRepositoryV1GetCart',
             ],
         ];
 
@@ -138,9 +138,9 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
 
         $serviceInfo = [
             'soap' => [
-                'service' => 'quoteQuoteRepositoryV1',
+                'service' => 'quoteCartRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'quoteQuoteRepositoryV1GetCart',
+                'operation' => 'quoteCartRepositoryV1GetCart',
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId,
@@ -165,9 +165,9 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
                 'httpMethod' => RestConfig::HTTP_METHOD_PUT,
             ],
             'soap' => [
-                'service' => 'quoteQuoteRepositoryV1',
+                'service' => 'quoteCartRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'quoteQuoteRepositoryV1GetCartList',
+                'operation' => 'quoteCartRepositoryV1GetCartList',
             ],
         ];
 
@@ -229,9 +229,9 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
     {
         $serviceInfo = [
             'soap' => [
-                'service' => 'quoteQuoteRepositoryV1',
+                'service' => 'quoteCartRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'quoteQuoteRepositoryV1GetCartList',
+                'operation' => 'quoteCartRepositoryV1GetCartList',
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts',

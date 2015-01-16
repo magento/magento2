@@ -19,6 +19,18 @@
             <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
+    <route url="/V1/carts/" method="POST">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="createEmptyCart"/>
+        <resources>
+            <resource ref="Magento_Sales::create" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId" method="PUT">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="assignCustomer"/>
+        <resources>
+            <resource ref="Magento_Sales::create" />
+        </resources>
+    </route>
     <route url="/V1/carts/:cartId/selected-shipping-method" method="PUT">
         <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="set"/>
         <resources>

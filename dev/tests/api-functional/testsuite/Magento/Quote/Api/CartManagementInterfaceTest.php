@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Service\V1\Cart;
+namespace Magento\Quote\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
-class WriteServiceTest extends WebapiAbstract
+class CartManagementInterfaceTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'checkoutCartWriteServiceV1';
+    const SERVICE_NAME = 'quoteCartManagementV1';
     const RESOURCE_PATH = '/V1/carts/';
 
     protected $createdQuotes = [];
@@ -37,11 +37,12 @@ class WriteServiceTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Create',
+                'operation' => self::SERVICE_NAME . 'CreateEmptyCart',
             ],
         ];
 
-        $quoteId = $this->_webApiCall($serviceInfo);
+        $requestData = ['storeId' => 1];
+        $quoteId = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertGreaterThan(0, $quoteId);
         $this->createdQuotes[] = $quoteId;
     }
@@ -86,6 +87,7 @@ class WriteServiceTest extends WebapiAbstract
         $requestData = [
             'cartId' => $cartId,
             'customerId' => $customerId,
+            'storeId' => 1,
         ];
         // Cart must be anonymous (see fixture)
         $this->assertEmpty($quote->getCustomerId());
@@ -123,6 +125,7 @@ class WriteServiceTest extends WebapiAbstract
         $requestData = [
             'cartId' => $cartId,
             'customerId' => $customerId,
+            'storeId' => 1,
         ];
 
         $this->_webApiCall($serviceInfo, $requestData);
@@ -150,6 +153,7 @@ class WriteServiceTest extends WebapiAbstract
         $requestData = [
             'cartId' => $cartId,
             'customerId' => $customerId,
+            'storeId' => 1,
         ];
 
         $this->_webApiCall($serviceInfo, $requestData);
@@ -184,6 +188,7 @@ class WriteServiceTest extends WebapiAbstract
         $requestData = [
             'cartId' => $cartId,
             'customerId' => $customerId,
+            'storeId' => 1,
         ];
         $this->_webApiCall($serviceInfo, $requestData);
     }
@@ -220,6 +225,7 @@ class WriteServiceTest extends WebapiAbstract
         $requestData = [
             'cartId' => $cartId,
             'customerId' => $customerId,
+            'storeId' => 1,
         ];
         $this->_webApiCall($serviceInfo, $requestData);
     }
@@ -260,41 +266,8 @@ class WriteServiceTest extends WebapiAbstract
         $requestData = [
             'cartId' => $cartId,
             'customerId' => $customerId,
+            'storeId' => 1,
         ];
         $this->_webApiCall($serviceInfo, $requestData);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
-     */
-    public function testOrderPlacesOrder()
-    {
-        /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test_order_1', 'reserved_order_id');
-
-        $cartId = $quote->getId();
-
-        $serviceInfo = [
-            'soap' => [
-                'service' => 'checkoutCartWriteServiceV1',
-                'operation' => 'checkoutCartWriteServiceV1Order',
-                'serviceVersion' => 'V1',
-            ],
-            'rest' => [
-                'resourcePath' => '/V1/carts/' . $cartId . '/order',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
-            ],
-        ];
-
-        $requestData = [
-            'cartId' => $cartId,
-        ];
-        $this->_webApiCall($serviceInfo, $requestData);
-        /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order')->load(1);
-        $items = $order->getAllItems();
-        $this->assertCount(1, $items);
-        $this->assertEquals('Simple Product', $items[0]->getName());
-        $quote->delete();
     }
 }

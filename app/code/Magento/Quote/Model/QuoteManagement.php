@@ -14,11 +14,14 @@ use Magento\Quote\Model\Quote\Address\ToOrder as ToOrderConverter;
 use Magento\Quote\Model\Quote\Address\ToOrderAddress as ToOrderAddressConverter;
 use Magento\Quote\Model\Quote\Item\ToOrderItem as ToOrderItemConverter;
 use Magento\Quote\Model\Quote\Payment\ToOrderPayment as ToOrderPaymentConverter;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\StateException;
 
 /**
  * Class QuoteManagement
  */
-class QuoteManagement
+class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 {
     /**
      * @var EventManager
@@ -66,6 +69,26 @@ class QuoteManagement
     protected $quotePaymentToOrderPayment;
 
     /**
+     * @var UserContextInterface
+     */
+    protected $userContext;
+
+    /**
+     * @var QuoteRepository
+     */
+    protected $quoteRepository;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
+     * @var \Magento\Customer\Model\CustomerFactory
+     */
+    protected $customerModelFactory;
+
+    /**
      * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderBuilder $orderBuilder
@@ -85,7 +108,11 @@ class QuoteManagement
         ToOrderConverter $quoteAddressToOrder,
         ToOrderAddressConverter $quoteAddressToOrderAddress,
         ToOrderItemConverter $quoteItemToOrderItem,
-        ToOrderPaymentConverter $quotePaymentToOrderPayment
+        ToOrderPaymentConverter $quotePaymentToOrderPayment,
+        UserContextInterface $userContext,
+        QuoteRepository $quoteRepository,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        \Magento\Customer\Model\CustomerFactory $customerModelFactory
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -96,8 +123,99 @@ class QuoteManagement
         $this->quoteAddressToOrderAddress = $quoteAddressToOrderAddress;
         $this->quoteItemToOrderItem = $quoteItemToOrderItem;
         $this->quotePaymentToOrderPayment = $quotePaymentToOrderPayment;
+        $this->userContext = $userContext;
+        $this->quoteRepository = $quoteRepository;
+        $this->customerRepository = $customerRepository;
+        $this->customerModelFactory = $customerModelFactory;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function createEmptyCart($storeId)
+    {
+        $quote = $this->userContext->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER
+            ? $this->createCustomerCart($storeId)
+            : $this->createAnonymousCart($storeId);
+
+        try {
+            $this->quoteRepository->save($quote);
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException('Cannot create quote');
+        }
+        return $quote->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function assignCustomer($cartId, $customerId, $storeId)
+    {
+        $quote = $this->quoteRepository->getActive($cartId);
+        $customer = $this->customerRepository->getById($customerId);
+        $customerModel = $this->customerModelFactory->create();
+
+        if (!in_array($storeId, $customerModel->load($customerId)->getSharedStoreIds())) {
+            throw new StateException('Cannot assign customer to the given cart. The cart belongs to different store.');
+        }
+        if ($quote->getCustomerId()) {
+            throw new StateException('Cannot assign customer to the given cart. The cart is not anonymous.');
+        }
+        try {
+            $this->quoteRepository->getForCustomer($customerId);
+            throw new StateException('Cannot assign customer to the given cart. Customer already has active cart.');
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        }
+
+        $quote->setCustomer($customer);
+        $quote->setCustomerIsGuest(0);
+        $this->quoteRepository->save($quote);
+        return true;
+
+    }
+
+    /**
+     * Creates an anonymous cart.
+     *
+     * @return \Magento\Quote\Model\Quote Cart object.
+     */
+    protected function createAnonymousCart($storeId)
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->quoteRepository->create();
+        $quote->setStoreId($storeId);
+        return $quote;
+    }
+
+    /**
+     * Creates a cart for the currently logged-in customer.
+     *
+     * @param $storeId
+     * @return \Magento\Quote\Model\Quote Cart object.
+     * @throws CouldNotSaveException The cart could not be created.
+     */
+    protected function createCustomerCart($storeId)
+    {
+        $customer = $this->customerRepository->getById($this->userContext->getUserId());
+
+        try {
+            $this->quoteRepository->getActiveForCustomer($this->userContext->getUserId());
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            throw new CouldNotSaveException('Cannot create quote');
+        }
+
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->quoteRepository->create();
+        $quote->setStoreId($storeId);
+        $quote->setCustomer($customer);
+        $quote->setCustomerIsGuest(0);
+        return $quote;
+    }
+
+    public function order($cartId)
+    {
+        //stub for interface
+    }
     /**
      * @param Quote $quote
      * @return void

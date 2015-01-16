@@ -25,4 +25,5 @@
     <preference for="Magento\Quote\Api\PaymentMethodManagementInterface" type="\Magento\Quote\Model\PaymentMethodManagement" />
     <preference for="Magento\Quote\Api\Data\PaymentInterface" type="\Magento\Quote\Model\Quote\Payment" />
     <preference for="Magento\Quote\Api\CouponManagementInterface" type="Magento\Quote\Model\CouponManagement" />
+    <preference for="Magento\Quote\Api\CartManagementInterface" type="Magento\Quote\Model\QuoteManagement" />
 </config>
