@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Api;
 
-use Magento\Downloadable\Api\Data\linkContentInterface;
+use Magento\Downloadable\Api\Data\LinkContentInterface;
 
 interface LinkRepositoryInterface
 {
