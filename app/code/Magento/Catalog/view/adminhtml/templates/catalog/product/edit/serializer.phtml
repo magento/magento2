@@ -7,7 +7,7 @@
 
 <?php $_id = 'id_' . md5(microtime()) ?>
 <input type="hidden" name="<?php echo $this->getInputElementName()?>"  value="" id="<?php echo $_id?>" />
-<script type="text/javascript">
+<script>
 // create serializer controller, that will syncronize grid checkboxes with hidden input
 new productLinksController('<?php echo $_id?>', <?php echo $this->getProductsJSON() ?>, <?php echo $this->getGridBlock()->getJsObjectName() ?>);
 </script>

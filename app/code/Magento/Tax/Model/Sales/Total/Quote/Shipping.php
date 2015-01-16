@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
 class Shipping extends CommonTaxCollector
 {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
-use Magento\Sales\Model\Quote;
+use Magento\Quote\Model\Quote;
 
 /**
  * Shopping cart abstract block
@@ -121,10 +121,10 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
     /**
      * Get item row html
      *
-     * @param   \Magento\Sales\Model\Quote\Item $item
+     * @param   \Magento\Quote\Model\Quote\Item $item
      * @return  string
      */
-    public function getItemHtml(\Magento\Sales\Model\Quote\Item $item)
+    public function getItemHtml(\Magento\Quote\Model\Quote\Item $item)
     {
         $renderer = $this->getItemRenderer($item->getProductType())->setItem($item);
         return $renderer->toHtml();

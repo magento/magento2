@@ -7,7 +7,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .table-wrapper {
     margin-bottom: @indent-base;
@@ -42,7 +42,7 @@ table {
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .table-wrapper {
         .table-overflow();
         position: relative; // to hide unnecessary horizontal scrollbar in Safari
