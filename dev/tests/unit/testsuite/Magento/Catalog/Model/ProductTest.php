@@ -105,6 +105,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $categoryRepository;
 
     /**
+     * @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $_catalogProduct;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
@@ -208,6 +213,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
         $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
 
+        $this->_catalogProduct = $this->getMock(
+            'Magento\Catalog\Helper\Product',
+            ['isDataForProductCategoryIndexerWasChanged'],
+            [],
+            '',
+            false
+        );
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
@@ -224,9 +237,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'stockItemBuilder' => $this->stockItemBuilderMock,
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'categoryRepository' => $this->categoryRepository,
+                'catalogProduct' => $this->_catalogProduct,
                 'data' => ['id' => 1]
             ]
         );
+
     }
 
     public function testGetAttributes()
@@ -337,12 +352,36 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->afterDeleteCommit();
     }
 
-    public function testReindex()
+    /**
+     * @param $productChanged
+     * @param $isScheduled
+     * @param $productFlatCount
+     * @param $categoryIndexerCount
+     *
+     * @dataProvider getProductReindexProvider
+     */
+    public function testReindex($productChanged, $isScheduled, $productFlatCount, $categoryIndexerCount)
     {
-        $this->categoryIndexerMock->expects($this->once())->method('reindexRow');
-        $this->productFlatProcessor->expects($this->once())->method('reindexRow');
-        $this->prepareCategoryIndexer();
-        $this->assertNull($this->model->reindex());
+        $this->model->setData('entity_id', 1);
+        $this->_catalogProduct->expects($this->once())->method('isDataForProductCategoryIndexerWasChanged')->willReturn($productChanged);
+        $this->productFlatProcessor->expects($this->exactly($productFlatCount))->method('reindexRow');
+        $this->indexerRegistryMock->expects($this->exactly($productFlatCount))
+            ->method('get')
+            ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
+            ->will($this->returnValue($this->categoryIndexerMock));
+        $this->categoryIndexerMock->expects($this->any())->method('isScheduled')->will($this->returnValue($isScheduled));
+        $this->categoryIndexerMock->expects($this->exactly($categoryIndexerCount))->method('reindexRow');
+
+        $this->model->reindex();
+    }
+
+    public function getProductReindexProvider()
+    {
+        return array(
+            'set 1' => [true, false, 1, 1],
+            'set 2' => [true, true, 1, 0],
+            'set 3' => [false, false, 0, 0]
+        );
     }
 
     public function testPriceReindexCallback()

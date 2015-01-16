@@ -309,4 +309,90 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
     }
+
+    public function reindexFlatEnabledTestDataProvider()
+    {
+        return [
+            'set 1' => [false, false, 1, 1],
+            'set 2' => [true,  false, 0, 1],
+            'set 3' => [false, true,  1, 0],
+            'set 4' => [true,  true,  0, 0],
+        ];
+    }
+
+    /**
+     * @param $flatScheduled
+     * @param $productScheduled
+     * @param $expectedFlatReindexCalls
+     * @param $expectedProductReindexCall
+     *
+     * @dataProvider reindexFlatEnabledTestDataProvider
+     */
+    public function testReindexFlatEnabled($flatScheduled, $productScheduled, $expectedFlatReindexCalls, $expectedProductReindexCall)
+    {
+        $affectedProductIds = ["1", "2"];
+        $this->category->setAffectedProductIds($affectedProductIds);
+        $pathIds = ['path/1/2', 'path/2/3'];
+        $this->category->setData('path_ids', $pathIds);
+        $this->category->setId('123');
+
+        $this->flatState->expects($this->any())
+            ->method('isFlatEnabled')
+            ->will($this->returnValue(true));
+
+        $this->flatIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($flatScheduled));
+        $this->flatIndexer->expects($this->exactly($expectedFlatReindexCalls))->method('reindexRow')->with('123');
+
+        $this->productIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($productScheduled));
+        $this->productIndexer->expects($this->exactly($expectedProductReindexCall))->method('reindexList')->with($pathIds);
+
+        $this->indexerRegistry->expects($this->at(0))
+            ->method('get')
+            ->with(Indexer\Category\Flat\State::INDEXER_ID)
+            ->will($this->returnValue($this->flatIndexer));
+
+        $this->indexerRegistry->expects($this->at(1))
+            ->method('get')
+            ->with(Indexer\Category\Product::INDEXER_ID)
+            ->will($this->returnValue($this->productIndexer));
+
+        $this->category->reindex();
+    }
+
+    public function reindexFlatDisabledTestDataProvider()
+    {
+        return [
+            'set 1' => [false, 1],
+            'set 2' => [true, 0],
+        ];
+    }
+
+    /**
+     * @param $productScheduled
+     * @param $expectedProductReindexCall
+     *
+     * @dataProvider reindexFlatDisabledTestDataProvider
+     */
+    public function testReindexFlatDisabled($productScheduled, $expectedProductReindexCall)
+    {
+        $affectedProductIds = ["1", "2"];
+        $this->category->setAffectedProductIds($affectedProductIds);
+        $pathIds = ['path/1/2', 'path/2/3'];
+        $this->category->setData('path_ids', $pathIds);
+        $this->category->setId('123');
+
+        $this->flatState->expects($this->any())
+            ->method('isFlatEnabled')
+            ->will($this->returnValue(false));
+
+        $this->productIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($productScheduled));
+        $this->productIndexer->expects($this->exactly($expectedProductReindexCall))->method('reindexList')->with($pathIds);
+
+        $this->indexerRegistry->expects($this->at(0))
+            ->method('get')
+            ->with(Indexer\Category\Product::INDEXER_ID)
+            ->will($this->returnValue($this->productIndexer));
+
+        $this->category->reindex();
+    }
 }

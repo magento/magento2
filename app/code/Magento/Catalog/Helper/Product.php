@@ -146,7 +146,7 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Catalog\Model\Product|array $data
      * @return boolean
      */
-    public function isDataForPriceIndexerWasChanged($data)
+    public function  isDataForPriceIndexerWasChanged($data)
     {
         if ($data instanceof ModelProduct) {
             foreach ($this->_reindexPriceIndexerData['byDataResult'] as $param) {
@@ -162,6 +162,24 @@ class Product extends \Magento\Core\Helper\Url
         } elseif (is_array($data)) {
             foreach ($this->_reindexPriceIndexerData['byDataChange'] as $param) {
                 if (isset($data[$param])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Retrieve data for product category indexer update
+     *
+     * @param \Magento\Catalog\Model\Product $data
+     * @return boolean
+     */
+    public function isDataForProductCategoryIndexerWasChanged($data)
+    {
+        if ($data instanceof ModelProduct) {
+            foreach ($this->_reindexProductCategoryIndexerData['byDataChange'] as $param) {
+                if ($data->dataHasChangedFor($param)) {
                     return true;
                 }
             }
