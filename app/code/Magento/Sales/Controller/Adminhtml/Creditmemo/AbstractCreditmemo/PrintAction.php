@@ -34,6 +34,7 @@ class PrintAction extends \Magento\Backend\App\Action
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
+
     /**
      * @return bool
      */
