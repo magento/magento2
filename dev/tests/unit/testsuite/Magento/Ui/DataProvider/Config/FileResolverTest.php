@@ -1,10 +1,11 @@
 <?php
-
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Ui\DataProvider\Config;
 
 use Magento\Framework\Filesystem;
-use Magento\Ui\DataProvider\Config\FileResolver;
-use Magento\Framework\Config\FileIteratorFactory;
 
 class FileResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,7 +42,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
             ->method('search')
             ->with($this->matchesRegularExpression('#\*\.xml$#'))
             ->willReturn([]);
-        
+
         $this->fileResolver->get('*.xml', '');
     }
 }
