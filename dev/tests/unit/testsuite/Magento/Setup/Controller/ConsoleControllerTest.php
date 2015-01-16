@@ -5,7 +5,7 @@
 
 namespace Magento\Setup\Controller;
 
-use \Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
+use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
 
 class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,23 +51,23 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->consoleLogger = $this->getMock('\Magento\Setup\Model\ConsoleLogger', [], [], '', false);
-        $installerFactory = $this->getMock('\Magento\Setup\Model\InstallerFactory', [], [], '', false);
-        $this->installer = $this->getMock('\Magento\Setup\Model\Installer', [], [], '', false);
+        $this->consoleLogger = $this->getMock('Magento\Setup\Model\ConsoleLogger', [], [], '', false);
+        $installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
+        $this->installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
         $installerFactory->expects($this->once())->method('create')->with($this->consoleLogger)->willReturn(
             $this->installer
         );
-        $this->options = $this->getMock('\Magento\Setup\Model\Lists', [], [], '', false);
-        $this->maintenanceMode = $this->getMock('\Magento\Framework\App\MaintenanceMode', [], [], '', false);
+        $this->options = $this->getMock('Magento\Setup\Model\Lists', [], [], '', false);
+        $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
 
-        $this->request = $this->getMock('\Zend\Console\Request', [], [], '', false);
-        $response = $this->getMock('\Zend\Console\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+        $this->request = $this->getMock('Zend\Console\Request', [], [], '', false);
+        $response = $this->getMock('Zend\Console\Response', [], [], '', false);
+        $routeMatch = $this->getMock('Zend\Mvc\Router\RouteMatch', [], [], '', false);
 
-        $this->parameters= $this->getMock('\Zend\Stdlib\Parameters', [], [], '', false);
+        $this->parameters= $this->getMock('Zend\Stdlib\Parameters', [], [], '', false);
         $this->request->expects($this->any())->method('getParams')->willReturn($this->parameters);
 
-        $this->mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $this->mvcEvent = $this->getMock('Zend\Mvc\MvcEvent', [], [], '', false);
         $this->mvcEvent->expects($this->once())->method('setRequest')->with($this->request)->willReturn(
             $this->mvcEvent
         );
@@ -87,17 +87,14 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     {
         $controller = $this->controller;
         $actualRoute = $controller::getRouterConfig();
-        $this->assertArrayHasKey($controller::CMD_HELP, $actualRoute);
-        $this->assertArrayHasKey($controller::CMD_INSTALL, $actualRoute);
-        $this->assertArrayHasKey($controller::CMD_INSTALL_CONFIG, $actualRoute);
-        $this->assertArrayHasKey($controller::CMD_INSTALL_SCHEMA, $actualRoute);
-        $this->assertArrayHasKey($controller::CMD_INSTALL_DATA, $actualRoute);
-        $this->assertArrayHasKey($controller::CMD_INSTALL_USER_CONFIG, $actualRoute);
-        $this->assertArrayHasKey($controller::CMD_INSTALL_ADMIN_USER, $actualRoute);
-        $this->assertArrayHasKey($controller::CMD_UPDATE, $actualRoute);
-        $this->assertArrayHasKey($controller::CMD_UNINSTALL, $actualRoute);
-        $this->assertArrayHasKey($controller::CMD_UPDATE, $actualRoute);
-        $this->assertArrayHasKey($controller::CMD_MAINTENANCE, $actualRoute);
+        foreach ($actualRoute as $route) {
+            $options = $route['options'];
+            $this->assertArrayHasKey('route', $options);
+            $this->assertArrayHasKey('defaults', $options);
+            $defaults = $options['defaults'];
+            $this->assertArrayHasKey('controller', $defaults);
+            $this->assertArrayHasKey('action', $defaults);
+        }
     }
 
     public function testSetEventManager()
@@ -106,36 +103,23 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $closureMock = function () use ($controller) {
         };
 
-        $eventManager = $this->getMock('\Zend\EventManager\EventManagerInterface');
+        $eventManager = $this->getMock('Zend\EventManager\EventManagerInterface');
         $eventManager->expects($this->atLeastOnce())->method('attach')->will($this->returnCallback($closureMock));
         $returnValue = $this->controller->setEventManager($eventManager);
         $this->assertSame($returnValue, $this->controller);
     }
 
-    /**
-     * @expectedException        RuntimeException
-     * @expectedExceptionMessage Some Message
-     */
-    public function testSetEventManagerWithError()
-    {
-        $e = 'Some Message';
-        $eventManager = $this->getMock('\Zend\EventManager\EventManagerInterface');
-        $eventManager->expects($this->once())->method('attach')->willThrowException(new \RuntimeException($e));
-        $returnValue = $this->controller->setEventManager($eventManager);
-        $this->assertEquals($returnValue, $this->controller);
-    }
-
     public function testOnDispatch()
     {
         $returnValue = $this->controller->onDispatch($this->mvcEvent);
-        $this->assertInstanceOf('\Zend\View\Model\ConsoleModel', $returnValue);
+        $this->assertInstanceOf('Zend\View\Model\ConsoleModel', $returnValue);
     }
 
     public function testOnDispatchWithException()
     {
         $errorMessage = 'Missing route matches; unsure how to retrieve action';
-        $event = $this->getMock('\Zend\Mvc\MvcEvent');
-        $exception = $this->getMock('\Magento\Setup\Exception', [], [$errorMessage]);
+        $event = $this->getMock('Zend\Mvc\MvcEvent');
+        $exception = $this->getMock('Magento\Setup\Exception', [], [$errorMessage]);
         $event->expects($this->once())->method('getRouteMatch')->willThrowException($exception);
         $this->consoleLogger->expects($this->once())->method('log')->with($errorMessage);
         $this->controller->onDispatch($event);
@@ -272,8 +256,9 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->options->expects($this->once())->method($method)->willReturn($expectedValue);
         $returnValue = $this->controller->helpAction();
 
-        //Need to convert from String to Associated Array.
-        $result = explode(PHP_EOL, trim($returnValue));
+        //Need to convert from String to associative array.
+        $result = explode("\n", trim($returnValue));
+        $actual = [];
         foreach ($result as $value) {
             $tempArray  = explode(' => ', $value);
             $actual[$tempArray[0]] = $tempArray[1];
@@ -289,18 +274,18 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [UserConfig::KEY_LANGUAGE, 'getLocaleList', [
-                    'en_GB' => 'English (United Kingdom)',
-                    'en_US' => 'English (United States)'
+                    'someCode1' => 'some country',
+                    'someCode2' => 'some country2',
                 ]
             ],
             [UserConfig::KEY_CURRENCY, 'getCurrencyList', [
-                    'USD' => 'US Dollar (USD)',
-                    'EUR' => 'Euro (EUR)'
+                    'currencyCode1' => 'some currency1',
+                    'currencyCode2' => 'some currency2',
                 ]
             ],
             [UserConfig::KEY_TIMEZONE, 'getTimezoneList', [
-                    'America/Chicago' => 'Central Standard Time (America/Chicago)',
-                    'America/Mexico_City' => 'Central Standard Time (Mexico) (America/Mexico_City)'
+                    'timezone1' => 'some specific timezone1',
+                    'timezone2' => 'some specific timezone2',
                 ]
             ],
         ];
