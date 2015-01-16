@@ -7,7 +7,7 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Customer\Test\Repository\CustomerInjectable">
-        <dataset name="default" >
+        <dataset name="default">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="group_id" xsi:type="array">
@@ -17,7 +17,8 @@
             <field name="password" xsi:type="string">123123q</field>
             <field name="password_confirmation" xsi:type="string">123123q</field>
         </dataset>
-        <dataset name="johndoe" >
+
+        <dataset name="johndoe">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
@@ -29,7 +30,8 @@
                 <item name="dataSet" xsi:type="string">General</item>
             </field>
         </dataset>
-        <dataset name="johndoe_retailer" >
+
+        <dataset name="johndoe_retailer">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="group_id" xsi:type="array">
@@ -41,7 +43,8 @@
             <field name="dob" xsi:type="string">01/01/1990</field>
             <field name="gender" xsi:type="string">Male</field>
         </dataset>
-        <dataset name="johndoe_with_balance" >
+
+        <dataset name="johndoe_with_balance">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
@@ -51,13 +54,15 @@
             <field name="gender" xsi:type="string">Male</field>
             <field name="amount_delta" xsi:type="string">501</field>
         </dataset>
-        <dataset name="defaultBackend" >
+
+        <dataset name="defaultBackend">
             <field name="website_id" xsi:type="string">Main Website</field>
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
         </dataset>
-        <dataset name="johndoe_with_addresses" >
+
+        <dataset name="johndoe_with_addresses">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="group_id" xsi:type="array">
@@ -70,21 +75,24 @@
                 <item name="presets" xsi:type="string">US_address</item>
             </field>
         </dataset>
-        <dataset name="customer_US" >
+
+        <dataset name="customer_US">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
             <field name="password" xsi:type="string">123123q</field>
             <field name="password_confirmation" xsi:type="string">123123q</field>
         </dataset>
-        <dataset name="customer_UK" >
+
+        <dataset name="customer_UK">
             <field name="firstname" xsi:type="string">Jane</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
             <field name="password" xsi:type="string">123123q</field>
             <field name="password_confirmation" xsi:type="string">123123q</field>
         </dataset>
-        <dataset name="johndoe_unique" >
+
+        <dataset name="johndoe_unique">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe%isolation%</field>
             <field name="group_id" xsi:type="array">
@@ -97,7 +105,8 @@
                 <item name="presets" xsi:type="string">US_address_NY</item>
             </field>
         </dataset>
-        <dataset name="johndoe_unique_TX" >
+
+        <dataset name="johndoe_unique_TX">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe%isolation%</field>
             <field name="group_id" xsi:type="array">

@@ -7,7 +7,7 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\Catalog\Test\Fixture\CatalogProductAttribute">
+         class="Magento\Catalog\Test\Fixture\CatalogProductAttribute">
     <module>Magento_Catalog</module>
     <type>composite</type>
     <entities>
@@ -18,301 +18,301 @@
     <repository_class>Magento\Catalog\Test\Repository\CatalogProductAttribute</repository_class>
     <handler_interface>Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface</handler_interface>
     <fields>
-        <field name="attribute_id" >
+        <field name="attribute_id">
             <attribute_code>attribute_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="entity_type_id" >
+        <field name="entity_type_id">
             <attribute_code>entity_type_id</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="attribute_code" >
+        <field name="attribute_code">
             <attribute_code>attribute_code</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
             <group>advanced-properties</group>
         </field>
-        <field name="attribute_model" >
+        <field name="attribute_model">
             <attribute_code>attribute_model</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="backend_model" >
+        <field name="backend_model">
             <attribute_code>backend_model</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="backend_type" >
+        <field name="backend_type">
             <attribute_code>backend_type</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>static</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="backend_table" >
+        <field name="backend_table">
             <attribute_code>backend_table</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="frontend_model" >
+        <field name="frontend_model">
             <attribute_code>frontend_model</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="frontend_input" >
+        <field name="frontend_input">
             <attribute_code>frontend_input</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>Text Field</default_value>
             <input>select</input>
             <group>properties</group>
         </field>
-        <field name="frontend_label" >
+        <field name="frontend_label">
             <attribute_code>frontend_label</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>attribute_label%isolation%</default_value>
-            <input></input>
+            <input />
             <group>properties</group>
         </field>
-        <field name="manage_frontend_label" >
+        <field name="manage_frontend_label">
             <attribute_code>manage_frontend_label</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
             <group>manage-labels</group>
         </field>
-        <field name="frontend_class" >
+        <field name="frontend_class">
             <attribute_code>frontend_class</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="source_model" >
+        <field name="source_model">
             <attribute_code>source_model</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="is_required" >
+        <field name="is_required">
             <attribute_code>is_required</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>No</default_value>
             <input>select</input>
             <group>properties</group>
         </field>
-        <field name="is_user_defined" >
+        <field name="is_user_defined">
             <attribute_code>is_user_defined</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="is_unique" >
+        <field name="is_unique">
             <attribute_code>is_unique</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>advanced-properties</group>
         </field>
-        <field name="note" >
+        <field name="note">
             <attribute_code>note</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="frontend_input_renderer" >
+        <field name="frontend_input_renderer">
             <attribute_code>frontend_input_renderer</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="is_global" >
+        <field name="is_global">
             <attribute_code>is_global</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>1</default_value>
-            <input></input>
+            <input />
             <group>advanced-properties</group>
         </field>
-        <field name="is_visible" >
+        <field name="is_visible">
             <attribute_code>is_visible</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>1</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="is_searchable" >
+        <field name="is_searchable">
             <attribute_code>is_searchable</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>frontend-properties</group>
         </field>
-        <field name="is_filterable" >
+        <field name="is_filterable">
             <attribute_code>is_filterable</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>frontend-properties</group>
         </field>
-        <field name="is_comparable" >
+        <field name="is_comparable">
             <attribute_code>is_comparable</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>frontend-properties</group>
         </field>
-        <field name="is_visible_on_front" >
+        <field name="is_visible_on_front">
             <attribute_code>is_visible_on_front</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>frontend-properties</group>
         </field>
-        <field name="is_html_allowed_on_front" >
+        <field name="is_html_allowed_on_front">
             <attribute_code>is_html_allowed_on_front</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>frontend-properties</group>
         </field>
-        <field name="is_used_for_price_rules" >
+        <field name="is_used_for_price_rules">
             <attribute_code>is_used_for_price_rules</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>frontend-properties</group>
         </field>
-        <field name="is_filterable_in_search" >
+        <field name="is_filterable_in_search">
             <attribute_code>is_filterable_in_search</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>frontend-properties</group>
         </field>
-        <field name="used_in_product_listing" >
+        <field name="used_in_product_listing">
             <attribute_code>used_in_product_listing</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>frontend-properties</group>
         </field>
-        <field name="used_for_sort_by" >
+        <field name="used_for_sort_by">
             <attribute_code>used_for_sort_by</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>frontend-properties</group>
         </field>
-        <field name="apply_to" >
+        <field name="apply_to">
             <attribute_code>apply_to</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="is_visible_in_advanced_search" >
+        <field name="is_visible_in_advanced_search">
             <attribute_code>is_visible_in_advanced_search</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
             <group>frontend-properties</group>
         </field>
-        <field name="position" >
+        <field name="position">
             <attribute_code>position</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="is_wysiwyg_enabled" >
+        <field name="is_wysiwyg_enabled">
             <attribute_code>is_wysiwyg_enabled</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="is_used_for_promo_rules" >
+        <field name="is_used_for_promo_rules">
             <attribute_code>is_used_for_promo_rules</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="is_configurable" >
+        <field name="is_configurable">
             <attribute_code>is_configurable</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
             <group>advanced-properties</group>
         </field>
-        <field name="search_weight" >
+        <field name="search_weight">
             <attribute_code>search_weight</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>1</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="options" >
+        <field name="options">
             <attribute_code>options</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
             <source>Magento\Catalog\Test\Fixture\CatalogProductAttribute\Options</source>
         </field>
-        <field name="default_value_text" >
+        <field name="default_value_text">
             <attribute_code>default_value_text</attribute_code>
             <backend_type>text</backend_type>
             <group>advanced-properties</group>
         </field>
-        <field name="default_value_textarea" >
+        <field name="default_value_textarea">
             <attribute_code>default_value_textarea</attribute_code>
             <backend_type>text</backend_type>
             <group>advanced-properties</group>
         </field>
-        <field name="default_value_date" >
+        <field name="default_value_date">
             <attribute_code>default_value_date</attribute_code>
             <backend_type>text</backend_type>
             <group>advanced-properties</group>
             <source>Magento\Backend\Test\Fixture\Source\Date</source>
         </field>
-        <field name="default_value_yesno" >
+        <field name="default_value_yesno">
             <attribute_code>default_value_yesno</attribute_code>
             <backend_type>text</backend_type>
             <group>advanced-properties</group>

@@ -7,7 +7,7 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\GiftMessage\Test\Repository\GiftMessage">
-        <dataset name="default" >
+        <dataset name="default">
             <field name="sender" xsi:type="string">John Doe</field>
             <field name="recipient" xsi:type="string">Jane Doe</field>
             <field name="message" xsi:type="string">text_%isolation%</field>

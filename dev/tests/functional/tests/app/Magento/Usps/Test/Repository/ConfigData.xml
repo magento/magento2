@@ -10,6 +10,7 @@
         <dataset name="disable_shipping_all">
             <field path="carriers/usps/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
         </dataset>
+
         <dataset name="usps">
             <field path="carriers/usps/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/usps/gateway_url" scope="carriers" scope_id="1" label="" xsi:type="string">http://production.shippingapis.com/ShippingAPI.dll</field>

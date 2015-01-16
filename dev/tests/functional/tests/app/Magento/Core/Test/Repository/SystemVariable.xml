@@ -7,13 +7,11 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Core\Test\Repository\SystemVariable">
-        <dataset name="custom_variable" >
+        <dataset name="custom_variable">
             <field name="variable" xsi:type="array">
                 <item name="code" xsi:type="string">variableCode%isolation%</item>
                 <item name="name" xsi:type="string">variableName%isolation%</item>
-                <item name="html_value" xsi:type="array">
-                    <item name="p" xsi:type="string">variableName%isolation%</item>
-                </item>
+                <item name="html_value" xsi:type="string"><p class='custom-variable-test-class-%isolation%'>variableName%isolation%</p></item>
                 <item name="plain_value" xsi:type="string">variableName%isolation%</item>
             </field>
         </dataset>

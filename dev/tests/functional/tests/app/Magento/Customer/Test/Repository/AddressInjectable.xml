@@ -7,7 +7,7 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Customer\Test\Repository\AddressInjectable">
-        <dataset name="US_address" >
+        <dataset name="US_address">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
@@ -21,7 +21,8 @@
             <field name="default_billing" xsi:type="string">Yes</field>
             <field name="default_shipping" xsi:type="string">Yes</field>
         </dataset>
-        <dataset name="US_address_default_billing" >
+
+        <dataset name="US_address_default_billing">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
@@ -35,7 +36,8 @@
             <field name="default_billing" xsi:type="string">Yes</field>
             <field name="default_shipping" xsi:type="string">No</field>
         </dataset>
-        <dataset name="US_NY_address_billing" >
+
+        <dataset name="US_NY_address_billing">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
@@ -49,7 +51,8 @@
             <field name="default_billing" xsi:type="string">No</field>
             <field name="default_shipping" xsi:type="string">No</field>
         </dataset>
-        <dataset name="US_address_default_shipping" >
+
+        <dataset name="US_address_default_shipping">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
@@ -63,7 +66,8 @@
             <field name="default_billing" xsi:type="string">Yes</field>
             <field name="default_shipping" xsi:type="string">No</field>
         </dataset>
-        <dataset name="default_US_address" >
+
+        <dataset name="default_US_address">
             <field name="company" xsi:type="string">Magento %isolation%</field>
             <field name="street" xsi:type="string">6161 West Centinela Avenue</field>
             <field name="city" xsi:type="string">Culver City</field>
@@ -74,7 +78,8 @@
             <field name="default_billing" xsi:type="string">Yes</field>
             <field name="default_shipping" xsi:type="string">Yes</field>
         </dataset>
-        <dataset name="US_address_without_email" >
+
+        <dataset name="US_address_without_email">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
@@ -85,7 +90,8 @@
             <field name="country_id" xsi:type="string">United States</field>
             <field name="telephone" xsi:type="string">555-55-555-55</field>
         </dataset>
-        <dataset name="US_address_NY" >
+
+        <dataset name="US_address_NY">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
@@ -99,7 +105,8 @@
             <field name="default_billing" xsi:type="string">Yes</field>
             <field name="default_shipping" xsi:type="string">Yes</field>
         </dataset>
-        <dataset name="US_address_TX" >
+
+        <dataset name="US_address_TX">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
@@ -113,7 +120,8 @@
             <field name="default_billing" xsi:type="string">Yes</field>
             <field name="default_shipping" xsi:type="string">Yes</field>
         </dataset>
-        <dataset name="customer_US" >
+
+        <dataset name="customer_US">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">JohnDoe_%isolation%@example.com</field>
@@ -126,7 +134,8 @@
             <field name="telephone" xsi:type="string">555-55-555-55</field>
             <field name="fax" xsi:type="string">555-55-555-55</field>
         </dataset>
-        <dataset name="customer_UK" >
+
+        <dataset name="customer_UK">
             <field name="firstname" xsi:type="string">Jane</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="email" xsi:type="string">JaneDoe_%isolation%@example.com</field>
@@ -139,7 +148,8 @@
             <field name="telephone" xsi:type="string">444-44-444-44</field>
             <field name="fax" xsi:type="string">444-44-444-44</field>
         </dataset>
-        <dataset name="address_US_1" >
+
+        <dataset name="address_US_1">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
@@ -151,7 +161,8 @@
             <field name="region_id" xsi:type="string">California</field>
             <field name="telephone" xsi:type="string">555-55-555-55</field>
         </dataset>
-        <dataset name="address_US_2" >
+
+        <dataset name="address_US_2">
             <field name="firstname" xsi:type="string">Billy</field>
             <field name="lastname" xsi:type="string">Holiday</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
@@ -163,7 +174,8 @@
             <field name="region_id" xsi:type="string">New York</field>
             <field name="telephone" xsi:type="string">777-77-77-77</field>
         </dataset>
-        <dataset name="address_data_US_1" >
+
+        <dataset name="address_data_US_1">
             <field name="firstname" xsi:type="string">John</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
@@ -174,7 +186,8 @@
             <field name="region_id" xsi:type="string">California</field>
             <field name="telephone" xsi:type="string">555-55-555-55</field>
         </dataset>
-        <dataset name="address_DE" >
+
+        <dataset name="address_DE">
             <field name="firstname" xsi:type="string">Jan</field>
             <field name="lastname" xsi:type="string">Jansen</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
@@ -185,7 +198,8 @@
             <field name="region_id" xsi:type="string">Berlin</field>
             <field name="telephone" xsi:type="string">333-33-333-33</field>
         </dataset>
-        <dataset name="address_UK" >
+
+        <dataset name="address_UK">
             <field name="firstname" xsi:type="string">Jane</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
@@ -196,7 +210,8 @@
             <field name="region_id" xsi:type="string">London</field>
             <field name="telephone" xsi:type="string">444-44-444-44</field>
         </dataset>
-        <dataset name="address_UK_2" >
+
+        <dataset name="address_UK_2">
             <field name="firstname" xsi:type="string">Jane</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
@@ -207,7 +222,8 @@
             <field name="region_id" xsi:type="string">Manchester</field>
             <field name="telephone" xsi:type="string">444-44-444-44</field>
         </dataset>
-        <dataset name="address_UK_with_VAT" >
+
+        <dataset name="address_UK_with_VAT">
             <field name="firstname" xsi:type="string">Jane</field>
             <field name="lastname" xsi:type="string">Doe</field>
             <field name="company" xsi:type="string">Magento %isolation%</field>
@@ -219,7 +235,8 @@
             <field name="telephone" xsi:type="string">444-44-444-44</field>
             <field name="vat_id" xsi:type="string">584451913</field>
         </dataset>
-        <dataset name="address_US_pay_pal" >
+
+        <dataset name="address_US_pay_pal">
             <field name="firstname" xsi:type="string">Dmytro</field>
             <field name="lastname" xsi:type="string">Aponasenko</field>
             <field name="city" xsi:type="string">Culver City</field>

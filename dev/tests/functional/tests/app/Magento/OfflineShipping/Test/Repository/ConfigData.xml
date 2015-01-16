@@ -10,22 +10,27 @@
         <dataset name="freeshipping">
             <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>
+
         <dataset name="freeshipping_rollback">
             <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
         </dataset>
+
         <dataset name="freeshipping_specificcountry_gb">
             <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/freeshipping/sallowspecific" scope="carriers" scope_id="1" label="Specific Countries" xsi:type="string">1</field>
             <field path="carriers/freeshipping/specificcountry/active" scope="carriers" scope_id="1" label="United Kingdom" xsi:type="string">GB</field>
         </dataset>
+
         <dataset name="freeshipping_specificcountry_gb_rollback">
             <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
             <field path="carriers/freeshipping/sallowspecific" scope="carriers" scope_id="1" label="All Allowed Countries" xsi:type="string">0</field>
         </dataset>
+
         <dataset name="disable_shipping_all">
             <field path="carriers/flatrate/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
             <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="All Allowed Countries" xsi:type="string">0</field>
         </dataset>
+
         <dataset name="flatrate">
             <field path="carriers/flatrate/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/flatrate/title" scope="carriers" scope_id="1" label="" xsi:type="string">Flat Rate</field>

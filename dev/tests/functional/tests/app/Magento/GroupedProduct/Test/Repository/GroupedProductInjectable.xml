@@ -7,7 +7,7 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\GroupedProduct\Test\Repository\GroupedProductInjectable">
-        <dataset name="default" >
+        <dataset name="default">
             <field name="name" xsi:type="string">Test grouped product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_grouped_product_%isolation%</field>
             <field name="category_ids" xsi:type="array">
@@ -26,13 +26,14 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="key_0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">default</item>
             </field>
         </dataset>
-        <dataset name="grouped_product_out_of_stock" >
+
+        <dataset name="grouped_product_out_of_stock">
             <field name="name" xsi:type="string">Test grouped product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_grouped_product_%isolation%</field>
             <field name="category_ids" xsi:type="array">
@@ -51,13 +52,14 @@
                 <item name="is_in_stock" xsi:type="string">Out of Stock</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="key_0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">default</item>
             </field>
         </dataset>
-        <dataset name="grouped_product_with_price" >
+
+        <dataset name="grouped_product_with_price">
             <field name="name" xsi:type="string">Test grouped product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_grouped_product_%isolation%</field>
             <field name="price" xsi:type="array">
@@ -80,13 +82,14 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="key_0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">default</item>
             </field>
         </dataset>
-        <dataset name="three_simple_products" >
+
+        <dataset name="three_simple_products">
             <field name="name" xsi:type="string">Grouped product %isolation%</field>
             <field name="sku" xsi:type="string">grouped_product_%isolation%</field>
             <field name="category_ids" xsi:type="array">
@@ -105,7 +108,7 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="key_0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">default</item>

@@ -7,7 +7,7 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\CatalogRule\Test\Fixture\CatalogRule">
+         class="Magento\CatalogRule\Test\Fixture\CatalogRule">
     <module>Magento_CatalogRule</module>
     <type>eav</type>
     <entity_type>catalog_rule</entity_type>
@@ -15,7 +15,7 @@
     <repository_class>Magento\CatalogRule\Test\Repository\CatalogRule</repository_class>
     <handler_interface>Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface</handler_interface>
     <fields>
-        <field name="name" >
+        <field name="name">
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
@@ -23,21 +23,20 @@
             <input>text</input>
             <group>rule_information</group>
         </field>
-        <field name="description" >
-            <attribute_code>description</attribute_code>
+        <field name="description"               <attribute_code>description</attribute_code>
             <default_value>Catalog Price Rule Description</default_value>
             <input>text</input>
             <group>rule_information</group>
         </field>
-        <field name="is_active" >
-            <attribute_code>is_active</attribute_code>
+        <field name="is_active">
+           <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
             <default_value>Active</default_value>
             <input>select</input>
             <group>rule_information</group>
         </field>
-        <field name="website_ids" >
+        <field name="website_ids">
             <attribute_code>website_ids</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
@@ -47,7 +46,7 @@
             <input>multiselect</input>
             <group>rule_information</group>
         </field>
-        <field name="customer_group_ids" >
+        <field name="customer_group_ids">
             <attribute_code>customer_group_ids</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
@@ -57,7 +56,7 @@
             <input>multiselect</input>
             <group>rule_information</group>
         </field>
-        <field name="from_date" >
+        <field name="from_date">
             <attribute_code>from_date</attribute_code>
             <backend_type>date</backend_type>
             <is_required>0</is_required>
@@ -65,7 +64,7 @@
             <input>text</input>
             <group>rule_information</group>
         </field>
-        <field name="to_date" >
+        <field name="to_date">
             <attribute_code>to_date</attribute_code>
             <backend_type>date</backend_type>
             <is_required>0</is_required>
@@ -73,7 +72,7 @@
             <input>text</input>
             <group>rule_information</group>
         </field>
-        <field name="simple_action" >
+        <field name="simple_action">
             <attribute_code>simple_action</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>0</is_required>
@@ -81,7 +80,7 @@
             <input>select</input>
             <group>actions</group>
         </field>
-        <field name="discount_amount" >
+        <field name="discount_amount">
             <attribute_code>discount_amount</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>1</is_required>
@@ -89,41 +88,41 @@
             <input>text</input>
             <group>actions</group>
         </field>
-        <field name="condition_type" >
+        <field name="condition_type">
             <attribute_code>condition_type</attribute_code>
             <backend_type>virtual</backend_type>
             <is_required>0</is_required>
             <group>conditions</group>
             <input>select</input>
         </field>
-        <field name="condition_value" >
+        <field name="condition_value">
             <attribute_code>condition_value</attribute_code>
             <backend_type>virtual</backend_type>
             <is_required>0</is_required>
             <group>conditions</group>
         </field>
-        <field name="rule" >
+        <field name="rule">
             <attribute_code>rule</attribute_code>
             <backend_type>virtual</backend_type>
             <is_required>0</is_required>
             <group>conditions</group>
         </field>
-        <field name="conditions" >
+        <field name="conditions">
             <attribute_code>conditions</attribute_code>
             <backend_type>virtual</backend_type>
             <group>conditions</group>
         </field>
-        <field name="id" >
+        <field name="id">
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
         </field>
-        <field name="sort_order" >
-            <attribute_code>sort_order</attribute_code>
+        <field name="sort_order">
+             attribute_code>sort_order</attribute_code>
             <default_value xsi:type="null" />
             <input>text</input>
             <group>rule_information</group>
         </field>
-        <field name="stop_rules_processing" >
+        <field name="stop_rules_processing">
             <attribute_code>stop_rules_processing</attribute_code>
             <default_value xsi:type="null" />
             <input>select</input>

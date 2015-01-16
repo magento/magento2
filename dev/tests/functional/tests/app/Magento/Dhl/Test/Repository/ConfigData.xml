@@ -10,6 +10,7 @@
         <dataset name="disable_shipping_all">
             <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
         </dataset>
+
         <dataset name="dhl_eu">
             <field path="carriers/dhl/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="carriers/dhl/gateway_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://xmlpitest-ea.dhl.com/XMLShippingServlet</field>

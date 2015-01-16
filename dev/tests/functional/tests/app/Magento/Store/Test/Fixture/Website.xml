@@ -7,7 +7,7 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\Store\Test\Fixture\Website">
+         class="Magento\Store\Test\Fixture\Website">
     <module>Magento_Store</module>
     <type>flat</type>
     <entity_type>store_website</entity_type>
@@ -16,47 +16,47 @@
     <repository_class>Magento\Store\Test\Repository\Website</repository_class>
     <handler_interface>Magento\Store\Test\Handler\Website\WebsiteInterface</handler_interface>
     <fields>
-        <field name="website_id" >
+        <field name="website_id">
             <attribute_code>website_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
             <default_value>1</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="code" >
+        <field name="code">
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>base</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="name" >
-            <attribute_code>name</attribute_code>
+        <field name="name">
+           <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>Main Website</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="sort_order" >
+        <field name="sort_order">
             <attribute_code>sort_order</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="default_group_id" >
+        <field name="default_group_id">
             <attribute_code>default_group_id</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="is_default" >
+        <field name="is_default">
             <attribute_code>is_default</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
     </fields>
 </fixture>

@@ -7,7 +7,7 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\GoogleShopping\Test\Fixture\GoogleShoppingAttribute">
+         class="Magento\GoogleShopping\Test\Fixture\GoogleShoppingAttribute">
     <module>Magento_GoogleShopping</module>
     <type>flat</type>
     <entity_type>googleshopping_types</entity_type>

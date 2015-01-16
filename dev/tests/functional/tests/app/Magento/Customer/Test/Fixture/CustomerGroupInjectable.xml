@@ -7,7 +7,7 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\Customer\Test\Fixture\CustomerGroupInjectable">
+         class="Magento\Customer\Test\Fixture\CustomerGroupInjectable">
     <module>Magento_Customer</module>
     <type>flat</type>
     <entity_type>customer_group</entity_type>
@@ -15,14 +15,14 @@
     <repository_class>Magento\Customer\Test\Repository\CustomerGroupInjectable</repository_class>
     <handler_interface>Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface</handler_interface>
     <fields>
-        <field name="customer_group_code" >
+        <field name="customer_group_code">
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
             <default_value>customer_code_%isolation%</default_value>
             <input>text</input>
         </field>
-        <field name="tax_class_id" >
+        <field name="tax_class_id">
             <attribute_code>tax_class</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
@@ -32,7 +32,7 @@
             <input>select</input>
             <source>Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds</source>
         </field>
-        <field name="customer_group_id" >
+        <field name="customer_group_id">
             <attribute_code>customer_group_id</attribute_code>
             <backend_type>virtual</backend_type>
         </field>

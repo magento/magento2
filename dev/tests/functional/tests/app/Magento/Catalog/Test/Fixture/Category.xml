@@ -7,7 +7,7 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\Catalog\Test\Fixture\Category">
+         class="Magento\Catalog\Test\Fixture\Category">
     <module>Magento_Catalog</module>
     <type>eav</type>
     <entity_type>catalog_category_entity</entity_type>
@@ -15,95 +15,95 @@
     <repository_class>Magento\Catalog\Test\Repository\Category</repository_class>
     <handler_interface>Magento\Catalog\Test\Handler\Category\CategoryInterface</handler_interface>
     <fields>
-        <field name="entity_id" >
+        <field name="entity_id">
             <attribute_code>entity_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="entity_type_id" >
+        <field name="entity_type_id">
             <attribute_code>entity_type_id</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="attribute_set_id" >
+        <field name="attribute_set_id">
             <attribute_code>attribute_set_id</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="description" >
+        <field name="description">
             <attribute_code>description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
             <default_value xsi:type="null" />
             <input>textarea</input>
         </field>
-        <field name="parent_id" >
+        <field name="parent_id">
             <attribute_code>parent_id</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>2</default_value>
-            <input></input>
+            <input />
             <group>null</group>
             <source>Magento\Catalog\Test\Fixture\Category\ParentId</source>
         </field>
-        <field name="created_at" >
+        <field name="created_at">
             <attribute_code>created_at</attribute_code>
             <backend_type>timestamp</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="updated_at" >
+        <field name="updated_at">
             <attribute_code>updated_at</attribute_code>
             <backend_type>timestamp</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="path" >
+        <field name="path">
             <attribute_code>path</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>Default Category</default_value>
             <group>null</group>
-            <input></input>
+            <input />
         </field>
-        <field name="position" >
+        <field name="position">
             <attribute_code>position</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="level" >
+        <field name="level">
             <attribute_code>level</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="children_count" >
+        <field name="children_count">
             <attribute_code>children_count</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="available_product_listing_config" >
+        <field name="available_product_listing_config">
             <attribute_code>available_product_listing_config</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
             <group>display_setting</group>
             <input>checkbox</input>
         </field>
-        <field name="available_sort_by" >
+        <field name="available_sort_by">
             <attribute_code>available_sort_by</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
@@ -111,7 +111,7 @@
             <group>display_setting</group>
             <input>multiselect</input>
         </field>
-        <field name="default_product_listing_config" >
+        <field name="default_product_listing_config">
             <attribute_code>default_product_listing_config</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
@@ -119,7 +119,7 @@
             <group>display_setting</group>
             <input>checkbox</input>
         </field>
-        <field name="default_sort_by" >
+        <field name="default_sort_by">
             <attribute_code>default_sort_by</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
@@ -127,62 +127,62 @@
             <group>display_setting</group>
             <input>select</input>
         </field>
-        <field name="meta_title" >
+        <field name="meta_title">
             <attribute_code>meta_title</attribute_code>
             <backend_type>text</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
             <group>general_information</group>
         </field>
-        <field name="id" >
+        <field name="id">
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
             <group>null</group>
         </field>
-        <field name="name" >
+        <field name="name">
             <attribute_code>name</attribute_code>
             <backend_type>virtual</backend_type>
             <group>general_information</group>
             <default_value>Category%isolation%</default_value>
         </field>
-        <field name="is_active" >
+        <field name="is_active">
             <attribute_code>is_active</attribute_code>
             <backend_type>virtual</backend_type>
             <group>general_information</group>
             <default_value>Yes</default_value>
         </field>
-        <field name="is_anchor" >
+        <field name="is_anchor">
             <attribute_code>is_anchor</attribute_code>
             <backend_type>virtual</backend_type>
             <group>display_setting</group>
         </field>
-        <field name="url_key" >
+        <field name="url_key">
             <attribute_code>url_key</attribute_code>
             <backend_type>virtual</backend_type>
             <group>general_information</group>
             <default_value>category%isolation%</default_value>
         </field>
-        <field name="include_in_menu" >
+        <field name="include_in_menu">
             <attribute_code>include_in_menu</attribute_code>
             <backend_type>virtual</backend_type>
             <group>general_information</group>
             <default_value>Yes</default_value>
         </field>
-        <field name="landing_page" >
+        <field name="landing_page">
             <attribute_code>landing_page</attribute_code>
             <backend_type>virtual</backend_type>
             <input>select</input>
             <group>display_setting</group>
             <source>\Magento\Catalog\Test\Fixture\Category\LandingPage</source>
         </field>
-        <field name="display_mode" >
+        <field name="display_mode">
             <attribute_code>display_mode</attribute_code>
             <backend_type>virtual</backend_type>
             <input>select</input>
             <group>display_setting</group>
         </field>
-        <field name="category_products" >
+        <field name="category_products">
             <attribute_code>category_products</attribute_code>
             <backend_type>virtual</backend_type>
             <group>category_products</group>

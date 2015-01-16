@@ -7,7 +7,7 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\Customer\Test\Fixture\CustomerInjectable">
+         class="Magento\Customer\Test\Fixture\CustomerInjectable">
     <module>Magento_Customer</module>
     <type>eav</type>
     <entity_type>customer</entity_type>
@@ -16,31 +16,31 @@
     <repository_class>Magento\Customer\Test\Repository\CustomerInjectable</repository_class>
     <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
     <fields>
-        <field name="address" >
+        <field name="address">
             <attribute_code>address</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Customer\Test\Fixture\CustomerInjectable\Address</source>
         </field>
-        <field name="confirmation" >
+        <field name="confirmation">
             <attribute_code>confirmation</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
             <default_value xsi:type="null" />
             <input>text</input>
         </field>
-        <field name="id" >
-            <attribute_code>id</attribute_code>
+        <field name="id">
+           <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
             <group>null</group>
         </field>
-        <field name="created_at" >
+        <field name="created_at">
             <attribute_code>created_at</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
             <default_value xsi:type="null" />
             <input>date</input>
         </field>
-        <field name="created_in" >
+        <field name="created_in">
             <attribute_code>created_in</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
@@ -48,21 +48,21 @@
             <input>text</input>
             <group>account_information</group>
         </field>
-        <field name="default_billing" >
+        <field name="default_billing">
             <attribute_code>default_billing</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
             <default_value xsi:type="null" />
             <input>text</input>
         </field>
-        <field name="default_shipping" >
+        <field name="default_shipping">
             <attribute_code>default_shipping</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
             <default_value xsi:type="null" />
             <input>text</input>
         </field>
-        <field name="disable_auto_group_change" >
+        <field name="disable_auto_group_change">
             <attribute_code>disable_auto_group_change</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>
@@ -70,7 +70,7 @@
             <input>boolean</input>
             <group>account_information</group>
         </field>
-        <field name="dob" >
+        <field name="dob">
             <attribute_code>dob</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
@@ -78,7 +78,7 @@
             <input>date</input>
             <group>account_information</group>
         </field>
-        <field name="email" >
+        <field name="email">
             <attribute_code>email</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
@@ -86,7 +86,7 @@
             <input>text</input>
             <group>account_information</group>
         </field>
-        <field name="firstname" >
+        <field name="firstname">
             <attribute_code>firstname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
@@ -94,7 +94,7 @@
             <input>text</input>
             <group>account_information</group>
         </field>
-        <field name="gender" >
+        <field name="gender">
             <attribute_code>gender</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
@@ -102,7 +102,7 @@
             <input>select</input>
             <group>account_information</group>
         </field>
-        <field name="group_id" >
+        <field name="group_id">
             <attribute_code>group_id</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
@@ -111,7 +111,7 @@
             <group>account_information</group>
             <source>Magento\Customer\Test\Fixture\CustomerInjectable\GroupId</source>
         </field>
-        <field name="lastname" >
+        <field name="lastname">
             <attribute_code>lastname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
@@ -119,7 +119,7 @@
             <input>text</input>
             <group>account_information</group>
         </field>
-        <field name="middlename" >
+        <field name="middlename">
             <attribute_code>middlename</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
@@ -127,14 +127,14 @@
             <input>text</input>
             <group>account_information</group>
         </field>
-        <field name="password_hash" >
+        <field name="password_hash">
             <attribute_code>password_hash</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
             <default_value xsi:type="null" />
             <input>hidden</input>
         </field>
-        <field name="prefix" >
+        <field name="prefix">
             <attribute_code>prefix</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
@@ -142,21 +142,21 @@
             <input>text</input>
             <group>account_information</group>
         </field>
-        <field name="rp_token" >
+        <field name="rp_token">
             <attribute_code>rp_token</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
             <default_value xsi:type="null" />
             <input>hidden</input>
         </field>
-        <field name="rp_token_created_at" >
+        <field name="rp_token_created_at">
             <attribute_code>rp_token_created_at</attribute_code>
             <backend_type>datetime</backend_type>
             <is_required>0</is_required>
             <default_value xsi:type="null" />
             <input>date</input>
         </field>
-        <field name="store_id" >
+        <field name="store_id">
             <attribute_code>store_id</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
@@ -164,7 +164,7 @@
             <input>select</input>
             <group>account_information</group>
         </field>
-        <field name="suffix" >
+        <field name="suffix">
             <attribute_code>suffix</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
@@ -172,7 +172,7 @@
             <input>text</input>
             <group>account_information</group>
         </field>
-        <field name="taxvat" >
+        <field name="taxvat">
             <attribute_code>taxvat</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
@@ -180,7 +180,7 @@
             <input>text</input>
             <group>account_information</group>
         </field>
-        <field name="website_id" >
+        <field name="website_id">
             <attribute_code>website_id</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
@@ -188,7 +188,7 @@
             <input>select</input>
             <group>account_information</group>
         </field>
-        <field name="amount_delta" >
+        <field name="amount_delta">
             <attribute_code>amount_delta</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
@@ -196,23 +196,23 @@
             <input>text</input>
             <group>store_credit</group>
         </field>
-        <field name="is_subscribed" >
+        <field name="is_subscribed">
             <attribute_code>is_subscribed</attribute_code>
             <backend_type>virtual</backend_type>
         </field>
-        <field name="password" >
+        <field name="password">
             <attribute_code>password</attribute_code>
             <backend_type>virtual</backend_type>
             <group>null</group>
             <default_value>123123q</default_value>
         </field>
-        <field name="password_confirmation" >
+        <field name="password_confirmation">
             <attribute_code>password_confirmation</attribute_code>
             <backend_type>virtual</backend_type>
             <group>null</group>
             <default_value>123123q</default_value>
         </field>
-        <field name="current_password" >
+        <field name="current_password">
             <attribute_code>current_password</attribute_code>
             <backend_type>virtual</backend_type>
             <group>null</group>

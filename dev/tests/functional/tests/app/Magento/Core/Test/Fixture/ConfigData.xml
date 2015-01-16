@@ -7,7 +7,7 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\Core\Test\Fixture\ConfigData">
+         class="Magento\Core\Test\Fixture\ConfigData">
     <module>Magento_Core</module>
     <type>flat</type>
     <entity_type>core_config_data</entity_type>

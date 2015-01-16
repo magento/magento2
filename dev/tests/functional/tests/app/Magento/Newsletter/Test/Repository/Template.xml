@@ -7,7 +7,7 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Newsletter\Test\Repository\Template">
-        <dataset name="default" >
+        <dataset name="default">
             <field name="code" xsi:type="string">Newsletter Template %isolation%</field>
             <field name="subject" xsi:type="string">Newsletter Subject %isolation%</field>
             <field name="sender_name" xsi:type="string">Sender Name %isolation%</field>

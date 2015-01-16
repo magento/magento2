@@ -7,7 +7,7 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Downloadable\Test\Repository\DownloadableProductInjectable">
-        <dataset name="default" >
+        <dataset name="default">
             <field name="name" xsi:type="string">Test downloadable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_downloadable_product_%isolation%</field>
             <field name="price" xsi:type="array">
@@ -30,13 +30,14 @@
                 <item name="preset" xsi:type="string">default</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="key_0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="checkout_data" xsi:type="array">
                 <item name="preset" xsi:type="string">default</item>
             </field>
         </dataset>
-        <dataset name="with_two_separately_links" >
+
+        <dataset name="with_two_separately_links">
             <field name="name" xsi:type="string">Downloadable product %isolation%</field>
             <field name="sku" xsi:type="string">downloadable_product_%isolation%</field>
             <field name="url_key" xsi:type="string">downloadable-product-%isolation%</field>
@@ -60,7 +61,8 @@
                 <item name="preset" xsi:type="string">with_two_separately_links</item>
             </field>
         </dataset>
-        <dataset name="with_two_bought_links" >
+
+        <dataset name="with_two_bought_links">
             <field name="name" xsi:type="string">Downloadable product %isolation%</field>
             <field name="sku" xsi:type="string">downloadable_product_%isolation%</field>
             <field name="url_key" xsi:type="string">downloadable-product-%isolation%</field>

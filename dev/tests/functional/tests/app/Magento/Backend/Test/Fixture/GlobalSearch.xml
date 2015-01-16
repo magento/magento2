@@ -7,10 +7,10 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\Backend\Test\Fixture\GlobalSearch">
+         class="Magento\Backend\Test\Fixture\GlobalSearch">
     <module>Magento_Backend</module>
     <fields>
-        <field name="query" >
+        <field name="query">
             <attribute_code>query</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Backend\Test\Fixture\GlobalSearch\Query</source>

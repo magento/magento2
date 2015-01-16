@@ -7,7 +7,7 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
+         class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
     <module>Magento_UrlRewrite</module>
     <type>virtual</type>
     <entity_type>url_rewrite</entity_type>
@@ -16,11 +16,11 @@
     <repository_class>Magento\UrlRewrite\Test\Repository\UrlRewrite</repository_class>
     <handler_interface>Magento\UrlRewrite\Test\Handler\UrlRewrite\UrlRewriteInterface</handler_interface>
     <fields>
-        <field name="id" >
+        <field name="id">
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
         </field>
-        <field name="store_id" >
+        <field name="store_id">
             <attribute_code>store_id</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
@@ -28,27 +28,27 @@
             <source>Magento\UrlRewrite\Test\Fixture\UrlRewrite\StoreId</source>
             <input>select</input>
         </field>
-        <field name="redirect_type" >
+        <field name="redirect_type">
             <attribute_code>redirect_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
             <input>select</input>
         </field>
-        <field name="request_path" >
+        <field name="request_path">
             <attribute_code>request_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
             <default_value>test_request%isolation%</default_value>
             <input>text</input>
         </field>
-        <field name="entity_type" >
+        <field name="entity_type">
             <attribute_code>entity_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
             <default_value xsi:type="null" />
             <input>text</input>
         </field>
-        <field name="target_path" >
+        <field name="target_path">
             <attribute_code>target_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
@@ -56,7 +56,7 @@
             <input>text</input>
             <source>Magento\UrlRewrite\Test\Fixture\UrlRewrite\TargetPath</source>
         </field>
-        <field name="description" >
+        <field name="description">
             <attribute_code>description</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>

@@ -7,18 +7,20 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\UrlRewrite\Test\Repository\UrlRewrite">
-        <dataset name="default" >
+        <dataset name="default">
             <field name="request_path" xsi:type="string">test-test-test%isolation%.html</field>
             <field name="target_path" xsi:type="string">http://www.ebayinc.com/</field>
             <field name="redirect_type" xsi:type="string">Temporary (302)</field>
             <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
         </dataset>
-        <dataset name="default_without_target" >
+
+        <dataset name="default_without_target">
             <field name="request_path" xsi:type="string">test-test-test%isolation%.html</field>
             <field name="redirect_type" xsi:type="string">Temporary (302)</field>
             <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
         </dataset>
-        <dataset name="custom_rewrite_wishlist" >
+
+        <dataset name="custom_rewrite_wishlist">
             <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
             <field name="request_path" xsi:type="string">wishlist/%isolation%</field>
             <field name="target_path" xsi:type="string">http://google.com</field>

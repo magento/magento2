@@ -7,7 +7,7 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\CatalogSearch\Test\Repository\CatalogSearchQuery">
-        <dataset name="default" >
+        <dataset name="default">
             <field name="query_text" xsi:type="array">
                 <item name="value" xsi:type="string">Query text %isolation%</item>
             </field>

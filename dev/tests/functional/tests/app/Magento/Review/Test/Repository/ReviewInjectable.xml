@@ -7,16 +7,16 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Review\Test\Repository\ReviewInjectable">
-        <dataset name="review_for_simple_product_with_rating" >
+        <dataset name="review_for_simple_product_with_rating">
             <field name="status_id" xsi:type="string">Approved</field>
             <field name="select_stores" xsi:type="array">
-                <item name="key_0" xsi:type="string">Main Website/Main Website Store/Default Store View</item>
+                <item name="0" xsi:type="string">Main Website/Main Website Store/Default Store View</item>
             </field>
             <field name="nickname" xsi:type="string">nickname_%isolation%</field>
             <field name="title" xsi:type="string">title_%isolation%</field>
             <field name="detail" xsi:type="string">review_detail_%isolation%</field>
             <field name="ratings" xsi:type="array">
-                <item name="key_0" xsi:type="array">
+                <item name="0" xsi:type="array">
                     <item name="dataSet" xsi:type="string">visibleOnDefaultWebsite</item>
                     <item name="rating" xsi:type="string">5</item>
                 </item>
@@ -25,10 +25,11 @@
                 <item name="dataSet" xsi:type="string">catalogProductSimple::default</item>
             </field>
         </dataset>
-        <dataset name="frontend_review" >
+
+        <dataset name="frontend_review">
             <field name="status_id" xsi:type="string">Pending</field>
             <field name="select_stores" xsi:type="array">
-                <item name="key_0" xsi:type="string">Main Website/Main Website Store/Default Store View</item>
+                <item name="0" xsi:type="string">Main Website/Main Website Store/Default Store View</item>
             </field>
             <field name="nickname" xsi:type="string">nickname_%isolation%</field>
             <field name="title" xsi:type="string">title_%isolation%</field>

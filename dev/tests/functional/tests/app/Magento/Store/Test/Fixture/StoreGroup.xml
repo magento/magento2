@@ -7,23 +7,23 @@
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
-        class="Magento\Store\Test\Fixture\StoreGroup">
+         class="Magento\Store\Test\Fixture\StoreGroup">
     <module>Magento_Store</module>
     <type>flat</type>
     <entity_type>store_group</entity_type>
     <collection>Magento\Store\Model\Resource\Group\Collection</collection>
-    <identifier></identifier>
+    <identifier/>
     <repository_class>Magento\Store\Test\Repository\StoreGroup</repository_class>
     <handler_interface>Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface</handler_interface>
     <fields>
-        <field name="group_id" >
+        <field name="group_id">
             <attribute_code>group_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
             <default_value xsi:type="null" />
-            <input></input>
+            <input />
         </field>
-        <field name="website_id" >
+        <field name="website_id">
             <attribute_code>website_id</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Store\Test\Fixture\StoreGroup\WebsiteId</source>
@@ -31,14 +31,14 @@
                 <dataSet>main_website</dataSet>
             </default_value>
         </field>
-        <field name="name" >
+        <field name="name">
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>StoreGroup%isolation%</default_value>
-            <input></input>
+            <input />
         </field>
-        <field name="root_category_id" >
+        <field name="root_category_id">
             <attribute_code>root_category_id</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Store\Test\Fixture\StoreGroup\CategoryId</source>
@@ -46,12 +46,12 @@
                 <dataSet>default_category</dataSet>
             </default_value>
         </field>
-        <field name="default_store_id" >
+        <field name="default_store_id">
             <attribute_code>default_store_id</attribute_code>
             <backend_type>smallint</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value>0</default_value>
-            <input></input>
+            <input />
         </field>
     </fields>
 </fixture>

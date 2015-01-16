@@ -7,7 +7,7 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Store\Test\Repository\StoreGroup">
-        <dataset name="default" >
+        <dataset name="default">
             <field name="website_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">main_website</item>
             </field>
@@ -17,7 +17,8 @@
                 <item name="dataSet" xsi:type="string">default_category</item>
             </field>
         </dataset>
-        <dataset name="custom" >
+
+        <dataset name="custom">
             <field name="website_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">main_website</item>
             </field>
