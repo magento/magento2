@@ -2857,4 +2857,8 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Collector'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
+    [
+        'Magento\Core\Model\TemplateEngine\Plugin\DebugHints',
+        'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints'
+    ],
 ];
