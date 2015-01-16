@@ -73,7 +73,6 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         $theme->setData(
             [
                 'id' => 'fixture_theme_id',
-                'theme_version' => 'fixture_theme_version',
                 'theme_title' => 'fixture_theme_title',
                 'preview_image' => 'fixture_preview_image',
                 'is_featured' => 'fixture_is_featured',
@@ -98,7 +97,6 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
             [
                 'parent_id' => 'fixture_theme_id',
                 'theme_path' => null,
-                'theme_version' => 'fixture_theme_version',
                 'theme_title' => 'fixture_theme_title - Staging',
                 'preview_image' => 'fixture_preview_image',
                 'is_featured' => 'fixture_is_featured',
