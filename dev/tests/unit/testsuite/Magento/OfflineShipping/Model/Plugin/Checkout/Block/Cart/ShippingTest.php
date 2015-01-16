@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\OfflineShipping\Model\SalesRule;
+namespace Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart;
 
 class ShippingTest extends \PHPUnit_Framework_TestCase
 {
