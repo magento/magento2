@@ -31,19 +31,25 @@ class WriteFactory
      * Create a readable file.
      *
      * @param string $path
-     * @param string|null $protocol [optional]
-     * @param DriverInterface $driver [optional]
+     * @param DriverInterface $driver
      * @param string $mode [optional]
      * @return Write
-     * @throws \InvalidArgumentException
      */
-    public function create($path, $protocol = null, DriverInterface $driver = null, $mode = 'r')
+    public function create($path, DriverInterface $driver, $mode = 'r')
     {
-        if ($protocol) {
-            $driver = $this->driverPool->getDriver($protocol);
-        } elseif (!$driver) {
-            throw new \InvalidArgumentException('Either driver or protocol must be specified.');
-        }
         return new Write($path, $driver, $mode);
+    }
+
+    /**
+     * Create a readable file.
+     *
+     * @param string $path
+     * @param string $driverCode
+     * @param string $mode [optional]
+     * @return Write
+     */
+    public function createWithDriverCode($path, $driverCode, $mode = 'r')
+    {
+        return new Write($path, $this->driverPool->getDriver($driverCode), $mode);
     }
 }

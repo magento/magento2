@@ -168,7 +168,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
                     // Strip down protocol from path
                     $path = preg_replace('#.+://#', '', $path);
                 }
-                $this->_handle = $this->fileReadFactory->create($path, $protocol);
+                $this->_handle = $this->fileReadFactory->createWithDriverCode($path, $protocol);
             } elseif ($this->_linkType == self::LINK_TYPE_FILE) {
                 $this->_workingDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
                 $fileExists = $this->_downloadableFile->ensureFileInFilesystem($this->_resourceFile);

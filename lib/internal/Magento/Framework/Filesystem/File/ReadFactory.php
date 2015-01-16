@@ -31,18 +31,23 @@ class ReadFactory
      * Create a readable file
      *
      * @param string $path
-     * @param string|null $protocol [optional]
-     * @param DriverInterface $driver [optional]
+     * @param DriverInterface $driver
      * @return \Magento\Framework\Filesystem\File\ReadInterface
-     * @throws \InvalidArgumentException
      */
-    public function create($path, $protocol = null, DriverInterface $driver = null)
+    public function create($path, DriverInterface $driver = null)
     {
-        if ($protocol) {
-            $driver = $this->driverPool->getDriver($protocol);
-        } elseif (!$driver) {
-            throw new \InvalidArgumentException('Either driver or protocol must be specified.');
-        }
         return new Read($path, $driver);
+    }
+
+    /**
+     * Create a readable file
+     *
+     * @param string $path
+     * @param string|null $driverCode
+     * @return \Magento\Framework\Filesystem\File\ReadInterface
+     */
+    public function createWithDriverCode($path, $driverCode)
+    {
+        return new Read($path, $this->driverPool->getDriver($driverCode));
     }
 }

@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework;
 
-use Magento\Framework\Filesystem\File\ReadInterface;
+use Magento\Framework\Filesystem\DriverPool;
 
 class Filesystem
 {
@@ -68,14 +68,16 @@ class Filesystem
     /**
      * Create an instance of directory with read permissions
      *
-     * @param string $code
+     * @param string $directoryCode
+     * @param string $driverCode
      * @return \Magento\Framework\Filesystem\Directory\WriteInterface
      * @throws \Magento\Framework\Filesystem\FilesystemException
      */
-    public function getDirectoryWrite($code)
+    public function getDirectoryWrite($directoryCode, $driverCode = DriverPool::FILE)
     {
+        $code = $directoryCode . '_' . $driverCode;
         if (!array_key_exists($code, $this->writeInstances)) {
-            $this->writeInstances[$code] = $this->writeFactory->create($this->getDirPath($code));
+            $this->writeInstances[$code] = $this->writeFactory->create($this->getDirPath($directoryCode), $driverCode);
         }
         return $this->writeInstances[$code];
     }
