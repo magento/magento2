@@ -149,7 +149,7 @@ class CartBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
     /**
      * Set shipping address data object
      *
-     * @param \Magento\Checkout\Service\V1\Data\Cart\Address $value
+     * @param \Magento\Quote\Api\Data\AddressInterface $value
      * @return $this
      */
     public function setShippingAddress($value)
@@ -160,7 +160,7 @@ class CartBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
     /**
      * Set billing address data object
      *
-     * @param \Magento\Checkout\Service\V1\Data\Cart\Address $value
+     * @param \Magento\Quote\Api\Data\AddressInterface $value
      * @return $this
      */
     public function setBillingAddress($value)

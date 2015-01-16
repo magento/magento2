@@ -5,9 +5,6 @@
  */
 namespace Magento\Quote\Api\Data;
 
-/**
- * @see \Magento\Checkout\Service\V1\Data\Cart\Address
- */
 interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+

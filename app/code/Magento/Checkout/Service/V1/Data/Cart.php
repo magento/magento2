@@ -237,7 +237,7 @@ class Cart extends \Magento\Framework\Api\AbstractExtensibleObject
     /**
      * Returns the cart shipping address.
      *
-     * @return \Magento\Checkout\Service\V1\Data\Cart\Address|null Cart shipping address. Otherwise, null.
+     * @return \Magento\Quote\Api\Data\AddressInterface|null Cart shipping address. Otherwise, null.
      */
     public function getShippingAddress()
     {
@@ -247,7 +247,7 @@ class Cart extends \Magento\Framework\Api\AbstractExtensibleObject
     /**
      * Returns the cart billing address.
      *
-     * @return \Magento\Checkout\Service\V1\Data\Cart\Address|null Cart billing address. Otherwise, null.
+     * @return \Magento\Quote\Api\Data\AddressInterface|null Cart billing address. Otherwise, null.
      */
     public function getBillingAddress()
     {

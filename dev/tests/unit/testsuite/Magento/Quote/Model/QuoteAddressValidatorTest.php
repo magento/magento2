@@ -7,8 +7,6 @@
 
 namespace Magento\Quote\Model;
 
-use Magento\Checkout\Service\V1\Data\Cart\Address;
-
 class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
