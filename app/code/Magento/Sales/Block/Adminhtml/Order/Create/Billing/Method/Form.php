@@ -90,7 +90,7 @@ class Form extends \Magento\Payment\Block\Form\Container
     /**
      * Enter description here...
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {

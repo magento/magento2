@@ -8,14 +8,14 @@ namespace Magento\Sales\Model\Observer\Backend;
 class CatalogProductQuote
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Quote
+     * @var \Magento\Quote\Model\Resource\Quote
      */
     protected $_quote;
 
     /**
-     * @param \Magento\Sales\Model\Resource\Quote $quote
+     * @param \Magento\Quote\Model\Resource\Quote $quote
      */
-    public function __construct(\Magento\Sales\Model\Resource\Quote $quote)
+    public function __construct(\Magento\Quote\Model\Resource\Quote $quote)
     {
         $this->_quote = $quote;
     }
