@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 require.config({
-    "waitSeconds":"0",
+    "waitSeconds": 0,
     "shim": {
         "jquery/jquery.hashchange": ["jquery"],
         "jquery/jstree/jquery.hotkeys": ["jquery"],
