@@ -5,7 +5,7 @@
 
 define('globalNavigation', [
     'jquery',
-    'jquery/jquery-ui',
+    'jquery/ui',
     'jquery/hover-intent'
 ], function ($) {
     'use strict';
@@ -134,7 +134,7 @@ define('globalNavigation', [
 
 define('globalSearch', [
     'jquery',
-    'jquery/jquery-ui'
+    'jquery/ui'
 ], function ($) {
     'use strict';
 
@@ -173,7 +173,7 @@ define('globalSearch', [
 
 define('modalPopup', [
     'jquery',
-    'jquery/jquery-ui'
+    'jquery/ui'
 ], function ($) {
     'use strict';
 
@@ -213,7 +213,7 @@ define('modalPopup', [
 
 define('useDefault', [
     'jquery',
-    'jquery/jquery-ui'
+    'jquery/ui'
 ], function ($) {
     'use strict';
 
@@ -276,7 +276,7 @@ define('useDefault', [
 
 define('loadingPopup', [
     'jquery',
-    'jquery/jquery-ui'
+    'jquery/ui'
 ], function ($) {
     'use strict';
 
@@ -342,7 +342,7 @@ define('loadingPopup', [
 
 define('collapsable', [
     'jquery',
-    'jquery/jquery-ui',
+    'jquery/ui',
     'jquery/jquery.tabs'
 ], function ($) {
     'use strict';
