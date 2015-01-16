@@ -43,7 +43,7 @@ class SampleRepositoryTest extends WebapiAbstract
             'soap' => [
                 'service' => 'downloadableSampleRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'downloadableSampleRepositoryV1Create',
+                'operation' => 'downloadableSampleRepositoryV1Save',
             ],
         ];
 
@@ -54,7 +54,7 @@ class SampleRepositoryTest extends WebapiAbstract
             'soap' => [
                 'service' => 'downloadableSampleRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'downloadableSampleRepositoryV1Update',
+                'operation' => 'downloadableSampleRepositoryV1Save',
             ],
         ];
 

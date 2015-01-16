@@ -44,7 +44,7 @@ class LinkRepositoryTest extends WebapiAbstract
             'soap' => [
                 'service' => 'downloadableLinkRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'downloadableLinkRepositoryV1Create',
+                'operation' => 'downloadableLinkRepositoryV1Save',
             ],
         ];
 
@@ -55,7 +55,7 @@ class LinkRepositoryTest extends WebapiAbstract
             'soap' => [
                 'service' => 'downloadableLinkRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'downloadableLinkRepositoryV1Update',
+                'operation' => 'downloadableLinkRepositoryV1Save',
             ],
         ];
 
