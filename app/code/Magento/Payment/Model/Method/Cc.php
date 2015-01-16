@@ -40,12 +40,12 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_centinelService;
 
     /**
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Centinel\Model\Service $centinelService
@@ -54,12 +54,12 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * @param array $data
      */
     public function __construct(
-        \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Centinel\Model\Service $centinelService,
@@ -68,12 +68,12 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         array $data = []
     ) {
         parent::__construct(
-            $paymentData,
-            $scopeConfig,
             $context,
             $registry,
             $metadataService,
             $customAttributeBuilder,
+            $paymentData,
+            $scopeConfig,
             $resource,
             $resourceCollection,
             $data
