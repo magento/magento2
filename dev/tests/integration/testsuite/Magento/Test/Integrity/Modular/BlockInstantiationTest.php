@@ -10,7 +10,7 @@ use Magento\Customer\Model\Context;
  * This test ensures that all blocks have the appropriate constructor arguments that allow
  * them to be instantiated via the objectManager.
  *
- * @magentoAppIsolation
+ * @magentoAppIsolation enabled
  */
 class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
