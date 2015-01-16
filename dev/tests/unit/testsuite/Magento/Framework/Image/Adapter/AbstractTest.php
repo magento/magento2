@@ -26,6 +26,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystemMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject |\Psr\Log\LoggerInterface
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
         $this->directoryWriteMock = $this->getMock(
@@ -49,10 +54,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->directoryWriteMock)
         );
+        $this->loggerMock = $this->getMockBuilder( 'Psr\Log\LoggerInterface')->getMock();
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Framework\Image\Adapter\AbstractAdapter',
-            [$this->filesystemMock]
+            [$this->filesystemMock, $this->loggerMock]
         );
     }
 
@@ -61,6 +67,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->directoryWriteMock = null;
         $this->_model = null;
         $this->filesystemMock = null;
+        $this->loggerMock = null;
     }
 
     /**
