@@ -64,7 +64,7 @@ class Transactions extends \Magento\Backend\App\Action
     /**
      * Initialize payment transaction model
      *
-     * @return \Magento\Sales\Model\Order\Payment\Transaction|bool
+     * @return \Magento\Sales\Model\Order\Payment\Transaction|\Magento\Backend\Model\View\Result\Redirect
      */
     protected function _initTransaction()
     {
@@ -76,11 +76,10 @@ class Transactions extends \Magento\Backend\App\Action
 
         if (!$txn->getId()) {
             $this->messageManager->addError(__('Please correct the transaction ID and try again.'));
+            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            $resultRedirect->setPath('sales/*/');
-            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-            return false;
+            return $resultRedirect->setPath('sales/*/');
         }
         $orderId = $this->getRequest()->getParam('order_id');
         if ($orderId) {

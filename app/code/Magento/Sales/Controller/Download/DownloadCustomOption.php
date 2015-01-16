@@ -7,8 +7,8 @@
 namespace Magento\Sales\Controller\Download;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Backend\Model\View\Result\ForwardFactory;
-use Magento\Catalog\Model\Product\Type\AbstractType\AbstractProductType;
 
 class DownloadCustomOption extends \Magento\Framework\App\Action\Action
 {
@@ -47,8 +47,8 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         }
 
         $optionId = null;
-        if (strpos($option->getCode(), AbstractProductType::OPTION_PREFIX) === 0) {
-            $optionId = str_replace(AbstractProductType::OPTION_PREFIX, '', $option->getCode());
+        if (strpos($option->getCode(), AbstractType::OPTION_PREFIX) === 0) {
+            $optionId = str_replace(AbstractType::OPTION_PREFIX, '', $option->getCode());
             if ((int)$optionId != $optionId) {
                 $optionId = null;
             }
