@@ -24,7 +24,7 @@ module.exports.init = function (grunt) {
      * @return {Boolean}
      */
     function exists(path) {
-        return fs.existsSync(path);
+        return fs.existsSync(__dirname + path);
     }
 
     /**
@@ -65,7 +65,7 @@ module.exports.init = function (grunt) {
         app.use(function (req, res, next) {
             var url     = req.url,
                 match   = url.match(/^\/([A-Z][^\/]+)_(\w+)\/(.+)$/),
-                app,
+                vendor,
                 module,
                 path,
                 getModuleUrl,
@@ -80,7 +80,7 @@ module.exports.init = function (grunt) {
                 return [
                     '/app/design',
                     area,
-                    app,
+                    vendor,
                     theme
                 ].join('/');
             }
@@ -97,7 +97,7 @@ module.exports.init = function (grunt) {
             }
 
             if (match !== null) {
-                app     = match[1];
+                vendor  = match[1];
                 module  = match[2];
                 path    = match[3];
 
@@ -111,10 +111,10 @@ module.exports.init = function (grunt) {
                 getModuleUrl = function (shared) {
                     return [
                         '/app/code',
-                        app,
+                        vendor,
                         module,
                         'view',
-                        shared ? share : area,
+                        !!shared ? share : area,
                         'web',
                         path
                     ].join('/');
@@ -128,13 +128,16 @@ module.exports.init = function (grunt) {
                 getThemeUrl = function () {
                     return [
                         themeRoot(),
-                        app + '_' + module,
+                        vendor + '_' + module,
                         'web',
                         path
                     ].join('/');
                 };
 
-                url = exists(url = getThemeUrl()) ? url : getModuleUrl(true);
+                url = exists(url = getThemeUrl()) ?
+                    url :
+                    exists(url = getModuleUrl()) ?
+                        url : getModuleUrl(true);
 
             } else if (canModify(url)) {
                 url = (exists(url = lib(true)) ? url : lib()) + req.url;

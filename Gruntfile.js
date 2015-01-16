@@ -5,7 +5,7 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var specRunner = require('./spec_runner');
+    var specRunner = require('./dev/tests/js/framework/spec_runner');
     specRunner.init(grunt);
 
     // Time how long tasks take. Can help when optimizing build times
