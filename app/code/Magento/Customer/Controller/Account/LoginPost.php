@@ -136,7 +136,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /**
      * Login post action
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()

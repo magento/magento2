@@ -67,13 +67,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->redirectResultMock = $this->getMock(
-            'Magento\Framework\Controller\Result\Redirect',
-            ['setPath', 'setUrl'],
-            [],
-            '',
-            false
-        );
+        $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
+
         $this->redirectFactoryMock = $this->getMock(
             'Magento\Framework\Controller\Result\RedirectFactory',
             ['create'],
@@ -118,7 +113,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->redirectResultMock->expects($this->once())
             ->method('setPath')
             ->with('*/*')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->resultPageMock->expects($this->never())
             ->method('getLayout');
@@ -151,7 +146,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         );
         $layoutMock->expects($this->once())
             ->method('initMessages')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->pageFactoryMock->expects($this->once())
             ->method('create')

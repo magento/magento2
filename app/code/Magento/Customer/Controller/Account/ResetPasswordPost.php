@@ -60,6 +60,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
 
         if ($password !== $passwordConfirmation) {
             $this->messageManager->addError(__("New Password and Confirm New Password values didn't match."));
+            $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
             return $resultRedirect;
         }
         if (iconv_strlen($password) <= 0) {

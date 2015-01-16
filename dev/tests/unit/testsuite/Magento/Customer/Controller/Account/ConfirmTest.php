@@ -124,13 +124,8 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->addressHelperMock = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->redirectResultMock = $this->getMock(
-            'Magento\Framework\Controller\Result\Redirect',
-            ['setPath', 'setUrl'],
-            [],
-            '',
-            false
-        );
+        $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
+
         $redirectFactoryMock = $this->getMock(
             'Magento\Framework\Controller\Result\RedirectFactory',
             ['create'],
@@ -187,7 +182,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->redirectResultMock->expects($this->once())
             ->method('setPath')
             ->with('*/*/')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->execute());
     }
@@ -229,7 +224,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->redirectResultMock->expects($this->once())
             ->method('setUrl')
             ->with($this->equalTo($testUrl))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->assertInstanceOf('Magento\Framework\Controller\Result\Redirect', $this->model->execute());
     }
@@ -285,12 +280,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->any())
             ->method('setCustomerDataAsLoggedIn')
             ->with($this->equalTo($this->customerDataMock))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->messageManagerMock->expects($this->any())
             ->method('addSuccess')
             ->with($this->stringContains($successMessage))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->addressHelperMock->expects($this->once())
             ->method('isVatValidationEnabled')
@@ -371,12 +366,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->any())
             ->method('setCustomerDataAsLoggedIn')
             ->with($this->equalTo($this->customerDataMock))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->messageManagerMock->expects($this->any())
             ->method('addSuccess')
             ->with($this->stringContains($successMessage))
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->storeMock->expects($this->any())
             ->method('getFrontendName')

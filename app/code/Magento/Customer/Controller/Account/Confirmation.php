@@ -12,7 +12,6 @@ use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
 class Confirmation extends \Magento\Customer\Controller\Account
@@ -23,9 +22,6 @@ class Confirmation extends \Magento\Customer\Controller\Account
     /** @var AccountManagementInterface  */
     protected $customerAccountManagement;
 
-    /** @var \Magento\Framework\UrlInterface */
-    protected $urlModel;
-
     /**
      * @param Context $context
      * @param Session $customerSession
@@ -33,7 +29,6 @@ class Confirmation extends \Magento\Customer\Controller\Account
      * @param PageFactory $resultPageFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
-     * @param UrlFactory $urlFactory
      */
     public function __construct(
         Context $context,
@@ -41,12 +36,10 @@ class Confirmation extends \Magento\Customer\Controller\Account
         RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         StoreManagerInterface $storeManager,
-        AccountManagementInterface $customerAccountManagement,
-        UrlFactory $urlFactory
+        AccountManagementInterface $customerAccountManagement
     ) {
         $this->storeManager = $storeManager;
         $this->customerAccountManagement = $customerAccountManagement;
-        $this->urlModel = $urlFactory->create();
         parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
     }
 
@@ -80,13 +73,11 @@ class Confirmation extends \Magento\Customer\Controller\Account
                 $this->messageManager->addSuccess(__('This email does not require confirmation.'));
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Wrong email.'));
-                $resultRedirect->setUrl(
-                    $this->urlModel->getUrl('*/*/*', ['email' => $email, '_secure' => true])
-                );
+                $resultRedirect->setPath('*/*/*', ['email' => $email, '_secure' => true]);
                 return $resultRedirect;
             }
             $this->_getSession()->setUsername($email);
-            $resultRedirect->setUrl($this->urlModel->getUrl('*/*/index', ['_secure' => true]));
+            $resultRedirect->setPath('*/*/index', ['_secure' => true]);
             return $resultRedirect;
         }
 

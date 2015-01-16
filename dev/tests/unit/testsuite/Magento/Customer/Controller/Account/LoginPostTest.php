@@ -158,13 +158,8 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
         $this->customerAccountManagementMock =
             $this->getMockForAbstractClass('Magento\Customer\Api\AccountManagementInterface');
 
-        $this->redirectResultMock = $this->getMock(
-            'Magento\Framework\Controller\Result\Redirect',
-            ['setUrl'],
-            [],
-            '',
-            false
-        );
+        $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
+
         $this->redirectFactoryMock = $this->getMock(
             'Magento\Framework\Controller\Result\RedirectFactory',
             ['create'],
@@ -246,7 +241,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
 
         $this->redirectResultMock->expects($this->once())
             ->method('setUrl')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->object->execute();
     }
