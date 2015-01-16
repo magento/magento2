@@ -1,5 +1,4 @@
 /**
- * @category    design
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -29,7 +28,7 @@
     // Don't show links for images, or javascript/internal links */
     pre,
     blockquote {
-        border: 1px solid #999;
+        border: 1px solid @color-gray60;
         page-break-inside: avoid;
     }
     thead {
@@ -42,7 +41,7 @@
         }
         table-layout: fixed;
         & > tfoot > tr:first-child {
-            border-top: 1px solid #999;
+            border-top: 1px solid @color-gray60;
         }
     }
     .box,
