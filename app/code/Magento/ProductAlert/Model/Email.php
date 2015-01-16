@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Model;
 
@@ -298,7 +299,11 @@ class Email extends \Magento\Framework\Model\AbstractModel
             return false;
         }
 
-        $store = $this->_website->getDefaultStore();
+        if ($this->_customer->getStoreId() > 0) {
+            $store = $this->_storeManager->getStore($this->_customer->getStoreId());
+        } else {
+            $store = $this->_website->getDefaultStore();
+        }
         $storeId = $store->getId();
 
         if ($this->_type == 'price' && !$this->_scopeConfig->getValue(

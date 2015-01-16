@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Resource\Oauth;
 
@@ -55,5 +56,23 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $adapter->delete($this->getTable('oauth_nonce'), ['consumer_id' => $object->getId()]);
         $adapter->delete($this->getTable('oauth_token'), ['consumer_id' => $object->getId()]);
         return parent::_afterDelete($object);
+    }
+
+    /**
+     * Compute time in seconds since consumer was created.
+     *
+     * @param int $consumerId - The consumer id
+     * @return int - time lapsed in seconds
+     */
+    public function getTimeInSecondsSinceCreation($consumerId)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->reset(\Zend_Db_Select::COLUMNS)
+            ->columns('CURRENT_TIMESTAMP() - created_at')
+            ->where('entity_id = ?', $consumerId);
+
+        return $adapter->fetchOne($select);
     }
 }

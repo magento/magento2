@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -430,7 +431,7 @@ class Onepage
             $address = $this->getQuote()->getBillingAddress();
         }
 
-        if (!$this->getQuote()->getCustomerId() && self::METHOD_REGISTER == $this->getQuote()->getCheckoutMethod()) {
+        if (!$this->getQuote()->getCustomerId() && $this->isCheckoutMethodRegister()) {
             if ($this->_customerEmailExists($address->getEmail(), $this->_storeManager->getWebsite()->getId())) {
                 return [
                     'error' => 1,
@@ -491,13 +492,19 @@ class Onepage
                     )->setCollectShippingRates(
                         true
                     )->collectTotals();
-                    $shipping->save();
+                    if (!$this->isCheckoutMethodRegister()) {
+                        $shipping->save();
+                    }
                     $this->getCheckout()->setStepData('shipping', 'complete', true);
                     break;
             }
         }
 
-        $this->quoteRepository->save($this->getQuote());
+        if ($this->isCheckoutMethodRegister()) {
+            $this->quoteRepository->save($this->getQuote());
+        } else {
+            $address->save();
+        }
 
         $this->getCheckout()->setStepData(
             'billing',
@@ -517,6 +524,16 @@ class Onepage
     }
 
     /**
+     * Check whether checkout method is "register"
+     *
+     * @return bool
+     */
+    protected function isCheckoutMethodRegister()
+    {
+        return $this->getQuote()->getCheckoutMethod() == self::METHOD_REGISTER;
+    }
+
+    /**
      * Validate customer data and set some its data for further usage in quote
      *
      * Will return either true or array with error messages
@@ -529,7 +546,7 @@ class Onepage
         $quote = $this->getQuote();
         $isCustomerNew = !$quote->getCustomerId();
         $customer = $quote->getCustomer();
-        $customerData = $this->extensibleDataObjectConverter->toFlatArray($customer);
+        $customerData = $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface');
 
         /** @var Form $customerForm */
         $customerForm = $this->_formFactory->create(
@@ -593,7 +610,7 @@ class Onepage
         $this->_objectCopyService->copyFieldsetToTarget(
             'customer_account',
             'to_quote',
-            $this->extensibleDataObjectConverter->toFlatArray($customer),
+            $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface'),
             $quote
         );
 

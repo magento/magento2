@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\Theme;
 
@@ -216,7 +217,6 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
             'area' => $pathData['area'],
             'theme_path' => $themePath,
             'code' => $themeCode,
-            'theme_version' => $themeConfig->getThemeVersion(),
             'theme_title' => $themeConfig->getThemeTitle(),
             'preview_image' => $media['preview_image'] ? $media['preview_image'] : null,
             'parent_theme_path' => $parentPath
@@ -268,15 +268,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
         $relativeConfigPath = $this->_directory->getRelativePath($configPath);
         $configContent = $this->_directory->isExist($relativeConfigPath) ?
             $this->_directory->readFile($relativeConfigPath) : null;
-        $relativeComposerPath = dirname($relativeConfigPath) . '/composer.json';
-        $composerContent = $this->_directory->isExist($relativeComposerPath) ?
-            $this->_directory->readFile($relativeComposerPath) : null;
-        return $this->themeConfigFactory->create(
-            [
-                'configContent' => $configContent,
-                'composerContent' => $composerContent,
-            ]
-        );
+        return $this->themeConfigFactory->create(['configContent' => $configContent]);
     }
 
     /**

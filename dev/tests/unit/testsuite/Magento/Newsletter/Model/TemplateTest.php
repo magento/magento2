@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
 
@@ -53,7 +54,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         );
 
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory');
+        $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory', [], [], '', false);
         $data = ['template_text' => 'template text'];
 
         $filterManager = $this->getMock('\Magento\Framework\Filter\FilterManager', [], [], '', false);

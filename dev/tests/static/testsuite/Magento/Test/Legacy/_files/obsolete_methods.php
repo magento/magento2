@@ -2,7 +2,8 @@
 /**
  * Obsolete methods
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['__get', 'Magento\Framework\Object'],
@@ -328,6 +329,12 @@ return [
     ['displayFullSummary', 'Magento\Tax\Model\Config'],
     ['displayZeroTax', 'Magento\Tax\Model\Config'],
     ['drawItem', 'Magento\Catalog\Block\Navigation'],
+    ['getStoreCategories', 'Magento\Catalog\Block\Navigation'],
+    ['_getItemPosition', 'Magento\Catalog\Block\Navigation'],
+    ['_renderCategoryMenuItemHtml', 'Magento\Catalog\Block\Navigation'],
+    ['getCurrentCategoryPath', 'Magento\Catalog\Block\Navigation'],
+    ['drawOpenCategoryItem', 'Magento\Catalog\Block\Navigation'],
+    ['renderCategoriesMenuHtml', 'Magento\Catalog\Block\Navigation'],
     ['dropKey', 'Magento\Framework\DB\Adapter\Pdo\Mysql'],
     ['escapeJs', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config'],
     ['eventClean', 'Magento\Reports\Model\Event\Observer'],
@@ -610,6 +617,7 @@ return [
     ],
     ['getTaxAmount', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
     ['getTaxRatesByProductClass', '', '_getAllRatesByProductClass'],
+    ['getThemeVersion', '\Magento\Framework\Config\Theme'],
     ['getAllRatesByProductClass', 'Magento\Tax\Helper\Data'],
     [
         'getTemplateProcessor',
@@ -1652,6 +1660,7 @@ return [
     ['_isDataChanged', 'Magento\Catalog\Model\Product'],
     ['getVisibleOnFrontStates', 'Magento\Sales\Model\Order\Config', 'getVisibleOnFrontStatuses'],
     ['getInvisibleOnFrontStates', 'Magento\Sales\Model\Order\Config', 'getInvisibleOnFrontStatuses'],
+    ['_authorize', 'Magento\Sales\Model\Order\Payment'],
     ['_shouldBeConverted', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_beforeSave', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_afterSave', 'Magento\Sales\Model\Resource\AbstractResource'],
@@ -2008,5 +2017,15 @@ return [
     ],
     ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
     ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
-    ['cleanTransactions', 'Magento\Paypal\Model\Observer']
+    ['cleanTransactions', 'Magento\Paypal\Model\Observer'],
+    ['getSkinImagePlaceholderUrl', 'Magento\Cms\Model\Wysiwyg\Config'],
+    ['compareIndexColumnProperties', 'Magento\Catalog\Model\Resource\Helper'],
+    ['getIsNullNotNullCondition', 'Magento\Catalog\Model\Resource\Helper'],
+    ['_getCategoryPath', 'Magento\Catalog\Model\Resource\Setup'],
+    ['_getCategoryEntityRow', 'Magento\Catalog\Model\Resource\Setup'],
+    ['createEavAttributeResource', 'Magento\Catalog\Model\Resource\Setup'],
+    ['getAllNonNominalItems', 'Magento\Sales\Model\Quote\Address'],
+    ['getAllNominalItems', 'Magento\Sales\Model\Quote\Address'],
+    ['isNominal', 'Magento\Sales\Model\Order\Item'],
+    ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem']
 ];
