@@ -15,27 +15,12 @@ module.exports.init = function (grunt) {
     var connect     = require('connect'),
         logger      = require('morgan'),
         serveStatic = require('serve-static'),
-        fs          = require('fs');
+        fs          = require('fs'),
+        root;
 
-    /**
-     * Defines if passed file path exists
-     *
-     * @param  {String} path
-     * @return {Boolean}
-     */
-    function exists(path) {
-        return fs.existsSync(__dirname + path);
-    }
-
-    /**
-     * Restricts url's which lead to '/_SpecRunner.html', '/dev/tests' or '.grunt' folders from being modified
-     *
-     * @param  {String} url
-     * @return {Boolean}
-     */
-    function canModify(url) {
-        return url.match(/^\/(\.grunt)|(dev\/tests)|(_SpecRunner\.html)/) === null;
-    }
+    root = __dirname
+        .replace('/dev/tests/js/framework', '')
+        .replace('\\dev\\tests\\js\\framework', '');
 
     grunt.registerMultiTask('specRunner', function () {
         var app = connect(),
@@ -158,10 +143,30 @@ module.exports.init = function (grunt) {
             }
         }
 
-        app.use(serveStatic(__dirname));
+        app.use(serveStatic(root));
 
         app.listen(options.port);
     });
+
+    /**
+     * Defines if passed file path exists
+     *
+     * @param  {String} path
+     * @return {Boolean}
+     */
+    function exists(path) {
+        return fs.existsSync(root + path);
+    }
+
+    /**
+     * Restricts url's which lead to '/_SpecRunner.html', '/dev/tests' or '.grunt' folders from being modified
+     *
+     * @param  {String} url
+     * @return {Boolean}
+     */
+    function canModify(url) {
+        return url.match(/^\/(\.grunt)|(dev\/tests)|(dev\\tests)|(_SpecRunner\.html)/) === null;
+    }
 };
 
 /**

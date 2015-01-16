@@ -129,8 +129,7 @@ module.exports = function (grunt) {
 
         specRunner: {
             options: {
-                shareDir: 'base',
-                enableLogs: false
+                shareDir: 'base'
             },
             backend: {
                 options: {
