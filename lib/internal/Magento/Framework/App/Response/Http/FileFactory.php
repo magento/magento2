@@ -70,33 +70,13 @@ class FileFactory
             }
         }
 
-        $this->_response->setHttpResponseCode(
-            200
-        )->setHeader(
-            'Pragma',
-            'public',
-            true
-        )->setHeader(
-            'Cache-Control',
-            'must-revalidate, post-check=0, pre-check=0',
-            true
-        )->setHeader(
-            'Content-type',
-            $contentType,
-            true
-        )->setHeader(
-            'Content-Length',
-            is_null($contentLength) ? strlen($content) : $contentLength,
-            true
-        )->setHeader(
-            'Content-Disposition',
-            'attachment; filename="' . $fileName . '"',
-            true
-        )->setHeader(
-            'Last-Modified',
-            date('r'),
-            true
-        );
+        $this->_response->setHttpResponseCode(200)
+            ->setHeader('Pragma', 'public', true)
+            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            ->setHeader('Content-type', $contentType, true)
+            ->setHeader('Content-Length', is_null($contentLength) ? strlen($content) : $contentLength, true)
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"', true)
+            ->setHeader('Last-Modified', date('r'), true);
 
         if (!is_null($content)) {
             if ($isFile) {
