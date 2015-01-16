@@ -5,6 +5,8 @@
  */
 namespace Magento\OfflineShipping\Model\Observer\SalesRule;
 
+use Magento\OfflineShipping\Model\SalesRule\Rule;
+
 class ActionsTabTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -39,7 +41,21 @@ class ActionsTabTest extends \PHPUnit_Framework_TestCase
             ->willReturn('action_fieldset');
 
         $elementMock->expects($this->once())
-            ->method('addField');
+            ->method('addField')
+            ->with(
+                'simple_free_shipping',
+                'select',
+                [
+                    'label' => __('Free Shipping'),
+                    'title' => __('Free Shipping'),
+                    'name' => 'simple_free_shipping',
+                    'options' => [
+                        0 => __('No'),
+                        Rule::FREE_SHIPPING_ITEM => __('For matching items only'),
+                        Rule::FREE_SHIPPING_ADDRESS => __('For shipment with matching items'),
+                    ]
+                ]
+            );
 
         $formMock->expects($this->once())
             ->method('getElements')
