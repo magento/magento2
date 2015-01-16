@@ -18,9 +18,8 @@ class ProductReviews extends \Magento\Customer\Controller\Adminhtml\Index
     {
         $this->_initCustomer();
         $resultLayout = $this->resultLayoutFactory->create();
-        $resultLayout->getLayout()->getBlock('admin.customer.reviews')->setCustomerId(
-            $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
-        )
+        $block = $resultLayout->getLayout()->getBlock('admin.customer.reviews');
+        $block->setCustomerId($this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID))
             ->setUseAjax(true);
         return $resultLayout;
     }
