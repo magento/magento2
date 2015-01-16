@@ -19,6 +19,7 @@ use Magento\Webapi\Exception as WebapiException;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
+use Magento\Webapi\Model\Cache\Type as WebapiCache;
 
 /**
  * Deserializes arguments from API requests.
@@ -27,6 +28,8 @@ use Zend\Code\Reflection\ParameterReflection;
  */
 class ServiceArgsSerializer
 {
+    const CACHE_ID_PREFIX = 'service_method_params_';
+
     /** @var \Magento\Framework\Reflection\TypeProcessor */
     protected $typeProcessor;
 
@@ -39,6 +42,9 @@ class ServiceArgsSerializer
     /** @var AttributeDataBuilder */
     protected $attributeValueBuilder;
 
+    /** @var WebapiCache */
+    protected $cache;
+
     /**
      * Initialize dependencies.
      *
@@ -46,22 +52,24 @@ class ServiceArgsSerializer
      * @param DataBuilderFactory $builderFactory
      * @param ServiceConfigReader $serviceConfigReader
      * @param AttributeDataBuilder $attributeValueBuilder
+     * @param WebapiCache $cache
      */
     public function __construct(
         TypeProcessor $typeProcessor,
         DataBuilderFactory $builderFactory,
         ServiceConfigReader $serviceConfigReader,
-        AttributeDataBuilder $attributeValueBuilder
+        AttributeDataBuilder $attributeValueBuilder,
+        WebapiCache $cache
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->builderFactory = $builderFactory;
         $this->serviceConfigReader = $serviceConfigReader;
         $this->attributeValueBuilder = $attributeValueBuilder;
+        $this->cache = $cache;
     }
 
     /**
-     * Converts the provided input array from key-value format to a list of parameters suitable for the specified
-     * class / method.
+     * Convert the input array from key-value format to a list of parameters suitable for the specified class / method.
      *
      * The input array should have the field name as the key, and the value will either be a primitive or another
      * key-value array.  The top level of this array needs keys that match the names of the parameters on the
@@ -77,28 +85,20 @@ class ServiceArgsSerializer
      */
     public function getInputData($serviceClassName, $serviceMethodName, array $inputArray)
     {
-        /** TODO: Reflection causes performance degradation when used in runtime. Should be optimized via caching */
-        $serviceClass = new ClassReflection($serviceClassName);
-        /** @var MethodReflection $serviceMethod */
-        $serviceMethod = $serviceClass->getMethod($serviceMethodName);
-        /** @var ParameterReflection[] $params */
-        $params = $serviceMethod->getParameters();
-
         $inputData = [];
         $inputError = [];
-        foreach ($params as $param) {
-            $paramName = $param->getName();
+        foreach ($this->getMethodParams($serviceClassName, $serviceMethodName) as $param) {
+            $paramName = $param['name'];
             $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
             if (isset($inputArray[$paramName]) || isset($inputArray[$snakeCaseParamName])) {
                 $paramValue = isset($inputArray[$paramName])
                     ? $inputArray[$paramName]
                     : $inputArray[$snakeCaseParamName];
 
-                $paramType = $this->getParamType($param);
-                $inputData[] = $this->_convertValue($paramValue, $paramType);
+                $inputData[] = $this->_convertValue($paramValue, $param['type']);
             } else {
-                if ($param->isDefaultValueAvailable()) {
-                    $inputData[] = $param->getDefaultValue();
+                if ($param['isDefaultValueAvailable']) {
+                    $inputData[] = $param['defaultValue'];
                 } else {
                     $inputError[] = $paramName;
                 }
@@ -344,5 +344,37 @@ class ServiceArgsSerializer
          */
         $isAssociative = array_keys($value) !== range(0, count($value) - 1);
         return $isAssociative ? [$value] : $value;
+    }
+
+    /**
+     * Retrieve requested service method params metadata.
+     *
+     * @param string $serviceClassName
+     * @param string $serviceMethodName
+     * @return array
+     */
+    protected function getMethodParams($serviceClassName, $serviceMethodName)
+    {
+        $cacheId = self::CACHE_ID_PREFIX . hash('md5', $serviceClassName . $serviceMethodName);
+        $params = $this->cache->load($cacheId);
+        if ($params !== false) {
+            return unserialize($params);
+        }
+        $serviceClass = new ClassReflection($serviceClassName);
+        /** @var MethodReflection $serviceMethod */
+        $serviceMethod = $serviceClass->getMethod($serviceMethodName);
+        $params = [];
+        /** @var ParameterReflection $paramReflection */
+        foreach ($serviceMethod->getParameters() as $paramReflection) {
+            $isDefaultValueAvailable = $paramReflection->isDefaultValueAvailable();
+            $params[] = [
+                'name' => $paramReflection->getName(),
+                'type' => $this->getParamType($paramReflection),
+                'isDefaultValueAvailable' => $isDefaultValueAvailable,
+                'defaultValue' => $isDefaultValueAvailable ? $paramReflection->getDefaultValue() : null
+            ];
+        }
+        $this->cache->save(serialize($params), $cacheId, [\Magento\Webapi\Model\Cache\Type::CACHE_TAG]);
+        return $params;
     }
 }
