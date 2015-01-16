@@ -268,7 +268,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->importData();
 
-        reset($source);
+        $source->rewind();
         foreach ($source as $row) {
             /** @var $productAfterImport \Magento\Catalog\Model\Product */
             $productBeforeImport = $productsBeforeImport[$row['sku']];
