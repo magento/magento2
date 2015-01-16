@@ -138,6 +138,9 @@ module.exports = function (grunt) {
 
         uglify: {
             legacy: {
+                options: {
+                    mangle: false
+                },
                 files: {
                     '<%= config.path.uglify.legacy %>': [
                         'lib/web/prototype/window.js',

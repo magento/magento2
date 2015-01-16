@@ -177,7 +177,7 @@ define('modalPopup', [
 ], function ($) {
     'use strict';
 
-     $.widget('mage.modalPopup', {
+    $.widget('mage.modalPopup', {
         options: {
             popup: '.popup',
             btnDismiss: '[data-dismiss="popup"]',
