@@ -57,6 +57,11 @@ class WebLogger implements LoggerInterface
     private function open($mode)
     {
         $this->resource = fopen($this->logFile, $mode);
+        if (!file_exists($this->logFile) && !is_resource($this->resource)) {
+            $this->resource = fopen($this->logFile, 'w');
+        } else {
+            $this->resource = fopen($this->logFile, $mode);
+        }
     }
 
     /**
@@ -66,7 +71,10 @@ class WebLogger implements LoggerInterface
      */
     private function close()
     {
-        fclose($this->resource);
+        // Do a check to prevent warinig in console
+        if (is_resource($this->resource)) {
+            fclose($this->resource);
+        }
     }
 
     /**
