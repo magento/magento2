@@ -24,9 +24,18 @@ class BackendConfigTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage No backend frontname provided.
      */
-    public function testEmptyData()
+    public function testUnsetData()
     {
         new BackendConfig([]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage No backend frontname provided.
+     */
+    public function testEmptyData()
+    {
+        new BackendConfig(['frontName' => '']);
     }
 
     /**

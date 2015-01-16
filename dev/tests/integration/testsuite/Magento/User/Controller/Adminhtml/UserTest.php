@@ -219,6 +219,6 @@ class UserTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         $this->assertContains('{"error":1,"html_message":', $body);
-        $this->assertContains('Please correct this email address: \"example@domain.cim\"', $body);
+        $this->assertContains('Please correct this email address: &quot;example@domain.cim&quot;', $body);
     }
 }

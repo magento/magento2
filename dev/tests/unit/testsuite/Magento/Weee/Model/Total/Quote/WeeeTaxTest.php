@@ -125,7 +125,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\Quote\Address',
             [
                 '__wakeup',
-                'getAllNonNominalItems',
+                'getAllItems',
                 'getQuote',
                 'getWeeeCodeToItemMap',
                 'getExtraTaxableDetails',
@@ -180,7 +180,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->any())->method('convertPrice')->will($this->returnArgument(0));
         $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
 
-        $addressMock->expects($this->any())->method('getAllNonNominalItems')->will($this->returnValue([$itemMock]));
+        $addressMock->expects($this->any())->method('getAllItems')->will($this->returnValue([$itemMock]));
         $addressMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
         $addressMock->expects($this->any())->method('getWeeeCodeToItemMap')->will($this->returnValue($map));
         $addressMock->expects($this->any())->method('getExtraTaxableDetails')->will($this->returnValue($extraDetails));

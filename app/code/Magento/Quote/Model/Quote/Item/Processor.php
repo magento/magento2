@@ -9,8 +9,8 @@ use \Magento\Catalog\Model\Product;
 use Magento\Quote\Model\Quote\ItemFactory;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\StoreManagerInterface;
-use \Magento\Framework\App\State;
-use \Magento\Framework\Object;
+use Magento\Framework\App\State;
+use Magento\Framework\Object;
 
 /**
  * Class Processor

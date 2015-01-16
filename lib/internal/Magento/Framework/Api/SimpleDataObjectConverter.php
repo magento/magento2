@@ -27,11 +27,14 @@ class SimpleDataObjectConverter
      * Convert nested array into flat array.
      *
      * @param ExtensibleDataInterface $dataObject
+     * @param string $dataObjectType
      * @return array
      */
-    public function toFlatArray(ExtensibleDataInterface $dataObject)
+    public function toFlatArray(ExtensibleDataInterface $dataObject, $dataObjectType = null)
     {
-        $dataObjectType = get_class($dataObject);
+        if ($dataObjectType === null) {
+            $dataObjectType = get_class($dataObject);
+        }
         $data = $this->dataObjectProcessor->buildOutputDataArray($dataObject, $dataObjectType);
         return ConvertArray::toFlatArray($data);
     }

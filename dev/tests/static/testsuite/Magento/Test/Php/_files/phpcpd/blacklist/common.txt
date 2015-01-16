@@ -113,8 +113,6 @@ lib/internal/Magento/Framework/App/Config
 Magento/Cron/Model
 Magento/SalesRule/Model/Resource/Report/Rule
 Magento/SalesRule/Model/Resource/Rule
-Magento/SalesRule/Model/Quote/Nominal
-Magento/Tax/Model/Sales/Total/Quote/Nominal
 Magento/Theme/Block/Adminhtml/System/Design/Theme/Edit
 Magento/User/Block/User/Edit
 var/generation
