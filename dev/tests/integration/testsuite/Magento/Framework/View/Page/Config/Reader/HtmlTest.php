@@ -1,7 +1,9 @@
 <?php
-
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\View\Page\Config\Reader;
-
 
 class HtmlTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,8 +20,8 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
         foreach ($pageXml->xpath('html') as $htmlElement) {
             $html->interpret($readerContext, $htmlElement, $parentElement);
         }
-        
+
         $structure = $readerContext->getPageConfigStructure();
         $this->assertEquals(['html' => ['test-name' => 'test-value']], $structure->getElementAttributes());
     }
-} 
+}
