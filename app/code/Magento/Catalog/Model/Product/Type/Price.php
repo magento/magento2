@@ -330,7 +330,7 @@ class Price
      */
     protected function _getCustomerGroupId($product)
     {
-        if ($product->getCustomerGroupId()) {
+        if (!is_null($product->getCustomerGroupId())) {
             return $product->getCustomerGroupId();
         }
         return $this->_customerSession->getCustomerGroupId();
