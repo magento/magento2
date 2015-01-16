@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<scenarios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Config/etc/test_scenario.xsd">
+  <scenario name="CreateProductAttributeEntityFromProductPageTest" firstStep="openProductOnBackend">
+    <step name="openProductOnBackend" next="addNewAttributeFromProductPage"/>
+    <step name="addNewAttributeFromProductPage" next="fillAttributeFormOnProductPage">
+      <item name="tabName" value="product-details"/>
+    </step>
+    <step name="fillAttributeFormOnProductPage" next="saveAttributeOnProductPage"/>
+    <step name="saveAttributeOnProductPage" next="setDefaultAttributeValue"/>
+    <step name="setDefaultAttributeValue" next="saveProduct"/>
+    <step name="saveProduct"/>
+  </scenario>
+  <scenario name="CreateProductAttributeEntityTest" firstStep="createProductTemplate">
+    <step name="createProductTemplate" next="openProductAttributesPage"/>
+    <step name="openProductAttributesPage" next="addNewAttribute"/>
+    <step name="addNewAttribute" next="fillAttributeForm"/>
+    <step name="fillAttributeForm" next="saveAttribute"/>
+    <step name="saveAttribute" next="addAttributeToProductTemplate"/>
+    <step name="addAttributeToProductTemplate"/>
+  </scenario>
+</scenarios>
