@@ -391,18 +391,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
             self::$rootJson,
             "If there are any component paths specified, then they must be reflected in 'replace' section"
         );
-        $flat = [];
-        foreach (self::$rootJson['extra']['component_paths'] as $key => $element) {
-            if (is_string($element)) {
-                $flat[] = [$key, $element];
-            } elseif (is_array($element)) {
-                foreach ($element as $path) {
-                    $flat[] = [$key, $path];
-                }
-            } else {
-                throw new \Exception("Unexpected element 'in extra->component_paths' section");
-            }
-        }
+        $flat = $this->getFlatPathsInfo(self::$rootJson['extra']['component_paths']);
         while (list(, list($component, $path)) = each($flat)) {
             $this->assertFileExists(
                 self::$root . '/' . $path,
@@ -423,5 +412,28 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 );
             }
         }
+    }
+
+    /**
+     * @param array $info
+     * @return array
+     * @throws \Exception
+     */
+    private function getFlatPathsInfo(array $info)
+    {
+        $flat = [];
+        foreach ($info as $key => $element) {
+            if (is_string($element)) {
+                $flat[] = [$key, $element];
+            } elseif (is_array($element)) {
+                foreach ($element as $path) {
+                    $flat[] = [$key, $path];
+                }
+            } else {
+                throw new \Exception("Unexpected element 'in extra->component_paths' section");
+            }
+        }
+
+        return $flat;
     }
 }
