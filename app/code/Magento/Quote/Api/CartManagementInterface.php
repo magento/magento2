@@ -45,5 +45,5 @@ interface CartManagementInterface
      * @return int Order ID.
      * @see \Magento\Checkout\Service\V1\Cart\WriteServiceInterface::order
      */
-    public function order($cartId);
+    public function placeOrder($cartId);
 }

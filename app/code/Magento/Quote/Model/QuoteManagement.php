@@ -212,9 +212,14 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         return $quote;
     }
 
-    public function order($cartId)
+    /**
+     * {@inheritdoc}
+     */
+    public function placeOrder($cartId)
     {
-        //stub for interface
+        $quote = $this->quoteRepository->getActive($cartId);
+        $order = $this->submit($quote);
+        return $order->getId();
     }
 
     public function getCartForCustomer($customerId)

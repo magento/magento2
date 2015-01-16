@@ -270,4 +270,35 @@ class CartManagementInterfaceTest extends WebapiAbstract
         ];
         $this->_webApiCall($serviceInfo, $requestData);
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
+     */
+    public function testPlaceOrder()
+    {
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test_order_1', 'reserved_order_id');
+        $cartId = $quote->getId();
+
+        $serviceInfo = [
+            'soap' => [
+                'service' => 'quoteQuoteManagementV1',
+                'operation' => 'quoteQuoteManagementV1PlaceOrder',
+                'serviceVersion' => 'V1',
+            ],
+            'rest' => [
+                'resourcePath' => '/V1/carts/' . $cartId . '/order',
+                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+            ],
+        ];
+
+        $orderId = $this->_webApiCall($serviceInfo, ['cartId' => $cartId]);
+
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $this->objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        $items = $order->getAllItems();
+        $this->assertCount(1, $items);
+        $this->assertEquals('Simple Product', $items[0]->getName());
+        $quote->delete();
+    }
 }

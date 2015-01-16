@@ -19,10 +19,4 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/carts/:cartId/order" method="PUT">
-        <service class="Magento\Checkout\Service\V1\Cart\WriteServiceInterface" method="order"/>
-        <resources>
-            <resource ref="Magento_Sales::sales" />
-        </resources>
-    </route>
 </routes>

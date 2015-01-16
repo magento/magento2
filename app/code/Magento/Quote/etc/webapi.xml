@@ -133,4 +133,10 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/carts/:cartId/order" method="PUT">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="placeOrder"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
 </routes>
