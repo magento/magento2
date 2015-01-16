@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -62,14 +61,42 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->repositoryMock = $this->getMock('\Magento\Catalog\Model\ProductRepository', [], [], '', false);
         $this->productTypeMock = $this->getMock('\Magento\Downloadable\Model\Product\Type', [], [], '', false);
-        $this->linkBuilder = $this->getMock('\Magento\Downloadable\Api\Data\LinkDataBuilder', [], [], '', false);
-        $this->sampleBuilder = $this->getMock(
-            '\Magento\Downloadable\Api\Data\SampleDataBuilder',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->linkBuilder = $this->getMockBuilder('\Magento\Downloadable\Api\Data\LinkDataBuilder')
+            ->setMethods(
+                [
+                    'create',
+                    'populateWithArray',
+                    'setId',
+                    'setTitle',
+                    'setSortOrder',
+                    'setSampleType',
+                    'setSampleFile',
+                    'setSampleUrl',
+                    'setPrice',
+                    'setNumberOfDownloads',
+                    'setIsShareable',
+                    'setLinkType',
+                    'setLinkFile',
+                    'setLinkUrl'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->sampleBuilder = $this->getMockBuilder('\Magento\Downloadable\Api\Data\SampleDataBuilder')
+            ->setMethods(
+                [
+                    'create',
+                    'populateWithArray',
+                    'setId',
+                    'setTitle',
+                    'setSortOrder',
+                    'setSampleType',
+                    'setSampleFile',
+                    'setSampleUrl'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->contentValidatorMock = $this->getMock(
             '\Magento\Downloadable\Model\Link\ContentValidator',
             [],
@@ -442,7 +469,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$linkMock]));
 
         $this->setLinkAssertions($linkMock, $linkData);
-
+        $this->linkBuilder->expects($this->once())->method('populateWithArray')->with([]);
         $this->linkBuilder->expects($this->once())->method('create')->willReturn($linkInterfaceMock);
 
         $this->assertEquals([$linkInterfaceMock], $this->service->getLinks($productSku));
@@ -493,6 +520,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$sampleMock]));
 
         $this->setSampleAssertions($sampleMock, $sampleData);
+        $this->sampleBuilder->expects($this->once())->method('populateWithArray')->with([]);
 
         $this->sampleBuilder->expects($this->once())->method('create')->willReturn($sampleInterfaceMock);
 
