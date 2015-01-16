@@ -48,10 +48,10 @@
             <attribute_code>tax_rate</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Tax\Test\Fixture\TaxRule\TaxRate</source>
-            <default_value>
-                <dataSet>
-                    <key_0>US-CA-Rate_1</key_0>
-                </dataSet>
+            <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="array">
+                    <item name="0" xsi:type="sting">US-CA-Rate_1</item>
+                </item>
             </default_value>
         </field>
         <field name="tax_customer_class" >

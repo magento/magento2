@@ -41,8 +41,8 @@
             <attribute_code>website_ids</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value>
-                <key_0>Main Website</key_0>
+            <default_value  xsi:type="array">
+                <item name="0" xsi:type="sting">Main Website</item>
             </default_value>
             <input>multiselect</input>
             <group>rule_information</group>
@@ -51,8 +51,8 @@
             <attribute_code>customer_group_ids</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value>
-                <key_0>NOT LOGGED IN</key_0>
+            <default_value  xsi:type="array">
+                <item name="0" xsi:type="sting">NOT LOGGED IN</item>
             </default_value>
             <input>multiselect</input>
             <group>rule_information</group>

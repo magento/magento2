@@ -426,8 +426,8 @@
         <field name="website_ids" >
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
-            <default_value>
-                <key_0>Main Website</key_0>
+            <default_value xsi:type="array">
+                <item name="0" xsi:type="sting">Main Website</item>
             </default_value>
             <group>websites</group>
         </field>
