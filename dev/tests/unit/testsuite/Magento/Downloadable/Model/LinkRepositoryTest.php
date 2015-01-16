@@ -238,7 +238,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->productMock->expects($this->once())->method('save');
-        $this->service->save($productSku, null, $linkContentMock);
+        $this->service->save($productSku, $linkContentMock, null);
     }
 
     /**
@@ -267,7 +267,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->never())->method('save');
 
-        $this->service->save($productSku, null, $linkContentMock);
+        $this->service->save($productSku, $linkContentMock, null);
     }
 
     public function testUpdate()
@@ -336,7 +336,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
         $linkMock->expects($this->once())->method('setProductWebsiteIds')->will($this->returnSelf());
         $linkMock->expects($this->once())->method('save')->will($this->returnSelf());
 
-        $this->assertTrue($this->service->save($productSku, $linkId, $linkContentMock));
+        $this->assertTrue($this->service->save($productSku, $linkContentMock, $linkId));
     }
 
     /**
@@ -375,7 +375,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $linkMock->expects($this->never())->method('save');
 
-        $this->service->save($productSku, $linkId, $linkContentMock, true);
+        $this->service->save($productSku, $linkContentMock, $linkId, true);
     }
 
     public function testDelete()

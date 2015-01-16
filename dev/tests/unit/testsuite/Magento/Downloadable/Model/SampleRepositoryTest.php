@@ -138,7 +138,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
         $this->productMock->expects($this->once())->method('save');
-        $this->service->save($productSku, null, $sampleContentMock);
+        $this->service->save($productSku, $sampleContentMock, null);
     }
 
     /**
@@ -164,7 +164,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->never())->method('save');
 
-        $this->service->save($productSku, null, $sampleContentMock);
+        $this->service->save($productSku, $sampleContentMock, null);
     }
 
     public function testUpdate()
@@ -204,7 +204,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $sampleMock->expects($this->once())->method('setStoreId')->will($this->returnSelf());
         $sampleMock->expects($this->once())->method('save')->will($this->returnSelf());
 
-        $this->assertTrue($this->service->save($productSku, $sampleId, $sampleContentMock));
+        $this->assertTrue($this->service->save($productSku, $sampleContentMock, $sampleId));
     }
 
     /**
@@ -240,7 +240,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $sampleMock->expects($this->never())->method('save');
 
-        $this->service->save($productSku, $sampleId, $sampleContentMock, true);
+        $this->service->save($productSku, $sampleContentMock, $sampleId, true);
     }
 
     public function testDelete()
