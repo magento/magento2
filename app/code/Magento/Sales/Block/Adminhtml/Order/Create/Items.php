@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
-use Magento\Sales\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Adminhtml sales order create items block

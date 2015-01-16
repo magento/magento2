@@ -6,7 +6,7 @@
 namespace Magento\Multishipping\Block\Checkout;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Mustishipping checkout shipping

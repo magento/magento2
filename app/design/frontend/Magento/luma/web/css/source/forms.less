@@ -3,14 +3,14 @@
 //  * See COPYING.txt for license details.
 //  */
 
-@legend-border-bottom: 1px solid #c5c5c5;
+@legend-border-bottom: 1px solid @color-gray-light6;
 @form-field-vertical-indent-desktop: 29px;
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .fieldset {
     .form-fieldset();
@@ -123,9 +123,10 @@ select:focus ~ .tooltip .tooltip-content {
         .fields > .field {
             margin: 0 0 @form-field-vertical-indent;
             .label {
-                padding: 0 0 5px;
+                margin: 0 0 4px;
+                padding: 0 0 @indent-xs-base;
                 text-align: left;
-                width: 100%
+                width: 100%;
             }
             .control {
                 width: 100%;
@@ -139,7 +140,7 @@ select:focus ~ .tooltip .tooltip-content {
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .legend {
         .css(border-bottom, @legend-border-bottom);
     }

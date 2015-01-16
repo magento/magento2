@@ -9,7 +9,7 @@ class ToPercent extends ByPercent
 {
     /**
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @return Data
      */

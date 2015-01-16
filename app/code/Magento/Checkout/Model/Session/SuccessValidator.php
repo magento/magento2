@@ -11,18 +11,29 @@ namespace Magento\Checkout\Model\Session;
 class SuccessValidator
 {
     /**
-     * Is valid session?
-     *
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     */
+    public function __construct(
+        \Magento\Checkout\Model\Session $checkoutSession
+    ) {
+        $this->checkoutSession = $checkoutSession;
+    }
+
+    /**
      * @return bool
      */
-    public function isValid(\Magento\Checkout\Model\Session $checkoutSession)
+    public function isValid()
     {
-        if (!$checkoutSession->getLastSuccessQuoteId()) {
+        if (!$this->checkoutSession->getLastSuccessQuoteId()) {
             return false;
         }
 
-        if (!$checkoutSession->getLastQuoteId() || !$checkoutSession->getLastOrderId()) {
+        if (!$this->checkoutSession->getLastQuoteId() || !$this->checkoutSession->getLastOrderId()) {
             return false;
         }
         return true;

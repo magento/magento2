@@ -34,7 +34,7 @@ class Items extends \Magento\Backend\Block\Template
     /**
      * Get order item
      *
-     * @return \Magento\Sales\Model\Quote\Item
+     * @return \Magento\Quote\Model\Quote\Item
      */
     public function getItem()
     {
