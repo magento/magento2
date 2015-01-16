@@ -100,37 +100,6 @@ class QuoteManagement
 
     /**
      * @param Quote $quote
-     * @return void
-     */
-    protected function deleteNominalItems(QuoteEntity $quote)
-    {
-        foreach ($quote->getAllVisibleItems() as $item) {
-            if ($item->isNominal()) {
-                $item->isDeleted(true);
-            }
-        }
-    }
-
-    /**
-     * @param Quote $quote
-     * @return void
-     * @throws \Magento\Framework\Model\Exception
-     */
-    public function submitNominalItems(QuoteEntity $quote)
-    {
-        $this->quoteValidator->validateBeforeSubmit($quote);
-        $this->eventManager->dispatch(
-            'sales_model_service_quote_submit_nominal_items',
-            [
-                'quote' => $quote
-            ]
-        );
-        $quote->setIsActive(false);
-        $this->deleteNominalItems($quote);
-    }
-
-    /**
-     * @param Quote $quote
      * @param array $orderData
      * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object|void
      * @throws \Exception
@@ -148,7 +117,7 @@ class QuoteManagement
                 'quote' => $quote
             ]
         );
-        $this->deleteNominalItems($quote);
+
         return $this->submitQuote($quote, $orderData);
     }
 

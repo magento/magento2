@@ -1052,7 +1052,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
     public function testAddItem()
     {
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', ['setQuote', 'getId'], [], '', false);
+        $item = $this->getMock('Magento\Quote\Model\Quote\Item', ['setQuote', 'getId'], [], '', false);
         $item->expects($this->once())
             ->method('setQuote');
         $item->expects($this->once())
