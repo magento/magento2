@@ -130,7 +130,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
     public function getImage()
     {
         $this->_applyOptions();
-        return (string)$this->_imageHandler;
+        return $this->_imageHandler->getImageBlob();
     }
 
     /**
@@ -314,7 +314,7 @@ class ImageMagick extends \Magento\Framework\Image\Adapter\AbstractAdapter
         }
 
         // merge layers
-        $this->_imageHandler->flattenImages();
+        $this->_imageHandler->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
         $watermark->clear();
         $watermark->destroy();
     }
