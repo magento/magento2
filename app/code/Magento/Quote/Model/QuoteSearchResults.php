@@ -8,9 +8,8 @@ namespace Magento\Quote\Model;
 /**
  * @codeCoverageIgnore
  */
-class QuoteSearchResults
-    extends \Magento\Framework\Api\SearchResults
-    implements \Magento\Quote\Api\Data\CartSearchResultsInterface
+class QuoteSearchResults extends \Magento\Framework\Api\SearchResults implements
+    \Magento\Quote\Api\Data\CartSearchResultsInterface
 {
     /**
      * Get items

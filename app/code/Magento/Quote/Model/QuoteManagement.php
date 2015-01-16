@@ -98,6 +98,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param ToOrderAddressConverter $quoteAddressToOrderAddress
      * @param ToOrderItemConverter $quoteItemToOrderItem
      * @param ToOrderPaymentConverter $quotePaymentToOrderPayment
+     * @param UserContextInterface $userContext
+     * @param QuoteRepository $quoteRepository
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
      */
     public function __construct(
         EventManager $eventManager,
@@ -177,6 +181,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * Creates an anonymous cart.
      *
+     * @param int $storeId
      * @return \Magento\Quote\Model\Quote Cart object.
      */
     protected function createAnonymousCart($storeId)
@@ -222,11 +227,17 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         return $order->getId();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getCartForCustomer($customerId)
     {
         //stub for interface
     }
+
     /**
+     * Delete quote item
+     *
      * @param Quote $quote
      * @return void
      */

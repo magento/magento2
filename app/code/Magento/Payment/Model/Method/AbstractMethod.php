@@ -14,8 +14,8 @@ use Magento\Sales\Model\Order\Payment;
  * Payment method abstract model
  * @method AbstractMethod setStore()
  */
-abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements MethodInterface,
-    PaymentMethodChecksInterface, \Magento\Quote\Api\Data\PaymentMethodInterface
+abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    MethodInterface, PaymentMethodChecksInterface, \Magento\Quote\Api\Data\PaymentMethodInterface
 {
     const ACTION_ORDER = 'order';
 

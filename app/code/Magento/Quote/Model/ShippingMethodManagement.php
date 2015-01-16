@@ -13,7 +13,6 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 
-
 /**
  * Shipping method read service.
  */
