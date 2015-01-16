@@ -31,12 +31,12 @@ class FreeTest extends \PHPUnit_Framework_TestCase
         $customAttributeBuilder = $this->getMock('\Magento\Framework\Api\AttributeDataBuilder', [], [], '', false);
 
         $this->methodFree = new \Magento\Payment\Model\Method\Free(
-            $paymentData,
-            $this->scopeConfig,
             $context,
             $registry,
             $metadataService,
             $customAttributeBuilder,
+            $paymentData,
+            $this->scopeConfig,
             $this->currencyPrice
         );
     }
