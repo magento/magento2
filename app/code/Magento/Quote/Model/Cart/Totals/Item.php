@@ -3,16 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Service\V1\Data\Cart\Totals;
+namespace Magento\Quote\Model\Cart\Totals;
+
+use Magento\Quote\Api\Data\TotalsItemInterface;
+use Magento\Framework\Api\AbstractExtensibleObject;
 
 /**
  * Cart item totals.
  *
  * @codeCoverageIgnore
- * @deprecated
- * @see \Magento\Checkout\Api\Data\TotalsItemInterface
  */
-class Item extends \Magento\Framework\Api\AbstractExtensibleObject
+class Item extends AbstractExtensibleObject implements TotalsItemInterface
 {
     /**
      * Price.

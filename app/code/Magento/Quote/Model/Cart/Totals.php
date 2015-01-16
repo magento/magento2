@@ -3,16 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Service\V1\Data\Cart;
+namespace Magento\Quote\Model\Cart;
 
+use Magento\Quote\Api\Data\TotalsInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Cart Totals
  *
  * @codeCoverageIgnore
- * @deprecated
- * @see \Magento\Checkout\Api\Data\TotalsInterface
  */
-class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
+class Totals extends AbstractExtensibleModel implements TotalsInterface
 {
     /* TOTALS */
     const GRAND_TOTAL = 'grand_total';
@@ -56,7 +56,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getGrandTotal()
     {
-        return $this->_get(self::GRAND_TOTAL);
+        return $this->getData(self::GRAND_TOTAL);
     }
 
     /**
@@ -66,7 +66,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseGrandTotal()
     {
-        return $this->_get(self::BASE_GRAND_TOTAL);
+        return $this->getData(self::BASE_GRAND_TOTAL);
     }
 
     /**
@@ -76,7 +76,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getSubtotal()
     {
-        return $this->_get(self::SUBTOTAL);
+        return $this->getData(self::SUBTOTAL);
     }
 
     /**
@@ -86,7 +86,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseSubtotal()
     {
-        return $this->_get(self::BASE_SUBTOTAL);
+        return $this->getData(self::BASE_SUBTOTAL);
     }
 
     /**
@@ -96,7 +96,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getDiscountAmount()
     {
-        return $this->_get(self::DISCOUNT_AMOUNT);
+        return $this->getData(self::DISCOUNT_AMOUNT);
     }
 
     /**
@@ -106,7 +106,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseDiscountAmount()
     {
-        return $this->_get(self::BASE_DISCOUNT_AMOUNT);
+        return $this->getData(self::BASE_DISCOUNT_AMOUNT);
     }
 
     /**
@@ -116,7 +116,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getSubtotalWithDiscount()
     {
-        return $this->_get(self::SUBTOTAL_WITH_DISCOUNT);
+        return $this->getData(self::SUBTOTAL_WITH_DISCOUNT);
     }
 
     /**
@@ -126,7 +126,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseSubtotalWithDiscount()
     {
-        return $this->_get(self::BASE_SUBTOTAL_WITH_DISCOUNT);
+        return $this->getData(self::BASE_SUBTOTAL_WITH_DISCOUNT);
     }
 
     /**
@@ -136,7 +136,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getShippingAmount()
     {
-        return $this->_get(self::SHIPPING_AMOUNT);
+        return $this->getData(self::SHIPPING_AMOUNT);
     }
 
     /**
@@ -146,7 +146,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseShippingAmount()
     {
-        return $this->_get(self::BASE_SHIPPING_AMOUNT);
+        return $this->getData(self::BASE_SHIPPING_AMOUNT);
     }
 
     /**
@@ -156,7 +156,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getShippingDiscountAmount()
     {
-        return $this->_get(self::SHIPPING_DISCOUNT_AMOUNT);
+        return $this->getData(self::SHIPPING_DISCOUNT_AMOUNT);
     }
 
     /**
@@ -166,7 +166,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseShippingDiscountAmount()
     {
-        return $this->_get(self::BASE_SHIPPING_DISCOUNT_AMOUNT);
+        return $this->getData(self::BASE_SHIPPING_DISCOUNT_AMOUNT);
     }
 
     /**
@@ -176,7 +176,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getTaxAmount()
     {
-        return $this->_get(self::TAX_AMOUNT);
+        return $this->getData(self::TAX_AMOUNT);
     }
 
     /**
@@ -186,7 +186,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseTaxAmount()
     {
-        return $this->_get(self::BASE_TAX_AMOUNT);
+        return $this->getData(self::BASE_TAX_AMOUNT);
     }
 
     /**
@@ -196,7 +196,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getShippingTaxAmount()
     {
-        return $this->_get(self::SHIPPING_TAX_AMOUNT);
+        return $this->getData(self::SHIPPING_TAX_AMOUNT);
     }
 
     /**
@@ -206,7 +206,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseShippingTaxAmount()
     {
-        return $this->_get(self::BASE_SHIPPING_TAX_AMOUNT);
+        return $this->getData(self::BASE_SHIPPING_TAX_AMOUNT);
     }
 
     /**
@@ -216,7 +216,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getSubtotalInclTax()
     {
-        return $this->_get(self::SUBTOTAL_INCL_TAX);
+        return $this->getData(self::SUBTOTAL_INCL_TAX);
     }
 
     /**
@@ -226,7 +226,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseSubtotalInclTax()
     {
-        return $this->_get(self::BASE_SUBTOTAL_INCL_TAX);
+        return $this->getData(self::BASE_SUBTOTAL_INCL_TAX);
     }
 
     /**
@@ -236,7 +236,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getShippingInclTax()
     {
-        return $this->_get(self::SHIPPING_INCL_TAX);
+        return $this->getData(self::SHIPPING_INCL_TAX);
     }
 
     /**
@@ -246,7 +246,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseShippingInclTax()
     {
-        return $this->_get(self::BASE_SHIPPING_INCL_TAX);
+        return $this->getData(self::BASE_SHIPPING_INCL_TAX);
     }
 
     /**
@@ -256,7 +256,7 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getBaseCurrencyCode()
     {
-        return $this->_get(self::BASE_CURRENCY_CODE);
+        return $this->getData(self::BASE_CURRENCY_CODE);
     }
 
     /**
@@ -266,16 +266,16 @@ class Totals extends \Magento\Framework\Api\AbstractExtensibleObject
      */
     public function getQuoteCurrencyCode()
     {
-        return $this->_get(self::QUOTE_CURRENCY_CODE);
+        return $this->getData(self::QUOTE_CURRENCY_CODE);
     }
 
     /**
      * Get totals by items
      *
-     * @return \Magento\Checkout\Service\V1\Data\Cart\Totals\Item[]|null
+     * @return \Magento\Quote\Api\Data\TotalsItemInterface[]|null
      */
     public function getItems()
     {
-        return $this->_get(self::ITEMS);
+        return $this->getData(self::ITEMS);
     }
 }

@@ -3,11 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Api\Data;
+namespace Magento\Quote\Api\Data;
 
-/**
- * @see \Magento\Checkout\Service\V1\Data\Cart\Totals
- */
 interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
@@ -167,7 +164,7 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Get totals by items
      *
-     * @return \Magento\Checkout\Api\Data\TotalsItemInterface[]|null
+     * @return \Magento\Quote\Api\Data\TotalsItemInterface[]|null
      */
     public function getItems();
 }

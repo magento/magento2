@@ -169,7 +169,7 @@ class CartBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
     }
 
     /**
-     * @param \Magento\Checkout\Service\V1\Data\Cart\Totals $value
+     * @param \Magento\Quote\Api\Data\TotalsInterface $value
      * @return $this
      */
     public function setTotals($value)

@@ -103,7 +103,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Returns information about cart totals.
      *
-     * @return \Magento\Checkout\Api\Data\TotalsInterface|null Information about cart totals. Otherwise, null.
+     * @return \Magento\Quote\Api\Data\TotalsInterface|null Information about cart totals. Otherwise, null.
      */
     public function getTotals();
 

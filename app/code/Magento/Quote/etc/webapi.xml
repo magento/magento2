@@ -139,4 +139,10 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/carts/:cartId/totals" method="GET">
+        <service class="Magento\Quote\Api\CartTotalRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
 </routes>

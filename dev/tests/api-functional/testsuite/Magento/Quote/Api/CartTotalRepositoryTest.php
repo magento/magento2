@@ -4,17 +4,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Service\V1\Cart;
+namespace Magento\Quote\Api;
 
-use Magento\Checkout\Service\V1\Data\Cart\Totals;
-use Magento\Checkout\Service\V1\Data\Cart\Totals\Item as ItemTotals;
+use Magento\Quote\Model\Cart\Totals;
+use Magento\Quote\Model\Cart\Totals\Item as ItemTotals;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
-class TotalsServiceTest extends WebapiAbstract
+class CartTotalRepositoryTest extends WebapiAbstract
 {
     /**
      * @var ObjectManager
@@ -109,9 +109,9 @@ class TotalsServiceTest extends WebapiAbstract
     {
         return [
             'soap' => [
-                'service' => 'checkoutCartTotalsServiceV1',
+                'service' => 'quoteCartTotalRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'checkoutCartTotalsServiceV1GetTotals',
+                'operation' => 'quoteCartTotalRepositoryV1get',
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId . '/totals',

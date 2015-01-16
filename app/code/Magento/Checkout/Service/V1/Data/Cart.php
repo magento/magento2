@@ -257,7 +257,7 @@ class Cart extends \Magento\Framework\Api\AbstractExtensibleObject
     /**
      * Returns information about cart totals.
      *
-     * @return \Magento\Checkout\Service\V1\Data\Cart\Totals|null Information about cart totals. Otherwise, null.
+     * @return \Magento\Quote\Api\Data\TotalsInterface|null Information about cart totals. Otherwise, null.
      */
     public function getTotals()
     {
