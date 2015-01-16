@@ -104,5 +104,5 @@ define([
     } else {
         $('.notifications-action .counter').show();
     }
-
+    
 });
