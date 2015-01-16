@@ -12,7 +12,9 @@ module.exports = function (grunt) {
     require('time-grunt')(grunt);
 
     // Load grunt tasks automatically
-    require('load-grunt-tasks')(grunt);
+    require('load-grunt-tasks')(grunt, {
+        pattern: ['grunt-*', '!grunt-template-jasmine-requirejs']
+    });
 
     var config = {
         path: {
