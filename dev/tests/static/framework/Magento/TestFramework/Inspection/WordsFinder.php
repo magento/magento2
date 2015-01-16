@@ -240,6 +240,7 @@ class WordsFinder
      *
      * @param  string $file
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _findWords($file)
     {

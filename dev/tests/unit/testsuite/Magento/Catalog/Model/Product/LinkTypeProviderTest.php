@@ -36,7 +36,10 @@ class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->linkTypeBuilderMock = $this->getMock(
             'Magento\Catalog\Api\Data\ProductLinkTypeDataBuilder',
-            ['create', 'populateWithArray']
+            ['create', 'populateWithArray'],
+            [],
+            '',
+            false
         );
         $this->linkAttributeBuilderMock = $this->getMock(
             'Magento\Catalog\Api\Data\ProductLinkAttributeDataBuilder',
