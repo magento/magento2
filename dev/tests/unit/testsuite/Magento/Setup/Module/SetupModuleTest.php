@@ -36,7 +36,7 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
         $this->moduleListMock = $this->getMockForAbstractClass('Magento\Framework\Module\ModuleListInterface');
         $this->moduleName = 'SampleModule';
         $this->moduleListMock
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getOne')
             ->with($this->moduleName)
             ->will($this->returnValue(['name' => 'SampleModule', 'schema_version' => '2.0.0']));
@@ -47,10 +47,13 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
     {
         $fileResolver = $this->getMock('Magento\Setup\Module\Setup\FileResolver', [], [], '', false);
         $fileResolver
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getSqlSetupFiles')
             ->with($this->moduleName, 'recurring.php')
             ->will($this->returnValue([__DIR__ . '/_files/recurring.php']));
+        $this->loggerMock
+            ->expects($this->once())
+            ->method('log');
         $setupModule = new SetupModule(
             $this->loggerMock,
             $this->moduleListMock,
@@ -70,10 +73,13 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
     {
         $fileResolver = $this->getMock('Magento\Setup\Module\Setup\FileResolver', [], [], '', false);
         $fileResolver
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getSqlSetupFiles')
             ->with($this->moduleName, 'recurring.php')
             ->will($this->returnValue([__DIR__ . '/_files/recurring1.php']));
+        $this->loggerMock
+            ->expects($this->once())
+            ->method('log');
         $setupModule = new SetupModule(
             $this->loggerMock,
             $this->moduleListMock,
@@ -88,7 +94,7 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
     {
         $fileResolver = $this->getMock('Magento\Setup\Module\Setup\FileResolver', [], [], '', false);
         $fileResolver
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getResourceCode')
             ->will($this->returnValue(null));
         $setupModule = new SetupModule(
@@ -105,10 +111,6 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
     public  function testApplyUpdatesWithNoVersions()
     {
         $fileResolver = $this->getMock('Magento\Setup\Module\Setup\FileResolver', [], [], '', false);
-        $this->resourceModelMock
-            ->expects($this->any())
-            ->method('getDbVersion')
-            ->will($this->returnValue(false));
         $setupModule = new SetupModule(
             $this->loggerMock,
             $this->moduleListMock,
