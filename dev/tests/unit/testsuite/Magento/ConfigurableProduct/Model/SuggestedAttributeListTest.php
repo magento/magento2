@@ -77,7 +77,6 @@ class SuggestedAttributeListTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             ['frontend_input', 'select', $this->collectionMock],
             ['frontend_label', ['like' => $this->labelPart], $this->collectionMock],
-            ['is_configurable', [['eq' => 1], ['null' => true]], $this->collectionMock],
             ['is_user_defined', 1, $this->collectionMock],
             ['is_global', \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL, $this->collectionMock],
         ];

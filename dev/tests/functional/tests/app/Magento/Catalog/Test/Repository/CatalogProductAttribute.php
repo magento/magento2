@@ -37,7 +37,6 @@ class CatalogProductAttribute extends AbstractRepository
             'attribute_code' => 'attribute_dropdown%isolation%',
             'frontend_input' => 'Dropdown',
             'is_required' => 'No',
-            'is_configurable' => 'Yes',
             'options' => [
                 [
                     'is_default' => 'Yes',
@@ -62,7 +61,6 @@ class CatalogProductAttribute extends AbstractRepository
             'attribute_code' => 'attribute_dropdown%isolation%',
             'frontend_input' => 'Dropdown',
             'is_required' => 'No',
-            'is_configurable' => 'Yes',
             'options' => [
                 [
                     'is_default' => 'Yes',
@@ -82,7 +80,6 @@ class CatalogProductAttribute extends AbstractRepository
             'attribute_code' => 'attribute_dropdown%isolation%',
             'frontend_input' => 'Dropdown',
             'is_required' => 'No',
-            'is_configurable' => 'Yes',
             'options' => [
                 [
                     'is_default' => 'Yes',
@@ -97,7 +94,6 @@ class CatalogProductAttribute extends AbstractRepository
             'attribute_code' => 'color_%isolation%',
             'frontend_input' => 'Dropdown',
             'is_required' => 'No',
-            'is_configurable' => 'Yes',
             'options' => [
                 [
                     'is_default' => 'Yes',
@@ -117,7 +113,6 @@ class CatalogProductAttribute extends AbstractRepository
             'attribute_code' => 'size_%isolation%',
             'frontend_input' => 'Dropdown',
             'is_required' => 'No',
-            'is_configurable' => 'Yes',
             'options' => [
                 [
                     'is_default' => 'Yes',
