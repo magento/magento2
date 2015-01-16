@@ -11,9 +11,8 @@ use Magento\Framework\Exception\AuthorizationException;
 use Magento\Webapi\Model\PathProcessor;
 
 /**
- * TODO: Consider warnings suppression removal
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * SOAP Web API entry point.
  */
 class Soap implements \Magento\Framework\App\FrontControllerInterface
 {
@@ -82,8 +81,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param PathProcessor $pathProcessor
      * @param \Magento\Framework\App\AreaList $areaList
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Webapi\Controller\Soap\Request $request,
