@@ -57,7 +57,7 @@
     case 'wysiwyg': ?>
     <span class="form_row">
       <label for="<?php echo $element->getHtmlId() ?>"><?php echo $element->getLabel() ?>:</label>
-        <script type="text/javascript">
+        <script>
         require([
             'tinymce'
         ], function(tinyMCE){
@@ -80,7 +80,6 @@
                 convert_urls : 'false',
                 force_br_newlines : 'true',
                 doctype : '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
-
             });
         });
 </script>
@@ -101,7 +100,7 @@
       <?php break;
 } ?>
 <?php if ($element->getScript()): ?>
-<script type="text/javascript">
+<script>
     <?php echo $element->getScript() ?>
 </script>
 <?php endif; ?>

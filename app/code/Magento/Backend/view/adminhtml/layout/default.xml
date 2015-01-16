@@ -64,7 +64,7 @@
                 <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
                 <block class="Magento\Backend\Block\Page\Footer" name="version" as="version">
                     <arguments>
-                        <argument name="bugreport_url" xsi:type="string">http://www.magentocommerce.com/bug-tracking</argument>
+                        <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
                     </arguments>
                 </block>
             </container>

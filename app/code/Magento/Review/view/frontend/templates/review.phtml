@@ -40,8 +40,7 @@
             $('.product-info-main .reviews-actions a').click(function (event) {
                 event.preventDefault();
                 var acnchor = $(this).attr('href').replace(/^.*?(#|$)/, '');
-                $('.product.data.items [data-role='
-                    content ']').each(function (index) {
+                $(".product.data.items [data-role='content']").each(function(index){
                     if (this.id == 'reviews') {
                         $('.product.data.items').tabs('activate', index);
                         $('html, body').animate({

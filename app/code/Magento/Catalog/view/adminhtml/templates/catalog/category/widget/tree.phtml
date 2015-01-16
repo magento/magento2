@@ -8,9 +8,8 @@
 <?php $_divId = 'tree' . $this->getId() ?>
 <div id="<?php echo $_divId ?>" class="tree"></div>
 
-<script type="text/javascript">
+<script>
 require(["prototype", "extjs/ext-tree-checkbox"], function(){
-//<![CDATA[
 
 var tree<?php echo $this->getId() ?>;
 
@@ -180,7 +179,6 @@ Ext.onReady(function()
     tree<?php echo $this->getId() ?>.loadTree({parameters:parameters, data:<?php echo $this->getTreeJson() ?>},true);
 
 });
-//]]>
 
 });
 </script>
