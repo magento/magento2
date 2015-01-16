@@ -10,7 +10,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 class MutablePathAsset extends AbstractAsset
 {
-
     /**
      * Generate minified file and fill the properties to reference that file
      *

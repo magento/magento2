@@ -123,6 +123,8 @@ class MinifyService
     }
 
     /**
+     * Returns asset decorated by corresponding minifier
+     *
      * @param AssetInterface $asset
      * @param string $strategy
      * @return AssetInterface
@@ -130,17 +132,20 @@ class MinifyService
      */
     protected function getAssetDecorated(AssetInterface $asset, $strategy)
     {
-        return $this->objectManager->create(
-                    $this->getDecoratorClass($asset),
-                    [
-                        'asset' => $asset,
-                        'strategy' => $strategy,
-                        'adapter' => $this->getAdapter($asset->getContentType()),
-                    ]
-        );
+        return
+            $this->objectManager->create(
+                $this->getDecoratorClass($asset),
+                [
+                    'asset' => $asset,
+                    'strategy' => $strategy,
+                    'adapter' => $this->getAdapter($asset->getContentType()),
+                ]
+            );
     }
 
     /**
+     * Returns minifier decorator class name for given asset
+     *
      * @param AssetInterface $asset
      * @return string
      */
