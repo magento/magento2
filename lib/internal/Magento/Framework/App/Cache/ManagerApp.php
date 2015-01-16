@@ -66,6 +66,7 @@ class ManagerApp implements AppInterface
     /**
      * {@inheritdoc}
      * @return Response
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function launch()
     {
