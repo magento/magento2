@@ -203,16 +203,12 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->eventManager->expects($this->at(0))
             ->method('dispatch')
-            ->with('sales_model_service_quote_submit_nominal_items', ['quote' => $quote]);
-        $this->eventManager->expects($this->at(1))
-            ->method('dispatch')
             ->with('sales_model_service_quote_submit_before', ['order' => $order, 'quote' => $quote]);
-        $this->eventManager->expects($this->at(2))
+        $this->eventManager->expects($this->at(1))
             ->method('dispatch')
             ->with('sales_model_service_quote_submit_success', ['order' => $order, 'quote' => $quote]);
 
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
-
     }
 
     protected function getQuote(

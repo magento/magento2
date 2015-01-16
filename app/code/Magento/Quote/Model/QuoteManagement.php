@@ -111,12 +111,6 @@ class QuoteManagement
             $quote->setIsActive(false);
             return;
         }
-        $this->eventManager->dispatch(
-            'sales_model_service_quote_submit_nominal_items',
-            [
-                'quote' => $quote
-            ]
-        );
 
         return $this->submitQuote($quote, $orderData);
     }
