@@ -26,12 +26,12 @@ class DbIsolation
         \PHPUnit_Framework_TestCase $test,
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
-        $methodIsolation = $this->_getIsolation('method', $test);
+        $methodIsolation = $this->_getIsolation($test);
         if ($this->_isIsolationActive) {
             if ($methodIsolation === false) {
                 $param->requestTransactionRollback();
             }
-        } elseif ($methodIsolation || ($methodIsolation === null && $this->_getIsolation('class', $test))) {
+        } elseif ($methodIsolation || ($methodIsolation === null && $this->_getIsolation($test))) {
             $param->requestTransactionStart();
         }
     }
@@ -46,7 +46,7 @@ class DbIsolation
         \PHPUnit_Framework_TestCase $test,
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
-        if ($this->_isIsolationActive && $this->_getIsolation('method', $test)) {
+        if ($this->_isIsolationActive && $this->_getIsolation($test)) {
             $param->requestTransactionRollback();
         }
     }
@@ -78,12 +78,11 @@ class DbIsolation
      *   TRUE  - annotation is defined as 'enabled'
      *   FALSE - annotation is defined as 'disabled'
      *
-     * @param string $scope 'class' or 'method'
      * @param \PHPUnit_Framework_TestCase $test
      * @return bool|null Returns NULL, if isolation is not defined for the current scope
      * @throws \Magento\Framework\Exception
      */
-    protected function _getIsolation($scope, \PHPUnit_Framework_TestCase $test)
+    protected function _getIsolation(\PHPUnit_Framework_TestCase $test)
     {
         $annotations = $this->getAnnotations($test);
         if (isset($annotations[self::MAGENTO_DB_ISOLATION])) {
@@ -102,7 +101,8 @@ class DbIsolation
      * @param \PHPUnit_Framework_TestCase $test
      * @return array
      */
-    private function getAnnotations(\PHPUnit_Framework_TestCase $test) {
+    private function getAnnotations(\PHPUnit_Framework_TestCase $test)
+    {
         $annotations = $test->getAnnotations();
         return array_replace($annotations['class'], $annotations['method']);
     }
