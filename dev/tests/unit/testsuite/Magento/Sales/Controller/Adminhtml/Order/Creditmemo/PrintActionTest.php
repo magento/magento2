@@ -43,11 +43,6 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $creditmemoMock;
 
     /**
@@ -76,19 +71,14 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultPageMock;
+    protected $resultForwardFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $pageConfigMock;
-
-    /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $pageTitleMock;
+    protected $resultForwardMock;
 
     public function setUp()
     {
@@ -109,10 +99,6 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
         $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->viewMock = $this->getMockBuilder('Magento\Backend\Model\View')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
         $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\Manager')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -155,9 +141,6 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
             ->method('getTitle')
             ->will($this->returnValue($titleMock));
         $this->contextMock->expects($this->any())
-            ->method('getView')
-            ->will($this->returnValue($this->viewMock));
-        $this->contextMock->expects($this->any())
             ->method('getMessageManager')
             ->will($this->returnValue($this->messageManagerMock));
         $this->loaderMock = $this->getMockBuilder('Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader')
@@ -168,20 +151,23 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+        $this->resultForwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $this->resultForwardMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->controller = new \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\PrintAction(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->loaderMock
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->controller = $objectManager->getObject(
+            'Magento\Sales\Controller\Adminhtml\Order\Creditmemo\PrintAction',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'resultForwardFactory' => $this->resultForwardFactoryMock,
+                'creditmemoLoader' => $this->loaderMock
+            ]
         );
     }
 
@@ -206,18 +192,17 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
         $this->loaderMock->expects($this->once())
             ->method('load')
             ->willReturn($this->creditmemoMock);
-        $this->viewMock->expects($this->atLeastOnce())
-            ->method('getPage')
-            ->willReturn($this->resultPageMock);
-        $this->resultPageMock->expects($this->atLeastOnce())
-            ->method('getConfig')
-            ->willReturn($this->pageConfigMock);
-        $this->pageConfigMock->expects($this->atLeastOnce())
-            ->method('getTitle')
-            ->willReturn($this->pageTitleMock);
-        $this->pageTitleMock->expects($this->atLeastOnce())
-            ->method('prepend');
+        $this->resultForwardFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultForwardMock);
+        $this->resultForwardMock->expects($this->once())
+            ->method('forward')
+            ->with('noroute')
+            ->willReturnSelf();
 
-        $this->assertNull($this->controller->execute());
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Forward',
+            $this->controller->execute()
+        );
     }
 }

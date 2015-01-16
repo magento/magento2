@@ -18,14 +18,14 @@ class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstrac
     /**
      * @param Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
         parent::__construct(
