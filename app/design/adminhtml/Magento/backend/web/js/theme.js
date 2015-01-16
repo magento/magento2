@@ -385,7 +385,7 @@ define('js/theme', [
     'mage/smart-keyboard-handler',
     'mage/ie-class-fixer',
     'collapsable',
-    'domReady'
+    'domReady!'
 ], function ($, keyboardHandler) {
     'use strict';
 

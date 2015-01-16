@@ -7,7 +7,7 @@ define([
     'mage/smart-keyboard-handler',
     'mage/mage',
     'mage/ie-class-fixer',
-    'domReady'
+    'domReady!'
 ], function ($, keyboardHandler) {
     'use strict';
 

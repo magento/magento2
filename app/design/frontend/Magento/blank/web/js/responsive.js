@@ -7,7 +7,7 @@ define([
     'jquery',
     'matchMedia',
     'mage/tabs',
-    'domReady'
+    'domReady!'
 ], function ($, mediaCheck) {
     'use strict';
 
