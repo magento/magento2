@@ -8,6 +8,9 @@ namespace Magento\Customer\Controller\Address;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Index extends \Magento\Customer\Controller\Address
 {
     /**
