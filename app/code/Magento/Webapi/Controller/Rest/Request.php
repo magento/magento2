@@ -18,6 +18,8 @@ class Request extends \Magento\Webapi\Controller\Request
      */
     const REQUEST_CHARSET = 'utf-8';
 
+    const DEFAULT_ACCEPT = '*/*';
+
     /** @var string */
     protected $_serviceName;
 
@@ -101,7 +103,7 @@ class Request extends \Magento\Webapi\Controller\Request
         foreach ($qualityToTypes as $typeList) {
             $orderedTypes += $typeList;
         }
-        return array_keys($orderedTypes);
+        return empty($orderedTypes) ? self::DEFAULT_ACCEPT : array_keys($orderedTypes);
     }
 
     /**
