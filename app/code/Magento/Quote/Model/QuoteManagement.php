@@ -224,6 +224,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $order = $this->submit($quote);
+        $this->quoteRepository->save($quote);
         return $order->getId();
     }
 
