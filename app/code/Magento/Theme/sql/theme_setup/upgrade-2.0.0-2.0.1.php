@@ -14,7 +14,7 @@ $connection = $installer->getConnection();
  * Remove column 'theme_version' from 'core_theme'
  */
 $connection->dropColumn(
-    $installer->getTable('core_theme'),
+    $installer->getTable('theme'),
     'theme_version'
 );
 

@@ -8,6 +8,11 @@
 $installer = $this->createMigrationSetup();
 $installer->startSetup();
 
+/*
+ * Register themes
+ */
+$installer->getEventManager()->dispatch('theme_registration_from_filesystem');
+
 /**
  * Update theme's data
  */
@@ -48,6 +53,5 @@ $installer->getConnection()->update(
     ['area' => 'frontend'],
     ['area = ?' => '']
 );
-$installer->getEventManager()->dispatch('theme_registration_from_filesystem');
 
 $installer->endSetup();
