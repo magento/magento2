@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Pricing\Render;
@@ -41,7 +42,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     protected $product;
 
     /**
-     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $logger;
 
@@ -74,7 +75,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
 
         $this->priceBox = $this->getMock('Magento\Framework\Pricing\Render\PriceBox', [], [], '', false);
-        $this->logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->layout->expects($this->any())
             ->method('getBlock')
@@ -187,7 +188,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     public function testRenderMsrpNotRegisteredException()
     {
         $this->logger->expects($this->once())
-            ->method('logException');
+            ->method('critical');
 
         $this->priceInfo->expects($this->once())
             ->method('getPrice')

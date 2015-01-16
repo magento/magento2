@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
@@ -23,7 +24,7 @@ class Wishlist extends \Magento\Customer\Controller\Adminhtml\Index
             try {
                 $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($itemId)->delete();
             } catch (\Exception $exception) {
-                $this->_objectManager->get('Magento\Framework\Logger')->logException($exception);
+                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($exception);
             }
         }
 

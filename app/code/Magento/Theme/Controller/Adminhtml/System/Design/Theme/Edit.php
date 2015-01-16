@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
@@ -40,7 +41,7 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $this->_redirect('adminhtml/*/');
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We cannot find the theme.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_redirect('adminhtml/*/');
         }
     }

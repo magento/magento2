@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page mca="setup/" module="Magento_Install">
+    <blocks>
+        <landingBlock>
+            <class>Magento\Install\Test\Block\Landing</class>
+            <locator>body</locator>
+            <strategy>css selector</strategy>
+        </landingBlock>
+        <licenseBlock>
+            <class>Magento\Install\Test\Block\License</class>
+            <locator>body</locator>
+            <strategy>css selector</strategy>
+        </licenseBlock>
+        <readinessBlock>
+            <class>Magento\Install\Test\Block\Readiness</class>
+            <locator>body</locator>
+            <strategy>css selector</strategy>
+        </readinessBlock>
+        <databaseBlock>
+            <class>Magento\Install\Test\Block\Database</class>
+            <locator>body</locator>
+            <strategy>css selector</strategy>
+        </databaseBlock>
+        <webConfigBlock>
+            <class>Magento\Install\Test\Block\WebConfiguration</class>
+            <locator>body</locator>
+            <strategy>css selector</strategy>
+        </webConfigBlock>
+        <customizeStoreBlock>
+            <class>Magento\Install\Test\Block\CustomizeStore</class>
+            <locator>body</locator>
+            <strategy>css selector</strategy>
+        </customizeStoreBlock>
+        <createAdminBlock>
+            <class>Magento\Install\Test\Block\CreateAdmin</class>
+            <locator>body</locator>
+            <strategy>css selector</strategy>
+        </createAdminBlock>
+        <installBlock>
+            <class>Magento\Install\Test\Block\Install</class>
+            <locator>body</locator>
+            <strategy>css selector</strategy>
+        </installBlock>
+    </blocks>
+</page>

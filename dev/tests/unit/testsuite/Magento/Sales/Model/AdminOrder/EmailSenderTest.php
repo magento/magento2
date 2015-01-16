@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\AdminOrder;
 
@@ -41,7 +42,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->loggerMock = $this->getMock(
-            '\Magento\Framework\Logger',
+            '\Psr\Log\LoggerInterface',
             [],
             [],
             '',
@@ -80,7 +81,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addWarning');
         $this->loggerMock->expects($this->once())
-            ->method('logException');
+            ->method('critical');
 
         $this->assertFalse($this->emailSender->send($this->orderMock));
     }

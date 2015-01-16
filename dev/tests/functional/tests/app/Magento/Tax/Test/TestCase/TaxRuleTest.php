@@ -3,7 +3,8 @@
  * @category    Mtf
  * @package     Mtf
  * @subpackage  functional_tests
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tax\Test\TestCase;
@@ -27,7 +28,7 @@ class TaxRuleTest extends Functional
     {
         //Data
         $objectManager = Factory::getObjectManager();
-        $fixture = $objectManager->create('\Magento\Tax\Test\Fixture\TaxRule', ['dataSet' => 'us_ca_ny_rule']);
+        $fixture = $objectManager->create('Magento\Tax\Test\Fixture\TaxRule', ['dataSet' => 'us_ca_ny_rule']);
         //Pages
         $taxGridPage = Factory::getPageFactory()->getTaxRuleIndex();
         $newTaxRulePage = Factory::getPageFactory()->getTaxRuleNew();

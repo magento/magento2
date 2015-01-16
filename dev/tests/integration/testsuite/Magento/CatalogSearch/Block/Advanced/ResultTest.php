@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Block\Advanced;
 
@@ -48,7 +49,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $category->setId(100500); // Any id - just for layer navigation
         /** @var \Magento\Catalog\Model\Layer\Resolver $resolver */
         $resolver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('\Magento\Catalog\Model\Layer\Resolver');
+            ->get('Magento\Catalog\Model\Layer\Resolver');
         $resolver->get()->setCurrentCategory($category);
 
         $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'search_result_list', 'block');

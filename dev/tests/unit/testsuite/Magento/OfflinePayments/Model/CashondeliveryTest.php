@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Model;
 
@@ -17,13 +18,6 @@ class CashondeliveryTest extends \PHPUnit_Framework_TestCase
 
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $adapterFactoryMock = $this->getMock(
-            'Magento\Framework\Logger\AdapterFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
 
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_object = $helper->getObject(
@@ -32,7 +26,6 @@ class CashondeliveryTest extends \PHPUnit_Framework_TestCase
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,
                 'scopeConfig' => $scopeConfig,
-                'logAdapterFactory' => $adapterFactoryMock
             ]
         );
     }

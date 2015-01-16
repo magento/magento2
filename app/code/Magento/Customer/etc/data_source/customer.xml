@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,7 +20,7 @@
                 </constraints>
                 <tooltip>
                     <link>http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes</link>
-                    <description>If your Magento Go site has multiple views, you can set the scope to apply to a specific view.</description>
+                    <description>If your Magento site has multiple views, you can set the scope to apply to a specific view.</description>
                 </tooltip>
             </field>
             <field name="prefix" source="eav" dataType="text"/>

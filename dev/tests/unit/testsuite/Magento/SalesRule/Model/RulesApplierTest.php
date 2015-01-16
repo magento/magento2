@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\SalesRule\Model;
@@ -58,10 +59,16 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testApplyRulesWhenRuleWithStopRulesProcessingIsUsed()
+    /**
+     * @param bool $isChildren
+     * @param bool $isContinue
+     *
+     * @dataProvider dataProviderChildren
+     */
+    public function testApplyRulesWhenRuleWithStopRulesProcessingIsUsed($isChildren, $isContinue)
     {
         $positivePrice = 1;
-        $skipValidation = true;
+        $skipValidation = false;
         $item = $this->getPreparedItem();
         $couponCode = 111;
 
@@ -73,7 +80,7 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
          */
         $ruleWithStopFurtherProcessing = $this->getMock(
             'Magento\SalesRule\Model\Rule',
-            ['getStoreLabel', 'getCouponType', 'getRuleId', '__wakeup'],
+            ['getStoreLabel', 'getCouponType', 'getRuleId', '__wakeup', 'getActions'],
             [],
             '',
             false
@@ -82,6 +89,14 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
         $ruleThatShouldNotBeRun = $this->getMock(
             'Magento\SalesRule\Model\Rule',
             ['getStopRulesProcessing', '__wakeup'],
+            [],
+            '',
+            false
+        );
+
+        $actionMock = $this->getMock(
+            'Magento\Rule\Model\Action\Collection',
+            ['validate'],
             [],
             '',
             false
@@ -96,18 +111,50 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
 
         $this->validatorUtility->expects($this->atLeastOnce())
             ->method('canProcessRule')
-            ->will(
-                $this->returnValue(true)
-            );
-        $ruleWithStopFurtherProcessing->expects($this->any())
-            ->method('getRuleId')
-            ->will($this->returnValue($ruleId));
-        $this->applyRule($item, $ruleWithStopFurtherProcessing);
-        $ruleWithStopFurtherProcessing->setStopRulesProcessing(true);
-        $ruleThatShouldNotBeRun->expects($this->never())
-            ->method('getStopRulesProcessing');
+            ->will($this->returnValue(true));
+
+        $ruleWithStopFurtherProcessing->expects($this->atLeastOnce())
+            ->method('getActions')
+            ->willReturn($actionMock);
+        $actionMock->expects($this->at(0))
+            ->method('validate')
+            ->with($item)
+            ->willReturn(!$isChildren);
+
+        // if there are child elements, check them
+        if ($isChildren) {
+            $item->expects($this->atLeastOnce())
+                ->method('getChildren')
+                ->willReturn([$item]);
+            $actionMock->expects($this->at(1))
+                ->method('validate')
+                ->with($item)
+                ->willReturn(!$isContinue);
+        }
+
+        //
+        if (!$isContinue || !$isChildren) {
+            $ruleWithStopFurtherProcessing->expects($this->any())
+                ->method('getRuleId')
+                ->will($this->returnValue($ruleId));
+
+            $this->applyRule($item, $ruleWithStopFurtherProcessing);
+
+            $ruleWithStopFurtherProcessing->setStopRulesProcessing(true);
+            $ruleThatShouldNotBeRun->expects($this->never())
+                ->method('getStopRulesProcessing');
+        }
+
         $result = $this->rulesApplier->applyRules($item, $rules, $skipValidation, $couponCode);
         $this->assertEquals($appliedRuleIds, $result);
+    }
+
+    public function dataProviderChildren()
+    {
+        return [
+            ['isChildren' => true, 'isContinue' => false],
+            ['isChildren' => false, 'isContinue' => true],
+        ];
     }
 
     /**
@@ -137,7 +184,8 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
                 'setDiscountPercent',
                 'getAddress',
                 'setAppliedRuleIds',
-                '__wakeup'
+                '__wakeup',
+                'getChildren'
             ],
             [],
             '',

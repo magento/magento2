@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -32,7 +33,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->_menuModel = new \Magento\Backend\Model\Menu($logger);
         $this->_menuSubModel = new \Magento\Backend\Model\Menu($logger);
 

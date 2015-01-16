@@ -1,8 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
+
+use Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
 
 /**
  * Test class for \Magento\Sales\Model\Order
@@ -39,6 +42,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $item;
 
+    /**
+     * @var HistoryCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $historyCollectionFactoryMock;
+
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -51,6 +59,13 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
         $this->orderItemCollectionFactoryMock = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Item\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->historyCollectionFactoryMock = $this->getMock(
+            'Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory',
             ['create'],
             [],
             '',
@@ -87,7 +102,8 @@ class OrderTest extends \PHPUnit_Framework_TestCase
                 'paymentCollectionFactory' => $this->paymentCollectionFactoryMock,
                 'orderItemCollectionFactory' => $this->orderItemCollectionFactoryMock,
                 'data' => ['increment_id' => $this->incrementId],
-                'context' => $context
+                'context' => $context,
+                'historyCollectionFactory' => $this->historyCollectionFactoryMock
             ]
         );
     }
@@ -483,5 +499,71 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityType()
     {
         $this->assertEquals('order', $this->order->getEntityType());
+    }
+
+    /**
+     * Run test getStatusHistories method
+     *
+     * @return void
+     */
+    public function testGetStatusHistories()
+    {
+        $itemMock = $this->getMockForAbstractClass(
+            'Magento\Sales\Api\Data\OrderStatusHistoryInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['setOrder']
+        );
+        $dbMock = $this->getMock(
+            'Magento\Framework\Data\Collection\Db',
+            ['setOrder'],
+            [],
+            '',
+            false
+        );
+        $collectionMock = $this->getMock(
+            'Magento\Sales\Model\Resource\Order\Status\History\Collection',
+            [
+                'setOrderFilter',
+                'setOrder',
+                'getItems',
+                'getIterator',
+                'toOptionArray',
+                'count',
+                'load'
+            ],
+            [],
+            '',
+            false
+        );
+
+        $collectionItems = [$itemMock];
+
+        $collectionMock->expects($this->once())
+            ->method('setOrderFilter')
+            ->with($this->order)
+            ->willReturnSelf();
+        $collectionMock->expects($this->once())
+            ->method('setOrder')
+            ->with('created_at', 'desc')
+            ->willReturn($dbMock);
+        $dbMock->expects($this->once())
+            ->method('setOrder')
+            ->with('entity_id', 'desc')
+            ->willReturn($collectionMock);
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn($collectionItems);
+
+        $this->historyCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        for ($i = 10; --$i;) {
+            $this->assertEquals($collectionItems, $this->order->getStatusHistories());
+        }
     }
 }

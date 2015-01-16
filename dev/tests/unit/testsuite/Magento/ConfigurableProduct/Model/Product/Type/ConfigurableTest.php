@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
@@ -51,7 +52,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
         $this->_typeConfigurableFactory = $this->getMock(
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory',

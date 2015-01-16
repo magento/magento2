@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Model;
 
@@ -9,7 +10,7 @@ use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Response\RedirectInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\UrlInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
@@ -32,7 +33,7 @@ class ItemCarrier
     protected $cart;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -145,7 +146,7 @@ class ItemCarrier
                     $cart->getQuote()->deleteItem($cartItem);
                 }
             } catch (\Exception $e) {
-                $this->logger->logException($e);
+                $this->logger->critical($e);
                 $messages[] = __('We cannot add this item to your shopping cart.');
             }
         }

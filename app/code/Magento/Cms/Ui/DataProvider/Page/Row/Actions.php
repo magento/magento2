@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Ui\DataProvider\Page\Row;
 
@@ -16,7 +17,7 @@ class Actions implements RowInterface
     /**
      * Url path
      */
-    const URL_PATH = 'adminhtml/cms_page/edit';
+    const URL_PATH = 'cms/page/edit';
 
     /**
      * @var UrlBuilder

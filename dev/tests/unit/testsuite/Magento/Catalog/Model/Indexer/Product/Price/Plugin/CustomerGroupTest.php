@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Plugin;
 
@@ -49,7 +50,7 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($indexerMock));
 
         $this->_model = $this->_objectManager->getObject(
-            '\Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup',
+            'Magento\Catalog\Model\Indexer\Product\Price\Plugin\CustomerGroup',
             ['indexerRegistry' => $this->indexerRegistryMock]
         );
     }

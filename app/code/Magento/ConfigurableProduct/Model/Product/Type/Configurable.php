@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
@@ -163,7 +164,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory
      * @param \Magento\Eav\Model\EntityFactory $entityFactory
@@ -187,7 +188,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory,
         \Magento\Eav\Model\EntityFactory $entityFactory,

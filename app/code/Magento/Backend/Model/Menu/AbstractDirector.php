@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu;
 
@@ -25,12 +26,12 @@ abstract class AbstractDirector
      *
      * @param array $config
      * @param \Magento\Backend\Model\Menu\Builder $builder
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @return void
      */
     abstract public function direct(
         array $config,
         \Magento\Backend\Model\Menu\Builder $builder,
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     );
 }

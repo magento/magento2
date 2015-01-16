@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper\Product;
 
@@ -22,7 +23,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Helper\Product\Flat\Indexer'
         );
         $this->_state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            '\Magento\Catalog\Model\Indexer\Product\Flat\State'
+            'Magento\Catalog\Model\Indexer\Product\Flat\State'
         );
     }
 

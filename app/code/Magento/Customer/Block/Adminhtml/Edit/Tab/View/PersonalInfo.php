@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
@@ -128,7 +129,7 @@ class PersonalInfo extends \Magento\Backend\Block\Template
             );
             return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             return '';
         }
     }

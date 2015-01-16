@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Fixture\CatalogCategory;
@@ -38,7 +39,7 @@ class ParentId implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data = [])
     {
         $this->params = $params;
-        if ($data['dataSet']) {
+        if (isset($data['dataSet']) && $data['dataSet'] !== '-') {
             $this->parentCategory = $fixtureFactory->createByCode('catalogCategory', ['dataSet' => $data['dataSet']]);
             if (!$this->parentCategory->hasData('id')) {
                 $this->parentCategory->persist();

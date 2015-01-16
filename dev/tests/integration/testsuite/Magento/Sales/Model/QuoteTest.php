@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
 
@@ -68,7 +69,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
          */
         $customerRepository = Bootstrap::getObjectManager()
-            ->create('\Magento\Customer\Api\CustomerRepositoryInterface');
+            ->create('Magento\Customer\Api\CustomerRepositoryInterface');
         $customerRepository->save($customerDataSet);
         $quote->setCustomer($customerDataSet);
         $expected = $this->_getCustomerDataArray();

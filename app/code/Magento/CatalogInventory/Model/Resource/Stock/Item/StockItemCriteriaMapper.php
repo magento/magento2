@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Model\Resource\Stock\Item;
@@ -10,7 +11,7 @@ use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Data\ObjectFactory;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 
 /**

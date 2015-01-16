@@ -1,10 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\AdminOrder;
 
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
@@ -53,7 +54,7 @@ class EmailSender
         try {
             $this->orderSender->send($order);
         } catch (\Magento\Framework\Mail\Exception $exception) {
-            $this->logger->logException($exception);
+            $this->logger->critical($exception);
             $this->messageManager->addWarning(
                 __('You did not email your customer. Please check your email settings.')
             );

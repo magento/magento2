@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
@@ -415,7 +416,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $taxTotalsCalcModel = $objectManager->getObject(
-            '\Magento\Tax\Model\Sales\Total\Quote\Tax',
+            'Magento\Tax\Model\Sales\Total\Quote\Tax',
             ['taxData' => $taxData]
         );
         $array = $taxTotalsCalcModel->processConfigArray([], null);
@@ -448,7 +449,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     public function testMapQuoteExtraTaxables($itemData, $addressData)
     {
         $objectManager = new ObjectManager($this);
-        $taxTotalsCalcModel = $objectManager->getObject('\Magento\Tax\Model\Sales\Total\Quote\Tax');
+        $taxTotalsCalcModel = $objectManager->getObject('Magento\Tax\Model\Sales\Total\Quote\Tax');
 
         $taxClassKeyBuilder = $this->getMockBuilder('\Magento\Tax\Api\Data\TaxClassKeyDataBuilder')
             ->disableOriginalConstructor()
@@ -606,7 +607,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $taxTotalsCalcModel = $objectManager->getObject(
-            '\Magento\Tax\Model\Sales\Total\Quote\Tax',
+            'Magento\Tax\Model\Sales\Total\Quote\Tax',
             ['taxConfig' => $taxConfig]
         );
 
@@ -695,7 +696,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     public function testGetLabel()
     {
         $objectManager = new ObjectManager($this);
-        $taxTotalsCalcModel = $objectManager->getObject('\Magento\Tax\Model\Sales\Total\Quote\Tax');
+        $taxTotalsCalcModel = $objectManager->getObject('Magento\Tax\Model\Sales\Total\Quote\Tax');
         $this->assertSame($taxTotalsCalcModel->getLabel(), __('Tax'));
     }
 

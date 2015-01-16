@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -38,13 +39,7 @@ class DirectorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_builderMock = $this->getMock('Magento\Backend\Model\Menu\Builder', [], [], '', false);
-        $this->_logger = $this->getMock(
-            'Magento\Framework\Logger',
-            ['addStoreLog', 'log', 'logException'],
-            [],
-            '',
-            false
-        );
+        $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->_commandMock = $this->getMock(
             'Magento\Backend\Model\Menu\Builder\AbstractCommand',
             ['getId', '_execute', 'execute', 'chain'],
@@ -75,7 +70,7 @@ class DirectorTest extends \PHPUnit_Framework_TestCase
     {
         $config = [['type' => 'update'], ['type' => 'remove'], ['type' => 'added']];
         $this->_builderMock->expects($this->at(2))->method('processCommand')->with($this->_commandMock);
-        $this->_logger->expects($this->at(1))->method('logDebug');
+        $this->_logger->expects($this->at(1))->method('debug');
         $this->_commandMock->expects($this->at(1))->method('getId');
         $this->_model->direct($config, $this->_builderMock, $this->_logger);
     }

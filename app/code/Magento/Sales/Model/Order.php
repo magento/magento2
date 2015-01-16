@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
 
@@ -3389,7 +3390,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         if ($this->getData(ApiOrderInterface::STATUS_HISTORIES) == null) {
             $this->setData(
                 ApiOrderInterface::STATUS_HISTORIES,
-                $this->getPaymentsCollection()->getItems()
+                $this->getStatusHistoryCollection()->getItems()
             );
         }
         return $this->getData(ApiOrderInterface::STATUS_HISTORIES);

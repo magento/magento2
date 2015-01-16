@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\Address\Billing;
@@ -69,7 +70,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             '\Magento\Checkout\Service\V1\Address\Converter', [], [], '', false
         );
 
-        $this->loggerMock = $this->getMock('\Magento\Framework\Logger', [], [], '', false);
+        $this->loggerMock = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
 
         $this->service = new \Magento\Checkout\Service\V1\Address\Billing\WriteService(
             $this->quoteRepositoryMock,

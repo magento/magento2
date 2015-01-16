@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework;
 
@@ -272,10 +273,10 @@ class Application
         $objectManager->removeSharedInstance('Magento\Framework\Filesystem');
         $objectManager->addSharedInstance($filesystem, 'Magento\Framework\Filesystem');
 
-        /** @var \Magento\Framework\Logger $logger */
+        /** @var \Psr\Log\LoggerInterface $logger */
         $logger = $objectManager->get('Magento\TestFramework\ErrorLog\Logger');
-        $objectManager->removeSharedInstance('Magento\Framework\Logger');
-        $objectManager->addSharedInstance($logger, 'Magento\Framework\Logger');
+        $objectManager->removeSharedInstance('Psr\Log\LoggerInterface');
+        $objectManager->addSharedInstance($logger, 'Psr\Log\LoggerInterface');
 
         Helper\Bootstrap::setObjectManager($objectManager);
 

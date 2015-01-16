@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Error;
 
@@ -21,7 +22,7 @@ class ProcessorFactory
     {
         $objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
         $objectManager = $objectManagerFactory->create($_SERVER);
-        $response = $objectManager->create('\Magento\Framework\App\Response\Http');
+        $response = $objectManager->create('Magento\Framework\App\Response\Http');
         return new Processor($response);
     }
 }

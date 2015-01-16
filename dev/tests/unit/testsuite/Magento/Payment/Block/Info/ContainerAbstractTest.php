@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -21,17 +22,7 @@ class ContainerAbstractTest extends \PHPUnit_Framework_TestCase
         );
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $paymentInfo = $objectManagerHelper->getObject('Magento\Payment\Model\Info');
-        $adapterFactoryMock = $this->getMock(
-            'Magento\Framework\Logger\AdapterFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $methodInstance = $objectManagerHelper->getObject(
-            'Magento\OfflinePayments\Model\Checkmo',
-            ['logAdapterFactory' => $adapterFactoryMock]
-        );
+        $methodInstance = $objectManagerHelper->getObject('Magento\OfflinePayments\Model\Checkmo');
         $paymentInfo->setMethodInstance($methodInstance);
         $block->expects($this->atLeastOnce())->method('getPaymentInfo')->will($this->returnValue($paymentInfo));
 

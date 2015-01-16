@@ -2,7 +2,8 @@
 /**
  * Test Rest renderer factory class.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Rest\Response\Renderer;
 
@@ -76,7 +77,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             $this->_factory->get();
             $this->fail("Exception is expected to be raised");
         } catch (\Magento\Webapi\Exception $e) {
-            $exceptionMessage = 'Server cannot understand Accept HTTP header media type.';
+            $exceptionMessage = 'Server cannot match any of the given Accept HTTP header media type(s) '.
+                'from the request: "" with media types from the config of response renderer.';
             $this->assertInstanceOf('Magento\Webapi\Exception', $e, 'Exception type is invalid');
             $this->assertEquals($exceptionMessage, $e->getMessage(), 'Exception message is invalid');
             $this->assertEquals(

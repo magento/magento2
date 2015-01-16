@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
 
@@ -43,7 +44,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
@@ -51,11 +52,11 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         PriceCurrencyInterface $priceCurrency,
         array $data = []
     ) {
-        parent::__construct($eventManager, $paymentData, $scopeConfig, $logAdapterFactory, $data);
+        parent::__construct($eventManager, $paymentData, $scopeConfig, $logger, $data);
         $this->priceCurrency = $priceCurrency;
     }
 

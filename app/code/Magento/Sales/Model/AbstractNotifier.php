@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Model;
 
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Mail\Exception;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory;
@@ -22,7 +23,7 @@ abstract class AbstractNotifier extends \Magento\Framework\Model\AbstractModel
     protected $historyCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -67,7 +68,7 @@ abstract class AbstractNotifier extends \Magento\Framework\Model\AbstractModel
                 $historyItem->save();
             }
         } catch (Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             return false;
         }
         return true;

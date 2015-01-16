@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Model\Search;
@@ -16,7 +17,7 @@ class CatalogTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->catalogSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('\Magento\CatalogSearch\Model\Search\Catalog');
+            ->create('Magento\CatalogSearch\Model\Search\Catalog');
     }
 
     /**

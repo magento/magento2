@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Model\Type;
@@ -28,7 +29,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Url|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerUrlMock;
 
-    /** @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $loggerMock;
 
     /** @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
@@ -113,7 +114,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->checkoutHelperMock = $this->getMock('Magento\Checkout\Helper\Data', [], [], '', false);
         $this->customerUrlMock = $this->getMock('Magento\Customer\Model\Url', [], [], '', false);
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->checkoutSessionMock = $this->getMock(
             'Magento\Checkout\Model\Session',
             ['getLastOrderId', 'getQuote', 'setStepData', 'getStepData'],

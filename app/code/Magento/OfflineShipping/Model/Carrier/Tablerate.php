@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\Carrier;
 
@@ -45,7 +46,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory
      * @param \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory
@@ -54,7 +55,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory,
         \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory,
@@ -63,7 +64,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $this->_rateResultFactory = $rateResultFactory;
         $this->_resultMethodFactory = $resultMethodFactory;
         $this->_tablerateFactory = $tablerateFactory;
-        parent::__construct($scopeConfig, $rateErrorFactory, $logAdapterFactory, $data);
+        parent::__construct($scopeConfig, $rateErrorFactory, $logger, $data);
         foreach ($this->getCode('condition_name') as $k => $v) {
             $this->_conditionNames[] = $k;
         }
