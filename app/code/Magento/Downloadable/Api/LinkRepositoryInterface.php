@@ -30,7 +30,7 @@ interface LinkRepositoryInterface
      *
      * @param string $productSku
      * @param \Magento\Downloadable\Api\Data\LinkContentInterface $linkContent
-     * @param int $linkId
+     * @param int|null $linkId
      * @param bool $isGlobalScopeContent
      * @return bool
      */

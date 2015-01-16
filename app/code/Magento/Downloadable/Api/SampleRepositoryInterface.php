@@ -14,7 +14,7 @@ interface SampleRepositoryInterface
      *
      * @param string $productSku
      * @param \Magento\Downloadable\Api\Data\SampleContentInterface $sampleContent
-     * @param int $sampleId
+     * @param int|null $sampleId
      * @param bool $isGlobalScopeContent
      * @return int
      */
