@@ -216,6 +216,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         //stub for interface
     }
+
+    public function getCartForCustomer($customerId)
+    {
+        //stub for interface
+    }
     /**
      * @param Quote $quote
      * @return void
