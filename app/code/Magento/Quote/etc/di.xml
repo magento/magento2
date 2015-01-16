@@ -26,4 +26,5 @@
     <preference for="Magento\Quote\Api\Data\PaymentInterface" type="\Magento\Quote\Model\Quote\Payment" />
     <preference for="Magento\Quote\Api\CouponManagementInterface" type="Magento\Quote\Model\CouponManagement" />
     <preference for="Magento\Quote\Api\CartManagementInterface" type="Magento\Quote\Model\QuoteManagement" />
+    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
 </config>
