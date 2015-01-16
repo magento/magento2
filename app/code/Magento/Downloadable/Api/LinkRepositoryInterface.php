@@ -29,12 +29,12 @@ interface LinkRepositoryInterface
      * Update downloadable link of the given product (link type and its resources cannot be changed)
      *
      * @param string $productSku
-     * @param int $linkId
      * @param \Magento\Downloadable\Api\Data\LinkContentInterface $linkContent
+     * @param int $linkId
      * @param bool $isGlobalScopeContent
      * @return bool
      */
-    public function save($productSku, $linkId = null, LinkContentInterface $linkContent, $isGlobalScopeContent = false);
+    public function save($productSku, LinkContentInterface $linkContent, $linkId = null, $isGlobalScopeContent = false);
 
     /**
      * Delete downloadable link

@@ -58,14 +58,18 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @param \Magento\Downloadable\Model\Product\Type $downloadableType
      * @param \Magento\Downloadable\Api\Data\LinkDataBuilder $linkBuilder
      * @param \Magento\Downloadable\Api\Data\SampleDataBuilder $sampleBuilder
+     * @param LinkFactory $linkFactory
+     * @param Link\ContentValidator $contentValidator
+     * @param EncoderInterface $jsonEncoder
+     * @param ContentUploaderInterface $fileContentUploader
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Downloadable\Model\Product\Type $downloadableType,
         \Magento\Downloadable\Api\Data\LinkDataBuilder $linkBuilder,
         \Magento\Downloadable\Api\Data\SampleDataBuilder $sampleBuilder,
-        \Magento\Downloadable\Model\LinkFactory $linkFactory,
-        \Magento\Downloadable\Model\Link\ContentValidator $contentValidator,
+        LinkFactory $linkFactory,
+        Link\ContentValidator $contentValidator,
         EncoderInterface $jsonEncoder,
         ContentUploaderInterface $fileContentUploader
     ) {
@@ -169,7 +173,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * {@inheritdoc}
      */
-    public function save($productSku, $linkId = null, LinkContentInterface $linkContent, $isGlobalScopeContent = false)
+    public function save($productSku, LinkContentInterface $linkContent, $linkId = null, $isGlobalScopeContent = false)
     {
         $product = $this->productRepository->get($productSku, true);
         if ($linkId) {

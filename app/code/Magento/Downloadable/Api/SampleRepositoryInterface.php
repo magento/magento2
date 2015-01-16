@@ -13,15 +13,15 @@ interface SampleRepositoryInterface
      * Update downloadable sample of the given product (sample type and its resource cannot be changed)
      *
      * @param string $productSku
-     * @param int $sampleId
      * @param \Magento\Downloadable\Api\Data\SampleContentInterface $sampleContent
+     * @param int $sampleId
      * @param bool $isGlobalScopeContent
      * @return int
      */
     public function save(
         $productSku,
-        $sampleId = null,
         SampleContentInterface $sampleContent,
+        $sampleId = null,
         $isGlobalScopeContent = false
     );
 
