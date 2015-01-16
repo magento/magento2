@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Template;
 
@@ -26,5 +27,17 @@ class Filter extends \Magento\Email\Model\Template\Filter
     {
         $this->_useSessionInUrl = (bool)$flag;
         return $this;
+    }
+
+    /**
+     * Retrieve media file URL directive
+     *
+     * @param string[] $construction
+     * @return string
+     */
+    public function mediaDirective($construction)
+    {
+        $params = $this->_getIncludeParameters($construction[2]);
+        return $this->_storeManager->getStore()->getBaseMediaDir() . '/' . $params['url'];
     }
 }

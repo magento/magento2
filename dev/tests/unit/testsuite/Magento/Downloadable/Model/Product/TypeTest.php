@@ -1,23 +1,36 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Product;
 
+use Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface;
+
+/**
+ * Class TypeTest
+ * Test for \Magento\Downloadable\Model\Product\Type
+ */
 class TypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Downloadable\Model\Product\Type
      */
-    protected $_model;
+    private $target;
+    /**
+     * @var TypeHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $typeHandler;
+
+    /**
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $product;
 
     protected function setUp()
     {
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $downloadableFile = $this->getMockBuilder(
-            'Magento\Downloadable\Helper\File'
-        )->disableOriginalConstructor()->getMock();
         $coreData = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
         $fileStorageDb = $this->getMockBuilder(
             'Magento\Core\Helper\File\Storage\Database'
@@ -51,7 +64,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         );
         $resourceProductMock->expects($this->any())->method('getEntityType')->will($this->returnValue($entityTypeMock));
 
-        $productMock = $this->getMock(
+        $this->product = $this->getMock(
             'Magento\Catalog\Model\Product',
             [
                 'getResource',
@@ -62,37 +75,40 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'getDownloadableData',
                 'setTypeHasOptions',
                 'setLinksExist',
-                '__wakeup'
+                '__wakeup',
             ],
             [],
             '',
             false
         );
-        $productMock->expects($this->any())->method('getResource')->will($this->returnValue($resourceProductMock));
-        $productMock->expects($this->any())->method('setTypeHasRequiredOptions')->with($this->equalTo(true))->will(
+        $this->product->expects($this->any())->method('getResource')->will($this->returnValue($resourceProductMock));
+        $this->product->expects($this->any())->method('setTypeHasRequiredOptions')->with($this->equalTo(true))->will(
             $this->returnSelf()
         );
-        $productMock->expects($this->any())->method('setRequiredOptions')->with($this->equalTo(true))->will(
+        $this->product->expects($this->any())->method('setRequiredOptions')->with($this->equalTo(true))->will(
             $this->returnSelf()
         );
-        $productMock->expects($this->any())->method('getDownloadableData')->will($this->returnValue([]));
-        $productMock->expects($this->any())->method('setTypeHasOptions')->with($this->equalTo(false));
-        $productMock->expects($this->any())->method('setLinksExist')->with($this->equalTo(false));
-        $productMock->expects($this->any())->method('canAffectOptions')->with($this->equalTo(true));
-        $productMock->expects($this->any())->method('getLinksPurchasedSeparately')->will($this->returnValue(true));
-        $productMock->expects($this->any())->method('getLinksPurchasedSeparately')->will($this->returnValue(true));
-        $this->_productMock = $productMock;
+        $this->product->expects($this->any())->method('setTypeHasOptions')->with($this->equalTo(false));
+        $this->product->expects($this->any())->method('setLinksExist')->with($this->equalTo(false));
+        $this->product->expects($this->any())->method('canAffectOptions')->with($this->equalTo(true));
+        $this->product->expects($this->any())->method('getLinksPurchasedSeparately')->will($this->returnValue(true));
+        $this->product->expects($this->any())->method('getLinksPurchasedSeparately')->will($this->returnValue(true));
 
         $eavConfigMock = $this->getMock('\Magento\Eav\Model\Config', ['getEntityAttributeCodes'], [], '', false);
         $eavConfigMock->expects($this->any())
             ->method('getEntityAttributeCodes')
-            ->with($this->equalTo($entityTypeMock), $this->equalTo($productMock))
+            ->with($this->equalTo($entityTypeMock), $this->equalTo($this->product))
             ->will($this->returnValue([]));
-        $this->_model = $objectHelper->getObject(
+
+        $this->typeHandler = $this->getMockBuilder('\Magento\Downloadable\Model\Product\TypeHandler\TypeHandler')
+            ->disableOriginalConstructor()
+            ->setMethods(['save'])
+            ->getMock();
+
+        $this->target = $objectHelper->getObject(
             'Magento\Downloadable\Model\Product\Type',
             [
                 'eventManager' => $eventManager,
-                'downloadableFile' => $downloadableFile,
                 'coreData' => $coreData,
                 'fileStorageDb' => $fileStorageDb,
                 'filesystem' => $filesystem,
@@ -105,18 +121,32 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'samplesFactory' => $samplesFactory,
                 'sampleFactory' => $sampleFactory,
                 'linkFactory' => $linkFactory,
-                'eavConfig' => $eavConfigMock
+                'eavConfig' => $eavConfigMock,
+                'typeHandler' => $this->typeHandler,
+
             ]
         );
     }
 
     public function testHasWeightFalse()
     {
-        $this->assertFalse($this->_model->hasWeight(), 'This product has weight, but it should not');
+        $this->assertFalse($this->target->hasWeight(), 'This product has weight, but it should not');
     }
 
     public function testBeforeSave()
     {
-        $this->_model->beforeSave($this->_productMock);
+        $this->target->beforeSave($this->product);
+    }
+
+    public function testSave()
+    {
+        $data = ['sample' => ['sampleData', 'link' => ['linkData']]];
+        $this->product->expects($this->once())
+            ->method('getDownloadableData')
+            ->will($this->returnValue($data));
+        $this->typeHandler->expects($this->once())
+            ->method('save')
+            ->with($this->product, $data);
+        $this->target->save($this->product);
     }
 }

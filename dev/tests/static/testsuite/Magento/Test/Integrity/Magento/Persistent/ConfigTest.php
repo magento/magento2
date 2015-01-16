@@ -5,7 +5,8 @@
  * Find "persistent.xml" files in code tree and validate them.  Also verify schema fails on an invalid xml and
  * passes on a valid xml.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity\Magento\Persistent;
 
