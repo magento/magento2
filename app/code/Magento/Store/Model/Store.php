@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
@@ -592,6 +593,26 @@ class Store extends AbstractModel implements
         }
 
         return $this->_baseUrlCache[$cacheKey];
+    }
+
+    /**
+     * Retrieve base media directory path
+     *
+     * @return string
+     */
+    public function getBaseMediaDir()
+    {
+        return $this->filesystem->getUri(DirectoryList::MEDIA);
+    }
+
+    /**
+     * Retrieve base static directory path
+     *
+     * @return string
+     */
+    public function getBaseStaticDir()
+    {
+        return $this->filesystem->getUri(DirectoryList::STATIC_VIEW);
     }
 
     /**

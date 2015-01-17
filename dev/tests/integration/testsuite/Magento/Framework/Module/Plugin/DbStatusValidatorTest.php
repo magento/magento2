@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Plugin;
 
@@ -24,7 +25,7 @@ class DbStatusValidatorTest extends \Magento\TestFramework\TestCase\AbstractCont
         $moduleList = $objectManager->get('Magento\Framework\Module\ModuleListInterface');
 
         /** @var \Magento\Framework\Module\ResourceResolverInterface $resourceResolver */
-        $resourceResolver = $objectManager->get('\Magento\Framework\Module\ResourceResolverInterface');
+        $resourceResolver = $objectManager->get('Magento\Framework\Module\ResourceResolverInterface');
 
         // get first resource, we don't care which one it is.
         foreach ($moduleList->getNames() as $moduleName) {

@@ -1,11 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model;
 
 use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Theme model class
@@ -14,7 +14,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @method string getParentThemePath()
  * @method string getParentId()
  * @method string getThemeTitle()
- * @method string getThemeVersion()
  * @method string getPreviewImage()
  * @method bool getIsFeatured()
  * @method int getThemeId()
@@ -26,7 +25,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @method ThemeInterface setPackageCode(string $packageCode)
  * @method ThemeInterface setThemeCode(string $themeCode)
  * @method ThemeInterface setThemePath(string $themePath)
- * @method ThemeInterface setThemeVersion(string $themeVersion)
  * @method ThemeInterface setThemeTitle(string $themeTitle)
  * @method ThemeInterface setType(int $type)
  * @method ThemeInterface setCode(string $code)

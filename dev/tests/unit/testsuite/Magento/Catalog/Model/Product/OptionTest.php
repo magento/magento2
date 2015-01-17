@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -22,7 +23,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('\Magento\Catalog\Model\Product\Option');
+        $this->model = $objectManager->getObject('Magento\Catalog\Model\Product\Option');
         $this->model->setProduct($this->productMock);
     }
 

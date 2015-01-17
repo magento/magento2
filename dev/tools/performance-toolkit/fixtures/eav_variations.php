@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /** @var \Magento\ToolkitFramework\Application $this */
 define('ATTRIBUTE_SET_ID', 4);
@@ -11,7 +12,7 @@ $model = $this->getObjectManager()->create('Magento\Catalog\Model\Resource\Eav\A
 /* @var $helper \Magento\Catalog\Helper\Product */
 $helper = $this->getObjectManager()->get('Magento\Catalog\Helper\Product');
 /** @var \Magento\Store\Model\StoreManager $storeManager */
-$storeManager = $this->getObjectManager()->create('\Magento\Store\Model\StoreManager');
+$storeManager = $this->getObjectManager()->create('Magento\Store\Model\StoreManager');
 $stores = $storeManager->getStores();
 $storeViewsCount = count($stores);
 

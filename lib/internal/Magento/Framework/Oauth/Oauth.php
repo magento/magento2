@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Oauth;
 
@@ -60,11 +61,9 @@ class Oauth implements OauthInterface
      */
     public function getRequestToken($params, $requestUrl, $httpMethod = 'POST')
     {
-        $this->_validateVersionParam($params['oauth_version']);
+        $this->_validateProtocolParams($params);
         $consumer = $this->_tokenProvider->getConsumerByKey($params['oauth_consumer_key']);
         $this->_tokenProvider->validateConsumer($consumer);
-        $this->_nonceGenerator->validateNonce($consumer, $params['oauth_nonce'], $params['oauth_timestamp']);
-
         $this->_validateSignature($params, $consumer->getSecret(), $httpMethod, $requestUrl);
 
         return $this->_tokenProvider->createRequestToken($consumer);
@@ -219,9 +218,9 @@ class Oauth implements OauthInterface
      * @param array $protocolParams
      * @param array $requiredParams
      * @return void
-     * @throws Exception|OauthInputException
+     * @throws OauthInputException
      */
-    protected function _validateProtocolParams($protocolParams, $requiredParams)
+    protected function _validateProtocolParams($protocolParams, $requiredParams = [])
     {
         // validate version if specified.
         if (isset($protocolParams['oauth_version'])) {
@@ -246,7 +245,7 @@ class Oauth implements OauthInterface
             $protocolParams['oauth_token']
         )
         ) {
-            throw new Exception('Token is not the correct length');
+            throw new OauthInputException('Token is not the correct length');
         }
 
         // Validate signature method.
@@ -275,10 +274,14 @@ class Oauth implements OauthInterface
      */
     protected function _checkRequiredParams($protocolParams, $requiredParams)
     {
+        $exception = new OauthInputException();
         foreach ($requiredParams as $param) {
             if (!isset($protocolParams[$param])) {
-                throw new OauthInputException(OauthInputException::REQUIRED_FIELD, ['fieldName' => $param]);
+                $exception->addError(OauthInputException::REQUIRED_FIELD, ['fieldName' => $param]);
             }
+        }
+        if ($exception->wasErrorAdded()) {
+            throw $exception;
         }
     }
 }

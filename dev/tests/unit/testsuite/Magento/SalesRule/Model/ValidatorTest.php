@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
 
@@ -134,12 +135,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         /** @var $quote \Magento\Sales\Model\Quote */
         $quote = $this->getMock(
             'Magento\Sales\Model\Quote',
-            ['hasNominalItems', 'getStoreId', '__wakeup'],
+            ['getStoreId', '__wakeup'],
             [],
             '',
             false
         );
-        $quote->expects($this->any())->method('hasNominalItems')->will($this->returnValue(false));
         $quote->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
 
         $itemData = include $fixturePath . 'quote_item_downloadable.php';

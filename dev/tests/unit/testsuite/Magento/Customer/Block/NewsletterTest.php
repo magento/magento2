@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block;
 
@@ -20,7 +21,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
     {
         $this->urlBuilder = $this->getMock('\Magento\Framework\UrlInterface');
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->block = $helper->getObject('\Magento\Customer\Block\Newsletter', ['urlBuilder' => $this->urlBuilder]);
+        $this->block = $helper->getObject('Magento\Customer\Block\Newsletter', ['urlBuilder' => $this->urlBuilder]);
     }
 
     public function testGetAction()

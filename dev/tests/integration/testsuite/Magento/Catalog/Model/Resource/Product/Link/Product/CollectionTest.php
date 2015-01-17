@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Resource\Product\Link\Product;
 
@@ -28,7 +29,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddLinkAttributeToFilterWithResults()
     {
         $om = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $link = $om->get('\Magento\Catalog\Model\Product\Link')->useCrossSellLinks();
+        $link = $om->get('Magento\Catalog\Model\Product\Link')->useCrossSellLinks();
         $this->collection->setLinkModel($link);
         $this->collection->addLinkAttributeToFilter('position', ['from' => 0, 'to' => 2]);
         $product = $om->get('Magento\Catalog\Model\Product')->load(2);
@@ -47,7 +48,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddLinkAttributeToFilterNoResults()
     {
         $om = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $link = $om->get('\Magento\Catalog\Model\Product\Link')->useCrossSellLinks();
+        $link = $om->get('Magento\Catalog\Model\Product\Link')->useCrossSellLinks();
         $this->collection->setLinkModel($link);
         $this->collection->addLinkAttributeToFilter('position', ['from' => 2, 'to' => 3]);
         $product = $om->get('Magento\Catalog\Model\Product')->load(2);

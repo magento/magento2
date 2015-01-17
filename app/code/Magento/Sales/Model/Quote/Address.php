@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Quote;
 
@@ -180,13 +181,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @var array
      */
     protected $_baseTotalAmounts = [];
-
-    /**
-     * Whether to segregate by nominal items only
-     *
-     * @var bool
-     */
-    protected $_nominalOnly = null;
 
     /**
      * Core store config
@@ -570,23 +564,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function getAllItems()
     {
-        // We calculate item list once and cache it in three arrays - all items, nominal, non-nominal
-        $cachedItems = $this->_nominalOnly ? 'nominal' : ($this->_nominalOnly === false ? 'nonnominal' : 'all');
+        // We calculate item list once and cache it in three arrays - all items
+        $cachedItems = 'all';
         $key = 'cached_items_' . $cachedItems;
         if (!$this->hasData($key)) {
-            // For compatibility  we will use $this->_filterNominal to divide nominal items from non-nominal
-            // (because it can be overloaded)
-            // So keep current flag $this->_nominalOnly and restore it after cycle
-            $wasNominal = $this->_nominalOnly;
-            $this->_nominalOnly = true;
-            // Now $this->_filterNominal() will return positive values for nominal items
-
             $quoteItems = $this->getQuote()->getItemsCollection();
             $addressItems = $this->getItemsCollection();
 
             $items = [];
-            $nominalItems = [];
-            $nonNominalItems = [];
             if ($this->getQuote()->getIsMultiShipping() && $addressItems->count() > 0) {
                 foreach ($addressItems as $aItem) {
                     if ($aItem->isDeleted()) {
@@ -600,11 +585,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
                         }
                     }
                     $items[] = $aItem;
-                    if ($this->_filterNominal($aItem)) {
-                        $nominalItems[] = $aItem;
-                    } else {
-                        $nonNominalItems[] = $aItem;
-                    }
                 }
             } else {
                 /*
@@ -621,71 +601,17 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
                             continue;
                         }
                         $items[] = $qItem;
-                        if ($this->_filterNominal($qItem)) {
-                            $nominalItems[] = $qItem;
-                        } else {
-                            $nonNominalItems[] = $qItem;
-                        }
                     }
                 }
             }
 
             // Cache calculated lists
             $this->setData('cached_items_all', $items);
-            $this->setData('cached_items_nominal', $nominalItems);
-            $this->setData('cached_items_nonnominal', $nonNominalItems);
-
-            $this->_nominalOnly = $wasNominal; // Restore original value before we changed it
         }
 
         $items = $this->getData($key);
 
         return $items;
-    }
-
-    /**
-     * Getter for all non-nominal items
-     *
-     * @return array
-     */
-    public function getAllNonNominalItems()
-    {
-        $this->_nominalOnly = false;
-        $result = $this->getAllItems();
-        $this->_nominalOnly = null;
-        return $result;
-    }
-
-    /**
-     * Getter for all nominal items
-     *
-     * @return array
-     */
-    public function getAllNominalItems()
-    {
-        $this->_nominalOnly = true;
-        $result = $this->getAllItems();
-        $this->_nominalOnly = null;
-
-        return $result;
-    }
-
-    /**
-     * Segregate by nominal criteria
-     *
-     * Returns
-     * true: get nominals only
-     * false: get non-nominals only
-     * null: get all
-     *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @return \Magento\Sales\Model\Quote\Item\AbstractItem|false
-     */
-    protected function _filterNominal($item)
-    {
-        return null === $this->_nominalOnly ||
-            false === $this->_nominalOnly && !$item->isNominal() ||
-            true === $this->_nominalOnly && $item->isNominal() ? $item : false;
     }
 
     /**
@@ -860,9 +786,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     {
         if (null === $this->_rates) {
             $this->_rates = $this->_rateCollectionFactory->create()->setAddressFilter($this->getId());
-            if ($this->getQuote()->hasNominalItems(false)) {
-                $this->_rates->setFixedOnlyFilter(true);
-            }
             if ($this->getId()) {
                 foreach ($this->_rates as $rate) {
                     $rate->setAddress($this);

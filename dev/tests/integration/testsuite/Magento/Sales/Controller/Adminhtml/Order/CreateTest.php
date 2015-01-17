@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
@@ -108,7 +109,7 @@ class CreateTest extends \Magento\Backend\Utility\Controller
     public function testGetAclResource($actionName, $reordered, $expectedResult)
     {
         $this->_objectManager->get('Magento\Backend\Model\Session\Quote')->setReordered($reordered);
-        $orderController = $this->_objectManager->get('\Magento\Sales\Controller\Adminhtml\Order\Create');
+        $orderController = $this->_objectManager->get('Magento\Sales\Controller\Adminhtml\Order\Create');
 
         $this->getRequest()->setActionName($actionName);
 

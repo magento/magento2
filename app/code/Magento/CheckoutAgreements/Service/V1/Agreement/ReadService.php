@@ -1,17 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CheckoutAgreements\Service\V1\Agreement;
 
-use \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
-use \Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
-use \Magento\CheckoutAgreements\Model\Agreement;
-use \Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as AgreementCollectionFactory;
+use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
+use Magento\CheckoutAgreements\Model\Agreement;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use \Magento\Store\Model\ScopeInterface;
-use \Magento\CheckoutAgreements\Service\V1\Data\AgreementBuilder;
-use \Magento\CheckoutAgreements\Service\V1\Data\Agreement as AgreementDataObject;
+use Magento\Store\Model\ScopeInterface;
+use Magento\CheckoutAgreements\Service\V1\Data\AgreementBuilder;
+use Magento\CheckoutAgreements\Service\V1\Data\Agreement as AgreementDataObject;
 
 /**
  * Checkout agreement service.
