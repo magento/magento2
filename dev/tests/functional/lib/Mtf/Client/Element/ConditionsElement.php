@@ -84,7 +84,7 @@ class ConditionsElement extends SimpleElement
      *
      * @var string
      */
-    protected $created = './ul/li[1]';
+    protected $created = './ul/li[span[contains(@class,"rule-param-new-child")]]/preceding-sibling::li[1]';
 
     /**
      * Children condition
