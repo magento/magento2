@@ -13,7 +13,6 @@ $table = $installer->getConnection()
     ->dropColumn(
         $installer->getTable('catalog_eav_attribute'),
         'is_configurable'
-
     );
 
 $installer->endSetup();
