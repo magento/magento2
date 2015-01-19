@@ -202,4 +202,17 @@
             <argument name="attributePrefix" xsi:type="const">Magento\CatalogSearch\Model\Resource\Engine::ATTRIBUTE_PREFIX</argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogSearch\Model\Resource\ResourceProvider">
+        <arguments>
+            <argument name="resourceFactoryNames" xsi:type="array">
+                <item name="Magento\CatalogSearch\Model\Resource\Engine" xsi:type="array">
+                    <item name="resource" xsi:type="string">Magento\CatalogSearch\Model\Resource\AdvancedFactory</item>
+                    <item name="resource_collection" xsi:type="string">Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory</item>
+                    <item name="result_collection" xsi:type="string">Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory</item>
+                    <item name="advanced_result_collection" xsi:type="string">Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
