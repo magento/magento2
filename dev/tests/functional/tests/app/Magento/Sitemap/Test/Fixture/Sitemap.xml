@@ -33,14 +33,14 @@
            <attribute_code>sitemap_filename</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>sitemap.xml</default_value>
+            <default_value xsi:type="string">sitemap.xml</default_value>
             <input />
         </field>
         <field name="sitemap_path">
             <attribute_code>sitemap_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>/</default_value>
+            <default_value xsi:type="string">/</default_value>
             <input />
         </field>
         <field name="sitemap_time">
@@ -54,7 +54,7 @@
             <attribute_code>store_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
     </fields>

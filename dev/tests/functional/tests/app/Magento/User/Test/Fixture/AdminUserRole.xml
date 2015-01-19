@@ -26,42 +26,42 @@
             <attribute_code>parent_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="tree_level">
             <attribute_code>tree_level</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="sort_order">
             <attribute_code>sort_order</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="role_type">
             <attribute_code>role_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="user_id">
             <attribute_code>user_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="rolename">
             <attribute_code>rolename</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>AdminRole%isolation%</default_value>
+            <default_value xsi:type="string">AdminRole%isolation%</default_value>
             <input />
             <group>role-info</group>
         </field>
@@ -76,7 +76,7 @@
             <attribute_code>resource_access</attribute_code>
             <backend_type>virtual</backend_type>
             <group>role-resources</group>
-            <default_value>All</default_value>
+            <default_value xsi:type="string">All</default_value>
         </field>
         <field name="roles_resources">
             <attribute_code>roles_resources</attribute_code>

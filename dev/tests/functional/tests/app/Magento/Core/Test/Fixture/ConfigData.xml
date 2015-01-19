@@ -29,28 +29,28 @@
         <field name="scope">
             <attribute_code>scope</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value>default</default_value>
+            <is_required />
+            <default_value xsi:type="string">default</default_value>
             <input />
         </field>
         <field name="scope_id">
             <attribute_code>scope_id</attribute_code>
             <backend_type>int</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
+            <is_required />
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="path">
             <attribute_code>path</attribute_code>
             <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value>general</default_value>
+            <is_required />
+            <default_value xsi:type="string">general</default_value>
             <input />
         </field>
         <field name="value">
             <attribute_code>value</attribute_code>
             <backend_type>text</backend_type>
-            <is_required></is_required>
+            <is_required />
             <default_value xsi:type="null" />
             <input />
         </field>

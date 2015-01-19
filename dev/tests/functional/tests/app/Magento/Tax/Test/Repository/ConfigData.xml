@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/config.xsd">
-    <storage class="Magento\Tax\Test\Repository\ConfigData">
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+    <storage class="Magento\Core\Test\Repository\ConfigData">
         <dataset name="shipping_tax_class_taxable_goods">
             <field path="tax/classes/shipping_tax_class" scope="tax" scope_id="1" label="Taxable Goods" xsi:type="string">2</field>
         </dataset>

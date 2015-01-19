@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/config.xsd">
-    <storage class="Magento\GiftMessage\Test\Repository\ConfigData">
-        <dataset name="enableGiftMessages">
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+    <storage class="Magento\Core\Test\Repository\ConfigData">
+        <dataset name="enable_gift_messages">
             <field path="sales/gift_options/allow_order" scope="sales" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="sales/gift_options/allow_items" scope="sales" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>

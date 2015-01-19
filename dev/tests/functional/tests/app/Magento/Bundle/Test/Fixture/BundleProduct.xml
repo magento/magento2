@@ -88,7 +88,7 @@
             <attribute_code>enable_googlecheckout</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>1</default_value>
+            <default_value xsi:type="number">1</default_value>
             <input>select</input>
         </field>
         <field name="gallery">
@@ -190,14 +190,14 @@
             <attribute_code>msrp_display_actual_price_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>4</default_value>
+            <default_value xsi:type="number">4</default_value>
             <input>select</input>
         </field>
         <field name="name">
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>BundleProduct %isolation%</default_value>
+            <default_value xsi:type="string">BundleProduct %isolation%</default_value>
             <input>text</input>
             <group>product-details</group>
         </field>
@@ -226,7 +226,7 @@
             <attribute_code>options_container</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>container2</default_value>
+            <default_value xsi:type="string">container2</default_value>
             <input>select</input>
         </field>
         <field name="page_layout">
@@ -265,7 +265,7 @@
             <attribute_code>price_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value>Dynamic</default_value>
+            <default_value xsi:type="string">Dynamic</default_value>
             <input>select</input>
             <group>product-details</group>
         </field>
@@ -273,7 +273,7 @@
             <attribute_code>status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>1</default_value>
+            <default_value xsi:type="string">1</default_value>
             <input>checkbox</input>
             <group>product-details</group>
         </field>
@@ -289,7 +289,7 @@
             <attribute_code>quantity_and_stock_status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>1</default_value>
+            <default_value xsi:type="number">1</default_value>
             <input>select</input>
             <group>product-details</group>
         </field>
@@ -338,7 +338,7 @@
             <attribute_code>sku_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value>Dynamic</default_value>
+            <default_value xsi:type="string">Dynamic</default_value>
             <input>select</input>
             <group>product-details</group>
         </field>
@@ -346,7 +346,7 @@
             <attribute_code>weight_type</attribute_code>
             <backend_type>int</backend_type>
             <is_required>1</is_required>
-            <default_value>Dynamic</default_value>
+            <default_value xsi:type="string">Dynamic</default_value>
             <input>select</input>
             <group>product-details</group>
         </field>
@@ -402,7 +402,7 @@
             <attribute_code>tax_class_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>Taxable Goods</default_value>
+            <default_value xsi:type="string">Taxable Goods</default_value>
             <input>select</input>
             <group>product-details</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
@@ -456,7 +456,7 @@
             <attribute_code>visibility</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>4</default_value>
+            <default_value xsi:type="number">4</default_value>
             <input>select</input>
             <group>autosettings</group>
         </field>
@@ -507,7 +507,7 @@
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
             <default_value xsi:type="array">
-                <item name="0" xsi:type="sting">Main Website</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </default_value>
             <group>websites</group>
         </field>

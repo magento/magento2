@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+         class="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement">
+    <module>Magento_CheckoutAgreements</module>
+    <type>flat</type>
+    <entity_type>checkout_agreement</entity_type>
+    <collection>Magento\CheckoutAgreements\Model\Resource\Agreement\Collection</collection>
+    <repository_class>Magento\CheckoutAgreements\Test\Repository\CheckoutAgreement</repository_class>
+    <handler_interface>Magento\CheckoutAgreements\Test\Handler\CheckoutAgreement\CheckoutAgreementInterface</handler_interface>
+    <fields>
+        <field name="agreement_id">
+            <attribute_code>agreement_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="name">
+            <attribute_code>name</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value xsi:type="string">DefaultName%isolation%</default_value>
+            <input />
+        </field>
+        <field name="content">
+            <attribute_code>content</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required />
+            <default_value xsi:type="string">TestMessage%isolation%</default_value>
+            <input />
+        </field>
+        <field name="content_height">
+            <attribute_code>content_height</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required />
+            <default_value xsi:type="null" />
+            <input />
+        </field>
+        <field name="checkbox_text">
+            <attribute_code>checkbox_text</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required />
+            <default_value xsi:type="string">test_checkbox%isolation%</default_value>
+            <input />
+        </field>
+        <field name="is_active">
+            <attribute_code>is_active</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required />
+            <default_value xsi:type="string">Enabled</default_value>
+            <input />
+        </field>
+        <field name="is_html">
+            <attribute_code>is_html</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required />
+            <default_value xsi:type="string">Text</default_value>
+            <input />
+        </field>
+        <field name="stores">
+            <attribute_code>store_ids</attribute_code>
+            <backend_type>virtual</backend_type>
+            <source>Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement\Stores</source>
+            <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="array">
+                    <item name="0" xsi:type="string">default</item>
+                </item>
+            </default_value>
+        </field>
+    </fields>
+</fixture>

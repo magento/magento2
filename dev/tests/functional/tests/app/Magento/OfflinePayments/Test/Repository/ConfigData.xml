@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/config.xsd">
-    <storage class="Magento\OfflinePayments\Test\Repository\ConfigData">
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+    <storage class="Magento\Core\Test\Repository\ConfigData">
         <dataset name="cashondelivery">
             <field path="payment/cashondelivery/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>

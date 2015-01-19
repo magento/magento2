@@ -87,7 +87,7 @@
             <attribute_code>description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value>This is description for grouped product</default_value>
+            <default_value xsi:type="string">This is description for grouped product</default_value>
             <input />
             <group>product-details</group>
         </field>
@@ -130,7 +130,7 @@
             <attribute_code>is_returnable</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>2</default_value>
+            <default_value xsi:type="number">2</default_value>
             <input>select</input>
         </field>
         <field name="media_gallery">
@@ -165,7 +165,7 @@
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>GroupedProduct_%isolation%</default_value>
+            <default_value xsi:type="string">GroupedProduct_%isolation%</default_value>
             <input>text</input>
             <group>product-details</group>
         </field>
@@ -194,7 +194,7 @@
             <attribute_code>options_container</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>container2</default_value>
+            <default_value xsi:type="string">container2</default_value>
             <input>select</input>
         </field>
         <field name="page_layout">
@@ -208,9 +208,9 @@
             <attribute_code>quantity_and_stock_status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>
-                <qty>1</qty>
-                <is_in_stock>In Stock</is_in_stock>
+            <default_value xsi:type="array">
+                <item name="qty" xsi:type="number">1</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
             </default_value>
             <input>select</input>
             <group>product-details</group>
@@ -244,7 +244,7 @@
             <attribute_code>short_description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value>This is short description for grouped product</default_value>
+            <default_value xsi:type="string">This is short description for grouped product</default_value>
             <input />
             <group>autosettings</group>
         </field>
@@ -252,7 +252,7 @@
             <attribute_code>sku</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value>GroupedProduct_%isolation%</default_value>
+            <default_value xsi:type="string">GroupedProduct_%isolation%</default_value>
             <input>text</input>
             <group>product-details</group>
         </field>
@@ -274,7 +274,7 @@
             <attribute_code>status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>1</default_value>
+            <default_value xsi:type="string">1</default_value>
             <input>select</input>
         </field>
         <field name="thumbnail">
@@ -331,7 +331,7 @@
             <attribute_code>visibility</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>4</default_value>
+            <default_value xsi:type="number">4</default_value>
             <input>select</input>
         </field>
         <field name="id">
@@ -352,7 +352,7 @@
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
             <default_value xsi:type="array">
-                <item name="0" xsi:type="sting">Main Website</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </default_value>
             <group>websites</group>
         </field>
@@ -368,7 +368,7 @@
             <source>Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable\CheckoutData</source>
         </field>
         <field name="tax_class">
-            <default_value>taxable_goods</default_value>
+            <default_value xsi:type="string">taxable_goods</default_value>
         </field>
     </fields>
 </fixture>

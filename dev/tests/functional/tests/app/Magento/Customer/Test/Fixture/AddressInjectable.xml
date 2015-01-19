@@ -19,7 +19,7 @@
             <attribute_code>city</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>Culver City</default_value>
+            <default_value xsi:type="string">Culver City</default_value>
             <input>text</input>
         </field>
         <field name="default_billing">
@@ -40,14 +40,14 @@
             <attribute_code>company</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>Magento %isolation%</default_value>
+            <default_value xsi:type="string">Magento %isolation%</default_value>
             <input>text</input>
         </field>
         <field name="country_id">
             <attribute_code>country_id</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>United States</default_value>
+            <default_value xsi:type="string">United States</default_value>
             <input>select</input>
         </field>
         <field name="fax">
@@ -61,21 +61,21 @@
             <attribute_code>firstname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>John</default_value>
+            <default_value xsi:type="string">John</default_value>
             <input>text</input>
         </field>
         <field name="lastname">
             <attribute_code>lastname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>Doe</default_value>
+            <default_value xsi:type="string">Doe</default_value>
             <input>text</input>
         </field>
         <field name="email">
             <attribute_code>email</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>John.Doe%isolation%@example.com</default_value>
+            <default_value xsi:type="string">John.Doe%isolation%@example.com</default_value>
             <input>text</input>
         </field>
         <field name="middlename">
@@ -89,7 +89,7 @@
             <attribute_code>postcode</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>90230</default_value>
+            <default_value xsi:type="string">90230</default_value>
             <input>text</input>
         </field>
         <field name="prefix">
@@ -110,14 +110,14 @@
             <attribute_code>region_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>California</default_value>
+            <default_value xsi:type="string">California</default_value>
             <input>hidden</input>
         </field>
         <field name="street">
             <attribute_code>street</attribute_code>
             <backend_type>text</backend_type>
             <is_required>1</is_required>
-            <default_value>6161 West Centinela Avenue</default_value>
+            <default_value xsi:type="string">6161 West Centinela Avenue</default_value>
             <input>multiline</input>
         </field>
         <field name="suffix">
@@ -131,7 +131,7 @@
             <attribute_code>telephone</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>555-55-555-55</default_value>
+            <default_value xsi:type="string">555-55-555-55</default_value>
             <input>text</input>
         </field>
         <field name="vat_id">

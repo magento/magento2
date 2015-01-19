@@ -11,8 +11,8 @@
     <module>Magento_Catalog</module>
     <type>composite</type>
     <entities>
-        <eav_attribute>eav_attribute</eav_attribute>
-        <catalog_eav_attribute>catalog_eav_attribute</catalog_eav_attribute>
+        <entity name="eav_attribute" />
+        <entity name="catalog_eav_attribute" />
     </entities>
     <collection>Magento\Catalog\Model\Resource\Attribute</collection>
     <repository_class>Magento\Catalog\Test\Repository\CatalogProductAttribute</repository_class>
@@ -29,7 +29,7 @@
             <attribute_code>entity_type_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="attribute_code">
@@ -58,7 +58,7 @@
             <attribute_code>backend_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>static</default_value>
+            <default_value xsi:type="string">static</default_value>
             <input />
         </field>
         <field name="backend_table">
@@ -79,7 +79,7 @@
             <attribute_code>frontend_input</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>Text Field</default_value>
+            <default_value xsi:type="string">Text Field</default_value>
             <input>select</input>
             <group>properties</group>
         </field>
@@ -87,7 +87,7 @@
             <attribute_code>frontend_label</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>attribute_label%isolation%</default_value>
+            <default_value xsi:type="string">attribute_label%isolation%</default_value>
             <input />
             <group>properties</group>
         </field>
@@ -117,7 +117,7 @@
             <attribute_code>is_required</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>No</default_value>
+            <default_value xsi:type="string">No</default_value>
             <input>select</input>
             <group>properties</group>
         </field>
@@ -125,14 +125,14 @@
             <attribute_code>is_user_defined</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="is_unique">
             <attribute_code>is_unique</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>advanced-properties</group>
         </field>
@@ -154,7 +154,7 @@
             <attribute_code>is_global</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>1</default_value>
+            <default_value xsi:type="string">1</default_value>
             <input />
             <group>advanced-properties</group>
         </field>
@@ -162,14 +162,14 @@
             <attribute_code>is_visible</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>1</default_value>
+            <default_value xsi:type="string">1</default_value>
             <input />
         </field>
         <field name="is_searchable">
             <attribute_code>is_searchable</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>frontend-properties</group>
         </field>
@@ -177,7 +177,7 @@
             <attribute_code>is_filterable</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>frontend-properties</group>
         </field>
@@ -185,7 +185,7 @@
             <attribute_code>is_comparable</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>frontend-properties</group>
         </field>
@@ -193,7 +193,7 @@
             <attribute_code>is_visible_on_front</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>frontend-properties</group>
         </field>
@@ -201,7 +201,7 @@
             <attribute_code>is_html_allowed_on_front</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>frontend-properties</group>
         </field>
@@ -209,7 +209,7 @@
             <attribute_code>is_used_for_price_rules</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>frontend-properties</group>
         </field>
@@ -217,7 +217,7 @@
             <attribute_code>is_filterable_in_search</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>frontend-properties</group>
         </field>
@@ -225,7 +225,7 @@
             <attribute_code>used_in_product_listing</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>frontend-properties</group>
         </field>
@@ -233,7 +233,7 @@
             <attribute_code>used_for_sort_by</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>frontend-properties</group>
         </field>
@@ -248,7 +248,7 @@
             <attribute_code>is_visible_in_advanced_search</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>frontend-properties</group>
         </field>
@@ -256,21 +256,21 @@
             <attribute_code>position</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="is_wysiwyg_enabled">
             <attribute_code>is_wysiwyg_enabled</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="is_used_for_promo_rules">
             <attribute_code>is_used_for_promo_rules</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="is_configurable">
@@ -285,7 +285,7 @@
             <attribute_code>search_weight</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>1</default_value>
+            <default_value xsi:type="string">1</default_value>
             <input />
         </field>
         <field name="options">

@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<fixture>
+    <currencyRate module="Magento_CurrencySymbol">
+        <type>table</type>
+        <entity_type>directory_currency_rate</entity_type>
+        <entity_id_field />
+        <collection>Mtf\Util\Generate\Repository\TableCollection</collection>
+        <identifier />
+        <fields />
+        <data_set />
+        <data_config />
+    </currencyRate>
+    <currencySymbolEntity module="Magento_CurrencySymbol">
+        <type>flat</type>
+        <entity_type>core_config_data</entity_type>
+    </currencySymbolEntity>
+</fixture>

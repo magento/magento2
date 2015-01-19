@@ -27,14 +27,14 @@
             <attribute_code>entity_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="rating_code">
             <attribute_code>rating_code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>Rating %isolation%</default_value>
+            <default_value xsi:type="string">Rating %isolation%</default_value>
             <input />
             <group>rating_information</group>
         </field>
@@ -42,7 +42,7 @@
             <attribute_code>position</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
             <group>rating_information</group>
         </field>
@@ -50,7 +50,7 @@
             <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>Yes</default_value>
+            <default_value xsi:type="string">Yes</default_value>
             <input />
             <group>rating_information</group>
         </field>
@@ -58,7 +58,7 @@
             <attribute_code>stores</attribute_code>
             <backend_type>virtual</backend_type>
             <group>rating_information</group>
-            <default_value>Main Website/Main Website Store/Default Store View</default_value>
+            <default_value xsi:type="string">Main Website/Main Website Store/Default Store View</default_value>
         </field>
         <field name="options">
             <attribute_code>options</attribute_code>

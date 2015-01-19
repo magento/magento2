@@ -82,7 +82,7 @@
             <attribute_code>email</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value>John.Doe%isolation%@example.com</default_value>
+            <default_value xsi:type="string">John.Doe%isolation%@example.com</default_value>
             <input>text</input>
             <group>account_information</group>
         </field>
@@ -90,7 +90,7 @@
             <attribute_code>firstname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>John</default_value>
+            <default_value xsi:type="string">John</default_value>
             <input>text</input>
             <group>account_information</group>
         </field>
@@ -115,7 +115,7 @@
             <attribute_code>lastname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>Doe</default_value>
+            <default_value xsi:type="string">Doe</default_value>
             <input>text</input>
             <group>account_information</group>
         </field>
@@ -204,13 +204,13 @@
             <attribute_code>password</attribute_code>
             <backend_type>virtual</backend_type>
             <group>null</group>
-            <default_value>123123q</default_value>
+            <default_value xsi:type="string">123123q</default_value>
         </field>
         <field name="password_confirmation">
             <attribute_code>password_confirmation</attribute_code>
             <backend_type>virtual</backend_type>
             <group>null</group>
-            <default_value>123123q</default_value>
+            <default_value xsi:type="string">123123q</default_value>
         </field>
         <field name="current_password">
             <attribute_code>current_password</attribute_code>

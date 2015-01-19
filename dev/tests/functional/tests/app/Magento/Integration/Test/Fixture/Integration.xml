@@ -11,9 +11,9 @@
     <module>Magento_Integration</module>
     <type>composite</type>
     <entities>
-        <integration>integration</integration>
-        <oauth_token>oauth_token</oauth_token>
-        <oauth_consumer>oauth_consumer</oauth_consumer>
+        <entity name="integration" />
+        <entity name="oauth_token" />
+        <entity name="oauth_consumer" />
     </entities>
     <entity_type>integration</entity_type>
     <collection>Magento\Integration\Model\Resource\Integration\Collection</collection>
@@ -31,7 +31,7 @@
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>default_integration_%isolation%</default_value>
+            <default_value xsi:type="string">default_integration_%isolation%</default_value>
             <input />
             <group>integration_info</group>
         </field>
@@ -39,7 +39,7 @@
            <attribute_code>email</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>test_%isolation%@example.com</default_value>
+            <default_value xsi:type="string">test_%isolation%@example.com</default_value>
             <input />
             <group>integration_info</group>
         </field>
@@ -69,7 +69,7 @@
             <attribute_code>created_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required />
-            <default_value>CURRENT_TIMESTAMP</default_value>
+            <default_value xsi:type="string">CURRENT_TIMESTAMP</default_value>
             <input />
         </field>
         <field name="updated_at">
@@ -83,7 +83,7 @@
             <attribute_code>setup_type</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="identity_link_url">
@@ -154,14 +154,14 @@
             <attribute_code>revoked</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="authorized">
             <attribute_code>authorized</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="user_type">
@@ -189,7 +189,7 @@
             <attribute_code>resource_access</attribute_code>
             <backend_type>virtual</backend_type>
             <group>api</group>
-            <default_value>All</default_value>
+            <default_value xsi:type="string">All</default_value>
         </field>
         <field name="resources">
             <attribute_code>resources</attribute_code>

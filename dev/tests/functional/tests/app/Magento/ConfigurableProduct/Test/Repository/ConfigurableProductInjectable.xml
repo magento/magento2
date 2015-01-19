@@ -6,7 +6,7 @@
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\ConfigurableProduct\Test\Repository\ConfigurableProductInjectable">
-        <dataset name="default" xsi:type="array">
+        <dataset name="default">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
             <field name="price" xsi:type="array">
@@ -36,7 +36,7 @@
             </field>
         </dataset>
 
-        <dataset name="product_with_size" xsi:type="array">
+        <dataset name="product_with_size">
             <field name="name" xsi:type="string">Test configurable product with size %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
             <field name="price" xsi:type="array">
@@ -66,7 +66,7 @@
             </field>
         </dataset>
 
-        <dataset name="product_with_color_and_size" xsi:type="array">
+        <dataset name="product_with_color_and_size">
             <field name="name" xsi:type="string">Test configurable product with color and size %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
             <field name="price" xsi:type="array">
@@ -96,7 +96,7 @@
             </field>
         </dataset>
 
-        <dataset name="one_variation" xsi:type="array">
+        <dataset name="one_variation">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
             <field name="price" xsi:type="array">
@@ -123,7 +123,7 @@
             </field>
         </dataset>
 
-        <dataset name="not_virtual_for_type_switching" xsi:type="array">
+        <dataset name="not_virtual_for_type_switching">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
             <field name="price" xsi:type="array">
@@ -154,7 +154,7 @@
             </field>
         </dataset>
 
-        <dataset name="with_one_option" xsi:type="array">
+        <dataset name="with_one_option">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
             <field name="price" xsi:type="array">
@@ -184,7 +184,7 @@
             </field>
         </dataset>
 
-        <dataset name="with_out_of_stock_item" xsi:type="array">
+        <dataset name="with_out_of_stock_item">
             <field name="name" xsi:type="string">Test configurable product %isolation%</field>
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
             <field name="price" xsi:type="array">

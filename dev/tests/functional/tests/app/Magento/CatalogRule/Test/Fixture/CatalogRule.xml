@@ -19,12 +19,13 @@
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>CatalogPriceRule %isolation%</default_value>
+            <default_value xsi:type="string">CatalogPriceRule %isolation%</default_value>
             <input>text</input>
             <group>rule_information</group>
         </field>
-        <field name="description"               <attribute_code>description</attribute_code>
-            <default_value>Catalog Price Rule Description</default_value>
+        <field name="description">
+            <attribute_code>description</attribute_code>
+            <default_value xsi:type="string">Catalog Price Rule Description</default_value>
             <input>text</input>
             <group>rule_information</group>
         </field>
@@ -32,7 +33,7 @@
            <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value>Active</default_value>
+            <default_value xsi:type="string">Active</default_value>
             <input>select</input>
             <group>rule_information</group>
         </field>
@@ -41,7 +42,7 @@
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
             <default_value  xsi:type="array">
-                <item name="0" xsi:type="sting">Main Website</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </default_value>
             <input>multiselect</input>
             <group>rule_information</group>
@@ -51,7 +52,7 @@
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
             <default_value  xsi:type="array">
-                <item name="0" xsi:type="sting">NOT LOGGED IN</item>
+                <item name="0" xsi:type="string">NOT LOGGED IN</item>
             </default_value>
             <input>multiselect</input>
             <group>rule_information</group>
@@ -76,7 +77,7 @@
             <attribute_code>simple_action</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>0</is_required>
-            <default_value>By Percentage of the Original Price</default_value>
+            <default_value xsi:type="string">By Percentage of the Original Price</default_value>
             <input>select</input>
             <group>actions</group>
         </field>
@@ -84,7 +85,7 @@
             <attribute_code>discount_amount</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>1</is_required>
-            <default_value>50</default_value>
+            <default_value xsi:type="number">50</default_value>
             <input>text</input>
             <group>actions</group>
         </field>
@@ -117,7 +118,7 @@
             <backend_type>virtual</backend_type>
         </field>
         <field name="sort_order">
-             attribute_code>sort_order</attribute_code>
+            <attribute_code>sort_order</attribute_code>
             <default_value xsi:type="null" />
             <input>text</input>
             <group>rule_information</group>

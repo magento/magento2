@@ -1,0 +1,198 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+-->
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+    <storage class="Magento\Weee\Test\Repositoy\ConfigData">
+        <dataset name="row_cat_incl_ship_excl_after_disc_on_excl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="row_cat_excl_ship_incl_before_disc_on_incl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="total_cat_excl_ship_incl_after_disc_on_excl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="row_cat_incl_ship_excl_before_disc_on_incl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="unit_cat_incl_ship_incl_before_disc_on_incl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="total_cat_excl_ship_incl_before_disc_on_incl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="unit_cat_excl_ship_excl_after_disc_on_excl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="total_cat_incl_ship_excl_before_disc_on_excl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="total_cat_excl_ship_incl_after_disc_on_incl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="unit_cat_excl_ship_incl_after_disc_on_excl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="default_tax_configuration">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="cross_border_enabled_price_incl_tax">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="cross_border_enabled_price_excl_tax">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="tax_with_fpt_taxed_cat_excl_disp_excl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="tax_with_fpt_taxed_cat_incl_disp_excl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="tax_with_fpt_taxed_cat_incl_disp_incl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="tax_with_fpt_taxed_cat_excl_disp_incl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="tax_with_fpt_cat_excl_disp_excl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="tax_with_fpt_cat_excl_disp_incl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="tax_with_fpt_cat_incl_disp_excl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Excluding FPT, FPT description, final price" xsi:type="string">2</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="tax_with_fpt_cat_incl_disp_incl">
+            <field path="tax/weee/enable" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/display_sales" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>
+            <field path="tax/weee/apply_vat" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="tax/weee/include_in_subtotal" scope="tax" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+    </storage>
+</repository>

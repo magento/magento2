@@ -34,14 +34,14 @@
            <attribute_code>num_results</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="popularity">
             <attribute_code>popularity</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="redirect">
@@ -62,35 +62,35 @@
             <attribute_code>store_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="display_in_terms">
             <attribute_code>display_in_terms</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>null</default_value>
+            <default_value xsi:type="null" />
             <input />
         </field>
         <field name="is_active">
             <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>null</default_value>
+            <default_value xsi:type="null" />
             <input />
         </field>
         <field name="is_processed">
             <attribute_code>is_processed</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="updated_at">
             <attribute_code>updated_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required />
-            <default_value>null</default_value>
+            <default_value xsi:type="null" />
             <input />
         </field>
     </fields>

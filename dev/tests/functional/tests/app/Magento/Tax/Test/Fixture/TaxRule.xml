@@ -27,7 +27,7 @@
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>TaxIdentifier%isolation%</default_value>
+            <default_value xsi:type="string">TaxIdentifier%isolation%</default_value>
             <input />
         </field>
         <field name="priority">
@@ -50,7 +50,7 @@
             <source>Magento\Tax\Test\Fixture\TaxRule\TaxRate</source>
             <default_value xsi:type="array">
                 <item name="dataSet" xsi:type="array">
-                    <item name="0" xsi:type="sting">US-CA-Rate_1</item>
+                    <item name="0" xsi:type="string">US-CA-Rate_1</item>
                 </item>
             </default_value>
         </field>

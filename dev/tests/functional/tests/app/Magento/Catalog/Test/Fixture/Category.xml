@@ -26,14 +26,14 @@
             <attribute_code>entity_type_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="attribute_set_id">
             <attribute_code>attribute_set_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="description">
@@ -47,7 +47,7 @@
             <attribute_code>parent_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>2</default_value>
+            <default_value xsi:type="number">2</default_value>
             <input />
             <group>null</group>
             <source>Magento\Catalog\Test\Fixture\Category\ParentId</source>
@@ -70,7 +70,7 @@
             <attribute_code>path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>Default Category</default_value>
+            <default_value xsi:type="string">Default Category</default_value>
             <group>null</group>
             <input />
         </field>
@@ -85,7 +85,7 @@
             <attribute_code>level</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="children_count">
@@ -144,13 +144,13 @@
             <attribute_code>name</attribute_code>
             <backend_type>virtual</backend_type>
             <group>general_information</group>
-            <default_value>Category%isolation%</default_value>
+            <default_value xsi:type="string">Category%isolation%</default_value>
         </field>
         <field name="is_active">
             <attribute_code>is_active</attribute_code>
             <backend_type>virtual</backend_type>
             <group>general_information</group>
-            <default_value>Yes</default_value>
+            <default_value xsi:type="string">Yes</default_value>
         </field>
         <field name="is_anchor">
             <attribute_code>is_anchor</attribute_code>
@@ -161,13 +161,13 @@
             <attribute_code>url_key</attribute_code>
             <backend_type>virtual</backend_type>
             <group>general_information</group>
-            <default_value>category%isolation%</default_value>
+            <default_value xsi:type="string">category%isolation%</default_value>
         </field>
         <field name="include_in_menu">
             <attribute_code>include_in_menu</attribute_code>
             <backend_type>virtual</backend_type>
             <group>general_information</group>
-            <default_value>Yes</default_value>
+            <default_value xsi:type="string">Yes</default_value>
         </field>
         <field name="landing_page">
             <attribute_code>landing_page</attribute_code>

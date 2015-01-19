@@ -27,14 +27,14 @@
             <attribute_code>template_code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>TemplateName%isolation%</default_value>
+            <default_value xsi:type="string">TemplateName%isolation%</default_value>
             <input />
         </field>
         <field name="text">
            <attribute_code>template_text</attribute_code>
             <backend_type>text</backend_type>
             <is_required />
-            <default_value>Some text %isolation%</default_value>
+            <default_value xsi:type="string">Some text %isolation%</default_value>
             <input />
         </field>
         <field name="text_preprocessed">
@@ -62,28 +62,28 @@
             <attribute_code>template_subject</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>TemplateSubject%isolation%</default_value>
+            <default_value xsi:type="string">TemplateSubject%isolation%</default_value>
             <input />
         </field>
         <field name="sender_name">
             <attribute_code>template_sender_name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>SenderName%isolation%</default_value>
+            <default_value xsi:type="string">SenderName%isolation%</default_value>
             <input />
         </field>
         <field name="sender_email">
             <attribute_code>template_sender_email</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>SenderName%isolation%@example.com</default_value>
+            <default_value xsi:type="string">SenderName%isolation%@example.com</default_value>
             <input />
         </field>
         <field name="actual">
             <attribute_code>template_actual</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>1</default_value>
+            <default_value xsi:type="string">1</default_value>
             <input />
         </field>
         <field name="added_at">

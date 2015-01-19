@@ -80,7 +80,7 @@
             <attribute_code>description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value>This is description for downloadable product</default_value>
+            <default_value xsi:type="string">This is description for downloadable product</default_value>
             <input>textarea</input>
             <group>product-details</group>
         </field>
@@ -132,14 +132,14 @@
             <attribute_code>is_returnable</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>2</default_value>
+            <default_value xsi:type="number">2</default_value>
             <input>select</input>
         </field>
         <field name="links_exist">
             <attribute_code>links_exist</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="links_purchased_separately">
@@ -202,14 +202,14 @@
             <attribute_code>msrp_display_actual_price_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>4</default_value>
+            <default_value xsi:type="number">4</default_value>
             <input>select</input>
         </field>
         <field name="name">
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>DownloadableProduct_%isolation%</default_value>
+            <default_value xsi:type="string">DownloadableProduct_%isolation%</default_value>
             <input>text</input>
             <group>product-details</group>
         </field>
@@ -238,7 +238,7 @@
             <attribute_code>options_container</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>container2</default_value>
+            <default_value xsi:type="string">container2</default_value>
             <input>select</input>
         </field>
         <field name="page_layout">
@@ -252,8 +252,8 @@
             <attribute_code>price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>1</is_required>
-            <default_value>
-                <value>100</value>
+            <default_value xsi:type="array">
+                <item name="value" xsi:type="string">100</item>
             </default_value>
             <input>price</input>
             <group>product-details</group>
@@ -268,9 +268,9 @@
             <attribute_code>quantity_and_stock_status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>
-                <qty>1</qty>
-                <is_in_stock>In Stock</is_in_stock>
+            <default_value xsi:type="array">
+                <item name="qty" xsi:type="number">1</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
             </default_value>
             <input>select</input>
             <group>product-details</group>
@@ -307,7 +307,7 @@
             <attribute_code>short_description</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value>This is short description for downloadable product</default_value>
+            <default_value xsi:type="string">This is short description for downloadable product</default_value>
             <input>textarea</input>
             <group>autosettings</group>
         </field>
@@ -321,8 +321,8 @@
             <attribute_code>downloadable_items</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value>
-                <preset>default</preset>
+            <default_value xsi:type="array">
+                <item name="preset" xsi:type="string">default</item>
             </default_value>
             <input>text</input>
             <group>downloadable_information</group>
@@ -332,7 +332,7 @@
             <attribute_code>downloadable_sample</attribute_code>
             <backend_type>text</backend_type>
             <is_required>0</is_required>
-            <default_value>dafault</default_value>
+            <default_value xsi:type="string">dafault</default_value>
             <input>text</input>
             <group>downloadable_information</group>
             <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\Samples</source>
@@ -341,7 +341,7 @@
             <attribute_code>sku</attribute_code>
             <backend_type>static</backend_type>
             <is_required>1</is_required>
-            <default_value>DownloadableProduct_%isolation%</default_value>
+            <default_value xsi:type="string">DownloadableProduct_%isolation%</default_value>
             <input>text</input>
             <group>product-details</group>
         </field>
@@ -370,7 +370,7 @@
             <attribute_code>special_price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value>10</default_value>
+            <default_value xsi:type="number">10</default_value>
             <group>advanced-pricing</group>
         </field>
         <field name="special_to_date">
@@ -384,7 +384,7 @@
             <attribute_code>status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>1</default_value>
+            <default_value xsi:type="string">1</default_value>
             <input>select</input>
             <group>product-details</group>
         </field>
@@ -392,8 +392,8 @@
             <attribute_code>tax_class_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>
-                <dataSet>taxable_goods</dataSet>
+            <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">taxable_goods</item>
             </default_value>
             <input>select</input>
             <group>product-details</group>
@@ -417,7 +417,7 @@
             <attribute_code>tier_price</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required>0</is_required>
-            <default_value>default</default_value>
+            <default_value xsi:type="string">default</default_value>
             <input>text</input>
             <group>advanced-pricing</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions</source>
@@ -447,7 +447,7 @@
             <attribute_code>url_key</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value>downloadableproduct_%isolation%</default_value>
+            <default_value xsi:type="string">downloadableproduct_%isolation%</default_value>
             <input>text</input>
             <group>search-engine-optimization</group>
         </field>
@@ -462,7 +462,7 @@
             <attribute_code>visibility</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>4</default_value>
+            <default_value xsi:type="number">4</default_value>
             <input>select</input>
             <group>autosettings</group>
         </field>
@@ -478,7 +478,7 @@
             <attribute_code>custom_options</attribute_code>
             <backend_type>virtual</backend_type>
             <is_required>0</is_required>
-            <default_value>default</default_value>
+            <default_value xsi:type="string">default</default_value>
             <group>customer-options</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</source>
         </field>
@@ -490,13 +490,13 @@
             <attribute_code>is_virtual</attribute_code>
             <backend_type>virtual</backend_type>
             <group>product-details</group>
-            <default_value>Yes</default_value>
+            <default_value xsi:type="string">Yes</default_value>
         </field>
         <field name="website_ids">
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
             <default_value xsi:type="array">
-                <item name="0" xsi:type="sting">Main Website</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </default_value>
             <group>websites</group>
         </field>

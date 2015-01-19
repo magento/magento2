@@ -10,9 +10,9 @@
         <dataset name="default">
             <field name="target_country" xsi:type="string">United States</field>
             <field name="attribute_set_id" xsi:type="array">
-                <field name="dataSet" xsi:type="string">default</field>
+                <item name="dataSet" xsi:type="string">default</item>
             </field>
-            <field name="category" xsi:type="string">Apparel & Accessories</field>
+            <field name="category" xsi:type="string">Apparel &amp; Accessories</field>
         </dataset>
     </storage>
 </repository>

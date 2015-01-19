@@ -26,39 +26,39 @@
             <attribute_code>customer_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="sender">
            <attribute_code>sender</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>John Doe</default_value>
+            <default_value xsi:type="string">John Doe</default_value>
             <input />
         </field>
         <field name="recipient">
             <attribute_code>recipient</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>Jane Doe</default_value>
+            <default_value xsi:type="string">Jane Doe</default_value>
             <input />
         </field>
         <field name="message">
              <attribute_code>message</attribute_code>
             <backend_type>text</backend_type>
             <is_required />
-            <default_value>text_%isolation%</default_value>
+            <default_value xsi:type="string">text_%isolation%</default_value>
             <input />
         </field>
         <field name="allow_gift_options">
             <attribute_code>allow_gift_options</attribute_code>
             <backend_type>virtual</backend_type>
-            <default_value>Yes</default_value>
+            <default_value xsi:type="string">Yes</default_value>
         </field>
         <field name="allow_gift_messages_for_order">
             <attribute_code>allow_gift_messages_for_order</attribute_code>
             <backend_type>virtual</backend_type>
-            <default_value>Yes</default_value>
+            <default_value xsi:type="string">Yes</default_value>
         </field>
         <field name="allow_gift_options_for_items">
             <attribute_code>allow_gift_options_for_items</attribute_code>

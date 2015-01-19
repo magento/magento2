@@ -11,7 +11,7 @@
             <field name="variable" xsi:type="array">
                 <item name="code" xsi:type="string">variableCode%isolation%</item>
                 <item name="name" xsi:type="string">variableName%isolation%</item>
-                <item name="html_value" xsi:type="string"><p class='custom-variable-test-class-%isolation%'>variableName%isolation%</p></item>
+                <item name="html_value" xsi:type="string">&lt;p class='custom-variable-test-class-%isolation%'>variableName%isolation%&lt;/p&gt;</item>
                 <item name="plain_value" xsi:type="string">variableName%isolation%</item>
             </field>
         </dataset>

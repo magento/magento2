@@ -17,6 +17,13 @@ use Magento\User\Test\Fixture\AdminUserRole;
 class CurrentPassword implements FixtureInterface
 {
     /**
+     * Data set configuration settings
+     *
+     * @var array
+     */
+    protected $params;
+
+    /**
      * User role name.
      *
      * @var string
@@ -33,9 +40,11 @@ class CurrentPassword implements FixtureInterface
     {
         $this->params = $params;
         /** @var \Mtf\System\Config $systemConfig */
-        $systemConfig = ObjectManager::getInstance()->create('Mtf\System\Config');
-        $superAdminPassword = $systemConfig->getConfigParam('application/backend_user_credentials/password');
-        $this->data = $data == '%current_password%' ? $superAdminPassword : $data;
+        if ($data == '%current_password%') {
+            $systemConfig = ObjectManager::getInstance()->create('Mtf\System\Config');
+            $data = $systemConfig->getConfigParam('application/backend_user_credentials/password');
+        }
+        $this->data = $data;
     }
 
     /**

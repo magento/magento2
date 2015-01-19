@@ -14,7 +14,7 @@
             <attribute_code>query</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Backend\Test\Fixture\GlobalSearch\Query</source>
-            <default_value>catalogProductSimple::default::name</default_value>
+            <default_value xsi:type="string">catalogProductSimple::default::name</default_value>
         </field>
     </fields>
 </fixture>

@@ -20,42 +20,42 @@
             <attribute_code>website_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required>1</is_required>
-            <default_value>1</default_value>
+            <default_value xsi:type="string">1</default_value>
             <input />
         </field>
         <field name="code">
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>base</default_value>
+            <default_value xsi:type="string">base</default_value>
             <input />
         </field>
         <field name="name">
            <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>Main Website</default_value>
+            <default_value xsi:type="string">Main Website</default_value>
             <input />
         </field>
         <field name="sort_order">
             <attribute_code>sort_order</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="default_group_id">
             <attribute_code>default_group_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="is_default">
             <attribute_code>is_default</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
     </fields>

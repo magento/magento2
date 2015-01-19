@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/config.xsd">
-    <storage class="Magento\Shipping\Test\Repository\ConfigData">
-        <dataset name="shipping_origin">
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+    <storage class="Magento\Core\Test\Repository\ConfigData">
+        <dataset name="shipping_origin_US_CA">
             <field path="shipping/origin/country_id" scope="shipping" scope_id="1" label="United States" xsi:type="string">US</field>
             <field path="shipping/origin/region_id" scope="shipping" scope_id="1" label="California" xsi:type="string">12</field>
             <field path="shipping/origin/postcode" scope="shipping" scope_id="1" label="" xsi:type="string">90232</field>
@@ -16,7 +16,7 @@
             <field path="shipping/origin/street_line2" scope="shipping" scope_id="1" label="" xsi:type="string">Suite 200</field>
         </dataset>
 
-        <dataset name="fedex">
+        <dataset name="shipping_origin_US_LA">
             <field path="shipping/origin/country_id" scope="carriers" scope_id="1" label="United States" xsi:type="string">US</field>
             <field path="shipping/origin/region_id" scope="shipping" scope_id="1" label="California" xsi:type="string">12</field>
             <field path="shipping/origin/postcode" scope="shipping" scope_id="1" label="" xsi:type="string">90024</field>

@@ -11,8 +11,8 @@
     <module>Magento_Review</module>
     <type>composite</type>
     <entities>
-        <review>review</review>
-        <review_detail>review_detail</review_detail>
+        <entity name="review" />
+        <entity name="review_detail" />
     </entities>
     <collection>Magento\Review\Model\Resource\Review\Collection</collection>
     <repository_class>Magento\Review\Test\Repository\ReviewInjectable</repository_class>
@@ -22,22 +22,22 @@
             <attribute_code>review_id</attribute_code>
             <backend_type>bigint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="created_at">
             <attribute_code>created_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required />
-            <default_value>CURRENT_TIMESTAMP</default_value>
+            <default_value xsi:type="string">CURRENT_TIMESTAMP</default_value>
             <input />
         </field>
         <field name="entity_id">
             <attribute_code>entity_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>
-                <dataSet>catalogProductSimple::default</dataSet>
+            <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">catalogProductSimple::default</item>
             </default_value>
             <input />
             <source>Magento\Review\Test\Fixture\Review\EntityId</source>
@@ -46,14 +46,14 @@
             <attribute_code>entity_pk_value</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="status_id">
             <attribute_code>status_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>Approved</default_value>
+            <default_value xsi:type="string">Approved</default_value>
             <input />
         </field>
         <field name="detail_id">
@@ -67,28 +67,28 @@
             <attribute_code>store_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="title">
             <attribute_code>title</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>Summary review %isolation%</default_value>
+            <default_value xsi:type="string">Summary review %isolation%</default_value>
             <input />
         </field>
         <field name="detail">
             <attribute_code>detail</attribute_code>
             <backend_type>text</backend_type>
             <is_required />
-            <default_value>Text review %isolation%</default_value>
+            <default_value xsi:type="string">Text review %isolation%</default_value>
             <input />
         </field>
         <field name="nickname">
             <attribute_code>nickname</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>Guest customer %isolation%</default_value>
+            <default_value xsi:type="string">Guest customer %isolation%</default_value>
             <input />
         </field>
         <field name="customer_id">
@@ -102,8 +102,8 @@
             <attribute_code>select_stores</attribute_code>
             <backend_type>virtual</backend_type>
             <is_required>1</is_required>
-            <default_value  xsi:type="array">
-                <item name="0" xsi:type="sting">Main Website/Main Website Store/Default Store View</item>
+            <default_value xsi:type="array">
+                <item name="0" xsi:type="string">Main Website/Main Website Store/Default Store View</item>
             </default_value>
             <input>multiselectgrouplist</input>
         </field>
@@ -113,8 +113,8 @@
             <source>Magento\Review\Test\Fixture\Review\Ratings</source>
             <default_value xsi:type="array">
                 <item name="0" xsi:type="array">
-                    <item name="dataSet" xsi:type="sting">visibleOnDefaultWebsite</item>
-                    <item name="rating" xsi:type="sting">4</item>
+                    <item name="dataSet" xsi:type="string">visibleOnDefaultWebsite</item>
+                    <item name="rating" xsi:type="number">4</item>
                 </item>
             </default_value>
         </field>
@@ -122,7 +122,7 @@
             <attribute_code>type</attribute_code>
             <backend_type>string</backend_type>
             <is_required />
-            <default_value>Administrator</default_value>
+            <default_value xsi:type="string">Administrator</default_value>
             <input />
         </field>
     </fields>

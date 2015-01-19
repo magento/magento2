@@ -27,14 +27,14 @@
             <attribute_code>class_name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>Tax Class %isolation%</default_value>
+            <default_value xsi:type="string">Tax Class %isolation%</default_value>
             <input />
         </field>
         <field name="class_type">
            <attribute_code>class_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>CUSTOMER</default_value>
+            <default_value xsi:type="string">CUSTOMER</default_value>
             <input />
         </field>
         <field name="id">

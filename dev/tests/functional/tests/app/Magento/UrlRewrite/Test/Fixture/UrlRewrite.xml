@@ -24,7 +24,7 @@
             <attribute_code>store_id</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>Main Website/Main Website Store/Default Store View</default_value>
+            <default_value xsi:type="string">Main Website/Main Website Store/Default Store View</default_value>
             <source>Magento\UrlRewrite\Test\Fixture\UrlRewrite\StoreId</source>
             <input>select</input>
         </field>
@@ -38,7 +38,7 @@
             <attribute_code>request_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>test_request%isolation%</default_value>
+            <default_value xsi:type="string">test_request%isolation%</default_value>
             <input>text</input>
         </field>
         <field name="entity_type">
@@ -52,7 +52,7 @@
             <attribute_code>target_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>target_path%isolation%</default_value>
+            <default_value xsi:type="string">target_path%isolation%</default_value>
             <input>text</input>
             <source>Magento\UrlRewrite\Test\Fixture\UrlRewrite\TargetPath</source>
         </field>

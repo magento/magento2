@@ -26,21 +26,21 @@
             <attribute_code>store_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="created_at">
            <attribute_code>created_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required />
-            <default_value>CURRENT_TIMESTAMP</default_value>
+            <default_value xsi:type="string">CURRENT_TIMESTAMP</default_value>
             <input />
         </field>
         <field name="updated_at">
             <attribute_code>updated_at</attribute_code>
             <backend_type>timestamp</backend_type>
             <is_required />
-            <default_value>0000-00-00 00:00:00</default_value>
+            <default_value xsi:type="string">0000-00-00 00:00:00</default_value>
             <input />
         </field>
         <field name="converted_at">
@@ -54,21 +54,21 @@
             <attribute_code>is_active</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>1</default_value>
+            <default_value xsi:type="string">1</default_value>
             <input />
         </field>
         <field name="is_virtual">
             <attribute_code>is_virtual</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="is_multi_shipping">
             <attribute_code>is_multi_shipping</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="items">
@@ -80,35 +80,35 @@
             <attribute_code>items_count</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="items_qty">
             <attribute_code>items_qty</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required />
-            <default_value>0.0000</default_value>
+            <default_value xsi:type="string">0.0000</default_value>
             <input />
         </field>
         <field name="orig_order_id">
             <attribute_code>orig_order_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="store_to_base_rate">
             <attribute_code>store_to_base_rate</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required />
-            <default_value>0.0000</default_value>
+            <default_value xsi:type="string">0.0000</default_value>
             <input />
         </field>
         <field name="store_to_quote_rate">
             <attribute_code>store_to_quote_rate</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required />
-            <default_value>0.0000</default_value>
+            <default_value xsi:type="string">0.0000</default_value>
             <input />
         </field>
         <field name="base_currency_code">
@@ -136,14 +136,14 @@
             <attribute_code>grand_total</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required />
-            <default_value>0.0000</default_value>
+            <default_value xsi:type="string">0.0000</default_value>
             <input />
         </field>
         <field name="base_grand_total">
             <attribute_code>base_grand_total</attribute_code>
             <backend_type>decimal</backend_type>
             <is_required />
-            <default_value>0.0000</default_value>
+            <default_value xsi:type="string">0.0000</default_value>
             <input />
         </field>
         <field name="checkout_method">
@@ -157,21 +157,21 @@
             <attribute_code>customer_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="customer_tax_class_id">
             <attribute_code>customer_tax_class_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="customer_group_id">
             <attribute_code>customer_group_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="customer_email">
@@ -234,14 +234,14 @@
             <attribute_code>customer_note_notify</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>1</default_value>
+            <default_value xsi:type="string">1</default_value>
             <input />
         </field>
         <field name="customer_is_guest">
             <attribute_code>customer_is_guest</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="remote_ip">
@@ -350,14 +350,14 @@
             <input />
         </field>
         <field name="trigger_recollect">
-            <attribute_code>trigger_recollec">attribute_code>
+            <attribute_code>trigger_recollec</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="ext_shipping_info">
-            <attribute_code>ext_shipping_info">ttribute_code>
+            <attribute_code>ext_shipping_info</attribute_code>
             <backend_type>text</backend_type>
             <is_required />
             <default_value xsi:type="null" />
@@ -367,7 +367,7 @@
             <attribute_code>is_persistent</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="gift_message_id">

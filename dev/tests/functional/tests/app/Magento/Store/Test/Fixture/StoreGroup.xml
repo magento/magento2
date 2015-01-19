@@ -27,30 +27,30 @@
             <attribute_code>website_id</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Store\Test\Fixture\StoreGroup\WebsiteId</source>
-            <default_value>
-                <dataSet>main_website</dataSet>
+            <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">main_website</item>
             </default_value>
         </field>
         <field name="name">
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>StoreGroup%isolation%</default_value>
+            <default_value xsi:type="string">StoreGroup%isolation%</default_value>
             <input />
         </field>
         <field name="root_category_id">
             <attribute_code>root_category_id</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Store\Test\Fixture\StoreGroup\CategoryId</source>
-            <default_value>
-                <dataSet>default_category</dataSet>
+            <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">default_category</item>
             </default_value>
         </field>
         <field name="default_store_id">
             <attribute_code>default_store_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
     </fields>

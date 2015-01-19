@@ -23,14 +23,14 @@
             <attribute_code>entity</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>Products</default_value>
+            <default_value xsi:type="string">Products</default_value>
             <input />
         </field>
         <field name="behavior">
            <attribute_code>behavior</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>CSV</default_value>
+            <default_value xsi:type="string">CSV</default_value>
             <input />
         </field>
         <field name="data_export">

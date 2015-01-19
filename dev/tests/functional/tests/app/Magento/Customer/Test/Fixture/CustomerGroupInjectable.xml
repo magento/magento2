@@ -19,15 +19,15 @@
             <attribute_code>code</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>customer_code_%isolation%</default_value>
+            <default_value xsi:type="string">customer_code_%isolation%</default_value>
             <input>text</input>
         </field>
         <field name="tax_class_id">
             <attribute_code>tax_class</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
-            <default_value>
-                <dataSet>customer_tax_class</dataSet>
+            <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">customer_tax_class</item>
             </default_value>
             <input>select</input>
             <source>Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds</source>

@@ -26,29 +26,29 @@
             <attribute_code>entity_type_id</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="attribute_set_name">
             <attribute_code>attribute_set_name</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>Default_attribute_set_%isolation%</default_value>
+            <default_value xsi:type="string">Default_attribute_set_%isolation%</default_value>
             <input />
         </field>
         <field name="sort_order">
             <attribute_code>sort_order</attribute_code>
             <backend_type>smallint</backend_type>
             <is_required />
-            <default_value>0</default_value>
+            <default_value xsi:type="number">0</default_value>
             <input />
         </field>
         <field name="skeleton_set">
             <attribute_code>skeleton_set</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required />
-            <default_value>
-                <dataSet>default</dataSet>
+            <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
             </default_value>
             <input />
             <source>Magento\Catalog\Test\Fixture\CatalogAttributeSet\SkeletonSet</source>
