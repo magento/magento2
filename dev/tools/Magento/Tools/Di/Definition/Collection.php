@@ -33,7 +33,7 @@ class Collection
      *
      * @return void
      */
-    public function initialize($definitions)
+    public function initialize(array $definitions)
     {
         $this->definitions = $definitions;
     }
@@ -54,7 +54,7 @@ class Collection
      * Add new definition for instance
      *
      * @param string $instance
-     * @param array $arguments
+     * @param array|null $arguments
      *
      * @return void
      */
@@ -63,11 +63,11 @@ class Collection
         $this->definitions[$instance] = $arguments;
     }
 
-    /**
+    /**+
      * Returns instance arguments
      *
      * @param string $instanceName
-     * @return null
+     * @return null|array
      */
     public function getInstanceArguments($instanceName)
     {
