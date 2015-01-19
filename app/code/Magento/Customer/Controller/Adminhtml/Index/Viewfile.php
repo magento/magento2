@@ -174,11 +174,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $this->getResponse()
                 ->setHttpResponseCode(200)
                 ->setHeader('Pragma', 'public', true)
-                ->setHeader(
-                    'Content-type',
-                    $contentType,
-                    true
-                )
+                ->setHeader('Content-type', $contentType, true)
                 ->setHeader('Content-Length', $contentLength)
                 ->setHeader('Last-Modified', date('r', $contentModify))
                 ->clearBody();
@@ -187,13 +183,9 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             echo $directory->readFile($fileName);
         } else {
             $name = pathinfo($path, PATHINFO_BASENAME);
-            $this->_fileFactory->create(
-                $name,
-                ['type' => 'filename', 'value' => $fileName],
-                DirectoryList::MEDIA
-            )->sendResponse();
+            $this->_fileFactory->create($name, ['type' => 'filename', 'value' => $fileName], DirectoryList::MEDIA)
+                ->sendResponse();
         }
-
         exit;
     }
 }

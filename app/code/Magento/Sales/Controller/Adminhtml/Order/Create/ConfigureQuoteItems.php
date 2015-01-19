@@ -12,7 +12,7 @@ class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Crea
     /**
      * Ajax handler to response configuration fieldset of composite product in quote items
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
@@ -30,11 +30,9 @@ class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Crea
             }
 
             $configureResult->setOk(true);
-            $optionCollection = $this->_objectManager->create(
-                'Magento\Quote\Model\Quote\Item\Option'
-            )->getCollection()->addItemFilter(
-                [$quoteItemId]
-            );
+            $optionCollection = $this->_objectManager->create('Magento\Quote\Model\Quote\Item\Option')
+                ->getCollection()
+                ->addItemFilter([$quoteItemId]);
             $quoteItem->setOptions($optionCollection->getOptionsByItem($quoteItem));
 
             $configureResult->setBuyRequest($quoteItem->getBuyRequest());
@@ -48,10 +46,7 @@ class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Crea
         }
 
         // Render page
-        $this->_objectManager->get(
-            'Magento\Catalog\Helper\Product\Composite'
-        )->renderConfigureResult(
-            $configureResult
-        );
+        return $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
+            ->renderConfigureResult($configureResult);
     }
 }

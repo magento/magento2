@@ -7,7 +7,7 @@ namespace Magento\Catalog\Helper\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\ViewInterface;
+use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Helper\Product;
 use Magento\Store\Model\StoreManagerInterface;
@@ -42,9 +42,9 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
-     * @var ViewInterface
+     * @var \Magento\Framework\View\Result\LayoutFactory
      */
-    protected $_view;
+    protected $resultLayoutFactory;
 
     /**
      * @var ProductRepositoryInterface
@@ -61,7 +61,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Product $catalogProduct
      * @param Registry $coreRegistry
-     * @param ViewInterface $view
+     * @param LayoutFactory $resultLayoutFactory
      * @param ProductRepositoryInterface $productRepository
      * @param CustomerRepositoryInterface $customerRepository
      */
@@ -70,14 +70,14 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
         StoreManagerInterface $storeManager,
         Product $catalogProduct,
         Registry $coreRegistry,
-        ViewInterface $view,
+        LayoutFactory $resultLayoutFactory,
         ProductRepositoryInterface $productRepository,
         CustomerRepositoryInterface $customerRepository
     ) {
         $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;
         $this->_catalogProduct = $catalogProduct;
-        $this->_view = $view;
+        $this->resultLayoutFactory = $resultLayoutFactory;
         $this->productRepository = $productRepository;
         $this->customerRepository = $customerRepository;
         parent::__construct($context);
@@ -86,15 +86,13 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Init layout of product configuration update result
      *
-     * @return $this
+     * @return \Magento\Framework\View\Result\Layout
      */
     protected function _initUpdateResultLayout()
     {
-        $this->_view->getLayout()->getUpdate()->addHandle('CATALOG_PRODUCT_COMPOSITE_UPDATE_RESULT');
-        $this->_view->loadLayoutUpdates();
-        $this->_view->generateLayoutXml();
-        $this->_view->generateLayoutBlocks();
-        return $this;
+        $resultLayout = $this->resultLayoutFactory->create();
+        $resultLayout->addHandle('CATALOG_PRODUCT_COMPOSITE_UPDATE_RESULT');
+        return $resultLayout;
     }
 
     /**
@@ -102,14 +100,12 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      * when single configuration submitted
      *
      * @param \Magento\Framework\Object $updateResult
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function renderUpdateResult(\Magento\Framework\Object $updateResult)
     {
         $this->_coreRegistry->register('composite_update_result', $updateResult);
-
-        $this->_initUpdateResultLayout();
-        $this->_view->renderLayout();
+        return $this->_initUpdateResultLayout();
     }
 
     /**
@@ -120,24 +116,18 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param bool $isOk
      * @param string $productType
-     * @return $this
+     * @return \Magento\Framework\View\Result\Layout
      */
     protected function _initConfigureResultLayout($isOk, $productType)
     {
-        $update = $this->_view->getLayout()->getUpdate();
+        $resultLayout = $this->resultLayoutFactory->create();
         if ($isOk) {
-            $update->addHandle(
-                'CATALOG_PRODUCT_COMPOSITE_CONFIGURE'
-            )->addHandle(
-                'catalog_product_view_type_' . $productType
-            );
+            $resultLayout->addHandle('CATALOG_PRODUCT_COMPOSITE_CONFIGURE')
+                ->addHandle('catalog_product_view_type_' . $productType);
         } else {
-            $update->addHandle('CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR');
+            $resultLayout->addHandle('CATALOG_PRODUCT_COMPOSITE_CONFIGURE_ERROR');
         }
-        $this->_view->loadLayoutUpdates();
-        $this->_view->generateLayoutXml();
-        $this->_view->generateLayoutBlocks();
-        return $this;
+        return $resultLayout;
     }
 
     /**
@@ -148,7 +138,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      *  - 'error' = true, and 'message' to show
      *
      * @param \Magento\Framework\Object $configureResult
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function renderConfigureResult(\Magento\Framework\Object $configureResult)
     {
@@ -193,7 +183,6 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
             $this->_coreRegistry->register('composite_configure_result_error_message', $e->getMessage());
         }
 
-        $this->_initConfigureResultLayout($isOk, $productType);
-        $this->_view->renderLayout();
+        return $this->_initConfigureResultLayout($isOk, $productType);
     }
 }
