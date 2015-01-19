@@ -212,7 +212,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
                 ->setIsShareable($linkContent->isShareable())
                 ->setNumberOfDownloads($linkContent->getNumberOfDownloads())
                 ->save();
-            return true;
+            return $link->getId();
         } else {
             $product = $this->productRepository->get($productSku, true);
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {

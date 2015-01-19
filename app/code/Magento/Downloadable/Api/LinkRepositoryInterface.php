@@ -30,9 +30,9 @@ interface LinkRepositoryInterface
      *
      * @param string $productSku
      * @param \Magento\Downloadable\Api\Data\LinkContentInterface $linkContent
-     * @param int|null $linkId
+     * @param int $linkId
      * @param bool $isGlobalScopeContent
-     * @return bool
+     * @return int
      */
     public function save($productSku, LinkContentInterface $linkContent, $linkId = null, $isGlobalScopeContent = false);
 

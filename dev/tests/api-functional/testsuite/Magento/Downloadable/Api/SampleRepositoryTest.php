@@ -375,7 +375,7 @@ class SampleRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $this->assertTrue($this->_webApiCall($this->updateServiceInfo, $requestData));
+        $this->assertEquals($sampleId, $this->_webApiCall($this->updateServiceInfo, $requestData));
         $sample = $this->getTargetSample($this->getTargetProduct(), $sampleId);
         $this->assertNotNull($sample);
         $this->assertEquals($requestData['sampleContent']['title'], $sample->getTitle());
@@ -401,7 +401,7 @@ class SampleRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $this->assertTrue($this->_webApiCall($this->updateServiceInfo, $requestData));
+        $this->assertEquals($sampleId, $this->_webApiCall($this->updateServiceInfo, $requestData));
         $sample = $this->getTargetSample($this->getTargetProduct(), $sampleId);
         $globalScopeSample = $this->getTargetSample($this->getTargetProduct(true), $sampleId);
         $this->assertNotNull($sample);

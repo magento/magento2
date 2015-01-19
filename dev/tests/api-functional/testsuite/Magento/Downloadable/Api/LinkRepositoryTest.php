@@ -590,8 +590,7 @@ class LinkRepositoryTest extends WebapiAbstract
                 'number_of_downloads' => 50,
             ],
         ];
-
-        $this->assertTrue($this->_webApiCall($this->updateServiceInfo, $requestData));
+        $this->assertEquals($linkId, $this->_webApiCall($this->updateServiceInfo, $requestData));
         $link = $this->getTargetLink($this->getTargetProduct(), $linkId);
         $this->assertNotNull($link);
         $this->assertEquals($requestData['linkContent']['title'], $link->getTitle());
@@ -623,7 +622,7 @@ class LinkRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $this->assertTrue($this->_webApiCall($this->updateServiceInfo, $requestData));
+        $this->assertEquals($linkId, $this->_webApiCall($this->updateServiceInfo, $requestData));
         $link = $this->getTargetLink($this->getTargetProduct(), $linkId);
         $globalScopeLink = $this->getTargetLink($this->getTargetProduct(true), $linkId);
         $this->assertNotNull($link);

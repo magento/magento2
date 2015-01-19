@@ -103,7 +103,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
                 ->setSortOrder($sampleContent->getSortOrder())
                 ->save();
 
-            return true;
+            return $sample->getId();
         } else {
 
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {

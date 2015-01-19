@@ -204,7 +204,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $sampleMock->expects($this->once())->method('setStoreId')->will($this->returnSelf());
         $sampleMock->expects($this->once())->method('save')->will($this->returnSelf());
 
-        $this->assertTrue($this->service->save($productSku, $sampleContentMock, $sampleId));
+        $this->assertEquals($sampleId, $this->service->save($productSku, $sampleContentMock, $sampleId));
     }
 
     /**
