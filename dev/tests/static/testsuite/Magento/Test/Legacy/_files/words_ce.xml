@@ -51,5 +51,8 @@
             <word>Mage_Adminhtml::gui</word>
             <word>Mage_Adminhtml::profiles</word>
         </item>
+        <item>
+            <path>lib/web/legacy-build.min.js</path>
+        </item>
     </whitelist>
 </config>
