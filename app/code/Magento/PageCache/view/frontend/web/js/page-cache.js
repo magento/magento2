@@ -24,19 +24,26 @@ define([
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
-            if (element.is('iframe')) {
-                var hostName = window.location.hostname,
-                    iFrameHostName = $('<a>').prop('href', element.prop('src')).prop('hostname');
+            $(element).contents().each(function (index, el) {
+                switch (el.nodeType) {
+                    case 1: // ELEMENT_NODE
+                        lookup(el);
+                        break;
 
-                if (hostName != iFrameHostName) {
-                    return;
-                }
-            }
-            element.contents().each(function (i, el) {
-                if (el.nodeType == 8) {
-                    elements.push(el);
-                } else if (el.nodeType == 1) {
-                    lookup($(el));
+                    case 8: // COMMENT_NODE
+                        elements.push(el);
+                        break;
+
+                    case 9: // DOCUMENT_NODE
+                        var hostName = window.location.hostname,
+                            iFrameHostName = $('<a>')
+                                .prop('href', element.prop('src'))
+                                .prop('hostname');
+
+                        if (hostName === iFrameHostName) {
+                            lookup($(el).find('body'));
+                        }
+                        break;
                 }
             });
         })(this);
@@ -59,10 +66,7 @@ define([
          */
         _create: function () {
             if ($.mage.cookies.get(this.options.msgBoxCookieName)) {
-                $.mage.cookies.set(this.options.msgBoxCookieName, null, {
-                    expires: new Date(),
-                    path: '/'
-                });
+                $.mage.cookies.clear(this.options.msgBoxCookieName);
             } else {
                 $(this.options.msgBoxSelector).hide();
             }
@@ -125,7 +129,7 @@ define([
             }
             placeholders = this._searchPlaceholders(this.element.comments());
 
-            if (placeholders.length) {
+            if (placeholders && placeholders.length) {
                 this._ajax(placeholders, version);
             }
         },
@@ -140,13 +144,14 @@ define([
             var placeholders = [],
                 tmp = {},
                 ii,
+                len,
                 el, matches, name;
 
-            if (!elements.length) {
+            if (!(elements && elements.length)) {
                 return placeholders;
             }
 
-            for (ii = 0; ii < elements.length; ii++) {
+            for (ii = 0, len = elements.length; ii < len; ii++) {
                 el = elements[ii];
                 matches = this.options.patternPlaceholderOpen.exec(el.nodeValue);
                 name = null;
@@ -182,14 +187,19 @@ define([
          * @protected
          */
         _replacePlaceholder: function (placeholder, html) {
+            if (!placeholder || !html) {
+                return;
+            }
+
             var parent = $(placeholder.openElement).parent(),
                 contents = parent.contents(),
                 startReplacing = false,
                 prevSibling = null,
                 yy,
+                len,
                 element;
 
-            for (yy = 0; yy < contents.length; yy++) {
+            for (yy = 0, len = contents.length; yy < len; yy++) {
                 element = contents[yy];
 
                 if (element == placeholder.openElement) {
@@ -286,6 +296,7 @@ define([
      */
     function generateRandomString(chars, length) {
         var result = '';
+        length = length > 0 && Number.isFinite(length) ? length : 1;
 
         while (length--) {
             result += chars[Math.round(Math.random() * (chars.length - 1))];
