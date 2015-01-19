@@ -5,7 +5,7 @@
  */
 ?>
 <?php echo $block->getFormHtml() ?>
-<script type="text/javascript">
+<script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('#<?php echo $block->getFormId();?>').mage('form').mage('validation');

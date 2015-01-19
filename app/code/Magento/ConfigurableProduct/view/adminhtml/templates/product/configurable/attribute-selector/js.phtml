@@ -6,7 +6,7 @@
 
 /** @var $block \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector */
 ?>
-<script type="text/javascript">
+<script>
 require(["jquery","mage/mage","mage/backend/suggest"], function($){
     var options = <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($block->getSuggestWidgetOptions())?>;
     $('#configurable-attribute-selector')

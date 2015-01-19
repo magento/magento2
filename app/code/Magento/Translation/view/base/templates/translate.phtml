@@ -5,7 +5,7 @@
  */
 ?>
 <?php /** @var $block \Magento\Translation\Block\Js */ ?>
-<script type="text/javascript">
+<script>
 //<![CDATA[
     require(
         ["jquery", "mage/translate"], function($){ $.mage.translate.add( <?php echo $block->getTranslatedJson() ?> ); }

@@ -167,7 +167,7 @@
                         <?php echo $block->truncateString($option['value'], 55, '', $_remainder);?>
                         <?php if ($_remainder):?>
                             ... <span id="<?php echo $_id = 'id' . uniqid()?>"><?php echo $_remainder ?></span>
-                            <script type="text/javascript">
+                            <script>
 require(['prototype'], function(){
 
     $('<?php echo $_id ?>').hide();

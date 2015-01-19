@@ -8,7 +8,7 @@
 
 <?php $_options = $block->decorateArray($block->getOptions()) ?>
 <?php if (count($_options)):?>
-<script type="text/javascript">
+<script>
 require([ 'jquery', 'Magento_Catalog/js/price-options' ], function($){
     $('#product_addtocart_form')
         .priceOptions({

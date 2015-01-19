@@ -12,7 +12,7 @@
 <?php $_id = 'id_' . md5(microtime()) ?>
 <?php $formId = $block->getFormId()?>
 <?php if (!empty($formId)) :?>
-<script type="text/javascript">
+<script>
     Event.observe(window, "load", function(){
         var serializeInput  = document.createElement('input');
         serializeInput.type = 'hidden';

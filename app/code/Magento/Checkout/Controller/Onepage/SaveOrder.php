@@ -48,6 +48,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
                     \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
                     \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL,
                 ];
+                $this->getOnepage()->getQuote()->getPayment()->setQuote($this->getOnepage()->getQuote());
                 $this->getOnepage()->getQuote()->getPayment()->importData($data);
             }
 

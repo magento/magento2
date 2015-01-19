@@ -19,8 +19,6 @@ No,Não
 "Apply Coupon Code","Solicitar código do cupom"
 "Remove Coupon Code","Remover código do cupom"
 Qty,Quant.
-Subtotal,Subtotal
-Discount,Desconto
 "Row Subtotal","Coluna de subtotal"
 Action,Ação
 "No ordered items","Nenhum item solicitado"
@@ -40,9 +38,6 @@ Sku,SKU
 Orders,Ordens
 Customer,Cliente
 Guest,Convidado
-"Grand Total","Total geral"
-Tax,Taxas
-Shipping,Remessa
 "Account Information","Informações da Conta"
 "First Name","Nome do Cliente"
 "Last Name","Último Nome do Cliente"
@@ -118,7 +113,6 @@ Date,Data
 "Order Total","Total do Pedido"
 "Purchase Point","Comprado de (Loja)"
 "Recent Orders","Pedidos Recentes"
-"Store Credit","Credito da loja"
 Notified,Notificado
 "Notify Customer by Email","Notificar cliente por e-mail"
 Billing,Faturamento
@@ -132,7 +126,6 @@ Message,Mensagem
 Information,Informações
 "Gift Options","Opções de presente"
 "If you don't want to leave a gift message for the entire order, leave this box blank.","If you don't want to leave a gift message for the entire order, leave this box blank."
-"An item option with code %1 already exists.","An item option with code %1 already exists."
 New,Novo
 "Custom Price","Preço Aduaneiro"
 Processing,Processando
@@ -174,7 +167,6 @@ Returned,Retornado
 "Please select products.","Please select products."
 Number,Número
 "Order Date: %1","Order Date: %1"
-"Discount (%1)","Discount (%1)"
 "Shipping &amp; Handling","Transporte &amp; Manuseio"
 "Credit Memos","Notas de Crédito"
 Invoices,Faturas
@@ -298,7 +290,6 @@ Transactions,Transações
 "Order View","Visualizar Pedido"
 "Applies to Any of the Specified Order Statuses","Applies to Any of the Specified Order Statuses"
 "Show Actual Values","Show Actual Values"
-"Shipping & Handling","Transporte & Manuseio"
 Fetch,Buscar
 "Transaction # %1 | %2","Transaction # %1 | %2"
 Key,Senha
@@ -484,32 +475,10 @@ Mixed,Misto
 "We cannot create an empty shipment.","We cannot create an empty shipment."
 "We found an invalid qty to ship for item ""%1"".","We found an invalid qty to ship for item ""%1""."
 "The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal.","The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal."
-"Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself.","Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself."
-"We found an invalid request for adding product to quote.","We found an invalid request for adding product to quote."
-"This is the wrong quote item id to update configuration.","This is the wrong quote item id to update configuration."
-"This shipping method is not available. To use this shipping method, please contact us.","This shipping method is not available. To use this shipping method, please contact us."
-"The address model is not defined.","The address model is not defined."
-"The address total model should be extended from \Magento\Sales\Model\Quote\Address\Total\AbstractTotal.","O modelo de endereço total deve ser alargado de \Magento\Sales\Model\Quote\Address\Total\AbstractTotal."
-"Subscription Items","Subscription Items"
-"Regular Payment","Pagamento Regular"
-"Shipping & Handling (%1)","Shipping & Handling (%1)"
-"We found an invalid item option format.","We found an invalid item option format."
-"Item qty declaration error","Item qty declaration error"
-"Some of the products below do not have all the required options.","Some of the products below do not have all the required options."
-"Something went wrong during the item options declaration.","Something went wrong during the item options declaration."
-"We found an item options declaration error.","We found an item options declaration error."
-"Some of the selected options are not currently available.","Some of the selected options are not currently available."
-"Selected option(s) or their combination is not currently available.","Selected option(s) or their combination is not currently available."
-"Some item options or their combination are not currently available.","Some item options or their combination are not currently available."
-"The requested Payment Method is not available.","O Método de Pagamento solicitado não está disponível."
 "We cannot determine the field name.","We cannot determine the field name."
 "Please specify a valid grid column alias name that exists in the grid table.","Please specify a valid grid column alias name that exists in the grid table."
 "We don't have enough information to save the parent transaction ID.","We don't have enough information to save the parent transaction ID."
 "The last status can't be unassigned from its current state.","The last status can't be unassigned from its current state."
-"Please check the shipping address information. %1","Please check the shipping address information. %1"
-"Please specify a shipping method.","Especifique um método de envio."
-"Please check the billing address information. %1","Please check the billing address information. %1"
-"Please select a valid payment method.","Por favor selecione um método de pagamento válido."
 "Pending Payment","Pagamento Pendente"
 "On Hold","Em espera"
 Complete,Completar

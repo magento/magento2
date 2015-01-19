@@ -824,7 +824,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         parent::checkProductBuyState($product);
         $option = $product->getCustomOption('info_buyRequest');
-        if ($option instanceof \Magento\Sales\Model\Quote\Item\Option) {
+        if ($option instanceof \Magento\Quote\Model\Quote\Item\Option) {
             $buyRequest = new \Magento\Framework\Object(unserialize($option->getValue()));
             $attributes = $buyRequest->getSuperAttribute();
             if (is_array($attributes)) {
@@ -939,7 +939,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * For example if product which was added to option already removed from catalog.
      *
      * @param  \Magento\Catalog\Model\Product|null $optionProduct
-     * @param  \Magento\Sales\Model\Quote\Item\Option $option
+     * @param  \Magento\Quote\Model\Quote\Item\Option $option
      * @param  \Magento\Catalog\Model\Product|null $product
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

@@ -30,7 +30,7 @@
     <div class="actions"><?php echo $block->getAttributeCreate()?></div>
 </script>
 
-<script type="text/javascript">
+<script>
     require(["jquery","mage/mage","mage/backend/suggest"], function($) {
         var $suggest = $('[data-role="product-attribute-search"][data-group="<?php echo $block->escapeHtml($block->getGroupCode()); ?>"]');
 

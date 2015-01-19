@@ -27,6 +27,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateWebsiteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Page StoreIndex
      *

@@ -10,7 +10,7 @@ $shippingMethod = $block->getShipment()->getOrder()->getShippingMethod();
 $sizeSource = $block->getSourceSizeModel()->toOptionArray();
 $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 0;
 ?>
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "prototype",

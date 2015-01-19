@@ -8,7 +8,7 @@ $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Ma
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$quote = $objectManager->create('Magento\Sales\Model\Quote');
+$quote = $objectManager->create('Magento\Quote\Model\Quote');
 $quote->load('test_order_item_with_message', 'reserved_order_id');
 $message = $objectManager->create('Magento\GiftMessage\Model\Message');
 $product = $objectManager->create('Magento\Catalog\Model\Product');

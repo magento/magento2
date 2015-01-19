@@ -11,7 +11,7 @@
     <?php echo $block->getSaveButtonHtml(); ?>
 </div>
 <?php echo $block->getRenameFormHtml(); ?>
-<script type="text/javascript">
+<script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('#<?php echo $block->getRenameFormId() ?>').mage('form').mage('validation');

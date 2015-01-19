@@ -12,7 +12,7 @@ $helper = $this->helper('Magento\Catalog\Helper\Output');
 <?php $options = $block->decorateArray($block->getOptions()); ?>
 <?php if ($product->isSaleable()):?>
     <?php if (count($options)): ?>
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'mage/mage',

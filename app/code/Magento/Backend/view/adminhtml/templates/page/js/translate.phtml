@@ -42,7 +42,7 @@ $_data = [
     'Please wait, loading...' => __('Please wait, loading...'),
 ];
 ?>
-<script type="text/javascript">
+<script>
 require(["jquery","mage/translate"], function($){
     $.mage.translate.add(<?php echo Zend_Json::encode($_data) ?>)
 });

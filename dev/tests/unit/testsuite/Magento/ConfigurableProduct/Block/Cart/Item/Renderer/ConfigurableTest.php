@@ -98,7 +98,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ),
             'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
             'itemOptionFactory' => $this->getMock(
-                'Magento\Sales\Model\Quote\Item\OptionFactory',
+                'Magento\Quote\Model\Quote\Item\OptionFactory',
                 [],
                 [],
                 '',
@@ -106,10 +106,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ),
             'priceCurrency' => $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock(),
         ];
-        $childItem = $objectManagerHelper->getObject('Magento\Sales\Model\Quote\Item', $arguments);
+        $childItem = $objectManagerHelper->getObject('Magento\Quote\Model\Quote\Item', $arguments);
         $childItem->setData('product', $childProduct);
 
-        $item = $objectManagerHelper->getObject('Magento\Sales\Model\Quote\Item', $arguments);
+        $item = $objectManagerHelper->getObject('Magento\Quote\Model\Quote\Item', $arguments);
         $item->setData('product', $product);
         $item->addChild($childItem);
 
@@ -211,11 +211,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $childProduct->expects($this->any())->method('getThumbnail')->will($this->returnValue($childThumbnail));
 
         /** Mock methods which return parent and child products */
-        /** @var \Magento\Sales\Model\Quote\Item\Option|\PHPUnit_Framework_MockObject_MockObject $itemOption */
-        $itemOption = $this->getMock('Magento\Sales\Model\Quote\Item\Option', [], [], '', false);
+        /** @var \Magento\Quote\Model\Quote\Item\Option|\PHPUnit_Framework_MockObject_MockObject $itemOption */
+        $itemOption = $this->getMock('Magento\Quote\Model\Quote\Item\Option', [], [], '', false);
         $itemOption->expects($this->any())->method('getProduct')->will($this->returnValue($childProduct));
-        /** @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
+        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($parentProduct));
         $item->expects(
             $this->any()
@@ -233,7 +233,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionList()
     {
-        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item\AbstractItem', [], [], '', false);
+        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item\AbstractItem', [], [], '', false);
         $this->_renderer->setItem($itemMock);
         $this->productConfigMock->expects($this->once())->method('getOptions')->with($itemMock);
         $this->_renderer->getOptionList();
@@ -244,7 +244,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $productTags = ['catalog_product_1'];
         $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $product->expects($this->exactly(2))->method('getIdentities')->will($this->returnValue($productTags));
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $item->expects($this->exactly(2))->method('getProduct')->will($this->returnValue($product));
         $this->_renderer->setItem($item);
         $this->assertEquals(array_merge($productTags, $productTags), $this->_renderer->getIdentities());

@@ -6,7 +6,7 @@
 ?>
 
 <?php if (is_array($block->getChildBlock('diagrams')->getTabsIds())) : ?>
-<script type="text/javascript">
+<script>
 function changeDiagramsPeriod(periodObj) {
     periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
 <?php foreach ($block->getChildBlock('diagrams')->getTabsIds() as $tabId): ?>

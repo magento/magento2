@@ -49,7 +49,7 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
         $this->messageFactoryMock =
             $this->getMock('\Magento\GiftMessage\Model\MessageFactory', ['create', '__wakeup'], [], '', false);
 
-        $this->quoteMock = $this->getMock('\Magento\Sales\Model\Quote',
+        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote',
             [
                 'setGiftMessageId',
                 'getGiftMessageId',
@@ -60,7 +60,7 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false);
-        $this->quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item',
+        $this->quoteItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item',
             [
                 'setGiftMessageId',
                 'getGiftMessageId',
@@ -71,7 +71,7 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false);
 
-        $this->quoteAddressMock = $this->getMock('Magento\Sales\Model\Quote\Address',
+        $this->quoteAddressMock = $this->getMock('Magento\Quote\Model\Quote\Address',
             [
                 'getGiftMessageId',
                 'setGiftMessageId',
@@ -84,7 +84,7 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             false);
 
         $this->quoteAddressItemMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address\Item',
+            '\Magento\Quote\Model\Quote\Address\Item',
             [
                 'getGiftMessageId',
                 'setGiftMessageId',
