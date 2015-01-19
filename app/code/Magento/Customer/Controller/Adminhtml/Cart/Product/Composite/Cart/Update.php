@@ -15,12 +15,12 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composi
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
     ) {
         parent::__construct($context, $quoteRepository);
