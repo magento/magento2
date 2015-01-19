@@ -32,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateNewsletterTemplateTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Newsletter template index page
      *

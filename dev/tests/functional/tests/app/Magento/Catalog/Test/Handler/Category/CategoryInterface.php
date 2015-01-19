@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Review\Test\Handler\ReviewInjectable;
+namespace Magento\Catalog\Test\Handler\Category;
 
 use Mtf\Handler\HandlerInterface;
 
 /**
- * Interface ReviewInjectableInterface
+ * Interface CategoryInterface
  */
-interface ReviewInjectableInterface extends HandlerInterface
+interface CategoryInterface extends HandlerInterface
 {
     //
 }
