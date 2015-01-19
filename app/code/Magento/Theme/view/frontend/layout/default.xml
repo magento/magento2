@@ -35,7 +35,7 @@
                 <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
                     <arguments>
                         <argument name="target" xsi:type="string">contentarea</argument>
-                        <argument name="label" translate="true" xsi:type="string">Skip to content</argument>
+                        <argument name="label" translate="true" xsi:type="string">Skip to Content</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Store\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
