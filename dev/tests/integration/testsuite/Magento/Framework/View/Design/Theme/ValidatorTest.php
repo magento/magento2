@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -64,7 +65,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         return [
             'theme_code' => 'space',
             'theme_title' => 'Space theme',
-            'theme_version' => '0.1.0',
             'parent_theme' => null,
             'theme_path' => 'default/space',
             'preview_image' => 'images/preview.png'
@@ -80,8 +80,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'theme_code' => 'space',
-            'theme_title' => 'Space theme',
-            'theme_version' => 'last version',
+            'theme_title' => '',
             'parent_theme' => null,
             'theme_path' => 'default/space',
             'preview_image' => 'images/preview.png'

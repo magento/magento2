@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Page\Config;
@@ -39,7 +40,7 @@ class Renderer
     protected $string;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -55,7 +56,7 @@ class Renderer
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Stdlib\String $string
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         Config $pageConfig,
@@ -64,7 +65,7 @@ class Renderer
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Stdlib\String $string,
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->pageConfig = $pageConfig;
         $this->assetMinifyService = $assetMinifyService;
@@ -339,7 +340,7 @@ class Renderer
                 $result .= sprintf($template, $asset->getUrl());
             }
         } catch (\Magento\Framework\Exception $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
         }
         return $result;

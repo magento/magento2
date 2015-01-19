@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Plugin;
 
@@ -28,9 +29,9 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order\Item', [], [], '', false);
-        $this->quoteItemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $orderItem = $this->orderItemMock;
-        $this->subjectMock = $this->getMock('Magento\Sales\Model\Convert\Quote', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
         $this->closureMock = function () use ($orderItem) {
             return $orderItem;
         };
@@ -41,14 +42,14 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->quoteItemMock->expects($this->exactly(2))->method('getOptions')->will($this->returnValue([]));
 
-        $orderItem = $this->model->aroundItemToOrderItem($this->subjectMock, $this->closureMock, $this->quoteItemMock);
+        $orderItem = $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock, []);
         $this->assertSame($this->orderItemMock, $orderItem);
     }
 
     public function testAroundItemToOrderItemWithOptions()
     {
         $itemOption = $this->getMock(
-            'Magento\Sales\Model\Quote\Item\Option',
+            'Magento\Quote\Model\Quote\Item\Option',
             ['getCode', '__wakeup'],
             [],
             '',
@@ -73,7 +74,7 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteItemMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
 
-        $orderItem = $this->model->aroundItemToOrderItem($this->subjectMock, $this->closureMock, $this->quoteItemMock);
+        $orderItem = $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock, []);
         $this->assertSame($this->orderItemMock, $orderItem);
     }
 }

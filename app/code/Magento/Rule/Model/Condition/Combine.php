@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Rule\Model\Condition;
 
@@ -12,7 +13,7 @@ class Combine extends AbstractCondition
     protected $_conditionFactory;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -215,7 +216,7 @@ class Combine extends AbstractCondition
                     $this->addCondition($condition);
                     $condition->loadArray($conditionArr, $key);
                 } catch (\Exception $e) {
-                    $this->_logger->logException($e);
+                    $this->_logger->critical($e);
                 }
             }
         }
@@ -316,12 +317,12 @@ class Combine extends AbstractCondition
     }
 
     /**
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
-    public function validate(\Magento\Framework\Object $object)
+    public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
-        return $this->_isValid($object);
+        return $this->_isValid($model);
     }
 
     /**
@@ -338,7 +339,7 @@ class Combine extends AbstractCondition
     /**
      * Is entity valid
      *
-     * @param int|\Magento\Framework\Object $entity
+     * @param int|\Magento\Framework\Model\AbstractModel $entity
      * @return bool
      */
     protected function _isValid($entity)
@@ -351,7 +352,7 @@ class Combine extends AbstractCondition
         $true = (bool)$this->getValue();
 
         foreach ($this->getConditions() as $cond) {
-            if ($entity instanceof \Magento\Framework\Object) {
+            if ($entity instanceof \Magento\Framework\Model\AbstractModel) {
                 $validated = $cond->validate($entity);
             } else {
                 $validated = $cond->validateByEntityId($entity);

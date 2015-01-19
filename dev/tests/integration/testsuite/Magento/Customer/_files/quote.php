@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(
@@ -32,8 +33,8 @@ $product->setTypeId(
 )->save();
 $product->load(1);
 
-/** @var $quote \Magento\Sales\Model\Quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+/** @var $quote \Magento\Quote\Model\Quote */
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
 $quoteItem = $quote->setCustomerId(
     1
 )->setStoreId(
@@ -46,7 +47,7 @@ $quoteItem = $quote->setCustomerId(
     $product,
     10
 );
-/** @var $quoteItem \Magento\Sales\Model\Quote\Item */
+/** @var $quoteItem \Magento\Quote\Model\Quote\Item */
 $quoteItem->setQty(1);
 $quote->getPayment()->setMethod('checkmo');
 $quote->getBillingAddress();

@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Config\System\Storage;
 
@@ -79,8 +80,8 @@ class Status extends \Magento\Backend\Controller\Adminhtml\System\Config\System\
                         ) && $flagData['timeout_reached'])
                         ) {
                             $this->_objectManager->get(
-                                'Magento\Framework\Logger'
-                            )->logException(
+                                'Psr\Log\LoggerInterface'
+                            )->critical(
                                 new \Magento\Framework\Exception(
                                     __('The timeout limit for response from synchronize process was reached.')
                                 )

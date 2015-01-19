@@ -1,16 +1,17 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 @mobile-cart-padding: 15px;
-@cart-price-color: #666;
+@cart-price-color: @color-gray40;
 @cart-item-cell-padding-top: 20px;
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Shopping cart
@@ -36,7 +37,7 @@
     //  Summary block
     &-summary {
         &:extend(.abs-add-box-sizing all);
-        background: @sidebar-background;
+        .css(background, @sidebar-background);
         margin-bottom: 25px;
         padding: 1px 0 25px;
         > .title {
@@ -269,7 +270,7 @@
                 }
             }
             > .price {
-                color: @color-primary-lighter;
+                .css(color, @color-primary-lighter);
                 .font-size(18);
                 font-weight: @font-weight-bold;
             }
@@ -430,7 +431,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .cart {
         &-totals {
              .table.totals {
@@ -465,7 +466,7 @@
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .cart {
         // Cart container
         &-container {
@@ -542,7 +543,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Cross sell
@@ -560,7 +561,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .checkout-cart-index {
         .page-main {
             padding-left: @layout-width-xs-indent;

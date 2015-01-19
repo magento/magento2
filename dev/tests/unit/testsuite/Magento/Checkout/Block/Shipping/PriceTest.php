@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Shipping;
 
@@ -15,7 +16,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected $priceObj;
 
     /**
-     * @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quote;
 
@@ -36,7 +37,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
 
         $this->priceObj = $objectManager->getObject(
-            '\Magento\Checkout\Block\Shipping\Price',
+            'Magento\Checkout\Block\Shipping\Price',
             ['priceCurrency'   => $this->priceCurrency]
         );
     }
@@ -46,7 +47,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $shippingPrice = 5;
         $convertedPrice = "$5";
 
-        $shippingRateMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address\Rate')
+        $shippingRateMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address\Rate')
             ->disableOriginalConstructor()
             ->setMethods(['getPrice', '__wakeup'])
             ->getMock();

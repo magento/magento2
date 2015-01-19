@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -65,9 +66,9 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
      *
      * @param \Magento\Framework\View\Layout\Element $element
      *
-     * @dataProvider processDataProvider
+     * @dataProvider interpretDataProvider
      */
-    public function testProcess($element)
+    public function testInterpret($element)
     {
         $scope = $this->getMock('Magento\Framework\App\ScopeInterface', [], [], '', false);
         $this->scopeResolver->expects($this->any())->method('getScope')->will($this->returnValue($scope));
@@ -84,14 +85,14 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
             $element->getParent()
         )->willReturn($element->getAttribute('name'));
 
-        $this->helper->expects($this->any())->method('setStructureElementData')->with(
+        $scheduleStructure->expects($this->once())->method('setStructureElementData')->with(
             $element->getAttribute('name'),
             ['attributes' => ['group' => '', 'component' => 'listing']]
         );
         $this->model->interpret($this->context, $element);
     }
 
-    public function processDataProvider()
+    public function interpretDataProvider()
     {
         return [
             [

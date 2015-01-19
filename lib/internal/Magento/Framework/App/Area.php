@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
@@ -62,7 +63,7 @@ class Area implements \Magento\Framework\App\AreaInterface
     protected $_diConfigLoader;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -84,7 +85,7 @@ class Area implements \Magento\Framework\App\AreaInterface
     protected $_designExceptions;
 
     /**
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\TranslateInterface $translator
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -95,7 +96,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * @param string $areaCode
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\TranslateInterface $translator,
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -167,7 +168,7 @@ class Area implements \Magento\Framework\App\AreaInterface
                 return true;
             }
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
         return false;
     }

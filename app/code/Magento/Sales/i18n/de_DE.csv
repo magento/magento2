@@ -19,8 +19,6 @@ No,Nein
 "Apply Coupon Code","Coupon Code anwenden"
 "Remove Coupon Code","Gutscheincode entfernen"
 Qty,Anzahl
-Subtotal,Zwischensumme
-Discount,Rabatt
 "Row Subtotal",Zeilengesamtsumme
 Action,Aktion
 "No ordered items","Keine bestellten Artikel"
@@ -33,16 +31,13 @@ Total,Gesamt
 "Move to Wishlist","Auf Wunschzettel schreiben"
 Edit,Bearbeiten
 Item,Objekt
-"Add to Cart","Zum Warenkobrn hinzufügen"
+"Add to Cart","Zum Warenkorb hinzufügen"
 Sku,SKU
 "Order saving error: %1","Order saving error: %1"
 "You created the order.","You created the order."
 Orders,Aufträge
 Customer,Kunde
 Guest,Gast
-"Grand Total",Gesamtbetrag
-Tax,Steuer
-Shipping,Lieferung
 "Account Information",Kontoinformationen
 "First Name",Kundenname
 "Last Name","Nachname des Kunden"
@@ -118,7 +113,6 @@ Date,Datum
 "Order Total","Gesamtsumme Bestellung"
 "Purchase Point","Erworben von (Geschäft)"
 "Recent Orders","Kürzlich aufgegebene Bestellungen"
-"Store Credit","Guthaben aufbewahren"
 Notified,Benachrichtigt
 "Notify Customer by Email","Kunde per E-Mail benachrichtigen"
 Billing,Abrechnung
@@ -132,7 +126,6 @@ Message,Nachricht
 Information,Information
 "Gift Options",Geschenkoptionen
 "If you don't want to leave a gift message for the entire order, leave this box blank.","If you don't want to leave a gift message for the entire order, leave this box blank."
-"An item option with code %1 already exists.","An item option with code %1 already exists."
 New,Neu
 "Custom Price",Kundenpreis
 Processing,Bearbeitung
@@ -174,7 +167,6 @@ Returned,Zurückgesendet
 "Please select products.","Please select products."
 Number,Nummer
 "Order Date: %1","Order Date: %1"
-"Discount (%1)","Discount (%1)"
 "Shipping &amp; Handling","Versand und Abwicklung"
 "Credit Memos",Gutschriften
 Invoices,Rechnungen
@@ -298,7 +290,6 @@ Transactions,Transaktionen
 "Order View",Bestellungsansicht
 "Applies to Any of the Specified Order Statuses","Applies to Any of the Specified Order Statuses"
 "Show Actual Values","Show Actual Values"
-"Shipping & Handling","Lieferung und Verarbeitung"
 Fetch,Holen
 "Transaction # %1 | %2","Transaction # %1 | %2"
 Key,Schlüssel
@@ -484,32 +475,10 @@ Mixed,Gemischt
 "We cannot create an empty shipment.","We cannot create an empty shipment."
 "We found an invalid qty to ship for item ""%1"".","We found an invalid qty to ship for item ""%1""."
 "The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal.","The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal."
-"Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself.","Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself."
-"We found an invalid request for adding product to quote.","We found an invalid request for adding product to quote."
-"This is the wrong quote item id to update configuration.","This is the wrong quote item id to update configuration."
-"This shipping method is not available. To use this shipping method, please contact us.","This shipping method is not available. To use this shipping method, please contact us."
-"The address model is not defined.","The address model is not defined."
-"The address total model should be extended from \Magento\Sales\Model\Quote\Address\Total\AbstractTotal.","Das adresse total model sollte von \Magento\Sales\Model\Quote\Address\Total\AbstractTotal erweitert werden."
-"Subscription Items","Subscription Items"
-"Regular Payment","Reguläre Zahlung"
-"Shipping & Handling (%1)","Shipping & Handling (%1)"
-"We found an invalid item option format.","We found an invalid item option format."
-"Item qty declaration error","Item qty declaration error"
-"Some of the products below do not have all the required options.","Some of the products below do not have all the required options."
-"Something went wrong during the item options declaration.","Something went wrong during the item options declaration."
-"We found an item options declaration error.","We found an item options declaration error."
-"Some of the selected options are not currently available.","Some of the selected options are not currently available."
-"Selected option(s) or their combination is not currently available.","Selected option(s) or their combination is not currently available."
-"Some item options or their combination are not currently available.","Some item options or their combination are not currently available."
-"The requested Payment Method is not available.","Die angeforderte Zahlungsart ist nicht verfügbar."
 "We cannot determine the field name.","We cannot determine the field name."
 "Please specify a valid grid column alias name that exists in the grid table.","Please specify a valid grid column alias name that exists in the grid table."
 "We don't have enough information to save the parent transaction ID.","We don't have enough information to save the parent transaction ID."
 "The last status can't be unassigned from its current state.","The last status can't be unassigned from its current state."
-"Please check the shipping address information. %1","Please check the shipping address information. %1"
-"Please specify a shipping method.","Bitte geben Sie eine Versandart an."
-"Please check the billing address information. %1","Please check the billing address information. %1"
-"Please select a valid payment method.","Bitte wählen Sie eine gültige Zahlungsmethode."
 "Pending Payment","Ausstehende Bezahlung"
 "On Hold",Zurückgestellt
 Complete,Vollständig

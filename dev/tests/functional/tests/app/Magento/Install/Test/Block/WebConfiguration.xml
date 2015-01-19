@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <web />
+        <admin />
+        <keyOwn>
+            <selector>[value="user"]</selector>
+            <input>checkbox</input>
+        </keyOwn>
+        <keyValue>
+            <selector>[name="key"]</selector>
+        </keyValue>
+        <apacheRewrites>
+            <selector>[ng-model*="rewrites"]</selector>
+            <input>checkbox</input>
+        </apacheRewrites>
+        <httpsFront>
+            <selector>[ng-model*="front"]</selector>
+            <input>checkbox</input>
+        </httpsFront>
+        <https />
+        <httpsAdmin>
+            <selector>[type="checkbox"][ng-model*="admin"]</selector>
+            <input>checkbox</input>
+        </httpsAdmin>
+    </fields>
+</mapping>

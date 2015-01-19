@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin;
 
@@ -21,7 +22,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $quoteItemMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item', ['getProductType', '__wakeup'], [], '', false
+            'Magento\Quote\Model\Quote\Item', ['getProductType', '__wakeup'], [], '', false
         );
         $quoteItemMock->expects($this->once())
             ->method('getProductType')
@@ -35,7 +36,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
             ->method('setProductName');
 
         $optionMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item\Option', ['getProduct', '__wakeup'], [], '', false
+            'Magento\Quote\Model\Quote\Item\Option', ['getProduct', '__wakeup'], [], '', false
         );
 
         $proceed = function () use ($stockItemMock) {

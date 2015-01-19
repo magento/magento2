@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Observer;
 
@@ -19,7 +20,7 @@ class CleanExpiredQuotes
     protected $storesConfig;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Quote\CollectionFactory
+     * @var \Magento\Quote\Model\Resource\Quote\CollectionFactory
      */
     protected $quoteCollectionFactory;
 
@@ -30,11 +31,11 @@ class CleanExpiredQuotes
 
     /**
      * @param StoresConfig $storesConfig
-     * @param \Magento\Sales\Model\Resource\Quote\CollectionFactory $collectionFactory
+     * @param \Magento\Quote\Model\Resource\Quote\CollectionFactory $collectionFactory
      */
     public function __construct(
         StoresConfig $storesConfig,
-        \Magento\Sales\Model\Resource\Quote\CollectionFactory $collectionFactory
+        \Magento\Quote\Model\Resource\Quote\CollectionFactory $collectionFactory
     ) {
         $this->storesConfig = $storesConfig;
         $this->quoteCollectionFactory = $collectionFactory;
@@ -51,7 +52,7 @@ class CleanExpiredQuotes
         foreach ($lifetimes as $storeId => $lifetime) {
             $lifetime *= self::LIFETIME;
 
-            /** @var $quotes \Magento\Sales\Model\Resource\Quote\Collection */
+            /** @var $quotes \Magento\Quote\Model\Resource\Quote\Collection */
             $quotes = $this->quoteCollectionFactory->create();
 
             $quotes->addFieldToFilter('store_id', $storeId);

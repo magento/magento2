@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Renderer;
 
@@ -63,7 +64,7 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
         $html .= '<option value="">' . __('Please select') . '</option>';
         $html .= '</select>';
 
-        $html .= '<script type="text/javascript">' . "\n";
+        $html .= '<script>' . "\n";
         $html .= 'require(["prototype", "mage/adminhtml/form"], function(){';
         $html .= '$("' . $selectId . '").setAttribute("defaultValue", "' . $regionId . '");' . "\n";
         $html .= 'new regionUpdater("' .

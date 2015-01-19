@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model;
 
@@ -21,12 +22,6 @@ abstract class AbstractModel extends \Magento\Framework\Object
     protected $_debugMode = false;
 
     /**
-     * Logger instance
-     * @var \Magento\Framework\Logger\Adapter
-     */
-    protected $_logInstance;
-
-    /**
      * Fields that should be replaced in debug with '***'
      *
      * @var string[]
@@ -41,7 +36,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
     protected $_logTrace = [];
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -51,25 +46,17 @@ abstract class AbstractModel extends \Magento\Framework\Object
     protected $_varDirectory;
 
     /**
-     * @var \Magento\Framework\Logger\AdapterFactory
-     */
-    protected $_adapterFactory;
-
-    /**
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Logger\AdapterFactory $adapterFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Logger\AdapterFactory $adapterFactory,
         array $data = []
     ) {
         $this->_logger = $logger;
         $this->_varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->_adapterFactory = $adapterFactory;
         parent::__construct($data);
     }
 
@@ -87,32 +74,11 @@ abstract class AbstractModel extends \Magento\Framework\Object
         } else {
             $this->_logTrace[] = $debugData;
         }
-        if (!$this->_debugMode) {
-            return $this;
+
+        if ($this->_debugMode) {
+            $this->_logger->debug($debugData);
         }
 
-        if (!$this->_logInstance) {
-            $dirName = date('Y/m/d/');
-            $fileName = join(
-                '_',
-                [
-                    str_replace(':', '-', $this->getRunAt()),
-                    $this->getScheduledOperationId(),
-                    $this->getOperationType(),
-                    $this->getEntity()
-                ]
-            );
-            $path = 'import_export/' . $dirName;
-            $this->_varDirectory->create($path);
-
-            $fileName = $path . $fileName . '.log';
-            $this->_logInstance = $this->_adapterFactory->create(
-                ['fileName' => $this->_varDirectory->getAbsolutePath($fileName)]
-            )->setFilterDataKeys(
-                $this->_debugReplacePrivateDataKeys
-            );
-        }
-        $this->_logInstance->log($debugData);
         return $this;
     }
 

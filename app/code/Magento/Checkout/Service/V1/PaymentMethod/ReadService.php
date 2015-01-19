@@ -1,14 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Service\V1\PaymentMethod;
 
-use \Magento\Sales\Model\QuoteRepository;
-use \Magento\Store\Model\StoreManagerInterface;
+use \Magento\Quote\Model\QuoteRepository;
 use Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Converter as QuoteMethodConverter;
 use Magento\Checkout\Service\V1\Data\PaymentMethod\Converter as PaymentMethodConverter;
-use \Magento\Payment\Model\MethodList;
+use Magento\Payment\Model\MethodList;
 
 /**
  * Payment method read service object.
@@ -72,7 +72,7 @@ class ReadService implements ReadServiceInterface
      */
     public function getPayment($cartId)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $payment = $quote->getPayment();
         if (!$payment->getId()) {
@@ -91,7 +91,7 @@ class ReadService implements ReadServiceInterface
     public function getList($cartId)
     {
         $output = [];
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         foreach ($this->methodList->getAvailableMethods($quote) as $method) {
             $output[] = $this->paymentMethodConverter->toDataObject($method);

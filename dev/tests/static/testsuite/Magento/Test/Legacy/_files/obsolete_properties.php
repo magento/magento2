@@ -4,7 +4,8 @@
  *
  * Format: array(<attribute_name>[, <class_scope> = ''[, <replacement>]])
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['_addresses', 'Magento\Customer\Model\Customer'],
@@ -22,7 +23,7 @@ return [
     ['_childGroups', 'Magento\Core\Block\AbstractBlock'],
     ['_combineHistory'],
     ['_config', 'Magento\Core\Model\Design\Package'],
-    ['_config', 'Magento\Framework\Logger', '_dirs'],
+    ['_config', 'Psr\Log\LoggerInterface', '_dirs'],
     ['_config', 'Magento\Core\Model\Resource\Setup'],
     ['_configModel', 'Magento\Backend\Model\Menu\AbstractDirector'],
     ['_connectionConfig', 'Magento\Core\Model\Resource\Setup'],
@@ -125,7 +126,7 @@ return [
     ['_messageFactory', 'Magento\Core\Model\Session\Context', 'messagesFactory'],
     ['_sessionQuote', 'Magento\Sales\Block\Adminhtml\Order\Create\Messages', 'sessionQuote'],
     ['_coreRegistry', 'Magento\Sales\Block\Adminhtml\Order\View\Messages', 'coreRegistry'],
-    ['_message', 'Magento\Sales\Model\Quote', 'messageFactory'],
+    ['_message', 'Magento\Quote\Model\Quote', 'messageFactory'],
     ['_encryptedSessionId', '\Magento\Core\Model\Session\AbstractSession'],
     ['_skipSessionIdFlag', '\Magento\Core\Model\Session\AbstractSession'],
     ['_url', '\Magento\Core\Model\Session\AbstractSession'],

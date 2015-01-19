@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Product;
 
@@ -49,7 +50,7 @@ class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
             $this->messageManager->addError(
                 __('An error occurred while showing the product views report. Please review the log and try again.')
             );
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_redirect('reports/*/viewed/');
             return;
         }

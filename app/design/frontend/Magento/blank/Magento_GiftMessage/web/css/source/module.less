@@ -1,12 +1,13 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .gift-message {
     margin: 0;
@@ -35,7 +36,7 @@
         &:extend(.abs-reset-image-wrapper all);
     }
     .options-items {
-        background: @sidebar-background;
+        .css(background, @sidebar-background);
         display: block;
         margin: @indent-base 0 0;
         padding: @indent-base;
@@ -154,7 +155,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .gift-message {
         .item {
             border-bottom: @border-width-base solid @border-color-base;

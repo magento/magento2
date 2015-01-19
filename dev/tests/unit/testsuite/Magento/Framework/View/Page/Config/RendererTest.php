@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Page\Config;
@@ -56,7 +57,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected $stringMock;
 
     /**
-     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $loggerMock;
 
@@ -106,8 +107,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder('Magento\Framework\Logger')
-            ->disableOriginalConstructor()
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
             ->getMock();
 
         $this->assetsCollection = $this->getMockBuilder('Magento\Framework\View\Asset\GroupedCollection')
@@ -316,7 +316,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
 
         $this->loggerMock->expects($this->once())
-            ->method('logException')
+            ->method('critical')
             ->with($exception);
 
         $this->urlBuilderMock->expects($this->once())

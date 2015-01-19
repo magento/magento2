@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Resource\Report;
 
@@ -36,7 +37,7 @@ class Bestsellers extends AbstractReport
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
@@ -47,7 +48,7 @@ class Bestsellers extends AbstractReport
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
@@ -158,7 +159,6 @@ class Bestsellers extends AbstractReport
 
             $joinExpr = [
                 'product.entity_id = order_item.product_id',
-                $adapter->quoteInto('product.entity_type_id = ?', $this->_productResource->getTypeId()),
                 $adapter->quoteInto('product.type_id NOT IN(?)', $this->ignoredProductTypes),
             ];
 
@@ -170,14 +170,12 @@ class Bestsellers extends AbstractReport
             $joinExprProductName = [
                 'product_name.entity_id = product.entity_id',
                 'product_name.store_id = source_table.store_id',
-                $adapter->quoteInto('product_name.entity_type_id = ?', $this->_productResource->getTypeId()),
                 $adapter->quoteInto('product_name.attribute_id = ?', $attr->getAttributeId()),
             ];
             $joinExprProductName = implode(' AND ', $joinExprProductName);
             $joinProductName = [
                 'product_default_name.entity_id = product.entity_id',
                 'product_default_name.store_id = 0',
-                $adapter->quoteInto('product_default_name.entity_type_id = ?', $this->_productResource->getTypeId()),
                 $adapter->quoteInto('product_default_name.attribute_id = ?', $attr->getAttributeId()),
             ];
             $joinProductName = implode(' AND ', $joinProductName);
@@ -194,7 +192,6 @@ class Bestsellers extends AbstractReport
             $joinExprProductPrice = [
                 'product_price.entity_id = product.entity_id',
                 'product_price.store_id = source_table.store_id',
-                $adapter->quoteInto('product_price.entity_type_id = ?', $this->_productResource->getTypeId()),
                 $adapter->quoteInto('product_price.attribute_id = ?', $attr->getAttributeId()),
             ];
             $joinExprProductPrice = implode(' AND ', $joinExprProductPrice);
@@ -202,7 +199,6 @@ class Bestsellers extends AbstractReport
             $joinProductPrice = [
                 'product_default_price.entity_id = product.entity_id',
                 'product_default_price.store_id = 0',
-                $adapter->quoteInto('product_default_price.entity_type_id = ?', $this->_productResource->getTypeId()),
                 $adapter->quoteInto('product_default_price.attribute_id = ?', $attr->getAttributeId()),
             ];
             $joinProductPrice = implode(' AND ', $joinProductPrice);

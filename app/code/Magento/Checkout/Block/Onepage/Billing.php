@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Onepage;
 
@@ -15,7 +16,7 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     /**
      * Sales Qoute Billing Address instance
      *
-     * @var \Magento\Sales\Model\Quote\Address
+     * @var \Magento\Quote\Model\Quote\Address
      */
     protected $_address;
 
@@ -27,7 +28,7 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $_taxvat;
 
     /**
-     * @var \Magento\Sales\Model\Quote\AddressFactory
+     * @var \Magento\Quote\Model\Quote\AddressFactory
      */
     protected $_addressFactory;
 
@@ -43,7 +44,7 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param AddressConfig $addressConfig
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
-     * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
+     * @param \Magento\Quote\Model\Quote\AddressFactory $addressFactory
      * @param array $data
      */
     public function __construct(
@@ -58,7 +59,7 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         AddressConfig $addressConfig,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
-        \Magento\Sales\Model\Quote\AddressFactory $addressFactory,
+        \Magento\Quote\Model\Quote\AddressFactory $addressFactory,
         array $data = []
     ) {
         $this->_addressFactory = $addressFactory;
@@ -131,7 +132,7 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     /**
      * Return Sales Quote Address model
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return \Magento\Quote\Model\Quote\Address
      */
     public function getAddress()
     {

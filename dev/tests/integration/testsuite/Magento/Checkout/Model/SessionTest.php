@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
 
@@ -105,7 +106,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     /**
      * Ensure that quote has customer data specified in customer fixture.
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      */
     protected function _validateCustomerDataInQuote($quote)
     {

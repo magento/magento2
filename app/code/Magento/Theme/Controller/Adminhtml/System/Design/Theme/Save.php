@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
@@ -69,7 +70,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $redirectBack = true;
         } catch (\Exception $e) {
             $this->messageManager->addError('The theme was not saved');
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $redirectBack ? $this->_redirect(
             'adminhtml/*/edit',

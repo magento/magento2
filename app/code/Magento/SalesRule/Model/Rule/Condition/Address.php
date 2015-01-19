@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
@@ -160,22 +161,22 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     /**
      * Validate Address Rule Condition
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
-    public function validate(\Magento\Framework\Object $object)
+    public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
-        $address = $object;
-        if (!$address instanceof \Magento\Sales\Model\Quote\Address) {
-            if ($object->getQuote()->isVirtual()) {
-                $address = $object->getQuote()->getBillingAddress();
+        $address = $model;
+        if (!$address instanceof \Magento\Quote\Model\Quote\Address) {
+            if ($model->getQuote()->isVirtual()) {
+                $address = $model->getQuote()->getBillingAddress();
             } else {
-                $address = $object->getQuote()->getShippingAddress();
+                $address = $model->getQuote()->getShippingAddress();
             }
         }
 
         if ('payment_method' == $this->getAttribute() && !$address->hasPaymentMethod()) {
-            $address->setPaymentMethod($object->getQuote()->getPayment()->getMethod());
+            $address->setPaymentMethod($model->getQuote()->getPayment()->getMethod());
         }
 
         return parent::validate($address);

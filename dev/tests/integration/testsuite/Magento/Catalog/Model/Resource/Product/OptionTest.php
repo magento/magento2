@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Resource\Product;
 
@@ -101,7 +102,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $title = $options[0]['values'][0]['title'];
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Catalog\Model\Product'
+            'Magento\Catalog\Model\Product'
         );
         $product->load($productId);
         $product->setStoreIds([$storeId]);
@@ -152,7 +153,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $price = $options[0]['values'][0]['price'];
         $priceType = $options[0]['values'][0]['price_type'];
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Catalog\Model\Product'
+            'Magento\Catalog\Model\Product'
         );
         $product->load($productId);
         $product->setStoreIds([$storeId]);

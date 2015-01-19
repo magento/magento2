@@ -2,7 +2,8 @@
 /**
  * Unit Test for \Magento\Framework\Validator\Config
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator;
 
@@ -52,7 +53,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $factory = new \Magento\Framework\ObjectManager\Factory\Dynamic\Developer($config);
         $realObjectManager = new \Magento\Framework\ObjectManager\ObjectManager($factory, $config);
         $factory->setObjectManager($realObjectManager);
-        $universalFactory = $realObjectManager->get('\Magento\Framework\Validator\UniversalFactory');
+        $universalFactory = $realObjectManager->get('Magento\Framework\Validator\UniversalFactory');
         $this->_config = $this->_objectManager->getObject(
             'Magento\Framework\Validator\Config',
             ['configFiles' => $configFiles, 'builderFactory' => $universalFactory]

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\HTTP;
 
@@ -56,7 +57,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
         $this->_prepareCleanString($clean);
 
         $headerObject = $this->_objectManager->getObject(
-            '\Magento\Framework\HTTP\Header',
+            'Magento\Framework\HTTP\Header',
             ['httpRequest' => $this->_request, 'converter' => $this->_converter]
         );
 
@@ -138,7 +139,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
         $this->_prepareCleanString($clean);
 
         $headerObject = $this->_objectManager->getObject(
-            '\Magento\Framework\HTTP\Header',
+            'Magento\Framework\HTTP\Header',
             ['httpRequest' => $this->_request, 'converter' => $this->_converter]
         );
 

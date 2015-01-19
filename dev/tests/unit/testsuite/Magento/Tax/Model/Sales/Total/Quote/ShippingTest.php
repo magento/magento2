@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
@@ -107,13 +108,13 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             'store_id' => $storeId,
         ]);
         $quoteMock = $this->getMockObject(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             [
                 'store' => $storeMock,
             ]
         );
-        $addressMock = $this->getMockObject('Magento\Sales\Model\Quote\Address', [
-            'all_non_nominal_items' => [],
+        $addressMock = $this->getMockObject('Magento\Quote\Model\Quote\Address', [
+            'all_items' => [],
             'shipping_tax_calculation_amount' => 100,
             'base_shipping_tax_calculation_amount' => 200,
             'shipping_discount_amount' => 10,

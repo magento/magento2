@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Config;
 
@@ -66,7 +67,9 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
     protected function _getSampleReflectionData()
     {
         return [
-            'documentation' => 'Basic random string generator',
+            'documentation' =>
+                'Basic random string generator. This line is short description '.
+                'This line is long description. This is still the long description.',
             'interface' => [
                 'in' => [
                     'parameters' => [

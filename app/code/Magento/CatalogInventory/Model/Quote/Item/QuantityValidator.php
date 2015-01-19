@@ -2,7 +2,8 @@
 /**
  * Product inventory data validator
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item;
 
@@ -59,7 +60,7 @@ class QuantityValidator
      */
     public function validate(\Magento\Framework\Event\Observer $observer)
     {
-        /* @var $quoteItem \Magento\Sales\Model\Quote\Item */
+        /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $observer->getEvent()->getItem();
 
         if (!$quoteItem ||
@@ -196,7 +197,7 @@ class QuantityValidator
     /**
      * Removes error statuses from quote and item, set by this observer
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item $item
      * @param int $code
      * @return void
      */

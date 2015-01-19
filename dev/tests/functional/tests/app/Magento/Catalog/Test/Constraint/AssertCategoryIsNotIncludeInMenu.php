@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Client\Browser;
@@ -25,14 +26,14 @@ class AssertCategoryIsNotIncludeInMenu extends AbstractConstraint
      * Assert that the category is no longer available on the top menu bar
      *
      * @param CmsIndex $cmsIndex
-     * @param CatalogCategory $category
+     * @param Category $category
      * @param Browser $browser
      * @param CatalogCategoryView $categoryView
      * @return void
      */
     public function processAssert(
         CmsIndex $cmsIndex,
-        CatalogCategory $category,
+        Category $category,
         Browser $browser,
         CatalogCategoryView $categoryView
     ) {

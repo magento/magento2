@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -57,7 +58,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             'theme_code' => 'theme',
             'package_code' => 'package',
             'theme_path' => 'package/theme',
-            'theme_version' => '0.1.0',
             'parent_theme' => null,
             'is_featured' => true,
             'preview_image' => '',

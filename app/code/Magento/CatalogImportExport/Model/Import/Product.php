@@ -266,9 +266,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $stockConfiguration;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStateInterface
+     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface
      */
-    protected $stockState;
+    protected $stockStateProvider;
 
     /**
      * Core event manager proxy
@@ -358,7 +358,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $validator;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     private $_logger;
 
@@ -378,7 +378,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
-     * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
+     * @param \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface $stockStateProvider
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ImportExport\Model\Import\Config $importConfig
      * @param Proxy\Product\ResourceFactory $resourceFactory
@@ -392,7 +392,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param Product\StoreResolver $storeResolver
      * @param Product\SkuProcessor $skuProcessor
@@ -412,7 +412,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\CatalogInventory\Api\StockStateInterface $stockState,
+        \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface $stockStateProvider,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ImportExport\Model\Import\Config $importConfig,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
@@ -426,7 +426,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         Product\StoreResolver $storeResolver,
         Product\SkuProcessor $skuProcessor,
@@ -437,7 +437,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
         $this->stockConfiguration = $stockConfiguration;
-        $this->stockState = $stockState;
+        $this->stockStateProvider = $stockStateProvider;
         $this->_catalogData = $catalogData;
         $this->_importConfig = $importConfig;
         $this->_resourceFactory = $resourceFactory;
@@ -694,7 +694,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             if ($linkedId == null) {
                                 // Import file links to a SKU which is skipped for some reason, which leads to a "NULL"
                                 // link causing fatal errors.
-                                $this->_logger->logException(
+                                $this->_logger->critical(
                                     new \Exception(
                                         sprintf(
                                             'WARNING: Orphaned link skipped: From SKU %s (ID %d) to SKU %s, ' .
@@ -763,7 +763,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     foreach ($storeValues as $storeId => $storeValue) {
                         $tableData[] = [
                             'entity_id' => $productId,
-                            'entity_type_id' => $this->_entityTypeId,
                             'attribute_id' => $attributeId,
                             'store_id' => $storeId,
                             'value' => $storeValue,
@@ -783,9 +782,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ) . $this->_connection->quoteInto(
                         ' AND entity_id = ?',
                         $productId
-                    ) . $this->_connection->quoteInto(
-                        ' AND entity_type_id = ?',
-                        $this->_entityTypeId
                     );
                     $this->_connection->delete($tableName, $where);
                 }
@@ -916,7 +912,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         // new row
                         if (!$productLimit || $productsQty < $productLimit) {
                             $entityRowsIn[$rowSku] = [
-                                'entity_type_id' => $this->_entityTypeId,
                                 'attribute_set_id' => $this->skuProcessor->getNewSku($rowSku)['attr_set_id'],
                                 'type_id' => $this->skuProcessor->getNewSku($rowSku)['type_id'],
                                 'sku' => $rowSku,
@@ -1401,15 +1396,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if ($this->stockConfiguration->isQty(
                     $this->skuProcessor->getNewSku($rowData[self::COL_SKU])['type_id']
                 )) {
-                    $row['is_in_stock'] = $this->stockState->verifyStock($row['product_id'], $row['website_id']);
-                    if ($this->stockState->verifyNotification($row['product_id'], $row['website_id'])) {
+                    $stockItemDo->setData($row);
+                    $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
+                    if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                         $row['low_stock_date'] = $this->_localeDate->date(null, null, null, false)
                             ->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
                     }
-                    $row['stock_status_changed_auto'] = (int) !$this->stockState->verifyStock(
-                        $row['product_id'],
-                        $row['website_id']
-                    );
+                    $row['stock_status_changed_auto'] =
+                        (int) !$this->stockStateProvider->verifyStock($stockItemDo);
                 } else {
                     $row['qty'] = 0;
                 }

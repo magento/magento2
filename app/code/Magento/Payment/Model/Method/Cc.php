@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
 
@@ -39,18 +40,10 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_centinelService;
 
     /**
-     * Construct
-     *
-     * @var \Magento\Framework\Logger
-     */
-    protected $_logger;
-
-    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Centinel\Model\Service $centinelService
@@ -60,16 +53,14 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Centinel\Model\Service $centinelService,
         array $data = []
     ) {
-        parent::__construct($eventManager, $paymentData, $scopeConfig, $logAdapterFactory, $data);
+        parent::__construct($eventManager, $paymentData, $scopeConfig, $logger, $data);
         $this->_moduleList = $moduleList;
-        $this->_logger = $logger;
         $this->_localeDate = $localeDate;
         $this->_centinelService = $centinelService;
     }
@@ -348,7 +339,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Check whether there are CC types set in configuration
      *
-     * @param \Magento\Sales\Model\Quote|null $quote
+     * @param \Magento\Quote\Model\Quote|null $quote
      * @return bool
      */
     public function isAvailable($quote = null)
@@ -473,7 +464,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     private function _isPlaceOrder()
     {
         $info = $this->getInfoInstance();
-        if ($info instanceof \Magento\Sales\Model\Quote\Payment) {
+        if ($info instanceof \Magento\Quote\Model\Quote\Payment) {
             return false;
         } elseif ($info instanceof \Magento\Sales\Model\Order\Payment) {
             return true;

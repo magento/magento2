@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Test\TestCase;
 
 use Magento\Bundle\Test\Fixture\BundleProduct;
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Mtf\TestCase\Injectable;
@@ -27,6 +28,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateBundleProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Page product on backend
      *
@@ -44,10 +50,10 @@ class CreateBundleProductEntityTest extends Injectable
     /**
      * Persist category
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return array
      */
-    public function __prepare(CatalogCategory $category)
+    public function __prepare(Category $category)
     {
         $category->persist();
 
@@ -75,10 +81,10 @@ class CreateBundleProductEntityTest extends Injectable
      * Test create bundle product
      *
      * @param BundleProduct $product
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function test(BundleProduct $product, CatalogCategory $category)
+    public function test(BundleProduct $product, Category $category)
     {
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getGridPageActionBlock()->addProduct('bundle');

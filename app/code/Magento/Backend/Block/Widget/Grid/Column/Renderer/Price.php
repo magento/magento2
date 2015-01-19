@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
@@ -48,7 +49,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
      */
     public function render(\Magento\Framework\Object $row)
     {
-        if ($data = $row->getData($this->getColumn()->getIndex())) {
+        if ($data = $this->_getValue($row)) {
             $currencyCode = $this->_getCurrencyCode($row);
 
             if (!$currencyCode) {

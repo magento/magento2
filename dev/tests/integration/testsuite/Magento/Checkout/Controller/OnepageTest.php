@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller;
 
@@ -12,7 +13,7 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
     protected function setUp()
     {
         parent::setUp();
-        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Checkout\Model\Session'
@@ -56,7 +57,7 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public function testSaveOrderActionWithFormKey()
     {
-        $formKey = $this->_objectManager->get('\Magento\Framework\Data\Form\FormKey');
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $this->getRequest()->setParam('form_key', $formKey->getFormKey());
         $this->dispatch('checkout/onepage/saveOrder');
         $html = $this->getResponse()->getBody();

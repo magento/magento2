@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Rule\Model\Condition;
@@ -99,6 +100,48 @@ class AbstractConditionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $expectedResult,
             $this->_condition->validateAttribute($valueForValidate),
+            "Failed asserting that "
+            . var_export($existingValue, true)
+            . $operator
+            . var_export($valueForValidate, true)
+        );
+    }
+
+    /**
+     * @param $existingValue
+     * @param $operator
+     * @param $valueForValidate
+     * @param $expectedResult
+     *
+     * @dataProvider validateAttributeDataProvider
+     */
+    public function testValidate($existingValue, $operator, $valueForValidate, $expectedResult)
+    {
+        $objectMock = $this->getMock(
+            'Magento\Framework\Model\AbstractModel',
+            ['hasData', 'load', 'getId', 'getData'],
+            [],
+            '',
+            false
+        );
+        $objectMock->expects($this->once())
+            ->method('hasData')
+            ->willReturn(false);
+        $objectMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(7);
+        $objectMock->expects($this->once())
+            ->method('load')
+            ->with(7);
+        $objectMock->expects($this->once())
+            ->method('getData')
+            ->willReturn($valueForValidate);
+
+        $this->_condition->setOperator($operator);
+        $this->_condition->setData('value_parsed', $existingValue);
+        $this->assertEquals(
+            $expectedResult,
+            $this->_condition->validate($objectMock),
             "Failed asserting that "
             . var_export($existingValue, true)
             . $operator

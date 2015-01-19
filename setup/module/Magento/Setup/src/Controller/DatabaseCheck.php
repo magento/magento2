@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
 
@@ -20,13 +21,22 @@ class DatabaseCheck extends AbstractActionController
     private $installerFactory;
 
     /**
+     * WebLogger to access log
+     *
+     * @var WebLogger
+     */
+    private $webLogger;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
+     * @param WebLogger $webLogger
      */
-    public function __construct(InstallerFactory $installerFactory)
+    public function __construct(InstallerFactory $installerFactory, WebLogger $webLogger)
     {
         $this->installerFactory = $installerFactory;
+        $this->webLogger = $webLogger;
     }
 
     /**
@@ -38,7 +48,7 @@ class DatabaseCheck extends AbstractActionController
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         try {
-            $installer = $this->installerFactory->create(new WebLogger());
+            $installer = $this->installerFactory->create($this->webLogger);
             $password = isset($params['password']) ? $params['password'] : '';
             $installer->checkDatabaseConnection($params['name'], $params['host'], $params['user'], $password);
             return new JsonModel(['success' => true]);

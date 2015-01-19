@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\Resource;
@@ -124,7 +125,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     {
         $this->validate($customer);
         $customerData = $this->extensibleDataObjectConverter->toFlatArray(
-            $this->customerBuilder->populate($customer)->setAddresses([])->create()
+            $this->customerBuilder->populate($customer)->setAddresses([])->create(),
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
         );
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
         $storeId = $customerModel->getStoreId();

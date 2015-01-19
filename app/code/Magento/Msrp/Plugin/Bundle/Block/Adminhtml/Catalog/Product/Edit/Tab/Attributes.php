@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Msrp\Plugin\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
@@ -20,7 +21,7 @@ class Attributes
         $mapEnabled = $subject->getForm()->getElement('msrp');
         if ($mapEnabled && $subject->getCanEditPrice() !== false) {
             $mapEnabled->setAfterElementHtml(
-                '<script type="text/javascript">' .
+                '<script>' .
                 "
                 function changePriceTypeMap() {
                     if ($('price_type').value == " . \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC . ") {

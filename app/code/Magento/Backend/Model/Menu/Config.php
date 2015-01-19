@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu;
 
@@ -33,7 +34,7 @@ class Config
     protected $_menu;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -64,7 +65,7 @@ class Config
      * @param \Magento\Backend\Model\Menu\Config\Reader $configReader
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\State $appState
      */
@@ -75,7 +76,7 @@ class Config
         \Magento\Backend\Model\Menu\Config\Reader $configReader,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\State $appState
     ) {
@@ -101,21 +102,17 @@ class Config
      */
     public function getMenu()
     {
-        if ($this->_scopeConfig->getValue('dev/log/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
-            $this->_logger->addStreamLog(\Magento\Backend\Model\Menu::LOGGER_KEY);
-        }
-
         try {
             $this->_initMenu();
             return $this->_menu;
         } catch (\InvalidArgumentException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw $e;
         } catch (\BadMethodCallException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw $e;
         } catch (\OutOfRangeException $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
             throw $e;
         } catch (\Exception $e) {
             throw $e;

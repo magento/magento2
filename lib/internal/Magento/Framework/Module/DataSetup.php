@@ -2,7 +2,8 @@
 /**
  * Resource Setup Model
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module;
 
@@ -50,7 +51,7 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
     protected $_eventManager;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -223,9 +224,9 @@ class DataSetup extends \Magento\Framework\Module\Setup implements \Magento\Fram
 
                 if ($result) {
                     $this->_resource->setDataVersion($this->_resourceName, $file['toVersion']);
-                    $this->_logger->log($fileName);
+                    $this->_logger->info($fileName);
                 } else {
-                    $this->_logger->log("Failed resource setup: {$fileName}");
+                    $this->_logger->info("Failed resource setup: {$fileName}");
                 }
             } catch (\Exception $e) {
                 throw new \Magento\Framework\Exception(

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
@@ -66,16 +67,16 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $customerAddress = $objectManager->create('Magento\Customer\Model\Address')->load($fixtureCustomerId);
         /** Set data which corresponds tax class fixture */
         $customerAddress->setCountryId('US')->setRegionId(12)->save();
-        /** @var \Magento\Sales\Model\Quote\Address $quoteShippingAddress */
-        $quoteShippingAddress = $objectManager->create('Magento\Sales\Model\Quote\Address');
+        /** @var \Magento\Quote\Model\Quote\Address $quoteShippingAddress */
+        $quoteShippingAddress = $objectManager->create('Magento\Quote\Model\Quote\Address');
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
         $addressRepository = $objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
         $quoteShippingAddress->importCustomerAddressData($addressRepository->getById($fixtureCustomerAddressId));
 
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $objectManager->create('Magento\Quote\Model\Quote');
         $quote->setStoreId(1)
             ->setIsActive(true)
             ->setIsMultiShipping(false)
@@ -110,7 +111,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify fields in quote item
      *
-     * @param \Magento\Sales\Model\Quote\Address\Item $item
+     * @param \Magento\Quote\Model\Quote\Address\Item $item
      * @param array $expectedItemData
      * @return $this
      */
@@ -178,7 +179,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify fields in quote address
      *
-     * @param \Magento\Sales\Model\Quote\Address $quoteAddress
+     * @param \Magento\Quote\Model\Quote\Address $quoteAddress
      * @param array $expectedAddressData
      * @return $this
      */
@@ -198,7 +199,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify fields in quote address and quote item are correct
      *
-     * @param \Magento\Sales\Model\Quote\Address $quoteAddress
+     * @param \Magento\Quote\Model\Quote\Address $quoteAddress
      * @param array $expectedResults
      * @return $this
      */
@@ -210,7 +211,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $quoteItems = $quoteAddress->getAllItems();
         foreach ($quoteItems as $item) {
-            /** @var  \Magento\Sales\Model\Quote\Address\Item $item */
+            /** @var  \Magento\Quote\Model\Quote\Address\Item $item */
             $sku = $item->getProduct()->getSku();
             $expectedItemData = $expectedResults['items_data'][$sku];
             $this->verifyItem($item, $expectedItemData);

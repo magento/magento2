@@ -2,7 +2,8 @@
 /**
  * Mysql PDO DB adapter
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
@@ -444,7 +445,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
                 if (!$retry) {
                     $this->logger->logStats(LoggerInterface::TYPE_QUERY, $sql, $bind);
-                    $this->logger->logException($e);
+                    $this->logger->critical($e);
                     throw $e;
                 }
             }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Block\Adminhtml\Items\Price;
 
@@ -46,7 +47,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->renderer = $objectManager->getObject(
-            '\Magento\Tax\Block\Adminhtml\Items\Price\Renderer',
+            'Magento\Tax\Block\Adminhtml\Items\Price\Renderer',
             [
                 'itemPriceRenderer' => $this->itemPriceRenderer,
                 'defaultColumnRenderer' => $this->defaultColumnRenderer,

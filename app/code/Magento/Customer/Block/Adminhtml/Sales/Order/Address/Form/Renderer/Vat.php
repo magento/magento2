@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Sales\Order\Address\Form\Renderer;
 
@@ -94,7 +95,7 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
             );
 
             $optionsVarName = $this->getJsVariablePrefix() . 'VatParameters';
-            $beforeHtml = '<script type="text/javascript">var ' .
+            $beforeHtml = '<script>var ' .
                 $optionsVarName .
                 ' = ' .
                 $vatValidateOptions .

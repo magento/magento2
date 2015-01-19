@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
@@ -37,7 +38,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Persistor',
+                            'description' => $this->_getPersistorClassName(),
                         ],
                     ],
                 ],
@@ -105,6 +106,19 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             str_replace('Interface', '', $this->_getFullyQualifiedClassName($this->_getSourceClassName()))
             . 'SearchResultInterfaceFactory';
     }
+    /**
+     * Returns source persistor class name
+     *
+     * @return string
+     */
+    protected function _getPersistorClassName()
+    {
+        $target = $this->_getFullyQualifiedClassName($this->_getSourceClassName());
+//        if (substr($target, -9) == 'Interface') {
+//            $target = substr($target, 1, strlen($target) -9);
+//        }
+        return $target . 'Persistor';
+    }
 
     /**
      * Get default constructor definition for generated class
@@ -118,7 +132,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => $this->_getSourcePersistorPropertyName(),
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Persistor',
+                    'type' => $this->_getPersistorClassName(),
                 ],
                 [
                     'name' => $this->_getSourceCollectionFactoryPropertyName(),
