@@ -9,13 +9,16 @@ use Magento\Payment\Model\Checks\PaymentMethodChecksInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Quote\Api\Data\PaymentMethodInterface;
 
 /**
  * Payment method abstract model
  * @method AbstractMethod setStore()
  */
 abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    MethodInterface, PaymentMethodChecksInterface, \Magento\Quote\Api\Data\PaymentMethodInterface
+    MethodInterface,
+    PaymentMethodChecksInterface,
+    PaymentMethodInterface
 {
     const ACTION_ORDER = 'order';
 

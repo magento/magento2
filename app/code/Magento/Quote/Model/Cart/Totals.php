@@ -7,6 +7,7 @@ namespace Magento\Quote\Model\Cart;
 
 use Magento\Quote\Api\Data\TotalsInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+
 /**
  * Cart Totals
  *

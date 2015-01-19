@@ -195,7 +195,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * Creates a cart for the currently logged-in customer.
      *
-     * @param $storeId
+     * @param int $storeId
      * @return \Magento\Quote\Model\Quote Cart object.
      * @throws CouldNotSaveException The cart could not be created.
      */
