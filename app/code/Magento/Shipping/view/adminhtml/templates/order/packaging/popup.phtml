@@ -10,7 +10,7 @@ $shippingMethod = $this->getShipment()->getOrder()->getShippingMethod();
 $sizeSource = $this->getSourceSizeModel()->toOptionArray();
 $girthEnabled = $this->isDisplayGirthValue() && $this->isGirthAllowed() ? 1 : 0;
 ?>
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "prototype",

@@ -7,7 +7,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Minicart
@@ -122,9 +122,9 @@
             &.empty {
                display: none;
             }
-            background: @color-active;
+            .css(background, @color-active);
             border-radius: 2px;
-            color: @page-bg-color;
+            .css(color, @page-bg-color);
             clip: none;
             display: inline-block;
             height: 24px;
@@ -167,7 +167,7 @@
             font-weight: @font-weight-base;
             margin-top: 0;
             a {
-                color: @link-color;
+                .css(color, @link-color);
             }
         }
         &-item-details {
@@ -205,9 +205,9 @@
                  @_icon-font-size: 28px,
                  @_icon-font-line-height: 28px,
                  @_icon-font-text-hide: true,
-                 @_icon-font-color: #303030,
-                 @_icon-font-color-hover: #303030,
-                 @_icon-font-color-active: #303030
+                 @_icon-font-color: @color-gray19,
+                 @_icon-font-color-hover: @color-gray19,
+                 @_icon-font-color-active: @color-gray19
              );
          }
          &.delete {
@@ -223,13 +223,13 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-xs) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-xs) {
     .minicart-wrapper .block-minicart {
         width: 290px;
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .minicart-wrapper {
         margin-top: @indent-s-base;
     }
@@ -238,7 +238,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .minicart-wrapper {
         margin-left: 13px;
         .block-minicart {

@@ -169,7 +169,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
         $homeUrl = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Backend\Helper\Data'
         )->getHomePageUrl();
-        $expected = '<script type="text/javascript">parent.window.location =';
+        $expected = '<script>parent.window.location =';
         $this->assertStringStartsWith($expected, $this->getResponse()->getBody());
         $this->assertContains($homeUrl, $this->getResponse()->getBody());
         $this->_logout();

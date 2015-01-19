@@ -56,7 +56,10 @@ class Address
     public function process(Order $order)
     {
         if (null !== $order->getAddresses()) {
+            /** @var \Magento\Sales\Model\Order\Address $address */
             foreach ($order->getAddresses() as $address) {
+                $address->setParentId($order->getId());
+                $address->setOrder($order);
                 $address->save();
             }
             $billingAddress = $order->getBillingAddress();

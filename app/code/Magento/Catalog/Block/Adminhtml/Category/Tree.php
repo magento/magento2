@@ -300,7 +300,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         foreach ($categories as $key => $category) {
             $categories[$key] = $this->_getNodeJson($category);
         }
-        return '<script type="text/javascript">' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
+        return '<script>' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
             $categories
         ) .
             ';' .

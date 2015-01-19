@@ -385,9 +385,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $stockConfiguration;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStateInterface
+     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface
      */
-    protected $stockState;
+    protected $stockStateProvider;
 
     /**
      * Core event manager proxy
@@ -502,7 +502,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
-     * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
+     * @param \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface $stockStateProvider
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ImportExport\Model\Import\Config $importConfig
      * @param Proxy\Product\ResourceFactory $resourceFactory
@@ -537,7 +537,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\CatalogInventory\Api\StockStateInterface $stockState,
+        \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface $stockStateProvider,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ImportExport\Model\Import\Config $importConfig,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
@@ -563,7 +563,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
         $this->stockConfiguration = $stockConfiguration;
-        $this->stockState = $stockState;
+        $this->stockStateProvider = $stockStateProvider;
         $this->_catalogData = $catalogData;
         $this->_importConfig = $importConfig;
         $this->_resourceFactory = $resourceFactory;
@@ -1796,12 +1796,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 );
 
                 if ($this->stockConfiguration->isQty($this->_newSku[$rowData[self::COL_SKU]]['type_id'])) {
-                    $row['is_in_stock'] = $this->stockState->verifyStock($row['product_id'], $row['website_id']);
-                    if ($this->stockState->verifyNotification($row['product_id'], $row['website_id'])) {
+                    $stockItemDo->setData($row);
+                    $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
+                    if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                         $row['low_stock_date'] = $this->_localeDate->date(null, null, null, false)
                             ->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
                     }
-                    $row['stock_status_changed_auto'] = (int) !$this->stockState->verifyStock($row['product_id'], $row['website_id']);
+                    $row['stock_status_changed_auto'] =
+                        (int) !$this->stockStateProvider->verifyStock($stockItemDo);
                 } else {
                     $row['qty'] = 0;
                 }

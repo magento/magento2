@@ -31,7 +31,7 @@ class SetCanApplyMsrp
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $quote \Magento\Sales\Model\Quote */
+        /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $observer->getEvent()->getQuote();
 
         $canApplyMsrp = false;
