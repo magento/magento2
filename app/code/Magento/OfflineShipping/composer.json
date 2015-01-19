@@ -11,6 +11,7 @@
         "magento/module-sales-rule": "0.42.0-beta4",
         "magento/module-directory": "0.42.0-beta4",
         "magento/module-checkout": "0.42.0-beta4",
+        "magento/module-quote": "0.42.0-beta4",
         "magento/framework": "0.42.0-beta4",
         "magento/magento-composer-installer": "*"
     },

@@ -72,7 +72,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     /**
      * Return billing address object
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return \Magento\Quote\Model\Quote\Address
      */
     public function getAddress()
     {

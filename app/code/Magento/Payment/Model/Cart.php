@@ -75,7 +75,7 @@ class Cart
     /**
      * @param \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Order|\Magento\Sales\Model\Quote $salesModel
+     * @param \Magento\Sales\Model\Order|\Magento\Quote\Model\Quote $salesModel
      */
     public function __construct(
         \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory,

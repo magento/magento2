@@ -82,12 +82,12 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
      * Setup an item mock
      *
      * @param float $itemQty
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Item
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item
      */
     protected function setupItemMock($itemQty)
     {
         $itemMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             [
                 'getProduct',
                 'getQuote',
@@ -110,13 +110,13 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup address mock
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Item $itemMock
+     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item $itemMock
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function setupAddressMock($itemMock)
     {
         $addressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             [
                 '__wakeup',
                 'getAllItems',
@@ -127,7 +127,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
         $this->priceCurrency->expects($this->any())->method('round')->willReturnArgument(0);
@@ -143,10 +143,10 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify that correct fields of item has been set
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Item $item
+     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item $item
      * @param $itemData
      */
-    public function verifyItem(\Magento\Sales\Model\Quote\Item $item, $itemData)
+    public function verifyItem(\Magento\Quote\Model\Quote\Item $item, $itemData)
     {
         foreach ($itemData as $key => $value) {
             $this->assertEquals($value, $item->getData($key), 'item ' . $key . ' is incorrect');
@@ -156,10 +156,10 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     /**
      * Verify that correct fields of address has been set
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Address $address
+     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Address $address
      * @param $addressData
      */
-    public function verifyAddress(\Magento\Sales\Model\Quote\Address $address, $addressData)
+    public function verifyAddress(\Magento\Quote\Model\Quote\Address $address, $addressData)
     {
         foreach ($addressData as $key => $value) {
             $this->assertEquals($value, $address->getData($key), 'address ' . $key . ' is incorrect');

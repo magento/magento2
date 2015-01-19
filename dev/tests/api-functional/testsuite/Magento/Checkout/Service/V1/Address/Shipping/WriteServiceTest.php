@@ -36,8 +36,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testSetAddress()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
 
         $serviceInfo = [
@@ -77,7 +77,7 @@ class WriteServiceTest extends WebapiAbstract
         $addressId = $this->_webApiCall($serviceInfo, $requestData);
 
         //reset $quote to reload data
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
         $savedData  = $quote->getShippingAddress()->getData();
         $this->assertEquals($addressId, $savedData['address_id']);
@@ -105,8 +105,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testSetAddressForVirtualQuote()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');
 
         $serviceInfo = [
