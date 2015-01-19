@@ -7,7 +7,7 @@
         define([
             "jquery",
             "jquery/ui",
-            "mage/validation"
+            "mage/validation/validation"
         ], factory);
     } else {
         factory(jQuery);
