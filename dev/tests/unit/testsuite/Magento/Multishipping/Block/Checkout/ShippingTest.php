@@ -58,7 +58,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddresses()
     {
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $this->multiShippingMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())
             ->method('getAllShippingAddresses')->will($this->returnValue(['expected array']));
@@ -68,7 +68,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testGetAddressShippingMethod()
     {
         $addressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             ['getShippingMethod', '__wakeup'],
             [],
             '',
@@ -82,7 +82,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingRates()
     {
         $addressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             ['getGroupedAllShippingRates', '__wakeup'],
             [],
             '',
@@ -116,13 +116,13 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingPrice()
     {
         $addressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             ['getQuote', '__wakeup'],
             [],
             '',
             false
         );
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $price = 100;
         $flag = true;

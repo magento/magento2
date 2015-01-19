@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,7 +12,7 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Handle and then get cart grid contents
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
@@ -23,9 +22,9 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
         // delete an item from cart
         $deleteItemId = $this->getRequest()->getPost('delete');
         if ($deleteItemId) {
-            /** @var \Magento\Sales\Model\QuoteRepository $quoteRepository */
-            $quoteRepository = $this->_objectManager->create('Magento\Sales\Model\QuoteRepository');
-            /** @var \Magento\Sales\Model\Quote $quote */
+            /** @var \Magento\Quote\Model\QuoteRepository $quoteRepository */
+            $quoteRepository = $this->_objectManager->create('Magento\Quote\Model\QuoteRepository');
+            /** @var \Magento\Quote\Model\Quote $quote */
             try {
                 $quote = $quoteRepository->getForCustomer(
                     $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
@@ -43,9 +42,8 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
             }
         }
 
-        $this->_view->loadLayout();
-        $this->prepareDefaultCustomerTitle();
-        $this->_view->getLayout()->getBlock('admin.customer.view.edit.cart')->setWebsiteId($websiteId);
-        $this->_view->renderLayout();
+        $resultLayout = $this->resultLayoutFactory->create();
+        $resultLayout->getLayout()->getBlock('admin.customer.view.edit.cart')->setWebsiteId($websiteId);
+        return $resultLayout;
     }
 }

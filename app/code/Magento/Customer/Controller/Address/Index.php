@@ -8,6 +8,9 @@ namespace Magento\Customer\Controller\Address;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Index extends \Magento\Customer\Controller\Address
 {
     /**
@@ -25,6 +28,9 @@ class Index extends \Magento\Customer\Controller\Address
      * @param \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -36,6 +42,9 @@ class Index extends \Magento\Customer\Controller\Address
         \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder,
         \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         CustomerRepositoryInterface $customerRepository
     ) {
         $this->customerRepository = $customerRepository;
@@ -47,29 +56,32 @@ class Index extends \Magento\Customer\Controller\Address
             $addressRepository,
             $addressDataBuilder,
             $regionDataBuilder,
-            $dataProcessor
+            $dataProcessor,
+            $resultRedirectFactory,
+            $resultForwardFactory,
+            $resultPageFactory
         );
     }
 
     /**
      * Customer addresses list
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $addresses = $this->customerRepository->getById($this->_getSession()->getCustomerId())->getAddresses();
         if (count($addresses)) {
-            $this->_view->loadLayout();
-            $this->_view->getLayout()->initMessages();
-
-            $block = $this->_view->getLayout()->getBlock('address_book');
+            /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->getLayout()->initMessages();
+            $block = $resultPage->getLayout()->getBlock('address_book');
             if ($block) {
                 $block->setRefererUrl($this->_redirect->getRefererUrl());
             }
-            $this->_view->renderLayout();
+            return $resultPage;
         } else {
-            $this->getResponse()->setRedirect($this->_buildUrl('*/*/new'));
+            return $this->resultRedirectFactory->create()->setPath('*/*/new');
         }
     }
 }

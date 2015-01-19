@@ -7,7 +7,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .panel.header {
     .links,
@@ -43,7 +43,7 @@
 //    Mobile
 //--------------------------------------
 @active-nav-indent: 54px;
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .navigation {
         padding: 0;
         .parent .level-top {
@@ -79,7 +79,7 @@
         .css(transition, left .3s, 1);
 
         .switcher {
-            border-top: 1px solid #D1D1D1;
+            border-top: 1px solid @color-gray82;
             margin: 0;
             font-size: 1.6rem;
             padding: 8px 20px;
@@ -89,7 +89,7 @@
                 margin-bottom: @indent-xs-base;
             }
             &:last-child {
-                    border-bottom: 1px solid #D1D1D1;
+                    border-bottom: 1px solid @color-gray82;
             }
             &-trigger {
                 strong {
@@ -123,7 +123,7 @@
         .header.links {
             .list-reset-styles();
             li {
-                border-top: 1px solid #D1D1D1;
+                border-top: 1px solid @color-gray82;
                 margin: 0;
                 font-size: 1.6rem;
                 &.greet.welcome {
@@ -131,7 +131,7 @@
                     font-weight: 700;
                 }
                 &:last-child {
-                    border-bottom: 1px solid #D1D1D1;
+                    border-bottom: 1px solid @color-gray82;
                 }
             }
             a, a:hover
@@ -227,7 +227,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .nav-toggle {
         display: none;
     }

@@ -48,6 +48,21 @@ class LoginTest extends \PHPUnit_Framework_TestCase
      */
     protected $dataHelper;
 
+    /**
+     * @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultJson;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory| \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Raw \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRaw;
+
     protected function setUp()
     {
         $this->request = $this->getMock(
@@ -107,11 +122,30 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->dataHelper = $this->getMock(
             '\Magento\Core\Helper\Data',
-            ['jsonDecode', 'jsonEncode'],
+            ['jsonDecode'],
             [],
             '',
             false
         );
+
+        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->resultRaw = $this->getMockBuilder('Magento\Framework\Controller\Result\Raw')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultRawFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultRawFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->resultRaw);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
@@ -121,6 +155,8 @@ class LoginTest extends \PHPUnit_Framework_TestCase
                 'helper' => $this->dataHelper,
                 'request' => $this->request,
                 'response' => $this->response,
+                'resultRawFactory' => $resultRawFactory,
+                'resultJsonFactory' => $this->resultJsonFactory,
                 'objectManager' => $this->objectManager,
                 'customerAccountManagement' => $this->customerAccountManagementMock,
             ]
@@ -147,17 +183,15 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('isXmlHttpRequest')
             ->willReturn(true);
 
+        $this->resultJsonFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->resultJson);
+
         $this->dataHelper
             ->expects($this->any())
             ->method('jsonDecode')
             ->with($jsonRequest)
             ->willReturn(['username' => 'customer@example.com', 'password' => 'password']);
-
-        $this->dataHelper
-            ->expects($this->any())
-            ->method('jsonEncode')
-            ->with(['message' => 'Login successful.'])
-            ->willReturn($loginSuccessResponse);
 
         $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
         $this->customerAccountManagementMock
@@ -172,7 +206,13 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSession->expects($this->once())->method('regenerateId');
 
-        $this->response->expects($this->once())->method('representJson')->with($loginSuccessResponse);
+        $this->resultRaw->expects($this->never())->method('setHttpResponseCode');
+
+        $this->resultJson
+            ->expects($this->once())
+            ->method('setData')
+            ->with(['message' => 'Login successful.'])
+            ->willReturn($loginSuccessResponse);
 
         $this->object->execute();
     }
@@ -197,17 +237,15 @@ class LoginTest extends \PHPUnit_Framework_TestCase
             ->method('isXmlHttpRequest')
             ->willReturn(true);
 
+        $this->resultJsonFactory->expects($this->never())
+            ->method('create')
+            ->willReturn($this->resultJson);
+
         $this->dataHelper
             ->expects($this->any())
             ->method('jsonDecode')
             ->with($jsonRequest)
             ->willReturn(['username' => 'invalid@example.com', 'password' => 'invalid']);
-
-        $this->dataHelper
-            ->expects($this->any())
-            ->method('jsonEncode')
-            ->with(['message' => 'Invalid login or password.'])
-            ->willReturn($loginFailureResponse);
 
         $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
         $this->customerAccountManagementMock
@@ -222,11 +260,14 @@ class LoginTest extends \PHPUnit_Framework_TestCase
 
         $this->customerSession->expects($this->never())->method('regenerateId');
 
-        $this->response->expects($this->once())->method('representJson')->with($loginFailureResponse);
+        $this->resultJson
+            ->expects($this->never())
+            ->method('setData')
+            ->with(['message' => 'Invalid login or password.'])
+            ->willReturn($loginFailureResponse);
 
-        $this->response->expects($this->once())->method('setHttpResponseCode')->with(401);
+        $this->resultRaw->expects($this->once())->method('setHttpResponseCode')->with(401);
 
         $this->object->execute();
     }
 }
-

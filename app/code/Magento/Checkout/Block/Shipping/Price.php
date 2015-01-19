@@ -7,7 +7,7 @@ namespace Magento\Checkout\Block\Shipping;
 
 use Magento\Checkout\Block\Cart\AbstractCart;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Model\Quote\Address\Rate;
+use Magento\Quote\Model\Quote\Address\Rate;
 
 class Price extends AbstractCart
 {

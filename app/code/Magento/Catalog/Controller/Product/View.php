@@ -18,7 +18,7 @@ class View extends \Magento\Catalog\Controller\Product
     protected $viewHelper;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
      */
     protected $resultRedirectFactory;
 
