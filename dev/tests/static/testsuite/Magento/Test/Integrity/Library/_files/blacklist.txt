@@ -75,4 +75,5 @@ lib/internal/Magento/Framework/App/Filesystem/DirectoryList/Configuration.php
 lib/internal/Magento/Framework/Filesystem/Driver/Http.php
 
 lib/internal/Magento/Framework/Url/ScopeResolver.php
-
+lib/internal/Magento/Framework/Url/SecurityInfo.php
+lib/internal/Magento/Framework/Url/RouteParamsResolver.php
