@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -46,6 +45,12 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param ObjectFactory $objectFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -70,6 +75,12 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         ObjectFactory $objectFactory,
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
         \Magento\Framework\Url\DecoderInterface $urlDecoder
     ) {
         parent::__construct(
@@ -91,7 +102,13 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $addressDataBuilder,
             $customerMapper,
             $dataObjectProcessor,
-            $objectFactory
+            $objectFactory,
+            $layoutFactory,
+            $resultLayoutFactory,
+            $resultPageFactory,
+            $resultRedirectFactory,
+            $resultForwardFactory,
+            $resultJsonFactory
         );
         $this->urlDecoder  = $urlDecoder;
     }
