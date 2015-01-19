@@ -22,11 +22,16 @@ use Mtf\TestCase\Injectable;
  *  5. Click "Save" button.
  *  6. Perform all assertions.
  *
- * @group XML_Sitemap_(MX)
+ * @group XML_Sitemap_(PS)
  * @ZephyrId MAGETWO-23277
  */
 class CreateSitemapEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * @var SitemapIndex
      */

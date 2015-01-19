@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<fixture class="Magento\Catalog\Test\Fixture\CatalogCategory">
+<fixture class="Magento\Catalog\Test\Fixture\Category">
     <module>Magento_Catalog</module>
     <type>eav</type>
     <entity_type>catalog_category_entity</entity_type>
@@ -38,13 +38,14 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>textarea</input>
+            <group>general_information</group>
         </description>
         <parent_id>
             <attribute_code>parent_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
-            <source>Magento\Catalog\Test\Fixture\CatalogCategory\ParentId</source>
+            <source>Magento\Catalog\Test\Fixture\Category\ParentId</source>
             <input></input>
         </parent_id>
         <created_at>
@@ -123,6 +124,7 @@
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
+            <group>general_information</group>
         </meta_title>
         <id>
             <attribute_code>id</attribute_code>
@@ -141,7 +143,7 @@
         <is_anchor>
             <attribute_code>is_anchor</attribute_code>
             <backend_type>virtual</backend_type>
-            <group>general_information</group>
+            <group>display_setting</group>
         </is_anchor>
         <url_key>
             <attribute_code>url_key</attribute_code>
@@ -158,6 +160,7 @@
             <backend_type>virtual</backend_type>
             <input>select</input>
             <group>display_setting</group>
+            <source>\Magento\Catalog\Test\Fixture\Category\LandingPage</source>
         </landing_page>
         <display_mode>
             <attribute_code>display_mode</attribute_code>
@@ -168,9 +171,9 @@
         <category_products>
             <attribute_code>category_products</attribute_code>
             <backend_type>virtual</backend_type>
-            <source>Magento\Catalog\Test\Fixture\CatalogCategory\CategoryProducts</source>
+            <source>Magento\Catalog\Test\Fixture\Category\CategoryProducts</source>
         </category_products>
     </fields>
-    <repository_class>Magento\Catalog\Test\Repository\CatalogCategory</repository_class>
-    <handler_interface>Magento\Catalog\Test\Handler\CatalogCategory\CatalogCategoryInterface</handler_interface>
+    <repository_class>Magento\Catalog\Test\Repository\Category</repository_class>
+    <handler_interface>Magento\Catalog\Test\Handler\Category\CategoryInterface</handler_interface>
 </fixture>

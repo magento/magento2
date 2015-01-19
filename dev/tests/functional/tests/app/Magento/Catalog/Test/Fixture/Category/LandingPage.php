@@ -4,33 +4,33 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Fixture\CatalogCategory;
+namespace Magento\Catalog\Test\Fixture\Category;
 
+use Magento\Cms\Test\Fixture\CmsBlock;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
 
 /**
- * Class CategoryProducts
- * Prepare products
+ * Prepare landing page.
  */
-class CategoryProducts implements FixtureInterface
+class LandingPage implements FixtureInterface
 {
     /**
-     * Prepared dataSet data
+     * Prepared dataSet data.
      *
-     * @var array|null
+     * @var string
      */
     protected $data;
 
     /**
-     * Return products
+     * Source Cms Block.
      *
-     * @var array
+     * @var CmsBlock
      */
-    protected $products = [];
+    protected $cmsBlock = null;
 
     /**
-     * Fixture params
+     * Fixture params.
      *
      * @var array
      */
@@ -40,27 +40,26 @@ class CategoryProducts implements FixtureInterface
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
-     * @param array|int $data
+     * @param array $data [optional]
      */
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data = [])
     {
         $this->params = $params;
-        if (!empty($data['dataSet']) && $data['dataSet'] !== '-') {
-            $dataSet = explode(',', $data['dataSet']);
-            foreach ($dataSet as $value) {
-                $explodeValue = explode('::', $value);
-                $product = $fixtureFactory->createByCode($explodeValue[0], ['dataSet' => $explodeValue[1]]);
-                if (!$product->getId()) {
-                    $product->persist();
-                }
-                $this->data[] = $product->getName();
-                $this->products[] = $product;
+
+        if (isset($data['preset'])) {
+            /** @var CmsBlock $cmsBlock */
+            $cmsBlock = $fixtureFactory->createByCode('cmsBlock', ['dataSet' => $data['preset']]);
+            if (!$cmsBlock->getBlockId()) {
+                $cmsBlock->persist();
             }
+
+            $this->data = $cmsBlock->getTitle();
+            $this->cmsBlock = $cmsBlock;
         }
     }
 
     /**
-     * Persist attribute options
+     * Persist source.
      *
      * @return void
      */
@@ -70,7 +69,7 @@ class CategoryProducts implements FixtureInterface
     }
 
     /**
-     * Return prepared data set
+     * Return prepared data set.
      *
      * @param string|null $key [optional]
      * @return array|null
@@ -83,7 +82,7 @@ class CategoryProducts implements FixtureInterface
     }
 
     /**
-     * Return data set configuration settings
+     * Return data set configuration settings.
      *
      * @return array
      */
@@ -93,12 +92,12 @@ class CategoryProducts implements FixtureInterface
     }
 
     /**
-     * Return products
+     * Return Cms Block.
      *
-     * @return array
+     * @return CmsBlock
      */
-    public function getProducts()
+    public function getCmsBlock()
     {
-        return $this->products;
+        return $this->cmsBlock;
     }
 }

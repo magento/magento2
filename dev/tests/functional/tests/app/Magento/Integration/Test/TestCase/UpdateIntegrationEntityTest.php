@@ -31,6 +31,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateIntegrationEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Integration grid page
      *

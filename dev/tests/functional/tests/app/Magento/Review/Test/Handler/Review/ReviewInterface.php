@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Handler\CatalogCategory;
+namespace Magento\Review\Test\Handler\Review;
 
 use Mtf\Handler\HandlerInterface;
 
 /**
- * Interface CatalogCategoryInterface
+ * Interface ReviewInterface
  */
-interface CatalogCategoryInterface extends HandlerInterface
+interface ReviewInterface extends HandlerInterface
 {
     //
 }
