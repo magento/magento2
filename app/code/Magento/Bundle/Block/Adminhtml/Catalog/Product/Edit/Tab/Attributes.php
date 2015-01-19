@@ -68,7 +68,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
             $tax->setAfterElementHtml(
                 '<script>' .
                 "
-                //<![CDATA[
+                require(['prototype'], function(){
                 function changeTaxClassId() {
                     if ($('price_type').value == '" .
                 \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC .
@@ -87,13 +87,11 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
                     }
                 }
 
-                document.observe('dom:loaded', function() {
-                    if ($('price_type')) {
-                        $('price_type').observe('change', changeTaxClassId);
-                        changeTaxClassId();
-                    }
+                if ($('price_type')) {
+                    $('price_type').observe('change', changeTaxClassId);
+                    changeTaxClassId();
+                }
                 });
-                //]]>
                 " .
                 '</script>'
             );

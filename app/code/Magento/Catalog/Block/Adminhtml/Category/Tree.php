@@ -300,12 +300,12 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         foreach ($categories as $key => $category) {
             $categories[$key] = $this->_getNodeJson($category);
         }
-        return '<script>' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
+        return '<script>require(["prototype"], function(){' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
             $categories
         ) .
             ';' .
             ($this->canAddSubCategory() ? '$("add_subcategory_button").show();' : '$("add_subcategory_button").hide();') .
-            '</script>';
+            '});</script>';
     }
 
     /**
