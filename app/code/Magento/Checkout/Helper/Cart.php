@@ -108,7 +108,7 @@ class Cart extends \Magento\Core\Helper\Url
     /**
      * Retrieve url for remove product from cart
      *
-     * @param   \Magento\Sales\Model\Quote\Item $item
+     * @param   \Magento\Quote\Model\Quote\Item $item
      * @return  string
      */
     public function getRemoveUrl($item)
@@ -123,7 +123,7 @@ class Cart extends \Magento\Core\Helper\Url
     /**
      * Get post parameters for delete from cart
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item $item
      * @return string
      */
     public function getDeletePostJson($item)
@@ -150,7 +150,7 @@ class Cart extends \Magento\Core\Helper\Url
     /**
      * Retrieve current quote instance
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {

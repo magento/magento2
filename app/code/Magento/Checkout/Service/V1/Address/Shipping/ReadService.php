@@ -14,7 +14,7 @@ class ReadService implements ReadServiceInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -28,11 +28,11 @@ class ReadService implements ReadServiceInterface
     /**
      * Constructs a quote billing address read service object.
      *
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
      * @param AddressConverter $addressConverter Address converter.
      */
     public function __construct(
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         AddressConverter $addressConverter
     ) {
         $this->quoteRepository = $quoteRepository;
@@ -51,7 +51,7 @@ class ReadService implements ReadServiceInterface
         /**
          * Quote.
          *
-         * @var \Magento\Sales\Model\Quote $quote
+         * @var \Magento\Quote\Model\Quote $quote
          */
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
@@ -63,7 +63,7 @@ class ReadService implements ReadServiceInterface
         /**
          * Address.
          *
-         * @var \Magento\Sales\Model\Quote\Address $address
+         * @var \Magento\Quote\Model\Quote\Address $address
          */
         $address = $quote->getShippingAddress();
         return $this->addressConverter->convertModelToDataObject($address);

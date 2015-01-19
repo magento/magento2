@@ -10,7 +10,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
 /**
  * Base container block for payment methods forms
  *
- * @method \Magento\Sales\Model\Quote getQuote()
+ * @method \Magento\Quote\Model\Quote getQuote()
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */

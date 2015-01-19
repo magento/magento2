@@ -1,11 +1,11 @@
-// /**
-//  * Copyright © 2015 Magento. All rights reserved.
-//  * See COPYING.txt for license details.
-//  */
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 .magento-reset();   // Reset default styles with magento_reset
 
-@import 'styles';
+@import "styles.less";
 
 //    Magento Import instructions
 //--------------------------------------
@@ -15,31 +15,7 @@
 //@magento_import "source/extend.less"; // for minor customisation
 
 //
-//    Common styles collector
+//    Styles grouped by media queries
 //--------------------------------------
-
-.responsive-common() {}
-.responsive-common();
-
-//
-//    Mobile styles collector
-//--------------------------------------
-
-.responsive-max-m(@break) {}
-.responsive-min-m(@break) {}
-
-@media only screen and (max-width: (@screen-xs - 1)) {
-    .responsive-max-m(@screen-xs);
-}
-
-@media only screen and (max-width: (@screen-s - 1)) {
-    .responsive-max-m(@screen-s);
-}
-
-@media only screen and (max-width: (@screen-m - 1)) {
-    .responsive-max-m(@screen-m);
-}
-
-@media all and (min-width: @screen-s) {
-    .responsive-min-m(@screen-s);
-}
+@import "source/lib/responsive.less";
+@media-target: 'mobile'; // Sets target device for this file

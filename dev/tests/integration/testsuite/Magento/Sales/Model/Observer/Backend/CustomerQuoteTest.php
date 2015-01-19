@@ -24,8 +24,8 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
         $customer = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
         $customer->load(1);
 
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
         $quote->setCustomerIsGuest(false)->setCustomerId(1)->setCustomerGroupId($customer->getGroupId())->save();
 

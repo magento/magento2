@@ -18,7 +18,7 @@ class WordsFinder
      */
     protected $_binaryExtensions = [
         'jpg', 'jpeg', 'png', 'gif', 'swf', 'mp3', 'avi', 'mov', 'flv', 'jar', 'zip',
-        'eot', 'ttf', 'woff', 'ico', 'svg',
+        'eot', 'ttf', 'woff', 'woff2', 'ico', 'svg',
     ];
 
     /**

@@ -27,7 +27,7 @@ class DefaultOrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Item  */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item  */
     protected $itemMock;
 
     /**

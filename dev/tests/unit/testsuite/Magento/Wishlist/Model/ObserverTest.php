@@ -148,7 +148,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getEvent')
             ->willReturn($event);
 
-        $quoteItem = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $quoteItem = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->setMethods(['getProductId', 'getBuyRequest', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -168,7 +168,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$itemId => ['qty' => $itemQty, 'wishlist' => true]]);
 
         $cart = $this->getMockBuilder('Magento\Checkout\Model\Cart')->disableOriginalConstructor()->getMock();
-        $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->setMethods(['getCustomerId', 'getItemById', 'removeItem', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();

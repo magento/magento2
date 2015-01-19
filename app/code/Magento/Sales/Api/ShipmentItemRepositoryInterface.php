@@ -25,23 +25,23 @@ interface ShipmentItemRepositoryInterface
      * Loads a specified shipment item.
      *
      * @param int $id
-     * @return \Magento\Sales\Api\Data\ShipmentInterface
+     * @return \Magento\Sales\Api\Data\ShipmentItemInterface
      */
     public function get($id);
 
     /**
      * Deletes a specified shipment item.
      *
-     * @param \Magento\Sales\Api\Data\ShipmentInterface $entity The shipment item.
+     * @param \Magento\Sales\Api\Data\ShipmentItemInterface $entity The shipment item.
      * @return bool
      */
-    public function delete(\Magento\Sales\Api\Data\ShipmentInterface $entity);
+    public function delete(\Magento\Sales\Api\Data\ShipmentItemInterface $entity);
 
     /**
      * Performs persist operations for a specified shipment item.
      *
-     * @param \Magento\Sales\Api\Data\ShipmentInterface $entity The shipment item.
-     * @return \Magento\Sales\Api\Data\ShipmentInterface Shipment interface.
+     * @param \Magento\Sales\Api\Data\ShipmentItemInterface $entity The shipment item.
+     * @return \Magento\Sales\Api\Data\ShipmentItemInterface Shipment interface.
      */
-    public function save(\Magento\Sales\Api\Data\ShipmentInterface $entity);
+    public function save(\Magento\Sales\Api\Data\ShipmentItemInterface $entity);
 }

@@ -63,14 +63,14 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->giftMessageManagerMock =
             $this->getMock('\Magento\GiftMessage\Model\GiftMessageManager', [], [], '', false);
         $this->helperMock = $this->getMock('\Magento\GiftMessage\Helper\Message', [], [], '', false);
         $this->giftMessageMock = $this->getMock('\Magento\GiftMessage\Service\V1\Data\Message', [], [], '', false);
         $this->quoteMock = $this->getMock(
-            '\Magento\Sales\Model\Quote',
+            '\Magento\Quote\Model\Quote',
             [
                 'getItemsCount',
                 'isVirtual',
@@ -84,9 +84,9 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->billingAddressMock =
-            $this->getMock('\Magento\Sales\Model\Quote\Address', ['getCountryId', '__wakeup'], [], '', false);
+            $this->getMock('\Magento\Quote\Model\Quote\Address', ['getCountryId', '__wakeup'], [], '', false);
         $this->shippingAddressMock =
-            $this->getMock('\Magento\Sales\Model\Quote\Address', ['getCountryId', '__wakeup'], [], '', false);
+            $this->getMock('\Magento\Quote\Model\Quote\Address', ['getCountryId', '__wakeup'], [], '', false);
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
 
         $this->service = $objectManager->getObject(
@@ -206,7 +206,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getActive')
             ->with($cartId)
             ->will($this->returnValue($this->quoteMock));
-        $quoteItem = $this->getMock('\Magento\Sales\Model\Quote\Item', ['getIsVirtual', '__wakeup'], [], '', false);
+        $quoteItem = $this->getMock('\Magento\Quote\Model\Quote\Item', ['getIsVirtual', '__wakeup'], [], '', false);
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)
@@ -225,7 +225,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getActive')
             ->with($cartId)
             ->will($this->returnValue($this->quoteMock));
-        $quoteItem = $this->getMock('\Magento\Sales\Model\Quote\Item', ['getIsVirtual', '__wakeup'], [], '', false);
+        $quoteItem = $this->getMock('\Magento\Quote\Model\Quote\Item', ['getIsVirtual', '__wakeup'], [], '', false);
         $this->quoteMock->expects($this->once())
             ->method('getItemById')
             ->with($itemId)

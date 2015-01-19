@@ -145,4 +145,24 @@ class OrderService implements OrderManagementInterface
     {
         return (bool)$this->orderRepository->get($id)->unhold();
     }
+
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @return \Magento\Sales\Api\Data\OrderInterface
+     */
+    public function place(\Magento\Sales\Api\Data\OrderInterface $order)
+    {
+        // transaction will be here
+        //begin transaction
+        try {
+//            $order = $this->orderRepository->save($order);
+            $order->place();
+            return $this->orderRepository->save($order);
+
+            //commit
+        } catch (\Exception $e) {
+            throw $e;
+            //rollback;
+        }
+    }
 }
