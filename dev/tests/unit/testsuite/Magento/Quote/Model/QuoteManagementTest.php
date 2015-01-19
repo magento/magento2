@@ -54,6 +54,11 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
     protected $orderManagement;
 
     /**
+     * @var \Magento\Quote\Model\QuoteRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $quoteRepositoryMock;
+
+    /**
      * @var CustomerManagement
      */
     protected $customerManagement;
@@ -99,6 +104,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteItemToOrderItem = $this->getMock('Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
         $this->orderManagement = $this->getMock('Magento\Sales\Api\OrderManagementInterface', [], [], '', false);
         $this->customerManagement = $this->getMock('Magento\Quote\Model\CustomerManagement', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
 
         $this->model = $objectManager->getObject(
             'Magento\Quote\Model\QuoteManagement',
@@ -111,7 +117,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'quoteAddressToOrder' => $this->quoteAddressToOrder,
                 'quoteAddressToOrderAddress' => $this->quoteAddressToOrderAddress,
                 'quoteItemToOrderItem' => $this->quoteItemToOrderItem,
-                'quotePaymentToOrderPayment' => $this->quotePaymentToOrderPayment
+                'quotePaymentToOrderPayment' => $this->quotePaymentToOrderPayment,
+                'quoteRepository' => $this->quoteRepositoryMock
             ]
         );
     }
@@ -207,6 +214,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->eventManager->expects($this->at(1))
             ->method('dispatch')
             ->with('sales_model_service_quote_submit_success', ['order' => $order, 'quote' => $quote]);
+
+        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
 
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
     }
