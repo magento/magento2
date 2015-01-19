@@ -91,7 +91,7 @@
             <word>head.js</word>
         </item>
         <item>
-            <path>magento2ce/lib/web/legacy-build.min.js</path>
+            <path>lib/web/legacy-build.min.js</path>
         </item>
     </whitelist>
 </config>
