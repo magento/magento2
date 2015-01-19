@@ -18,8 +18,9 @@
     <?php echo $this->getBlockHtml('formkey')?>
 
     <script>
-    function setCacheAction(id, button) {
-        $(id).value = button.id;
+    window.setCacheAction = function(id, button) {
+        document.getElementById(id).value = button.id;
+
         configForm.submit();
     }
     </script>

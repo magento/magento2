@@ -49,11 +49,13 @@ document.getElementById("gallery_thead").style.visibility="hidden";
 </tbody></table>
 
 <script>
-//<![CDATA[
+require([
+    'prototype'
+], function () {
 id = 0;
 num_of_images = <?php echo $i ?>;
 
-function addNewImage()
+window.addNewImage = function()
 {
 
     document.getElementById("gallery_thead").style.visibility="visible";
@@ -102,7 +104,7 @@ function addNewImage()
 
 }
 
-function deleteImage(image)
+window.deleteImage = function(image)
 {
     num_of_images--;
     if (num_of_images<=0) {
@@ -115,8 +117,7 @@ function deleteImage(image)
         image.parentNode.parentNode.parentNode.removeChild( image.parentNode.parentNode );
     }
 }
-//]]>
-
+});
 </script>
     </td>
 </tr>

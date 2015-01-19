@@ -75,6 +75,9 @@
 </div>
 
 <script>
+require([
+    'prototype'
+], function () {
     var productWebsiteCheckboxes = $$('.website-checkbox');
 
     for(var i=0;i<productWebsiteCheckboxes.length;i++){
@@ -97,4 +100,5 @@
             }
         }
     }
+});
 </script>

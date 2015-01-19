@@ -5,7 +5,10 @@
  */
 ?>
 <script>
-//<![CDATA[
+require([
+    'prototype'
+], function () {
+
 var freeModel = Class.create();
 freeModel.prototype = {
     initialize : function()
@@ -233,8 +236,8 @@ function showHint() {
         });
     });
 }
-Event.observe(window, 'load', function(){
-    showHint();
+
+Event.observe(window, 'load', showHint);
+
 });
-//]]>
 </script>
