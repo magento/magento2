@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Request;
 
@@ -31,14 +32,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected $cookieReaderMock;
 
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
+     * @var \Magento\TestFramework\Helper\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManager;
-
-    /**
-     * @var \Magento\Framework\App\Config\ReinitableConfigInterface | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $configMock;
+    protected $objectManager;
 
     /**
      * @var array
@@ -47,7 +43,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_routerListMock = $this->getMock(
             'Magento\Framework\App\Route\ConfigInterface\Proxy',
@@ -59,7 +54,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
         $this->_infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
         $this->cookieReaderMock = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface');
-        $this->configMock = $this->getMock('Magento\Framework\App\Config\ReinitableConfigInterface');
+        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
@@ -80,15 +75,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     private function getModel($uri = null)
     {
-        return $this->_objectManager->getObject(
-            'Magento\Framework\App\Request\Http',
-            [
-                'pathInfoProcessor' => $this->_infoProcessorMock,
-                'routeConfig' => $this->_routerListMock,
-                'cookieReader' => $this->cookieReaderMock,
-                'uri' => $uri,
-                'config' => $this->configMock
-            ]
+        return new \Magento\Framework\App\Request\Http(
+                $this->_routerListMock,
+                $this->_infoProcessorMock,
+                $this->cookieReaderMock,
+                $this->objectManager,
+                $uri
         );
     }
 
@@ -554,10 +546,19 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model = $this->getModel();
         $configOffloadHeader = 'Header-From-Proxy';
-        $this->configMock->expects($this->exactly($configCall))
+        $configMock = $this->getMockBuilder('Magento\Framework\App\Config')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue'])
+            ->getMock();
+        $configMock->expects($this->exactly($configCall))
             ->method('getValue')
             ->with(Request::XML_PATH_OFFLOADER_HEADER, ScopeInterface::SCOPE_DEFAULT)
             ->willReturn($configOffloadHeader);
+        $this->objectManager->expects($this->exactly($configCall))
+            ->method('get')
+            ->with('Magento\Framework\App\Config')
+            ->will($this->returnValue($configMock));
+
         $_SERVER[$headerOffloadKey] = $headerOffloadValue;
         $_SERVER['HTTPS'] = $serverHttps;
 

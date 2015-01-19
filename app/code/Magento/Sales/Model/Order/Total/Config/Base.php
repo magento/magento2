@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Total\Config;
 
@@ -37,14 +38,14 @@ class Base extends \Magento\Sales\Model\Config\Ordered
 
     /**
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory
      * @param mixed $sourceData
      */
     public function __construct(
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Sales\Model\Order\TotalFactory $orderTotalFactory,
         $sourceData = null

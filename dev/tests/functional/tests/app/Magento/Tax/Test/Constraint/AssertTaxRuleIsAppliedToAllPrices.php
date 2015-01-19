@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tax\Test\Constraint;
@@ -20,6 +21,10 @@ use Mtf\Fixture\FixtureFactory;
  */
 class AssertTaxRuleIsAppliedToAllPrices extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * Cms index page
      *
@@ -47,13 +52,6 @@ class AssertTaxRuleIsAppliedToAllPrices extends AbstractConstraint
      * @var CheckoutCart
      */
     protected $checkoutCart;
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Assert that specified prices are actual on category, product and cart pages
@@ -162,14 +160,14 @@ class AssertTaxRuleIsAppliedToAllPrices extends AbstractConstraint
      */
     public function getCartPrices(CatalogProductSimple $product, $actualPrices)
     {
-        $actualPrices['cart_item_price_excl_tax'] =
-            $this->checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
-        $actualPrices['cart_item_price_incl_tax'] =
-            $this->checkoutCart->getCartBlock()->getCartItem($product)->getPriceInclTax();
         $actualPrices['cart_item_subtotal_excl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPrice();
         $actualPrices['cart_item_subtotal_incl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPriceInclTax();
+        $actualPrices['cart_item_price_excl_tax'] =
+            $this->checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
+        $actualPrices['cart_item_price_incl_tax'] =
+            $this->checkoutCart->getCartBlock()->getCartItem($product)->getPriceInclTax();
         return $actualPrices;
     }
 

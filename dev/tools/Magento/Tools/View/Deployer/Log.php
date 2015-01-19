@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tools\View\Deployer;
@@ -24,6 +25,13 @@ class Log
     private $verbosity;
 
     /**
+     * If last output printed inline
+     *
+     * @var bool
+     */
+    private $isInline = false;
+
+    /**
      * @param int $verbosity
      */
     public function __construct($verbosity)
@@ -40,6 +48,7 @@ class Log
     public function logMessage($msg)
     {
         if ($this->verbosity !== self::SILENT) {
+            $this->terminateLine();
             echo "{$msg}\n";
         }
     }
@@ -53,6 +62,7 @@ class Log
     public function logError($msg)
     {
         if ($this->verbosity & self::ERROR) {
+            $this->terminateLine();
             echo "ERROR: {$msg}\n";
         }
     }
@@ -61,12 +71,30 @@ class Log
      * Log a debug message
      *
      * @param string $msg
+     * @param string $altInline Alternative message for normal mode (printed inline)
      * @return void
      */
-    public function logDebug($msg)
+    public function logDebug($msg, $altInline = '')
     {
         if ($this->verbosity & self::DEBUG) {
+            $this->terminateLine();
             echo "{$msg}\n";
+        } elseif ($altInline && $this->verbosity !== self::SILENT) {
+            echo $altInline;
+            $this->isInline = true;
+        }
+    }
+
+    /**
+     * Ensures the next log message will be printed on new line
+     *
+     * @return void
+     */
+    private function terminateLine()
+    {
+        if ($this->isInline) {
+            $this->isInline = false;
+            echo "\n";
         }
     }
 }

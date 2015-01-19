@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Review\Test\Constraint;
@@ -14,17 +15,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductReviewBackendSuccessSaveMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'middle';
+    /* end tags */
+
     /**
      * Text of success message after review created
      */
     const SUCCESS_MESSAGE = 'You saved the review.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'middle';
 
     /**
      * Assert that success message is displayed after review created

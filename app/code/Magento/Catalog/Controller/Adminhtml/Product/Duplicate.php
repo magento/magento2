@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
@@ -53,7 +54,7 @@ class Duplicate extends \Magento\Catalog\Controller\Adminhtml\Product
             $this->messageManager->addSuccess(__('You duplicated the product.'));
             $resultRedirect->setPath('catalog/*/edit', ['_current' => true, 'id' => $newProduct->getId()]);
         } catch (\Exception $e) {
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->messageManager->addError($e->getMessage());
             $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
         }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
@@ -13,14 +14,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductCompareSuccessRemoveAllProductsMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'You cleared the comparison list.';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    const SUCCESS_MESSAGE = 'You cleared the comparison list.';
 
     /**
      * Assert message is appeared on "Compare Products" page.

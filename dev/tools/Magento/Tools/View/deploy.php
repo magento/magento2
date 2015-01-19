@@ -6,7 +6,8 @@
  * They can be used not only by the server where Magento instance is,
  * but also can be copied to a CDN, and the Magento instance may be configured to generate base URL to the CDN.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 use Magento\Framework\Autoload\AutoloaderRegistry;
 
@@ -48,6 +49,14 @@ $omFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, []
 $objectManager = $omFactory->create(
     [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]
 );
+
+/** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
+$deploymentConfig = $objectManager->get('Magento\Framework\App\DeploymentConfig');
+$isAppInstalled = $deploymentConfig->isAvailable();
+if (!$isAppInstalled) {
+    throw new \Exception('Please install the Magento application before running this process.');
+}
+
 $logger = new \Magento\Tools\View\Deployer\Log($verbosity);
 /** @var \Magento\Tools\View\Deployer $deployer */
 $deployer = $objectManager->create(

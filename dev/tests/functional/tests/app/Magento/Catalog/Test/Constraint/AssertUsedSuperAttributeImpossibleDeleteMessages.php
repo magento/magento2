@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
@@ -14,17 +15,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertUsedSuperAttributeImpossibleDeleteMessages extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * Impossible to delete message
      */
     const ERROR_DELETE_MESSAGE = 'This attribute is used in configurable products.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Assert that it's impossible to delete configurable attribute that is used in created configurable product

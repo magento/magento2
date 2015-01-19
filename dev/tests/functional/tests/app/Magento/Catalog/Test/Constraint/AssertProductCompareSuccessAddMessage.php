@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
@@ -14,14 +15,11 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductCompareSuccessAddMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'You added product %s to the comparison list.';
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
+    const SUCCESS_MESSAGE = 'You added product %s to the comparison list.';
 
     /**
      * Assert success message is presented on page

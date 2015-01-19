@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\Constraint;
 
 use Magento\Reports\Test\Page\Adminhtml\ProductReportReview;
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -15,21 +16,18 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductReviewReportIsVisibleInGrid extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that Product Review Report is visible in reports grid
      *
      * @param ProductReportReview $productReportReview
-     * @param ReviewInjectable $review
+     * @param Review $review
      * @return void
      */
-    public function processAssert(ProductReportReview $productReportReview, ReviewInjectable $review)
+    public function processAssert(ProductReportReview $productReportReview, Review $review)
     {
         $productReportReview->open();
         $name = $review->getDataFieldConfig('entity_id')['source']->getEntity()->getName();

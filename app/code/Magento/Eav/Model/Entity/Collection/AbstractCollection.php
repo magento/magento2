@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Collection;
 
@@ -115,7 +116,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -127,7 +128,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
@@ -191,7 +192,8 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
     protected function _initSelect()
     {
         $this->getSelect()->from(['e' => $this->getEntity()->getEntityTable()]);
-        if ($this->getEntity()->getTypeId()) {
+        $entity = $this->getEntity();
+        if ($entity->getTypeId() && $entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE) {
             $this->addAttributeToFilter('entity_type_id', $this->getEntity()->getTypeId());
         }
         return $this;
@@ -1161,13 +1163,11 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
         if (empty($attributeIds)) {
             $attributeIds = $this->_selectAttributes;
         }
-        $entityIdField = $this->getEntity()->getEntityIdField();
+        $entity = $this->getEntity();
+        $entityIdField = $entity->getEntityIdField();
         $select = $this->getConnection()->select()->from(
             $table,
             [$entityIdField, 'attribute_id']
-        )->where(
-            'entity_type_id =?',
-            $this->getEntity()->getTypeId()
         )->where(
             "{$entityIdField} IN (?)",
             array_keys($this->_itemsById)
@@ -1175,6 +1175,13 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
             'attribute_id IN (?)',
             $attributeIds
         );
+
+        if ($entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE && $entity->getTypeId()) {
+            $select->where(
+                'entity_type_id =?',
+                $entity->getTypeId()
+            );
+        }
         return $select;
     }
 

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 require __DIR__ . '/../../../bootstrap.php';
 
@@ -15,6 +16,7 @@ use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Proxy;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
+use Magento\Framework\ObjectManager\Code\Generator\Persistor;
 use Magento\Tools\Di\Code\Scanner;
 use Magento\Tools\Di\Compiler\Directory;
 use Magento\Tools\Di\Compiler\Log\Log;
@@ -27,7 +29,7 @@ $codeScanDir = realpath($rootDir . '/app');
 try {
     $opt = new Zend_Console_Getopt(
         [
-            'serializer=w'         => 'serializer function that should be used (serialize|binary) default = serialize',
+            'serializer=w'         => 'serializer function that should be used (serialize|igbinary) default: serialize',
             'verbose|v'            => 'output report after tool run',
             'extra-classes-file=s' => 'path to file with extra proxies and factories to generate',
             'generation=s'         => 'absolute path to generated classes, <magento_root>/var/generation by default',
@@ -39,10 +41,14 @@ try {
     $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . '/var/generation';
     $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . '/var/di';
     $compiledFile = $diDir . '/definitions.php';
-    $relationsFile = $diDir . '/relations.php';
-    $pluginDefFile = $diDir . '/plugins.php';
+    $relationsFile = $diDir . '/relations.ser';
+    $pluginDefFile = $diDir . '/plugins.ser';
 
-    $compilationDirs = [$rootDir . '/app/code', $rootDir . '/lib/internal/Magento'];
+    $compilationDirs = [
+        $rootDir . '/app/code',
+        $rootDir . '/lib/internal/Magento',
+        $rootDir . '/dev/tools/Magento/Tools/View'
+    ];
 
     /** @var Writer\WriterInterface $logWriter Writer model for success messages */
     $logWriter = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();
@@ -51,7 +57,7 @@ try {
     $errorWriter = new Writer\Console();
 
     $log = new Log($logWriter, $errorWriter);
-    $serializer = $opt->getOption('serializer') == 'binary' ? new Serializer\Igbinary() : new Serializer\Standard();
+    $serializer = $opt->getOption('serializer') == 'igbinary' ? new Serializer\Igbinary() : new Serializer\Standard();
 
     $validator = new \Magento\Framework\Code\Validator();
     $validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
@@ -65,6 +71,9 @@ try {
     $files = $directoryScanner->scan($codeScanDir, $filePatterns);
     $files['additional'] = [$opt->getOption('extra-classes-file')];
     $entities = [];
+
+    $repositoryScanner = new Scanner\RepositoryScanner();
+    $repositories = $repositoryScanner->collectEntities($files['di']);
 
     $scanner = new Scanner\CompositeScanner();
     $scanner->addChild(new Scanner\PhpScanner($log), 'php');
@@ -90,6 +99,7 @@ try {
             Proxy::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Proxy',
             Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
             Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
+            Persistor::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Persistor',
             Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
             Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
             SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
@@ -98,6 +108,26 @@ try {
 
     $generatorAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
     spl_autoload_register([$generatorAutoloader, 'load']);
+
+
+
+    foreach ($repositories as $entityName) {
+        switch ($generator->generateClass($entityName)) {
+            case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
+                $log->add(Log::GENERATION_SUCCESS, $entityName);
+                break;
+
+            case \Magento\Framework\Code\Generator::GENERATION_ERROR:
+                $log->add(Log::GENERATION_ERROR, $entityName);
+                break;
+
+            case \Magento\Framework\Code\Generator::GENERATION_SKIP:
+            default:
+                //no log
+                break;
+        }
+    }
+
     foreach (['php', 'additional'] as $type) {
         sort($entities[$type]);
         foreach ($entities[$type] as $entityName) {

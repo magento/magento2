@@ -1,12 +1,13 @@
 <?php
 /**
  * @spi
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Category;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Mtf\Block\Block;
 use Mtf\Client\Element\Locator;
 use Mtf\Fixture\FixtureInterface;
@@ -97,15 +98,11 @@ class Tree extends Block
      */
     public function selectCategory(FixtureInterface $category, $fullPath = true)
     {
-        if ($category instanceof InjectableFixture) {
-            $parentPath = $this->prepareFullCategoryPath($category);
-            if (!$fullPath) {
-                array_pop($parentPath);
-            }
-            $path = implode('/', $parentPath);
-        } else {
-            $path = $category->getCategoryPath();
+        $parentPath = $this->prepareFullCategoryPath($category);
+        if (!$fullPath) {
+            array_pop($parentPath);
         }
+        $path = implode('/', $parentPath);
 
         $this->expandAllCategories();
         $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree')->setValue($path);
@@ -115,15 +112,17 @@ class Tree extends Block
     /**
      * Prepare category path
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return array
      */
-    protected function prepareFullCategoryPath(CatalogCategory $category)
+    protected function prepareFullCategoryPath(Category $category)
     {
         $path = [];
-        $parentCategory = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
+        $parentCategory = $category->hasData('parent_id')
+            ? $category->getDataFieldConfig('parent_id')['source']->getParentCategory()
+            : null;
 
-        if ($parentCategory != null) {
+        if ($parentCategory !== null) {
             $path = $this->prepareFullCategoryPath($parentCategory);
         }
         return array_filter(array_merge($path, [$category->getPath(), $category->getName()]));
@@ -153,10 +152,10 @@ class Tree extends Block
     /**
      * Check category in category tree
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return bool
      */
-    public function isCategoryVisible(CatalogCategory $category)
+    public function isCategoryVisible(Category $category)
     {
         $categoryPath = $this->prepareFullCategoryPath($category);
         $structure = $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree')->getStructure();

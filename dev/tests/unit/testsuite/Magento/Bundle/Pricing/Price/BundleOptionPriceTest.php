@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Pricing\Price;
@@ -145,7 +146,7 @@ class BundleOptionPriceTest extends \PHPUnit_Framework_TestCase
         $collection = $this->getMock('Magento\Bundle\Model\Resource\Option\Collection', [], [], '', false);
         $collection->expects($this->atLeastOnce())
             ->method('appendSelections')
-            ->with($this->equalTo($selectionCollection), $this->equalTo(false), $this->equalTo(false))
+            ->with($this->equalTo($selectionCollection), $this->equalTo(true), $this->equalTo(false))
             ->will($this->returnValue($selectionCollection));
 
         $priceTypeMock->expects($this->atLeastOnce())

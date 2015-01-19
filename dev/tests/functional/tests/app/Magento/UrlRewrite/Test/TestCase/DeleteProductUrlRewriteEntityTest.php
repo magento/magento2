@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\UrlRewrite\Test\TestCase;
@@ -25,11 +26,16 @@ use Mtf\TestCase\Injectable;
  * 4. Click 'Delete' button.
  * 5. Perform asserts.
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites_(PS)
  * @ZephyrId  MAGETWO-23287
  */
 class DeleteProductUrlRewriteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Url rewrite index page
      *

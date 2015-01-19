@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
 
@@ -21,12 +22,22 @@ class Items extends \Magento\Backend\App\Action
     protected $notifier;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param NotifierInterface $notifier
+     * @var \Magento\Framework\Url\EncoderInterface
      */
-    public function __construct(Action\Context $context, NotifierInterface $notifier)
-    {
+    protected $urlEncoder;
+
+    /**
+     * @param Action\Context $context
+     * @param NotifierInterface $notifier
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     */
+    public function __construct(
+        Action\Context $context,
+        NotifierInterface $notifier,
+        \Magento\Framework\Url\EncoderInterface $urlEncoder
+    ) {
         parent::__construct($context);
+        $this->urlEncoder = $urlEncoder;
         $this->notifier = $notifier;
     }
 
@@ -52,12 +63,8 @@ class Items extends \Magento\Backend\App\Action
             '*/*/index',
             [
                 'store' => $this->_getStore()->getId(),
-                'captcha_token' => $this->_objectManager->get(
-                    'Magento\Core\Helper\Data'
-                )->urlEncode(
-                    $e->getCaptchaToken()
-                ),
-                'captcha_url' => $this->_objectManager->get('Magento\Core\Helper\Data')->urlEncode($e->getCaptchaUrl())
+                'captcha_token' => $this->urlEncoder->encode($e->getCaptchaToken()),
+                'captcha_url' => $this->urlEncoder->encode($e->getCaptchaUrl())
             ]
         );
         if ($this->getRequest()->isAjax()) {

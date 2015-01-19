@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\ObjectManager\Environment;
@@ -13,7 +14,7 @@ use Magento\Framework\ObjectManager\Profiler\FactoryDecorator;
 abstract class AbstractEnvironment implements EnvironmentInterface
 {
     /**
-     * @var \Magento\Framework\Interception\ObjectManager\Config
+     * @var \Magento\Framework\Interception\ObjectManager\ConfigInterface
      */
     protected $config;
 

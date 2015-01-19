@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Adminhtml\Rating\Edit\Tab;
 
@@ -12,6 +13,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
+
+    /**
+     * @var string
+     */
+    protected $_template = 'rating/form.phtml';
 
     /**
      * Session
@@ -175,27 +181,5 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 $element->setValue($value);
             }
         }
-    }
-
-    /**
-     * @return string
-     */
-    protected function _toHtml()
-    {
-        return $this->_getWarningHtml() . parent::_toHtml();
-    }
-
-    /**
-     * @return string
-     */
-    protected function _getWarningHtml()
-    {
-        return '
-    <div class="message info">
-        <div>' .
-        __(
-            'Please specify a rating title for a store, or we\'ll just use the default value.'
-        ) . '</div>
-    </div>';
     }
 }

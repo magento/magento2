@@ -2,7 +2,8 @@
 /**
  * Test Webapi Json Deserializer Request Rest Controller.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Rest\Request\Deserializer;
 
@@ -47,12 +48,6 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->_jsonDeserializer->deserialize(false);
     }
 
-    public function testDeserializerOauthInputException()
-    {
-        $this->setExpectedException('\Magento\Webapi\Exception', 'Request body should not be empty.');
-        $this->_jsonDeserializer->deserialize('');
-    }
-
     public function testDeserialize()
     {
         /** Prepare mocks for SUT constructor. */
@@ -82,7 +77,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         /** Prepare mocks for SUT constructor. */
         $this->_helperMock->expects($this->once())
             ->method('jsonDecode')
-            ->will($this->throwException(new \Zend_Json_Exception()));
+            ->will($this->throwException(new \Zend_Json_Exception));
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue('production'));

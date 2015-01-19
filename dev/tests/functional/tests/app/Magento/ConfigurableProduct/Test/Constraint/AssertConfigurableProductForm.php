@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
@@ -13,6 +14,10 @@ use Magento\Catalog\Test\Constraint\AssertProductForm;
  */
 class AssertConfigurableProductForm extends AssertProductForm
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * List skipped fixture fields in verify
      *
@@ -55,13 +60,6 @@ class AssertConfigurableProductForm extends AssertProductForm
     protected $skippedVariationMatrixFields = [
         'configurable_attribute',
     ];
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Prepares fixture data for comparison

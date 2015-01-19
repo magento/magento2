@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Calculation;
 
@@ -160,6 +161,7 @@ abstract class AbstractCalculator
     /**
      * Set billing address
      *
+     * @codeCoverageIgnoreStart
      * @param CustomerAddress $billingAddress
      * @return void
      */
@@ -200,6 +202,7 @@ abstract class AbstractCalculator
     {
         $this->customerId = $customerId;
     }
+    // @codeCoverageIgnoreEnd
 
     /**
      * Calculate tax details for quote item with given quantity

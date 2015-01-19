@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\Constraint;
@@ -17,12 +18,9 @@ use Mtf\Fixture\InjectableFixture;
  */
 class AssertProductDetailsInWishlist extends AbstractAssertForm
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that the correct option details are displayed on the "View Details" tool tip
@@ -44,7 +42,10 @@ class AssertProductDetailsInWishlist extends AbstractAssertForm
         $cartFixture = $fixtureFactory->createByCode('cart', ['data' => ['items' => ['products' => [$product]]]]);
         $expectedOptions = $cartFixture->getItems()[0]->getData()['options'];
 
-        $errors = $this->verifyData($expectedOptions, $actualOptions);
+        $errors = $this->verifyData(
+            $this->sortDataByPath($expectedOptions, '::title'),
+            $this->sortDataByPath($actualOptions, '::title')
+        );
         \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
     }
 

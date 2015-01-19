@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\Test\Constraint;
@@ -14,17 +15,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertStoreGroupSuccessSaveMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Success store create message
      */
     const SUCCESS_MESSAGE = 'The store has been saved.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that success message is displayed after Store Group has been created

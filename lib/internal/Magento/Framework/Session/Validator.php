@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
 
@@ -77,10 +78,12 @@ class Validator implements ValidatorInterface
         if (!isset($_SESSION[self::VALIDATOR_KEY])) {
             $_SESSION[self::VALIDATOR_KEY] = $this->_getSessionEnvironment();
         } else {
-            if (!$this->_validate()) {
+            try {
+                $this->_validate();
+            } catch (Exception $e) {
                 $session->destroy(['clear_storage' => false]);
                 // throw core session exception
-                throw new Exception('');
+                throw $e;
             }
         }
     }
@@ -89,7 +92,7 @@ class Validator implements ValidatorInterface
      * Validate data
      *
      * @return bool
-     *
+     * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _validate()
@@ -102,14 +105,14 @@ class Validator implements ValidatorInterface
             $this->_scopeType
         ) && $sessionData[self::VALIDATOR_REMOTE_ADDR_KEY] != $validatorData[self::VALIDATOR_REMOTE_ADDR_KEY]
         ) {
-            return false;
+            throw new Exception('Invalid session ' . self::VALIDATOR_REMOTE_ADDR_KEY . ' value.');
         }
         if ($this->_scopeConfig->getValue(
             self::XML_PATH_USE_HTTP_VIA,
             $this->_scopeType
         ) && $sessionData[self::VALIDATOR_HTTP_VIA_KEY] != $validatorData[self::VALIDATOR_HTTP_VIA_KEY]
         ) {
-            return false;
+            throw new Exception('Invalid session ' . self::VALIDATOR_HTTP_VIA_KEY . ' value.');
         }
 
         $httpXForwardedKey = $sessionData[self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY];
@@ -119,7 +122,7 @@ class Validator implements ValidatorInterface
             $this->_scopeType
         ) && $httpXForwardedKey != $validatorXForwarded
         ) {
-            return false;
+            throw new Exception('Invalid session ' . self::VALIDATOR_HTTP_X_FORWARDED_FOR_KEY . ' value.');
         }
         if ($this->_scopeConfig->getValue(
             self::XML_PATH_USE_USER_AGENT,
@@ -131,7 +134,7 @@ class Validator implements ValidatorInterface
                     return true;
                 }
             }
-            return false;
+            throw new Exception('Invalid session ' . self::VALIDATOR_HTTP_USER_AGENT_KEY . ' value.');
         }
 
         return true;

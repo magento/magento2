@@ -2,7 +2,8 @@
 /**
  * This script executes all Magento JavaScript unit tests.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 define('RELATIVE_APP_ROOT', '../../..');
@@ -138,7 +139,12 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             kill -9 $LSOF
         fi
 
-        pkill Xvfb
+        DISPLAY_NUM=99
+        ps -ef | egrep "[X]vfb.*:$DISPLAY_NUM"
+        if [ $? -eq 0 ] ; then
+            pkill Xvfb
+        fi
+
         XVFB=`which Xvfb`
         if [ "$?" -eq 1 ];
         then
@@ -146,9 +152,9 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             exit 1
         fi
 
-        $XVFB :99 -nolisten inet6 -ac &
+        $XVFB :$DISPLAY_NUM -nolisten inet6 -ac &
         PID_XVFB="$!"        # take the process ID
-        export DISPLAY=:99   # set display to use that of the Xvfb
+        export DISPLAY=:$DISPLAY_NUM   # set display to use that of the Xvfb
         USER=`whoami`
         SUDO=`which sudo`
 

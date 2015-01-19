@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GoogleShopping\Test\Block\Adminhtml\Types\Edit;
@@ -23,11 +24,11 @@ class GoogleShoppingForm extends Form
     protected $attributeOptions = '//select[@id="gcontent_attribute_0_attribute"]//option';
 
     /**
-     * Loading Mask locator
+     * Locator for root elements
      *
      * @var string
      */
-    protected $loadingMask = '//ancestor::body/div[@id="loading-mask"]';
+    protected $loaderRootLocator = 'body';
 
     /**
      * Fill specified form data
@@ -43,7 +44,10 @@ class GoogleShoppingForm extends Form
             $element = $this->getElement($context, $field);
             if ($this->mappingMode || ($element->isVisible() && !$element->isDisabled())) {
                 $element->setValue($field['value']);
-                $this->waitForElementNotVisible($this->loadingMask, Locator::SELECTOR_XPATH);
+                $this->blockFactory->create(
+                    'Magento\Backend\Test\Block\Template',
+                    ['element' => $this->browser->find($this->loaderRootLocator)]
+                )->waitLoader();
             }
         }
     }

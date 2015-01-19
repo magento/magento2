@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Service\V1\Address;
 
@@ -43,10 +44,10 @@ class Converter
     /**
      * Converts a quote address model to an address data object.
      *
-     * @param \Magento\Sales\Model\Quote\Address $address The quote address model.
+     * @param \Magento\Quote\Model\Quote\Address $address The quote address model.
      * @return \Magento\Checkout\Service\V1\Data\Cart\Address Address data object.
      */
-    public function convertModelToDataObject(\Magento\Sales\Model\Quote\Address $address)
+    public function convertModelToDataObject(\Magento\Quote\Model\Quote\Address $address)
     {
         $data = [
             Address::KEY_COUNTRY_ID => $address->getCountryId(),
@@ -86,8 +87,8 @@ class Converter
      * Converts an address data object to a quote address model.
      *
      * @param \Magento\Checkout\Service\V1\Data\Cart\Address $dataObject The address data object.
-     * @param \Magento\Sales\Model\Quote\Address $address The address.
-     * @return \Magento\Sales\Model\Quote\Address Quote address model.
+     * @param \Magento\Quote\Model\Quote\Address $address The address.
+     * @return \Magento\Quote\Model\Quote\Address Quote address model.
      */
     public function convertDataObjectToModel($dataObject, $address)
     {

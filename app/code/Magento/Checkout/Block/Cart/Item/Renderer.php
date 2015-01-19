@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart\Item;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 
 /**
@@ -115,10 +116,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Set item for render
      *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
      */
-    public function setItem(\Magento\Sales\Model\Quote\Item\AbstractItem $item)
+    public function setItem(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
         $this->_item = $item;
         return $this;
@@ -524,10 +525,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return the unit price html
      *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return string
      */
-    public function getUnitPriceHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
+    public function getUnitPriceHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.item.price.unit');
@@ -538,10 +539,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return row total html
      *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem  $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem  $item
      * @return string
      */
-    public function getRowTotalHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.item.price.row');
@@ -552,10 +553,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return item price html for sidebar
      *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem  $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem  $item
      * @return string
      */
-    public function getSidebarItemPriceHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
+    public function getSidebarItemPriceHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.cart.item.price.sidebar');
@@ -569,7 +570,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param Item\AbstractItem $item
      * @return string
      */
-    public function getUnitPriceExclTaxHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
+    public function getUnitPriceExclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.unit.excl');
@@ -583,7 +584,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param Item\AbstractItem $item
      * @return string
      */
-    public function getUnitPriceInclTaxHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
+    public function getUnitPriceInclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.unit.incl');
@@ -597,7 +598,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param Item\AbstractItem $item
      * @return string
      */
-    public function getRowTotalExclTaxHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalExclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.excl');
@@ -611,7 +612,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param Item\AbstractItem $item
      * @return string
      */
-    public function getRowTotalInclTaxHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalInclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.incl');

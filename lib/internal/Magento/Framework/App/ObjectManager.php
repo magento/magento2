@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
 
@@ -21,9 +22,6 @@ class ObjectManager extends \Magento\Framework\ObjectManager\ObjectManager
     /**
      * Retrieve object manager
      *
-     * TODO: Temporary solution for serialization, should be removed when Serialization problem is resolved
-     *
-     * @deprecated
      * @return ObjectManager
      * @throws \RuntimeException
      */

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -102,7 +103,8 @@ class ConfigFixture
             if (preg_match('/^.+?(?=_store\s)/', $configPathAndValue, $matches)) {
                 /* Store-scoped config value */
                 $storeCode = $matches[0] != 'current' ? $matches[0] : null;
-                list(, $configPath, $requiredValue) = preg_split('/\s+/', $configPathAndValue, 3);
+                $parts = preg_split('/\s+/', $configPathAndValue, 3);
+                list(, $configPath, $requiredValue) = $parts + ['', '', ''];
                 $originalValue = $this->_getConfigValue($configPath, $storeCode);
                 $this->_storeConfigValues[$storeCode][$configPath] = $originalValue;
                 $this->_setConfigValue($configPath, $requiredValue, $storeCode);

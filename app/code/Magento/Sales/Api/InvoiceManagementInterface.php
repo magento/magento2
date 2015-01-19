@@ -1,16 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api;
 
 /**
- * Interface InvoiceManagementInterface
+ * Invoice management interface.
+ *
+ * An invoice is a record of the receipt of payment for an order.
  */
 interface InvoiceManagementInterface
 {
     /**
-     * Set invoice capture
+     * Sets invoice capture.
      *
      * @param int $id
      * @return string
@@ -18,24 +21,25 @@ interface InvoiceManagementInterface
     public function setCapture($id);
 
     /**
-     * Returns list of comments attached to invoice
-     * @param int $id
-     * @return \Magento\Sales\Api\Data\InvoiceCommentSearchResultInterface
+     * Lists comments for a specified invoice.
+     *
+     * @param int $id The invoice ID.
+     * @return \Magento\Sales\Api\Data\InvoiceCommentSearchResultInterface Invoice comment search result interface.
      */
     public function getCommentsList($id);
 
     /**
-     * Notify user
+     * Emails a user a specified invoice.
      *
-     * @param int $id
+     * @param int $id The invoice ID.
      * @return bool
      */
     public function notify($id);
 
     /**
-     * Set invoice void
+     * Voids a specified invoice.
      *
-     * @param int $id
+     * @param int $id The invoice ID.
      * @return bool
      */
     public function setVoid($id);

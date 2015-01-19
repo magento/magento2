@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\TestCase\ProductAttribute;
@@ -24,11 +25,16 @@ use Mtf\TestCase\Injectable;
  * 6. Save new Product Template.
  * 7. Verify created Product Template.
  *
- * @group Product_Attributes_(CS)
+ * @group Product_Attributes_(MX)
  * @ZephyrId MAGETWO-25104
  */
 class CreateAttributeSetEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog Product Set page
      *

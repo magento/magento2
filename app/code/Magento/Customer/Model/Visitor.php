@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model;
@@ -164,7 +165,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
             $this->_eventManager->dispatch('visitor_activity_save', ['visitor' => $this]);
             $this->session->setVisitorData($this->getData());
         } catch (\Exception $e) {
-            $this->_logger->logException($e);
+            $this->_logger->critical($e);
         }
         return $this;
     }

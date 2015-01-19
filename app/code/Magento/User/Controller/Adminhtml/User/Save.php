@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
@@ -62,8 +63,11 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             $this->_redirect('adminhtml/*/');
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addMessages($e->getMessages());
-            if ($e->getMessage()) {
-                $this->messageManager->addError($e->getMessage());
+            $messages = $e->getMessages();
+            if (empty($messages)) {
+                if ($e->getMessage()) {
+                    $this->messageManager->addError($e->getMessage());
+                }
             }
             $this->_getSession()->setUserData($data);
             $arguments = $model->getId() ? ['user_id' => $model->getId()] : [];

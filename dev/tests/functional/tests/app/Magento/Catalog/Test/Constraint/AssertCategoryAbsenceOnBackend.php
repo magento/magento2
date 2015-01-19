@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Mtf\Constraint\AbstractConstraint;
 
@@ -15,21 +16,18 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertCategoryAbsenceOnBackend extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that not displayed category in backend catalog category tree
      *
      * @param CatalogCategoryIndex $catalogCategoryIndex
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function processAssert(CatalogCategoryIndex $catalogCategoryIndex, CatalogCategory $category)
+    public function processAssert(CatalogCategoryIndex $catalogCategoryIndex, Category $category)
     {
         $catalogCategoryIndex->open();
         \PHPUnit_Framework_Assert::assertFalse(

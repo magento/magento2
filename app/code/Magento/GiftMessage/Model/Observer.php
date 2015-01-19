@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Model;
 
@@ -33,22 +34,6 @@ class Observer extends \Magento\Framework\Object
     ) {
         $this->_messageFactory = $messageFactory;
         $this->_giftMessageMessage = $giftMessageMessage;
-    }
-
-    /**
-     * Set gift messages to order from quote address
-     *
-     * @param \Magento\Framework\Object $observer
-     * @return $this
-     */
-    public function salesEventConvertQuoteAddressToOrder($observer)
-    {
-        if ($observer->getEvent()->getAddress()->getGiftMessageId()) {
-            $observer->getEvent()->getOrder()->setGiftMessageId(
-                $observer->getEvent()->getAddress()->getGiftMessageId()
-            );
-        }
-        return $this;
     }
 
     /**
@@ -114,7 +99,7 @@ class Observer extends \Magento\Framework\Object
             return $this;
         }
 
-        /** @var $quoteItem \Magento\Sales\Model\Quote\Item */
+        /** @var $quoteItem \Magento\Quote\Model\Quote\Item */
         $quoteItem = $observer->getEvent()->getQuoteItem();
         if ($giftMessageId = $orderItem->getGiftMessageId()) {
             $giftMessage = $this->_messageFactory->create()->load($giftMessageId)->setId(null)->save();

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\Resource\Db\Collection;
 
@@ -95,7 +96,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Zend_Db_Adapter_Abstract $connection
@@ -103,7 +104,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         $connection = null,

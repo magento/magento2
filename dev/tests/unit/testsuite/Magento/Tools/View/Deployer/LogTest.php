@@ -1,25 +1,24 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tools\View\Deployer;
-
-use Magento\Tools\View\Deployer\Log;
 
 class LogTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param string $method
      * @param int $verbosity
-     * @param string $exepctedMsg
+     * @param string $expectedMsg
      * @dataProvider logDataProvider
      */
-    public function testLog($method, $verbosity, $exepctedMsg)
+    public function testLog($method, $verbosity, $expectedMsg)
     {
         $object = new Log($verbosity);
         $object->$method('foo');
-        $this->expectOutputString($exepctedMsg);
+        $this->expectOutputString($expectedMsg);
     }
 
     /**
@@ -42,6 +41,31 @@ class LogTest extends \PHPUnit_Framework_TestCase
             ['logMessage', Log::ERROR | Log::DEBUG, $foo],
             ['logError',   Log::ERROR | Log::DEBUG, $err],
             ['logDebug',   Log::ERROR | Log::DEBUG, $foo],
+        ];
+    }
+
+    /**
+     * @param int $verbosity
+     * @param string $expectedMsg
+     *
+     * @dataProvider logDebugAltDataProvider
+     */
+    public function testLogDebugAlt($verbosity, $expectedMsg)
+    {
+        $object = new Log($verbosity);
+        $object->logDebug('foo', '[alt]');
+        $this->expectOutputString($expectedMsg);
+    }
+
+    /**
+     * @return array
+     */
+    public function logDebugAltDataProvider()
+    {
+        return[
+            'debug mode' => [Log::DEBUG, "foo\n"],
+            'default mode' => [Log::ERROR, '[alt]'],
+            'silent mode' => [Log::SILENT, '']
         ];
     }
 }

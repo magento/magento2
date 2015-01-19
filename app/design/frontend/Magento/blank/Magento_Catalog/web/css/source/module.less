@@ -1,5 +1,6 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 @product-grid-items-per-row-layout-default: 2;
@@ -36,7 +37,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Category view
@@ -129,7 +130,7 @@
     }
     .notice {
         margin: @indent-s-base 0;
-        color: @text-color-muted;
+        .css(color, @text-color-muted);
         .font-size(@font-size-s);
     }
     .product.thumbs {
@@ -180,7 +181,7 @@
             &.sku {
                 display: inline-block;
                 vertical-align: top;
-                color: @text-color-muted;
+                .css(color, @text-color-muted);
                 > .value {
                     display: inline-block;
                     vertical-align: top;
@@ -268,7 +269,7 @@
 
 .prices-tier {
     &:extend(.abs-reset-list all);
-    background: @sidebar-background;
+    .css(background, @sidebar-background);
     padding: @indent-s-base (.75 * @indent-base);
     margin: @indent-s-base 0;
     .price-tier_price {
@@ -332,7 +333,7 @@
             margin-right: 8px;
         }
         .counter {
-            color: @color-primary-lighter;
+            .css(color, @color-primary-lighter);
             .font-size(12);
             white-space: nowrap;
         }
@@ -389,7 +390,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .catalog-product-view {
         .column.main {
             .vendor-prefix-display(flex);
@@ -417,7 +418,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .product-info-main,
     .product-options-bottom {
         .box-tocart {
@@ -468,15 +469,12 @@
         &:extend(.abs-revert-field-type-desktop all);
     }
 
-    .table-wrapper.comparison {
-        .table-overflow();
-    }
 }
 
 //
 //    Desktop large
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-xl) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-xl) {
     .sidebar {
         .product-items {
             .product-item {
@@ -500,7 +498,7 @@
 //
 //    Category page layout
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .product-info-main {
         float: right;
     }
@@ -532,7 +530,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Minimum Advertising Price
@@ -680,7 +678,7 @@ body.catalog-product-compare-index {
     top: 0;
     left: 0;
     width: auto;
-    background: @page-bg-color;
+    .css(background, @page-bg-color);
 }
 
 .block-compare {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\Constraint;
@@ -15,17 +16,14 @@ use Mtf\Fixture\InjectableFixture;
  */
 class AssertMoveProductToWishlistSuccessMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Success add message
      */
     const SUCCESS_MESSAGE = "%s has been moved to wish list Wish List";
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that success message appears on My Wish List page after moving product to wishlist.

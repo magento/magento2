@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Product;
 
@@ -111,7 +112,7 @@ class View extends \Magento\Catalog\Controller\Product
             if ($e->getCode() == $this->viewHelper->ERR_NO_PRODUCT_LOADED) {
                 return $this->noProductRedirect();
             } else {
-                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $resultForward = $this->resultForwardFactory->create();
                 $resultForward->forward('noroute');
                 return $resultForward;

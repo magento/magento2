@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Product;
 
@@ -63,7 +64,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory
@@ -82,7 +83,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory,
@@ -373,7 +374,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     {
         parent::checkProductBuyState($product);
         $option = $product->getCustomOption('info_buyRequest');
-        if ($option instanceof \Magento\Sales\Model\Quote\Item\Option) {
+        if ($option instanceof \Magento\Quote\Model\Quote\Item\Option) {
             $buyRequest = new \Magento\Framework\Object(unserialize($option->getValue()));
             if (!$buyRequest->hasLinks()) {
                 if (!$product->getLinksPurchasedSeparately()) {

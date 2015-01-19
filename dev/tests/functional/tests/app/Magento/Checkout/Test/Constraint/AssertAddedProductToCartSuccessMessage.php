@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\Constraint;
@@ -15,17 +16,14 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertAddedProductToCartSuccessMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Success add to cart message
      */
     const SUCCESS_MESSAGE = 'You added %s to your shopping cart.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert success message is appeared on Shopping Cart page

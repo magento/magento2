@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Test\TestCase;
 
@@ -21,7 +22,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             $this->getMock('Magento\Framework\App\Route\ConfigInterface\Proxy', [], [], '', false),
             $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface', [], [], '', false),
             $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface'),
-            $this->getMock('Magento\Framework\App\Config\ReinitableConfigInterface')
+            $this->getMock('Magento\Framework\ObjectManagerInterface')
         );
         $response = new \Magento\TestFramework\Response(
             $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface'),

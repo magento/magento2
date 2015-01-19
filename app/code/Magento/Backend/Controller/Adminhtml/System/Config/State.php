@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Config;
 
@@ -17,14 +18,14 @@ class State extends AbstractScopeConfig
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\Backend\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Backend\Model\Config $backendConfig
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRawFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Backend\Model\Config\Structure $configStructure,
         \Magento\Backend\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Backend\Model\Config $backendConfig,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRawFactory
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         parent::__construct($context, $configStructure, $sectionChecker, $backendConfig);
         $this->resultRawFactory = $resultRawFactory;

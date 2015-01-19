@@ -1,11 +1,10 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception;
-
-use Magento\Framework\ObjectManager\Config\Config as ObjectManagerConfig;
 
 /**
  * Class GeneralTest
@@ -25,7 +24,7 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $config = new \Magento\Framework\Interception\ObjectManager\Config(new ObjectManagerConfig());
+        $config = new \Magento\Framework\Interception\ObjectManager\Config\Developer();
         $factory = new \Magento\Framework\ObjectManager\Factory\Dynamic\Developer($config, null);
 
         $this->_configReader = $this->getMock('Magento\Framework\Config\ReaderInterface');
@@ -81,7 +80,7 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\Config\ReaderInterface' => $this->_configReader,
                 'Magento\Framework\ObjectManager\RelationsInterface' => $relations,
                 'Magento\Framework\ObjectManager\ConfigInterface' => $config,
-                'Magento\Framework\Interception\ObjectManager\Config' => $config,
+                'Magento\Framework\Interception\ObjectManager\ConfigInterface' => $config,
                 'Magento\Framework\ObjectManager\DefinitionInterface' => $definitions,
                 'Magento\Framework\Interception\DefinitionInterface' => $interceptionDefinitions
             ]

@@ -1,10 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Search\Request\Aggregation\StatusInterface as AggregationStatus;
 
 class Cleaner
 {
@@ -24,6 +26,21 @@ class Cleaner
     private $mappedFilters;
 
     /**
+     * @var AggregationStatus
+     */
+    private $aggregationStatus;
+
+    /**
+     * Cleaner constructor
+     *
+     * @param AggregationStatus $aggregationStatus
+     */
+    public function __construct(AggregationStatus $aggregationStatus)
+    {
+        $this->aggregationStatus = $aggregationStatus;
+    }
+
+    /**
      * Clean not binder queries and filters
      *
      * @param array $requestData
@@ -34,6 +51,7 @@ class Cleaner
         $this->clear();
         $this->requestData = $requestData;
         $this->cleanQuery($requestData['query']);
+        $this->cleanAggregations();
         $requestData = $this->requestData;
         $this->clear();
 
@@ -90,6 +108,18 @@ class Cleaner
                 break;
             default:
                 throw new \InvalidArgumentException('Invalid query type');
+        }
+    }
+
+    /**
+     * Clean aggregations if we don't need to process them
+     *
+     * @return void
+     */
+    private function cleanAggregations()
+    {
+        if (!$this->aggregationStatus->isEnabled()) {
+            $this->requestData['aggregations'] = [];
         }
     }
 

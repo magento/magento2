@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ZoomTest = TestCase('ZoomTest');
 ZoomTest.prototype.setUp = function() {
@@ -352,19 +353,14 @@ ZoomTest.prototype.testRefreshLargeImage = function() {
     assertEquals(zoomInstance.largeImage.css('left'), css.left + 'px');
 };
 ZoomTest.prototype.testRenderLargeImage = function() {
-    var zoomInstance = this.zoomCreate(),
-        processStartTriggered = false;
+    var zoomInstance = this.zoomCreate();
 
     zoomInstance.element.append(jQuery('<p data-role="test-image" />'));
     zoomInstance.options.selectors.image = '[data-role=test-image]';
-    jQuery(zoomInstance.options.selectors.image).on('processStart', function() {
-        processStartTriggered = true;
-    });
 
     var image = zoomInstance._renderLargeImage();
     assertTrue(image.is('img'));
     assertTrue(image.is(zoomInstance.largeImage));
-    assertTrue(processStartTriggered);
 };
 ZoomTest.prototype.testGetZoomRatio = function() {
     var zoomInstance = this.zoomCreate(),

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Handler\CustomerInjectable;
@@ -22,7 +23,7 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
     /**
      * Default customer group
      */
-    const GENERAL_GROUP = 'General';
+    const GENERAL_GROUP = '1';
 
     /**
      * Mapping values for data
@@ -30,13 +31,8 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
      * @var array
      */
     protected $mappingData = [
-        'group_id' => [
-            self::GENERAL_GROUP => 1,
-            'Wholesale' => 2,
-            'Retailer' => 3,
-        ],
         'country_id' => [
-            'United States' => 'US',
+            'United States' => 'US'
         ],
         'region_id' => [
             'California' => 12,
@@ -58,8 +54,8 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
             'email',
             'dob',
             'taxvat',
-            'gender',
-        ],
+            'gender'
+        ]
     ];
 
     /**
@@ -76,6 +72,7 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
         /** @var CustomerInjectable $customer */
         $url = $_ENV['app_frontend_url'] . 'customer/account/createpost/?nocookie=true';
         $data = $customer->getData();
+        $data['group_id'] = $this->getCustomerGroup($customer);
 
         if ($customer->hasData('address')) {
             $address = $customer->getAddress();
@@ -121,6 +118,19 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
     }
 
     /**
+     * Prepare customer for curl
+     *
+     * @param FixtureInterface $customer
+     * @return string
+     */
+    protected function getCustomerGroup(FixtureInterface $customer)
+    {
+        return $customer->hasData('group_id')
+            ? $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup()->getCustomerGroupId()
+            : self::GENERAL_GROUP;
+    }
+
+    /**
      * Add addresses in to customer account
      *
      * @param array $data
@@ -130,7 +140,7 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
     protected function addAddress(array $data)
     {
         $curlData = [];
-        $url = $_ENV['app_backend_url'] . 'customer/index/save';
+        $url = $_ENV['app_backend_url'] . 'customer/index/save/id/' . $data['customer_id'];
         foreach ($data as $key => $value) {
             foreach ($this->curlMapping as $prefix => $prefixValues) {
                 if (in_array($key, $prefixValues)) {
@@ -140,9 +150,6 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
             }
         }
         unset($data['password'], $data['password_confirmation']);
-        $curlData['account']['group_id'] = isset($curlData['account']['group_id'])
-            ? $curlData['account']['group_id']
-            : self::GENERAL_GROUP;
 
         $curlData = $this->replaceMappingData(array_merge($curlData, $data));
         $curlData = $this->prepareAddressData($curlData);
@@ -173,18 +180,18 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
                 $curlData['address'][$key]['street'] = [];
                 $curlData['address'][$key]['street'][] = $street;
             }
-            $newKey = '_item' . ($key + 1);
-            if ($curlData['address'][$key]['default_billing'] === 'Yes') {
-                unset($curlData['address'][$key]['default_billing']);
-                $curlData['account']['default_billing'] = $newKey;
+            $newKey = 'new_' . ($key);
+            if (isset($curlData['address'][$key]['default_billing'])) {
+                $value = $curlData['address'][$key]['default_billing'] === 'Yes' ? 'true' : 'false';
+                $curlData['address'][$key]['default_billing'] = $value;
             }
-            if ($curlData['address'][$key]['default_shipping'] === 'Yes') {
-                unset($curlData['address'][$key]['default_shipping']);
-                $curlData['account']['default_shipping'] = $newKey;
+            if (isset($curlData['address'][$key]['default_shipping'])) {
+                $value = $curlData['address'][$key]['default_shipping'] === 'Yes' ? 'true' : 'false';
+                $curlData['address'][$key]['default_shipping'] = $value;
             }
-            $curlData['address'][$newKey] = $curlData['address'][$key];
-            unset($curlData['address'][$key]);
+            $curlData['account']['customer_address'][$newKey] = $curlData['address'][$key];
         }
+        unset($curlData['address']);
 
         return $curlData;
     }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Centinel\Model;
 
@@ -10,7 +11,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     {
         $method = $this->getMock(
             'Magento\Paypal\Model\Payflowpro',
-            ['getIsCentinelValidationEnabled'],
+            ['getIsCentinelValidationEnabled', 'getCode'],
             [],
             '',
             false
@@ -18,6 +19,10 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $method->expects($this->once())
             ->method('getIsCentinelValidationEnabled')
             ->will($this->returnValue(true));
+
+        $method->expects($this->once())
+            ->method('getCode')
+            ->willReturn('payflowpro');
 
         $blockLogo = $this->getMock(
             'Magento\Centinel\Block\Logo',

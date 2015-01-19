@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <carrier_code>
+            <selector>[name$='[carrier_code]']</selector>
+            <input>select</input>
+        </carrier_code>
+        <title>
+            <selector>[name$='[title]']</selector>
+        </title>
+        <number>
+            <selector>[name$='[number]']</selector>
+        </number>
+    </fields>
+</mapping>

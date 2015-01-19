@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
 
@@ -88,8 +89,13 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
         if ($setEntityType->getEntityTypeCode() != $entityTypeCode) {
             throw new InputException('Wrong attribute set id provided');
         }
+
         //Check if group exists. If not - expected exception
-        $this->groupRepository->get($attributeGroupId);
+        $attributeGroup = $this->groupRepository->get($attributeGroupId);
+
+        if ($attributeGroup->getAttributeSetId() != $attributeSetId) {
+            throw new InputException('Attribute group does not belong to attribute set');
+        }
 
         /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
         $attribute = $this->attributeRepository->get($entityTypeCode, $attributeCode);

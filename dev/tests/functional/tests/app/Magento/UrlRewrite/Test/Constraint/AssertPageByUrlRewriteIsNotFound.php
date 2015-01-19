@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\UrlRewrite\Test\Constraint;
@@ -16,17 +17,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertPageByUrlRewriteIsNotFound extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Message on the product page 404
      */
     const NOT_FOUND_MESSAGE = 'Whoops, our bad...';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Checking the server response 404 page on frontend

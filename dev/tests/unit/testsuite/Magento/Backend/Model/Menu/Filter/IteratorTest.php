@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Menu\Filter;
 
@@ -38,7 +39,7 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
         $this->_items['item3']->expects($this->any())->method('isDisabled')->will($this->returnValue(false));
         $this->_items['item3']->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
 
-        $loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->_menuModel = new \Magento\Backend\Model\Menu($loggerMock);
         $this->_filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(

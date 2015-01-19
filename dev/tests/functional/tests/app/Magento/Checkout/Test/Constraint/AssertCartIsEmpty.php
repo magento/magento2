@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\Constraint;
@@ -16,17 +17,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertCartIsEmpty extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'middle';
+    /* end tags */
+
     /**
      * Text of empty cart.
      */
     const TEXT_EMPTY_CART = 'You have no items in your shopping cart. Click here to continue shopping.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'middle';
 
     /**
      * Check that Shopping Cart is empty, opened page contains text "You have no items in your shopping cart.

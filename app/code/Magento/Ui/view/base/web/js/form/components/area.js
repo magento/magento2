@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 define([
     'underscore',
@@ -7,27 +8,22 @@ define([
 ], function(_, Tab) {
     'use strict';
 
-    var defaults = {
-        uniqueNs:   'activeArea',
-        template:   'ui/area',
-        changed:    false,
-        loading:    false
-    };
-
-    var __super__ = Tab.prototype;
-
     return Tab.extend({
+        defaults: {
+            uniqueNs:   'activeArea',
+            template:   'ui/area',
+            changed:    false,
+            loading:    false
+        },
 
         /**
          * Extends instance with defaults. Invokes parent initialize method.
          * Calls initListeners and pushParams methods.
          */
         initialize: function() {
-            _.extend(this, defaults);
-
             _.bindAll(this, 'onChildrenUpdate', 'onContentLoading', 'onContentLoaded');
 
-            __super__.initialize.apply(this, arguments);
+            return this._super();
         },
 
         /**
@@ -36,9 +32,8 @@ define([
          * @return {Object} - reference to instance
          */
         initObservable: function() {
-            __super__.initObservable.apply(this, arguments);
-
-            this.observe('changed loading');
+            this._super()
+                .observe('changed loading');
 
             return this;
         },
@@ -50,7 +45,7 @@ define([
          * @return {Object} - reference to instance
          */
         initElement: function(elem){
-            __super__.initElement.apply(this, arguments);
+            this._super();
 
             elem.on({
                 'update':   this.onChildrenUpdate,

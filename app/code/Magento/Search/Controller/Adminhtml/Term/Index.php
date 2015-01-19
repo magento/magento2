@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
@@ -13,7 +14,7 @@ class Index extends \Magento\Search\Controller\Adminhtml\Term
     public function execute()
     {
         $resultPage = $this->createPage();
-        $resultPage->getPage()->getConfig()->getTitle()->prepend(__('Search Terms'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Search Terms'));
         $resultPage->addBreadcrumb(__('Search'), __('Search'));
         return $resultPage;
     }

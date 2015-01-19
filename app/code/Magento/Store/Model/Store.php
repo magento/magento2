@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
@@ -595,6 +596,26 @@ class Store extends AbstractModel implements
     }
 
     /**
+     * Retrieve base media directory path
+     *
+     * @return string
+     */
+    public function getBaseMediaDir()
+    {
+        return $this->filesystem->getUri(DirectoryList::MEDIA);
+    }
+
+    /**
+     * Retrieve base static directory path
+     *
+     * @return string
+     */
+    public function getBaseStaticDir()
+    {
+        return $this->filesystem->getUri(DirectoryList::STATIC_VIEW);
+    }
+
+    /**
      * Append script file name to url in case when server rewrites are disabled
      *
      * @param   string $url
@@ -1177,7 +1198,8 @@ class Store extends AbstractModel implements
     {
         $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
             ->setHttpOnly(true)
-            ->setDurationOneYear();
+            ->setDurationOneYear()
+            ->setPath($this->getStorePath());
         $this->_cookieManager->setPublicCookie(
             self::COOKIE_NAME,
             $this->getCode(),
@@ -1203,7 +1225,18 @@ class Store extends AbstractModel implements
      */
     public function deleteCookie()
     {
-        $this->_cookieManager->deleteCookie(self::COOKIE_NAME);
+        $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
+            ->setPath($this->getStorePath());
+        $this->_cookieManager->deleteCookie(self::COOKIE_NAME, $cookieMetadata);
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStorePath()
+    {
+        $parsedUrl = parse_url($this->getBaseUrl());
+        return isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
     }
 }

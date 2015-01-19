@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
 
-use Magento\Sales\Model\Quote\Address;
-use Magento\Sales\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 /**
  * SalesRule Validator Model

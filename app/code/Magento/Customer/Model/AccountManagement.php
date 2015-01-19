@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model;
@@ -25,7 +26,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\Logger;
+use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Mail\Exception as MailException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
@@ -33,7 +34,6 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\String as StringHelper;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\UrlInterface;
 
 /**
  * Handle various customer account actions
@@ -133,7 +133,7 @@ class AccountManagement implements AccountManagementInterface
     private $customerMetadataService;
 
     /**
-     * @var UrlInterface
+     * @var \Magento\Framework\Url
      */
     private $url;
 
@@ -220,7 +220,7 @@ class AccountManagement implements AccountManagementInterface
      * @param AddressRepositoryInterface $addressRepository
      * @param CustomerMetadataInterface $customerMetadataService
      * @param CustomerRegistry $customerRegistry
-     * @param UrlInterface $url
+     * @param \Magento\Framework\Url $url
      * @param Logger $logger
      * @param Encryptor $encryptor
      * @param ConfigShare $configShare
@@ -249,7 +249,7 @@ class AccountManagement implements AccountManagementInterface
         AddressRepositoryInterface $addressRepository,
         CustomerMetadataInterface $customerMetadataService,
         CustomerRegistry $customerRegistry,
-        UrlInterface $url,
+        \Magento\Framework\Url $url,
         Logger $logger,
         Encryptor $encryptor,
         ConfigShare $configShare,
@@ -312,7 +312,7 @@ class AccountManagement implements AccountManagementInterface
             );
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
     }
 
@@ -432,7 +432,7 @@ class AccountManagement implements AccountManagementInterface
             }
         } catch (MailException $e) {
             // If we are not able to send a reset password email, this should be ignored
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
     }
 
@@ -585,7 +585,7 @@ class AccountManagement implements AccountManagementInterface
             }
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
     }
 
@@ -639,7 +639,7 @@ class AccountManagement implements AccountManagementInterface
         try {
             $this->sendPasswordResetNotificationEmail($customer);
         } catch (MailException $e) {
-            $this->logger->logException($e);
+            $this->logger->critical($e);
         }
 
         return true;
@@ -683,7 +683,7 @@ class AccountManagement implements AccountManagementInterface
     public function validate(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
         $customerErrors = $this->validator->validateData(
-            $this->extensibleDataObjectConverter->toFlatArray($customer),
+            $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface'),
             [],
             'customer'
         );
@@ -1057,7 +1057,8 @@ class AccountManagement implements AccountManagementInterface
             'customer/account/createPassword',
             [
                 '_query' => ['id' => $customer->getId(), 'token' => $newPasswordToken],
-                '_store' => $customer->getStoreId()
+                '_store' => $customer->getStoreId(),
+                '_nosid' => true,
             ]
         );
 

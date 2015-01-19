@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()
@@ -15,6 +16,7 @@ $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
  */
 /** @var $category \Magento\Catalog\Model\Category */
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(3)
     ->setName('Category 1')
     ->setParentId(2)
@@ -27,6 +29,7 @@ $category->setId(3)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(4)
     ->setName('Category 1.1')
     ->setParentId(3)
@@ -40,6 +43,7 @@ $category->setId(4)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(5)
     ->setName('Category 1.1.1')
     ->setParentId(4)
@@ -54,6 +58,7 @@ $category->setId(5)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(6)
     ->setName('Category 2')
     ->setParentId(2)

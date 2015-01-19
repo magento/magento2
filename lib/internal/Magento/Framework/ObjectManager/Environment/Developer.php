@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\ObjectManager\Environment;
@@ -17,7 +18,7 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
     /**#@- */
 
     /**
-     * @var \Magento\Framework\Interception\ObjectManager\Config
+     * @var \Magento\Framework\Interception\ObjectManager\ConfigInterface
      */
     protected $config;
 
@@ -29,16 +30,14 @@ class Developer extends AbstractEnvironment implements EnvironmentInterface
     /**
      * Returns initialized di config entity
      *
-     * @return \Magento\Framework\Interception\ObjectManager\Config
+     * @return \Magento\Framework\Interception\ObjectManager\ConfigInterface
      */
     public function getDiConfig()
     {
         if (!$this->config) {
-            $this->config = new \Magento\Framework\Interception\ObjectManager\Config(
-                new \Magento\Framework\ObjectManager\Config\Config(
-                    $this->envFactory->getRelations(),
-                    $this->envFactory->getDefinitions()
-                )
+            $this->config = new \Magento\Framework\Interception\ObjectManager\Config\Developer(
+                $this->envFactory->getRelations(),
+                $this->envFactory->getDefinitions()
             );
         }
 

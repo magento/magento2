@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -44,6 +45,7 @@ $categories = [
 ];
 foreach ($categories as $data) {
     $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+    $model->isObjectNew(true);
     $model->setId($data['id'])
         ->setName($data['name'])
         ->setParentId($data['parent_id'])

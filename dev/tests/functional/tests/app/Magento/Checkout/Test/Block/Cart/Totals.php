@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\Block\Cart;
@@ -75,7 +76,7 @@ class Totals extends Block
      *
      * @var string
      */
-    protected $discount = '//tr[normalize-space(td)="Discount"]//span';
+    protected $discount = '//tr[normalize-space(th)="Discount"]//span';
 
     /**
      * Get shipping price including tax selector

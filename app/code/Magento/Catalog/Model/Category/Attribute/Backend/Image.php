@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -34,19 +35,19 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_fileUploaderFactory;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
      * Construct
      *
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
     ) {
@@ -93,7 +94,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
         } catch (\Exception $e) {
             if ($e->getCode() != \Magento\Core\Model\File\Uploader::TMP_NAME_EMPTY) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
         return $this;

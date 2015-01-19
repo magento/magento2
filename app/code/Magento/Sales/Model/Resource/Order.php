@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Resource;
 
@@ -146,8 +147,8 @@ class Order extends SalesResource implements OrderResourceInterface
                 $store->getName(),
             ];
             $object->setStoreName(implode("\n", $name));
+            $object->setTotalItemCount($this->calculateItems($object));
         }
-        $object->setTotalItemCount($this->calculateItems($object));
         $object->setData(
             'protect_code',
             substr(md5(uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)), 5, 6)
@@ -180,17 +181,21 @@ class Order extends SalesResource implements OrderResourceInterface
             /** @var \Magento\Sales\Model\Order\Payment $payment */
             foreach ($object->getPayments() as $payment) {
                 $payment->setParentId($object->getId());
+                $payment->setOrder($object);
                 $payment->save();
             }
         }
         if (null !== $object->getStatusHistories()) {
             /** @var \Magento\Sales\Model\Order\Status\History $statusHistory */
             foreach ($object->getStatusHistories() as $statusHistory) {
+                $statusHistory->setParentId($object->getId());
                 $statusHistory->save();
+                $statusHistory->setOrder($object);
             }
         }
         foreach ($object->getRelatedObjects() as $relatedObject) {
             $relatedObject->save();
+            $relatedObject->setOrder($object);
         }
         return parent::_afterSave($object);
     }

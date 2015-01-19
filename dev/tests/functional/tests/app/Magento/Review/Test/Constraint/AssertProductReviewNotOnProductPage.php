@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Review\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
 
@@ -17,24 +18,21 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductReviewNotOnProductPage extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'middle';
+    /* tags */
+    const SEVERITY = 'middle';
+    /* end tags */
 
     /**
      * Assert that product review Not available on product page
      *
      * @param CatalogProductView $catalogProductView
-     * @param ReviewInjectable $reviewInitial
+     * @param Review $reviewInitial
      * @param Browser $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        ReviewInjectable $reviewInitial,
+        Review $reviewInitial,
         Browser $browser
     ) {
         /** @var CatalogProductSimple $product */

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Locale;
@@ -217,6 +218,11 @@ class ListsTest extends \PHPUnit_Framework_TestCase
         $timeZones = $this->listsModel->getOptionTimezones();
         foreach ($expectedResults as $value) {
             $this->assertContains($value, $timeZones);
+        }
+
+        $timeZoneList = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL_WITH_BC);
+        foreach ($timeZones as $timeZone) {
+            $this->assertContains($timeZone['value'], $timeZoneList);
         }
     }
 

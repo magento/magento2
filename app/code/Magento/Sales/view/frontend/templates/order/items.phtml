@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php $_order = $this->getOrder() ?>
@@ -64,7 +65,7 @@
     </table>
 </div>
 <?php if ($_giftMessage): ?>
-    <script type="text/javascript">
+    <script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('a.action.show').add('a.action.close').mage('giftMessage', {});

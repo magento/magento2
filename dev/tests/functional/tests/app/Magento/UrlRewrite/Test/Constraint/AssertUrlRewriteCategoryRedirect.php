@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\UrlRewrite\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
@@ -16,24 +17,21 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertUrlRewriteCategoryRedirect extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert check URL rewrite category redirect
      *
      * @param UrlRewrite $urlRewrite
-     * @param CatalogCategory $category
+     * @param Category $category
      * @param Browser $browser
      * @return void
      */
     public function processAssert(
         UrlRewrite $urlRewrite,
-        CatalogCategory $category,
+        Category $category,
         Browser $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $urlRewrite->getRequestPath());

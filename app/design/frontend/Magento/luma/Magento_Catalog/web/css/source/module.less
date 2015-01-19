@@ -1,25 +1,26 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 @import "listings.less";
 @import "toolbar.less";
 
-@product-info-price: #575757;
+@product-info-price: @color-gray34;
 @product-h1-margin-bottom-desktop: @indent-s-base + @indent-xs-base;
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Category view
 //--------------------------------------
 .old-price,
 .old.price {
-    color: @text-color-muted;
+    .css(color, @text-color-muted);
 }
 
 .price-tier_price {
@@ -109,7 +110,7 @@
     }
     .notice {
         margin: @indent-s-base 0;
-        color: @text-color-muted;
+        .css(color, @text-color-muted);
         .font-size(@font-size-s);
     }
     .product.thumbs {
@@ -149,10 +150,10 @@
 
 .product-info-main {
     .product-info-price {
-        border-bottom: 1px #c1c1c1 solid;
+        border-bottom: 1px @color-gray-light5 solid;
         display: table;
         width: 100%;
-        color: @product-info-price;
+        .css(color, @product-info-price);
         margin-bottom: @indent-s-base + @indent-xs-base;
         .price-box {
             display: table-cell;
@@ -250,7 +251,7 @@
 
 .product-options-bottom .price-box,
 .product-info-price .price-box {
-    color: @product-info-price;
+    .css(color, @product-info-price);
     display: table-cell;
     vertical-align: top;
     padding-bottom: @indent-s-base;
@@ -389,7 +390,7 @@
             margin-right: 8px;
         }
         .counter {
-            color: @color-primary-lighter;
+            .css(color, @color-primary-lighter);
             font-size: 12px;
             white-space: nowrap;
         }
@@ -451,7 +452,7 @@
 //
 //    Mobile @screen-m
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .catalog-product-view {
         .column.main {
             .vendor-prefix-display(flex);
@@ -466,7 +467,7 @@
 //
 //    Mobile @screen-s
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .product-social-links {
         .action.tocompare {
             display: none;
@@ -499,7 +500,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .product-info-main {
         .page-title {
             h1 {
@@ -604,7 +605,7 @@
 //
 //    Desktop large
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-xl) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-xl) {
     .sidebar {
         .product-items {
             .product-item {
@@ -630,7 +631,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Minimum Advertising Price
@@ -821,7 +822,7 @@ body.catalog-product-compare-index {
     top: 0;
     left: 0;
     width: auto;
-    background: @color-white;
+    .css(background, @color-white);
 }
 
 .block-compare {
@@ -849,16 +850,12 @@ body.catalog-product-compare-index {
     }
 }
 
-.compare.wrapper {
-    display: none;
-}
-
 }
 
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .table-wrapper.comparison {
         .table-comparison > tbody > tr{
             > th,
@@ -869,13 +866,18 @@ body.catalog-product-compare-index {
         }
     }
 }
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
+    .compare.wrapper,
+    [class*="block-compare"] {
+        display: none;
+    }
+}
 
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .compare.wrapper {
-        display: block;
         float: right;
         .list-reset-styles();
         .action.compare {
@@ -892,7 +894,7 @@ body.catalog-product-compare-index {
             );
         }
         .counter.qty {
-            color: @color-primary-lighter;
+            .css(color, @color-primary-lighter);
             &:before {
                 content: "(";
             }
@@ -901,16 +903,13 @@ body.catalog-product-compare-index {
             }
         }
     }
-    .table-wrapper.comparison {
-        .table-overflow();
-    }
 }
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .block.related {
     .action.select {
@@ -939,7 +938,7 @@ body.catalog-product-compare-index {
 //
 //    Desktop large
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-l) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-l) {
     .box-tocart {
         .paypal:first-of-type {
             margin-top: 13px;

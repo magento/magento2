@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Setup;
 
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
@@ -54,7 +55,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Resource $appResource
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
@@ -65,7 +66,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Resource $appResource,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
@@ -95,7 +96,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\Logger $logger
+     * @return \Psr\Log\LoggerInterface $logger
      */
     public function getLogger()
     {

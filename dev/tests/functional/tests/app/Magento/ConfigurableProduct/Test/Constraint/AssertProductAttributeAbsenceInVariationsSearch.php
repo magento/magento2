@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
@@ -18,17 +19,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductAttributeAbsenceInVariationsSearch extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Label "Variations" tab
      */
     const TAB_VARIATIONS = 'variations';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that deleted attribute can't be added to product template on Product Page via Add Attribute control

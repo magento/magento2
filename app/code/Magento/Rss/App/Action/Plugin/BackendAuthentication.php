@@ -2,7 +2,8 @@
 /**
  * RSS Backend Authentication plugin
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Rss\App\Action\Plugin;
 
@@ -22,7 +23,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
     protected $httpAuthentication;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -34,9 +35,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
     /**
      * @var array
      */
-    protected $aclResources = [
-        'feed' => 'Magento_Rss::rss',
-    ];
+    protected $aclResources;
 
     /**
      * @param \Magento\Backend\Model\Auth $auth
@@ -45,8 +44,9 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\HTTP\Authentication $httpAuthentication
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param array $aclResources
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
@@ -55,12 +55,14 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\HTTP\Authentication $httpAuthentication,
-        \Magento\Framework\Logger $logger,
-        \Magento\Framework\AuthorizationInterface $authorization
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\AuthorizationInterface $authorization,
+        array $aclResources
     ) {
         $this->httpAuthentication = $httpAuthentication;
         $this->logger = $logger;
         $this->authorization = $authorization;
+        $this->aclResources = $aclResources;
         parent::__construct($auth, $url, $response, $actionFlag, $messageManager);
     }
 
@@ -72,6 +74,8 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @param RequestInterface $request
      * @return ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function aroundDispatch(AbstractAction $subject, \Closure $proceed, RequestInterface $request)
     {
@@ -81,7 +85,10 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
                 : $this->aclResources[$request->getControllerName()]
             : null;
 
-        if (!$resource) {
+        $type = $request->getParam('type');
+        $resourceType = isset($this->aclResources[$type]) ? $this->aclResources[$type] : null;
+
+        if (!$resource || !$resourceType) {
             return parent::aroundDispatch($subject, $proceed, $request);
         }
 
@@ -93,12 +100,13 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
             try {
                 $this->_auth->login($login, $password);
             } catch (\Magento\Backend\Model\Auth\Exception $e) {
-                $this->logger->logException($e);
+                $this->logger->critical($e);
             }
         }
 
         // Verify if logged in and authorized
-        if (!$session->isLoggedIn() || !$this->authorization->isAllowed($resource)) {
+        if (!$session->isLoggedIn() || !$this->authorization->isAllowed($resource)
+            || !$this->authorization->isAllowed($resourceType)) {
             $this->httpAuthentication->setAuthenticationFailed('RSS Feeds');
             return $this->_response;
         }

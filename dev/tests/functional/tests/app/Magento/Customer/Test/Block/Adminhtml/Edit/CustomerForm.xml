@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <tabs>
@@ -27,7 +28,7 @@
     </account_information>
     <addresses>
         <class>\Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses</class>
-        <selector>#customer_info_tabs_addresses</selector>
+        <selector>#tab_customer_address</selector>
         <strategy>css selector</strategy>
     </addresses>
 </tabs>

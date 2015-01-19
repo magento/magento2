@@ -1,23 +1,22 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
 abstract class ProductTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $context;
-
-    /**
-     * @var \Magento\Catalog\Controller\Product
-     */
+    /** @var \Magento\Catalog\Controller\Product */
     protected $action;
-
     /** @var \Magento\Framework\View\Layout  */
     protected $layout;
+    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    protected $session;
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    protected $request;
 
     /**
      *  Init context object
@@ -42,7 +41,7 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['add'])->disableOriginalConstructor()->getMock();
         $title->expects($this->any())->method('prepend')->withAnyParameters()->will($this->returnSelf());
         $requestInterfaceMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')->setMethods(
-            ['getParam', 'getFullActionName']
+            ['getParam', 'getFullActionName', 'getPost']
         )->disableOriginalConstructor()->getMock();
 
         $responseInterfaceMock = $this->getMockBuilder('Magento\Framework\App\ResponseInterface')->setMethods(
@@ -50,7 +49,13 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $managerInterfaceMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
-        $sessionMock = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
+        $sessionMock = $this->getMock(
+            'Magento\Backend\Model\Session',
+            ['getProductData', 'setProductData'],
+            [],
+            '',
+            false
+        );
         $actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
         $helperDataMock = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
         $this->context = $this->getMock(
@@ -78,12 +83,15 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getResponse')->will($this->returnValue($responseInterfaceMock));
         $this->context->expects($this->any())->method('getObjectManager')->will($this->returnValue($objectManagerMock));
 
-        $this->context->expects($this->any())
-            ->method('getMessageManager')
+        $this->context->expects($this->any())->method('getMessageManager')
             ->will($this->returnValue($managerInterfaceMock));
         $this->context->expects($this->any())->method('getSession')->will($this->returnValue($sessionMock));
         $this->context->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
         $this->context->expects($this->any())->method('getHelper')->will($this->returnValue($helperDataMock));
+
+        $this->session = $sessionMock;
+        $this->request = $requestInterfaceMock;
+
         return $this->context;
     }
 }

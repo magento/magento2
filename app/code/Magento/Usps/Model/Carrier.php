@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Usps\Model;
 
@@ -60,17 +61,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_code = self::CODE;
 
     /**
-     * Destination Zip Code required flag
-     *
-     * @var boolean
-     * @deprecated since 1.7.0 functionality implemented in \Magento\Shipping\Model\Carrier\AbstractCarrierOnline
-     */
-    protected $_isZipCodeRequired;
-
-    /**
      * Rate request data
      *
-     * @var \Magento\Sales\Model\Quote\Address\RateRequest|null
+     * @var \Magento\Quote\Model\Quote\Address\RateRequest|null
      */
     protected $_request = null;
 
@@ -114,11 +107,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
-     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
-     * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory
      * @param \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory
      * @param \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory
@@ -136,11 +129,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
-        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
-        \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory,
         \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory,
         \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory,
@@ -160,7 +153,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         parent::__construct(
             $scopeConfig,
             $rateErrorFactory,
-            $logAdapterFactory,
+            $logger,
             $xmlElFactory,
             $rateFactory,
             $rateMethodFactory,
@@ -179,10 +172,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Collect and get rates
      *
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return Result|bool|null
      */
-    public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function collectRates(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         if (!$this->getConfigFlag($this->_activeFlag)) {
             return false;
@@ -200,10 +193,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Prepare and set request to this instance
      *
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this
      */
-    public function setRequest(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function setRequest(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         $this->_request = $request;
 

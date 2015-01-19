@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Product\Compare;
@@ -75,7 +76,7 @@ class ListCompare extends Block
      *
      * @var string
      */
-    protected $isEmpty = 'p.empty';
+    protected $isEmpty = 'div.empty:last-child';
 
     /**
      * Selector for message block.
@@ -146,6 +147,39 @@ class ListCompare extends Block
     }
 
     /**
+     * Get item compare product attribute.
+     *
+     * @param string $key
+     * @return Element
+     */
+    public function getCompareProductAttribute($key)
+    {
+        $rootElement = $this->_rootElement;
+        $element = $this->nameSelector;
+        $this->_rootElement->waitUntil(
+            function () use ($rootElement, $element) {
+                return $rootElement->find($element, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
+            }
+        );
+        return $this->_rootElement->find(sprintf($this->productAttribute, $key), Locator::SELECTOR_XPATH);
+    }
+
+    /**
+     * Get item attribute.
+     *
+     * @param int $indexProduct
+     * @param string $attributeKey
+     * @return string
+     */
+    public function getProductAttribute($indexProduct, $attributeKey)
+    {
+        return trim(
+            $this->getCompareProductAttribute($attributeKey)
+                ->find(sprintf($this->attributeSelector, $indexProduct), Locator::SELECTOR_XPATH)->getText()
+        );
+    }
+
+    /**
      * Remove product from compare product list.
      *
      * @param int $index [optional]
@@ -208,6 +242,7 @@ class ListCompare extends Block
      */
     public function getEmptyMessage()
     {
+        $this->waitForElementVisible($this->isEmpty);
         $isEmpty = $this->_rootElement->find($this->isEmpty);
         if ($isEmpty->isVisible()) {
             return $isEmpty->getText();

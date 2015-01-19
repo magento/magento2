@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /** @var $installer \Magento\Catalog\Model\Resource\Setup */
@@ -10,6 +11,8 @@ $attributes = [
     'country_of_manufacture',
     'group_price',
     'minimal_price',
+    'msrp',
+    'msrp_display_actual_price_type',
     'price',
     'special_price',
     'special_from_date',

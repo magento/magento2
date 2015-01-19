@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
 
@@ -153,7 +154,7 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $directoryWrite;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -260,11 +261,16 @@ abstract class AbstractAdapter implements AdapterInterface
      * Initialize default values
      *
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, array $data = [])
-    {
+    public function __construct(
+        \Magento\Framework\Filesystem $filesystem,
+        \Psr\Log\LoggerInterface $logger,
+        array $data = []
+    ) {
         $this->_filesystem = $filesystem;
+        $this->logger = $logger;
         $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
     }
 
@@ -675,8 +681,7 @@ abstract class AbstractAdapter implements AdapterInterface
             try {
                 $this->directoryWrite->create($this->directoryWrite->getRelativePath($destination));
             } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
-                $this->logger->addStreamLog(\Magento\Framework\Logger::LOGGER_SYSTEM);
-                $this->logger->log($e->getMessage());
+                $this->logger->critical($e);
                 throw new \Exception('Unable to write file into directory ' . $destination . '. Access forbidden.');
             }
         }

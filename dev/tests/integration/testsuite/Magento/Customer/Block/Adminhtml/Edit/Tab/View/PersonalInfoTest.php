@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
@@ -65,7 +66,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         $this->_dataObjectProcessor = $this->_objectManager->get('Magento\Framework\Reflection\DataObjectProcessor');
 
         $this->_groupRepository = $this->_objectManager->get('Magento\Customer\Api\GroupRepositoryInterface');
-        $this->dateTime = $this->_objectManager->get('\Magento\Framework\Stdlib\DateTime');
+        $this->dateTime = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime');
 
         $this->_block = $this->_objectManager->get(
             'Magento\Framework\View\LayoutInterface'

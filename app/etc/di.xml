@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
     <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\Framework\Search\Adapter\Mysql\Filter\Preprocessor" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver" />
+    <preference for="Magento\Framework\Search\Request\Aggregation\StatusInterface" type="Magento\Framework\Search\Request\Aggregation\Status" />
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\Http\RequestInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
@@ -84,6 +87,26 @@
     <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Null"/>
     <preference for="Magento\Framework\App\Resource\ConnectionAdapterInterface" type="Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
+    <type name="Magento\Framework\Logger\Handler\System">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">main</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="exception" xsi:type="object">Magento\Framework\Logger\Handler\Critical</item>
+                <item name="system" xsi:type="object">Magento\Framework\Logger\Handler\System</item>
+                <item name="debug" xsi:type="object">Magento\Framework\Logger\Handler\Debug</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Monolog\Handler\StreamHandler">
+        <arguments>
+            <argument name="stream" xsi:type="string">var/log/system.log</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Model\Context">
         <arguments>
             <argument name="actionValidator" xsi:type="object">Magento\Framework\Model\ActionValidator\RemoveAction\Proxy</argument>

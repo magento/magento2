@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Factory\Dynamic;
 
@@ -27,7 +28,7 @@ class Production extends \Magento\Framework\ObjectManager\Factory\AbstractFactor
         foreach ($parameters as $parameter) {
             list($paramName, $paramType, $paramRequired, $paramDefault) = $parameter;
             $argument = null;
-            if (!empty($arguments) && array_key_exists($paramName, $arguments)) {
+            if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
                 $argument = $arguments[$paramName];
             } elseif ($paramRequired) {
                 $argument = ['instance' => $paramType];

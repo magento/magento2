@@ -4,7 +4,8 @@
  *
  * Format: array(<class_name>[, <replacement>])
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['Mage_Admin_Helper_Data', 'Magento\Backend\Helper\Data'],
@@ -1361,7 +1362,7 @@ return [
     ['Magento\Sales\Model\Resource\Order\Creditmemo\Attribute\Backend\Parent'],
     ['Magento\Sales\Model\Resource\Order\Invoice\Attribute\Backend\Parent'],
     ['Magento\Sales\Model\Resource\Order\Shipment\Attribute\Backend\Parent'],
-    ['Magento\Sales\Model\Resource\Quote\Address\Attribute\Backend\Parent'],
+    ['Magento\Quote\Model\Resource\Quote\Address\Attribute\Backend\Parent'],
     ['Magento\Core\Helper\Http'],
     ['Magento\Core\Model\ThemeInterface', 'Magento\Framework\View\Design\ThemeInterface'],
     ['Magento\Core\Model\View\DesignInterface', 'Magento\Framework\View\DesignInterface'],
@@ -1724,7 +1725,7 @@ return [
     ['Magento\Adminhtml\Block\Report\Wishlist', 'Magento\Reports\Block\Adminhtml\Wishlist'],
     ['Magento\Backend\Helper\Addresses'],
     ['Magento\Core\Model\Cookie', 'Magento\Framework\Stdlib\Cookie'],
-    ['Magento\Core\Model\Logger', 'Magento\Framework\Logger'],
+    ['Magento\Core\Model\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Core\Block\Template\Context', 'Magento\Framework\View\Element\Template\Context'],
     ['Magento\Page\Block\Template\Container'],
     ['Magento\Page\Block\Redirect', 'Magento\Framework\View\Element\Redirect'],
@@ -1875,15 +1876,15 @@ return [
     ['CollFactory', 'CollectionFactory'], // no need to shorten anymore
     [
         'Magento\Shipping\Model\Rate\Result\AbstractResult',
-        'Magento\Sales\Model\Quote\Address\RateResult\AbstractResult'
+        'Magento\Quote\Model\Quote\Address\RateResult\AbstractResult'
     ],
-    ['Magento\Shipping\Model\Rate\Result\Error', 'Magento\Sales\Model\Quote\Address\RateResult\Error'],
-    ['Magento\Shipping\Model\Rate\Result\Method', 'Magento\Sales\Model\Quote\Address\RateResult\Method'],
+    ['Magento\Shipping\Model\Rate\Result\Error', 'Magento\Quote\Model\Quote\Address\RateResult\Error'],
+    ['Magento\Shipping\Model\Rate\Result\Method', 'Magento\Quote\Model\Quote\Address\RateResult\Method'],
     [
         'Magento\Shipping\Model\Rate\AbstractRate',
-        'Magento\Sales\Model\Quote\Address\Rate + Magento\Shipping\Model\CarrierFactory'
+        'Magento\Quote\Model\Quote\Address\Rate + Magento\Shipping\Model\CarrierFactory'
     ],
-    ['Magento\Shipping\Model\Rate\Request', 'Magento\Sales\Model\Quote\Address\RateRequest'],
+    ['Magento\Shipping\Model\Rate\Request', 'Magento\Quote\Model\Quote\Address\RateRequest'],
     ['Magento\PageCache\Block\Adminhtml\Cache\Additional'],
     ['Magento\PageCache\Model\Control\ControlInterface'],
     ['Magento\PageCache\Model\Control\Zend'],
@@ -2329,8 +2330,9 @@ return [
     ['Magento\TranslateInterface', 'Magento\Framework\TranslateInterface'],
     ['Magento\Locale', 'Magento\Framework\Locale'],
     ['Magento\LocaleFactory', 'Magento\Framework\LocaleFactory'],
+    ['Magento\Integration\Model\Oauth\Token\Factory', 'Magento\Integration\Model\Oauth\TokenFactory'],
     ['Magento\LocaleInterface', 'Magento\Framework\LocaleInterface'],
-    ['Magento\Logger', 'Magento\Framework\Logger'],
+    ['Magento\Logger', 'Psr\Log\LoggerInterface'],
     ['Magento\Phrase', 'Magento\Framework\Phrase'],
     ['Magento\Pear', 'Magento\Framework\Pear'],
     [
@@ -2682,7 +2684,7 @@ return [
     ['Magento\Catalog\Block\Product'],
     ['\Magento\Sales\Model\Observer'],
     ['\Magento\Install\Block\Begin'],
-    ['\Magento\Checkout\Service\V1\QuoteLoader', '\Magento\Sales\Model\QuoteRepository'],
+    ['\Magento\Checkout\Service\V1\QuoteLoader', '\Magento\Quote\Model\QuoteRepository'],
     ['Magento\PageCache\Model\Observer'],
     ['Magento\Catalog\Model\Layer\Filter\Price\Algorithm', 'Magento\Framework\Search\Dynamic\Algorithm'],
     ['Magento\Rss\Block\Order\Info\Buttons\Rss'],
@@ -2819,6 +2821,15 @@ return [
     ['Magento\Customer\Model\Converter'],
     ['Magento\CatalogRule\Plugin\Indexer\Product\PriceIndexer'],
     ['Magento\CatalogRule\Plugin\Indexer\Product\PriceIndexerTest'],
+    [
+        'Magento\Framework\Interception\ObjectManager\Compiled\Config',
+        'Magento\Framework\Interception\ObjectManager\Config\Compiled'
+    ],
+    [
+        'Magento\Framework\Interception\ObjectManager\Config',
+        'Magento\Framework\Interception\ObjectManager\Config\Developer'
+    ],
+    ['Magento\Framework\ObjectManager\Config\ProxyConfig'],
     ['Magento\Catalog\Block\Product\Send'],
     ['Magento\Catalog\Helper\Product\Options'],
     ['Magento\Cms\Model\Resource\Page\Service'],
@@ -2826,7 +2837,20 @@ return [
     ['Magento\GiftMessage\Helper\Url'],
     ['Magento\Rss\Helper\Data'],
     ['Magento\Sales\Model\ConverterInterface'],
+    ['Magento\Paypal\Block\System\Config\Fieldset\Location'],
+    ['Magento\Paypal\Block\Payflow\Advanced\Review'],
+    ['Magento\Paypal\Block\Payflow\Link\Review'],
+    ['Magento\Paypal\Model\System\Config\Source\AuthorizationAmounts'],
     ['Magento\Rule\Model\Rule', 'Magento\Rule\Model\AbstractModel'],
     ['Magento\Framework\App\Cache\State\Options', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\App\Cache\State\OptionsInterface', 'Magento\Framework\App\Cache\State'],
+    ['Magento\Framework\Logger', 'Psr\Log\LoggerInterface'],
+    ['Magento\Weee\Model\Total\Quote\Nominal\Weee'],
+    ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Tax'],
+    ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Subtotal'],
+    ['Magento\SalesRule\Model\Quote\Nominal\Discount'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal\Collector'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
 ];

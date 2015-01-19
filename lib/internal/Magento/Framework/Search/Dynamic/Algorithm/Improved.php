@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Dynamic\Algorithm;
 
@@ -50,7 +51,7 @@ class Improved implements AlgorithmInterface
             $aggregations['count']
         );
 
-        $this->algorithm->setLimits($aggregations['min'], $aggregations['max']);
+        $this->algorithm->setLimits($aggregations['min'], $aggregations['max'] + 0.01);
 
         $interval = $this->dataProvider->getInterval($bucket, $dimensions, $entityIds);
         $data = $this->algorithm->calculateSeparators($interval);
@@ -58,6 +59,12 @@ class Improved implements AlgorithmInterface
         $data[0]['from'] = ''; // We should not calculate min and max value
         $data[count($data) - 1]['to'] = '';
 
+        $dataSize = count($data);
+        for ($key = 0; $key < $dataSize; $key++) {
+            if (isset($data[$key + 1])) {
+                $data[$key]['to'] = $data[$key + 1]['from'];
+            }
+        }
         return $data;
     }
 }

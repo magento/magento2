@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Sitemap\Test\Constraint;
@@ -14,16 +15,13 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertSitemapSuccessSaveAndGenerateMessages extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     const SUCCESS_GENERATE_MESSAGE = 'The sitemap "%s" has been generated.';
 
     const SUCCESS_SAVE_MESSAGE = 'The sitemap has been saved.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert that success messages is displayed after sitemap generate

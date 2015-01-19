@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\Constraint;
@@ -14,17 +15,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertOrderSuccessPlacedMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * Message of success checkout
      */
     const SUCCESS_MESSAGE = 'Thank you for your purchase!';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Assert that success message is correct

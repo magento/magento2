@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\Item;
@@ -46,14 +47,14 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->quoteRepositoryMock =
-            $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+            $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->productRepositoryMock =
             $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
         $this->dataMock = $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\Item', [], [], '', false);
-        $this->quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->quoteItemMock =
-            $this->getMock('\Magento\Sales\Model\Quote\Item', ['getId', 'setData', '__wakeUp'], [], '', false);
+            $this->getMock('\Magento\Quote\Model\Quote\Item', ['getId', 'setData', '__wakeUp'], [], '', false);
 
         $this->service = new WriteService($this->quoteRepositoryMock, $this->productRepositoryMock);
     }

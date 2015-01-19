@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\User\Test\Constraint;
@@ -14,14 +15,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserInvalidEmailMessage extends AbstractConstraint
 {
-    const ERROR_MESSAGE = 'Please correct this email address: "%s".';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const ERROR_MESSAGE = 'Please correct this email address: "%s".';
 
     /**
      * Asserts that error message equals to expected message.

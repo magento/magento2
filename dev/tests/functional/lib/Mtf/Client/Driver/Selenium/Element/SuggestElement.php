@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Mtf\Client\Driver\Selenium\Element;
@@ -14,6 +15,11 @@ use Mtf\Client\Element\Locator;
  */
 class SuggestElement extends Element
 {
+    /**
+     * "Backspace" key code.
+     */
+    const BACKSPACE = "\xEE\x80\x83";
+
     /**
      * Selector suggest input
      *
@@ -36,6 +42,13 @@ class SuggestElement extends Element
     protected $resultItem = './/ul/li/a[text()="%s"]';
 
     /**
+     * Suggest state loader
+     *
+     * @var string
+     */
+    protected $suggestStateLoader = '.mage-suggest-state-loading';
+
+    /**
      * Set value
      *
      * @param string $value
@@ -45,9 +58,30 @@ class SuggestElement extends Element
     {
         $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
-        $this->find($this->suggest)->setValue($value);
-        $this->waitResult();
-        $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH)->click();
+        $this->clear();
+        foreach (str_split($value) as $symbol) {
+            $this->find($this->suggest)->click();
+            $this->_driver->keys($symbol);
+            $this->waitResult();
+            $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+            if ($searchedItem->isVisible()) {
+                $searchedItem->click();
+                break;
+            }
+        }
+    }
+
+    /**
+     * Clear value of element.
+     *
+     * @return void
+     */
+    protected function clear()
+    {
+        $element = $this->find($this->suggest);
+        while ($element->getValue() != '') {
+            $element->keys([self::BACKSPACE]);
+        }
     }
 
     /**
@@ -57,11 +91,12 @@ class SuggestElement extends Element
      */
     public function waitResult()
     {
-        $browser = $this;
-        $selector = $this->searchResult;
+        $browser = clone $this;
+        $selector = $this->suggestStateLoader;
         $browser->waitUntil(
             function () use ($browser, $selector) {
-                return $browser->find($selector)->isVisible() ? true : null;
+                $element = $browser->find($selector);
+                return $element->isVisible() == false ? true : null;
             }
         );
     }

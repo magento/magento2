@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Service\V1\Item;
 
@@ -12,7 +13,7 @@ class ReadService implements ReadServiceInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -26,11 +27,11 @@ class ReadService implements ReadServiceInterface
     /**
      * Constructs a read service object.
      *
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
      * @param \Magento\Checkout\Service\V1\Data\Cart\ItemMapper $itemMapper Item mapper.
      */
     public function __construct(
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Checkout\Service\V1\Data\Cart\ItemMapper $itemMapper
     ) {
         $this->quoteRepository = $quoteRepository;
@@ -47,10 +48,10 @@ class ReadService implements ReadServiceInterface
     public function getList($cartId)
     {
         $output = [];
-        /** @var  \Magento\Sales\Model\Quote $quote */
+        /** @var  \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
 
-        /** @var  \Magento\Sales\Model\Quote\Item  $item */
+        /** @var  \Magento\Quote\Model\Quote\Item  $item */
         foreach ($quote->getAllItems() as $item) {
             $output[] = $this->itemMapper->extractDto($item);
         }

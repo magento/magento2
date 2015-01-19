@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php
@@ -111,7 +112,7 @@
                         <?php echo $this->truncateString($option['value'], 55, '', $_remainder);?>
                         <?php if ($_remainder):?>
                             ... <span id="<?php echo $_id = 'id' . uniqid()?>"><?php echo $_remainder ?></span>
-                            <script type="text/javascript">
+                            <script>
 require(['protoype'], function(){
 
     $('<?php echo $_id ?>').hide();

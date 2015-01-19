@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\User\Test\Constraint;
@@ -14,14 +15,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserWrongCredentialsMessage extends AbstractConstraint
 {
-    const INVALID_CREDENTIALS_MESSAGE = 'Please correct the user name or password.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const INVALID_CREDENTIALS_MESSAGE = 'Please correct the user name or password.';
 
     /**
      * Verify incorrect credentials message while login to admin

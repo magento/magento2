@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set;
@@ -43,6 +44,13 @@ class Main extends Block
     protected $addGroupButton = '[data-ui-id="adminhtml-catalog-product-set-edit-add-group-button"]';
 
     /**
+     * Selector for note block element.
+     *
+     * @var string
+     */
+    protected $noteBlock = '.attribute-set .title';
+
+    /**
      * Move Attribute to Attribute Group
      *
      * @param array $attributeData
@@ -59,6 +67,9 @@ class Main extends Block
 
         $attributeGroupLocator = sprintf($this->groups, $attributeGroup);
         $target = $this->_rootElement->find($attributeGroupLocator, Locator::SELECTOR_XPATH);
+
+        $target->click(); // Handle small resolution screen issue
+        $this->browser->find($this->noteBlock)->click();
 
         $attributeLabelLocator = sprintf($this->attribute, $attribute);
         $this->_rootElement->find($attributeLabelLocator, Locator::SELECTOR_XPATH)->dragAndDrop($target);

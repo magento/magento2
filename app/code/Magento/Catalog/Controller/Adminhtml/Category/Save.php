@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
@@ -185,12 +186,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             );
         }
 
+        $redirectParams = [
+            '_current' => true,
+            'id' => $category->getId()
+        ];
+        if ($storeId) {
+            $redirectParams['store'] = $storeId;
+        }
+
         return $resultRedirect->setPath(
             'catalog/*/edit',
-            [
-                '_current' => true,
-                'id' => $category->getId()
-            ]
+            $redirectParams
         );
     }
 }

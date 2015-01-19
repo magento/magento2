@@ -2,7 +2,8 @@
 /**
  * Customer address entity resource model
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Resource;
 
@@ -148,5 +149,23 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
         $result = parent::delete($object);
         $object->setData([]);
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _afterDelete(\Magento\Framework\Object $address)
+    {
+        if ($address->getId()) {
+            $customer = $this->_createCustomer()->load($address->getCustomerId());
+            if ($customer->getDefaultBilling() == $address->getId()) {
+                $customer->setDefaultBilling(null);
+            }
+            if ($customer->getDefaultShipping() == $address->getId()) {
+                $customer->setDefaultShipping(null);
+            }
+            $customer->save();
+        }
+        return parent::_afterDelete($address);
     }
 }

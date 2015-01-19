@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
@@ -54,8 +55,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
             $attribute->setAttributeSetId($attributeSet->getId())->loadEntityAttributeIdBySet();
 
-            $attribute->setEntityTypeId($attributeSet->getEntityTypeId())
-                ->setAttributeSetId($request->getParam('template_id'))
+            $attribute->setAttributeSetId($request->getParam('template_id'))
                 ->setAttributeGroupId($attributeGroup->getId())
                 ->setSortOrder('0')
                 ->save();

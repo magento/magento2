@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
@@ -16,12 +17,9 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductNotVisibleInCategory extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that product is not visible in the assigned category
@@ -29,14 +27,14 @@ class AssertProductNotVisibleInCategory extends AbstractConstraint
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface $product
-     * @param CatalogCategory|null $category
+     * @param Category|null $category
      * @return void
      */
     public function processAssert(
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
         FixtureInterface $product,
-        CatalogCategory $category = null
+        Category $category = null
     ) {
         $categoryName = $category
             ? $category->getName()

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Adminhtml\Edit;
@@ -28,5 +29,16 @@ class FormPageActions extends ParentFormPageActions
     public function createOrder()
     {
         $this->_rootElement->find($this->createOrderButton)->click();
+    }
+
+    /**
+     * Wait for User before click on any Button which calls JS validation on correspondent form.
+     * See details in MAGETWO-31121.
+     *
+     * @return void
+     */
+    protected function waitBeforeClick()
+    {
+        sleep(0.2);
     }
 }

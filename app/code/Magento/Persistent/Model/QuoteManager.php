@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model;
 
@@ -38,7 +39,7 @@ class QuoteManager
     protected $_setQuotePersistent = true;
 
     /**
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -46,13 +47,13 @@ class QuoteManager
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         $this->persistentSession = $persistentSession;
         $this->persistentData = $persistentData;
@@ -68,7 +69,7 @@ class QuoteManager
      */
     public function setGuest($checkQuote = false)
     {
-        /** @var $quote \Magento\Sales\Model\Quote */
+        /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->checkoutSession->getQuote();
         if ($quote && $quote->getId()) {
             if ($checkQuote && !$this->persistentData->isShoppingCartPersist() && !$quote->getIsPersistent()) {

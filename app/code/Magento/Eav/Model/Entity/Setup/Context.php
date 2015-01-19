@@ -2,7 +2,8 @@
 /**
  * Eav setup context object
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Setup;
 
@@ -14,7 +15,7 @@ class Context extends \Magento\Framework\Module\Setup\Context
     protected $attributeMapper;
 
     /**
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Resource $appResource
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
@@ -26,7 +27,7 @@ class Context extends \Magento\Framework\Module\Setup\Context
      * @param PropertyMapperInterface $attributeMapper
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Resource $appResource,
         \Magento\Framework\Module\Dir\Reader $modulesReader,

@@ -2,7 +2,8 @@
 /**
  * Interception config. Responsible for providing list of plugins configured for instance
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception\Config;
 
@@ -11,7 +12,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     /**
      * Type configuration
      *
-     * @var \Magento\Framework\ObjectManager\ConfigInterface
+     * @var \Magento\Framework\Interception\ObjectManager\ConfigInterface
      */
     protected $_omConfig;
 
@@ -74,7 +75,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      * @param \Magento\Framework\Config\ScopeListInterface $scopeList
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\ObjectManager\RelationsInterface $relations
-     * @param \Magento\Framework\Interception\ObjectManager\Config $omConfig
+     * @param \Magento\Framework\Interception\ObjectManager\ConfigInterface $omConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions
      * @param string $cacheId
      */
@@ -83,7 +84,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         \Magento\Framework\Config\ScopeListInterface $scopeList,
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Framework\ObjectManager\RelationsInterface $relations,
-        \Magento\Framework\Interception\ObjectManager\Config $omConfig,
+        \Magento\Framework\Interception\ObjectManager\ConfigInterface $omConfig,
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         $cacheId = 'interception'
     ) {
@@ -99,17 +100,19 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         if ($intercepted !== false) {
             $this->_intercepted = unserialize($intercepted);
         } else {
-            $this->initialize();
+            $this->initialize($this->_classDefinitions->getClasses());
         }
     }
 
     /**
      * Initialize interception config
      *
+     * @param array $classDefinitions
      * @return void
      */
-    protected function initialize()
+    public function initialize($classDefinitions = [])
     {
+        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$this->_cacheId]);
         $config = [];
         foreach ($this->_scopeList->getAllScopes() as $scope) {
             $config = array_replace_recursive($config, $this->_reader->read($scope));
@@ -123,7 +126,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         foreach ($config as $typeName => $typeConfig) {
             $this->hasPlugins(ltrim($typeName, '\\'));
         }
-        foreach ($this->_classDefinitions->getClasses() as $class) {
+        foreach ($classDefinitions as $class) {
             $this->hasPlugins($class);
         }
         $this->_cache->save(serialize($this->_intercepted), $this->_cacheId);
@@ -166,6 +169,9 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      */
     public function hasPlugins($type)
     {
-        return isset($this->_intercepted[$type]) ? $this->_intercepted[$type] : $this->_inheritInterception($type);
+        if (isset($this->_intercepted[$type])) {
+            return $this->_intercepted[$type];
+        }
+        return $this->_inheritInterception($type);
     }
 }

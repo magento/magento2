@@ -2,7 +2,8 @@
 /**
  * Web API request.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
 
@@ -50,5 +51,23 @@ class Request extends \Zend_Controller_Request_Http implements \Magento\Framewor
     public function getCookie($name = null, $default = null)
     {
         return $this->_cookieReader->getCookie($name, $default);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Added CGI environment support.
+     */
+    public function getHeader($header)
+    {
+        $headerValue = parent::getHeader($header);
+        if ($headerValue == false) {
+            /** Workaround for php-fpm environment */
+            $header = strtoupper(str_replace('-', '_', $header));
+            if (isset($_SERVER[$header]) && in_array($header, ['CONTENT_TYPE', 'CONTENT_LENGTH'])) {
+                $headerValue = $_SERVER[$header];
+            }
+        }
+        return $headerValue;
     }
 }

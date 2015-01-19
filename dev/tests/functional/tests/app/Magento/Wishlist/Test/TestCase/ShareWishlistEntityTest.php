@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\TestCase;
@@ -41,6 +42,11 @@ use Mtf\TestCase\Injectable;
  */
 class ShareWishlistEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Cms index page
      *
@@ -155,7 +161,6 @@ class ShareWishlistEntityTest extends Injectable
         CatalogProductSimple $product,
         array $sharingInfo
     ) {
-        $this->markTestIncomplete("Bug: MAGETWO-30105");
         //Steps
         $this->loginCustomer($customer);
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');

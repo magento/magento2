@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model;
@@ -598,8 +599,16 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             'aPassword',
             true
         );
-        $attributesBefore = $this->extensibleDataObjectConverter->toFlatArray($existingCustomer);
-        $attributesAfter = $this->extensibleDataObjectConverter->toFlatArray($customerAfter);
+        $attributesBefore = $this->extensibleDataObjectConverter->toFlatArray(
+            $existingCustomer,
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
+        $attributesAfter = $this->extensibleDataObjectConverter->toFlatArray(
+            $customerAfter,
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         // ignore 'updated_at'
         unset($attributesBefore['updated_at']);
         unset($attributesAfter['updated_at']);
@@ -669,7 +678,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $simpleDataObjectConverter = Bootstrap::getObjectManager()
             ->get('Magento\Framework\Api\SimpleDataObjectConverter');
 
-        $dataInService = $simpleDataObjectConverter->toFlatArray($savedCustomer);
+        $dataInService = $simpleDataObjectConverter->toFlatArray(
+            $savedCustomer,
+            'Magento\Customer\Api\Data\CustomerInterface'
+        );
         $expectedDifferences = [
             'created_at',
             'updated_at',

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Review\Test\Constraint;
@@ -13,17 +14,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertReviewCreationSuccessMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * Text of success message after review created
      */
     const SUCCESS_MESSAGE = 'Your review has been accepted for moderation.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Assert that success message is displayed after review created

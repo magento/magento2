@@ -1,10 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
- * Sales configuration filesystem loader. Loads all totals (incl. nominal, creditmemo, invoice)
+ * Sales configuration filesystem loader. Loads all totals (incl. creditmemo, invoice)
  * configuration from XML file
  */
 namespace Magento\Sales\Model\Config;
@@ -20,6 +21,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         '/config/section' => 'name',
         '/config/section/group' => 'name',
         '/config/section/group/item' => 'name',
+        '/config/section/group/item/renderer' => 'name',
         '/config/order/available_product_type' => 'name',
     ];
 

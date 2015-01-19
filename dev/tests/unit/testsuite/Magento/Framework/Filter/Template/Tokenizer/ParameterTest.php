@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Template\Tokenizer;
 
@@ -41,7 +42,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
     public function sampleTokenizeStringProvider()
     {
         return [
-            [" direct_url='about-magento-demo-store'", ['direct_url' => 'about-magento-demo-store']],
+            ["%20direct_url='about-magento-demo-store'", ['direct_url' => 'about-magento-demo-store']],
             [" direct_url='about-magento-demo-store\\[newDemo]",
             ['direct_url' => 'about-magento-demo-store\\[newDemo]']],
             ["   ", []]

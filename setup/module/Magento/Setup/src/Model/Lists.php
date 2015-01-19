@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model;
 
 use Zend_Locale;
+use Magento\Framework\Locale\ConfigInterface;
 
 class Lists
 {
@@ -17,13 +19,22 @@ class Lists
     protected $zendLocale;
 
     /**
+     * List of allowed locales
+     *
+     * @var array
+     */
+    protected $allowedLocales;
+
+    /**
      * Constructor
      *
      * @param Zend_Locale $zendLocale
+     * @param ConfigInterface $localeConfig
      */
-    public function __construct(Zend_Locale $zendLocale)
+    public function __construct(Zend_Locale $zendLocale, ConfigInterface $localeConfig)
     {
         $this->zendLocale = $zendLocale;
+        $this->allowedLocales = $localeConfig->getAllowedLocales();
     }
 
     /**
@@ -67,15 +78,24 @@ class Lists
     {
         $languages = $this->zendLocale->getTranslationList('Language');
         $countries = $this->zendLocale->getTranslationList('Territory');
-        $locale = $this->zendLocale->getLocaleList();
+        $locales = $this->zendLocale->getLocaleList();
+
+        $allowedAliases = [];
+        foreach ($this->allowedLocales as $code) {
+            $allowedAliases[$this->zendLocale->getAlias($code)] = $code;
+        }
+
         $list = [];
-        foreach ($locale as $key => $value) {
-            if (strstr($key, '_')) {
-                $data = explode('_', $key);
+        foreach (array_keys($locales) as $code) {
+            if (array_key_exists($code, $allowedAliases)) {
+                $code = $allowedAliases[$code];
+            }
+            if (strstr($code, '_')) {
+                $data = explode('_', $code);
                 if (!isset($languages[$data[0]]) || !isset($countries[$data[1]])) {
                     continue;
                 }
-                $list[$key] = $languages[$data[0]] . ' (' . $countries[$data[1]] . ')';
+                $list[$code] = $languages[$data[0]] . ' (' . $countries[$data[1]] . ')';
             }
         }
         asort($list);

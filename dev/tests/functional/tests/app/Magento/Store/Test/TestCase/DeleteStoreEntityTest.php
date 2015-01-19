@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\Test\TestCase;
@@ -33,6 +34,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteStoreEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Page BackupIndex
      *
@@ -100,6 +106,6 @@ class DeleteStoreEntityTest extends Injectable
         $this->storeIndex->getStoreGrid()->searchAndOpenStore($store);
         $this->editStore->getFormPageActions()->delete();
         $this->storeDelete->getStoreForm()->fillForm(['create_backup' => $createBackup]);
-        $this->storeDelete->getFormPageFooterActions()->delete();
+        $this->storeDelete->getFormPageActions()->delete();
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php
@@ -53,13 +54,14 @@
 <?php if ($this->getUseContainer()): ?>
 </form>
 <?php endif; ?>
-<script type="text/javascript">
+<script>
 require([
     "jquery",
+    "underscore",
     "mage/mage",
     "Magento_Catalog/catalog/type-switcher",
     "mage/backend/tabs",
-    "underscore"
+    "domReady"
 ], function($){
     var $form = $('[data-form=edit-product]');
     $form.data('typeSwitcher', new TypeSwitcher(<?php echo $this->getTypeSwitcherData();?>).bindAll());

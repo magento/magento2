@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
@@ -19,17 +20,14 @@ use Mtf\Fixture\FixtureInterface;
  */
 class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'high';
+    /* end tags */
+
     /**
      * Message on the product page 404
      */
     const NOT_FOUND_MESSAGE = 'Whoops, our bad...';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'high';
 
     /**
      * Product view page
@@ -69,7 +67,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
     /**
      * Fixture category
      *
-     * @var CatalogCategory
+     * @var Category
      */
     protected $category;
 
@@ -82,7 +80,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface|FixtureInterface[] $product
      * @param Browser $browser
-     * @param CatalogCategory|null $category
+     * @param Category|null $category
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
@@ -91,7 +89,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
         CmsIndex $cmsIndex,
         $product,
         Browser $browser,
-        CatalogCategory $category = null
+        Category $category = null
     ) {
         $this->browser = $browser;
         $this->catalogProductView = $catalogProductView;

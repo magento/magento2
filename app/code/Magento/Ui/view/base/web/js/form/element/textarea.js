@@ -1,26 +1,17 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 define([
     './abstract'
 ], function (Abstract) {
     'use strict';
 
-    var defaults = {
-        cols: 15,
-        rows: 2,
-        template: 'ui/form/element/textarea'
-    };
-
     return Abstract.extend({
-
-        /**
-         * Invokes initialize method of parent class.
-         */
-        initialize: function (config) {
-            _.extend(this, defaults);
-            
-            Abstract.prototype.initialize.apply(this, arguments);
+        defaults: {
+            cols:       15,
+            rows:       2,
+            template:   'ui/form/element/textarea'
         }
     });
 });

@@ -1,41 +1,49 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api;
 
 /**
- * Interface RepositoryInterface
+ * Credit memo item repository interface.
+ *
+ * After a customer places and pays for an order and an invoice has been issued, the merchant can create a credit memo
+ * to refund all or part of the amount paid for any returned or undelivered items. The memo restores funds to the
+ * customer account so that the customer can make future purchases. A credit memo item is an invoiced item for which
+ * a merchant creates a credit memo.
  */
 interface CreditmemoItemRepositoryInterface
 {
     /**
-     * Load entity
+     * Loads a specified credit memo item.
      *
-     * @param int $id
-     * @return \Magento\Sales\Api\Data\CreditmemoItemInterface
+     * @param int $id The credit memo item ID.
+     * @return \Magento\Sales\Api\Data\CreditmemoItemInterface Credit memo item interface.
      */
     public function get($id);
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteria $criteria
-     * @return \Magento\Sales\Api\Data\CreditmemoItemSearchResultInterface
+     * Lists credit memo items that match specified search criteria.
+     *
+     * @param \Magento\Framework\Api\SearchCriteria $criteria The search criteria.
+     * @return \Magento\Sales\Api\Data\CreditmemoItemSearchResultInterface Credit memo item search results interface.
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $criteria);
 
     /**
-     * Delete entity
+     * Deletes a specified credit memo item.
      *
-     * @param \Magento\Sales\Api\Data\CreditmemoInterface $entity
+     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $entity The credit memo item.
      * @return bool
      */
-    public function delete(\Magento\Sales\Api\Data\CreditmemoInterface $entity);
+    public function delete(\Magento\Sales\Api\Data\CreditmemoItemInterface $entity);
 
     /**
-     * Perform persist operations for one entity
+     * Performs persist operations for a specified credit memo item.
      *
-     * @param \Magento\Sales\Api\Data\CreditmemoInterface $entity
-     * @return \Magento\Sales\Api\Data\CreditmemoInterface
+     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $entity The credit memo item.
+     * @return \Magento\Sales\Api\Data\CreditmemoItemInterface Credit memo interface.
      */
-    public function save(\Magento\Sales\Api\Data\CreditmemoInterface $entity);
+    public function save(\Magento\Sales\Api\Data\CreditmemoItemInterface $entity);
 }

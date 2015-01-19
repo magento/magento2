@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Constraint;
@@ -15,17 +16,14 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertMassActionSuccessUpdateMessage extends AbstractConstraint
 {
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
+
     /**
      * Text value to be checked
      */
     const UPDATE_MESSAGE = 'A total of %d record(s) were updated.';
-
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
 
     /**
      * Assert update message is appears on customer grid (Customers > All Customers)

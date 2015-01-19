@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Model;
 
@@ -62,8 +63,8 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $model->delete();
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Framework\Logger')
-                ->logException($e);
+                ->get('Psr\Log\LoggerInterface')
+                ->critical($e);
         }
     }
 

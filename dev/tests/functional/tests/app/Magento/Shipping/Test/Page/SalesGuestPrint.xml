@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page mca="sales/guest/print">
+    <blocks>
+        <infoShipping>
+            <class>Magento\Shipping\Test\Block\Order\Info</class>
+            <locator>.block-order-details-view</locator>
+            <strategy>css selector</strategy>
+        </infoShipping>
+    </blocks>
+</page>

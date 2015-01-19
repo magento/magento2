@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Generator;
 
@@ -29,7 +30,7 @@ class Block implements Layout\GeneratorInterface
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -39,13 +40,13 @@ class Block implements Layout\GeneratorInterface
      * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
      * @param \Magento\Framework\Data\Argument\InterpreterInterface $argumentInterpreter
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Framework\View\Element\BlockFactory $blockFactory,
         \Magento\Framework\Data\Argument\InterpreterInterface $argumentInterpreter,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Logger $logger
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->blockFactory = $blockFactory;
         $this->argumentInterpreter = $argumentInterpreter;
@@ -172,7 +173,7 @@ class Block implements Layout\GeneratorInterface
             try {
                 $block = $this->blockFactory->createBlock($block, $arguments);
             } catch (\ReflectionException $e) {
-                $this->logger->log($e->getMessage());
+                $this->logger->critical($e->getMessage());
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {

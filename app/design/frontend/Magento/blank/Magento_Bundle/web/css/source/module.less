@@ -1,12 +1,13 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .bundle-actions {
     &:extend(.abs-box-tocart all);
@@ -52,7 +53,7 @@
 
     .block-bundle-summary {
         padding: @indent-s-base @indent-base;
-        background: @color-secondary;
+        .css(background, @color-secondary);
         &:extend(.abs-add-box-sizing all);
 
         > .title > strong {
@@ -80,6 +81,7 @@
         .box-tocart {
             .actions {
                 margin-bottom: @indent-s-base;
+                display: inline-block;
             }
             .action.primary {
                 &:extend(.abs-button-l all);
@@ -93,7 +95,7 @@
         }
     }
     p.required {
-        color: @form-field-label-asterisk-color;
+        .css(color, @form-field-label-asterisk-color);
     }
 }
 
@@ -102,7 +104,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .bundle-options-container {
         .legend.title {
             &:extend(.abs-reset-left-margin all);

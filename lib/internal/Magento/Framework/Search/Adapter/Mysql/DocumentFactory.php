@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
@@ -49,11 +50,11 @@ class DocumentFactory
             if ($rawField['name'] == $entityId) {
                 $documentId = $rawField['value'];
             } else {
-                $fields[] = $this->objectManager->create('\Magento\Framework\Search\DocumentField', $rawField);
+                $fields[] = $this->objectManager->create('Magento\Framework\Search\DocumentField', $rawField);
             }
         }
         return $this->objectManager->create(
-            '\Magento\Framework\Search\Document',
+            'Magento\Framework\Search\Document',
             ['documentFields' => $fields, 'documentId' => $documentId]
         );
     }

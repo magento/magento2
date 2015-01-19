@@ -1,14 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\TestCase;
 
-use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
 use Mtf\Client\Browser;
-use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
+use Mtf\Fixture\FixtureFactory;
+use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 
 /**
  * Test Creation for ViewedProductsReportEntity
@@ -31,6 +33,11 @@ use Mtf\TestCase\Injectable;
  */
 class ViewedProductsReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Product Report View page
      *
@@ -51,6 +58,18 @@ class ViewedProductsReportEntityTest extends Injectable
      * @var Browser
      */
     protected $browser;
+
+    /**
+     * Delete all products
+     *
+     * @param CatalogProductIndex $catalogProductIndexPage
+     * @return void
+     */
+    public function __prepare(CatalogProductIndex $catalogProductIndexPage)
+    {
+        $catalogProductIndexPage->open();
+        $catalogProductIndexPage->getProductGrid()->massaction([], 'Delete', true, 'Select All');
+    }
 
     /**
      * Inject pages
@@ -80,7 +99,6 @@ class ViewedProductsReportEntityTest extends Injectable
      */
     public function test($products, array $viewsReport, $total)
     {
-        $this->markTestIncomplete('MAGETWO-15707');
         // Preconditions
         $productsList = $this->prepareProducts($products);
         $this->openProducts($productsList, $total);

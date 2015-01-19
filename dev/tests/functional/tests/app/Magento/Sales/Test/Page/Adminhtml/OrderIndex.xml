@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page mca="sales/order/index" module="Magento_Sales">
+    <blocks>
+        <gridPageActions>
+            <class>Magento\Backend\Test\Block\GridPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </gridPageActions>
+        <salesOrderGrid>
+            <class>Magento\Sales\Test\Block\Adminhtml\Order\Grid</class>
+            <locator>#sales_order_grid</locator>
+            <strategy>css selector</strategy>
+        </salesOrderGrid>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+    </blocks>
+</page>

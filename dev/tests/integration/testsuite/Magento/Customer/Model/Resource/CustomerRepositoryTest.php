@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\Resource;
@@ -140,8 +141,16 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Admin', $customerAfter->getCreatedIn());
         $passwordFromFixture = 'password';
         $this->accountManagement->authenticate($customerAfter->getEmail(), $passwordFromFixture);
-        $attributesBefore = $this->converter->toFlatArray($customerBefore);
-        $attributesAfter = $this->converter->toFlatArray($customerAfter);
+        $attributesBefore = $this->converter->toFlatArray(
+            $customerBefore,
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
+        $attributesAfter = $this->converter->toFlatArray(
+            $customerAfter,
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         // ignore 'updated_at'
         unset($attributesBefore['updated_at']);
         unset($attributesAfter['updated_at']);
@@ -271,7 +280,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function searchCustomersDataProvider()
     {
-        $builder = Bootstrap::getObjectManager()->create('\Magento\Framework\Api\FilterBuilder');
+        $builder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
         return [
             'Customer with specific email' => [
                 [$builder->setField('email')->setValue('customer@search.example.com')->create()],
@@ -321,14 +330,14 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchBuilder = $objectManager->create('Magento\Framework\Api\SearchCriteriaDataBuilder');
 
         // Filter for 'firstname' like 'First'
-        $filterBuilder = $objectManager->create('\Magento\Framework\Api\FilterBuilder');
+        $filterBuilder = $objectManager->create('Magento\Framework\Api\FilterBuilder');
         $firstnameFilter = $filterBuilder->setField('firstname')
             ->setConditionType('like')
             ->setValue('First%')
             ->create();
         $searchBuilder->addFilter([$firstnameFilter]);
         // Search ascending order
-        $sortOrderBuilder = $objectManager->create('\Magento\Framework\Api\SortOrderBuilder');
+        $sortOrderBuilder = $objectManager->create('Magento\Framework\Api\SortOrderBuilder');
         $sortOrder = $sortOrderBuilder
             ->setField('lastname')
             ->setDirection(SearchCriteriaInterface::SORT_ASC)

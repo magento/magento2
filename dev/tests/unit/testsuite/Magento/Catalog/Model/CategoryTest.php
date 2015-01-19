@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model;
@@ -90,16 +91,27 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->registry = $this->getMock('Magento\Framework\Registry');
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->categoryTreeResource = $this->getMock('Magento\Catalog\Model\Resource\Category\Tree', [], [], '', false);
-        $this->categoryTreeFactory = $this->getMock('Magento\Catalog\Model\Resource\Category\TreeFactory', ['create']);
+        $this->categoryTreeFactory = $this->getMock(
+            'Magento\Catalog\Model\Resource\Category\TreeFactory',
+            ['create'],
+            [],
+            '',
+            false);
         $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
         $this->storeCollectionFactory = $this->getMock(
             'Magento\Store\Model\Resource\Store\CollectionFactory',
-            ['create']
+            ['create'],
+            [],
+            '',
+            false
         );
         $this->url = $this->getMock('Magento\Framework\UrlInterface');
         $this->productCollectionFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\CollectionFactory',
-            ['create']
+            ['create'],
+            [],
+            '',
+            false
         );
         $this->catalogConfig = $this->getMock('Magento\Catalog\Model\Config', [], [], '', false);
         $this->filterManager = $this->getMock(

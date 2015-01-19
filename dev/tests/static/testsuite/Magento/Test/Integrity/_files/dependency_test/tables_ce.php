@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     'admin_assert' => 'Magento_Adminhtml',
@@ -106,7 +107,6 @@ return [
     'cms_page' => 'Magento_Cms',
     'cms_page_store' => 'Magento_Cms',
     'core_cache' => 'Magento_Core',
-    'core_cache_option' => 'Magento_Core',
     'core_cache_tag' => 'Magento_Core',
     'core_config_data' => 'Magento_Core',
     'core_config_field' => 'Magento_Core',
@@ -261,13 +261,13 @@ return [
     'sales_order_status_state' => 'Magento_Sales',
     'sales_order_tax' => 'Magento_Tax',
     'sales_payment_transaction' => 'Magento_Sales',
-    'sales_quote' => 'Magento_Sales',
-    'sales_quote_address' => 'Magento_Sales',
-    'sales_quote_address_item' => 'Magento_Sales',
-    'sales_quote_shipping_rate' => 'Magento_Sales',
-    'sales_quote_item' => 'Magento_Sales',
-    'sales_quote_item_option' => 'Magento_Sales',
-    'sales_quote_payment' => 'Magento_Sales',
+    'quote' => 'Magento_Quote',
+    'quote_address' => 'Magento_Quote',
+    'quote_address_item' => 'Magento_Quote',
+    'quote_shipping_rate' => 'Magento_Quote',
+    'quote_item' => 'Magento_Quote',
+    'quote_item_option' => 'Magento_Quote',
+    'quote_payment' => 'Magento_Quote',
     'sales_refunded_aggregated' => 'Magento_Sales',
     'sales_refunded_aggregated_order' => 'Magento_Sales',
     'sales_shipment' => 'Magento_Sales',
@@ -277,8 +277,8 @@ return [
     'sales_shipment_track' => 'Magento_Sales',
     'sales_shipping_aggregated' => 'Magento_Sales',
     'sales_shipping_aggregated_order' => 'Magento_Sales',
-    'sales_quote_entity' => 'Magento_Sales',
-    'sales_quote_temp' => 'Magento_Sales',
+    'quote_entity' => 'Magento_Quote',
+    'quote_temp' => 'Magento_Quote',
     'salesrule_coupon' => 'Magento_SalesRule',
     'coupon_aggregated' => 'Magento_SalesRule',
     'coupon_aggregated_order' => 'Magento_SalesRule',

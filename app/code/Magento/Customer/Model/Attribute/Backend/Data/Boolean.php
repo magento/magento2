@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Attribute\Backend\Data;
 
@@ -21,6 +22,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     {
         $attributeName = $this->getAttribute()->getName();
         $inputValue = $customer->getData($attributeName);
+        $inputValue = is_null($inputValue) ? $this->getAttribute()->getDefaultValue() : $inputValue;
         $sanitizedValue = !empty($inputValue) ? '1' : '0';
         $customer->setData($attributeName, $sanitizedValue);
         return $this;

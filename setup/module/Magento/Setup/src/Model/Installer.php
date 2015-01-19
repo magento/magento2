@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model;
@@ -26,7 +27,6 @@ use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\Store\Model\Store;
-use Symfony\Component\Process\PhpExecutableFinder;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -65,6 +65,11 @@ class Installer
     /**#@- */
 
     const INFO_MESSAGE = 'message';
+
+    /**
+     * The lowest supported MySQL verion
+     */
+    const MYSQL_VERSION_REQUIRED = '5.6.0';
 
     /**
      * File permissions checker
@@ -521,6 +526,7 @@ class Installer
      */
     public function installDeploymentConfig($data)
     {
+        $this->checkInstallationFilePermissions();
         $data[InstallConfig::KEY_DATE] = date('r');
 
         $configs = [
@@ -543,6 +549,8 @@ class Installer
     public function installSchema()
     {
         $this->assertDeploymentConfigExists();
+        $this->assertDbAccessible();
+
         $moduleNames = $this->moduleList->getNames();
 
         $this->log->log('Schema creation/updates:');
@@ -569,6 +577,10 @@ class Installer
      */
     public function installDataFixtures()
     {
+        $this->checkInstallationFilePermissions();
+        $this->assertDeploymentConfigExists();
+        $this->assertDbAccessible();
+
         /** @var \Magento\Framework\Module\Updater $updater */
         $updater = $this->getObjectManager()->create('Magento\Framework\Module\Updater');
         $updater->updateData();
@@ -707,7 +719,7 @@ class Installer
      * @param string $dbUser
      * @param string $dbPass
      * @return boolean
-     * @throws \Exception
+     * @throws \Magento\Setup\Exception
      */
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
@@ -720,7 +732,20 @@ class Installer
         ]);
 
         if (!$connection) {
-            throw new \Exception('Database connection failure.');
+            throw new \Magento\Setup\Exception('Database connection failure.');
+        }
+
+        $mysqlVersion = $connection->fetchOne('SELECT version()');
+        if ($mysqlVersion) {
+            if (preg_match('/^([0-9\.]+)/', $mysqlVersion, $matches)) {
+                if (isset($matches[1]) && !empty($matches[1])) {
+                    if (version_compare($matches[1], self::MYSQL_VERSION_REQUIRED) < 0) {
+                        throw new \Magento\Setup\Exception(
+                            'Sorry, but we support MySQL version '. self::MYSQL_VERSION_REQUIRED . ' or later.'
+                        );
+                    }
+                }
+            }
         }
         return true;
     }
@@ -840,6 +865,23 @@ class Installer
         if (!$this->deploymentConfig->isAvailable()) {
             throw new \Magento\Setup\Exception("Can't run this operation: deployment configuration is absent.");
         }
+    }
+
+    /**
+     * Validates that MySQL is accessible and MySQL version is supported
+     *
+     * @return void
+     */
+    private function assertDbAccessible()
+    {
+        $dbConfig = new DbConfig($this->deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
+        $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
+        $this->checkDatabaseConnection(
+            $config[DbConfig::KEY_NAME],
+            $config[DbConfig::KEY_HOST],
+            $config[DbConfig::KEY_USER],
+            $config[DbConfig::KEY_PASS]
+        );
     }
 
     /**

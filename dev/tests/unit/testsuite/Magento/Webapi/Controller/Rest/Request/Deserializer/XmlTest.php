@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Rest\Request\Deserializer;
 
@@ -40,12 +41,6 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('InvalidArgumentException', '"boolean" data type is invalid. String is expected.');
         $this->_xmlDeserializer->deserialize(false);
-    }
-
-    public function testDeserializerOauthInputException()
-    {
-        $this->setExpectedException('\Magento\Webapi\Exception', 'Request body is expected.');
-        $this->_xmlDeserializer->deserialize('');
     }
 
     public function testDeserialize()

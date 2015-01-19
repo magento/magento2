@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
 
@@ -167,7 +168,7 @@ class Object implements \ArrayAccess
      */
     public function setData($key, $value = null)
     {
-        if (is_array($key)) {
+        if ($key === (array)$key) {
             if ($this->_data !== $key) {
                 $this->_hasDataChanges = true;
             }
@@ -189,14 +190,14 @@ class Object implements \ArrayAccess
      */
     public function unsetData($key = null)
     {
-        if (is_null($key)) {
+        if ($key === null) {
             $this->setData([]);
         } elseif (is_string($key)) {
-            if (array_key_exists($key, $this->_data)) {
+            if (isset($this->_data[$key]) || array_key_exists($key, $this->_data)) {
                 $this->_hasDataChanges = true;
                 unset($this->_data[$key]);
             }
-        } elseif (is_array($key)) {
+        } elseif ($key === (array)$key) {
             foreach ($key as $element) {
                 $this->unsetData($element);
             }
@@ -219,6 +220,7 @@ class Object implements \ArrayAccess
      * @param string|int $index
      * @return mixed
      */
+
     public function getData($key = '', $index = null)
     {
         if ('' === $key) {
@@ -229,14 +231,14 @@ class Object implements \ArrayAccess
         if (strpos($key, '/')) {
             $data = $this->getDataByPath($key);
         } else {
-            $data = $this->getDataByKey($key);
+            $data = $this->_getData($key);
         }
 
         if ($index !== null) {
-            if (is_array($data)) {
+            if ($data === (array)$data) {
                 $data = isset($data[$index]) ? $data[$index] : null;
             } elseif (is_string($data)) {
-                $data = explode("\n", $data);
+                $data = explode(PHP_EOL, $data);
                 $data = isset($data[$index]) ? $data[$index] : null;
             } elseif ($data instanceof \Magento\Framework\Object) {
                 $data = $data->getData($index);
@@ -261,7 +263,7 @@ class Object implements \ArrayAccess
 
         $data = $this->_data;
         foreach ($keys as $key) {
-            if (is_array($data) && isset($data[$key])) {
+            if ((array)$data === $data && isset($data[$key])) {
                 $data = $data[$key];
             } elseif ($data instanceof \Magento\Framework\Object) {
                 $data = $data->getDataByKey($key);
@@ -291,7 +293,10 @@ class Object implements \ArrayAccess
      */
     protected function _getData($key)
     {
-        return isset($this->_data[$key]) ? $this->_data[$key] : null;
+        if (isset($this->_data[$key])) {
+            return $this->_data[$key];
+        }
+        return null;
     }
 
     /**
@@ -540,7 +545,7 @@ class Object implements \ArrayAccess
         if (isset(self::$_underscoreCache[$name])) {
             return self::$_underscoreCache[$name];
         }
-        $result = strtolower(trim(preg_replace('/([A-Z]+|[0-9]+)/', "_$1", $name), '_'));
+        $result = strtolower(trim(preg_replace('/([A-Z]|[0-9]+)/', "_$1", $name), '_'));
         self::$_underscoreCache[$name] = $result;
         return $result;
     }
@@ -583,7 +588,7 @@ class Object implements \ArrayAccess
      */
     public function setOrigData($key = null, $data = null)
     {
-        if (is_null($key)) {
+        if ($key === null) {
             $this->_origData = $this->_data;
         } else {
             $this->_origData[$key] = $data;
@@ -599,10 +604,13 @@ class Object implements \ArrayAccess
      */
     public function getOrigData($key = null)
     {
-        if (is_null($key)) {
+        if ($key === null) {
             return $this->_origData;
         }
-        return isset($this->_origData[$key]) ? $this->_origData[$key] : null;
+        if (isset($this->_origData[$key])) {
+            return $this->_origData[$key];
+        }
+        return null;
     }
 
     /**
@@ -682,7 +690,7 @@ class Object implements \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return array_key_exists($offset, $this->_data);
+        return isset($this->_data[$offset]) || array_key_exists($offset, $this->_data);
     }
 
     /**
@@ -706,6 +714,9 @@ class Object implements \ArrayAccess
      */
     public function offsetGet($offset)
     {
-        return isset($this->_data[$offset]) ? $this->_data[$offset] : null;
+        if (isset($this->_data[$offset])) {
+            return $this->_data[$offset];
+        }
+        return null;
     }
 }

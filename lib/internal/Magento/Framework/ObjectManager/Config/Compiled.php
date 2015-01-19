@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Config;
 
@@ -100,7 +101,10 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function getInstanceType($instanceName)
     {
-        return isset($this->virtualTypes[$instanceName]) ? $this->virtualTypes[$instanceName] : $instanceName;
+        if (isset($this->virtualTypes[$instanceName])) {
+            return $this->virtualTypes[$instanceName];
+        }
+        return $instanceName;
     }
 
     /**
@@ -112,7 +116,10 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
      */
     public function getPreference($type)
     {
-        return isset($this->preferences[$type]) ? $this->preferences[$type] : $type;
+        if (isset($this->preferences[$type])) {
+            return $this->preferences[$type];
+        }
+        return $type;
     }
 
     /**

@@ -2,7 +2,8 @@
 /**
  * Service Args Serializer
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
 
@@ -10,6 +11,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialization\DataBuilderFactory;
@@ -71,6 +73,7 @@ class ServiceArgsSerializer
      * @param string $serviceMethodName name of the method that we are trying to call
      * @param array $inputArray data to send to method in key-value format
      * @return array list of parameters that can be used to call the service method
+     * @throws InputException if no value is provided for required parameters
      */
     public function getInputData($serviceClassName, $serviceMethodName, array $inputArray)
     {
@@ -82,6 +85,7 @@ class ServiceArgsSerializer
         $params = $serviceMethod->getParameters();
 
         $inputData = [];
+        $inputError = [];
         foreach ($params as $param) {
             $paramName = $param->getName();
             $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
@@ -93,7 +97,21 @@ class ServiceArgsSerializer
                 $paramType = $this->getParamType($param);
                 $inputData[] = $this->_convertValue($paramValue, $paramType);
             } else {
-                $inputData[] = $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null;
+                if ($param->isDefaultValueAvailable()) {
+                    $inputData[] = $param->getDefaultValue();
+                } else {
+                    $inputError[] = $paramName;
+                }
+            }
+        }
+
+        if (!empty($inputError)) {
+            $exception = new InputException();
+            foreach ($inputError as $errorParamField) {
+                $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]);
+            }
+            if ($exception->wasErrorAdded()) {
+                throw $exception;
             }
         }
 

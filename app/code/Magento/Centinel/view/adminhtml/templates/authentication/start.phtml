@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <form name="validation_form" id="validation_form" action="<?php echo $this->getAcsUrl();?>" method="post">
@@ -8,7 +9,7 @@
     <input type="hidden" name="TermUrl" value="<?php echo $this->getTermUrl()?>" />
     <input type="hidden" name="MD" value="<?php echo $this->getMd()?>" />
 </form>
-<script type="text/javascript">
+<script>
 //<![CDATA[
 window.onload = function(){
     document.getElementById('validation_form').submit();

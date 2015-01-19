@@ -2,7 +2,8 @@
 /**
  * Obsolete methods
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['__get', 'Magento\Framework\Object'],
@@ -35,7 +36,7 @@ return [
     ['_getIsActiveAttributeId', 'Magento\Catalog\Model\Resource\Category\Tree', 'Magento\Catalog\Model\Resource\Category::getIsActiveAttributeId'],
     ['_getIsActiveAttributeId', 'Magento\Catalog\Model\Resource\Category', 'Magento\Catalog\Model\Resource\Category::getIsActiveAttributeId'],
     ['_bytesToMbytes', 'Magento\Catalog\Model\Product\Option\Type\File'],
-    ['_calculatePrice', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
+    ['_calculatePrice', 'Magento\Quote\Model\Quote\Item\AbstractItem'],
     ['_canBeStoreCodeInUrl', 'Magento\Framework\App\Request\Http'],
     ['_canShowField', 'Magento\Backend\Block\System\Config\Form'],
     ['_canUseCacheForInit', 'Magento\Core\Model\Config'],
@@ -180,18 +181,18 @@ return [
     ['_sort', 'Magento\Backend\Model\Config\Structure\Converter'],
     [
         'submitOrder',
-        'Magento\Sales\Model\Service\Quote',
-        'Magento\Sales\Model\Service\Quote::submitOrderWithDataObject'
+        'Magento\Quote\Model\Service\Quote',
+        'Magento\Quote\Model\Service\Quote::submitOrderWithDataObject'
     ],
     [
         'submitAll',
-        'Magento\Sales\Model\Service\Quote',
-        'Magento\Sales\Model\Service\Quote::submitAllWithDataObject'
+        'Magento\Quote\Model\Service\Quote',
+        'Magento\Quote\Model\Service\Quote::submitAllWithDataObject'
     ],
     [
         'exportCustomerAddress',
-        'Magento\Sales\Model\Quote\Address',
-        'Magento\Sales\Model\Quote\Address::exportCustomerAddressData'
+        'Magento\Quote\Model\Quote\Address',
+        'Magento\Quote\Model\Quote\Address::exportCustomerAddressData'
     ],
     ['_toHtml', 'Magento\Backend\Block\Widget\Container'],
     ['_unhookQueries', 'Magento\Core\Model\Resource\Setup'],
@@ -272,7 +273,7 @@ return [
     ['authFrontend'],
     ['authValidate', '', '\Magento\Framework\HTTP\Authentication::getCredentials'],
     ['bundlesAction', 'Magento\Catalog\Controller\Adminhtml\Product'],
-    ['calcTaxAmount', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
+    ['calcTaxAmount', 'Magento\Quote\Model\Quote\Item\AbstractItem'],
     ['callbackQueryHook', 'Magento\Core\Model\Resource\Setup'],
     ['canCreateUser', 'Magento\User\Model\Resource\User'],
     ['canPrint', 'Magento\Checkout\Block\Onepage\Success'],
@@ -328,6 +329,12 @@ return [
     ['displayFullSummary', 'Magento\Tax\Model\Config'],
     ['displayZeroTax', 'Magento\Tax\Model\Config'],
     ['drawItem', 'Magento\Catalog\Block\Navigation'],
+    ['getStoreCategories', 'Magento\Catalog\Block\Navigation'],
+    ['_getItemPosition', 'Magento\Catalog\Block\Navigation'],
+    ['_renderCategoryMenuItemHtml', 'Magento\Catalog\Block\Navigation'],
+    ['getCurrentCategoryPath', 'Magento\Catalog\Block\Navigation'],
+    ['drawOpenCategoryItem', 'Magento\Catalog\Block\Navigation'],
+    ['renderCategoriesMenuHtml', 'Magento\Catalog\Block\Navigation'],
     ['dropKey', 'Magento\Framework\DB\Adapter\Pdo\Mysql'],
     ['escapeJs', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config'],
     ['eventClean', 'Magento\Reports\Model\Event\Observer'],
@@ -380,7 +387,7 @@ return [
     ['getAttributeDataModelFactory', 'Magento\Eav\Model\Validator\Attribute\Data'],
     ['getAttributes', 'Magento\Customer\Helper\Address'],
     ['getAttributesJson', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config', 'getAttributes'],
-    ['getBaseTaxAmount', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
+    ['getBaseTaxAmount', 'Magento\Quote\Model\Quote\Item\AbstractItem'],
     ['getBlockClassName', 'Magento\Core\Model\Config'],
     ['getButtonsHtml', 'Magento_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Bundle_Option_Search'],
     ['getCache', 'Magento\Core\Model\Config'],
@@ -608,8 +615,9 @@ return [
         'Magento\Framework\App\CacheInterface',
         'Magento_Cache_Frontend_Decorator_TagScope::getTag()'
     ],
-    ['getTaxAmount', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
+    ['getTaxAmount', 'Magento\Quote\Model\Quote\Item\AbstractItem'],
     ['getTaxRatesByProductClass', '', '_getAllRatesByProductClass'],
+    ['getThemeVersion', '\Magento\Framework\Config\Theme'],
     ['getAllRatesByProductClass', 'Magento\Tax\Helper\Data'],
     [
         'getTemplateProcessor',
@@ -624,9 +632,9 @@ return [
         'Magento\Core\Model\Design\Source\Design',
         'Magento_Core_Model_Theme::getThemeCollectionOptionArray'
     ],
-    ['getTotalModels', 'Magento\Sales\Model\Quote\Address'],
-    ['importCustomerAddress', 'Magento\Sales\Model\Quote\Address'],
-    ['getTotalModels', 'Magento\Sales\Model\Quote\Config'],
+    ['getTotalModels', 'Magento\Quote\Model\Quote\Address'],
+    ['importCustomerAddress', 'Magento\Quote\Model\Quote\Address'],
+    ['getTotalModels', 'Magento\Quote\Model\Quote\Config'],
     ['getTrackId', 'Magento\Shipping\Block\Tracking\Popup'],
     ['getTrackingInfoByOrder', 'Magento\Shipping\Block\Tracking\Popup'],
     ['getTrackingInfoByShip', 'Magento\Shipping\Block\Tracking\Popup'],
@@ -680,7 +688,7 @@ return [
     ['insertProductPrice', 'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice'],
     ['isAbsolutePath'],
     ['isAdmin', 'Magento\Store\Model\Store'],
-    ['isAllowedGuestCheckout', 'Magento\Sales\Model\Quote'],
+    ['isAllowedGuestCheckout', 'Magento\Quote\Model\Quote'],
     ['isApplicableToQuote', 'Magento\Payment\Model\Method\AbstractMethod'],
     ['isCheckoutAvailable', 'Magento\Multishipping\Model\Checkout\Type\Multishipping'],
     ['isDirectOutput', 'Magento\Framework\View\Layout'],
@@ -1223,7 +1231,7 @@ return [
     [
         'changeQuoteCustomerGroupId',
         '\Magento\Sales\Model\Observer',
-        '\Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch'
+        '\Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch'
     ],
     [
         'getEncryptedSessionId',
@@ -1652,6 +1660,7 @@ return [
     ['_isDataChanged', 'Magento\Catalog\Model\Product'],
     ['getVisibleOnFrontStates', 'Magento\Sales\Model\Order\Config', 'getVisibleOnFrontStatuses'],
     ['getInvisibleOnFrontStates', 'Magento\Sales\Model\Order\Config', 'getInvisibleOnFrontStatuses'],
+    ['_authorize', 'Magento\Sales\Model\Order\Payment'],
     ['_shouldBeConverted', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_beforeSave', 'Magento\Sales\Model\Resource\AbstractResource'],
     ['_afterSave', 'Magento\Sales\Model\Resource\AbstractResource'],
@@ -1664,6 +1673,8 @@ return [
     ['_detectTheme', 'Magento\Core\Helper\Theme'],
     ['_detectGroup', 'Magento\Core\Helper\Theme'],
     ['_sortThemesByHierarchy', 'Magento\Core\Helper\Theme'],
+    ['set', 'Magento\Framework\Api\ExtensibleObjectBuilder'],
+    ['toFlatArrayStatic', 'Magento\Framework\Api\ExtensibleDataObjectConverter'],
     ['_sortArrayByArray', 'Magento\Core\Helper\Theme'],
     ['_getGroupLabels', 'Magento\Core\Helper\Theme'],
     ['_sortGroupFilesCallback', 'Magento\Core\Helper\Theme'],
@@ -1724,7 +1735,7 @@ return [
         'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
         'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::getFlatColumns'
     ],
-    ['addProductAdvanced', '\Magento\Sales\Model\Quote'],
+    ['addProductAdvanced', '\Magento\Quote\Model\Quote'],
     ['translateArray', 'Magento\Framework\App\Helper\AbstractHelper'],
     ['getCalculator', '\Magento\Tax\Helper\Data'],
     ['getRatesForAllProductTaxClasses', 'Magento\Tax\Model\Calculation'],
@@ -1927,7 +1938,7 @@ return [
     ['setTablePrefix', 'Magento\Framework\App\Magento\Framework\App\Resource', 'Can be passed through constructor only'],
     ['_debugTimer', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\LoggerAbstract::startTimer'],
     ['_debugStat', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::logStats'],
-    ['_debugException', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::logException'],
+    ['_debugException', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::critical'],
     ['_debugWriteToFile', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\Logger\File::log'],
     ['applyDataUpdates', 'Magento\Framework\Module\Setup', 'Magento\Framework\Module\DataSetup::applyDataUpdates'],
     ['_installData', 'Magento\Framework\Module\Setup', 'Magento\Framework\Module\DataSetup::_installData'],
@@ -1950,7 +1961,7 @@ return [
     ['getModule', 'Magento\Framework\Module\ModuleListInterface', 'getOne'],
     ['_getNewConditionModelInstance', 'Magento\Rule\Model\Condition\Combine'],
     ['getItemsRandomCollection', 'Magento\Sales\Model\Order'],
-    ['importOrderAddress', 'Magento\Sales\Model\Quote\Address', 'Magento\Sales\Model\Quote\Address::importCustomerAddressData'],
+    ['importOrderAddress', 'Magento\Quote\Model\Quote\Address', 'Magento\Quote\Model\Quote\Address::importCustomerAddressData'],
     ['_getUsedAttributes', 'Magento\SalesRule\Model\Rule'],
     ['getDefaultCustomerGroupId', 'Magento\Customer\Model\Vat', 'Magento\Customer\Api\GroupManagementInterface::getDefaultGroup'],
     [
@@ -1967,7 +1978,6 @@ return [
     ['urlDecode', 'Magento\Framework\App\Helper\AbstractHelper', 'Magento\Framework\Url\DecoderInterface::decode'],
     ['isModuleEnabled', 'Magento\Framework\App\Helper\AbstractHelper', 'Magento\Framework\Module\Manager::isEnabled()'],
     ['isModuleOutputEnabled', 'Magento\Framework\App\Helper\AbstractHelper', 'Magento\Framework\Module\Manager::isOutputEnabled()'],
-    ['toFlatArrayStatic', 'Magento\Framework\Api\ExtensibleDataObjectConverter'],
     ['_packToTar', 'Magento\Framework\Archive\Tar'],
     ['_parseHeader', 'Magento\Framework\Archive\Tar'],
     ['getIdentities', 'Magento\Wishlist\Block\Link'],
@@ -1987,7 +1997,6 @@ return [
     ['getEnv', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
     ['setActiveFilter', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
     ['process', 'Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection'],
-    ['set', 'Magento\Framework\Api\ExtensibleObjectBuilder'],
     [
         'isAutomaticCleaningAvailable',
         'Magento\Framework\Cache\Backend\Decorator\AbstractDecorator',
@@ -2001,4 +2010,24 @@ return [
     ['getScriptTranslation', 'Magento\Framework\LocaleInterface'],
     ['getCountryTranslation', 'Magento\Framework\LocaleInterface'],
     ['getTerritoryTranslation', 'Magento\Framework\LocaleInterface'],
+    [
+        'getNoteNotify',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Comment',
+        'Magento\Sales\Block\Adminhtml\Order\Create\Totals'
+    ],
+    ['getLinksConfig', 'Magento\Downloadable\Block\Catalog\Product\Links'],
+    ['getAuthorizationAmounts', 'Magento\Paypal\Model\Config'],
+    ['cleanTransactions', 'Magento\Paypal\Model\Observer'],
+    ['getSkinImagePlaceholderUrl', 'Magento\Cms\Model\Wysiwyg\Config'],
+    ['compareIndexColumnProperties', 'Magento\Catalog\Model\Resource\Helper'],
+    ['getIsNullNotNullCondition', 'Magento\Catalog\Model\Resource\Helper'],
+    ['_getCategoryPath', 'Magento\Catalog\Model\Resource\Setup'],
+    ['_getCategoryEntityRow', 'Magento\Catalog\Model\Resource\Setup'],
+    ['createEavAttributeResource', 'Magento\Catalog\Model\Resource\Setup'],
+    ['getAllNonNominalItems', 'Magento\Sales\Model\Quote\Address'],
+    ['getAllNominalItems', 'Magento\Sales\Model\Quote\Address'],
+    ['isNominal', 'Magento\Sales\Model\Order\Item'],
+    ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
+    ['checkQuoteAmount', 'Magento\Sales\Helper\Data'],
+    ['getEntityTypeId', 'Magento\Customer\Model\Customer']
 ];

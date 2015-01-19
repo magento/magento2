@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -120,8 +121,7 @@ class Curl implements \Zend_Http_Client_Adapter_Interface
      * @param int     $port
      * @param boolean $secure
      * @return $this
-     *
-     * @deprecated since 1.4.0.0-rc1 @TODO MAGETWO-31680
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function connect($host, $port = 80, $secure = false)
     {

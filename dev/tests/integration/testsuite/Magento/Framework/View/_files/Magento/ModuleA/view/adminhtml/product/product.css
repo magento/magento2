@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /* Action "Back" as cross  */
@@ -118,7 +119,7 @@
     text-align: center;
     text-transform: uppercase;
     color: #a69a8f;
-    font: 18px/110px 'CallunaSans', Arial, sans-serif;
+    font: 18px/110px Arial, sans-serif;
     font-weight: 500;
     z-index: 3;
 }

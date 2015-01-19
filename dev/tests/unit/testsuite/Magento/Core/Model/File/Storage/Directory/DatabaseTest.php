@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\File\Storage\Directory;
 
@@ -55,7 +56,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $resourceDirectoryDatabaseMock;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $loggerMock;
 
@@ -106,7 +107,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->directoryFactoryMock->expects(
             $this->any()
@@ -175,7 +176,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     {
         $this->directoryMock->expects($this->any())->method('getParentId')->will($this->returnValue(null));
 
-        $this->loggerMock->expects($this->any())->method('logException');
+        $this->loggerMock->expects($this->any())->method('critical');
 
         $this->directoryDatabase->importDirectories([]);
     }

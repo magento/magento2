@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
@@ -151,9 +152,7 @@ class ProductForm extends FormTabs
                 $category = reset($categories);
             }
             if ($category) {
-                $tabs['product-details']['category_ids']['value'] = ($category instanceof InjectableFixture)
-                    ? $category->getName()
-                    : $category->getCategoryName();
+                $tabs['product-details']['category_ids']['value'] = $category->getName();
             }
 
             $this->showAdvancedSettings();
@@ -179,9 +178,9 @@ class ProductForm extends FormTabs
         $attribute = $product->getDataFieldConfig('custom_attribute')['source']->getAttribute();
         $this->openTab('product-details');
         if (!$this->checkAttributeLabel($attribute)) {
-            /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab $tab */
+            /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails $tab */
             $tab = $this->openTab($tabName);
-            $tab->addNewAttribute();
+            $tab->addNewAttribute($tabName);
             $this->fillAttributeForm($attribute);
             $this->reinitRootElement();
         }
@@ -223,7 +222,6 @@ class ProductForm extends FormTabs
     public function openTab($tabName)
     {
         $this->showAdvancedSettings();
-
         return parent::openTab($tabName);
     }
 

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
@@ -410,7 +411,7 @@ class Bootstrap
                 if (!$this->objectManager) {
                     throw new \DomainException();
                 }
-                $this->objectManager->get('Magento\Framework\Logger')->logException($e);
+                $this->objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             } catch (\Exception $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }

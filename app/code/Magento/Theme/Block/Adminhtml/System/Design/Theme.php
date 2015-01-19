@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design;
 
@@ -23,7 +24,7 @@ class Theme extends \Magento\Backend\Block\Widget\Grid\Container
             $this->getLayout()->getBlock('page-title')->setPageTitle('Themes');
         }
 
-        $this->buttonList->update('add', 'label', __('Add New Theme'));
+        $this->buttonList->remove('add');
     }
 
     /**

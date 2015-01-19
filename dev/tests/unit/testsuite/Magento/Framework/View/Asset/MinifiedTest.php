@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Asset;
 
@@ -14,7 +15,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
     protected $_asset;
 
     /**
-     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_logger;
 
@@ -51,7 +52,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
-        $this->_logger = $this->getMock('\Magento\Framework\Logger', [], [], '', false);
+        $this->_logger = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
         $this->_baseUrl = $this->getMock('\Magento\Framework\Url', [], [], '', false);
         $this->_staticViewDir = $this->getMockForAbstractClass(
             '\Magento\Framework\Filesystem\Directory\WriteInterface'
@@ -210,7 +211,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
         $this->_asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
         $e = new \Exception('test');
         $this->_adapter->expects($this->once())->method('minify')->with('content')->will($this->throwException($e));
-        $this->_logger->expects($this->once())->method('logException');
+        $this->_logger->expects($this->once())->method('critical');
         $this->_staticViewDir->expects($this->never())->method('writeFile');
         $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
         $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
 
@@ -12,6 +13,11 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
  */
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Store\Model\Store
+     */
+    protected $store;
+
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
      */
@@ -32,6 +38,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     protected $cookieMetadataFactoryMock;
 
+    /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystemMock;
+
     public function setUp()
     {
         $this->objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -50,10 +61,17 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactoryMock = $this->getMock(
             'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
-            [],
+            ['createPublicCookieMetadata'],
             [],
             '',
             false
+        );
+        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->store = $this->objectManagerHelper->getObject(
+            'Magento\Store\Model\Store',
+            ['filesystem' => $this->filesystemMock]
         );
     }
 
@@ -448,19 +466,18 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testSetCookie()
     {
         $storeCode = 'store code';
-        $cookieMetadata = $this->getMock(
-            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
-            [],
-            [],
-            '',
-            false
-        );
+        $cookieMetadata = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
         $cookieMetadata->expects($this->once())
             ->method('setHttpOnly')
             ->with(true)
             ->willReturnSelf();
         $cookieMetadata->expects($this->once())
             ->method('setDurationOneYear')
+            ->willReturnSelf();
+        $cookieMetadata->expects($this->once())
+            ->method('setPath')
             ->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
@@ -496,9 +513,18 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteCookie()
     {
+        $cookieMetadata = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->will($this->returnValue($cookieMetadata));
+        $cookieMetadata->expects($this->once())
+            ->method('setPath')
+            ->willReturnSelf();
         $this->cookieManagerMock->expects($this->once())
             ->method('deleteCookie')
-            ->with(Store::COOKIE_NAME);
+            ->with(Store::COOKIE_NAME, $cookieMetadata);
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             'Magento\Store\Model\Store',
@@ -566,5 +592,31 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'unsecure request, no secure base url registered' => [false, ['SERVER_PORT' => 443], false, null],
             'unsecure request, not using registered port' => [false, ['SERVER_PORT' => 80]],
         ];
+    }
+
+    /**
+     * @covers \Magento\Store\Model\Store::getBaseMediaDir
+     */
+    public function testGetBaseMediaDir()
+    {
+        $expectedResult = 'pub/media';
+        $this->filesystemMock->expects($this->once())
+            ->method('getUri')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+            ->willReturn($expectedResult);
+        $this->assertEquals($expectedResult, $this->store->getBaseMediaDir());
+    }
+
+    /**
+     * @covers \Magento\Store\Model\Store::getBaseStaticDir
+     */
+    public function testGetBaseStaticDir()
+    {
+        $expectedResult = 'pub/static';
+        $this->filesystemMock->expects($this->once())
+            ->method('getUri')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::STATIC_VIEW)
+            ->willReturn($expectedResult);
+        $this->assertEquals($expectedResult, $this->store->getBaseStaticDir());
     }
 }

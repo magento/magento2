@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
@@ -29,7 +30,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false, false);
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $helper = $this->getMock('Magento\Framework\Stdlib\String', [], [], '', false, false);
 
         $attributeData = [

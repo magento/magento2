@@ -2,7 +2,8 @@
 /**
  * Test Webapi Error Processor.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller;
 
@@ -21,7 +22,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_appStateMock;
 
-    /** @var \Magento\Framework\Logger */
+    /** @var \Psr\Log\LoggerInterface */
     protected $_loggerMock;
 
     protected function setUp()
@@ -35,7 +36,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_loggerMock = $this->getMockBuilder('Magento\Framework\Logger')->disableOriginalConstructor()->getMock();
+        $this->_loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
 
         $filesystemMock = $this->getMockBuilder('\Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
@@ -198,7 +199,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     public function testMaskException($exception, $expectedHttpCode, $expectedMessage, $expectedDetails)
     {
         /** Assert that exception was logged. */
-        // TODO:MAGETWO-21077 $this->_loggerMock->expects($this->once())->method('logException');
+        // TODO:MAGETWO-21077 $this->_loggerMock->expects($this->once())->method('critical');
         $maskedException = $this->_errorProcessor->maskException($exception);
         $this->assertMaskedException(
             $maskedException,

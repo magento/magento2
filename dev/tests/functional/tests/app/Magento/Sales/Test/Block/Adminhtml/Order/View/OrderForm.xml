@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tabs>
+    <invoices>
+        <class>Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices</class>
+        <selector>#sales_order_view_tabs_order_invoices</selector>
+        <strategy>css selector</strategy>
+    </invoices>
+    <shipments>
+        <class>Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments</class>
+        <selector>#sales_order_view_tabs_order_shipments</selector>
+        <strategy>css selector</strategy>
+    </shipments>
+    <creditmemos>
+        <class>Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos</class>
+        <selector>#sales_order_view_tabs_order_creditmemos</selector>
+        <strategy>css selector</strategy>
+    </creditmemos>
+    <returns>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <selector>#sales_order_view_tabs_order_rma</selector>
+        <strategy>css selector</strategy>
+    </returns>
+    <transactions>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <selector>#sales_order_view_tabs_order_transactions</selector>
+        <strategy>css selector</strategy>
+    </transactions>
+</tabs>

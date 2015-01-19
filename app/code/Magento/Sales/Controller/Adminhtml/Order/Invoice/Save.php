@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
@@ -188,14 +189,14 @@ class Save extends \Magento\Backend\App\Action
             try {
                 $this->invoiceCommentSender->send($invoice, !empty($data['send_email']), $comment);
             } catch (\Exception $e) {
-                $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->messageManager->addError(__('We can\'t send the invoice email.'));
             }
             if ($shipment) {
                 try {
                     $this->shipmentSender->send($shipment, !empty($data['send_email']));
                 } catch (\Exception $e) {
-                    $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+                    $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                     $this->messageManager->addError(__('We can\'t send the shipment.'));
                 }
             }
@@ -206,7 +207,7 @@ class Save extends \Magento\Backend\App\Action
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t save the invoice.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->_redirect('sales/*/new', ['order_id' => $orderId]);
     }

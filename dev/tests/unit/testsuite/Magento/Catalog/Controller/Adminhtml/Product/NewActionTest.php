@@ -1,35 +1,38 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 class NewActionTest extends \Magento\Catalog\Controller\Adminhtml\ProductTest
 {
+    /** @var \Magento\Catalog\Controller\Adminhtml\Product\NewAction */
     protected $action;
-
-    /**
-     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultPage;
-
-    /**
-     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultForward;
+    /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject */
+    protected $productBuilder;
+    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    protected $product;
 
     protected function setUp()
     {
-        $productBuilder = $this->getMockBuilder('Magento\Catalog\Controller\Adminhtml\Product\Builder')->setMethods([
-                'build',
-            ])->disableOriginalConstructor()->getMock();
-
-        $product = $this->getMockBuilder('\Magento\Catalog\Model\Product')->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();
-        $product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
-        $product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
-        $productBuilder->expects($this->any())->method('build')->will($this->returnValue($product));
+        $this->productBuilder = $this->getMock(
+            'Magento\Catalog\Controller\Adminhtml\Product\Builder',
+            ['build'],
+            [],
+            '',
+            false
+        );
+        $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()
+            ->setMethods(['addData', 'getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();
+        $this->product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
+        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
+        $this->productBuilder->expects($this->any())->method('build')->will($this->returnValue($this->product));
 
         $this->resultPage = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
             ->disableOriginalConstructor()
@@ -56,7 +59,7 @@ class NewActionTest extends \Magento\Catalog\Controller\Adminhtml\ProductTest
 
         $this->action = new \Magento\Catalog\Controller\Adminhtml\Product\NewAction(
             $this->initContext(),
-            $productBuilder,
+            $this->productBuilder,
             $this->getMockBuilder('Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter')
                 ->disableOriginalConstructor()->getMock(),
             $resultPageFactory,
@@ -68,17 +71,25 @@ class NewActionTest extends \Magento\Catalog\Controller\Adminhtml\ProductTest
             ->willReturn($this->layout);
     }
 
-    /**
-     * Testing `newAction` method
-     */
     public function testExecute()
     {
-        $this->action->getRequest()->expects($this->at(0))->method('getParam')
-            ->with('set')->will($this->returnValue(true));
-        $this->action->getRequest()->expects($this->at(1))->method('getParam')
-            ->with('popup')->will($this->returnValue(true));
+        $this->action->getRequest()->expects($this->any())->method('getParam')->willReturn(true);
         $this->action->getRequest()->expects($this->any())->method('getFullActionName')
-            ->will($this->returnValue('catalog_product_new'));
+            ->willReturn('catalog_product_new');
+        $this->action->execute();
+    }
+
+    public function testExecuteObtainsProductDataFromSession()
+    {
+        $this->action->getRequest()->expects($this->any())->method('getParam')->willReturn(true);
+        $this->action->getRequest()->expects($this->any())->method('getFullActionName')
+            ->willReturn('catalog_product_new');
+
+        $this->session->expects($this->any())->method('getProductData')
+            ->willReturn(['product' => ['name' => 'test-name']]);
+
+        $this->product->expects($this->once())->method('addData')->with(['name' => 'test-name', 'stock_data' => null]);
+
         $this->action->execute();
     }
 }

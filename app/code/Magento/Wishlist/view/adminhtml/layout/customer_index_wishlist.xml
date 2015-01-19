@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
@@ -34,6 +35,7 @@
                         <argument name="header" xsi:type="string" translate="true">Product</argument>
                         <argument name="id" xsi:type="string">product_name</argument>
                         <argument name="index" xsi:type="string">product_name</argument>
+                        <argument name="filter" xsi:type="string">Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text</argument>
                         <argument name="renderer" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item</argument>
                         <argument name="column_css_class" xsi:type="string">col-name</argument>
                         <argument name="header_css_class" xsi:type="string">col-name</argument>
@@ -109,5 +111,6 @@
                 </arguments>
             </block>
         </block>
+        <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Configure" template="Magento_Catalog::catalog/product/composite/configure.phtml" name="configure.popup"/>
     </container>
 </layout>

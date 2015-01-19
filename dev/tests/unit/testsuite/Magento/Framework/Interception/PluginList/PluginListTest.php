@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception\PluginList;
 
@@ -46,10 +47,7 @@ class PluginListTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue(false));
 
-        $omConfigMock =  $this->getMockBuilder('Magento\Framework\Interception\ObjectManager\Config')
-            ->disableOriginalConstructor()
-            ->setMethods(['getOriginalInstanceType'])
-            ->getMock();
+        $omConfigMock =  $this->getMockForAbstractClass('Magento\Framework\Interception\ObjectManager\ConfigInterface');
 
         $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
 

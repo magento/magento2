@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 define([
     'underscore',
@@ -8,28 +9,26 @@ define([
 ], function (_, utils, Select) {
     'use strict';
 
-    var defaults = {
-        size: 5,
-        template: 'ui/form/element/multiselect'
-    };
-
-    var __super__ = Select.prototype;
-
     return Select.extend({
+        defaults: {
+            size: 5
+        },
 
         /**
-         * Extends instance with defaults, extends config with formatted values
-         *     and options, and invokes initialize method of AbstractElement class.
+         * Calls 'getInitialValue' of parent and if the result of it is not empty
+         * string, returs it, else returnes caption or first found option's value
+         *     
+         * @returns {Number|String}
          */
-        initialize: function () {
-            _.extend(this, defaults);
-            
-            __super__.initialize.apply(this, arguments);
+        getInititalValue: function(){
+            var value = this._super();
+
+            return _.isString(value) ? value.split(',') : value;
         },
 
         /**
          * Defines if value has changed
-         * @return {Boolean}
+         * @returns {Boolean}
          */
         hasChanged: function () {
             var value   = this.value(),

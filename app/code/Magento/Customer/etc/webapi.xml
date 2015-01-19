@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -27,12 +28,6 @@
     </route>
     <route url="/V1/customerGroups/:id/permissions" method="GET">
         <service class="Magento\Customer\Api\GroupManagementInterface" method="isReadonly"/>
-        <resources>
-            <resource ref="Magento_Customer::group"/>
-        </resources>
-    </route>
-    <route url="/V1/customerGroups/search" method="POST">
-        <service class="Magento\Customer\Api\GroupRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>
@@ -160,12 +155,6 @@
             <parameter name="customerId" force="true">%customer_id%</parameter>
         </data>
     </route>
-    <route url="/V1/customers/search" method="POST">
-        <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="getList"/>
-        <resources>
-            <resource ref="Magento_Customer::customer"/>
-        </resources>
-    </route>
     <route url="/V1/customers/search" method="GET">
         <service class="Magento\Customer\Api\CustomerRepositoryInterface" method="getList"/>
         <resources>
@@ -176,12 +165,6 @@
         <service class="Magento\Customer\Api\AccountManagementInterface" method="activate"/>
         <resources>
             <resource ref="Magento_Customer::manage"/>
-        </resources>
-    </route>
-    <route url="/V1/customers/login" method="POST">
-        <service class="Magento\Customer\Api\AccountManagementInterface" method="authenticate"/>
-        <resources>
-            <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
     <route url="/V1/customers/me/password" method="PUT">
@@ -196,13 +179,13 @@
     <route url="/V1/customers/:customerId/password/resetLinkToken/:resetPasswordLinkToken" method="GET">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="validateResetPasswordLinkToken"/>
         <resources>
-            <resource ref="Magento_Customer::customer"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/customers/password" method="PUT">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="initiatePasswordReset"/>
         <resources>
-            <resource ref="Magento_Customer::manage"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/customers/:customerId/password" method="PUT">
@@ -244,7 +227,7 @@
     <route url="/V1/customers/isEmailAvailable" method="POST">
         <service class="Magento\Customer\Api\AccountManagementInterface" method="isEmailAvailable"/>
         <resources>
-            <resource ref="Magento_Customer::manage"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
 

@@ -2,7 +2,8 @@
 /**
  * JSON deserializer of REST request content.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Rest\Request\Deserializer;
 
@@ -36,7 +37,7 @@ class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterf
      * @param string $encodedBody Posted content from request.
      * @return array|null Return NULL if content is invalid.
      * @throws \InvalidArgumentException
-     * @throws \Magento\Webapi\Exception If decoding error occurs or in case of empty argument type
+     * @throws \Magento\Webapi\Exception If decoding error was encountered.
      */
     public function deserialize($encodedBody)
     {
@@ -44,9 +45,6 @@ class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterf
             throw new \InvalidArgumentException(
                 sprintf('"%s" data type is invalid. String is expected.', gettype($encodedBody))
             );
-        }
-        if (empty($encodedBody)) {
-            throw new \Magento\Webapi\Exception(__('Request body should not be empty.'));
         }
         try {
             $decodedBody = $this->_helper->jsonDecode($encodedBody);

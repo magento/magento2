@@ -1,8 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Store\Model\StoreManager;
 
 /**
  * @magentoAppArea adminhtml
@@ -44,5 +48,17 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
 
         $noticeText = $this->_block->getForm()->getElement('preview_image')->getNote();
         $this->assertNotEmpty($noticeText);
+    }
+
+    public function testToHtmlPreviewImageUrl()
+    {
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $this->_theme->setType(\Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL);
+        $this->_theme->setPreviewImage('preview_image_test.jpg');
+        $this->_block->setArea('adminhtml');
+
+        $html = $this->_block->toHtml();
+        preg_match_all('/pub\/static\/adminhtml\/_view\/en_US/', $html, $result);
+        $this->assertEmpty($result[0]);
     }
 }

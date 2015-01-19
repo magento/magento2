@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Catalog\Model\Resource\Setup',
@@ -12,6 +13,7 @@ $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
  */
 /** @var $category \Magento\Catalog\Model\Category */
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(3)
     ->setName('Category 1')
     ->setParentId(2)
@@ -24,6 +26,7 @@ $category->setId(3)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(4)
     ->setName('Category 1.1')
     ->setParentId(3)
@@ -37,6 +40,7 @@ $category->setId(4)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(5)
     ->setName('Category 1.1.1')
     ->setParentId(4)
@@ -51,6 +55,7 @@ $category->setId(5)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(6)
     ->setName('Category 2')
     ->setParentId(2)
@@ -63,6 +68,7 @@ $category->setId(6)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(7)
     ->setName('Movable')
     ->setParentId(2)
@@ -75,6 +81,7 @@ $category->setId(7)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(8)
     ->setName('Inactive')
     ->setParentId(2)
@@ -86,6 +93,7 @@ $category->setId(8)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(9)
     ->setName('Movable Position 1')
     ->setParentId(2)
@@ -98,6 +106,7 @@ $category->setId(9)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(10)
     ->setName('Movable Position 2')
     ->setParentId(2)
@@ -110,6 +119,7 @@ $category->setId(10)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(11)
     ->setName('Movable Position 3')
     ->setParentId(2)
@@ -122,6 +132,7 @@ $category->setId(11)
     ->save();
 
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
 $category->setId(12)
     ->setName('Category 12')
     ->setParentId(2)

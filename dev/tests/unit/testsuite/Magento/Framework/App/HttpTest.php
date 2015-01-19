@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
@@ -188,6 +189,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ['DOCUMENT_ROOT' => 'something', 'SCRIPT_FILENAME' => 'something/else']
         );
         $this->assertTrue($this->http->catchException($bootstrap, new \Exception('Test')));
+    }
+
+    public function testCatchExceptionSessionException()
+    {
+        $this->responseMock->expects($this->once())->method('setRedirect');
+        $this->responseMock->expects($this->once())->method('sendHeaders');
+        $bootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
+        $bootstrap->expects($this->once())->method('isDeveloperMode')->willReturn(false);
+        $this->assertTrue($this->http->catchException($bootstrap, new \Magento\Framework\Session\Exception('Test')));
     }
 
     /**

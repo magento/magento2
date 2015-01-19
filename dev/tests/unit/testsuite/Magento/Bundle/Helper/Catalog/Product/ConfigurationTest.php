@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Helper\Catalog\Product;
 
@@ -150,7 +151,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $priceModel =
             $this->getMock('Magento\Bundle\Model\Product\Price', ['getSelectionFinalTotalPrice'], [], '', false);
         $selectionQty =
-            $this->getMock('Magento\Sales\Model\Quote\Item\Option', ['getValue', '__wakeup'], [], '', false);
+            $this->getMock('Magento\Quote\Model\Quote\Item\Option', ['getValue', '__wakeup'], [], '', false);
         $bundleOption =
             $this->getMock('Magento\Bundle\Model\Option', ['getSelections', 'getTitle', '__wakeup'], [], '', false);
         $selectionOption =

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\File\Storage;
 
@@ -50,18 +51,18 @@ class File
     protected $_errors = [];
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Core\Helper\File\Storage\Database $storageHelper
      * @param \Magento\Core\Helper\File\Media $mediaHelper
      * @param \Magento\Core\Model\Resource\File\Storage\File $fileUtility
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Core\Helper\File\Storage\Database $storageHelper,
         \Magento\Core\Helper\File\Media $mediaHelper,
         \Magento\Core\Model\Resource\File\Storage\File $fileUtility
@@ -193,7 +194,7 @@ class File
             try {
                 $fileInfo = $this->_mediaHelper->collectFileInfo($this->getMediaBaseDirectory(), $fileName);
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
                 continue;
             }
 
@@ -221,7 +222,7 @@ class File
                 $this->{$callback}($part);
             } catch (\Exception $e) {
                 $this->_errors[] = $e->getMessage();
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
             }
         }
 
@@ -284,7 +285,7 @@ class File
 
                 return $this->_fileUtility->saveFile($filename, $file['content'], $overwrite);
             } catch (\Exception $e) {
-                $this->_logger->logException($e);
+                $this->_logger->critical($e);
                 throw new \Magento\Framework\Model\Exception(
                     __('Unable to save file "%1" at "%2"', $file['filename'], $file['directory'])
                 );

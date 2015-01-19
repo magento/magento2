@@ -1,11 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Mtf\App\State;
 
-use Magento\Core\Test\Fixture\Config;
+use Mtf\ObjectManager;
+use Mtf\Fixture\FixtureFactory;
+use Magento\Core\Test\Fixture\ConfigData;
 
 /**
  * Class State1
@@ -13,20 +16,37 @@ use Magento\Core\Test\Fixture\Config;
  */
 class State1 extends AbstractState
 {
+    // TODO: Move data set to ConfigData fixture after implement merging fixture xml
+    /**
+     * Data set for configuration state
+     *
+     * @var array
+     */
+    protected $configDataSet = [
+        'section' => [
+            [
+                'path' => 'cms/wysiwyg/enabled',
+                'scope' => 'default',
+                'scope_id' => 1,
+                'value' => 'disabled',
+            ],
+        ]
+    ];
+
     /**
      * Configuration fixture
      *
-     * @var Config
+     * @var ConfigData
      */
     protected $config;
 
     /**
      * @construct
-     * @param Config $config
+     * @param FixtureFactory $fixtureFactory
      */
-    public function __construct(Config $config)
+    public function __construct(FixtureFactory $fixtureFactory)
     {
-        $this->config = $config;
+        $this->config = $fixtureFactory->createByCode('configData', ['data' => $this->configDataSet]);
     }
 
     /**
@@ -35,8 +55,9 @@ class State1 extends AbstractState
     public function apply()
     {
         parent::apply();
-        $this->config->switchData('app_state1_configuration');
-        $this->config->persist();
+        if (file_exists(dirname(dirname(dirname(MTF_BP))) . '/app/etc/config.php')) {
+            $this->config->persist();
+        }
     }
 
     /**

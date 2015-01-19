@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
@@ -48,7 +49,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Framework\Logger $logger
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -75,7 +76,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Framework\Logger $logger,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
@@ -174,13 +175,13 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             $this->requestBuilder->bind('search_term', $this->queryText);
         }
 
-        $this->requestBuilder->bind(
-            'price_dynamic_algorithm',
-            $this->_scopeConfig->getValue(
-                \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
+        $priceRangeCalculation = $this->_scopeConfig->getValue(
+            \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+        if ($priceRangeCalculation) {
+            $this->requestBuilder->bind('price_dynamic_algorithm', $priceRangeCalculation);
+        }
 
         $this->requestBuilder->setRequestName('quick_search_container');
         $queryRequest = $this->requestBuilder->create();

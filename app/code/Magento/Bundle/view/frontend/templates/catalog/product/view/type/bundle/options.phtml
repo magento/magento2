@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php /** @var $this Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */ ?>
@@ -11,7 +12,7 @@ $helper = $this->helper('Magento\Catalog\Helper\Output');
 <?php $options = $this->decorateArray($this->getOptions()); ?>
 <?php if ($product->isSaleable()):?>
     <?php if (count($options)): ?>
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'mage/mage',

@@ -2,7 +2,8 @@
 /**
  * A CLI tool for managing Magento application caches
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\App;
@@ -14,17 +15,20 @@ require __DIR__ . '/../../app/bootstrap.php';
 
 $usage = 'Usage: php -f cache.php -- [--' . ManagerApp::KEY_SET . '=1|0]'
     . ' [--' . ManagerApp::KEY_CLEAN . ']'
+    . ' [--' . ManagerApp::KEY_STATUS . ']'
     . ' [--' . ManagerApp::KEY_FLUSH . ']'
     . ' [--' . ManagerApp::KEY_TYPES . '=<type1>,<type2>,...]'
     . ' [--bootstrap=' . escapeshellarg('INIT_PARAM=foo&ANOTHER_PARAM[key]=bar') . ']
     --' . ManagerApp::KEY_TYPES . ' - list of cache types, comma-separated. If omitted, all caches will be affected
     --' . ManagerApp::KEY_SET . ' - enable or disable the specified cache types
     --' . ManagerApp::KEY_CLEAN . ' - clean data of the specified cache types
+    --' . ManagerApp::KEY_STATUS . ' - display current status for each cache type
     --' . ManagerApp::KEY_FLUSH . ' - destroy all data in storage that the specified cache types reside on
     --bootstrap - add or override parameters of the bootstrap' . PHP_EOL;
 $longOpts = [
     ManagerApp::KEY_SET . '::',
     ManagerApp::KEY_CLEAN,
+    ManagerApp::KEY_STATUS,
     ManagerApp::KEY_FLUSH,
     ManagerApp::KEY_TYPES . '::',
     'bootstrap::',

@@ -2,7 +2,8 @@
 /**
  * Base router
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\App\Router;
 
@@ -278,7 +279,6 @@ class Base implements \Magento\Framework\App\RouterInterface
         $action = null;
         $actionInstance = null;
 
-        $request->setRouteName($this->_routeConfig->getRouteByFrontName($moduleFrontName));
         $actionPath = $this->matchActionPath($request, $params['actionPath']);
         $action = $request->getActionName() ?: ($params['actionName'] ?: $this->_defaultPath->getPart('action'));
         $this->_checkShouldBeSecure($request, '/' . $moduleFrontName . '/' . $actionPath . '/' . $action);
@@ -308,6 +308,7 @@ class Base implements \Magento\Framework\App\RouterInterface
         $request->setControllerName($actionPath);
         $request->setActionName($action);
         $request->setControllerModule($currentModuleName);
+        $request->setRouteName($this->_routeConfig->getRouteByFrontName($moduleFrontName));
         if (isset($params['variables'])) {
             $request->setParams($params['variables']);
         }

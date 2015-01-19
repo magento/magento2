@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Onepage;
 
@@ -9,7 +10,7 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 use Magento\Directory\Model\Resource\Country\Collection;
 use Magento\Directory\Model\Resource\Region\Collection as RegionCollection;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Sales\Model\Quote;
+use Magento\Quote\Model\Quote;
 
 /**
  * One page common functionality block
@@ -365,10 +366,10 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     /**
      * Return the html text for shipping price
      *
-     * @param \Magento\Sales\Model\Quote\Address\Rate $rate
+     * @param \Magento\Quote\Model\Quote\Address\Rate $rate
      * @return string
      */
-    public function getShippingPriceHtml(\Magento\Sales\Model\Quote\Address\Rate $rate)
+    public function getShippingPriceHtml(\Magento\Quote\Model\Quote\Address\Rate $rate)
     {
         /** @var \Magento\Checkout\Block\Shipping\Price $block */
         $block = $this->getLayout()->getBlock('checkout.shipping.price');

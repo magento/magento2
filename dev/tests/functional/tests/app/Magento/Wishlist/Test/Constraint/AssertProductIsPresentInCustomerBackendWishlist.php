@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\Constraint;
@@ -18,12 +19,9 @@ use Mtf\Fixture\InjectableFixture;
  */
 class AssertProductIsPresentInCustomerBackendWishlist extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that products added to wishlist are present on Customers account on backend.
@@ -47,7 +45,7 @@ class AssertProductIsPresentInCustomerBackendWishlist extends AbstractConstraint
         $wishlistGrid = $customerIndexEdit->getCustomerForm()->getTabElement('wishlist')->getSearchGridBlock();
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $wishlistGrid->isRowVisible(['product_name' => $product->getName()]),
+            $wishlistGrid->isRowVisible(['product_name' => $product->getName()], true, false),
             $product->getName() . " is not visible in customer wishlist on backend."
         );
     }

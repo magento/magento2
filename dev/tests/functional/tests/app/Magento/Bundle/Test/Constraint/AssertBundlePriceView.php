@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Test\Constraint;
@@ -11,16 +12,13 @@ use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertBundlePriceView
+ * Check displayed price view for bundle product on product page.
  */
 class AssertBundlePriceView extends AbstractConstraint
 {
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
     /**
      * Assert that displayed price view for bundle product on product page equals passed from fixture.
@@ -43,7 +41,7 @@ class AssertBundlePriceView extends AbstractConstraint
     }
 
     /**
-     * Assert prices on the product view Page
+     * Assert prices on the product view Page.
      *
      * @param BundleProduct $product
      * @param CatalogProductView $catalogProductView
@@ -52,11 +50,14 @@ class AssertBundlePriceView extends AbstractConstraint
     protected function assertPrice(BundleProduct $product, CatalogProductView $catalogProductView)
     {
         $priceData = $product->getDataFieldConfig('price')['source']->getPreset();
+        $priceView = $product->getPriceView();
         $priceBlock = $catalogProductView->getViewBlock()->getPriceBlock();
 
-        $priceLow = ($product->getPriceView() == 'Price Range')
-            ? $priceBlock->getPriceFrom()
-            : $priceBlock->getRegularPrice();
+        if ($product->hasData('special_price') || $product->hasData('group_price')) {
+            $priceLow = $priceBlock->getFinalPrice();
+        } else {
+            $priceLow = ($priceView == 'Price Range') ? $priceBlock->getPriceFrom() : $priceBlock->getRegularPrice();
+        }
 
         \PHPUnit_Framework_Assert::assertEquals(
             $priceData['price_from'],
@@ -64,7 +65,7 @@ class AssertBundlePriceView extends AbstractConstraint
             'Bundle price From on product view page is not correct.'
         );
 
-        if ($product->getPriceView() == 'Price Range') {
+        if ($priceView == 'Price Range') {
             \PHPUnit_Framework_Assert::assertEquals(
                 $priceData['price_to'],
                 $priceBlock->getPriceTo(),
@@ -74,7 +75,7 @@ class AssertBundlePriceView extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Mtf\Client\Driver\Selenium\Element;
@@ -9,41 +10,40 @@ use Mtf\Client\Driver\Selenium\Element;
 use Mtf\Client\Element\Locator;
 
 /**
- * Class MultisuggestElement
- * Typified element class for multi suggest element
+ * Typified element class for multi suggest element.
  */
 class MultisuggestElement extends SuggestElement
 {
     /**
-     * Selector list choice
+     * Selector list choice.
      *
      * @var string
      */
     protected $listChoice = './/ul[contains(@class,"mage-suggest-choices")]';
 
     /**
-     * Selector choice item
+     * Selector choice item.
      *
      * @var string
      */
     protected $choice = './/li/div[text()="%s"]/..';
 
     /**
-     * Selector choice value
+     * Selector choice value.
      *
      * @var string
      */
     protected $choiceValue = './/li[contains(@class,"mage-suggest-choice")]/div';
 
     /**
-     * Selector remove choice item
+     * Selector remove choice item.
      *
      * @var string
      */
     protected $choiceClose = '.mage-suggest-choice-close';
 
     /**
-     * Set value
+     * Set value.
      *
      * @param array|string $values
      * @return void
@@ -55,13 +55,14 @@ class MultisuggestElement extends SuggestElement
         $this->clear();
         foreach ((array)$values as $value) {
             if (!$this->isChoice($value)) {
+                $this->selectWindow();
                 parent::setValue($value);
             }
         }
     }
 
     /**
-     * Get value
+     * Get value.
      *
      * @return array
      */
@@ -81,7 +82,7 @@ class MultisuggestElement extends SuggestElement
     }
 
     /**
-     * Check exist selected item
+     * Check exist selected item.
      *
      * @param string $value
      * @return bool
@@ -92,7 +93,7 @@ class MultisuggestElement extends SuggestElement
     }
 
     /**
-     * Clear element
+     * Clear element.
      *
      * @return void
      */
@@ -103,5 +104,16 @@ class MultisuggestElement extends SuggestElement
             $choiceClose->click();
             $choiceClose = $this->find($this->choiceClose);
         }
+    }
+
+    /**
+     * Select to last window.
+     *
+     * @return void
+     */
+    protected function selectWindow()
+    {
+        $windowHandles = $this->_driver->windowHandles();
+        $this->_driver->window(end($windowHandles));
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\DesignEditor\Controller\Varien\Router;
 
@@ -74,7 +75,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      */
     public function matchDataProvider()
     {
-        $configMock = $this->getMock('Magento\Framework\App\Config\ReinitableConfigInterface');
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_cookieReaderMock = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface');
         $uri    = self::TEST_HOST . '/' . self::VDE_FRONT_NAME . self::TEST_PATH;
         $notVdeUrl = self::TEST_HOST . self::TEST_PATH;
@@ -96,7 +97,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
         $matchedRequest = $this->getMock(
             'Magento\Framework\App\Request\Http',
             ['_isFrontArea'],
-            [$routerListMock, $infoProcessorMock, $this->_cookieReaderMock, $configMock, $uri]
+            [$routerListMock, $infoProcessorMock, $this->_cookieReaderMock, $objectManagerMock, $uri]
         );
 
         $matchedController = $this->getMockForAbstractClass(
@@ -135,7 +136,11 @@ class StandardTest extends \PHPUnit_Framework_TestCase
             'not vde request' => [
                 '$request' => $this->getMock(
                         'Magento\Framework\App\Request\Http', ['_isFrontArea'], [
-                            $routerListMock, $infoProcessorMock, $this->_cookieReaderMock, $configMock, $notVdeUrl
+                            $routerListMock,
+                            $infoProcessorMock,
+                            $this->_cookieReaderMock,
+                            $objectManagerMock,
+                            $notVdeUrl
                         ]
                     ),
                 '$isVde'           => false,
@@ -145,7 +150,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
                 '$request' => $this->getMock(
                         'Magento\Framework\App\Request\Http',
                         ['_isFrontArea'],
-                        [$routerListMock, $infoProcessorMock, $this->_cookieReaderMock, $configMock, $uri]
+                        [$routerListMock, $infoProcessorMock, $this->_cookieReaderMock, $objectManagerMock, $uri]
                     ),
                 '$isVde'           => true,
                 '$isLoggedIn'      => false,
@@ -154,7 +159,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
                 '$request' => $this->getMock(
                         'Magento\Framework\App\Request\Http',
                         ['_isFrontArea'],
-                        [$routerListMock, $infoProcessorMock, $this->_cookieReaderMock, $configMock, $uri]
+                        [$routerListMock, $infoProcessorMock, $this->_cookieReaderMock, $objectManagerMock, $uri]
                     ),
                 '$isVde'           => true,
                 '$isLoggedIn'      => true,

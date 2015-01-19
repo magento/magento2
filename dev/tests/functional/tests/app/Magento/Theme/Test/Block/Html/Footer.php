@@ -1,7 +1,8 @@
 <?php
 /**
  * @spi
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Test\Block\Html;
@@ -28,7 +29,7 @@ class Footer extends Block
      *
      * @var string
      */
-    protected $variableSelector = './/div[contains(@class, "links")]/*[text()="%s"]';
+    protected $variableSelector = './/ul[contains(@class, "links")]/*[text()="%s"]';
 
     /**
      * Store group dropdown selector

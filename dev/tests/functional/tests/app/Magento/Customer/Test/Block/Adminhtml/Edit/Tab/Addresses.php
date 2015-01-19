@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Adminhtml\Edit\Tab;
@@ -22,14 +23,14 @@ class Addresses extends Tab
      *
      * @var string
      */
-    protected $addNewAddress = '#add_address_button';
+    protected $addNewAddress = '.address-list-actions .add';
 
     /**
      * Open customer address
      *
      * @var string
      */
-    protected $customerAddress = '//*[@id="address_list"]/li[%d]/a';
+    protected $customerAddress = '//*[contains(@class, "address-list-item")][%d]';
 
     /**
      * Magento loader

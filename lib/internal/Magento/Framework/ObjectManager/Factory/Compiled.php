@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Factory;
 
@@ -29,18 +30,20 @@ class Compiled extends AbstractFactory
             if (isset($arguments[$key])) {
                 $argument = $arguments[$key];
             } else {
-                if (is_array($argument)) {
-                    if (array_key_exists('__val__', $argument)) {
+                if ($argument === (array)$argument) {
+                    if (isset($argument['__val__']) || array_key_exists('__val__', $argument)) {
                         $argument = $argument['__val__'];
-                        if (is_array($argument)) {
+                        if ($argument === (array)$argument) {
                             $this->parseArray($argument);
                         }
                     } elseif (isset($argument['__non_shared__'])) {
                         $argument = $this->objectManager->create($argument['__instance__']);
                     } elseif (isset($argument['__arg__'])) {
-                        $argument = isset($this->globalArguments[$argument['__arg__']])
-                            ? $this->globalArguments[$argument['__arg__']]
-                            : $argument['__default__'];
+                        if (isset($this->globalArguments[$argument['__arg__']])) {
+                            $argument = $this->globalArguments[$argument['__arg__']];
+                        } else {
+                            $argument = $argument['__default__'];
+                        }
                     }
                 } else {
                     $argument = $this->objectManager->get($argument);

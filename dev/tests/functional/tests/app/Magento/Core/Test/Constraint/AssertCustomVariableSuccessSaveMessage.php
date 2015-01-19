@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Core\Test\Constraint;
@@ -14,14 +15,11 @@ use Mtf\Constraint\AbstractConstraint;
  */
 class AssertCustomVariableSuccessSaveMessage extends AbstractConstraint
 {
-    const SUCCESS_SAVE_MESSAGE = 'You saved the custom variable.';
+    /* tags */
+    const SEVERITY = 'low';
+    /* end tags */
 
-    /**
-     * Constraint severeness
-     *
-     * @var string
-     */
-    protected $severeness = 'low';
+    const SUCCESS_SAVE_MESSAGE = 'You saved the custom variable.';
 
     /**
      * Assert that success delete message is correct after Custom System Variable deleted
