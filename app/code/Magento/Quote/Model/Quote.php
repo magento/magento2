@@ -7,7 +7,7 @@ namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
@@ -23,22 +23,15 @@ use Magento\Sales\Model\Status;
  *  sales_quote_delete_after
  *
  * @method Quote setStoreId(int $value)
- * @method string getCreatedAt()
  * @method Quote setCreatedAt(string $value)
- * @method string getUpdatedAt()
  * @method Quote setUpdatedAt(string $value)
- * @method string getConvertedAt()
  * @method Quote setConvertedAt(string $value)
- * @method int getIsActive()
  * @method Quote setIsActive(int $value)
  * @method Quote setIsVirtual(int $value)
  * @method int getIsMultiShipping()
  * @method Quote setIsMultiShipping(int $value)
- * @method int getItemsCount()
  * @method Quote setItemsCount(int $value)
- * @method float getItemsQty()
  * @method Quote setItemsQty(float $value)
- * @method int getOrigOrderId()
  * @method Quote setOrigOrderId(int $value)
  * @method float getStoreToBaseRate()
  * @method Quote setStoreToBaseRate(float $value)
@@ -73,17 +66,13 @@ use Magento\Sales\Model\Status;
  * @method Quote setCustomerSuffix(string $value)
  * @method string getCustomerDob()
  * @method Quote setCustomerDob(string $value)
- * @method string getCustomerNote()
  * @method Quote setCustomerNote(string $value)
- * @method int getCustomerNoteNotify()
  * @method Quote setCustomerNoteNotify(int $value)
- * @method int getCustomerIsGuest()
  * @method Quote setCustomerIsGuest(int $value)
  * @method string getRemoteIp()
  * @method Quote setRemoteIp(string $value)
  * @method string getAppliedRuleIds()
  * @method Quote setAppliedRuleIds(string $value)
- * @method string getReservedOrderId()
  * @method Quote setReservedOrderId(string $value)
  * @method string getPasswordHash()
  * @method Quote setPasswordHash(string $value)
@@ -120,7 +109,7 @@ use Magento\Sales\Model\Status;
  * @method Quote setSharedStoreIds(array $values)
  * @method Quote setWebsite($value)
  */
-class Quote extends \Magento\Framework\Model\AbstractModel
+class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\CartInterface
 {
     /**
      * Checkout login method key
@@ -329,9 +318,14 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     protected $customerRepository;
 
     /**
+     * @var \Magento\Quote\Api\Data\TotalsDataBuilder
+     */
+    protected $totalsBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
+     * @param QuoteValidator $quoteValidator
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -357,6 +351,9 @@ class Quote extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param \Magento\Quote\Api\Data\TotalsDataBuilder $totalsBuilder
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\Api\AttributeDataBuilder $attributeDataBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -390,6 +387,9 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        \Magento\Quote\Api\Data\TotalsDataBuilder $totalsBuilder,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        \Magento\Framework\Api\AttributeDataBuilder $attributeDataBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -420,7 +420,16 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         $this->customerBuilder = $customerBuilder;
         $this->customerRepository = $customerRepository;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->totalsBuilder = $totalsBuilder;
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $attributeDataBuilder,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -431,6 +440,111 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         $this->_init('Magento\Quote\Model\Resource\Quote');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCurrency()
+    {
+        return $this->_getData('currency');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItems()
+    {
+        return $this->_getData('items');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedAt()
+    {
+        return $this->_getData('created_at');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedAt()
+    {
+        return $this->_getData('updated_at');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConvertedAt()
+    {
+        return $this->_getData('converted_at');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsActive()
+    {
+        return $this->_getData('is_active');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItemsCount()
+    {
+        return $this->_getData('items_count');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItemsQty()
+    {
+        return $this->_getData('items_qty');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrigOrderId()
+    {
+        return $this->_getData('orig_order_id');
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getReservedOrderId()
+    {
+        return $this->_getData('reserved_order_id');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomerIsGuest()
+    {
+        return $this->_getData('customer_is_guest');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomerNote()
+    {
+        return $this->_getData('customer_note');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomerNoteNotify()
+    {
+        return $this->_getData('customer_note_notify');
     }
 
     /**
@@ -786,9 +900,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Get customer tax class ID.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getCustomerTaxClassId()
     {
@@ -1733,6 +1845,20 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTotalsObject()
+    {
+        // TODO: refactor to getTotals()
+        $shippingAddress = $this->getShippingAddress();
+        $totals = array_merge($shippingAddress->getData(), $this->getData());
+        $this->totalsBuilder->populateWithArray($totals);
+        $this->totalsBuilder->setItems($this->getAllItems());
+
+        return $this->totalsBuilder->create();
     }
 
     /**

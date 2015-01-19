@@ -78,9 +78,9 @@ class CartManagementInterfaceTest extends WebapiAbstract
                 'httpMethod' => RestConfig::HTTP_METHOD_PUT,
             ],
             'soap' => [
-                'service' => 'checkoutCartWriteServiceV1',
+                'service' => self::SERVICE_NAME,
                 'serviceVersion' => 'V1',
-                'operation' => 'checkoutCartWriteServiceV1AssignCustomer',
+                'operation' => self::SERVICE_NAME . 'AssignCustomer',
             ],
         ];
 
@@ -114,8 +114,8 @@ class CartManagementInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'soap' => [
                 'serviceVersion' => 'V1',
-                'service' => 'checkoutCartWriteServiceV1',
-                'operation' => 'checkoutCartWriteServiceV1AssignCustomer',
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'AssignCustomer',
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId,
@@ -141,9 +141,9 @@ class CartManagementInterfaceTest extends WebapiAbstract
         $customerId = 1;
         $serviceInfo = [
             'soap' => [
-                'service' => 'checkoutCartWriteServiceV1',
+                'service' => self::SERVICE_NAME,
                 'serviceVersion' => 'V1',
-                'operation' => 'checkoutCartWriteServiceV1AssignCustomer',
+                'operation' => self::SERVICE_NAME . 'AssignCustomer',
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId,
@@ -179,9 +179,9 @@ class CartManagementInterfaceTest extends WebapiAbstract
                 'resourcePath' => '/V1/carts/' . $cartId,
             ],
             'soap' => [
-                'service' => 'checkoutCartWriteServiceV1',
+                'service' => self::SERVICE_NAME,
                 'serviceVersion' => 'V1',
-                'operation' => 'checkoutCartWriteServiceV1AssignCustomer',
+                'operation' => self::SERVICE_NAME . 'AssignCustomer',
             ],
         ];
 
@@ -212,9 +212,9 @@ class CartManagementInterfaceTest extends WebapiAbstract
 
         $serviceInfo = [
             'soap' => [
-                'service' => 'checkoutCartWriteServiceV1',
+                'service' => self::SERVICE_NAME,
                 'serviceVersion' => 'V1',
-                'operation' => 'checkoutCartWriteServiceV1AssignCustomer',
+                'operation' => self::SERVICE_NAME . 'AssignCustomer',
             ],
             'rest' => [
                 'httpMethod' => RestConfig::HTTP_METHOD_PUT,
@@ -253,8 +253,8 @@ class CartManagementInterfaceTest extends WebapiAbstract
 
         $serviceInfo = [
             'soap' => [
-                'service' => 'checkoutCartWriteServiceV1',
-                'operation' => 'checkoutCartWriteServiceV1AssignCustomer',
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'AssignCustomer',
                 'serviceVersion' => 'V1',
             ],
             'rest' => [

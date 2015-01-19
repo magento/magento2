@@ -80,7 +80,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * @param int $cartId
      * @param int[] $sharedStoreIds
      * @throws NoSuchEntityException
-     * @return Quote
+     * @return \Magento\Quote\Api\Data\CartInterface
      */
     public function get($cartId, array $sharedStoreIds = [])
     {

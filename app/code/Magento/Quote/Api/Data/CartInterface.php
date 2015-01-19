@@ -75,7 +75,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Returns information about the customer who is assigned to the cart.
      *
-     * @return \Magento\Checkout\Api\Data\CustomerInterface Information about the customer who is assigned to the cart.
+     * @return \Magento\Customer\Api\Data\CustomerInterface Information about the customer who is assigned to the cart.
      */
     public function getCustomer();
 
@@ -105,7 +105,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return \Magento\Quote\Api\Data\TotalsInterface|null Information about cart totals. Otherwise, null.
      */
-    public function getTotals();
+    public function getTotalsObject();
 
     /**
      * Returns the reserved order ID for the cart.
@@ -127,4 +127,30 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return \Magento\Checkout\Api\Data\CurrencyInterface|null Quote currency information. Otherwise, null.
      */
     public function getCurrency();
+
+    /**
+     * True for guest customers, false for logged in customers
+     *
+     * @return bool|null
+     */
+    public function getCustomerIsGuest();
+
+    /**
+     * Customer notice text
+     *
+     * @return string|null
+     */
+    public function getCustomerNote();
+
+    /**
+     * @return bool|null
+     */
+    public function getCustomerNoteNotify();
+
+    /**
+     * Get customer tax class ID.
+     *
+     * @return string|null
+     */
+    public function getCustomerTaxClassId();
 }
