@@ -35,6 +35,11 @@ use Mtf\TestCase\Injectable;
  */
 class EditSearchTermEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * CMS index page
      *

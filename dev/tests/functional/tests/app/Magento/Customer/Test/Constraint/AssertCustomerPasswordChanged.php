@@ -6,7 +6,6 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Mtf\Constraint\AbstractConstraint;

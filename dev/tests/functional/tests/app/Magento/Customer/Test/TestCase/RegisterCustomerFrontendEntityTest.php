@@ -6,15 +6,13 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for CreateCustomerFrontendEntity
- *
  * Test Flow:
  * 1. Go to frontend.
  * 2. Click Register link.
@@ -25,8 +23,14 @@ use Mtf\TestCase\Injectable;
  * @group Customer_Account_(CS)
  * @ZephyrId MAGETWO-23546
  */
-class CreateCustomerFrontendEntityTest extends Injectable
+class RegisterCustomerFrontendEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * @var CustomerAccountCreate
      */
@@ -62,7 +66,7 @@ class CreateCustomerFrontendEntityTest extends Injectable
      *
      * @param CustomerInjectable $customer
      */
-    public function testCreateCustomer(CustomerInjectable $customer)
+    public function test(CustomerInjectable $customer)
     {
         //Steps
         $this->cmsIndex->open();
