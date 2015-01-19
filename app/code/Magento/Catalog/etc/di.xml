@@ -85,14 +85,10 @@
             </argument>
             <argument name="reindexProductCategoryIndexerData" xsi:type="array">
                 <item name="byDataChange" xsi:type="array">
-                    <item name="status" xsi:type="string">status</item>
-                    <item name="price" xsi:type="string">price</item>
-                    <item name="special_price" xsi:type="string">special_price</item>
-                    <item name="special_from_date" xsi:type="string">special_from_date</item>
-                    <item name="special_to_date" xsi:type="string">special_to_date</item>
-                    <item name="website_ids" xsi:type="string">website_ids</item>
-                    <item name="gift_wrapping_price" xsi:type="string">gift_wrapping_price</item>
-                    <item name="tax_class_id" xsi:type="string">tax_class_id</item>
+                    <item name="category_ids" xsi:type="string">category_ids</item>
+                    <item name="entity_id" xsi:type="string">entity_id</item>
+                    <item name="store_id" xsi:type="string">store_id</item>
+                    <item name="visibility" xsi:type="string">visibility</item>
                 </item>
             </argument>
             <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
