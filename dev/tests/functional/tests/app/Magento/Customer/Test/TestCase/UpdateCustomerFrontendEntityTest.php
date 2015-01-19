@@ -18,8 +18,6 @@ use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for UpdateCustomerFrontendEntity
- *
  * Test Flow:
  * Preconditions:
  * 1. Default test customer is created
@@ -40,6 +38,12 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateCustomerFrontendEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Factory for Fixtures
      *

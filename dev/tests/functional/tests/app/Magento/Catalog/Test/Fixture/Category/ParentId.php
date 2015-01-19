@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Fixture\CatalogCategory;
+namespace Magento\Catalog\Test\Fixture\Category;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
 
@@ -19,7 +19,7 @@ class ParentId implements FixtureInterface
     /**
      * Return category
      *
-     * @var CatalogCategory
+     * @var Category
      */
     protected $parentCategory = null;
 
@@ -40,7 +40,7 @@ class ParentId implements FixtureInterface
     {
         $this->params = $params;
         if (isset($data['dataSet']) && $data['dataSet'] !== '-') {
-            $this->parentCategory = $fixtureFactory->createByCode('catalogCategory', ['dataSet' => $data['dataSet']]);
+            $this->parentCategory = $fixtureFactory->createByCode('category', ['dataSet' => $data['dataSet']]);
             if (!$this->parentCategory->hasData('id')) {
                 $this->parentCategory->persist();
             }
@@ -86,7 +86,7 @@ class ParentId implements FixtureInterface
     /**
      * Return entity
      *
-     * @return CatalogCategory
+     * @return Category
      */
     public function getParentCategory()
     {
