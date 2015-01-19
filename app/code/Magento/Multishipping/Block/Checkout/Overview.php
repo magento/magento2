@@ -6,7 +6,7 @@
 namespace Magento\Multishipping\Block\Checkout;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Multishipping checkout overview information
@@ -305,7 +305,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Retrieve quote
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {

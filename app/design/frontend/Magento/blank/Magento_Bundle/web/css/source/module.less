@@ -7,7 +7,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .bundle-actions {
     &:extend(.abs-box-tocart all);
@@ -53,7 +53,7 @@
 
     .block-bundle-summary {
         padding: @indent-s-base @indent-base;
-        background: @color-secondary;
+        .css(background, @color-secondary);
         &:extend(.abs-add-box-sizing all);
 
         > .title > strong {
@@ -95,7 +95,7 @@
         }
     }
     p.required {
-        color: @form-field-label-asterisk-color;
+        .css(color, @form-field-label-asterisk-color);
     }
 }
 
@@ -104,7 +104,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .bundle-options-container {
         .legend.title {
             &:extend(.abs-reset-left-margin all);

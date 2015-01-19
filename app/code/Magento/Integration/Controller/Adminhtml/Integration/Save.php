@@ -30,7 +30,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
      * Save integration action.
      *
      * @return void
-     * @todo: Fix cyclomatic complexity.
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -56,7 +55,6 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             /** @var array $data */
             $data = $this->getRequest()->getPost();
             if (!empty($data)) {
-                // TODO: Move out work with API permissions to Web API module
                 if (!isset($data['resource'])) {
                     $integrationData['resource'] = [];
                 }

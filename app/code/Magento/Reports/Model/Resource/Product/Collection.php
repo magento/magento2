@@ -236,10 +236,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         if ($this->_selectCountSqlType == self::SELECT_COUNT_SQL_TYPE_CART) {
             $countSelect = clone $this->getSelect();
             $countSelect->reset()->from(
-                ['quote_item_table' => $this->getTable('sales_quote_item')],
+                ['quote_item_table' => $this->getTable('quote_item')],
                 ['COUNT(DISTINCT quote_item_table.product_id)']
             )->join(
-                ['quote_table' => $this->getTable('sales_quote')],
+                ['quote_table' => $this->getTable('quote')],
                 'quote_table.entity_id = quote_item_table.quote_id AND quote_table.is_active = 1',
                 []
             );
@@ -269,10 +269,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $countSelect->reset();
 
         $countSelect->from(
-            ['quote_items' => $this->getTable('sales_quote_item')],
+            ['quote_items' => $this->getTable('quote_item')],
             'COUNT(*)'
         )->join(
-            ['quotes' => $this->getTable('sales_quote')],
+            ['quotes' => $this->getTable('quote')],
             'quotes.entity_id = quote_items.quote_id AND quotes.is_active = 1',
             []
         )->where(

@@ -141,8 +141,16 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Admin', $customerAfter->getCreatedIn());
         $passwordFromFixture = 'password';
         $this->accountManagement->authenticate($customerAfter->getEmail(), $passwordFromFixture);
-        $attributesBefore = $this->converter->toFlatArray($customerBefore);
-        $attributesAfter = $this->converter->toFlatArray($customerAfter);
+        $attributesBefore = $this->converter->toFlatArray(
+            $customerBefore,
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
+        $attributesAfter = $this->converter->toFlatArray(
+            $customerAfter,
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
         // ignore 'updated_at'
         unset($attributesBefore['updated_at']);
         unset($attributesAfter['updated_at']);

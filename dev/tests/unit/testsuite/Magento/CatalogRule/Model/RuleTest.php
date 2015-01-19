@@ -39,7 +39,10 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogRule\Model\Rule\Condition\CombineFactory',
             [
                 'create'
-            ]
+            ],
+            [],
+            '',
+            false
         );
         $this->productModel = $this->getMock(
             'Magento\Catalog\Model\Product',

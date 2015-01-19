@@ -46,7 +46,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertQuotePaymentObjectToPaymentDataObject()
     {
-        $paymentMock = $this->getMock('\Magento\Sales\Model\Quote\Payment',
+        $paymentMock = $this->getMock('\Magento\Quote\Model\Quote\Payment',
             [
                 'getMethod', 'getPoNumber', 'getCcOwner', 'getCcNumber',
                 'getCcType', 'getCcExpYear', 'getCcExpMonth', 'getAdditionalData', '__wakeup'

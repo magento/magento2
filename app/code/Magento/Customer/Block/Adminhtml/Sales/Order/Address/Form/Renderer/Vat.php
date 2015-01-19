@@ -95,7 +95,7 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
             );
 
             $optionsVarName = $this->getJsVariablePrefix() . 'VatParameters';
-            $beforeHtml = '<script type="text/javascript">var ' .
+            $beforeHtml = '<script>var ' .
                 $optionsVarName .
                 ' = ' .
                 $vatValidateOptions .

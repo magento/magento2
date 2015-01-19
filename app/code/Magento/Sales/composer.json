@@ -2,7 +2,7 @@
     "name": "magento/module-sales",
     "description": "N/A",
     "require": {
-        "php": "~5.4.11|~5.5.0",
+        "php": "~5.4.11|~5.5.0|~5.6.0",
         "magento/module-store": "0.42.0-beta3",
         "magento/module-catalog": "0.42.0-beta3",
         "magento/module-customer": "0.42.0-beta3",
@@ -25,6 +25,7 @@
         "magento/module-shipping": "0.42.0-beta3",
         "magento/framework": "0.42.0-beta3",
         "magento/module-ui": "0.42.0-beta3",
+        "magento/module-quote": "0.42.0-beta3",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
