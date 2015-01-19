@@ -305,8 +305,13 @@ class DataObjectProcessor
 
         $isExcludedMagicMethod = in_array(
             $method->getName(),
-            ['__sleep', '__wakeup', '__clone']
+            ['__sleep', '__wakeup', '__clone', '___callParent']
         );
+
+        if (false !== strpos($method->getDocComment(), '{@inheritdoc}')) {
+            return false;
+        }
+
         return $isSuitableMethodType && !$isExcludedMagicMethod;
     }
 }
