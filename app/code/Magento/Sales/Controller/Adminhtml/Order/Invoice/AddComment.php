@@ -11,6 +11,10 @@ use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
+use Magento\Framework\Controller\Result\JSONFactory;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\Result\RawFactory;
 
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
@@ -20,17 +24,43 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
     protected $invoiceCommentSender;
 
     /**
+     * @var JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
      * @param Action\Context $context
      * @param Registry $registry
      * @param InvoiceCommentSender $invoiceCommentSender
+     * @param JSONFactory $resultJsonFactory
+     * @param ForwardFactory $resultForwardFactory
+     * @param PageFactory $resultPageFactory
+     * @param RawFactory $resultRawFactory
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
-        InvoiceCommentSender $invoiceCommentSender
+        InvoiceCommentSender $invoiceCommentSender,
+        JSONFactory $resultJsonFactory,
+        ForwardFactory $resultForwardFactory,
+        PageFactory $resultPageFactory,
+        RawFactory $resultRawFactory
     ) {
         $this->invoiceCommentSender = $invoiceCommentSender;
-        parent::__construct($context, $registry);
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRawFactory = $resultRawFactory;
+        parent::__construct($context, $registry, $resultForwardFactory);
     }
 
     /**
@@ -48,8 +78,9 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             }
             $invoice = $this->getInvoice();
             if (!$invoice) {
-                $this->_forward('noroute');
-                return;
+                /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+                $resultForward = $this->resultForwardFactory->create();
+                return $resultForward->forward('noroute');
             }
             $invoice->addComment(
                 $data['comment'],
@@ -60,9 +91,10 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             $this->invoiceCommentSender->send($invoice, !empty($data['is_customer_notified']), $data['comment']);
             $invoice->save();
 
-            $this->_view->loadLayout();
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Invoices'));
-            $response = $this->_view->getLayout()->getBlock('invoice_comments')->toHtml();
+            /** @var \Magento\Framework\View\Result\Page $resultPage */
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->getConfig()->getTitle()->prepend(__('Invoices'));
+            $response = $resultPage->getLayout()->getBlock('invoice_comments')->toHtml();
         } catch (Exception $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
@@ -70,9 +102,15 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         }
         if (is_array($response)) {
             $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
-            $this->getResponse()->representJson($response);
+            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+            $resultJson->setData($response);
+            return $resultJson;
         } else {
-            $this->getResponse()->setBody($response);
+            /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+            $resultRaw = $this->resultRawFactory->create();
+            $resultRaw->setContents($response);
+            return $resultRaw;
         }
     }
 }
