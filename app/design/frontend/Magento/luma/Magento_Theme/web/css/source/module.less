@@ -503,6 +503,12 @@
                         display: inline-block;
                         line-height: 1.4;
                     }
+                    &.welcome {
+                        a {
+                            .css(color, @color-white);
+                            .css(padding-left, @indent-xs-base);
+                        }
+                    }
                 }
                 > .authorization-link:after {
                     content: 'or';

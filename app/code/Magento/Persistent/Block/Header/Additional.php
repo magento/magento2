@@ -76,7 +76,7 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
                     $this->customerRepository->getById($this->_persistentSessionHelper->getSession()->getCustomerId())
                 )
             );
-            return '<span><a ' . $this->getLinkAttributes() . ' >' . __('(Not %1?)', $persistentName)
+            return '<span><a ' . $this->getLinkAttributes() . ' >' . __('Not you?')
             . '</a></span>';
         }
 
