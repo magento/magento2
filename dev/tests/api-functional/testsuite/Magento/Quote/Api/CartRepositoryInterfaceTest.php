@@ -95,7 +95,7 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
             'soap' => [
                 'service' => 'quoteCartRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'quoteCartRepositoryV1GetCart',
+                'operation' => 'quoteCartRepositoryV1Get',
             ],
         ];
 
@@ -138,7 +138,7 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
             'soap' => [
                 'service' => 'quoteCartRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'quoteCartRepositoryV1GetCart',
+                'operation' => 'quoteCartRepositoryV1Get',
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts/' . $cartId,
@@ -153,7 +153,7 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
-    public function testGetCartList()
+    public function testGetList()
     {
         $cart = $this->getCart('test01');
 
@@ -165,7 +165,7 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
             'soap' => [
                 'service' => 'quoteCartRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'quoteCartRepositoryV1GetCartList',
+                'operation' => 'quoteCartRepositoryV1GetList',
             ],
         ];
 
@@ -210,26 +210,24 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($cart->getCreatedAt(), $cartData['created_at']);
         $this->assertEquals($cart->getUpdatedAt(), $cartData['updated_at']);
         $this->assertEquals($cart->getIsActive(), $cartData['is_active']);
-        //following checks will be uncommented when all cart related services are ready
-//        $this->assertEquals($cart->getStoreId(), $cartData['store_id']);
 
-//        $this->assertContains('totals', $cartData);
-//        $this->assertEquals($cart->getBaseSubtotal(), $cartData['totals']['base_subtotal']);
-//        $this->assertEquals($cart->getBaseGrandTotal(), $cartData['totals']['base_grand_total']);
-//        $this->assertContains('customer', $cartData);
-//        $this->assertEquals(1, $cartData['customer']['is_guest']);
+        $this->assertContains('totals_object', $cartData);
+        $this->assertEquals($cart->getBaseSubtotal(), $cartData['totals_object']['base_subtotal']);
+        $this->assertEquals($cart->getBaseGrandTotal(), $cartData['totals_object']['base_grand_total']);
+        $this->assertContains('customer_is_guest', $cartData);
+        $this->assertEquals(1, $cartData['customer_is_guest']);
     }
 
     /**
      * @expectedException \Exception
      */
-    public function testGetCartListThrowsExceptionIfProvidedSearchFieldIsInvalid()
+    public function testGetListThrowsExceptionIfProvidedSearchFieldIsInvalid()
     {
         $serviceInfo = [
             'soap' => [
                 'service' => 'quoteCartRepositoryV1',
                 'serviceVersion' => 'V1',
-                'operation' => 'quoteCartRepositoryV1GetCartList',
+                'operation' => 'quoteCartRepositoryV1GetList',
             ],
             'rest' => [
                 'resourcePath' => '/V1/carts',

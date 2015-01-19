@@ -282,8 +282,8 @@ class CartManagementInterfaceTest extends WebapiAbstract
 
         $serviceInfo = [
             'soap' => [
-                'service' => 'quoteQuoteManagementV1',
-                'operation' => 'quoteQuoteManagementV1PlaceOrder',
+                'service' => 'quoteCartManagementV1',
+                'operation' => 'quoteCartManagementV1PlaceOrder',
                 'serviceVersion' => 'V1',
             ],
             'rest' => [
