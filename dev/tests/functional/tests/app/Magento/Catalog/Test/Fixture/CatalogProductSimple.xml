@@ -16,14 +16,14 @@
     <identifier>sku</identifier>
     <repository_class>Magento\Catalog\Test\Repository\CatalogProductSimple</repository_class>
     <handler_interface>Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface</handler_interface>
-    <dataset name="data_config">
-        <field name="type_id" xsi:type="string">simple</field>
-        <field name="create_url_params" xsi:type="array">
+    <data_config>
+        <item name="type_id" xsi:type="string">simple</item>
+        <item name="create_url_params" xsi:type="array">
             <item name="type" xsi:type="string">simple</item>
             <item name="set" xsi:type="string">4</item>
-        </field>
-        <field name="input_prefix" xsi:type="string">product</field>
-    </dataset>
+        </item>
+        <item name="input_prefix" xsi:type="string">product</item>
+    </data_config>
     <fields>
         <field name="field">
             <attribute_code>category_ids</attribute_code>
@@ -191,7 +191,7 @@
             <attribute_code>msrp_display_actual_price_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value xsi:type="string">Use config</default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
         </field>
         <field name="name">
@@ -213,7 +213,7 @@
             <attribute_code>options_container</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value xsi:type="string">Block after Info Column</default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
         </field>
         <field name="page_layout">
@@ -425,7 +425,7 @@
             <attribute_code>is_returnable</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value xsi:type="number">2</default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
             <group>autosettings</group>
         </field>

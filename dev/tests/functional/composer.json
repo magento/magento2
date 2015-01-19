@@ -1,12 +1,6 @@
 {
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://daponasenko:Magento%^78@github.corp.ebay.com/mtf/mtf.git"
-        }
-    ],
     "require": {
-        "magento/mtf": "dev-MTA-1136",
+        "magento/mtf": "1.0.0-rc12",
         "php": ">=5.4.0",
         "phpunit/phpunit": "4.1.0",
         "phpunit/phpunit-selenium": ">=1.2",

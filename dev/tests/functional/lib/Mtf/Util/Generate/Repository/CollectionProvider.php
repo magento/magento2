@@ -20,12 +20,36 @@ class CollectionProvider implements CollectionProviderInterface
     protected $objectManager;
 
     /**
+     * Magetno resource instance.
+     *
+     * @var \Magento\Framework\App\Resource
+     */
+    protected $resource;
+
+    /**
      * @constructor
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
+        $this->resource = $objectManager->create('Magento\Framework\App\Resource');
+    }
+
+    /**
+     * Check connection to DB.
+     *
+     * @return bool
+     */
+    public function checkConnection()
+    {
+        $connection = $this->getConnection('read');
+        if (!$connection || $connection instanceof \Zend_Db_Adapter_Exception) {
+            echo ('Connection to Magento 2 database is absent.' . PHP_EOL);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -106,5 +130,22 @@ class CollectionProvider implements CollectionProviderInterface
         }
 
         return $collection->getItems();
+    }
+
+    /**
+     * Retrieve connection to resource specified by $resourceName.
+     *
+     * @param string $resourceName
+     * @return \Exception|false|\Magento\Framework\DB\Adapter\AdapterInterface|\Zend_Exception
+     */
+    protected function getConnection($resourceName)
+    {
+        try {
+            $connection = $this->resource->getConnection($resourceName);
+            return $connection;
+        } catch (\Zend_Exception $e) {
+            echo $e->getMessage() . PHP_EOL;
+            return $e;
+        }
     }
 }

@@ -143,7 +143,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
                 throw new \Magento\Framework\Exception("Invalid XML in file " . $key . ":\n" . $e->getMessage());
             }
         }
-        $configMerger->getDom()->save("C:\\Users\\daponasenko\\PhpstormProjects\\magento2ce\\test.xml");
         if ($this->_isValidated) {
             $errors = [];
             if ($configMerger && !$configMerger->validate($this->_schemaFile, $errors)) {

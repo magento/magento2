@@ -16,14 +16,14 @@
     <identifier>sku</identifier>
     <repository_class>Magento\Bundle\Test\Repository\BundleProduct</repository_class>
     <handler_interface>Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface</handler_interface>
-    <dataset name="data_config">
-        <field name="type_id" xsi:type="string">bundle</field>
-        <field name="create_url_params" xsi:type="array">
+    <data_config>
+        <item name="type_id" xsi:type="string">bundle</item>
+        <item name="create_url_params" xsi:type="array">
             <item name="type" xsi:type="string">bundle</item>
             <item name="set" xsi:type="string">4</item>
-        </field>
-        <field name="input_prefix" xsi:type="string">product</field>
-    </dataset>
+        </item>
+        <item name="input_prefix" xsi:type="string">product</item>
+    </data_config>
     <fields>
         <field name="category_ids">
             <attribute_code>category_ids</attribute_code>
@@ -88,7 +88,7 @@
             <attribute_code>enable_googlecheckout</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value xsi:type="number">1</default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
         </field>
         <field name="gallery">
@@ -190,7 +190,7 @@
             <attribute_code>msrp_display_actual_price_type</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value xsi:type="number">4</default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
         </field>
         <field name="name">
@@ -226,7 +226,7 @@
             <attribute_code>options_container</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>0</is_required>
-            <default_value xsi:type="string">container2</default_value>
+            <default_value xsi:type="null" />
             <input>select</input>
         </field>
         <field name="page_layout">
@@ -273,7 +273,6 @@
             <attribute_code>status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value xsi:type="string">1</default_value>
             <input>checkbox</input>
             <group>product-details</group>
         </field>
@@ -289,7 +288,6 @@
             <attribute_code>quantity_and_stock_status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value xsi:type="number">1</default_value>
             <input>select</input>
             <group>product-details</group>
         </field>
@@ -402,7 +400,6 @@
             <attribute_code>tax_class_id</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value xsi:type="string">Taxable Goods</default_value>
             <input>select</input>
             <group>product-details</group>
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
@@ -456,7 +453,6 @@
             <attribute_code>visibility</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value xsi:type="number">4</default_value>
             <input>select</input>
             <group>autosettings</group>
         </field>
@@ -506,9 +502,6 @@
         <field name="website_ids">
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
-            <default_value xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
-            </default_value>
             <group>websites</group>
         </field>
     </fields>

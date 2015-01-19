@@ -317,7 +317,6 @@ class Dom
     protected function _initDom($xml)
     {
         $dom = new \DOMDocument();
-
         $dom->loadXML($xml);
         if ($this->_schemaFile) {
             $errors = self::validateDomDocument($dom, $this->_schemaFile, $this->_errorFormat);

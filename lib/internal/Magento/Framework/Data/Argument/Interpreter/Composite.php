@@ -51,7 +51,6 @@ class Composite implements InterpreterInterface
     public function evaluate(array $data)
     {
         if (!isset($data[$this->discriminator])) {
-            var_dump($data);
             throw new \InvalidArgumentException(
                 sprintf('Value for key "%s" is missing in the argument data.', $this->discriminator)
             );

@@ -11,7 +11,6 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class FieldsProvider
- *
  */
 class FieldsProvider implements FieldsProviderInterface
 {
@@ -26,6 +25,13 @@ class FieldsProvider implements FieldsProviderInterface
     protected $resource;
 
     /**
+     * Magento connection.
+     *
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    protected $connection;
+
+    /**
      * @constructor
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
@@ -33,6 +39,22 @@ class FieldsProvider implements FieldsProviderInterface
     {
         $this->eavConfig = $objectManager->create('Magento\Eav\Model\Config');
         $this->resource = $objectManager->create('Magento\Framework\App\Resource');
+    }
+
+    /**
+     * Check connection to DB.
+     *
+     * @return bool
+     */
+    public function checkConnection()
+    {
+        $this->connection = $this->getConnection('core_write');
+        if (!$this->connection || $this->connection instanceof \Zend_Db_Adapter_Exception) {
+            echo ('Connection to Magento 2 database is absent.' . PHP_EOL);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -105,8 +127,7 @@ class FieldsProvider implements FieldsProviderInterface
         $entityType = $fixture['entity_type'];
 
         /** @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
-        $connection = $this->resource->getConnection('core_write');
-        $fields = $connection->describeTable($entityType);
+        $fields = $this->connection->describeTable($entityType);
 
         $attributes = [];
         foreach ($fields as $code => $field) {
@@ -132,11 +153,9 @@ class FieldsProvider implements FieldsProviderInterface
     {
         $entityTypes = $fixture['entities'];
 
-        /** @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
-        $connection = $this->resource->getConnection('core_write');
         $fields = [];
         foreach ($entityTypes as $entityType) {
-            $fields = array_merge($fields, $connection->describeTable($entityType));
+            $fields = array_merge($fields, $this->connection->describeTable($entityType));
         }
 
         $attributes = [];
@@ -151,5 +170,22 @@ class FieldsProvider implements FieldsProviderInterface
         }
 
         return $attributes;
+    }
+
+    /**
+     * Retrieve connection to resource specified by $resourceName.
+     *
+     * @param string $resourceName
+     * @return \Exception|false|\Magento\Framework\DB\Adapter\AdapterInterface|\Zend_Exception
+     */
+    protected function getConnection($resourceName)
+    {
+        try {
+            $connection = $this->resource->getConnection($resourceName);
+            return $connection;
+        } catch (\Zend_Exception $e) {
+            echo $e->getMessage() . PHP_EOL;
+            return $e;
+        }
     }
 }

@@ -120,7 +120,7 @@
             <field name="name" xsi:type="string">product_100_dollar%isolation%</field>
             <field name="type_id" xsi:type="string">simple</field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">666</item>
+                <item name="qty" xsi:type="number">666.0000</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
