@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Resource;
 
@@ -256,7 +257,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
         $data = new \Magento\Framework\Object(
             [
-                'entity_type_id' => $attribute->getEntityTypeId(),
                 'attribute_id' => $attribute->getAttributeId(),
                 'store_id' => $storeId,
                 'entity_id' => $object->getEntityId(),
@@ -310,7 +310,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
                 $select = $this->_getReadAdapter()->select()
                     ->from($table)
-                    ->where('entity_type_id = ?', $attribute->getEntityTypeId())
                     ->where('attribute_id = ?', $attribute->getAttributeId())
                     ->where('store_id = ?', $this->getDefaultStoreId())
                     ->where('entity_id = ?', $object->getEntityId());
@@ -319,7 +318,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 if (!$row) {
                     $data = new \Magento\Framework\Object(
                         [
-                            'entity_type_id' => $attribute->getEntityTypeId(),
                             'attribute_id' => $attribute->getAttributeId(),
                             'store_id' => $this->getDefaultStoreId(),
                             'entity_id' => $object->getEntityId(),
@@ -365,12 +363,10 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $entityIdField = $attribute->getBackend()->getEntityIdField();
         $select = $adapter->select()
             ->from($table, 'value_id')
-            ->where('entity_type_id = :entity_type_id')
             ->where("$entityIdField = :entity_field_id")
             ->where('store_id = :store_id')
             ->where('attribute_id = :attribute_id');
         $bind = [
-            'entity_type_id' => $object->getEntityTypeId(),
             'entity_field_id' => $object->getId(),
             'store_id' => $storeId,
             'attribute_id' => $attribute->getId(),
@@ -387,7 +383,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         } else {
             $bind = [
                 $entityIdField => (int) $object->getId(),
-                'entity_type_id' => (int) $object->getEntityTypeId(),
                 'attribute_id' => (int) $attribute->getId(),
                 'value' => $this->_prepareValueForSave($value, $attribute),
                 'store_id' => (int) $storeId,
@@ -438,7 +433,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 
         $condition = [
             $entityIdField . ' = ?' => $object->getId(),
-            'entity_type_id = ?' => $object->getEntityTypeId(),
         ];
 
         /**
@@ -594,11 +588,10 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                 $select = $adapter->select()
                     ->from(['default_value' => $table], ['attribute_id'])
                     ->where('default_value.attribute_id IN (?)', array_keys($_attributes))
-                    ->where('default_value.entity_type_id = :entity_type_id')
                     ->where('default_value.entity_id = :entity_id')
                     ->where('default_value.store_id = ?', 0);
 
-                $bind = ['entity_type_id' => $this->getTypeId(), 'entity_id' => $entityId];
+                $bind = ['entity_id' => $entityId];
 
                 if ($store != $this->getDefaultStoreId()) {
                     $valueExpr = $adapter->getCheckSql(
@@ -608,7 +601,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
                     );
                     $joinCondition = [
                         $adapter->quoteInto('store_value.attribute_id IN (?)', array_keys($_attributes)),
-                        'store_value.entity_type_id = :entity_type_id',
                         'store_value.entity_id = :entity_id',
                         'store_value.store_id = :store_id',
                     ];

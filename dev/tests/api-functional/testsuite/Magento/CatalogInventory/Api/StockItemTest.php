@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Api;
 
@@ -146,7 +147,7 @@ class StockItemTest extends WebapiAbstract
                     'use_config_max_sale_qty' => 1,
                     'is_in_stock' => 1,
                     'low_stock_date' => '',
-                    'notify_stock_qty' => NULL,
+                    'notify_stock_qty' => null,
                     'use_config_notify_stock_qty' => 1,
                     'manage_stock' => 0,
                     'use_config_manage_stock' => 1,
@@ -173,8 +174,8 @@ class StockItemTest extends WebapiAbstract
                     'max_sale_qty' => '0.0000',
                     'use_config_max_sale_qty' => '1',
                     'is_in_stock' => '1',
-                    'low_stock_date' => NULL,
-                    'notify_stock_qty' => NULL,
+                    'low_stock_date' => null,
+                    'notify_stock_qty' => null,
                     'use_config_notify_stock_qty' => '1',
                     'manage_stock' => '0',
                     'use_config_manage_stock' => '1',

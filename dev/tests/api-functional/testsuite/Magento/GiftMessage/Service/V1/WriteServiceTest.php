@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GiftMessage\Service\V1;
@@ -32,8 +33,8 @@ class WriteServiceTest extends WebapiAbstract
         // sales/gift_options/allow_order must be set to 1 in system configuration
         // @todo remove next statement when \Magento\TestFramework\TestCase\WebapiAbstract::_updateAppConfig is fixed
         $this->markTestIncomplete('This test relies on system configuration state.');
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_item_with_message', 'reserved_order_id');
 
         $cartId = $quote->getId();
@@ -75,8 +76,8 @@ class WriteServiceTest extends WebapiAbstract
         // sales/gift_options/allow_items must be set to 1 in system configuration
         // @todo remove next statement when \Magento\TestFramework\TestCase\WebapiAbstract::_updateAppConfig is fixed
         $this->markTestIncomplete('This test relies on system configuration state.');
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_item_with_message', 'reserved_order_id');
         $cartId = $quote->getId();
         $product = $this->objectManager->create('Magento\Catalog\Model\Product');

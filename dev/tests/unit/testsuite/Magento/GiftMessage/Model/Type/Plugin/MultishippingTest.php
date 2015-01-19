@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GiftMessage\Model\Type\Plugin;
@@ -45,7 +46,7 @@ class MultishippingTest extends \PHPUnit_Framework_TestCase
             ->with('giftmessage')
             ->will($this->returnValue('Expected Value'));
         $subjectMock = $this->getMock('\Magento\Multishipping\Model\Checkout\Type\Multishipping', [], [], '', false);
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $subjectMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $this->messageMock->expects($this->once())->method('add')->with('Expected Value', $quoteMock);
 

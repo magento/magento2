@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\Coupon;
@@ -28,7 +29,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->couponBuilderMock = $this->getMock(
             '\Magento\Checkout\Service\V1\Data\Cart\CouponBuilder', [], [], '', false
         );
@@ -46,7 +47,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $cartId = 11;
         $couponCode = 'test_coupon_code';
 
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', ['getCouponCode', '__wakeup'], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', ['getCouponCode', '__wakeup'], [], '', false);
         $quoteMock->expects($this->any())->method('getCouponCode')->will($this->returnValue($couponCode));
 
         $this->quoteRepositoryMock->expects($this->once())

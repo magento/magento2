@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\AdminOrder;
 
@@ -189,7 +190,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         /** Validate data before creating address object */
         $this->_model->setIsValidate(true)->setBillingAddress($addressData);
         $this->assertInstanceOf(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             $this->_model->getBillingAddress(),
             'Billing address object was not created.'
         );
@@ -433,8 +434,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Backend\Model\Session\Quote $session */
         $session = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Session\Quote');
         $session->setCustomerId($fixtureCustomerId);
-        /** @var $quoteFixture \Magento\Sales\Model\Quote */
-        $quoteFixture = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var $quoteFixture \Magento\Quote\Model\Quote */
+        $quoteFixture = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quoteFixture->load('test01', 'reserved_order_id');
         $quoteFixture->setCustomerIsGuest(false)->setCustomerId($fixtureCustomerId)->save();
 
@@ -518,8 +519,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         }
 
         /** Emulate availability of shipping method (all are disabled by default) */
-        /** @var $rate \Magento\Sales\Model\Quote\Address\Rate */
-        $rate = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote\Address\Rate');
+        /** @var $rate \Magento\Quote\Model\Quote\Address\Rate */
+        $rate = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote\Address\Rate');
         $rate->setCode($shippingMethod);
         $this->_model->getQuote()->getShippingAddress()->addShippingRate($rate);
 
@@ -586,7 +587,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             $orderData['customer_firstname'],
             'Customer first name is invalid.'
         );
-        $this->assertEquals($shippingMethod, $orderData['shipping_method'], 'Customer first name is invalid.');
+        $this->assertEquals($shippingMethod, $orderData['shipping_method'], 'Shipping method is invalid.');
     }
 
     /**

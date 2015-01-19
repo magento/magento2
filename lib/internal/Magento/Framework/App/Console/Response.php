@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Console;
 
@@ -19,6 +20,16 @@ class Response implements \Magento\Framework\App\ResponseInterface
      * @var int
      */
     protected $code = 0;
+
+    /**
+     * Success code
+     */
+    const SUCCESS = 0;
+
+    /**
+     * Error code
+     */
+    const ERROR = 255;
 
     /**
      * Text to output on send response

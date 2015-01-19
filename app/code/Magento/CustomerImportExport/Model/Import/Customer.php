@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
@@ -233,7 +234,6 @@ class Customer extends AbstractCustomer
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = [
                         'entity_id' => $customerId,
-                        'entity_type_id' => $this->getEntityTypeId(),
                         'attribute_id' => $attributeId,
                         'value' => $value,
                     ];
@@ -311,8 +311,6 @@ class Customer extends AbstractCustomer
             // create
             $entityId = $this->_getNextEntityId();
             $entityRow['entity_id'] = $entityId;
-            $entityRow['entity_type_id'] = $this->getEntityTypeId();
-            $entityRow['attribute_set_id'] = 0;
             $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
             $entityRow['email'] = $emailInLowercase;
             $entityRow['is_active'] = 1;

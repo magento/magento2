@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout\Reader;
 
@@ -36,6 +37,6 @@ class Remove implements Layout\ReaderInterface
     {
         $scheduledStructure = $readerContext->getScheduledStructure();
         $scheduledStructure->setElementToRemoveList((string)$currentElement->getAttribute('name'));
-        return false;
+        return $this;
     }
 }

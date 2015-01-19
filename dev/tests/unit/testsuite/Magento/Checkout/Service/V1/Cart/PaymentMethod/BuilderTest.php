@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\Cart\PaymentMethod;
@@ -38,13 +39,13 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getPaymentDetails')
             ->will($this->returnValue(serialize(['paymentDetailsTest'])));
 
-        $paymentMock = $this->getMock('\Magento\Sales\Model\Quote\Payment', [], [], '', false);
+        $paymentMock = $this->getMock('\Magento\Quote\Model\Quote\Payment', [], [], '', false);
         $paymentMock->expects($this->once())
             ->method('importData')
             ->with($this->contains('checkmo'))
             ->will($this->returnSelf());
 
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
 
         $this->assertEquals($paymentMock, $this->builder->build($paymentMethodMock, $quoteMock));
@@ -67,7 +68,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getPaymentDetails')
             ->will($this->returnValue(['paymentDetailsTest']));
 
-        $paymentMock = $this->getMock('\Magento\Sales\Model\Quote\Payment', [], [], '', false);
+        $paymentMock = $this->getMock('\Magento\Quote\Model\Quote\Payment', [], [], '', false);
         $paymentMock->expects($this->once())
             ->method('importData')
             ->with($this->contains('notAvailableMethod'))
@@ -75,7 +76,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                 new \Magento\Framework\Exception\LocalizedException('The requested Payment Method is not available.'))
             );
 
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
 
         $this->assertEquals($paymentMock, $this->builder->build($paymentMethodMock, $quoteMock));

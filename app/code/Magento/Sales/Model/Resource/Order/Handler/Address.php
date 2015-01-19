@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Model\Resource\Order\Handler;
@@ -55,7 +56,10 @@ class Address
     public function process(Order $order)
     {
         if (null !== $order->getAddresses()) {
+            /** @var \Magento\Sales\Model\Order\Address $address */
             foreach ($order->getAddresses() as $address) {
+                $address->setParentId($order->getId());
+                $address->setOrder($order);
                 $address->save();
             }
             $billingAddress = $order->getBillingAddress();

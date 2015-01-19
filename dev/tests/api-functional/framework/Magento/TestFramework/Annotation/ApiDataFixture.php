@@ -6,7 +6,8 @@
  * that no transactions should be used for API data fixtures.
  * Otherwise fixture data will not be accessible to Web API functional tests.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\Annotation;
 

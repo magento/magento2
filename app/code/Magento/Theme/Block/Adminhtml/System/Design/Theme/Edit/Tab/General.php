@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 
@@ -155,18 +156,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
         }
 
         $themeFieldset->addField(
-            'theme_version',
-            $this->_getFieldTextType(),
-            [
-                'label' => __('Theme Version'),
-                'title' => __('Theme Version'),
-                'name' => 'theme_version',
-                'required' => $this->_isFieldAttrRequired(),
-                'note' => $this->_filterFieldNote(__('Example: 0.0.0.1 or 123.1.0.25-alpha1'))
-            ]
-        );
-
-        $themeFieldset->addField(
             'theme_title',
             $this->_getFieldTextType(),
             [
@@ -281,7 +270,6 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
     protected function _getDefaults()
     {
         $defaults = [];
-        $defaults['theme_version'] = '0.0.0.1';
         $defaults['theme_title'] = __('New Theme');
 
         return $defaults;

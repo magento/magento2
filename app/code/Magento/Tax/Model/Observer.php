@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -274,7 +275,7 @@ class Observer
      */
     public function quoteCollectTotalsBefore(\Magento\Framework\Event\Observer $observer)
     {
-        /* @var $quote \Magento\Sales\Model\Quote */
+        /* @var $quote \Magento\Quote\Model\Quote */
         $quote = $observer->getEvent()->getQuote();
         foreach ($quote->getAllAddresses() as $address) {
             $address->setExtraTaxAmount(0);

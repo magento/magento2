@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
@@ -13,6 +14,11 @@
     <type name="Magento\Newsletter\Model\Session">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\Newsletter\Model\Session\Storage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Newsletter\Helper\Data">
+        <arguments>
+            <argument name="frontendUrlBuilder" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">

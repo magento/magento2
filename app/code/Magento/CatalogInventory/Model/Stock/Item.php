@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Stock;
 
@@ -461,14 +462,14 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     /**
      * Add error to Quote Item
      *
-     * @param \Magento\Sales\Model\Quote\Item $item
+     * @param \Magento\Quote\Model\Quote\Item $item
      * @param string $itemError
      * @param string $quoteError
      * @param string $errorIndex
      * @return $this
      */
     protected function _addQuoteItemError(
-        \Magento\Sales\Model\Quote\Item $item,
+        \Magento\Quote\Model\Quote\Item $item,
         $itemError,
         $quoteError,
         $errorIndex = 'error'

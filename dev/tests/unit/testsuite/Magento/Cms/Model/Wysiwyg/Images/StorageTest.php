@@ -4,7 +4,8 @@ namespace Magento\Cms\Model\Wysiwyg\Images;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -163,9 +164,19 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->_resizeParameters = ['width' => 100, 'height' => 50];
 
         $this->_storageCollectionFactoryMock = $this->getMock(
-            'Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory'
+            'Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory',
+            [],
+            [],
+            '',
+            false
         );
-        $this->_storageFileFactoryMock = $this->getMock('Magento\Core\Model\File\Storage\FileFactory');
+        $this->_storageFileFactoryMock = $this->getMock(
+            'Magento\Core\Model\File\Storage\FileFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $this->_storageDatabaseFactoryMock = $this->getMock(
             'Magento\Core\Model\File\Storage\DatabaseFactory',
             [],
@@ -174,9 +185,13 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_directoryDatabaseFactoryMock = $this->getMock(
-            'Magento\Core\Model\File\Storage\Directory\DatabaseFactory'
+            'Magento\Core\Model\File\Storage\Directory\DatabaseFactory',
+            [],
+            [],
+            '',
+            false
         );
-        $this->_uploaderFactoryMock = $this->getMock('Magento\Core\Model\File\UploaderFactory');
+        $this->_uploaderFactoryMock = $this->getMock('Magento\Core\Model\File\UploaderFactory', [], [], '', false);
         $this->_sessionMock = $this->getMock('Magento\Backend\Model\Session', [], [], '', false);
         $this->_backendUrlMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
 

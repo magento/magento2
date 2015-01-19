@@ -1,12 +1,13 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .gift-message {
     margin: 0;
@@ -23,7 +24,7 @@
     .activate.message {
         border-top: @border-width-base solid @border-color-base;
         border-bottom: @border-width-base solid @border-color-base;
-        color: @color-primary;
+        .css(color, @color-primary);
         display: block;
         font-weight: @font-weight-semibold;
         line-height: 36px;
@@ -42,7 +43,7 @@
             top: 0;
         }
         &:hover {
-            color: @filter-link-hover;
+            .css(color, @filter-link-hover);
         }
         &.active {
             border-bottom: 0;
@@ -102,9 +103,9 @@
         .product {
             margin: 0 0 @indent-base;
             .number {
-                color: @color-primary-light;
+                .css(color, @color-primary-light);
                 span {
-                    color: @color-primary;
+                    .css(color, @color-primary);
                     font-weight: @font-weight-semibold;
                 }
             }
@@ -175,7 +176,7 @@
 //    Mobile
 //--------------------------------------
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .gift-message {
         .items {
             .item {

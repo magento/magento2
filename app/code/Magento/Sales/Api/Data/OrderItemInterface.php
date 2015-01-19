@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api\Data;
 
@@ -265,11 +266,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     const BASE_HIDDEN_TAX_REFUNDED = 'base_hidden_tax_refunded';
     /*
-     * Is-nominal flag.
-     */
-    const IS_NOMINAL = 'is_nominal';
-    /*
-     * Tax-canceled flag.
+     * Tax canceled flag
      */
     const TAX_CANCELED = 'tax_canceled';
     /*
@@ -392,6 +389,12 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Base WEEE tax row disposition.
      */
     const BASE_WEEE_TAX_ROW_DISPOSITION = 'base_weee_tax_row_disposition';
+
+    /**
+     * Parent Item
+     */
+    const PARENT_ITEM = 'parent_item';
+
 
     /**
      * Gets the additional data for the order item.
@@ -751,13 +754,6 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function getHiddenTaxRefunded();
 
     /**
-     * Gets the is-nominal flag value for the order item.
-     *
-     * @return int Is-nominal flag value.
-     */
-    public function getIsNominal();
-
-    /**
      * Gets the is-quantity-decimal flag value for the order item.
      *
      * @return int Is-quantity-decimal flag value.
@@ -1050,4 +1046,11 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return float Weight.
      */
     public function getWeight();
+
+    /**
+     * Gets the parent item
+     *
+     * @return \Magento\Sales\Api\Data\OrderItemInterface|null Parent item
+     */
+    public function getParentItem();
 }

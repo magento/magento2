@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config;
 
@@ -62,7 +63,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 'configContent' => file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml')
             ]
         );
-        $this->assertSame($expected['version'], $config->getThemeVersion());
         $this->assertSame($expected['media'], $config->getMedia());
         $this->assertSame($expected['title'], $config->getThemeTitle());
         $this->assertSame($expected['parent'], $config->getParentTheme());
@@ -77,7 +77,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             [
                 'default_default',
                 [[
-                    'version' => '0.1.0',
                     'media' => ['preview_image' => 'media/default_default.jpg'],
                     'title' => 'Default',
                     'parent' => null,
@@ -85,7 +84,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             [
                 'default_test',
                 [[
-                    'version' => '0.1.1',
                     'media' => ['preview_image' => ''],
                     'title' => 'Test',
                     'parent' => ['default_default'],
@@ -93,7 +91,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             [
                 'default_test2',
                 [[
-                    'version' => '0.1.2',
                     'media' => ['preview_image' => ''],
                     'title' => 'Test2',
                     'parent' => ['default_test'],
@@ -101,7 +98,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             [
                 'test_default',
                 [[
-                    'version' => '0.1.3',
                     'media' => ['preview_image' => 'media/test_default.jpg'],
                     'title' => 'Default',
                     'parent' => null,
@@ -109,7 +105,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             [
                 'test_external_package_descendant',
                 [[
-                    'version' => '0.1.4',
                     'media' => ['preview_image' => ''],
                     'title' => 'Default',
                     'parent' => ['default_test2'],

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Page\Config\Reader;
 
@@ -63,10 +64,11 @@ class Body implements Layout\ReaderInterface
         /** @var \Magento\Framework\View\Layout\Element $element */
         foreach ($bodyElement as $element) {
             if ($element->getName() === self::BODY_ATTRIBUTE) {
-                $this->setBodyAttributeTosStructure($readerContext, $element);
+                $this->setBodyAttributeToStructure($readerContext, $element);
             }
         }
-        return $this->readerPool->interpret($readerContext, $bodyElement);
+        $this->readerPool->interpret($readerContext, $bodyElement);
+        return $this;
     }
 
     /**
@@ -76,7 +78,7 @@ class Body implements Layout\ReaderInterface
      * @param Layout\Element $element
      * @return $this
      */
-    protected function setBodyAttributeTosStructure(Layout\Reader\Context $readerContext, Layout\Element $element)
+    protected function setBodyAttributeToStructure(Layout\Reader\Context $readerContext, Layout\Element $element)
     {
         if ($element->getAttribute('name') == PageConfig::BODY_ATTRIBUTE_CLASS) {
             $readerContext->getPageConfigStructure()->setBodyClass($element->getAttribute('value'));

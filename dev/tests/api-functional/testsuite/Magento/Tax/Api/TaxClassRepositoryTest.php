@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tax\Api;
@@ -225,10 +226,12 @@ class TaxClassRepositoryTest extends WebapiAbstract
             ->setValue($taxClassName)
             ->create();
         $this->searchCriteriaBuilder->addFilter([$filter]);
+        $searchData = $this->searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -236,8 +239,6 @@ class TaxClassRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $searchData = $this->searchCriteriaBuilder->create()->__toArray();
-        $requestData = ['searchCriteria' => $searchData];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(1, $searchResults['total_count']);
         $this->assertEquals($taxClassName, $searchResults['items'][0][$taxClassNameField]);
@@ -275,10 +276,12 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $this->searchCriteriaBuilder->addFilter([$filter1, $filter2]);
         $this->searchCriteriaBuilder->addFilter([$filter3, $filter4]);
         $searchCriteria = $this->searchCriteriaBuilder->setCurrentPage(1)->setPageSize(10)->create();
+        $searchData = $searchCriteria->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => RestConfig::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -286,14 +289,16 @@ class TaxClassRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $searchData = $searchCriteria->__toArray();
-        $requestData = ['searchCriteria' => $searchData];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(2, $searchResults['total_count']);
-        $this->assertEquals($productTaxClass[Data\TaxClassInterface::KEY_NAME],
-            $searchResults['items'][0][Data\TaxClassInterface::KEY_NAME]);
-        $this->assertEquals($customerTaxClass[Data\TaxClassInterface::KEY_NAME],
-            $searchResults['items'][1][Data\TaxClassInterface::KEY_NAME]);
+        $this->assertEquals(
+            $productTaxClass[Data\TaxClassInterface::KEY_NAME],
+            $searchResults['items'][0][Data\TaxClassInterface::KEY_NAME]
+        );
+        $this->assertEquals(
+            $customerTaxClass[Data\TaxClassInterface::KEY_NAME],
+            $searchResults['items'][1][Data\TaxClassInterface::KEY_NAME]
+        );
 
         /** class_name == 'Retail Customer' && ( class_type == 'CUSTOMER' || class_type == 'PRODUCT') */
         $this->searchCriteriaBuilder->addFilter([$filter2]);
@@ -301,9 +306,12 @@ class TaxClassRepositoryTest extends WebapiAbstract
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];
+        $serviceInfo['rest']['resourcePath'] = self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData);
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(1, $searchResults['total_count']);
-        $this->assertEquals($customerTaxClass[Data\TaxClassInterface::KEY_NAME],
-            $searchResults['items'][0][Data\TaxClassInterface::KEY_NAME]);
+        $this->assertEquals(
+            $customerTaxClass[Data\TaxClassInterface::KEY_NAME],
+            $searchResults['items'][0][Data\TaxClassInterface::KEY_NAME]
+        );
     }
 }

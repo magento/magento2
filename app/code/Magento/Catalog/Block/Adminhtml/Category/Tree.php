@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -299,7 +300,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         foreach ($categories as $key => $category) {
             $categories[$key] = $this->_getNodeJson($category);
         }
-        return '<script type="text/javascript">' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
+        return '<script>' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
             $categories
         ) .
             ';' .

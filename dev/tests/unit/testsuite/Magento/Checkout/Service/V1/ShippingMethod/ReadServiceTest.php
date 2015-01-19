@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\ShippingMethod;
@@ -49,7 +50,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->methodBuilderMock = $this->getMock(
             '\Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder',
             ['populateWithArray', 'create'],
@@ -59,7 +60,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->quoteMock = $this->getMock(
-            '\Magento\Sales\Model\Quote',
+            '\Magento\Quote\Model\Quote',
             [
                 'getShippingAddress',
                 'isVirtual',
@@ -72,7 +73,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->shippingAddressMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             [
                 'getCountryId',
                 'getShippingMethod',
@@ -248,7 +249,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(345));
         $this->shippingAddressMock->expects($this->once())->method('collectShippingRates');
-        $shippingRateMock = $this->getMock('\Magento\Sales\Model\Quote\Address\Rate', [], [], '', false);
+        $shippingRateMock = $this->getMock('\Magento\Quote\Model\Quote\Address\Rate', [], [], '', false);
         $this->shippingAddressMock->expects($this->once())
             ->method('getGroupedAllShippingRates')
             ->will($this->returnValue([[$shippingRateMock]]));

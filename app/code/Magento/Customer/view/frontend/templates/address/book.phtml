@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 <?php
@@ -13,7 +14,7 @@
     <div class="block-title"><strong><?php echo __('Default Addresses') ?></strong></div>
     <div class="block-content">
         <?php if ($_pAddsses = $this->getDefaultBilling()): ?>
-            <div class="box box-address-billing">
+            <div class="box box-billing-address">
                 <strong class="box-title">
                     <span><?php echo __('Default Billing Address') ?></span>
                 </strong>
@@ -29,7 +30,7 @@
                 </div>
             </div>
         <?php else: ?>
-            <div class="box box-address-billing">
+            <div class="box box-billing-address">
                 <strong class="box-title"><span><?php echo __('Default Billing Address') ?></span></strong>
                 <div class="box-content">
                     <p><?php echo __('You have no default billing address in your address book.') ?></p>
@@ -38,7 +39,7 @@
         <?php endif ?>
 
         <?php if ($_pAddsses = $this->getDefaultShipping()): ?>
-            <div class="box box-address-shipping">
+            <div class="box box-shipping-address">
                 <strong class="box-title">
                     <span><?php echo __('Default Shipping Address') ?></span>
                 </strong>
@@ -54,7 +55,7 @@
                 </div>
             </div>
         <?php else: ?>
-            <div class="box box-address-shipping">
+            <div class="box box-shipping-address">
                 <strong class="box-title"><span><?php echo __('Default Shipping Address') ?></span></strong>
                 <div class="box-content">
                     <p><?php echo __('You have no default shipping address in your address book.') ?></p>
@@ -96,7 +97,7 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('.page-main').mage('address', {

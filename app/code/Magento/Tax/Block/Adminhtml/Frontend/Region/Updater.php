@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Block\Adminhtml\Frontend\Region;
 
@@ -35,7 +36,7 @@ class Updater extends \Magento\Backend\Block\System\Config\Form\Field
     {
         $html = parent::_getElementHtml($element);
 
-        $js = '<script type="text/javascript">
+        $js = '<script>
               require(["prototype", "mage/adminhtml/form"], function(){
                updater = new RegionUpdater("tax_defaults_country", "none", "tax_defaults_region", %s, "nullify");
                if(updater.lastCountryId) {
