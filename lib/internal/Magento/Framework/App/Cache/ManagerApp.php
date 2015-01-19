@@ -22,6 +22,7 @@ class ManagerApp implements AppInterface
     const KEY_SET = 'set';
     const KEY_CLEAN = 'clean';
     const KEY_FLUSH = 'flush';
+    const KEY_STATUS = 'status';
     /**#@- */
 
     /**
@@ -65,6 +66,7 @@ class ManagerApp implements AppInterface
     /**
      * {@inheritdoc}
      * @return Response
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function launch()
     {
@@ -89,18 +91,24 @@ class ManagerApp implements AppInterface
         }
         if (isset($this->requestArgs[self::KEY_FLUSH])) {
             $this->cacheManager->flush($types);
-            $output[] = 'Flushed cache types: ' . join(', ', $types);
+            $output[] = 'Flushed cache types:';
+            $output[] = join("\n", $types);
         } elseif (isset($this->requestArgs[self::KEY_CLEAN])) {
             $this->cacheManager->clean($types);
-            $output[] = 'Cleaned cache types: ' . join(', ', $types);
+            $output[] = 'Cleaned cache types:';
+            $output[] = join("\n", $types);
+        } elseif (isset($this->requestArgs[self::KEY_STATUS])) {
+            $output[] = 'Current status:';
+            foreach ($this->cacheManager->getStatus() as $cache => $status) {
+                $output[] = sprintf('%30s: %d', $cache, $status);
+            }
         } elseif (!empty($enabledTypes)) {
             $this->cacheManager->clean($enabledTypes);
-            $output[] = 'Cleaned cache types: ' . join(', ', $enabledTypes);
+            $output[] = 'Cleaned cache types:';
+            $output[] = join("\n", $enabledTypes);
         }
-        $output[] = 'Current status:';
-        foreach ($this->cacheManager->getStatus() as $cache => $status) {
-            $output[] = sprintf('%30s: %d', $cache, $status);
-        }
+
+        $output[] = '';
         $this->response->setBody(join("\n", $output));
         return $this->response;
     }
