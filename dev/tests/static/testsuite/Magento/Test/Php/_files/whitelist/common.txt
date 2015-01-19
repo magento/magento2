@@ -100,8 +100,8 @@ app/code/Magento/Sales/Model/Order/Pdf/Config
 app/code/Magento/Sales/Model/Order/Pdf/Config.php
 app/code/Magento/Sales/Model/Order/Pdf/Total/Factory.php
 app/code/Magento/Sales/Model/Observer
-app/code/Magento/Sales/Model/Quote/Address/*Interface.php
-app/code/Magento/Sales/Model/Quote/Address/*Interface.php
+app/code/Magento/Quote/Model/Quote/Address/*Interface.php
+app/code/Magento/Quote/Model/Quote/Address/*Interface.php
 app/code/Magento/Sales/Model/Resource/Order/Rss/OrderStatus.php
 app/code/Magento/Sales/Model/Rss/NewOrder.php
 app/code/Magento/Sales/Model/Rss/OrderStatus.php

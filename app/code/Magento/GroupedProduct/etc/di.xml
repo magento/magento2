@@ -13,7 +13,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Quote\Item\RelatedProducts">
+    <type name="Magento\Quote\Model\Quote\Item\RelatedProducts">
         <arguments>
             <argument name="relatedProductTypes" xsi:type="array">
                 <item name="grouped" xsi:type="const">Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE</item>

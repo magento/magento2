@@ -45,7 +45,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Message\CollectionFactory'
         )->disableOriginalConstructor()->getMock();
         $quoteRepository = $this->getMockBuilder(
-            'Magento\Sales\Model\QuoteRepository'
+            'Magento\Quote\Model\QuoteRepository'
         )->disableOriginalConstructor()->getMock();
 
         $appState = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
@@ -157,7 +157,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
         $orderFactory->expects($this->once())->method('create')->will($this->returnValue($order));
         $quoteRepository = $this->getMock(
-            'Magento\Sales\Model\QuoteRepository',
+            'Magento\Quote\Model\QuoteRepository',
             ['get', 'save'],
             [],
             '',
@@ -189,7 +189,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         if ($hasOrderId) {
             $order->setQuoteId($quoteId);
             $quote = $this->getMock(
-                'Magento\Sales\Model\Quote',
+                'Magento\Quote\Model\Quote',
                 ['setIsActive', 'getId', 'setReservedOrderId', '__wakeup'],
                 [],
                 '',
@@ -264,7 +264,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testHasQuote()
     {
-        $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->getMock();
         $session = $this->_helper->getObject('Magento\Checkout\Model\Session', ['quote' => $quote]);
@@ -289,7 +289,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($store));
 
-        $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->getMock();
         $quote->expects($this->once())
