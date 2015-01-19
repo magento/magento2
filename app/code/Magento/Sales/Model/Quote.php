@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
 
@@ -683,7 +684,9 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         $this->setCustomerId($customer->getId());
         $customerData = $this->objectFactory->create(
             $this->extensibleDataObjectConverter->toFlatArray(
-                $this->customerBuilder->populate($customer)->setAddresses([])->create()
+                $this->customerBuilder->populate($customer)->setAddresses([])->create(),
+                [],
+                '\Magento\Customer\Api\Data\CustomerInterface'
             )
         );
         $this->_objectCopyService->copyFieldsetToTarget('customer_account', 'to_quote', $customerData, $this);
