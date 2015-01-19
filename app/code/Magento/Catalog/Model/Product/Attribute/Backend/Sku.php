@@ -104,13 +104,11 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $adapter = $this->getAttribute()->getEntity()->getReadConnection();
         $select = $adapter->select();
         $value = $object->getData($attribute->getAttributeCode());
-        $bind = ['entity_type_id' => $attribute->getEntityTypeId(), 'attribute_code' => trim($value) . '-%'];
+        $bind = ['attribute_code' => trim($value) . '-%'];
 
         $select->from(
             $this->getTable(),
             $attribute->getAttributeCode()
-        )->where(
-            'entity_type_id = :entity_type_id'
         )->where(
             $attribute->getAttributeCode() . ' LIKE :attribute_code'
         )->order(
