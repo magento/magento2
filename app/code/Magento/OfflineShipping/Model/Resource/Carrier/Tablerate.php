@@ -160,10 +160,10 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Return table rate array or false by rate request
      *
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array|bool
      */
-    public function getRate(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function getRate(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         $adapter = $this->_getReadAdapter();
         $bind = [

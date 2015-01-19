@@ -16,7 +16,7 @@ class CleanExpiredQuotesTest extends \PHPUnit_Framework_TestCase
     protected $storesConfigMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Quote\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Resource\Quote\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteFactoryMock;
 
@@ -29,7 +29,7 @@ class CleanExpiredQuotesTest extends \PHPUnit_Framework_TestCase
     {
         $this->storesConfigMock = $this->getMock('Magento\Store\Model\StoresConfig', [], [], '', false);
 
-        $this->quoteFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Quote\CollectionFactory')
+        $this->quoteFactoryMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -49,7 +49,7 @@ class CleanExpiredQuotesTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('checkout/cart/delete_quote_after'))
             ->will($this->returnValue($lifetimes));
 
-        $quotesMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Quote\Collection')
+        $quotesMock = $this->getMockBuilder('Magento\Quote\Model\Resource\Quote\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $this->quoteFactoryMock->expects($this->exactly(count($lifetimes)))

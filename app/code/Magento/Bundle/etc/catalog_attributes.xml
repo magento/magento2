@@ -10,7 +10,7 @@
         <attribute name="price_view"/>
         <attribute name="price_type"/>
     </group>
-    <group name="sales_quote_item">
+    <group name="quote_item">
         <attribute name="price_view"/>
         <attribute name="price_type"/>
         <attribute name="shipment_type"/>
