@@ -80,6 +80,8 @@ class Reader
         }
 
         $config = [];
+        
+        $this->fillThirdPartyInterfaces($areaConfig, $definitionsCollection);
         $config['arguments'] = $this->getConfigForScope($definitionsCollection, $areaConfig);
         foreach ($config['arguments'] as $key => $value) {
             if ($value !== null) {
@@ -87,7 +89,6 @@ class Reader
             }
         }
 
-        $this->fillThirdPartyInterfaces($areaConfig, $definitionsCollection);
         foreach ($definitionsCollection->getInstancesNamesList() as $instanceName) {
             if (!$areaConfig->isShared($instanceName)) {
                 $config['nonShared'][$instanceName] = true;
