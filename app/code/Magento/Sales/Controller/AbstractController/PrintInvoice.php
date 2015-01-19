@@ -36,6 +36,8 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
      * @param Context $context
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param \Magento\Framework\Registry $registry
+     * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Context $context,

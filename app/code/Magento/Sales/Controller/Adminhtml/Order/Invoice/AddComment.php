@@ -6,13 +6,13 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\Model\Exception;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\Result\JSONFactory;
-use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
@@ -43,16 +43,16 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
      * @param Registry $registry
      * @param InvoiceCommentSender $invoiceCommentSender
      * @param JSONFactory $resultJsonFactory
-     * @param ForwardFactory $resultForwardFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
      * @param RawFactory $resultRawFactory
      */
     public function __construct(
-        Action\Context $context,
+        Context $context,
         Registry $registry,
         InvoiceCommentSender $invoiceCommentSender,
         JSONFactory $resultJsonFactory,
-        ForwardFactory $resultForwardFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,,
         PageFactory $resultPageFactory,
         RawFactory $resultRawFactory
     ) {
@@ -62,7 +62,6 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct($context, $registry, $resultForwardFactory);
     }
-
     /**
      * Add comment to invoice action
      *

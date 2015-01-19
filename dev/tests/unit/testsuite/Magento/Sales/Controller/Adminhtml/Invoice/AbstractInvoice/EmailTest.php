@@ -61,17 +61,31 @@ class EmailTest extends \PHPUnit_Framework_TestCase
      */
     protected $helper;
 
+    /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirect;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForward;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForwardFactory;
+
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
-        $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
-        );
+        $this->response = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false );
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $this->messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
@@ -82,12 +96,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
         $this->context->expects($this->once())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $this->context->expects($this->once())
-            ->method('getResponse')
-            ->willReturn($this->response);
-        $this->context->expects($this->once())
             ->method('getObjectManager')
             ->willReturn($this->objectManager);
         $this->context->expects($this->once())
@@ -97,14 +105,35 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getActionFlag')
             ->willReturn($this->actionFlag);
         $this->context->expects($this->once())
+            ->method('getRequest')
+            ->willReturn($this->request);
+        $this->context->expects($this->once())
+            ->method('getResponse')
+            ->willReturn($this->response);
+        $this->context->expects($this->once())
             ->method('getHelper')
             ->willReturn($this->helper);
+
+        $this->resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultForwardFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->invoiceEmail = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\Email',
             [
                 'context' => $this->context,
-                'request' => $this->request,
-                'response' => $this->response
+                'resultRedirectFactory' => $this->resultRedirectFactory,
+                'resultForwardFactory' => $this->resultForwardFactory,
             ]
         );
     }
@@ -148,19 +177,31 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('addSuccess')
             ->with('We sent the message.');
 
-        $this->prepareRedirect($invoiceId, $orderId);
-
-        $this->invoiceEmail->execute();
-        $this->assertEquals($this->response, $this->invoiceEmail->getResponse());
+        $this->resultRedirectFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->resultRedirect);
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('sales/invoice/view', ['order_id' => $orderId, 'invoice_id' => $invoiceId])
+            ->willReturnSelf();
+        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Redirect', $this->invoiceEmail->execute());
     }
 
-    public function testEmailNoInvoiceId()
+        public function testEmailNoInvoiceId()
     {
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
             ->willReturn(null);
-        $this->assertNull($this->invoiceEmail->execute());
+        $this->resultForwardFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->resultForward);
+        $this->resultForward->expects($this->once())
+            ->method('forward')
+            ->with('noroute')
+            ->willReturnSelf();
+
+        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->invoiceEmail->execute());
     }
 
     public function testEmailNoInvoice()
@@ -181,30 +222,14 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($invoiceId)
             ->willReturn(null);
+        $this->resultForwardFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->resultForward);
+        $this->resultForward->expects($this->once())
+            ->method('forward')
+            ->with('noroute')
+            ->willReturnSelf();
 
-        $this->assertNull($this->invoiceEmail->execute());
-    }
-
-    /***
-     * @param $invoiceId
-     * @param $orderId
-     */
-    protected function prepareRedirect($invoiceId, $orderId)
-    {
-        $this->actionFlag->expects($this->once())
-            ->method('get')
-            ->with('', 'check_url_settings')
-            ->willReturn(true);
-        $this->session->expects($this->once())
-            ->method('setIsUrlNotice')
-            ->with(true);
-        $path = 'sales/invoice/view';
-        $this->response->expects($this->once())
-            ->method('setRedirect')
-            ->with($path . '/' . $invoiceId);
-        $this->helper->expects($this->atLeastOnce())
-            ->method('getUrl')
-            ->with($path, ['order_id' => $orderId, 'invoice_id' => $invoiceId])
-            ->willReturn($path . '/' . $invoiceId);
+        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->invoiceEmail->execute());
     }
 }
