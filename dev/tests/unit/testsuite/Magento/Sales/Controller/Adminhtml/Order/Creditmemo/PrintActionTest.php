@@ -219,7 +219,7 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
     {
         $orderId = 1;
         $creditmemo = 3;
-        $invoice_id = 4;
+        $invoiceId = 4;
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
@@ -228,7 +228,7 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
                     ['order_id', null, $orderId],
                     ['creditmemo_id', null, $creditmemoId],
                     ['creditmemo', null, $creditmemo],
-                    ['invoice_id', null, $invoice_id]
+                    ['invoice_id', null, $invoiceId]
                 ]
             );
         $this->creditmemoLoaderMock->expects($this->once())
@@ -245,7 +245,7 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('setInvoiceId')
-            ->with($invoice_id)
+            ->with($invoiceId)
             ->willReturnSelf();
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('load');
