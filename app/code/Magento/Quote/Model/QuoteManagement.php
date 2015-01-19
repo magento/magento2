@@ -224,7 +224,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $order = $this->submit($quote);
-        $this->quoteRepository->save($quote);
         return $order->getId();
     }
 
@@ -356,6 +355,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                     'quote' => $quote
                 ]
             );
+            $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->eventManager->dispatch(
                 'sales_model_service_quote_submit_failure',
