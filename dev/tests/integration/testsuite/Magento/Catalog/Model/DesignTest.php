@@ -58,7 +58,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             'theme_code' => 'theme',
             'package_code' => 'package',
             'theme_path' => 'package/theme',
-            'theme_version' => '0.1.0',
             'parent_theme' => null,
             'is_featured' => true,
             'preview_image' => '',

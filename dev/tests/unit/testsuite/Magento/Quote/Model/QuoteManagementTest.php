@@ -116,32 +116,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSubmitNominalItems()
-    {
-        $quoteItem = $this->getQuoteItem(false);
-        $nominalQuoteItem = $this->getQuoteItem(true);
-        $nominalQuoteItem->expects($this->once())
-            ->method('isDeleted')
-            ->with(true);
-
-        $quote = $this->getMock('Magento\Quote\Model\Quote', ['setIsActive', 'getAllVisibleItems'], [], '', false);
-        $quote->expects($this->once())
-            ->method('setIsActive')
-            ->with(false);
-        $quote->expects($this->once())
-            ->method('getAllVisibleItems')
-            ->willReturn([$quoteItem, $nominalQuoteItem]);
-
-        $this->quoteValidator->expects($this->once())
-            ->method('validateBeforeSubmit')
-            ->with($quote);
-        $this->eventManager->expects($this->once())
-            ->method('dispatch')
-            ->with('sales_model_service_quote_submit_nominal_items', ['quote' => $quote]);
-
-        $this->model->submitNominalItems($quote);
-    }
-
     public function testSubmit()
     {
         $orderData = [];
@@ -149,7 +123,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $isVirtual = false;
         $customerId = 1;
         $quoteId = 1;
-        $quoteItem = $this->getQuoteItem(false);
+        $quoteItem = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
 
         $billingAddress = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
         $shippingAddress = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
@@ -229,16 +203,12 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->eventManager->expects($this->at(0))
             ->method('dispatch')
-            ->with('sales_model_service_quote_submit_nominal_items', ['quote' => $quote]);
-        $this->eventManager->expects($this->at(1))
-            ->method('dispatch')
             ->with('sales_model_service_quote_submit_before', ['order' => $order, 'quote' => $quote]);
-        $this->eventManager->expects($this->at(2))
+        $this->eventManager->expects($this->at(1))
             ->method('dispatch')
             ->with('sales_model_service_quote_submit_success', ['order' => $order, 'quote' => $quote]);
 
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
-
     }
 
     protected function getQuote(
@@ -312,15 +282,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn($id);
 
         return $quote;
-    }
-
-    protected function getQuoteItem($isNominal)
-    {
-        $quoteItem = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $quoteItem->expects($this->once())
-            ->method('isNominal')
-            ->willReturn($isNominal);
-        return $quoteItem;
     }
 
     protected function prepareOrderBuilder(

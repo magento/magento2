@@ -33,7 +33,7 @@ class Import extends \Magento\Framework\Data\Form\Element\AbstractElement
         $html .= '<input id="time_condition" type="hidden" name="' . $this->getName() . '" value="' . time() . '" />';
 
         $html .= <<<EndHTML
-        <script type="text/javascript">
+        <script>
         Event.observe($('carriers_tablerate_condition_name'), 'change', checkConditionName.bind(this));
         function checkConditionName(event)
         {
