@@ -52,7 +52,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         Registry $registry,
         InvoiceCommentSender $invoiceCommentSender,
         JSONFactory $resultJsonFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory,
         RawFactory $resultRawFactory
     ) {
