@@ -63,7 +63,7 @@ class SelectstoreElement extends SelectElement
                 . $pieces[2] . '")]';
         }
 
-        $option = $this->_context->find($optionLocator, Locator::SELECTOR_XPATH);
+        $option = $this->context->find($optionLocator, Locator::SELECTOR_XPATH);
         if (!$option->isVisible()) {
             throw new \Exception('[' . implode('/', $pieces) . '] option is not visible in store switcher.');
         }
