@@ -145,4 +145,10 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/customer/:customerId/cart" method="GET">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="getCartForCustomer"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
 </routes>

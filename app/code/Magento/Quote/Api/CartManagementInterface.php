@@ -13,7 +13,6 @@ interface CartManagementInterface
      * @param int $storeId
      * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
      * @return int Cart ID.
-     * @see \Magento\Checkout\Service\V1\Cart\WriteServiceInterface::create
      */
     public function createEmptyCart($storeId);
 
@@ -23,7 +22,6 @@ interface CartManagementInterface
      * @param int $customerId The customer ID.
      * @return \Magento\Quote\Api\Data\CartInterface Cart object.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified customer does not exist.
-     * @see \Magento\Checkout\Service\V1\Cart\ReadServiceInterface::getCartForCustomer
      */
     public function getCartForCustomer($customerId);
 
@@ -34,7 +32,6 @@ interface CartManagementInterface
      * @param int $customerId The customer ID.
      * @param int $storeId
      * @return boolean
-     * @see \Magento\Checkout\Service\V1\Cart\WriteServiceInterface::assignCustomer
      */
     public function assignCustomer($cartId, $customerId, $storeId);
 
@@ -43,7 +40,6 @@ interface CartManagementInterface
      *
      * @param int $cartId The cart ID.
      * @return int Order ID.
-     * @see \Magento\Checkout\Service\V1\Cart\WriteServiceInterface::order
      */
     public function placeOrder($cartId);
 }

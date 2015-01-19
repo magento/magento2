@@ -340,4 +340,15 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
 
         return $order;
     }
+
+    public function testGetCartForCustomer()
+    {
+        $customerId = 100;
+        $cartMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('getActiveForCustomer')
+            ->with($customerId)
+            ->willReturn($cartMock);
+        $this->assertEquals($cartMock, $this->model->getCartForCustomer($customerId));
+    }
 }

@@ -232,7 +232,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     public function getCartForCustomer($customerId)
     {
-        //stub for interface
+        return $this->quoteRepository->getActiveForCustomer($customerId);
     }
 
     /**
