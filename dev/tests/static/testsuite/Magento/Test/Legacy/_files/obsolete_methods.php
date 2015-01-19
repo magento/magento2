@@ -2028,5 +2028,6 @@ return [
     ['getAllNominalItems', 'Magento\Sales\Model\Quote\Address'],
     ['isNominal', 'Magento\Sales\Model\Order\Item'],
     ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
-    ['checkQuoteAmount', 'Magento\Sales\Helper\Data']
+    ['checkQuoteAmount', 'Magento\Sales\Helper\Data'],
+    ['getEntityTypeId', 'Magento\Customer\Model\Customer']
 ];
