@@ -86,7 +86,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             ' value="' .
             $this->_localeResolver->getLocaleCode() .
             '"/>';
-        $html .= '<script type="text/javascript">
+        $html .= '<script>
             require(["jquery", "mage/calendar"], function($){
                 $("#' .
             $htmlId .

@@ -25,29 +25,29 @@ class Cart extends \Magento\Backend\App\Action
     /**
      * Quote we're working with
      *
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Quote\Model\Quote
      */
     protected $_quote = null;
 
     /**
      * Quote item we're working with
      *
-     * @var \Magento\Sales\Model\Quote\Item
+     * @var \Magento\Quote\Model\Quote\Item
      */
     protected $_quoteItem = null;
 
     /**
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         $this->quoteRepository = $quoteRepository;
         parent::__construct($context);

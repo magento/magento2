@@ -167,7 +167,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
         $address = $model;
-        if (!$address instanceof \Magento\Sales\Model\Quote\Address) {
+        if (!$address instanceof \Magento\Quote\Model\Quote\Address) {
             if ($model->getQuote()->isVirtual()) {
                 $address = $model->getQuote()->getBillingAddress();
             } else {
