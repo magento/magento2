@@ -45,6 +45,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('Checkout API');
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $methods = [

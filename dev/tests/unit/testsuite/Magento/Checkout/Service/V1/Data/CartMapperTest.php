@@ -49,6 +49,7 @@ class CartMapperTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('Checkout API');
         $this->totalsBuilder = $this->getMock(
             '\Magento\Checkout\Service\V1\Data\Cart\TotalsBuilder',
             ['populateWithArray', 'setItems', 'create'],

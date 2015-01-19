@@ -66,6 +66,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->markTestSkipped('Checkout API');
         $this->objectManager = new ObjectManager($this);
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
