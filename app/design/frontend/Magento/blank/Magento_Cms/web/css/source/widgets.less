@@ -9,22 +9,22 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .block-static-block,
 .block-cms-link {
     &.widget {
-        display: block;
         .css(margin-bottom, @widgets-indent-bottom);
+        .links & {
+            margin-bottom: 0;
+        }
     }
-
 }
 
 .block-cms-link-inline {
     &.widget {
         margin: 0;
     }
-
 }
 
 }

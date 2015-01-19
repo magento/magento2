@@ -44,9 +44,7 @@ class UrlRewriteForm extends Form
             }
         }
 
-        // TODO: delete line after removing old fixture
-        $fields = isset($data['fields']) ? $data['fields'] : $data;
-        $mapping = $this->dataMapping($fields);
+        $mapping = $this->dataMapping($data);
         $this->_fill($mapping, $element);
 
         return $this;

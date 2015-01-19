@@ -33,7 +33,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPaymentInfo()
     {
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $paymentInfoMock = $this->getMock('Magento\Payment\Model\Info', [], [], '', false);
         $this->multiShippingMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentInfoMock);

@@ -33,6 +33,11 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
  */
 class ViewedProductsReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Product Report View page
      *

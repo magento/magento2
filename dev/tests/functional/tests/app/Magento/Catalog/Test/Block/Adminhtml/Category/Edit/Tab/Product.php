@@ -12,27 +12,26 @@ use Magento\Catalog\Test\Block\Adminhtml\Category\Tab\ProductGrid;
 use Mtf\Client\Element;
 
 /**
- * Class Product
- * Products grid of Category Products tab
+ * Products grid of Category Products tab.
  */
 class Product extends Tab
 {
     /**
-     * An element locator which allows to select entities in grid
+     * An element locator which allows to select entities in grid.
      *
      * @var string
      */
     protected $selectItem = 'tbody tr .col-in_category';
 
     /**
-     * Product grid locator
+     * Product grid locator.
      *
      * @var string
      */
     protected $productGrid = '#catalog_category_products';
 
     /**
-     * Fill category products
+     * Fill category products.
      *
      * @param array $fields
      * @param SimpleElement|null $element
@@ -49,7 +48,31 @@ class Product extends Tab
     }
 
     /**
-     * Returns role grid
+     * Get data of tab.
+     *
+     * @param array|null $fields
+     * @param Element|null $element
+     * @return array
+     */
+    public function getDataFormTab($fields = null, Element $element = null)
+    {
+        $data = $this->dataMapping($fields);
+        $result = [];
+
+        if (isset($data['category_products'])) {
+            $this->getProductGrid()->search(['in_category' => 'Yes']);
+            $rows = $this->getProductGrid()->getRowsData(['name']);
+
+            foreach ($rows as $row) {
+                $result['category_products'][] = $row['name'];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns role grid.
      *
      * @return ProductGrid
      */
