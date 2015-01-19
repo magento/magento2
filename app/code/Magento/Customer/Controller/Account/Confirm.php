@@ -56,6 +56,8 @@ class Confirm extends \Magento\Customer\Controller\Account
      * @param CustomerRepositoryInterface $customerRepository
      * @param Address $addressHelper
      * @param UrlFactory $urlFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
