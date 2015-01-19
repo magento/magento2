@@ -12,7 +12,7 @@ $installer->createCategory()
     ->load(1)
     ->setId(1)
     ->setStoreId(0)
-    ->setPath(1)
+    ->setPath('1')
     ->setLevel(0)
     ->setPosition(0)
     ->setChildrenCount(0)
@@ -24,11 +24,12 @@ $category = $installer->createCategory();
 
 $installer->createCategory()
     ->setStoreId(0)
+    ->setPath('1')
     ->setName('Default Category')
     ->setDisplayMode('PRODUCTS')
     ->setAttributeSetId($category->getDefaultAttributeSetId())
     ->setIsActive(1)
-    ->setPath('1')
+    ->setLevel(1)
     ->setInitialSetupFlag(true)
     ->save();
 

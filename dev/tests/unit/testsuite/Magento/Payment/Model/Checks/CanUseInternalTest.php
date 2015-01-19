@@ -24,7 +24,7 @@ class CanUseInternalTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsApplicable($expectation)
     {
-        $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')->disableOriginalConstructor()->setMethods(
+        $quote = $this->getMockBuilder('Magento\Quote\Model\Quote')->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
         $paymentMethod = $this->getMockBuilder(

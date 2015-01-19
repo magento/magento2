@@ -26,10 +26,10 @@ class Converter
     /**
      * Convert quote payment object to payment data object
      *
-     * @param \Magento\Sales\Model\Quote\Payment $object
+     * @param \Magento\Quote\Model\Quote\Payment $object
      * @return QuotePaymentMethod
      */
-    public function toDataObject(\Magento\Sales\Model\Quote\Payment $object)
+    public function toDataObject(\Magento\Quote\Model\Quote\Payment $object)
     {
         $data = [
             QuotePaymentMethod::METHOD => $object->getMethod(),

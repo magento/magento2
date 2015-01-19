@@ -154,7 +154,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
         );
         //TODO: JavaScript logic should be moved to separate file or reviewed
         return <<<HTML
-<script type="text/javascript">
+<script>
 require(["jquery","mage/mage"],function($) {  // waiting for dependencies at first
     $(function(){ // waiting for page to load to have '#category_ids-template' available
         $('#new-category').mage('newCategoryDialog', $widgetOptions);

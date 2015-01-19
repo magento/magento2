@@ -520,7 +520,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['__wakeup', 'getCustomOption', 'getSkipCheckRequiredOption'])
             ->disableOriginalConstructor()
             ->getMock();
-        $optionMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item\Option')
+        $optionMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item\Option')
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -547,7 +547,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['__wakeup', 'getCustomOption', 'getSkipCheckRequiredOption'])
             ->disableOriginalConstructor()
             ->getMock();
-        $optionMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item\Option')
+        $optionMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item\Option')
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
