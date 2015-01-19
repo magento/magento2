@@ -14,6 +14,10 @@ use Mtf\Factory\Factory;
  */
 class EditConfigurableTest extends CreateConfigurableTest
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Edit configurable product and add new options to attribute
      *
