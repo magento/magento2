@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<scenarios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Config/etc/test_scenario.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/TestCase/etc/testcase.xsd">
   <scenario name="OnePageCheckoutTest" firstStep="setupConfiguration">
     <step name="setupConfiguration" next="createProducts"/>
     <step name="createProducts" next="addProductsToTheCart"/>
@@ -12,4 +12,4 @@
     <step name="selectPaymentMethod" next="placeOrder"/>
     <step name="placeOrder"/>
   </scenario>
-</scenarios>
+</config>

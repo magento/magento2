@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<scenarios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Config/etc/test_scenario.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/TestCase/etc/testcase.xsd">
   <scenario name="UpdateConfigurableProductEntityTest" firstStep="createProduct">
     <step name="createProduct" next="openProductOnBackend">
       <item name="product" value="configurableProductInjectable::default"/>
@@ -8,4 +8,4 @@
     <step name="updateConfigurableProduct" next="saveProduct"/>
     <step name="saveProduct"/>
   </scenario>
-</scenarios>
+</config>
