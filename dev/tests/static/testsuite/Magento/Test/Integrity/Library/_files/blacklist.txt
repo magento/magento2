@@ -73,3 +73,6 @@ lib/internal/Magento/Framework/Session/SidResolverInterface.php
 
 lib/internal/Magento/Framework/App/Filesystem/DirectoryList/Configuration.php
 lib/internal/Magento/Framework/Filesystem/Driver/Http.php
+
+lib/internal/Magento/Framework/Url/ScopeResolver.php
+

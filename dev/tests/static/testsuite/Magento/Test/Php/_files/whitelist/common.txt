@@ -40,7 +40,6 @@ app/code/Magento/Core/Model/Resource/Theme
 app/code/Magento/Core/Model/Resource/Theme.php
 app/code/Magento/Core/Model/Theme
 app/code/Magento/Core/Model/Theme.php
-app/code/Magento/Core/Model/Url/SecurityInfo.php
 app/code/Magento/Cron/Model/Config/Converter
 app/code/Magento/Cron/Model/Config/Reader
 app/code/Magento/Cron/Model/Config/Data.php
@@ -143,6 +142,7 @@ lib/internal/Magento/Framework/Data/Argument
 lib/internal/Magento/Framework/ObjectManager
 lib/internal/Magento/Framework/Api
 lib/internal/Magento/Framework/Url/SecurityInfoInterface.php
+lib/internal/Magento/Framework/Url/SecurityInfo.php
 lib/internal/Magento/Framework/View
 lib/internal/Magento/Framework/Locale/Validator.php
 lib/internal/Magento/Framework/Notification
