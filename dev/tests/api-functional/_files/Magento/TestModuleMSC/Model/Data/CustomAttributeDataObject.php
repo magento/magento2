@@ -7,8 +7,8 @@ namespace Magento\TestModuleMSC\Model\Data;
 
 use Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface;
 
-class CustomAttributeDataObject extends \Magento\Framework\Api\AbstractExtensibleObject
-    implements CustomAttributeDataObjectInterface
+class CustomAttributeDataObject extends \Magento\Framework\Api\AbstractExtensibleObject implements
+    CustomAttributeDataObjectInterface
 {
     /**
      * @return string
