@@ -9,7 +9,6 @@
         "magento/module-downloadable": "0.42.0-beta4",
         "magento/module-eav": "0.42.0-beta4",
         "magento/module-grouped-product": "0.42.0-beta4",
-        "magento/module-sales": "0.42.0-beta4",
         "magento/module-store": "0.42.0-beta4",
         "magento/module-tax": "0.42.0-beta4",
         "magento/module-quote": "0.42.0-beta4",

@@ -7,7 +7,6 @@
         "magento/module-checkout": "0.42.0-beta4",
         "magento/module-core": "0.42.0-beta4",
         "magento/module-customer": "0.42.0-beta4",
-        "magento/module-sales": "0.42.0-beta4",
         "magento/module-cron": "0.42.0-beta4",
         "magento/module-page-cache": "0.42.0-beta4",
         "magento/module-quote": "0.42.0-beta4",
