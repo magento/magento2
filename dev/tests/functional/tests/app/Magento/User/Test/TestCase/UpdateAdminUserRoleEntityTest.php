@@ -32,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateAdminUserRoleEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * @var UserRoleIndex
      */

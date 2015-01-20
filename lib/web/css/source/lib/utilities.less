@@ -3,42 +3,13 @@
 //  * See COPYING.txt for license details.
 //  */
 
-.margin-top-rem(
-    @value
-) when not (@value = false) and not (@value = '') {
-    @_value: unit(@value);
-    margin-top: @_value * 1rem / @font-rem-ratio;
-}
-
-.margin-bottom-rem(
-    @value
-) when not (@value = false) and not (@value = '') {
-    @_value: unit(@value);
-    margin-bottom: @_value * 1rem / @font-rem-ratio;
-}
-
-.margin-vertical-rem(@val-top, @val-bottom) {
-    .margin-top-rem(@val-top);
-    .margin-bottom-rem(@val-bottom);
-}
-
-.padding-top-rem(
-    @value
-) when not (@value = false) and not (@value = '') {
-    @_value: unit(@value);
-    padding-top: @_value * 1rem / @font-rem-ratio;
-}
-
-.padding-bottom-rem(
-    @value
-) when not (@value = false) and not (@value = '') {
-    @_value: unit(@value);
-    padding-bottom: @_value * 1rem / @font-rem-ratio;
-}
-
-.padding-vertical-rem(@val-top, @val-bottom) {
-    .padding-top-rem(@val-top);
-    .padding-bottom-rem(@val-bottom);
+//
+//    Convert to rem
+//--------------------------------------
+.to-rem(
+    @_value
+) when not (@_value = false) and not (@_value = '') {
+    @valueRem: (unit(@_value) * 1rem) / @font-rem-ratio;
 }
 
 .visibility-hidden() {
@@ -95,7 +66,12 @@
     // Creates two color stops, start and end, by specifying a color and position for each color stop.
     // Color stops are not available in IE9 and below.
     // Filters are enabled
-    .horizontal(@_start-color; @_end-color; @_start-percent: 0%; @_end-percent: 100%) when not (@disable-filters) {
+    .horizontal(
+        @_start-color;
+        @_end-color;
+        @_start-percent: 0%;
+        @_end-percent: 100%
+    ) when not (@disable-filters) {
         background-color: @_end-color;
         background-repeat: repeat-x;
         background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
@@ -107,7 +83,12 @@
     // Creates two color stops, start and end, by specifying a color and position for each color stop.
     // Color stops are not available in IE9 and below.
     // Filters are disabled
-    .horizontal(@_start-color; @_end-color; @_start-percent: 0%; @_end-percent: 100%) when (@disable-filters) {
+    .horizontal(
+        @_start-color;
+        @_end-color;
+        @_start-percent: 0%;
+        @_end-percent: 100%
+    ) when (@disable-filters) {
         background-color: @_end-color;
         background-repeat: repeat-x;
         background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
@@ -118,7 +99,12 @@
     // Creates two color stops, start and end, by specifying a color and position for each color stop.
     // Color stops are not available in IE9 and below.
 // Filters are enabled
-    .vertical(@_start-color; @_end-color; @_start-percent: 0%; @_end-percent: 100%) when not (@disable-filters) {
+    .vertical(
+        @_start-color;
+        @_end-color;
+        @_start-percent: 0%;
+        @_end-percent: 100%
+    ) when not (@disable-filters) {
         background-color: @_end-color;
         background-repeat: repeat-x;
         background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent);  // Safari 5.1-6, Chrome 10+
@@ -130,7 +116,12 @@
     // Creates two color stops, start and end, by specifying a color and position for each color stop.
     // Color stops are not available in IE9 and below.
     // Filters are disabled
-    .vertical(@_start-color; @_end-color; @_start-percent: 0%; @_end-percent: 100%) when (@disable-filters) {
+    .vertical(
+        @_start-color;
+        @_end-color;
+        @_start-percent: 0%;
+        @_end-percent: 100%
+    ) when (@disable-filters) {
         background-color: @_end-color;
         background-repeat: repeat-x;
         background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent);  // Safari 5.1-6, Chrome 10+
@@ -166,8 +157,8 @@
 //--------------------------------------
 .rotate(@_rotation) {
     -webkit-transform: rotate(@_rotation); // Use in 8 Safari
-    -ms-transform: rotate(@_rotation); // Use in 9 IE
-    transform: rotate(@_rotation);
+        -ms-transform: rotate(@_rotation); // Use in 9 IE
+            transform: rotate(@_rotation);
 }
 
 //
@@ -179,7 +170,10 @@
     letter-spacing: -1px;
 }
 
-.inline-block-space-item(@_font-size: @font-size-base, @_line-height: normal) {
+.inline-block-space-item(
+    @_font-size: @font-size-base,
+    @_line-height: normal
+) {
     .font-size(@_font-size);
     font-size: @_font-size;
     line-height: @_line-height;
@@ -189,13 +183,34 @@
 //
 //    Add any css property
 //--------------------------------------
-.css(@_property, @_value, @_prefix: 0) when (@_prefix = 1) {
-    -ms-@{_property}:@_value;
-    -webkit-@{_property}:@_value;
-    -moz-@{_property}:@_value;
+.css(
+    @_property,
+    @_value,
+    @_prefix: 0
+) when (@_prefix = 1)
+  and not (@_value = '')
+  and not (@_value = false)
+  and not (extract(@_value, 1) = false)
+  and not (extract(@_value, 2) = false)
+  and not (extract(@_value, 3) = false)
+  and not (extract(@_value, 4) = false)
+  and not (extract(@_value, 5) = false) {
+  -webkit-@{_property}: @_value;
+       -moz-@{_property}: @_value;
+        -ms-@{_property}: @_value;
 }
-.css(@_property, @_value, @_prefix: 0) when not (@_value = false) and not (@_value = '') {
-    @{_property}:@_value;
+.css(
+    @_property,
+    @_value,
+    @_prefix: 0
+) when not (@_value = '')
+  and not (@_value = false)
+  and not (extract(@_value, 1) = false)
+  and not (extract(@_value, 2) = false)
+  and not (extract(@_value, 3) = false)
+  and not (extract(@_value, 4) = false)
+  and not (extract(@_value, 5) = false) {
+    @{_property}: @_value;
 }
 
 //
@@ -216,32 +231,60 @@
 .url (@_path) {
     @url: "@{baseDir}@{_path}";
 }
-.url (@_path, @_module) when not (@_module = false) and not (@_module = '') and  (@urls-resolved = false) {
+
+.url (
+    @_path,
+    @_module
+) when not (@_module = false) and not (@_module = '') and (@urls-resolved = false) {
     @url: "@{_module}::@{_path}";
 }
-.url (@_path, @_module) when not (@_module = false) and not (@_module = '') and  (@urls-resolved = true) {
+
+.url (
+    @_path,
+    @_module
+) when not (@_module = false) and not (@_module = '') and (@urls-resolved = true) {
     @url: "@{baseDir}@{_module}/@{_path}";
 }
 
 //
 //    Arrow
 //--------------------------------------
-.arrow(@_position, @_size, @_color) {
+.arrow(
+    @_position,
+    @_size,
+    @_color
+) {
     width: 0;
     height: 0;
     border: @_size solid transparent;
     ._abbor_el(@_position, @_color);
 }
-._abbor_el(@_position, @_color) when (@_position = left) {
+
+._abbor_el(
+    @_position,
+    @_color
+) when (@_position = left) {
     border-right-color: @_color;
 }
-._abbor_el(@_position, @_color) when (@_position = right) {
+
+._abbor_el(
+    @_position,
+    @_color
+) when (@_position = right) {
     border-left-color: @_color;
 }
-._abbor_el(@_position, @_color) when (@_position = up) {
+
+._abbor_el(
+    @_position,
+    @_color
+) when (@_position = up) {
     border-bottom-color: @_color;
 }
-._abbor_el(@_position, @_color) when (@_position = down) {
+
+._abbor_el(
+    @_position,
+    @_color
+) when (@_position = down) {
     border-top-color: @_color;
 }
 

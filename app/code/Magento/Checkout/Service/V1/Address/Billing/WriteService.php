@@ -7,8 +7,8 @@ namespace Magento\Checkout\Service\V1\Address\Billing;
 
 use Magento\Checkout\Service\V1\Address\Converter;
 use Magento\Checkout\Service\V1\Address\Validator;
-use Magento\Sales\Model\Quote\AddressFactory;
-use Magento\Sales\Model\QuoteRepository;
+use Magento\Quote\Model\Quote\AddressFactory;
+use Magento\Quote\Model\QuoteRepository;
 use Magento\Framework\Exception\InputException;
 use Psr\Log\LoggerInterface as Logger;
 
@@ -87,13 +87,13 @@ class WriteService implements WriteServiceInterface
         /**
          * Quote.
          *
-         * @var \Magento\Sales\Model\Quote $quote
+         * @var \Magento\Quote\Model\Quote $quote
          */
         $quote = $this->quoteRepository->getActive($cartId);
         /**
          * Address.
          *
-         * @var \Magento\Sales\Model\Quote\Address $address
+         * @var \Magento\Quote\Model\Quote\Address $address
          */
         $address = $this->quoteAddressFactory->create();
         $this->addressValidator->validate($addressData);

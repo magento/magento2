@@ -29,6 +29,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteProductAttributeEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Run DeleteProductAttributeEntity test
      *

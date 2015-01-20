@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Invoice;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Totals
@@ -45,7 +45,6 @@ class Totals extends Block
                 return $element->isVisible() == false ? true : null;
             }
         );
-        $this->reinitRootElement();
         $this->_rootElement->find($this->submit)->click();
     }
 

@@ -73,6 +73,11 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
      */
     protected $request;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dateFactory;
+
     protected function setUp()
     {
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
@@ -101,6 +106,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('en_US'));
 
         $this->localeDate = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $this->dateFactory = $this->getMock('Magento\Framework\Stdlib\DateTime\DateFactory', ['create'], [], '', false);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
@@ -116,7 +122,8 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
                 'rssUrlBuilder' => $this->rssUrlBuilder,
                 'storeManager' => $this->storeManager,
                 'scopeConfig' => $this->scopeConfig,
-                'localeDate' => $this->localeDate
+                'localeDate' => $this->localeDate,
+                'dateFactory' => $this->dateFactory
             ]
         );
     }
@@ -130,6 +137,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
         $this->rssModel->expects($this->once())->method('getProductsCollection')
             ->will($this->returnValue([$item]));
         $this->msrpHelper->expects($this->once())->method('canApplyMsrp')->will($this->returnValue(false));
+        $this->dateFactory->expects($this->once())->method('create');
         $this->localeDate->expects($this->once())->method('formatDate')->will($this->returnValue(date('Y-m-d')));
 
         $this->priceCurrency->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));

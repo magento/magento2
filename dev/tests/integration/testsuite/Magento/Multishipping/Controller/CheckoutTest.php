@@ -24,8 +24,8 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testOverviewAction()
     {
-        /** @var $quote \Magento\Sales\Model\Quote */
-        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Checkout\Model\Session')

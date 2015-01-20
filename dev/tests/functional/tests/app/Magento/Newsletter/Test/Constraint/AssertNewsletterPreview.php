@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Test\Constraint;
 
 use Magento\Newsletter\Test\Fixture\Template;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplatePreview;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -24,13 +24,16 @@ class AssertNewsletterPreview extends AbstractConstraint
     /**
      * Assert that newsletter preview opened in new window and template content correct
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param TemplatePreview $templatePreview
      * @param Template $newsletter
      * @return void
      */
-    public function processAssert(Browser $browser, TemplatePreview $templatePreview, Template $newsletter)
-    {
+    public function processAssert(
+        BrowserInterface $browser,
+        TemplatePreview $templatePreview,
+        Template $newsletter
+    ) {
         $browser->selectWindow();
         $content = $templatePreview->getContent()->getPageContent();
         $browser->closeWindow();
