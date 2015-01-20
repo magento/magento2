@@ -187,7 +187,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Backend\Model\View\Result\Redirect', $this->invoiceEmail->execute());
     }
 
-        public function testEmailNoInvoiceId()
+    public function testEmailNoInvoiceId()
     {
         $this->request->expects($this->once())
             ->method('getParam')
