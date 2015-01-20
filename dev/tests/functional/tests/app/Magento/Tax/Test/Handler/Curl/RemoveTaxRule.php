@@ -55,7 +55,7 @@ class RemoveTaxRule extends Curl
      */
     protected function _getCurl($url)
     {
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.0');
         return $curl;
     }

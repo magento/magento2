@@ -194,7 +194,7 @@ class CreateBundle extends Curl
             $data['product']['category_ids'] = $fixture->getData('category_id');
         }
         $url = $this->_getUrl($config);
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();

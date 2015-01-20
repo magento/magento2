@@ -54,7 +54,7 @@ class Curl extends AbstractCurl implements UrlRewriteInterface
     {
         $url = $_ENV['app_backend_url'] . $this->url . $fixture->getTargetPath();
         $data = $this->replaceMappingData($fixture->getData());
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
 

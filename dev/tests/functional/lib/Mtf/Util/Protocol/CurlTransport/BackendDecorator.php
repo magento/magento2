@@ -6,7 +6,7 @@
 
 namespace Mtf\Util\Protocol\CurlTransport;
 
-use Mtf\System\Config;
+use Mtf\Config;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 
@@ -65,11 +65,11 @@ class BackendDecorator implements CurlInterface
      */
     protected function authorize()
     {
-        $credentials = $this->configuration->getConfigParam('application/backend_user_credentials');
-        $url = $_ENV['app_backend_url'] . $this->configuration->getConfigParam('application/backend_login_url');
+        $url = $this->configuration->getParameter('application/appBackendUrl') .
+            $this->configuration->getParameter('application/backendLoginUrl');
         $data = [
-            'login[username]' => $credentials['login'],
-            'login[password]' => $credentials['password'],
+            'login[username]' => $this->configuration->getParameter('application/backendLogin'),
+            'login[password]' => $this->configuration->getParameter('application/backendPassword'),
         ];
         $this->transport->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $this->read();

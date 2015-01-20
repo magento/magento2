@@ -52,7 +52,7 @@ class Curl extends AbstractCurl implements StoreInterface
     {
         $data = $this->prepareData($fixture);
         $url = $_ENV['app_backend_url'] . $this->saveUrl;
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.1', [], $data);
         $response = $curl->read();
         $curl->close();
@@ -93,7 +93,7 @@ class Curl extends AbstractCurl implements StoreInterface
     {
         //Set pager limit to 2000 in order to find created store view by name
         $url = $_ENV['app_backend_url'] . 'admin/system_store/index/sort/store_title/dir/asc/limit/2000';
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0');
         $response = $curl->read();

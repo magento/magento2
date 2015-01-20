@@ -113,7 +113,7 @@ class CreateDownloadable extends Curl
     {
         $config = $fixture->getDataConfig();
 
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(
             CurlInterface::POST,

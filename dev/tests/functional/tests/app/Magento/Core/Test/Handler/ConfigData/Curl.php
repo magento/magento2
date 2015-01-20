@@ -78,7 +78,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
     protected function applyConfigSettings(array $data, $section)
     {
         $url = $this->getUrl($section);
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();

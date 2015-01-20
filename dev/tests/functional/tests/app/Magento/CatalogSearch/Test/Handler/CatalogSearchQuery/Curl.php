@@ -62,7 +62,7 @@ class Curl extends AbstractCurl implements CatalogSearchQueryInterface
     protected function addNewSearchTerm(array $data)
     {
         $url = $_ENV['app_backend_url'] . $this->url . 'save';
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $curl->read();
         $curl->close();
@@ -79,7 +79,7 @@ class Curl extends AbstractCurl implements CatalogSearchQueryInterface
     {
         $filter = base64_encode('search_query=' . $queryText);
         $url = $_ENV['app_backend_url'] . $this->url . 'index/filter/' . $filter;
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::GET, $url, '1.0');
         $response = $curl->read();
         $curl->close();

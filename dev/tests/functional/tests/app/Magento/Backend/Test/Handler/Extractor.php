@@ -63,7 +63,7 @@ class Extractor
     public function getData()
     {
         $url = $_ENV['app_backend_url'] . $this->url;
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0');
         $response = $curl->read();

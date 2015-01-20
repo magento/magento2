@@ -101,7 +101,7 @@ class Curl extends ProductCurl implements DownloadableProductInjectableInterface
     protected function createProduct(array $data, array $config)
     {
         $url = $this->getUrl($config);
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
