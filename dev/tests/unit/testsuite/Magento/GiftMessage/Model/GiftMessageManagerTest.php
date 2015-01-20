@@ -44,6 +44,16 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $giftMessageMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $billingAddressMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $shippingAddressMock;
+
     protected function setUp()
     {
         $this->messageFactoryMock =
@@ -56,6 +66,8 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
                 'save',
                 'getItemById',
                 'getAddressById',
+                'getBillingAddress',
+                'getShippingAddress',
                 '__wakeup'],
             [],
             '',
@@ -100,6 +112,9 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
                 'setSender',
                 'setRecipient',
                 'setMessage',
+                'getSender',
+                'getRecipient',
+                'getMessage',
                 'getId',
                 'delete',
                 'save',
@@ -109,6 +124,10 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false);
 
+        $this->billingAddressMock =
+            $this->getMock('\Magento\Sales\Model\Quote\Address', ['getCountryId', '__wakeup'], [], '', false);
+        $this->shippingAddressMock =
+            $this->getMock('\Magento\Sales\Model\Quote\Address', ['getCountryId', '__wakeup'], [], '', false);
         $this->model = new GiftMessageManager($this->messageFactoryMock);
     }
 
@@ -287,4 +306,62 @@ class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->model->add($giftMessages, $this->quoteMock);
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
+     * @expectedExceptionMessage Billing address is not set
+     */
+    public function testSetMessageEmptyBillingAddressException()
+    {
+        $this->quoteMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->will($this->returnValue($this->billingAddressMock));
+        $this->billingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
+
+        $this->model->setMessage($this->quoteMock, 'item', $this->giftMessageMock);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
+     * @expectedExceptionMessage Shipping address is not set
+     */
+    public function testSetMessageEmptyShippingAddressException()
+    {
+        $this->quoteMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->will($this->returnValue($this->billingAddressMock));
+        $this->billingAddressMock->expects($this->any())->method('getCountryId')->will($this->returnValue(12));
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->will($this->returnValue($this->shippingAddressMock));
+        $this->shippingAddressMock->expects($this->any())->method('getCountryId')->will($this->returnValue(null));
+
+        $this->model->setMessage($this->quoteMock, 'item', $this->giftMessageMock);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     * @expectedExceptionMessage Could not add gift message to shopping cart
+     */
+    public function testSetMessageCouldNotAddGiftMessageException()
+    {
+        $this->quoteMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->will($this->returnValue($this->billingAddressMock));
+        $this->billingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(12));
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->will($this->returnValue($this->shippingAddressMock));
+        $this->shippingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(13));
+        $this->giftMessageMock->expects($this->once())->method('getSender')->will($this->returnValue('sender'));
+        $this->giftMessageMock->expects($this->once())->method('getRecipient')->will($this->returnValue('recipient'));
+        $this->giftMessageMock->expects($this->once())->method('getMessage')->will($this->returnValue('Message'));
+
+        $this->messageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willThrowException(new \Exception());
+
+        $this->model->setMessage($this->quoteMock, 'item', $this->giftMessageMock);
+    }
+
 }

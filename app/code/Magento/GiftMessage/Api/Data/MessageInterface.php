@@ -1,39 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Api\Data;
 
-/**
- * @see \Magento\GiftMessage\Service\V1\Data\Message
- */
-interface MessageInterface
+interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    /**
-     * Gift message ID.
-     */
-    const GIFT_MESSAGE_ID = 'gift_message_id';
-
-    /**
-     * Sender name.
-     */
-    const SENDER = 'sender';
-
-    /**
-     * Recipient name.
-     */
-    const RECIPIENT = 'recipient';
-
-    /**
-     * Message text.
-     */
-    const MESSAGE = 'message';
-
-    /**
-     * Customer ID.
-     */
-    const CUSTOMER_ID = 'customer_id';
-
     /**
      * Returns the gift message ID.
      *

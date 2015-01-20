@@ -5,6 +5,9 @@
  */
 namespace Magento\GiftMessage\Model;
 
+use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\Exception\CouldNotSaveException;
+
 class GiftMessageManager
 {
     /**
@@ -83,5 +86,39 @@ class GiftMessageManager
             }
         }
         return $this;
+    }
+
+    /**
+     * Sets the gift message to item or quote.
+     *
+     * @param \Magento\Quote\Model\Quote $quote The quote.
+     * @param string $type The type.
+     * @param \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage The gift message.
+     * @param null|int $entityId The entity ID.
+     * @return void
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message is not available.
+     * @throws \Magento\Framework\Exception\State\InvalidTransitionException The billing or shipping address is not set.
+     */
+    public function setMessage(\Magento\Quote\Model\Quote $quote, $type, $giftMessage, $entityId = null)
+    {
+        if (is_null($quote->getBillingAddress()->getCountryId())) {
+            throw new InvalidTransitionException('Billing address is not set');
+        }
+
+        // check if shipping address is set
+        if (is_null($quote->getShippingAddress()->getCountryId())) {
+            throw new InvalidTransitionException('Shipping address is not set');
+        }
+        $message[$type][$entityId] = [
+            'from' => $giftMessage->getSender(),
+            'to' => $giftMessage->getRecipient(),
+            'message' => $giftMessage->getMessage(),
+        ];
+
+        try {
+            $this->add($message, $quote);
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException('Could not add gift message to shopping cart');
+        }
     }
 }
