@@ -9,7 +9,7 @@ namespace Magento\Store\Test\Constraint;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backend\Test\Page\Adminhtml\StoreNew;
 use Magento\Store\Test\Fixture\Store;
-use Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertStoreForm

@@ -6,12 +6,12 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
-use Mtf\Client\Element;
-use Mtf\Fixture\DataFixture;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Fixture\DataFixture;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Backend\Test\Block\Widget\FormTabs;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class ProductForm

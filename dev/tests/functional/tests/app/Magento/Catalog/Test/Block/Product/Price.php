@@ -5,9 +5,9 @@
  */
 namespace Magento\Catalog\Test\Block\Product;
 
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Price

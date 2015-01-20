@@ -6,10 +6,10 @@
 
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
-use Mtf\Client\Element;
-use Mtf\Client\Locator;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Downloadable

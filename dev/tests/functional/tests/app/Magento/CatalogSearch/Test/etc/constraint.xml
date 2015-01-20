@@ -48,7 +48,7 @@
         <require>
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <browser class="Mtf\Client\Browser" />
+            <browser class="Magento\Mtf\Client\Browser" />
         </require>
     </assertSearchTermOnFrontend>
     <assertSearchTermSuccessSaveMessage  module="Magento_CatalogSearch">
@@ -62,7 +62,7 @@
         <require>
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <browser class="Mtf\Client\Browser" />
+            <browser class="Magento\Mtf\Client\Browser" />
         </require>
     </assertSearchTermSynonymOnFrontend>
     <assertSearchTermSuccessDeleteMessage module="Magento_CatalogSearch">
@@ -83,7 +83,7 @@
         <require>
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <browser class="Mtf\Client\Browser" />
+            <browser class="Magento\Mtf\Client\Browser" />
         </require>
     </assertSearchTermNotOnFrontend>
     <assertSearchSynonymNotOnFrontend module="Magento_CatalogSearch">
@@ -91,7 +91,7 @@
         <require>
             <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <browser class="Mtf\Client\Browser" />
+            <browser class="Magento\Mtf\Client\Browser" />
         </require>
     </assertSearchSynonymNotOnFrontend>
     <assertSearchTermSuccessMassDeleteMessage module="Magento_CatalogSearch">
@@ -110,14 +110,14 @@
         <severity>high</severity>
         <require>
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <browser class="Mtf\Client\Browser" />
+            <browser class="Magento\Mtf\Client\Browser" />
         </require>
     </assertSearchTermMassActionNotOnFrontend>
     <assertSearchSynonymMassActionNotOnFrontend module="Magento_CatalogSearch">
         <severity>high</severity>
         <require>
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <browser class="Mtf\Client\Browser" />
+            <browser class="Magento\Mtf\Client\Browser" />
         </require>
     </assertSearchSynonymMassActionNotOnFrontend>
     <assertProductCanBeOpenedFromSearchResult module="Magento_CatalogSearch">

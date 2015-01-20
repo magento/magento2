@@ -6,7 +6,7 @@
 
 namespace Magento\Downloadable\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class DownloadableProductInjectable

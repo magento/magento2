@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class GroupPriceOptions
@@ -19,7 +19,7 @@ use Mtf\Fixture\FixtureInterface;
 class GroupPriceOptions implements FixtureInterface
 {
     /**
-     * @var \Mtf\Fixture\FixtureFactory
+     * @var \Magento\Mtf\Fixture\FixtureFactory
      */
     protected $fixtureFactory;
 

@@ -20,7 +20,7 @@
         <require>
             <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
             <productPage class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertDownloadableDuplicateForm>
     <assertDownloadableProductInCustomerWishlistOnBackendGrid module="Magento_Downloadable">
