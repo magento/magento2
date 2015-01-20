@@ -6,7 +6,8 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
-use Mtf\Block\Form;
+use Mtf\Block\Block;
+use Mtf\Client\Locator;
 
 /**
  * Class Form
@@ -81,7 +82,6 @@ abstract class AbstractForm extends Form
                 return $element->isVisible() == false ? true : null;
             }
         );
-        $this->reinitRootElement();
         $this->_rootElement->find($this->send)->click();
     }
 

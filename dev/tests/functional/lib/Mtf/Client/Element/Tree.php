@@ -4,18 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element as ElementInterface;
+use Mtf\Client\ElementInterface;
 
 /**
  * Class Tree
  * General class for tree elements. Holds general implementation of methods, which overrides in child classes.
- *
- * @package Mtf\Client\Driver\Selenium\Element
  */
-abstract class Tree extends Element
+abstract class Tree extends SimpleElement
 {
     /**
      * Css class for finding tree nodes
@@ -44,27 +41,26 @@ abstract class Tree extends Element
     abstract public function getStructure();
 
     /**
-     * Drag'n'drop method is not accessible in this class.
-     * Throws exception if used.
+     * Drag and drop element to(between) another element(s)
      *
      * @param ElementInterface $target
-     * @throws \BadMethodCallException
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function dragAndDrop(ElementInterface $target)
     {
-        throw new \BadMethodCallException('Not applicable for this class of elements (TreeElement)');
+        throw new \Exception('Not applicable for this class of elements (TreeElement)');
     }
 
     /**
      * getValue method is not accessible in this class.
      * Throws exception if used.
      *
-     * @throws \BadMethodCallException
+     * @throws \Exception
      */
     public function getValue()
     {
-        throw new \BadMethodCallException('Not applicable for this class of elements (TreeElement)');
+        throw new \Exception('Not applicable for this class of elements (TreeElement)');
     }
 
     /**
@@ -72,12 +68,12 @@ abstract class Tree extends Element
      * Throws exception if used.
      *
      * @param array $keys
-     * @throws \BadMethodCallException
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function keys(array $keys)
     {
-        throw new \BadMethodCallException('Not applicable for this class of elements (TreeElement)');
+        throw new \Exception('Not applicable for this class of elements (TreeElement)');
     }
 
     /**
@@ -99,6 +95,7 @@ abstract class Tree extends Element
             ++$pathChunkCounter;
         }
         if ($structureChunk) {
+            /** @var ElementInterface $needleElement */
             $needleElement = $structureChunk->find($this->nodeName);
             $needleElement->click();
         } else {
@@ -112,7 +109,7 @@ abstract class Tree extends Element
      *
      * @param string $pathChunk
      * @param array $structureChunk
-     * @return array|Element||false
+     * @return array|ElementInterface|false
      */
     protected function deep($pathChunk, $structureChunk)
     {
@@ -124,17 +121,18 @@ abstract class Tree extends Element
                 }
             }
         }
+
         return false;
     }
 
     /**
      *  Recursive walks tree
      *
-     * @param Element $node
+     * @param ElementInterface $node
      * @param string $parentCssClass
      * @return array
      */
-    protected function _getNodeContent($node, $parentCssClass)
+    protected function _getNodeContent(ElementInterface $node, $parentCssClass)
     {
         $nodeArray = [];
         $nodeList = [];
@@ -148,7 +146,7 @@ abstract class Tree extends Element
         }
         //Write to array values of current node
         foreach ($nodeList as $currentNode) {
-            /** @var Element $currentNode */
+            /** @var ElementInterface $currentNode */
             $nodesNames = $currentNode->find($this->nodeName);
             $nodesContents = $currentNode->find($this->nodeCssClass);
             $text = ltrim($nodesNames->getText());
@@ -156,9 +154,10 @@ abstract class Tree extends Element
                 'name' => $text,
                 'element' => $currentNode,
                 'subnodes' => $nodesContents->isVisible() ?
-                        $this->_getNodeContent($nodesContents, $this->nodeCssClass) : null,
+                    $this->_getNodeContent($nodesContents, $this->nodeCssClass) : null,
             ];
         }
+
         return $nodeArray;
     }
 }

@@ -15,7 +15,7 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Reports\Test\Page\Adminhtml\ProductReportReview;
 use Magento\Review\Test\Fixture\Review;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
 
@@ -136,7 +136,7 @@ class CustomerReviewReportEntityTest extends Injectable
      * @param CustomerInjectable $customer
      * @param $customerLogin
      * @param CatalogProductSimple $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return array
      *
      * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
@@ -145,7 +145,7 @@ class CustomerReviewReportEntityTest extends Injectable
         Review $review,
         CustomerInjectable $customer,
         CatalogProductSimple $product,
-        Browser $browser,
+        BrowserInterface $browser,
         $customerLogin
     ) {
         // Preconditions
