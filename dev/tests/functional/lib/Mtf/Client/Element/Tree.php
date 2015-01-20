@@ -45,6 +45,7 @@ abstract class Tree extends SimpleElement
      *
      * @param ElementInterface $target
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function dragAndDrop(ElementInterface $target)
     {
