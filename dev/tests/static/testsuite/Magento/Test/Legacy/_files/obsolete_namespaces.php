@@ -71,5 +71,7 @@ return [
     ['Magento\PayPalRecurringPayment'],
     ['Magento\ConfigurableProduct\Service'],
     ['Magento\Catalog\Service'],
+    ['Magento\CheckoutAgreements\Service'],
+    ['Magento\Checkout\Service'],
     ['Magento\GiftMessage\Service']
 ];

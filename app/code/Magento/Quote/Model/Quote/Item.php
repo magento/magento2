@@ -5,18 +5,18 @@
  */
 namespace Magento\Quote\Model\Quote;
 
+use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\MetadataServiceInterface;
+
 /**
  * Sales Quote Item Model
  *
  * @method \Magento\Quote\Model\Resource\Quote\Item _getResource()
  * @method \Magento\Quote\Model\Resource\Quote\Item getResource()
- * @method int getQuoteId()
- * @method \Magento\Quote\Model\Quote\Item setQuoteId(int $value)
  * @method string getCreatedAt()
  * @method \Magento\Quote\Model\Quote\Item setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method \Magento\Quote\Model\Quote\Item setUpdatedAt(string $value)
- * @method int getProductId()
  * @method \Magento\Quote\Model\Quote\Item setProductId(int $value)
  * @method int getStoreId()
  * @method \Magento\Quote\Model\Quote\Item setStoreId(int $value)
@@ -24,10 +24,6 @@ namespace Magento\Quote\Model\Quote;
  * @method \Magento\Quote\Model\Quote\Item setParentItemId(int $value)
  * @method int getIsVirtual()
  * @method \Magento\Quote\Model\Quote\Item setIsVirtual(int $value)
- * @method string getSku()
- * @method \Magento\Quote\Model\Quote\Item setSku(string $value)
- * @method string getName()
- * @method \Magento\Quote\Model\Quote\Item setName(string $value)
  * @method string getDescription()
  * @method \Magento\Quote\Model\Quote\Item setDescription(string $value)
  * @method string getAdditionalData()
@@ -98,7 +94,7 @@ namespace Magento\Quote\Model\Quote;
  * @method \Magento\Quote\Model\Quote\Item setHasConfigurationUnavailableError(bool $value)
  * @method \Magento\Quote\Model\Quote\Item unsHasConfigurationUnavailableError()
  */
-class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
+class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Magento\Quote\Api\Data\CartItemInterface
 {
     /**
      * Prefix of model events names
@@ -180,12 +176,14 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+     * @param MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Model\Status\ListFactory $statusListFactory
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param Item\OptionFactory $itemOptionFactory
-     * @param \Magento\Quote\Model\Quote\Item\Compare $quoteItemCompare
+     * @param Item\Compare $quoteItemCompare
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -196,6 +194,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
@@ -215,6 +215,8 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
         parent::__construct(
             $context,
             $registry,
+            $metadataService,
+            $customAttributeBuilder,
             $productRepository,
             $priceCurrency,
             $resource,
@@ -896,4 +898,55 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
 
         return $this;
     }
+
+    /**
+     * @codeCoverageIgnoreStart
+     *
+     * {@inheritdoc}
+     */
+    public function getItemId()
+    {
+        return $this->getData('item_id');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSku()
+    {
+        return $this->getData('sku');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getQty()
+    {
+        return $this->getData('qty');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->getData('name');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrice()
+    {
+        return $this->getData('price');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getQuoteId()
+    {
+        return $this->getData('quote_id');
+    }
+    //@codeCoverageIgnoreEnd
 }
