@@ -7,7 +7,6 @@
 namespace Magento\User\Test\Fixture\User;
 
 use Mtf\ObjectManager;
-use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
 use Magento\User\Test\Fixture\AdminUserRole;
 
@@ -32,11 +31,10 @@ class CurrentPassword implements FixtureInterface
 
     /**
      * @construct
-     * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param string $data
      */
-    public function __construct(FixtureFactory $fixtureFactory, array $params, $data = '')
+    public function __construct(array $params, $data = '')
     {
         $this->params = $params;
         /** @var \Mtf\System\Config $systemConfig */

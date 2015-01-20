@@ -208,7 +208,7 @@
                 <item name="presets" xsi:type="string">default_subcategory</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Ma"bsite</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="mtf_dataset_name" xsi:type="string">simple_with_category</field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
