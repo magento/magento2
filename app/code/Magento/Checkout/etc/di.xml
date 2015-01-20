@@ -23,7 +23,4 @@
             <argument name="storage" xsi:type="object">Magento\Checkout\Model\Session\Storage</argument>
         </arguments>
     </type>
-    <preference for="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" type="Magento\Checkout\Service\V1\Cart\ReadService" />
-    <preference for="Magento\Checkout\Service\V1\Cart\TotalsServiceInterface" type="Magento\Checkout\Service\V1\Cart\TotalsService" />
-    <preference for="\Magento\Checkout\Service\V1\Cart\WriteServiceInterface" type="Magento\Checkout\Service\V1\Cart\WriteService" />
 </config>

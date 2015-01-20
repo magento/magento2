@@ -11,6 +11,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * Quote model
@@ -331,7 +332,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param \Magento\Framework\Api\AttributeDataBuilder $attributeDataBuilder
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param QuoteValidator $quoteValidator
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -368,7 +369,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        \Magento\Framework\Api\AttributeDataBuilder $attributeDataBuilder,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Quote\Model\QuoteValidator $quoteValidator,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -433,7 +434,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $context,
             $registry,
             $metadataService,
-            $attributeDataBuilder,
+            $customAttributeBuilder,
             $resource,
             $resourceCollection,
             $data
