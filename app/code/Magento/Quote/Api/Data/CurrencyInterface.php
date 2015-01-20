@@ -5,9 +5,6 @@
  */
 namespace Magento\Quote\Api\Data;
 
-/**
- * @see \Magento\Checkout\Service\V1\Data\Cart\Currency
- */
 interface CurrencyInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**

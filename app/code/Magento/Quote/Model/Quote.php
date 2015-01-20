@@ -473,6 +473,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
+     * @codeCoverageIgnoreStart
+     *
      * {@inheritdoc}
      */
     public function getItems()
@@ -568,6 +570,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         return $this->_getData('customer_note_notify');
     }
+    //@codeCoverageIgnoreEnd
 
     /**
      * Get quote store identifier
