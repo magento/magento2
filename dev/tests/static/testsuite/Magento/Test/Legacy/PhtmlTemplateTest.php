@@ -19,7 +19,7 @@ class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
          * @param string $file
          */
             function ($file) {
-                $this->assertRegexp(
+                $this->assertNotRegExp(
                     '/this->(?!helper)\S*/iS',
                     file_get_contents($file),
                     'Access to members and methods of Block class throught $this is ' .
