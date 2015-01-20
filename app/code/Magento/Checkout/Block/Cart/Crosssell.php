@@ -42,7 +42,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_productLinkFactory;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Item\RelatedProducts
+     * @var \Magento\Quote\Model\Quote\Item\RelatedProducts
      */
     protected $_itemRelationsList;
 
@@ -51,7 +51,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory
-     * @param \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList
+     * @param \Magento\Quote\Model\Quote\Item\RelatedProducts $itemRelationsList
      * @param StockHelper $stockHelper
      * @param array $data
      *
@@ -62,7 +62,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory,
-        \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList,
+        \Magento\Quote\Model\Quote\Item\RelatedProducts $itemRelationsList,
         StockHelper $stockHelper,
         array $data = []
     ) {
@@ -171,7 +171,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Get quote instance
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {

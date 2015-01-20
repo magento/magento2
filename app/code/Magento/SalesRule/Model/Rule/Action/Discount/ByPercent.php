@@ -9,7 +9,7 @@ class ByPercent extends AbstractDiscount
 {
     /**
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @return Data
      */
@@ -38,7 +38,7 @@ class ByPercent extends AbstractDiscount
 
     /**
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @param float $rulePercent
      * @return Data

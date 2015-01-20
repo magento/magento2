@@ -134,7 +134,7 @@ class DefaultType extends \Magento\Framework\Object
         }
 
         // Back compatibility with quote specific keys to set configuration item options
-        if ($this->_getData('quote_item_option') instanceof \Magento\Sales\Model\Quote\Item\Option) {
+        if ($this->_getData('quote_item_option') instanceof \Magento\Quote\Model\Quote\Item\Option) {
             return $this->_getData('quote_item_option');
         }
 
@@ -157,7 +157,7 @@ class DefaultType extends \Magento\Framework\Object
         }
 
         // Back compatibility with quote specific keys to set configuration item
-        if ($this->_getData('quote_item') instanceof \Magento\Sales\Model\Quote\Item) {
+        if ($this->_getData('quote_item') instanceof \Magento\Quote\Model\Quote\Item) {
             return $this->_getData('quote_item');
         }
 

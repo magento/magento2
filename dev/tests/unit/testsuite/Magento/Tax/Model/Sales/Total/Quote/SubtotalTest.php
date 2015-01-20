@@ -109,7 +109,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->addressMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address')
+        $this->addressMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
             ->setMethods([
                 'getAssociatedTaxables', 'getQuote', 'getBillingAddress',
@@ -117,7 +117,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
                 'getParentItem',
             ])->getMock();
 
-        $this->quoteMock = $this->getMockBuilder('\Magento\Sales\Model\Quote')
+        $this->quoteMock = $this->getMockBuilder('\Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->getMock();
 

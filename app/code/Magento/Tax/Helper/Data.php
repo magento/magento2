@@ -839,9 +839,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $itemTaxDetails = $orderTaxDetails->getItems();
             foreach ($itemTaxDetails as $itemTaxDetail) {
                 //Aggregate taxable items associated with shipping
-                if ($itemTaxDetail->getType() == \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING) {
-                    $taxClassAmount =
-                        $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $shippingRatio);
+                if ($itemTaxDetail->getType() == \Magento\Quote\Model\Quote\Address::TYPE_SHIPPING) {
+                    $taxClassAmount = $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $shippingRatio);
                 }
             }
         }
