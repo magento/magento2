@@ -100,7 +100,8 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
                 MTF_BP . '/testsuites/' . $_ENV['testsuite_rule_path']  . '/' . $configurationFileName . '.xml'
             );
             /** @var \Magento\Mtf\TestRunner\Configuration $testRunnerConfiguration */
-            $testRunnerConfiguration = $objectManagerFactory->getObjectManager()->get('\Magento\Mtf\TestRunner\Configuration');
+            $testRunnerConfiguration = $objectManagerFactory->getObjectManager()
+                ->get('\Magento\Mtf\TestRunner\Configuration');
             $testRunnerConfiguration->load($confFilePath);
             $testRunnerConfiguration->loadEnvConfig();
 
