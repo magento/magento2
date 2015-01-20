@@ -37,17 +37,42 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->with('instructions', 'payment configuration');
         $method = $this->getMock(
             'Magento\Payment\Model\MethodInterface',
-            ['getInstructions', 'getFormBlockType', 'getTitle', 'getCode'],
+            ['getConfigData', 'getFormBlockType', 'getTitle', 'getCode'],
             [],
             '',
             false
         );
         $method->expects($this->once())
-            ->method('getInstructions')
+            ->method('getConfigData')
             ->willReturn('payment configuration');
         $payment->expects($this->once())
             ->method('getMethodInstance')
             ->willReturn($method);
+        $event->expects($this->once())
+            ->method('getPayment')
+            ->willReturn($payment);
+        $observer->expects($this->once())
+            ->method('getEvent')
+            ->willReturn($event);
+        $this->_model->beforeOrderPaymentSave($observer);
+    }
+
+    public function testBeforeOrderPaymentSaveNoBanktransfer()
+    {
+        $observer = $this->getMock('Magento\Framework\Event\Observer', ['getEvent'], [], '', false);
+        $event = $this->getMock('Magento\Framework\Event', ['getPayment'], [], '', false);
+        $payment = $this->getMock(
+            'Magento\Sales\Model\Order\Payment',
+            ['getMethod', 'setAdditionalInformation', 'getMethodInstance'],
+            [],
+            '',
+            false
+        );
+        $payment->expects($this->once())
+            ->method('getMethod')
+            ->willReturn('somepaymentmethod');
+        $payment->expects($this->never())
+            ->method('setAdditionalInformation');
         $event->expects($this->once())
             ->method('getPayment')
             ->willReturn($payment);

@@ -5,17 +5,20 @@
  */
 namespace Magento\OfflinePayments\Block\Form;
 
-class BanktransferTest extends \PHPUnit_Framework_TestCase
+class AbstractInstructionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\OfflinePayments\Block\Form\Banktransfer
+     * @var \Magento\OfflinePayments\Block\Form\AbstractInstruction
      */
-    protected $_object;
+    protected $_model;
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_object = $objectManagerHelper->getObject('Magento\OfflinePayments\Block\Form\Banktransfer');
+        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $this->_model = $this->getMockForAbstractClass(
+            'Magento\OfflinePayments\Block\Form\AbstractInstruction',
+            ['context' => $context]
+        );
     }
 
     public function testGetInstructions()
@@ -30,8 +33,8 @@ class BanktransferTest extends \PHPUnit_Framework_TestCase
         $method->expects($this->once())
             ->method('getInstructions')
             ->willReturn('instructions');
-        $this->_object->setData('method', $method);
+        $this->_model->setData('method', $method);
 
-        $this->assertEquals('instructions', $this->_object->getInstructions());
+        $this->assertEquals('instructions', $this->_model->getInstructions());
     }
 }

@@ -10,33 +10,12 @@ class CheckmoTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\OfflinePayments\Block\Info\Checkmo
      */
-    protected $_object;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_scopeConfig;
+    protected $_model;
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $this->_scopeConfig = $this->getMock(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
-            ['getValue', 'isSetFlag'],
-            [],
-            '',
-            false
-        );
-        $this->_object = $objectManagerHelper->getObject(
-            'Magento\OfflinePayments\Block\Info\Checkmo',
-            [
-                'eventManager' => $eventManager,
-                'paymentData' => $paymentDataMock,
-                'scopeConfig' => $this->_scopeConfig,
-            ]
-        );
+        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $this->_model = new \Magento\OfflinePayments\Block\Info\Checkmo($context);
     }
 
     /**
@@ -48,9 +27,9 @@ class CheckmoTest extends \PHPUnit_Framework_TestCase
         $info->expects($this->once())
             ->method('getAdditionalData')
             ->willReturn(serialize($details));
-        $this->_object->setData('info', $info);
+        $this->_model->setData('info', $info);
 
-        $this->assertEquals($expected, $this->_object->getPayableTo());
+        $this->assertEquals($expected, $this->_model->getPayableTo());
     }
 
     /**
@@ -73,9 +52,9 @@ class CheckmoTest extends \PHPUnit_Framework_TestCase
         $info->expects($this->once())
             ->method('getAdditionalData')
             ->willReturn(serialize($details));
-        $this->_object->setData('info', $info);
+        $this->_model->setData('info', $info);
 
-        $this->assertEquals($expected, $this->_object->getMailingAddress());
+        $this->assertEquals($expected, $this->_model->getMailingAddress());
     }
 
     /**
@@ -87,5 +66,20 @@ class CheckmoTest extends \PHPUnit_Framework_TestCase
             [['mailing_address' => 'blah@blah.com'], 'blah@blah.com'],
             ['', '']
         ];
+    }
+
+    public function testConvertAdditionalDataIsNeverCalled()
+    {
+        $info = $this->getMock('Magento\Payment\Model\Info', ['getAdditionalData'], [], '', false);
+        $info->expects($this->once())
+            ->method('getAdditionalData')
+            ->willReturn(serialize(['mailing_address' => 'blah@blah.com']));
+        $this->_model->setData('info', $info);
+
+        // First we set the property $this->_mailingAddress
+        $this->_model->getMailingAddress();
+
+        // And now we get already setted property $this->_mailingAddress
+        $this->assertEquals('blah@blah.com', $this->_model->getMailingAddress());
     }
 }

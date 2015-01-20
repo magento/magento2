@@ -39,14 +39,4 @@ class CashondeliveryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('Magento\Payment\Block\Info\Instructions', $this->_object->getInfoBlockType());
     }
-
-    public function testGetInstructions()
-    {
-        $this->_object->setStore(1);
-        $this->_scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->with('payment/cashondelivery/instructions', 'store', 1)
-            ->willReturn('payment configuration');
-        $this->assertEquals('payment configuration', $this->_object->getInstructions());
-    }
 }
