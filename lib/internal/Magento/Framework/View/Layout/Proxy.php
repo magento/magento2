@@ -847,7 +847,7 @@ class Proxy extends \Magento\Framework\View\Layout
      * @param \DOMNode $dom
      * @return bool
      */
-    public function loadDom($dom)
+    public function loadDom(\DOMNode $dom)
     {
         return $this->getSubject()->loadDom($dom);
     }

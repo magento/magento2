@@ -488,13 +488,9 @@ class Config
      * @param \DOMNode $dom
      * @return bool
      */
-    public function loadDom($dom)
+    public function loadDom(\DOMNode $dom)
     {
-        if ($dom instanceof $this->_elementClass) {
-            $xml = $dom;
-        } else {
-            $xml = simplexml_import_dom($dom, $this->_elementClass);
-        }
+        $xml = simplexml_import_dom($dom, $this->_elementClass);
         if ($xml) {
             $this->_xml = $xml;
             return true;

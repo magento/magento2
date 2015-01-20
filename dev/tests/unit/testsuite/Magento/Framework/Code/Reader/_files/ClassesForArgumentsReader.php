@@ -82,7 +82,8 @@ class ClassExtendsDefaultPhpType extends \RuntimeException
 class ClassExtendsDefaultPhpTypeWithIOverrideConstructor extends \RuntimeException
 {
     /**
-     * Override constructor due to Reflection API incorrect work with internal PHP classes
+     * Override constructor due to Reflection API incorrect work with internal PHP classes.
+     * Obtaining of default argument value and default argument type is incorrect
      *
      * @param string $message
      * @param int $code

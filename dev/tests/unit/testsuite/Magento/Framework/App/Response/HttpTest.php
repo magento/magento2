@@ -133,7 +133,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->model->setPublicHeaders($ttl);
         $this->assertEquals($pragma, $this->model->getHeader('Pragma')['value']);
         $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')['value']);
-        $this->assertEquals($expiresResult, $this->model->getHeader('Expires')['value']);
+        $this->assertLessThanOrEqual($expiresResult, $this->model->getHeader('Expires')['value']);
     }
 
     /**

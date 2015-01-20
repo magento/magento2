@@ -44,8 +44,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadDom()
     {
-        $this->config->loadString('<?xml version="1.0"?><config><node>1</node></config>');
-        $this->assertTrue($this->config->loadDom($this->config->getNode()));
+        $dom = new \DOMDocument();
+        $dom->loadXML('<?xml version="1.0"?><config><node>1</node></config>');
+        $this->assertTrue($this->config->loadDom($dom));
     }
 
     public function testGetNode()
