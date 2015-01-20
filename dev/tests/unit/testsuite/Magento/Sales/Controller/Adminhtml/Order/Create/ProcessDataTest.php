@@ -115,6 +115,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resultForwardFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->resultForwardFactory->expects($this->once())

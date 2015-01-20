@@ -119,6 +119,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
@@ -126,6 +127,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resultForwardFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->invoiceEmail = $objectManagerHelper->getObject(
