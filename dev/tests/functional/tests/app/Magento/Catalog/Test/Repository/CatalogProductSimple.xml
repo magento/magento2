@@ -342,9 +342,7 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="description" xsi:type="array">
-                <item name="p" xsi:type="string">dfj_full</item>
-            </field>
+            <field name="description" xsi:type="string">&lt;p&gt;dfj_full&lt;/p&gt;</field>
             <field name="status" xsi:type="string">Product online</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -368,9 +366,7 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">0.1</field>
-            <field name="description" xsi:type="array">
-                <item name="p" xsi:type="string">Simple with Weight 0.1</item>
-            </field>
+            <field name="description" xsi:type="string">&lt;p&gt;Simple with Weight 0.1&lt;/p&gt;</field>
             <field name="status" xsi:type="string">Product online</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -394,9 +390,7 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">150.1</field>
-            <field name="description" xsi:type="array">
-                <item name="p" xsi:type="string">Simple with Weight 150.1</item>
-            </field>
+            <field name="description" xsi:type="string">&lt;p&gt;Simple with Weight 150.1&lt;/p&gt;</field>
             <field name="status" xsi:type="string">Product online</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -420,13 +414,9 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="description" xsi:type="array">
-                <item name="p" xsi:type="string">adc_Full</item>
-            </field>
+            <field name="description" xsi:type="string">&lt;p&gt;adc_Full&lt;/p&gt;</field>
             <field name="status" xsi:type="string">Product online</field>
-            <field name="short_description" xsi:type="array">
-                <item name="p" xsi:type="string">abc_short</item>
-            </field>
+            <field name="short_description" xsi:type="string">&lt;p&gt;abc_short&lt;/p&gt;</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>

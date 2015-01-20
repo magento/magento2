@@ -16,14 +16,14 @@
     <identifier>sku</identifier>
     <repository_class>Magento\ConfigurableProduct\Test\Repository\ConfigurableProductInjectable</repository_class>
     <handler_interface>Magento\ConfigurableProduct\Test\Handler\ConfigurableProductInjectable\ConfigurableProductInjectableInterface</handler_interface>
-    <dataset name="data_config">
-        <field name="type_id" xsi:type="string">configurable</field>
-        <field name="create_url_params" xsi:type="array">
+    <data_config>
+        <item name="type_id" xsi:type="string">configurable</item>
+        <item name="create_url_params" xsi:type="array">
             <item name="type" xsi:type="string">configurable</item>
             <item name="set" xsi:type="string">4</item>
-        </field>
-        <field name="input_prefix" xsi:type="string">product</field>
-    </dataset>
+        </item>
+        <item name="input_prefix" xsi:type="string">product</item>
+    </data_config>
     <fields>
         <field name="category_ids">
             <attribute_code>category_ids</attribute_code>
