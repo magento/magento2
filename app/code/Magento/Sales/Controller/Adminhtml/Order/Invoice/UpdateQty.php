@@ -8,13 +8,56 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Framework\Model\Exception;
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\Result\JSONFactory;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
 
 class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
+
+    /**
+     * @var JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param PageFactory $resultPageFactory
+     * @param JSONFactory $resultJsonFactory
+     * @param RawFactory $resultRawFactory
+     */
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        PageFactory $resultPageFactory,
+        JSONFactory $resultJsonFactory,
+        RawFactory $resultRawFactory
+    ) {
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->resultRawFactory = $resultRawFactory;
+        parent::__construct($context, $registry, $resultForwardFactory);
+    }
+
     /**
      * Update items qty action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -44,9 +87,10 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
             $invoiceRawCommentText = $invoiceData['comment_text'];
             $invoice->setCommentText($invoiceRawCommentText);
 
-            $this->_view->loadLayout();
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Invoices'));
-            $response = $this->_view->getLayout()->getBlock('order_items')->toHtml();
+            /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->getConfig()->getTitle()->prepend(__('Invoices'));
+            $response = $resultPage->getLayout()->getBlock('order_items')->toHtml();
         } catch (Exception $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
@@ -54,9 +98,15 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
         }
         if (is_array($response)) {
             $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
-            $this->getResponse()->representJson($response);
+            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+            $resultJson->setJsonData($response);
+            return $resultJson;
         } else {
-            $this->getResponse()->setBody($response);
+            /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+            $resultRaw = $this->resultRawFactory->create();
+            $resultRaw->setContents($response);
+            return $resultRaw;
         }
     }
 }

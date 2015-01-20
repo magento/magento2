@@ -12,6 +12,7 @@ use Magento\Framework\Registry;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Backend\Model\View\Result\RedirectFactory;
 
 class Save extends \Magento\Backend\App\Action
 {
@@ -31,20 +32,28 @@ class Save extends \Magento\Backend\App\Action
     protected $registry;
 
     /**
+     * @var RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param Action\Context $context
      * @param Registry $registry
      * @param InvoiceCommentSender $invoiceCommentSender
      * @param ShipmentSender $shipmentSender
+     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
         InvoiceCommentSender $invoiceCommentSender,
-        ShipmentSender $shipmentSender
+        ShipmentSender $shipmentSender,
+        RedirectFactory $resultRedirectFactory
     ) {
         $this->registry = $registry;
         $this->invoiceCommentSender = $invoiceCommentSender;
         $this->shipmentSender = $shipmentSender;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -94,7 +103,7 @@ class Save extends \Magento\Backend\App\Action
      * Save invoice
      * We can save only new invoice. Existing invoices are not editable
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -201,14 +210,15 @@ class Save extends \Magento\Backend\App\Action
                 }
             }
             $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
-            $this->_redirect('sales/order/view', ['order_id' => $orderId]);
-            return;
         } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t save the invoice.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
-        $this->_redirect('sales/*/new', ['order_id' => $orderId]);
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
+        return $resultRedirect;
     }
 }

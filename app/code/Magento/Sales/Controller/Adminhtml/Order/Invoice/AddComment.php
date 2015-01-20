@@ -103,7 +103,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
             /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
             $resultJson = $this->resultJsonFactory->create();
-            $resultJson->setData($response);
+            $resultJson->setJsonData($response);
             return $resultJson;
         } else {
             /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
