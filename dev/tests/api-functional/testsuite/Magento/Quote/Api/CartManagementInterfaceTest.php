@@ -328,7 +328,6 @@ class CartManagementInterfaceTest extends WebapiAbstract
         $this->assertEquals($cart->getId(), $cartData['id']);
         $this->assertEquals($cart->getCreatedAt(), $cartData['created_at']);
         $this->assertEquals($cart->getUpdatedAt(), $cartData['updated_at']);
-        $this->assertEquals($cart->getStoreId(), $cartData['store_id']);
         $this->assertEquals($cart->getIsActive(), $cartData['is_active']);
         $this->assertEquals($cart->getIsVirtual(), $cartData['is_virtual']);
         $this->assertEquals($cart->getOrigOrderId(), $cartData['orig_order_id']);
@@ -336,10 +335,10 @@ class CartManagementInterfaceTest extends WebapiAbstract
         $this->assertEquals($cart->getItemsQty(), $cartData['items_qty']);
 
         $this->assertContains('customer', $cartData);
-        $this->assertEquals(0, $cartData['customer']['is_guest']);
-        $this->assertContains('totals', $cartData);
-        $this->assertEquals($cart->getSubtotal(), $cartData['totals']['subtotal']);
-        $this->assertEquals($cart->getGrandTotal(), $cartData['totals']['grand_total']);
+        $this->assertEquals(false, $cartData['customer_is_guest']);
+        $this->assertContains('totals_object', $cartData);
+        $this->assertEquals($cart->getSubtotal(), $cartData['totals_object']['subtotal']);
+        $this->assertEquals($cart->getGrandTotal(), $cartData['totals_object']['grand_total']);
         $this->assertContains('currency', $cartData);
         $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
         $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);

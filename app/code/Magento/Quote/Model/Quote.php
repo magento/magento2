@@ -323,6 +323,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $totalsBuilder;
 
     /**
+     * @var \Magento\Quote\Api\Data\CurrencyDataBuilder
+     */
+    protected $currencyBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param QuoteValidator $quoteValidator
@@ -354,6 +359,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Quote\Api\Data\TotalsDataBuilder $totalsBuilder
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Framework\Api\AttributeDataBuilder $attributeDataBuilder
+     * @param \Magento\Quote\Api\Data\CurrencyDataBuilder $currencyBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -390,6 +396,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Quote\Api\Data\TotalsDataBuilder $totalsBuilder,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Framework\Api\AttributeDataBuilder $attributeDataBuilder,
+        \Magento\Quote\Api\Data\CurrencyDataBuilder $currencyBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -421,6 +428,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->customerRepository = $customerRepository;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->totalsBuilder = $totalsBuilder;
+        $this->currencyBuilder = $currencyBuilder;
         parent::__construct(
             $context,
             $registry,
@@ -447,7 +455,20 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getCurrency()
     {
-        return $this->_getData('currency');
+        $currency = $this->getData('currency');
+        if (!$currency) {
+            $this->currencyBuilder
+                ->setGlobalCurrencyCode($this->getGlobalCurrencyCode())
+                ->setBaseCurrencyCode($this->getBaseCurrencyCode())
+                ->setStoreCurrencyCode($this->getStoreCurrencyCode())
+                ->setQuoteCurrencyCode($this->getQuoteCurrencyCode())
+                ->setStoreToBaseRate($this->getStoreToBaseRate())
+                ->setStoreToQuoteRate($this->getStoreToQuoteRate())
+                ->setBaseToGlobalRate($this->getBaseToGlobalRate())
+                ->setBaseToQuoteRate($this->getBaseToQuoteRate());
+            $currency = $this->currencyBuilder->create();
+        }
+        return $currency;
     }
 
     /**

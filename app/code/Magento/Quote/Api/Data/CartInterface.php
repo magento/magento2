@@ -124,7 +124,7 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Returns information about quote currency, such as code, exchange rate, and so on.
      *
-     * @return \Magento\Checkout\Api\Data\CurrencyInterface|null Quote currency information. Otherwise, null.
+     * @return \Magento\Quote\Api\Data\CurrencyInterface|null Quote currency information. Otherwise, null.
      */
     public function getCurrency();
 

@@ -30,4 +30,5 @@
     <preference for="Magento\Quote\Api\CartTotalRepositoryInterface" type="\Magento\Quote\Model\Cart\CartTotalRepository" />
     <preference for="Magento\Quote\Api\Data\TotalsInterface" type="\Magento\Quote\Model\Cart\Totals" />
     <preference for="Magento\Quote\Api\Data\TotalsItemInterface" type="\Magento\Quote\Model\Quote\Cart\Totals\Item" />
+    <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="\Magento\Directory\Model\Currency" />
 </config>

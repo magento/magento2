@@ -115,15 +115,15 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
         $this->assertContains('totals_object', $cartData);
         $this->assertEquals($cart->getSubtotal(), $cartData['totals_object']['subtotal']);
         $this->assertEquals($cart->getGrandTotal(), $cartData['totals_object']['grand_total']);
-//        $this->assertContains('currency', $cartData);
-//        $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
-//        $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);
-//        $this->assertEquals($cart->getQuoteCurrencyCode(), $cartData['currency']['quote_currency_code']);
-//        $this->assertEquals($cart->getStoreCurrencyCode(), $cartData['currency']['store_currency_code']);
-//        $this->assertEquals($cart->getBaseToGlobalRate(), $cartData['currency']['base_to_global_rate']);
-//        $this->assertEquals($cart->getBaseToQuoteRate(), $cartData['currency']['base_to_quote_rate']);
-//        $this->assertEquals($cart->getStoreToBaseRate(), $cartData['currency']['store_to_base_rate']);
-//        $this->assertEquals($cart->getStoreToQuoteRate(), $cartData['currency']['store_to_quote_rate']);
+        $this->assertContains('currency', $cartData);
+        $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
+        $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);
+        $this->assertEquals($cart->getQuoteCurrencyCode(), $cartData['currency']['quote_currency_code']);
+        $this->assertEquals($cart->getStoreCurrencyCode(), $cartData['currency']['store_currency_code']);
+        $this->assertEquals($cart->getBaseToGlobalRate(), $cartData['currency']['base_to_global_rate']);
+        $this->assertEquals($cart->getBaseToQuoteRate(), $cartData['currency']['base_to_quote_rate']);
+        $this->assertEquals($cart->getStoreToBaseRate(), $cartData['currency']['store_to_base_rate']);
+        $this->assertEquals($cart->getStoreToQuoteRate(), $cartData['currency']['store_to_quote_rate']);
     }
 
     /**
