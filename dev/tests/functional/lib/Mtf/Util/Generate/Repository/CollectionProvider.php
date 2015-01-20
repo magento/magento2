@@ -45,7 +45,7 @@ class CollectionProvider implements CollectionProviderInterface
     {
         $connection = $this->getConnection('read');
         if (!$connection || $connection instanceof \Zend_Db_Adapter_Exception) {
-            echo ('Connection to Magento 2 database is absent.' . PHP_EOL);
+            echo ('Connection to Magento 2 database is absent. Repository data has not been fetched.' . PHP_EOL);
             return false;
         }
 
