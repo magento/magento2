@@ -7,7 +7,6 @@
 
 namespace Magento\Quote\Model;
 
-use Magento\Quote\Model\QuoteRepository;
 use Magento\Framework\Api\SearchCriteria;
 
 class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
@@ -64,7 +63,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->searchResultsBuilderMock = $this->getMock(
             '\Magento\Quote\Api\Data\CartSearchResultsDataBuilder',
-            [],
+            ['setSearchCriteria', 'setTotalCount', 'setItems', 'create'],
             [],
             '',
             false

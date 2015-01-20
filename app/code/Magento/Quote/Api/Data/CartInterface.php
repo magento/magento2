@@ -136,6 +136,8 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getCustomerNote();
 
     /**
+     * Send customer notification flag
+     *
      * @return bool|null
      */
     public function getCustomerNoteNotify();
