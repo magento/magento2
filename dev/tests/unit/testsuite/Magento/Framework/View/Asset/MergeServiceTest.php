@@ -95,7 +95,7 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Framework\View\Asset\Merged\MutablePathAsset',
+            'Magento\Framework\View\Asset\Merged',
             ['assets' => $assets, 'mergeStrategy' => $mergeStrategyMock]
         )->will(
             $this->returnValue($mergedAsset)

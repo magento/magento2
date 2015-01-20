@@ -63,9 +63,10 @@ class MinifyService
      * Assets applicable for minification are wrapped with the minified asset
      *
      * @param array|\Iterator $assets
-     * @return \Magento\Framework\View\Asset\Minified\AbstractAsset[]
+     * @param bool $isDirectRequest
+     * @return Minified\AbstractAsset[]
      */
-    public function getAssets($assets)
+    public function getAssets($assets, $isDirectRequest = false)
     {
         $resultAssets = [];
         $strategy = $this->appMode == \Magento\Framework\App\State::MODE_PRODUCTION
@@ -73,7 +74,7 @@ class MinifyService
         /** @var $asset AssetInterface */
         foreach ($assets as $asset) {
             if ($this->isEnabled($asset->getContentType())) {
-                $asset = $this->getAssetDecorated($asset, $strategy);
+                $asset = $this->getAssetDecorated($asset, $strategy, $isDirectRequest);
             }
             $resultAssets[] = $asset;
         }
@@ -127,18 +128,19 @@ class MinifyService
      *
      * @param AssetInterface $asset
      * @param string $strategy
+     * @param bool $isDirectRequest
      * @return AssetInterface
      * @throws \Magento\Framework\Exception
      */
-    protected function getAssetDecorated(AssetInterface $asset, $strategy)
+    protected function getAssetDecorated(AssetInterface $asset, $strategy, $isDirectRequest)
     {
         return
             $this->objectManager->create(
-                $this->getDecoratorClass($asset),
+                $this->getDecoratorClass($asset, $isDirectRequest),
                 [
                     'asset' => $asset,
                     'strategy' => $strategy,
-                    'adapter' => $this->getAdapter($asset->getContentType()),
+                    'adapter' => $this->getAdapter($asset->getContentType())
                 ]
             );
     }
@@ -147,11 +149,12 @@ class MinifyService
      * Returns minifier decorator class name for given asset
      *
      * @param AssetInterface $asset
+     * @param bool $isDirectRequest
      * @return string
      */
-    protected function getDecoratorClass(AssetInterface $asset)
+    protected function getDecoratorClass(AssetInterface $asset, $isDirectRequest)
     {
-        if ($asset->getContentType() == 'css') {
+        if ($isDirectRequest || $asset->getContentType() == 'css') {
             $result = 'Magento\Framework\View\Asset\Minified\ImmutablePathAsset';
         } else {
             $result = 'Magento\Framework\View\Asset\Minified\MutablePathAsset';
