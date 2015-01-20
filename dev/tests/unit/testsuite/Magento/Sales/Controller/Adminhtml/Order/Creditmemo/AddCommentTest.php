@@ -46,9 +46,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultLayoutFactoryMock;
+    protected $resultPageFactoryMock;
 
     /**
      * @var \Magento\Framework\Controller\Result\JSONFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -61,9 +61,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $resultRawFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultLayoutMock;
+    protected $resultPageMock;
 
     /**
      * @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject
@@ -108,7 +108,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->senderMock = $this->getMockBuilder('Magento\Sales\Model\Order\Email\Sender\CreditmemoSender')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultLayoutFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\LayoutFactory')
+        $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -120,7 +120,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultLayoutMock = $this->getMockBuilder('Magento\Framework\View\Result\Layout')
+        $this->resultPageMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
@@ -137,7 +137,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->contextMock,
                 'creditmemoLoader' => $this->loaderMock,
                 'creditmemoSender' => $this->senderMock,
-                'resultLayoutFactory' => $this->resultLayoutFactoryMock,
+                'resultPageFactory' => $this->resultPageFactoryMock,
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
                 'resultRawFactory' => $this->resultRawFactoryMock
             ]
@@ -246,10 +246,10 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->loaderMock->expects($this->once())
             ->method('load')
             ->willReturn($creditmemoMock);
-        $this->resultLayoutFactoryMock->expects($this->once())
+        $this->resultPageFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->resultLayoutMock);
-        $this->resultLayoutMock->expects($this->atLeastOnce())
+            ->willReturn($this->resultPageMock);
+        $this->resultPageMock->expects($this->atLeastOnce())
             ->method('getLayout')
             ->willReturn($layoutMock);
         $layoutMock->expects($this->once())

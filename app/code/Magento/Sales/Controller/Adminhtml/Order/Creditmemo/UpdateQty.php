@@ -15,9 +15,9 @@ class UpdateQty extends \Magento\Backend\App\Action
     protected $creditmemoLoader;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $resultLayoutFactory;
+    protected $pagePageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JSONFactory
@@ -32,19 +32,19 @@ class UpdateQty extends \Magento\Backend\App\Action
     /**
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
-        $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct($context);
@@ -71,8 +71,8 @@ class UpdateQty extends \Magento\Backend\App\Action
             $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
             $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
             $this->creditmemoLoader->load();
-            $resultLayout = $this->resultLayoutFactory->create();
-            $response = $resultLayout->getLayout()->getBlock('order_items')->toHtml();
+            $resultPage = $this->resultPageFactory->create();
+            $response = $resultPage->getLayout()->getBlock('order_items')->toHtml();
         } catch (\Magento\Framework\Model\Exception $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {

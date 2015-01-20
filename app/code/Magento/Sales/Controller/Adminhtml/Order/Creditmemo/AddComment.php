@@ -21,9 +21,9 @@ class AddComment extends \Magento\Backend\App\Action
     protected $creditmemoSender;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $resultLayoutFactory;
+    protected $pagePageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JSONFactory
@@ -39,7 +39,7 @@ class AddComment extends \Magento\Backend\App\Action
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param CreditmemoSender $creditmemoSender
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
@@ -47,13 +47,13 @@ class AddComment extends \Magento\Backend\App\Action
         Action\Context $context,
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
         CreditmemoSender $creditmemoSender,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
         $this->creditmemoSender = $creditmemoSender;
-        $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct($context);
@@ -93,8 +93,8 @@ class AddComment extends \Magento\Backend\App\Action
             $comment->save();
 
             $this->creditmemoSender->send($creditmemo, !empty($data['is_customer_notified']), $data['comment']);
-            $resultLayout = $this->resultLayoutFactory->create();
-            $response = $resultLayout->getLayout()->getBlock('creditmemo_comments')->toHtml();
+            $resultPage = $this->resultPageFactory->create();
+            $response = $resultPage->getLayout()->getBlock('creditmemo_comments')->toHtml();
         } catch (\Magento\Framework\Model\Exception $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
