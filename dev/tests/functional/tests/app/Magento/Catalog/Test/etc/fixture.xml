@@ -26,13 +26,13 @@
                 <backend_type>virtual</backend_type>
             </attribute_set_id>
         </fields>
-        <data_set>
+        <dataset>
             <sku />
             <name />
             <short_description />
             <description />
             <tax_class_id />
-        </data_set>
+        </dataset>
         <data_config>
             <create_url_params>
                 <type>simple</type>

@@ -253,7 +253,7 @@ class FormTabs extends Form
         foreach ($data as $field => $value) {
             $attributes = $fixture->getDataFieldConfig($field);
             $attributes['value'] = $value;
-            if (array_key_exists('group', $attributes) && $attributes['group'] !== null) {
+            if (array_key_exists('group', $attributes) && $attributes['group'] != 'null') {
                 $tabs[$attributes['group']][$field] = $attributes;
             } elseif (!array_key_exists('group', $attributes)) {
                 $this->unassignedFields[$field] = $attributes;
