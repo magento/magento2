@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Model\Cart\Access;
+namespace Magento\Quote\Model\Cart\Access;
 
 class CartRepositoryPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Checkout\Model\Cart\Access\CartRepositoryPlugin
+     * @var \Magento\Quote\Model\Cart\Access\CartRepositoryPlugin
      */
     protected $model;
 

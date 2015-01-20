@@ -4,13 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Model\Cart\Access;
+namespace Magento\Quote\Model\Cart\Access;
 
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Authorization\Model\UserContextInterface;
 
-class CartRepositoryPlugin
+class CartManagementPlugin
 {
     /**
      * @var UserContextInterface
@@ -34,37 +33,22 @@ class CartRepositoryPlugin
     }
 
     /**
-     * Check whether access is allowed for cart resource
+     * Check whether access is allowed for create cart resource
      *
-     * @param \Magento\Quote\Api\CartRepositoryInterface $subject
+     * @param \Magento\Quote\Api\CartManagementInterface $subject
      * @param int $cartId
+     * @param int $customerId
+     * @param int $storeId
      *
      * @return void
      * @throws AuthorizationException if access denied
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeGet(
-        \Magento\Quote\Api\CartRepositoryInterface $subject,
-        $cartId
-    ) {
-        if (!in_array($this->userContext->getUserType(), $this->allowedUserTypes)) {
-            throw new AuthorizationException('Access denied');
-        }
-    }
-
-    /**
-     * Check whether access is allowed for cart list resource
-     *
-     * @param \Magento\Quote\Api\CartRepositoryInterface $subject
-     * @param SearchCriteria $searchCriteria
-     *
-     * @return void
-     * @throws AuthorizationException if access denied
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function beforeGetList(
-        \Magento\Quote\Api\CartRepositoryInterface $subject,
-        SearchCriteria $searchCriteria
+    public function beforeAssignCustomer(
+        \Magento\Quote\Api\CartManagementInterface $subject,
+        $cartId,
+        $customerId,
+        $storeId
     ) {
         if (!in_array($this->userContext->getUserType(), $this->allowedUserTypes)) {
             throw new AuthorizationException('Access denied');
