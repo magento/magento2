@@ -14,8 +14,7 @@ namespace Magento\Directory\Model;
 use Magento\Directory\Exception;
 use Magento\Directory\Model\Currency\Filter;
 
-class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Quote\Api\Data\CurrencyInterface
+class Currency extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * CONFIG path constants
@@ -66,8 +65,6 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Helper\Data $directoryHelper
@@ -80,8 +77,6 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        \Magento\Framework\Api\AttributeDataBuilder $customAttributeBuilder,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Helper\Data $directoryHelper,
@@ -94,8 +89,6 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeBuilder,
             $resource,
             $resourceCollection,
             $data
@@ -391,69 +384,5 @@ class Currency extends \Magento\Framework\Model\AbstractExtensibleModel implemen
     {
         $this->_getResource()->saveRates($rates);
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getGlobalCurrencyCode()
-    {
-        return $this->getData('global_currency_code');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBaseCurrencyCode()
-    {
-        return $this->getData('base_currency_code');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getStoreCurrencyCode()
-    {
-        return $this->getData('store_currency_code');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getQuoteCurrencyCode()
-    {
-        return $this->getData('quote_currency_code');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getStoreToBaseRate()
-    {
-        return $this->getData('store_to_base_rate');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getStoreToQuoteRate()
-    {
-        return $this->getData('store_to_quote_rate');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBaseToGlobalRate()
-    {
-        return $this->getData('base_to_global_rate');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBaseToQuoteRate()
-    {
-        return $this->getData('base_to_quote_rate');
     }
 }
