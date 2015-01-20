@@ -6,7 +6,7 @@
 
 namespace Magento\Downloadable\Test\TestCase;
 
-use Magento\Tax\Test\TestCase\TaxCalculationTest;
+use Mtf\TestCase\Scenario;
 
 /**
  * Test tax calculation with downloadable product.
@@ -30,7 +30,43 @@ use Magento\Tax\Test\TestCase\TaxCalculationTest;
  * @group Tax_(CS)
  * @ZephyrId MAGETWO-32076
  */
-class DownloadableTaxCalculationTest extends TaxCalculationTest
+class DownloadableTaxCalculationTest extends Scenario
 {
-    //
+    /**
+     * Skip failed tests.
+     *
+     * @return void
+     */
+    public static function setUpBeforeClass()
+    {
+        self::markTestIncomplete("Epic: MAGETWO-30073");
+    }
+
+    /**
+     * Runs tax calculation test.
+     *
+     * @return void
+     */
+    public function test()
+    {
+        $this->executeScenario();
+    }
+
+    /**
+     * Tear down after each test.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        $this->objectManager->create('\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep')->run();
+        $this->objectManager->create('\Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep')->run();
+        $this->objectManager->create('\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep')->run();
+
+        // TODO: Move set default configuration to "tearDownAfterClass" method after fix bug MAGETWO-29331
+        $this->objectManager->create(
+            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            ['configData' => 'default_tax_configuration']
+        )->run();
+    }
 }
