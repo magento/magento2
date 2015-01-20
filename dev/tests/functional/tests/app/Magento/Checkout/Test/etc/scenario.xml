@@ -18,6 +18,9 @@
                         <next>addProductsToTheCart</next>
                     </step>
                     <step name="addProductsToTheCart" module="Magento_Checkout">
+                        <next>estimateShippingAndTax</next>
+                    </step>
+                    <step name="estimateShippingAndTax" module="Magento_Checkout">
                         <next>proceedToCheckout</next>
                     </step>
                     <step name="proceedToCheckout" module="Magento_Checkout">

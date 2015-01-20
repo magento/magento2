@@ -142,6 +142,20 @@
             <default_value>0.0000</default_value>
             <input></input>
         </base_grand_total>
+        <tax_amount>
+            <attribute_code>tax_amount</attribute_code>
+            <backend_type>decimal</backend_type>
+            <is_required></is_required>
+            <default_value>0.0000</default_value>
+            <input></input>
+        </tax_amount>
+        <shipping_amount>
+            <attribute_code>tax_amount</attribute_code>
+            <backend_type>decimal</backend_type>
+            <is_required></is_required>
+            <default_value>0.0000</default_value>
+            <input></input>
+        </shipping_amount>
         <checkout_method>
             <attribute_code>checkout_method</attribute_code>
             <backend_type>varchar</backend_type>

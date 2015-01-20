@@ -179,6 +179,22 @@ class Cart extends InjectableFixture
         'input' => '',
     ];
 
+    protected $tax_amount = [
+        'attribute_code' => 'tax_amount',
+        'backend_type' => 'decimal',
+        'is_required' => '',
+        'default_value' => '0.0000',
+        'input' => '',
+    ];
+
+    protected $shipping_amount = [
+        'attribute_code' => 'shipping_amount',
+        'backend_type' => 'decimal',
+        'is_required' => '',
+        'default_value' => '0.0000',
+        'input' => '',
+    ];
+
     protected $checkout_method = [
         'attribute_code' => 'checkout_method',
         'backend_type' => 'varchar',
@@ -543,6 +559,16 @@ class Cart extends InjectableFixture
     public function getBaseGrandTotal()
     {
         return $this->getData('base_grand_total');
+    }
+
+    public function getTaxAmount()
+    {
+        return $this->getData('tax_amount');
+    }
+
+    public function getShippingAmount()
+    {
+        return $this->getData('shipping_amount');
     }
 
     public function getCheckoutMethod()
