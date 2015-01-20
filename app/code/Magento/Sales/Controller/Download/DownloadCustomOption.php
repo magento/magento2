@@ -6,6 +6,7 @@
  */
 namespace Magento\Sales\Controller\Download;
 
+use Magento\Sales\Model\Download;
 use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Backend\Model\View\Result\ForwardFactory;
@@ -18,15 +19,23 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
     protected $resultForwardFactory;
 
     /**
+     * @var Download
+     */
+    protected $download;
+
+    /**
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
+     * @param Download $download
      */
     public function __construct(
         Context $context,
-        ForwardFactory $resultForwardFactory
+        ForwardFactory $resultForwardFactory,
+        Download $download
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
+        $this->download = $download;
     }
 
     /**
@@ -71,9 +80,9 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
             if ($this->getRequest()->getParam('key') != $info['secret_key']) {
                 return $resultForward->forward('noroute');
             }
-            $this->_download->downloadFile($info);
+            $this->download->downloadFile($info);
         } catch (\Exception $e) {
-            $resultForward->forward('noroute');
+            return $resultForward->forward('noroute');
         }
         exit(0);
     }

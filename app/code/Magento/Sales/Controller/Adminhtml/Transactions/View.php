@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Page;
-use Magento\Framework\Controller\ResultInterface;
 
 class View extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
@@ -20,10 +19,10 @@ class View extends \Magento\Sales\Controller\Adminhtml\Transactions
     public function execute()
     {
         $txn = $this->_initTransaction();
-        if ($txn instanceof ResultInterface) {
+        if (!$txn) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            return $resultRedirect->setPath('sales/transactions');
+            return $resultRedirect->setPath('sales/*/');
         }
         /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

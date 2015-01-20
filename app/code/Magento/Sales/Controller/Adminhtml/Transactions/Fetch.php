@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\View\Result\Redirect;
-use Magento\Framework\Controller\ResultInterface;
 
 class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
@@ -22,8 +21,8 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
         $txn = $this->_initTransaction();
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($txn instanceof ResultInterface) {
-            return $resultRedirect->setPath('sales/transactions/view', ['_current' => true]);
+        if (!$txn) {
+            return $resultRedirect->setPath('sales/*/');
         }
         try {
             $txn->getOrderPaymentObject()->setOrder($txn->getOrder())->importTransactionInfo($txn);
