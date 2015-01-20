@@ -66,8 +66,5 @@
             <path>dev/tests/api-functional/testsuite/Magento/Webapi/Routing/RequestIdOverrideTest.php</path>
             <word>overriden</word>
         </item>
-        <item>
-            <path>lib/web/legacy-build.min.js</path>
-        </item>
     </whitelist>
 </config>
