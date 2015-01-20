@@ -2811,6 +2811,12 @@ address {
     padding: 0;
 }
 
+.tree-wrapper {
+    width: 100%;
+    overflow: auto;
+    float: left; // Fixed Chrome scroll issue
+}
+
 .page-actions.fixed .page-actions-inner:before {
     content: attr(data-title);
     float: left;
