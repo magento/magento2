@@ -15,6 +15,10 @@
     <identifier>request_path</identifier>
     <repository_class>Magento\UrlRewrite\Test\Repository\UrlRewrite</repository_class>
     <handler_interface>Magento\UrlRewrite\Test\Handler\UrlRewrite\UrlRewriteInterface</handler_interface>
+    <dataset name="default">
+        <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
+        <field name="request_path" xsi:type="string">test_request%isolation%</field>
+    </dataset>
     <fields>
         <field name="id">
             <attribute_code>id</attribute_code>

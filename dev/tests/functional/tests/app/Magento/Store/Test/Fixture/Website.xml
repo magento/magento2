@@ -15,6 +15,11 @@
     <identifier>code</identifier>
     <repository_class>Magento\Store\Test\Repository\Website</repository_class>
     <handler_interface>Magento\Store\Test\Handler\Website\WebsiteInterface</handler_interface>
+    <dataset name="default">
+        <field name="name" xsi:type="string">Main Website</field>
+        <field name="code" xsi:type="string">base</field>
+        <field name="website_id" xsi:type="string">1</field>
+    </dataset>
     <fields>
         <field name="website_id">
             <attribute_code>website_id</attribute_code>

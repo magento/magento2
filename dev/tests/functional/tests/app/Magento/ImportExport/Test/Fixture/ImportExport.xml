@@ -11,6 +11,10 @@
     <module>Magento_ImportExport</module>
     <type>flat</type>
     <entity_type>importexport_importdata</entity_type>
+    <dataset name="default">
+        <field name="entity" xsi:type="string">Products</field>
+        <field name="behavior" xsi:type="string">CSV</field>
+    </dataset>
     <fields>
         <field name="id">
             <attribute_code>id</attribute_code>

@@ -16,6 +16,24 @@
     <identifier>sku</identifier>
     <repository_class>Magento\Catalog\Test\Repository\CatalogProductSimple</repository_class>
     <handler_interface>Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface</handler_interface>
+    <dataset name="default">
+        <field name="name" xsi:type="string">Test simple product %isolation%</field>
+        <field name="sku" xsi:type="string">test_simple_sku_%isolation%</field>
+        <field name="attribute_set_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default</item>
+        </field>
+        <field name="price" xsi:type="array">
+            <item name="value" xsi:type="string">100.00</item>
+        </field>
+        <field name="weight" xsi:type="string">12.00</field>
+        <field name="quantity_and_stock_status" xsi:type="array">
+            <item name="qty" xsi:type="string">10.00</item>
+            <item name="is_in_stock" xsi:type="string">In Stock</item>
+        </field>
+        <field name="website_ids" xsi:type="array">
+            <item name="0" xsi:type="string">Main Website</item>
+        </field>
+    </dataset>
     <data_config>
         <item name="type_id" xsi:type="string">simple</item>
         <item name="create_url_params" xsi:type="array">

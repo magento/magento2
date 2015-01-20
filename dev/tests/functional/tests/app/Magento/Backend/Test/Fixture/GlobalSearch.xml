@@ -9,12 +9,14 @@
          xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
          class="Magento\Backend\Test\Fixture\GlobalSearch">
     <module>Magento_Backend</module>
+    <dataset name="default">
+        <field name="query" xsi:type="string">catalogProductSimple::default::name</field>
+    </dataset>
     <fields>
         <field name="query">
             <attribute_code>query</attribute_code>
             <backend_type>virtual</backend_type>
             <source>Magento\Backend\Test\Fixture\GlobalSearch\Query</source>
-            <default_value xsi:type="string">catalogProductSimple::default::name</default_value>
         </field>
     </fields>
 </fixture>

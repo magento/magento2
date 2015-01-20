@@ -15,6 +15,13 @@
     <identifier>template_id</identifier>
     <repository_class>Magento\Newsletter\Test\Repository\Template</repository_class>
     <handler_interface>Magento\Newsletter\Test\Handler\Template\TemplateInterface</handler_interface>
+    <dataset name="default">
+        <field name="code" xsi:type="string">TemplateName%isolation%</field>
+        <field name="subject" xsi:type="string">TemplateSubject%isolation%</field>
+        <field name="sender_name" xsi:type="string">SenderName%isolation%</field>
+        <field name="sender_email" xsi:type="string">SenderName%isolation%@example.com</field>
+        <field name="text" xsi:type="string">Some text %isolation%</field>
+    </dataset>
     <fields>
         <field name="id">
             <attribute_code>template_id</attribute_code>

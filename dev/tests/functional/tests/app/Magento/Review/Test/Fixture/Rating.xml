@@ -15,6 +15,11 @@
     <identifier>rating_code</identifier>
     <repository_class>Magento\Review\Test\Repository\Rating</repository_class>
     <handler_interface>Magento\Review\Test\Handler\Rating\RatingInterface</handler_interface>
+    <dataset name="default">
+        <field name="rating_code" xsi:type="string">Rating %isolation%</field>
+        <field name="stores" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
+        <field name="is_active" xsi:type="string">Yes</field>
+    </dataset>
     <fields>
         <field name="rating_id">
             <attribute_code>rating_id</attribute_code>

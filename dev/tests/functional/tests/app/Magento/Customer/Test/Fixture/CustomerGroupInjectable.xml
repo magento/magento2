@@ -14,6 +14,12 @@
     <collection>Magento\Customer\Model\Resource\Group\Collection</collection>
     <repository_class>Magento\Customer\Test\Repository\CustomerGroupInjectable</repository_class>
     <handler_interface>Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface</handler_interface>
+    <dataset name="default">
+        <field name="customer_group_code" xsi:type="string">customer_code_%isolation%</field>
+        <field name="tax_class_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">customer_tax_class</item>
+        </field>
+    </dataset>
     <fields>
         <field name="customer_group_code">
             <attribute_code>code</attribute_code>

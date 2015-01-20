@@ -15,6 +15,15 @@
     <identifier/>
     <repository_class>Magento\Store\Test\Repository\StoreGroup</repository_class>
     <handler_interface>Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface</handler_interface>
+    <dataset name="default">
+        <field name="website_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">main_website</item>
+        </field>
+        <field name="name" xsi:type="string">StoreGroup%isolation%</field>
+        <field name="root_category_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default_category</item>
+        </field>
+    </dataset>
     <fields>
         <field name="group_id">
             <attribute_code>group_id</attribute_code>

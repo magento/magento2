@@ -15,6 +15,13 @@
     <identifier>email</identifier>
     <repository_class>Magento\Customer\Test\Repository\CustomerInjectable</repository_class>
     <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
+    <dataset name="default">
+        <field name="firstname" xsi:type="string">John</field>
+        <field name="lastname" xsi:type="string">Doe</field>
+        <field name="email" xsi:type="string">John.Doe%isolation%@example.com</field>
+        <field name="password" xsi:type="string">123123q</field>
+        <field name="password_confirmation" xsi:type="string">123123q</field>
+    </dataset>
     <fields>
         <field name="address">
             <attribute_code>address</attribute_code>

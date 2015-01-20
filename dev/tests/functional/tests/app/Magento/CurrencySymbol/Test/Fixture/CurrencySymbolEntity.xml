@@ -13,6 +13,9 @@
     <entity_type>core_config_data</entity_type>
     <repository_class>Magento\CurrencySymbol\Test\Repository\CurrencySymbolEntity</repository_class>
     <handler_interface>Magento\CurrencySymbol\Test\Handler\CurrencySymbolEntity\CurrencySymbolEntityInterface</handler_interface>
+    <dataset name="default">
+        <field name="inherit_custom_currency_symbol" xsi:type="string">Yes</field>
+    </dataset>
     <fields>
         <field name="config_id">
             <attribute_code>config_id</attribute_code>

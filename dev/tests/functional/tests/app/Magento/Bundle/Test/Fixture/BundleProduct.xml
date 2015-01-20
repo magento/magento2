@@ -16,6 +16,12 @@
     <identifier>sku</identifier>
     <repository_class>Magento\Bundle\Test\Repository\BundleProduct</repository_class>
     <handler_interface>Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface</handler_interface>
+    <dataset name="default">
+        <field name="name" xsi:type="string">BundleProduct %isolation%</field>
+        <field name="sku_type" xsi:type="string">Dynamic</field>
+        <field name="price_type" xsi:type="string">Dynamic</field>
+        <field name="weight_type" xsi:type="string">Dynamic</field>
+    </dataset>
     <data_config>
         <item name="type_id" xsi:type="string">bundle</item>
         <item name="create_url_params" xsi:type="array">

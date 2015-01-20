@@ -15,6 +15,12 @@
     <identifier>code</identifier>
     <repository_class>Magento\Tax\Test\Repository\TaxRule</repository_class>
     <handler_interface>Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface</handler_interface>
+    <dataset name="default">
+        <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+        <field name="tax_rate" xsi:type="array">
+            <item name="dataSet" xsi:type="string">US-CA-Rate_1</item>
+        </field>
+    </dataset>
     <fields>
         <field name="tax_calculation_rule_id">
             <attribute_code>tax_calculation_rule_id</attribute_code>

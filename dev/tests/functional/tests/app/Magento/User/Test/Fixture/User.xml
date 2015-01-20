@@ -14,6 +14,15 @@
     <collection>Magento\User\Model\Resource\User\Collection</collection>
     <repository_class>Magento\User\Test\Repository\User</repository_class>
     <handler_interface>Magento\User\Test\Handler\User\UserInterface</handler_interface>
+    <dataset name="default">
+        <field name="username" xsi:type="string">AdminUser%isolation%</field>
+        <field name="firstname" xsi:type="string">FirstName%isolation%</field>
+        <field name="lastname" xsi:type="string">LastName%isolation%</field>
+        <field name="email" xsi:type="string">email%isolation%@example.com</field>
+        <field name="password" xsi:type="string">123123q</field>
+        <field name="password_confirmation" xsi:type="string">123123q</field>
+        <field name="is_active" xsi:type="string">Active</field>
+    </dataset>
     <fields>
         <field name="user_id">
             <attribute_code>user_id</attribute_code>

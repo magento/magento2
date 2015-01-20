@@ -14,6 +14,13 @@
     <collection>Magento\GoogleShopping\Model\Resource\Attribute\Collection</collection>
     <repository_class>Magento\GoogleShopping\Test\Repository\GoogleShoppingAttribute</repository_class>
     <handler_interface>Magento\GoogleShopping\Test\Handler\GoogleShoppingAttribute\GoogleShoppingAttributeInterface</handler_interface>
+    <dataset name="default">
+        <field name="target_country" xsi:type="string">United States</field>
+        <field name="attribute_set_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default</item>
+        </field>
+        <field name="category" xsi:type="string">Apparel &amp; Accessories</field>
+    </dataset>
     <fields>
         <field name="type_id">
             <attribute_code>type_id</attribute_code>

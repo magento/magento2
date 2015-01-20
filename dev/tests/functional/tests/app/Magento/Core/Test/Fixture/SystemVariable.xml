@@ -16,6 +16,12 @@
     </entities>
     <collection>Magento\Core\Model\Resource\Variable\Collection</collection>
     <handler_interface>Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface</handler_interface>
+    <dataset name="default">
+        <field name="code" xsi:type="string">variableCode%isolation%</field>
+        <field name="name" xsi:type="string">variableName%isolation%</field>
+        <field name="html_value" xsi:type="string">&lt;p>html_value&lt;/p></field>
+        <field name="plain_value" xsi:type="string">plain_value</field>
+    </dataset>
     <fields>
         <field name="variable_id">
             <attribute_code>variable_id</attribute_code>

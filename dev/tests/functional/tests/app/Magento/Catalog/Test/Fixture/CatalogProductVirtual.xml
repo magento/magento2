@@ -16,6 +16,18 @@
     <identifier>sku</identifier>
     <repository_class>Magento\Catalog\Test\Repository\CatalogProductVirtual</repository_class>
     <handler_interface>Magento\Catalog\Test\Handler\CatalogProductVirtual\CatalogProductVirtualInterface</handler_interface>
+    <dataset name="default">
+        <field name="name" xsi:type="string">Test virtual product %isolation%</field>
+        <field name="sku" xsi:type="string">test_virtual_sku_%isolation%</field>
+        <field name="price" xsi:type="array">
+            <item name="value" xsi:type="string">100.00</item>
+        </field>
+        <field name="quantity_and_stock_status" xsi:type="array">
+            <item name="qty" xsi:type="string">10.00</item>
+            <item name="is_in_stock" xsi:type="string">In Stock</item>
+        </field>
+        <field name="is_virtual" xsi:type="string">Yes</field>
+    </dataset>
     <data_config>
         <item name="type_id" xsi:type="string">virtual</item>
         <item name="create_url_params" xsi:type="array">

@@ -16,6 +16,17 @@
     <identifier>sku</identifier>
     <repository_class>Magento\GroupedProduct\Test\Repository\GroupedProductInjectable</repository_class>
     <handler_interface>Magento\GroupedProduct\Test\Handler\GroupedProductInjectable\GroupedProductInjectableInterface</handler_interface>
+    <dataset name="default">
+        <field name="name" xsi:type="string">GroupedProduct_%isolation%</field>
+        <field name="sku" xsi:type="string">GroupedProduct_%isolation%</field>
+        <field name="tax_class" xsi:type="string">Taxable Goods</field>
+        <field name="description" xsi:type="string">This is description for grouped product</field>
+        <field name="short_description" xsi:type="string">This is short description for grouped product</field>
+        <field name="quantity_and_stock_status" xsi:type="array">
+            <item name="qty" xsi:type="string">1</item>
+            <item name="is_in_stock" xsi:type="string">In Stock</item>
+        </field>
+    </dataset>
     <data_config>
         <item name="type_id" xsi:type="string">grouped</item>
         <item name="create_url_params" xsi:type="array">

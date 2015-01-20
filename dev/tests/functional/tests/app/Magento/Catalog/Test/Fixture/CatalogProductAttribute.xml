@@ -17,6 +17,11 @@
     <collection>Magento\Catalog\Model\Resource\Attribute</collection>
     <repository_class>Magento\Catalog\Test\Repository\CatalogProductAttribute</repository_class>
     <handler_interface>Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface</handler_interface>
+    <dataset name="default">
+        <field name="frontend_label" xsi:type="string">attribute_label%isolation%</field>
+        <field name="frontend_input" xsi:type="string">Text Field</field>
+        <field name="is_required" xsi:type="string">No</field>
+    </dataset>
     <fields>
         <field name="attribute_id">
             <attribute_code>attribute_id</attribute_code>

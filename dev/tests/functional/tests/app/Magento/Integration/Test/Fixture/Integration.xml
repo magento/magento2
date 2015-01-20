@@ -19,6 +19,11 @@
     <collection>Magento\Integration\Model\Resource\Integration\Collection</collection>
     <repository_class>Magento\Integration\Test\Repository\Integration</repository_class>
     <handler_interface>Magento\Integration\Test\Handler\Integration\IntegrationInterface</handler_interface>
+    <dataset name="default">
+        <field name="name" xsi:type="string">default_integration_%isolation%</field>
+        <field name="email" xsi:type="string">test_%isolation%@example.com</field>
+        <field name="resource_access" xsi:type="string">All</field>
+    </dataset>
     <fields>
         <field name="integration_id">
             <attribute_code>integration_id</attribute_code>

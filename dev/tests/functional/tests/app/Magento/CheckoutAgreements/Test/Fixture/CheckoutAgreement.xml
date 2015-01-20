@@ -14,6 +14,16 @@
     <collection>Magento\CheckoutAgreements\Model\Resource\Agreement\Collection</collection>
     <repository_class>Magento\CheckoutAgreements\Test\Repository\CheckoutAgreement</repository_class>
     <handler_interface>Magento\CheckoutAgreements\Test\Handler\CheckoutAgreement\CheckoutAgreementInterface</handler_interface>
+    <dataset name="default">
+        <field name="name" xsi:type="string">DefaultName%isolation%</field>
+        <field name="is_active" xsi:type="string">Enabled</field>
+        <field name="is_html" xsi:type="string">Text</field>
+        <field name="stores" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default</item>
+        </field>
+        <field name="checkbox_text" xsi:type="string">test_checkbox%isolation%</field>
+        <field name="content" xsi:type="string">TestMessage%isolation%</field>
+    </dataset>
     <fields>
         <field name="agreement_id">
             <attribute_code>agreement_id</attribute_code>

@@ -14,6 +14,15 @@
     <collection>Magento\Store\Model\Resource\Store\Collection</collection>
     <repository_class>Magento\Store\Test\Repository\Store</repository_class>
     <handler_interface>Magento\Store\Test\Handler\Store\StoreInterface</handler_interface>
+    <dataset name="default">
+        <field name="group_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default</item>
+        </field>
+        <field name="name" xsi:type="string">Default Store View</field>
+        <field name="code" xsi:type="string">default</field>
+        <field name="is_active" xsi:type="string">Enabled</field>
+        <field name="store_id" xsi:type="string">1</field>
+    </dataset>
     <fields>
         <field name="store_id">
             <attribute_code>store_id</attribute_code>

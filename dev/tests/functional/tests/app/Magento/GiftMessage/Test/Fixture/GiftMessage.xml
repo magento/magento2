@@ -14,6 +14,13 @@
     <collection>Magento\GiftMessage\Model\Resource\Message\Collection</collection>
     <identifier>gift_message_id</identifier>
     <repository_class>Magento\GiftMessage\Test\Repository\GiftMessage</repository_class>
+    <dataset name="default">
+        <field name="allow_gift_options" xsi:type="string">Yes</field>
+        <field name="allow_gift_messages_for_order" xsi:type="string">Yes</field>
+        <field name="sender" xsi:type="string">John Doe</field>
+        <field name="recipient" xsi:type="string">Jane Doe</field>
+        <field name="message" xsi:type="string">text_%isolation%</field>
+    </dataset>
     <fields>
         <field name="gift_message_id">
             <attribute_code>gift_message_id</attribute_code>

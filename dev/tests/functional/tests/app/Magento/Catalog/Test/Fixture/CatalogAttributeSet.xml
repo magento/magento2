@@ -14,6 +14,12 @@
     <collection>Magento\Catalog\Model\Resource\Product\Link\Product\Collection</collection>
     <repository_class>Magento\Catalog\Test\Repository\CatalogAttributeSet</repository_class>
     <handler_interface>Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface</handler_interface>
+    <dataset name="default">
+        <field name="attribute_set_name" xsi:type="string">Default_attribute_set_%isolation%</field>
+        <field name="skeleton_set" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default</item>
+        </field>
+    </dataset>
     <fields>
         <field name="attribute_set_id">
             <attribute_code>attribute_set_id</attribute_code>

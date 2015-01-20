@@ -14,6 +14,10 @@
     <collection>Magento\Sitemap\Model\Resource\Sitemap\Collection</collection>
     <repository_class>Magento\Sitemap\Test\Repository\Sitemap</repository_class>
     <handler_interface>Magento\Sitemap\Test\Handler\Sitemap\SitemapInterface</handler_interface>
+    <dataset name="default">
+        <field name="sitemap_filename" xsi:type="string">sitemap.xml</field>
+        <field name="sitemap_path" xsi:type="string">/</field>
+    </dataset>
     <fields>
         <field name="sitemap_id">
             <attribute_code>sitemap_id</attribute_code>
