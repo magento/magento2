@@ -25,7 +25,7 @@ interface ShippingMethodManagementInterface
      * Returns selected shipping method for a specified quote.
      *
      * @param int $cartId The shopping cart ID.
-     * @return \Magento\Quote\Api\Data\ShippingMethodInterface|null Shipping method.
+     * @return \Magento\Quote\Api\Data\ShippingMethodInterface Shipping method.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified shopping cart does not exist.
      * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
      */
