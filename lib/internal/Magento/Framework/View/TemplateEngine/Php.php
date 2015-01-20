@@ -88,7 +88,7 @@ class Php implements TemplateEngineInterface
      *
      * This is needed because the templates are included in the context of this engine rather than
      * in the context of the block.
-
+     *
      * @deprecated
      * @param string $name
      * @return bool
