@@ -133,7 +133,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         $this->resultForwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();;
+            ->getMock();
 
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\Cancel',
@@ -242,13 +242,13 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $resultForward->expects($this->once())->method('forward')->with(('noroute'));
+        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->will($this->returnSelf());
 
         $this->resultForwardFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($resultForward));
 
-        $this->assertNull($this->controller->execute());
+        $this->assertSame($resultForward, $this->controller->execute());
     }
 
     public function testExecuteModelException()
