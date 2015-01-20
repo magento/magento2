@@ -82,6 +82,13 @@ class Product extends \Magento\Core\Helper\Url
     protected $_catalogSession;
 
     /**
+     * Invalidate product category indexer params
+     *
+     * @var array
+     */
+    protected $_reindexProductCategoryIndexerData;
+
+    /**
      * Invalidate price indexer params
      *
      * @var array
@@ -109,6 +116,7 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param string $typeSwitcherLabel
      * @param array $reindexPriceIndexerData
+     * @param array $reindexProductCategoryIndexerData
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -124,6 +132,7 @@ class Product extends \Magento\Core\Helper\Url
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         $typeSwitcherLabel,
         $reindexPriceIndexerData,
+        $reindexProductCategoryIndexerData,
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository
     ) {
@@ -137,6 +146,7 @@ class Product extends \Magento\Core\Helper\Url
         $this->_reindexPriceIndexerData = $reindexPriceIndexerData;
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->_reindexProductCategoryIndexerData = $reindexProductCategoryIndexerData;
         parent::__construct($context, $storeManager);
     }
 
