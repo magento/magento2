@@ -29,8 +29,11 @@ class AssertNewsletterPreview extends AbstractConstraint
      * @param Template $newsletter
      * @return void
      */
-    public function processAssert(BrowserInterfaceInterface $browser, TemplatePreview $templatePreview, Template $newsletter)
-    {
+    public function processAssert(
+        BrowserInterface $browser,
+        TemplatePreview $templatePreview,
+        Template $newsletter
+    ) {
         $browser->selectWindow();
         $content = $templatePreview->getContent()->getPageContent();
         $browser->closeWindow();
