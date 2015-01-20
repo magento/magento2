@@ -43,7 +43,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function createDataProvider()
     {
         return [
-            ['Magento\Sales\Model\Quote', 'Magento\Payment\Model\Cart\SalesModel\Quote'],
+            ['Magento\Quote\Model\Quote', 'Magento\Payment\Model\Cart\SalesModel\Quote'],
             ['Magento\Sales\Model\Order', 'Magento\Payment\Model\Cart\SalesModel\Order']
         ];
     }

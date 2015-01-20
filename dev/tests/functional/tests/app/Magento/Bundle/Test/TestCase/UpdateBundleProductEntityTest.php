@@ -34,6 +34,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateBundleProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Page product on backend
      *

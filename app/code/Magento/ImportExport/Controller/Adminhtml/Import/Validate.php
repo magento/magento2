@@ -63,12 +63,6 @@ class Validate extends \Magento\ImportExport\Controller\Adminhtml\Import
             $resultBlock->addAction(
                 'show',
                 'import_validation_container'
-            )->addAction(
-                'clear',
-                [
-                    \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE,
-                    \Magento\ImportExport\Model\Import::FIELD_NAME_IMG_ARCHIVE_FILE
-                ]
             );
 
             try {

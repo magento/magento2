@@ -7,8 +7,8 @@
 namespace Magento\Backend\Test\Block\Page;
 
 use Mtf\Block\Block;
-use Mtf\Client\Driver\Selenium\Element\GlobalsearchElement;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
+use Mtf\Client\Element\GlobalsearchElement;
 
 /**
  * Header block.

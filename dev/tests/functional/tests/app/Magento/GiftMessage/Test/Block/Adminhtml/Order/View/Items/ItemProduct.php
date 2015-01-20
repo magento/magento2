@@ -6,9 +6,8 @@
 
 namespace Magento\GiftMessage\Test\Block\Adminhtml\Order\View\Items;
 
+use Mtf\Client\Locator;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
 
 /**
  * Class ItemProduct

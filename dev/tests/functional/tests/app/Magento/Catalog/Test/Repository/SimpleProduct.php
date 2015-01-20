@@ -58,8 +58,8 @@ class SimpleProduct extends Product
                 'category_name' => ['value' => 'New category %isolation%'],
                 'parent_category' => ['value' => 'Default'],
             ],
-            'category_name' => '%category::getCategoryName%',
-            'category_id' => '%category::getCategoryId%',
+            'category_name' => '%category::getName%',
+            'category_id' => '%category::getId%',
             'fields' => array_intersect_key(
                 $defaultData['fields'],
                 array_flip(['name', 'sku', 'price', 'weight', 'product_website_1'])

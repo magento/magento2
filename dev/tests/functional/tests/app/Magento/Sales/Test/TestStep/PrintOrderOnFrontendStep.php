@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\TestStep;
 
 use Magento\Sales\Test\Page\SalesGuestView;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\TestStep\TestStepInterface;
 
 /**
@@ -25,16 +25,16 @@ class PrintOrderOnFrontendStep implements TestStepInterface
     /**
      * Browser.
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
     /**
      * @constructor
      * @param SalesGuestView $salesGuestView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      */
-    public function __construct(SalesGuestView $salesGuestView, Browser $browser)
+    public function __construct(SalesGuestView $salesGuestView, BrowserInterface $browser)
     {
         $this->salesGuestView = $salesGuestView;
         $this->browser = $browser;

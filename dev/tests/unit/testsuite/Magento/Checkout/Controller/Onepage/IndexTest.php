@@ -98,7 +98,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->basicMock('\Magento\Framework\ObjectManagerInterface');
         $this->dataMock = $this->basicMock('Magento\Checkout\Helper\Data');
-        $this->quoteMock = $this->basicMock('\Magento\Sales\Model\Quote');
+        $this->quoteMock = $this->basicMock('\Magento\Quote\Model\Quote');
         $this->contextMock = $this->basicMock('\Magento\Framework\App\Action\Context');
         $this->sessionMock = $this->basicMock('\Magento\Customer\Model\Session');
         $this->onepageMock = $this->basicMock('\Magento\Checkout\Model\Type\Onepage');

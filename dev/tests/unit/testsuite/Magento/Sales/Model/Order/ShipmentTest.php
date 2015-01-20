@@ -16,7 +16,7 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
     {
         $helperManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = [];
-        $this->shipmentModel = $helperManager->getObject('Magento\Sales\Model\Order\shipment', $arguments);
+        $this->shipmentModel = $helperManager->getObject('Magento\Sales\Model\Order\Shipment', $arguments);
     }
 
     public function testGetIncrementId()

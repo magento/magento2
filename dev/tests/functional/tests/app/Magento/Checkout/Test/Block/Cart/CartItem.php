@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Block\Cart;
 
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class CartItem
@@ -142,8 +142,8 @@ class CartItem extends AbstractCartItem
         $options = [];
 
         if ($optionsBlock->isVisible()) {
-            $titles = $optionsBlock->find('./dt', Locator::SELECTOR_XPATH)->getElements();
-            $values = $optionsBlock->find('./dd', Locator::SELECTOR_XPATH)->getElements();
+            $titles = $optionsBlock->getElements('./dt', Locator::SELECTOR_XPATH);
+            $values = $optionsBlock->getElements('./dd', Locator::SELECTOR_XPATH);
 
             foreach ($titles as $key => $title) {
                 $value = $values[$key]->getText();

@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\Block\Address;
 
 use Magento\Customer\Test\Fixture\Address;
 use Mtf\Block\Form;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Edit
