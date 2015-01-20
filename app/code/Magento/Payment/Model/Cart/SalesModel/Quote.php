@@ -6,26 +6,26 @@
 namespace Magento\Payment\Model\Cart\SalesModel;
 
 /**
- * Wrapper for \Magento\Sales\Model\Quote sales model
+ * Wrapper for \Magento\Quote\Model\Quote sales model
  */
 class Quote implements \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
 {
     /**
      * Sales quote model instance
      *
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Quote\Model\Quote
      */
     protected $_salesModel;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address
+     * @var \Magento\Quote\Model\Quote\Address
      */
     protected $_address;
 
     /**
-     * @param \Magento\Sales\Model\Quote $salesModel
+     * @param \Magento\Quote\Model\Quote $salesModel
      */
-    public function __construct(\Magento\Sales\Model\Quote $salesModel)
+    public function __construct(\Magento\Quote\Model\Quote $salesModel)
     {
         $this->_salesModel = $salesModel;
         $this->_address = $this

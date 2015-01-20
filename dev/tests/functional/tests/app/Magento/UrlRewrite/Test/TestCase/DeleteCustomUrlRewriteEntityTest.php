@@ -30,6 +30,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteCustomUrlRewriteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Url rewrite index page
      *
