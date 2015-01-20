@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/TestCase/etc/testcase.xsd">
+  <scenario name="CreateOrderFromCustomerPageTest" firstStep="createCustomer">
+    <step name="createCustomer" next="openCustomerOnBackend"/>
+    <step name="openCustomerOnBackend" next="createOrderFromCustomerAccount"/>
+    <step name="createOrderFromCustomerAccount" next="createProducts"/>
+    <step name="createProducts" next="addProducts"/>
+    <step name="addProducts" next="updateProductsData"/>
+    <step name="updateProductsData" next="fillBillingAddress"/>
+    <step name="fillBillingAddress" next="selectPaymentMethodForOrder"/>
+    <step name="selectPaymentMethodForOrder" next="selectShippingMethodForOrder"/>
+    <step name="selectShippingMethodForOrder" next="submitOrder"/>
+    <step name="submitOrder"/>
+  </scenario>
+</config>
