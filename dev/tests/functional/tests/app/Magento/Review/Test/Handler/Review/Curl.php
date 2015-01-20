@@ -6,7 +6,7 @@
 
 namespace Magento\Review\Test\Handler\Review;
 
-use Mtf\System\Config;
+use Mtf\Config;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
