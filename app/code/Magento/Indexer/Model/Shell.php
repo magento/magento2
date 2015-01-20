@@ -242,6 +242,7 @@ Usage:  php -f {$this->_entryPoint} -- [options]
   help                          This help
 
   <indexer>     Comma separated indexer codes or value "all" for all indexers
+
 USAGE;
     }
 }

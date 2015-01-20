@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 /**
+ * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
  */
 class FulltextTest extends \PHPUnit_Framework_TestCase
@@ -113,10 +114,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexAll
+     *
      */
     public function testReindexRowAfterEdit()
     {
+        $this->testReindexAll();
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
 
@@ -137,10 +139,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexRowAfterEdit
+     *
      */
     public function testReindexRowAfterMassAction()
     {
+        $this->testReindexRowAfterEdit();
         $productIds = [
             $this->productApple->getId(),
             $this->productBanana->getId(),
@@ -179,11 +182,12 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexRowAfterMassAction
      * @magentoAppArea adminhtml
      */
     public function testReindexRowAfterDelete()
     {
+        $this->testReindexRowAfterEdit();
+
         $this->productBanana->delete();
 
         $products = $this->search('Simple Product');

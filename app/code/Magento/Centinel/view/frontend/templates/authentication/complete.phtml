@@ -6,7 +6,7 @@
 ?>
 <?php if ($this->getIsProcessed()):?>
     <?php if ($this->getIsSuccess()):?>
-        <script type="text/javascript">
+        <script>
 
             parent.jQuery('[data-container="body"]').trigger("paymentAuthentication", {state: "success"});
 

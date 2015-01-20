@@ -80,7 +80,11 @@ class Factory
         }
         /** If server does not have renderer for any of the accepted types it SHOULD send 406 (not acceptable). */
         throw new \Magento\Webapi\Exception(
-            __('Server cannot understand Accept HTTP header media type.'),
+            __(
+                'Server cannot match any of the given Accept HTTP header media type(s) from the request: "%1" '.
+                'with media types from the config of response renderer.',
+                implode(',', $acceptTypes)
+            ),
             0,
             \Magento\Webapi\Exception::HTTP_NOT_ACCEPTABLE
         );

@@ -228,21 +228,24 @@ class Category extends AbstractResource
         if (!$object->getChildrenCount()) {
             $object->setChildrenCount(0);
         }
-        if ($object->getLevel() === null) {
-            $object->setLevel(1);
-        }
 
-        if (!$object->getId()) {
-            $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
+        if ($object->isObjectNew()) {
             $path = explode('/', $object->getPath());
-            $level = count($path);
-            $object->setLevel($level);
-            if ($level) {
+            $level = count($path)  - ($object->getId() ? 1 : 0);
+            $toUpdateChild = array_diff($path, [$object->getId()]);
+
+            if (!$object->hasPosition()) {
+                $object->setPosition($this->_getMaxPosition(implode('/', $toUpdateChild)) + 1);
+            }
+            if (!$object->hasLevel()) {
+                $object->setLevel($level);
+            }
+            if (!$object->hasParentId() && $level) {
                 $object->setParentId($path[$level - 1]);
             }
-            $object->setPath($object->getPath() . '/');
-
-            $toUpdateChild = explode('/', $object->getPath());
+            if (!$object->getId()) {
+                $object->setPath($object->getPath() . '/');
+            }
 
             $this->_getWriteAdapter()->update(
                 $this->getEntityTable(),

@@ -5,7 +5,7 @@
 
 @toolbar-mode-icon-font-size: 16px;
 @toolbar-background: transparent;
-@toolbar-element-background: #f0f0f0;
+@toolbar-element-background: @color-gray94;
 @pager-action-background: @toolbar-element-background;
 @pager-action-background-hover: darken(@toolbar-element-background, 7%);
 @pager-font-weight: @font-weight-bold;
@@ -14,7 +14,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .page-products .columns {
     position: relative;
@@ -24,7 +24,7 @@
 
 .toolbar {
     select {
-        background-color: @toolbar-element-background;
+        .css(background-color, @toolbar-element-background);
         border-radius: 3px;
         .css(box-shadow, @button-shadow);
     }
@@ -120,13 +120,13 @@
 //    Mobile
 //--------------------------------------
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .toolbar-products {
         margin-bottom: 0;
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .page-products .columns {
         position: relative;
         z-index: 1;
@@ -160,7 +160,7 @@
             float: left;
             border: 1px solid @border-color-base;
             font-weight: @font-weight-base;
-            color: @text-color-muted;
+            .css(color, @text-color-muted);
             text-align: center;
             padding: 7px 10px;
             line-height: 1;
@@ -173,7 +173,7 @@
             }
             &:hover {
                 background: darken(@toolbar-element-background, 2%);
-                color: @text-color-muted;
+                .css(color, @text-color-muted);
             }
             &:last-child {
                 border-radius: 0 3px 3px 0;
@@ -182,7 +182,7 @@
             &.active {
                 .css(box-shadow, @button-shadow-active);
                 background: darken(@toolbar-element-background, 7%);
-                color: #9e9e9e;
+                color: @color-gray62;
             }
             .icon-font(
                 @icon-grid,
