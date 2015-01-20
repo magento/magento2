@@ -8,10 +8,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
         <title>Magento Admin</title>
-        <link src="prototype/prototype.js"/>
         <link src="legacy-build.min.js"/>
         <link src="requirejs/require.js"/>
-        <link src="mage/requirejs/resolver.js"/>
         <link src="jquery.js"/>
         <css src="mage/calendar.css"/>
         <css src="extjs/resources/css/ext-all.css"/>

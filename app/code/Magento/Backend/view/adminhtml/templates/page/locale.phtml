@@ -10,16 +10,16 @@
         <?php echo $this->getLocaleSelect(); ?>
     </div>
     <script>
-        require([
-            'prototype'
-        ], function () {
-            function setInterfaceLanguage(event) {
-                var elem = Event.element(event);
-                if (elem) {
-                    window.location.href = '<?php echo $this->getChangeLocaleUrl() ?>locale/' + elem.value + '/<?php echo $this->getUrlForReferer() ?>';
-                }
+        (function () {
+            'use strict';
+
+            var elem = document.getElementById('footer_interface_locale');
+
+            function onChange() {
+                window.location.href = '<?php echo $this->getChangeLocaleUrl() ?>locale/' + elem.value + '/<?php echo $this->getUrlForReferer() ?>';
             }
-            Event.observe('footer_interface_locale', 'change', setInterfaceLanguage);
-        });
+
+            elem.addEventListener('change', onChange);
+        })();
     </script>
 </div>
