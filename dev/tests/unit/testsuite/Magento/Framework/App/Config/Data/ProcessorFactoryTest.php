@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\App\Config\Data;
 
-class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
+class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\Data\ProcessorFactory
@@ -27,7 +27,6 @@ class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_model = new \Magento\Framework\App\Config\Data\ProcessorFactory($this->_objectManager);
         $this->_processorMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\Data\ProcessorInterface');
-        $this->_processorMock->expects($this->any())->method('processValue')->will($this->returnArgument(0));
     }
 
     /**
@@ -54,6 +53,7 @@ class BackendModelPoolTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Magento\Framework\App\Config\Data\WrongBackendModel is not instance of \Magento\Framework\App\Config\Data\ProcessorInterface
      */
     public function testGetModelWithWrongInterface()
     {

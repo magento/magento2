@@ -122,4 +122,45 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedConfig, $this->_model->read());
     }
+
+    /**
+     * @covers \Magento\Framework\App\Config\Initial\Reader::read
+     * @expectedException \Magento\Framework\Exception
+     * @expectedExceptionMessageRegExp /Invalid XML in file \w+/
+     */
+    public function testReadInvalidConfig()
+    {
+        $testXmlFilesList = [
+            file_get_contents($this->_filePath . 'invalid_config.xml'),
+            file_get_contents($this->_filePath . 'initial_config2.xml'),
+        ];
+        $expectedConfig = ['data' => [], 'metadata' => []];
+
+        $this->_fileResolverMock->expects(
+            $this->at(0)
+        )->method(
+            'get'
+        )->with(
+            'config.xml',
+            'global'
+        )->will(
+            $this->returnValue($testXmlFilesList)
+        );
+
+        $this->_converterMock->expects(
+            $this->never()
+        )->method(
+            'convert'
+        )->with(
+            $this->anything()
+        )->will(
+            $this->returnValue($expectedConfig)
+        );
+
+        $this->rootDirectory->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+
+        $this->rootDirectory->expects($this->any())->method('readFile')->will($this->returnValue('<config></config>'));
+
+        $this->assertEquals($expectedConfig, $this->_model->read());
+    }
 }
