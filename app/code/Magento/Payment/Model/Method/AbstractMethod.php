@@ -787,7 +787,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
     protected function _debug($debugData)
     {
         if ($this->getDebugFlag()) {
-            $this->logger->debug($debugData);
+            $this->logger->debug(var_export($debugData, true));
         }
     }
 
