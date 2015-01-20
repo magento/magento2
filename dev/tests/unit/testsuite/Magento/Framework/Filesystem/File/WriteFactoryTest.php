@@ -28,7 +28,7 @@ class WriteFactoryTest extends \PHPUnit_Framework_TestCase
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);
         $driverPool->expects($this->once())->method('getDriver')->willReturn($driverMock);
         $factory = new WriteFactory($driverPool);
-        $result = $factory->createWithDriverCode('path', 'driverCode');
+        $result = $factory->create('path', 'driverCode');
         $this->assertInstanceOf('Magento\Framework\Filesystem\File\Write', $result);
     }
 

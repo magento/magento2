@@ -31,25 +31,15 @@ class WriteFactory
      * Create a readable file.
      *
      * @param string $path
-     * @param DriverInterface $driver
+     * @param DriverInterface|string $driver Driver or driver code
      * @param string $mode [optional]
      * @return Write
      */
-    public function create($path, DriverInterface $driver, $mode = 'r')
+    public function create($path, $driver, $mode = 'r')
     {
+        if (is_string($driver)) {
+            return new Write($path, $this->driverPool->getDriver($driver), $mode);
+        }
         return new Write($path, $driver, $mode);
-    }
-
-    /**
-     * Create a readable file.
-     *
-     * @param string $path
-     * @param string $driverCode
-     * @param string $mode [optional]
-     * @return Write
-     */
-    public function createWithDriverCode($path, $driverCode, $mode = 'r')
-    {
-        return new Write($path, $this->driverPool->getDriver($driverCode), $mode);
     }
 }

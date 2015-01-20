@@ -31,23 +31,14 @@ class ReadFactory
      * Create a readable file
      *
      * @param string $path
-     * @param DriverInterface $driver
+     * @param DriverInterface|string $driver Driver or driver code
      * @return \Magento\Framework\Filesystem\File\ReadInterface
      */
-    public function create($path, DriverInterface $driver = null)
+    public function create($path, $driver)
     {
+        if (is_string($driver)) {
+            return new Read($path, $this->driverPool->getDriver($driver));
+        }
         return new Read($path, $driver);
-    }
-
-    /**
-     * Create a readable file
-     *
-     * @param string $path
-     * @param string|null $driverCode
-     * @return \Magento\Framework\Filesystem\File\ReadInterface
-     */
-    public function createWithDriverCode($path, $driverCode)
-    {
-        return new Read($path, $this->driverPool->getDriver($driverCode));
     }
 }

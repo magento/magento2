@@ -30,7 +30,7 @@ class ReadFactoryTest extends \PHPUnit_Framework_TestCase
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);
         $driverPool->expects($this->once())->method('getDriver')->willReturn($driverMock);
         $factory = new ReadFactory($driverPool);
-        $result = $factory->createWithDriverCode('path', 'driverCode');
+        $result = $factory->create('path', 'driverCode');
         $this->assertInstanceOf('Magento\Framework\Filesystem\File\Read', $result);
     }
 }

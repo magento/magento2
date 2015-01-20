@@ -52,21 +52,23 @@ class Filesystem
     }
 
     /**
-     * Create an instance of directory with write permissions
+     * Create an instance of directory with read permissions
      *
-     * @param string $code
+     * @param string $directoryCode
+     * @param string $driverCode
      * @return \Magento\Framework\Filesystem\Directory\ReadInterface
      */
-    public function getDirectoryRead($code)
+    public function getDirectoryRead($directoryCode, $driverCode = DriverPool::FILE)
     {
+        $code = $directoryCode . '_' . $driverCode;
         if (!array_key_exists($code, $this->readInstances)) {
-            $this->readInstances[$code] = $this->readFactory->create($this->getDirPath($code));
+            $this->readInstances[$code] = $this->readFactory->create($this->getDirPath($directoryCode), $driverCode);
         }
         return $this->readInstances[$code];
     }
 
     /**
-     * Create an instance of directory with read permissions
+     * Create an instance of directory with write permissions
      *
      * @param string $directoryCode
      * @param string $driverCode
