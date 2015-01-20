@@ -82,7 +82,7 @@ class ResourceProvider
     /**
      * Create resource
      *
-     * @param $resourceKey
+     * @param string $resourceKey
      * @return mixed
      */
     protected function createResource($resourceKey)
