@@ -66,4 +66,16 @@
     <assertProductReviewInGridOnCustomerPage module="Magento_Review">
         <severity>low</severity>
     </assertProductReviewInGridOnCustomerPage>
+    <assertProductReviewIsAbsentOnProductPage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductReviewIsAbsentOnProductPage>
+    <assertProductReviewForm module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductReviewForm>
+    <assertSetApprovedProductReview module="Magento_Review">
+        <severeness>low</severeness>
+    </assertSetApprovedProductReview>
+    <assertReviewLinksIsPresentOnProductPage module="Magento_Review">
+        <severeness>low</severeness>
+    </assertReviewLinksIsPresentOnProductPage>
 </constraint>

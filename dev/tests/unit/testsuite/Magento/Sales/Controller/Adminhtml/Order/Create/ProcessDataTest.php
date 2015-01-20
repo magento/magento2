@@ -133,7 +133,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
     public function testExecute($noDiscount, $couponCode, $errorMessage, $actualCouponCode)
     {
         $quote = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             ['getCouponCode', 'isVirtual', 'getAllItems'],
             [],
             '',
@@ -184,7 +184,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
         $create->expects($this->once())->method('initRuleData')->willReturnSelf();
         $create->expects($this->any())->method('getQuote')->willReturn($quote);
 
-        $address = $this->getMock('Magento\Sales\Model\Quote\Address', [], [], '', false);
+        $address = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
         $create->expects($this->once())->method('getBillingAddress')->willReturn($address);
 
         $quote->expects($this->any())->method('isVirtual')->willReturn(true);

@@ -79,11 +79,11 @@ $table = $installer->getConnection()->newTable(
 $installer->getConnection()->createTable($table);
 
 /**
- * Alter sales_quote table with is_persistent flag
+ * Alter quote table with is_persistent flag
  *
  */
 $installer->getConnection()->addColumn(
-    $installer->getTable('sales_quote'),
+    $installer->getTable('quote'),
     'is_persistent',
     [
         'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,

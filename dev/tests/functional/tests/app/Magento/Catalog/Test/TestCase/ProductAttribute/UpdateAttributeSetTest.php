@@ -29,11 +29,16 @@ use Mtf\TestCase\Injectable;
  * 7. Save Product Template.
  * 8. Preform all assertions.
  *
- * @group Product_Attributes_(CS)
+ * @group Product_Attributes_(MX)
  * @ZephyrId MAGETWO-26251
  */
 class UpdateAttributeSetTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog Product Set page
      *

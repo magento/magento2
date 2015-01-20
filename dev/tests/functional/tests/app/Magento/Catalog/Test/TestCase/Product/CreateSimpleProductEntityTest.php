@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
@@ -28,10 +28,15 @@ use Mtf\TestCase\Injectable;
  */
 class CreateSimpleProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Category fixture
      *
-     * @var CatalogCategory
+     * @var Category
      */
     protected $category;
 
@@ -52,10 +57,10 @@ class CreateSimpleProductEntityTest extends Injectable
     /**
      * Prepare data
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return array
      */
-    public function __prepare(CatalogCategory $category)
+    public function __prepare(Category $category)
     {
         $category->persist();
 
@@ -67,13 +72,13 @@ class CreateSimpleProductEntityTest extends Injectable
     /**
      * Injection data
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductNew $newProductPage
      * @return void
      */
     public function __inject(
-        CatalogCategory $category,
+        Category $category,
         CatalogProductIndex $productGrid,
         CatalogProductNew $newProductPage
     ) {
@@ -86,10 +91,10 @@ class CreateSimpleProductEntityTest extends Injectable
      * Run create product simple entity test
      *
      * @param CatalogProductSimple $product
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function testCreate(CatalogProductSimple $product, CatalogCategory $category)
+    public function testCreate(CatalogProductSimple $product, Category $category)
     {
         // Steps
         $this->productGrid->open();
