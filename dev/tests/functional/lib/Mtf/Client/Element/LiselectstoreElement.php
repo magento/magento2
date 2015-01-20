@@ -89,7 +89,7 @@ class LiselectstoreElement extends SimpleElement
     protected function getLiElements()
     {
         $this->driver->find($this->toggleSelector)->click();
-        $elements = $this->driver->getElements('li', Locator::SELECTOR_TAG_NAME);
+        $elements = $this->driver->getElements($this, 'li', Locator::SELECTOR_TAG_NAME);
         $dropdownData = [];
         foreach ($elements as $element) {
             $class = $element->getAttribute('class');
