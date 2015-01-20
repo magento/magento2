@@ -14,7 +14,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected $priceObj;
 
     /**
-     * @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quote;
 
@@ -43,7 +43,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $this->quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->setMethods(['getStore', '__wakeup', 'getCustomerTaxClassId'])
             ->getMock();
@@ -80,11 +80,11 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param float $shippingPrice
-     * @return \Magento\Sales\Model\Quote\Address\Rate|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Quote\Model\Quote\Address\Rate|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function setupShippingRate($shippingPrice)
     {
-        $shippingRateMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address\Rate')
+        $shippingRateMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address\Rate')
             ->disableOriginalConstructor()
             ->setMethods(['getPrice', '__wakeup'])
             ->getMock();

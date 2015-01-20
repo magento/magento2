@@ -10,12 +10,12 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Payment\Model\Cart\SalesModel\Quote */
     protected $_model;
 
-    /** @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject */
     protected $_quoteMock;
 
     protected function setUp()
     {
-        $this->_quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $this->_quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Quote($this->_quoteMock);
     }
 
@@ -56,17 +56,15 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $isNominal
      * @param string $pItem
      * @param string $name
      * @param int $qty
      * @param float $price
      * @dataProvider getAllItemsDataProvider
      */
-    public function testGetAllItems($isNominal, $pItem, $name, $qty, $price)
+    public function testGetAllItems($pItem, $name, $qty, $price)
     {
-        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item\AbstractItem', [], [], '', false);
-        $itemMock->expects($this->any())->method('isNominal')->will($this->returnValue($isNominal));
+        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item\AbstractItem', [], [], '', false);
         $itemMock->expects($this->any())->method('getParentItem')->will($this->returnValue($pItem));
         $itemMock->expects($this->once())->method('__call')->with('getName')->will($this->returnValue($name));
         $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($qty));
@@ -77,7 +75,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                     'parent_item' => $pItem,
                     'name' => $name,
                     'qty' => $qty,
-                    'price' => $isNominal ? 0 : $price,
+                    'price' => $price,
                     'original_item' => $itemMock,
                 ]
             ),
@@ -89,12 +87,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function getAllItemsDataProvider()
     {
         return [
-            [0, 'parent item 1', 'name 1', 1, 0.1],
-            [1, 'parent item 1', 'name 1', 1, 0.1],
-            [0, 'parent item 2', 'name 2', 2, 1.2],
-            [1, 'parent item 2', 'name 2', 2, 1.2],
-            [0, 'parent item 3', 'name 3', 3, 2.3],
-            [1, 'parent item 3', 'name 3', 3, 2.3]
+            ['parent item 1', 'name 1', 1, 0.1],
+            ['parent item 2', 'name 2', 2, 1.2],
+            ['parent item 3', 'name 3', 3, 2.3],
         ];
     }
 
@@ -119,7 +114,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetter($isVirtual, $getterMethod)
     {
-        $address = $this->getMock('Magento\Sales\Model\Quote\Address', [], [], '', false);
+        $address = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
         $address->expects(
             $this->any()
         )->method(
@@ -129,7 +124,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($getterMethod)
         );
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->any())->method('getIsVirtual')->will($this->returnValue($isVirtual));
         $method = 'getShippingAddress';
         if ($isVirtual) {

@@ -53,7 +53,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve checkout quote
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {
@@ -87,7 +87,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             true
         ) &&
             $quote->getItemsSummaryQty() - $quote->getItemVirtualQty() > 0 &&
-            $quote->getItemsSummaryQty() <= $this->getMaximumQty() &&
-            !$quote->hasNominalItems();
+            $quote->getItemsSummaryQty() <= $this->getMaximumQty();
     }
 }

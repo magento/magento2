@@ -134,7 +134,8 @@ class DataFixture
      * @param \PHPUnit_Framework_TestCase $test
      * @return array
      */
-    private function getAnnotations(\PHPUnit_Framework_TestCase $test) {
+    private function getAnnotations(\PHPUnit_Framework_TestCase $test)
+    {
         $annotations = $test->getAnnotations();
         return array_replace($annotations['class'], $annotations['method']);
     }
@@ -218,15 +219,5 @@ class DataFixture
             }
         }
         $this->_appliedFixtures = [];
-    }
-
-    /**
-     * @param \PHPUnit_Framework_TestCase $test
-     * @return bool
-     */
-    private function hasDependsAnnotation(\PHPUnit_Framework_TestCase $test)
-    {
-        $annotations = $test->getAnnotations();
-        return !empty($annotations['method']['depends']);
     }
 }
