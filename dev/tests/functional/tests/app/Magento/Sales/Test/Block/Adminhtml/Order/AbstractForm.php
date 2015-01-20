@@ -6,8 +6,7 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
+use Mtf\Block\Form;
 
 /**
  * Class Form
