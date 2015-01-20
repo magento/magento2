@@ -21,7 +21,9 @@
     </step>
     <step name="createProducts" next="createCustomer"/>
     <step name="createCustomer" next="openSalesOrders">
-      <item name="customer/dataSet" value="johndoe_with_addresses"/>
+      <item name="customer">
+        <item name="dataSet" value="johndoe_with_addresses"/>
+      </item>
     </step>
     <step name="openSalesOrders" next="createNewOrder"/>
     <step name="createNewOrder" next="selectCustomerOrder"/>

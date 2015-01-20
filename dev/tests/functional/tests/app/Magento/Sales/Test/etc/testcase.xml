@@ -14,7 +14,9 @@
     <step name="setupConfiguration" next="createProducts"/>
     <step name="createProducts" next="createCustomer"/>
     <step name="createCustomer" next="openSalesOrders">
-      <item name="customer/dataSet" value="johndoe_with_addresses"/>
+      <item name="customer">
+        <item name="dataSet" value="johndoe_with_addresses"/>
+      </item>
     </step>
     <step name="openSalesOrders" next="createNewOrder"/>
     <step name="createNewOrder" next="selectCustomerOrder"/>
@@ -30,7 +32,9 @@
   <scenario name="MoveRecentlyViewedProductsOnOrderPageTest" firstStep="createProducts">
     <step name="createProducts" next="createCustomer"/>
     <step name="createCustomer" next="loginCustomerOnFrontend">
-      <item name="customer/dataSet" value="default"/>
+      <item name="customer">
+        <item name="dataSet" value="default"/>
+      </item>
     </step>
     <step name="loginCustomerOnFrontend" next="openProductsOnFrontend"/>
     <step name="openProductsOnFrontend" next="openCustomerOnBackend"/>
@@ -42,7 +46,9 @@
   <scenario name="PrintOrderFrontendGuestTest" firstStep="createProducts">
     <step name="createProducts" next="createCustomer"/>
     <step name="createCustomer" next="openSalesOrders">
-      <item name="customer/dataSet" value="johndoe_with_addresses"/>
+      <item name="customer">
+        <item name="dataSet" value="johndoe_with_addresses"/>
+      </item>
     </step>
     <step name="openSalesOrders" next="createNewOrder"/>
     <step name="createNewOrder" next="selectCustomerOrder"/>
@@ -50,10 +56,14 @@
     <step name="selectStore" next="addProducts"/>
     <step name="addProducts" next="fillBillingAddress"/>
     <step name="fillBillingAddress" next="selectPaymentMethodForOrder">
-      <item name="billingAddress/dataSet" value="customer_US"/>
+      <item name="billingAddress">
+        <item name="dataSet" value="customer_US"/>
+      </item>
     </step>
     <step name="selectPaymentMethodForOrder" next="selectShippingMethodForOrder">
-      <item name="payment/method" value="checkmo"/>
+      <item name="payment">
+        <item name="method" value="checkmo"/>
+      </item>
     </step>
     <step name="selectShippingMethodForOrder" next="submitOrder"/>
     <step name="submitOrder" next="openSalesOrderOnFrontendForGuest"/>
