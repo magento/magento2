@@ -77,7 +77,7 @@ class CartRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/gift-message',
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => RestConfig::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

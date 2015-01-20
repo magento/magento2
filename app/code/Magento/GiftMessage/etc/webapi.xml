@@ -19,13 +19,13 @@
             <resource ref="Magento_Sales::create" />
         </resources>
     </route>
-    <route url="/V1/carts/:cartId/gift-message" method="PUT">
+    <route url="/V1/carts/:cartId/gift-message" method="POST">
         <service class="Magento\GiftMessage\Api\CartRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::create" />
         </resources>
     </route>
-    <route url="/V1/carts/:cartId/gift-message/:itemId" method="PUT">
+    <route url="/V1/carts/:cartId/gift-message/:itemId" method="POST">
         <service class="Magento\GiftMessage\Api\ItemRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Sales::create" />
