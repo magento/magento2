@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Adminhtml\Edit;
@@ -16,6 +17,20 @@ use Mtf\Fixture\InjectableFixture;
 class CustomerForm extends FormTabs
 {
     /**
+     * Load spinner
+     *
+     * @var string
+     */
+    protected $spinner = '[data-role="spinner"]';
+
+    /**
+     * Customer form to load
+     *
+     * @var string
+     */
+    protected $activeFormTab = '.entry-edit.form-inline [data-bind="visible: active"]:not([style="display: none;"])';
+
+    /**
      * Fill Customer forms on tabs by customer, addresses data
      *
      * @param FixtureInterface $customer
@@ -25,7 +40,7 @@ class CustomerForm extends FormTabs
     public function fillCustomer(FixtureInterface $customer, $address = null)
     {
         $isHasData = ($customer instanceof InjectableFixture) ? $customer->hasData() : true;
-        $this->waitBeforeFill();
+        $this->waitForm();
         if ($isHasData) {
             parent::fill($customer);
         }
@@ -47,7 +62,7 @@ class CustomerForm extends FormTabs
     public function updateCustomer(FixtureInterface $customer, $address = null)
     {
         $isHasData = ($customer instanceof InjectableFixture) ? $customer->hasData() : true;
-        $this->waitBeforeFill();
+        $this->waitForm();
         if ($isHasData) {
             parent::fill($customer);
         }
@@ -68,6 +83,7 @@ class CustomerForm extends FormTabs
      */
     public function getDataCustomer(FixtureInterface $customer, $address = null)
     {
+        $this->waitForm();
         $data = ['customer' => $customer->hasData() ? parent::getData($customer) : parent::getData()];
 
         if (null !== $address) {
@@ -84,8 +100,9 @@ class CustomerForm extends FormTabs
      *
      * @return void
      */
-    protected function waitBeforeFill()
+    protected function waitForm()
     {
-        usleep(500000);
+        $this->waitForElementNotVisible($this->spinner);
+        $this->waitForElementVisible($this->activeFormTab);
     }
 }

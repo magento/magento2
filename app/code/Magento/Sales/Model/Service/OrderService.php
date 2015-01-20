@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Service;
 
@@ -143,5 +144,25 @@ class OrderService implements OrderManagementInterface
     public function unHold($id)
     {
         return (bool)$this->orderRepository->get($id)->unhold();
+    }
+
+    /**
+     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @return \Magento\Sales\Api\Data\OrderInterface
+     */
+    public function place(\Magento\Sales\Api\Data\OrderInterface $order)
+    {
+        // transaction will be here
+        //begin transaction
+        try {
+//            $order = $this->orderRepository->save($order);
+            $order->place();
+            return $this->orderRepository->save($order);
+
+            //commit
+        } catch (\Exception $e) {
+            throw $e;
+            //rollback;
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\Carrier;
 
@@ -33,7 +34,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     protected $_rateResultFactory;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory
      */
     protected $_resultMethodFactory;
 
@@ -44,19 +45,19 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
-     * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory
      * @param \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
-        \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $resultMethodFactory,
         \Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory $tablerateFactory,
         array $data = []
     ) {
@@ -70,10 +71,10 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
      */
-    public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function collectRates(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         if (!$this->getConfigFlag('active')) {
             return false;
@@ -143,7 +144,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         $request->setPackageQty($oldQty);
 
         if (!empty($rate) && $rate['price'] >= 0) {
-            /** @var \Magento\Sales\Model\Quote\Address\RateResult\Method $method */
+            /** @var \Magento\Quote\Model\Quote\Address\RateResult\Method $method */
             $method = $this->_resultMethodFactory->create();
 
             $method->setCarrier('tablerate');
@@ -163,7 +164,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
 
             $result->append($method);
         } else {
-            /** @var \Magento\Sales\Model\Quote\Address\RateResult\Error $error */
+            /** @var \Magento\Quote\Model\Quote\Address\RateResult\Error $error */
             $error = $this->_rateErrorFactory->create(
                 [
                     'data' => [
@@ -180,10 +181,10 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array|bool
      */
-    public function getRate(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function getRate(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         return $this->_tablerateFactory->create()->getRate($request);
     }

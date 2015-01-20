@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Service\V1\Data\Cart;
 
@@ -21,7 +22,7 @@ class TotalsMapperTest extends \PHPUnit_Framework_TestCase
         $methods = ['getBaseGrandTotal', 'getGrandTotal', 'getBaseSubtotal', 'getSubtotal','getBaseCurrencyCode',
             'getBaseSubtotalWithDiscount', 'getSubtotalWithDiscount', 'getShippingAddress', '__wakeUp',
             'getQuoteCurrencyCode', ];
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', $methods, [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', $methods, [], '', false);
         $methods = [
             'getDiscountAmount', 'getBaseDiscountAmount', 'getShippingAmount', 'getBaseShippingAmount',
             'getShippingDiscountAmount', 'getBaseShippingDiscountAmount', 'getTaxAmount', 'getBaseTaxAmount',
@@ -29,7 +30,7 @@ class TotalsMapperTest extends \PHPUnit_Framework_TestCase
             'getShippingInclTax', 'getBaseShippingInclTax', 'getId', '__wakeUp',
         ];
 
-        $shippingAddressMock = $this->getMock('\Magento\Sales\Model\Quote\Address', $methods, [], '', false);
+        $shippingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', $methods, [], '', false);
 
         $quoteMock->expects($this->any())->method('getShippingAddress')
             ->will($this->returnValue($shippingAddressMock));

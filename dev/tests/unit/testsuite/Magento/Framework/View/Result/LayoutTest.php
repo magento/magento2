@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Result;
@@ -27,6 +28,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     protected $layout;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\InlineInterface
+     */
+    protected $translateInline;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Result\Layout
      */
     protected $resultLayout;
@@ -36,6 +42,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        $this->translateInline = $this->getMock('Magento\Framework\Translate\InlineInterface');
 
         $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $context->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
@@ -43,7 +50,10 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())->method('getEventManager')->will($this->returnValue($this->eventManager));
 
         $this->resultLayout = (new \Magento\TestFramework\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\View\Result\Layout', ['context' => $context]);
+            ->getObject(
+                'Magento\Framework\View\Result\Layout',
+                ['context' => $context, 'translateInline' => $this->translateInline]
+            );
     }
 
     /**
@@ -90,12 +100,14 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      * @param bool $replaceHeader
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setHttpResponseCodeCount
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setHeaderCount
-     * @dataProvider providerRenderResult
+     * @dataProvider renderResultDataProvider
      */
     public function testRenderResult(
         $httpCode, $headerName, $headerValue, $replaceHeader, $setHttpResponseCodeCount, $setHeaderCount
     ) {
-        $this->layout->expects($this->once())->method('getOutput')->will($this->returnValue('output'));
+        $layoutOutput = 'output';
+
+        $this->layout->expects($this->once())->method('getOutput')->will($this->returnValue($layoutOutput));
 
         $this->request->expects($this->once())->method('getFullActionName')
             ->will($this->returnValue('Module_Controller_Action'));
@@ -105,11 +117,16 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ['layout_render_before_Module_Controller_Action']
         );
 
+        $this->translateInline->expects($this->once())
+            ->method('processResponseBody')
+            ->with($layoutOutput)
+            ->willReturnSelf();
+
         /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject $response */
         $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $response->expects($setHttpResponseCodeCount)->method('setHttpResponseCode')->with($httpCode);
         $response->expects($setHeaderCount)->method('setHeader')->with($headerName, $headerValue, $replaceHeader);
-        $response->expects($this->once())->method('appendBody')->with('output');
+        $response->expects($this->once())->method('appendBody')->with($layoutOutput);
 
         $this->resultLayout->setHttpResponseCode($httpCode);
 
@@ -123,7 +140,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function providerRenderResult()
+    public function renderResultDataProvider()
     {
         return [
             [200, 'content-type', 'text/html', true, $this->once(), $this->once()],

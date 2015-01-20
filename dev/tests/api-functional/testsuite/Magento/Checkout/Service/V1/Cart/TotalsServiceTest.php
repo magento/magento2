@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Service\V1\Cart;
 
@@ -46,12 +47,12 @@ class TotalsServiceTest extends WebapiAbstract
      */
     public function testGetTotals()
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
-        /** @var \Magento\Sales\Model\Quote\Address $shippingAddress */
+        /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
         $shippingAddress = $quote->getShippingAddress();
 
         $data = [
@@ -144,10 +145,10 @@ class TotalsServiceTest extends WebapiAbstract
     /**
      * Fetch quote item totals data from quote
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return array
      */
-    protected function getQuoteItemTotalsData(\Magento\Sales\Model\Quote $quote)
+    protected function getQuoteItemTotalsData(\Magento\Quote\Model\Quote $quote)
     {
         $items = $quote->getAllItems();
         $item = array_shift($items);

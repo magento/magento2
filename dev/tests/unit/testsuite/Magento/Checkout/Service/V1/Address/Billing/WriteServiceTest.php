@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\Address\Billing;
@@ -45,13 +46,13 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->addressFactoryMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\AddressFactory', ['create', '__wakeup'], [], '', false
+            '\Magento\Quote\Model\Quote\AddressFactory', ['create', '__wakeup'], [], '', false
         );
 
         $this->quoteAddressMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             ['getCustomerId', 'load', 'getData', 'setData', 'setStreet', 'setRegionId', 'setRegion', '__wakeup'],
             [],
             '',
@@ -86,7 +87,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddressValidationFailed()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cartId')
@@ -100,7 +101,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAddress()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cartId')
@@ -131,7 +132,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('setDataChanges')->with(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
         $addressId = 1;
-        $billingAddressMock = $this->getMock('\Magento\Sales\Model\Quote\Address', [], [], '', false);
+        $billingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
         $billingAddressMock->expects($this->once())->method('getId')->will($this->returnValue($addressId));
         $quoteMock->expects($this->once())->method('getBillingAddress')
             ->will($this->returnValue($billingAddressMock));
@@ -145,7 +146,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cartId')

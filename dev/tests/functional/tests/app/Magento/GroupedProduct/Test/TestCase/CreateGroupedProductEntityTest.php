@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GroupedProduct\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
@@ -33,6 +34,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateGroupedProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Page product on backend
      *
@@ -50,10 +56,10 @@ class CreateGroupedProductEntityTest extends Injectable
     /**
      * Persist category
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return array
      */
-    public function __prepare(CatalogCategory $category)
+    public function __prepare(Category $category)
     {
         $category->persist();
         return ['category' => $category];
@@ -78,10 +84,10 @@ class CreateGroupedProductEntityTest extends Injectable
      * Test create grouped product
      *
      * @param GroupedProductInjectable $product
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function test(GroupedProductInjectable $product, CatalogCategory $category)
+    public function test(GroupedProductInjectable $product, Category $category)
     {
         //Steps
         $this->catalogProductIndex->open();

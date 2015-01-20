@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\Theme;
 
@@ -216,7 +217,6 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
             'area' => $pathData['area'],
             'theme_path' => $themePath,
             'code' => $themeCode,
-            'theme_version' => $themeConfig->getThemeVersion(),
             'theme_title' => $themeConfig->getThemeTitle(),
             'preview_image' => $media['preview_image'] ? $media['preview_image'] : null,
             'parent_theme_path' => $parentPath

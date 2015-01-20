@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\TestModuleMSC\Model\Data;
 
 use Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface;
 
-class CustomAttributeDataObject extends \Magento\Framework\Api\AbstractExtensibleObject
-    implements CustomAttributeDataObjectInterface
+class CustomAttributeDataObject extends \Magento\Framework\Api\AbstractExtensibleObject implements
+    CustomAttributeDataObjectInterface
 {
     /**
      * @return string

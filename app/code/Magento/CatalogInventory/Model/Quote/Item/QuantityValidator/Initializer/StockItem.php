@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
@@ -44,7 +45,7 @@ class StockItem
      * Initialize stock item
      *
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem
-     * @param \Magento\Sales\Model\Quote\Item $quoteItem
+     * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @param int $qty
      *
      * @return \Magento\Framework\Object
@@ -52,7 +53,7 @@ class StockItem
      */
     public function initialize(
         \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem,
-        \Magento\Sales\Model\Quote\Item $quoteItem,
+        \Magento\Quote\Model\Quote\Item $quoteItem,
         $qty
     ) {
         /**

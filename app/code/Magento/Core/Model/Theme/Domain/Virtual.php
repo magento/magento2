@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -118,7 +119,6 @@ class Virtual implements \Magento\Framework\View\Design\Theme\Domain\VirtualInte
             [
                 'parent_id' => $this->_theme->getId(),
                 'theme_path' => null,
-                'theme_version' => $this->_theme->getThemeVersion(),
                 'theme_title' => sprintf('%s - Staging', $this->_theme->getThemeTitle()),
                 'preview_image' => $this->_theme->getPreviewImage(),
                 'is_featured' => $this->_theme->getIsFeatured(),

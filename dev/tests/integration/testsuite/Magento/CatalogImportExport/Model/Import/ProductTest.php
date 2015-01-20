@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -35,6 +36,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $_uploaderFactory;
 
+    /**
+     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_stockStateProvider;
+
     protected function setUp()
     {
         $this->_uploaderFactory = $this->getMock(
@@ -44,9 +50,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->_stockStateProvider = $this->getMock(
+            'Magento\CatalogInventory\Model\StockStateProvider',
+            ['verifyStock'],
+            [],
+            '',
+            false
+        );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\CatalogImportExport\Model\Import\Product',
-            ['uploaderFactory' => $this->_uploaderFactory]
+            [
+                'uploaderFactory' => $this->_uploaderFactory,
+                'stockStateProvider' => $this->_stockStateProvider
+            ]
         );
     }
 
@@ -169,6 +186,34 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test if stock state properly changed after import
+     *
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+    public function testStockState()
+    {
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv(
+            __DIR__ . '/_files/products_to_import_with_qty.csv',
+            $directory
+        );
+
+        $this->assertTrue(
+            $this->_model
+                ->setParameters(
+                    ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE, 'entity' => 'catalog_product']
+                )
+                ->setSource($source)
+                ->isDataValid()
+        );
+
+        $this->_stockStateProvider->expects($this->atLeastOnce())->method('verifyStock')->willReturn(true);
+        $this->_model->importData();
+    }
+
+    /**
      * Tests adding of custom options with existing and new product
      *
      * @param $behavior
@@ -181,6 +226,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveCustomOptions($behavior, $importFile, $sku)
     {
+        $this->_stockStateProvider->method('verifyStock')->willReturn(true);
+
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/' . $importFile;
 
@@ -241,6 +288,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveDatetimeAttribute()
     {
+        $this->_stockStateProvider->method('verifyStock')->willReturn(true);
+
         $existingProductIds = [10, 11, 12];
         $productsBeforeImport = [];
         foreach ($existingProductIds as $productId) {
@@ -653,6 +702,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidSkuLink()
     {
+        $this->_stockStateProvider->method('verifyStock')->willReturn(true);
+
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/products_to_import_invalid_attribute_set.csv';
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

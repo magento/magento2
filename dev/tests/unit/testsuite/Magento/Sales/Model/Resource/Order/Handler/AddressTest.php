@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Resource\Order\Handler;
 
@@ -86,8 +87,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->orderMock->expects($this->exactly(2))
             ->method('getAddresses')
-            ->willReturn([$this->addressCollectionMock]);
-        $this->addressCollectionMock->expects($this->once())
+            ->willReturn([$this->addressMock]);
+        $this->addressMock->expects($this->once())
             ->method('save')
             ->will($this->returnSelf());
         $this->orderMock->expects($this->once())
@@ -119,8 +120,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->orderMock->expects($this->exactly(2))
             ->method('getAddresses')
-            ->willReturn([$this->addressCollectionMock]);
-        $this->addressCollectionMock->expects($this->once())
+            ->willReturn([$this->addressMock]);
+        $this->addressMock->expects($this->once())
             ->method('save')
             ->will($this->returnSelf());
         $this->orderMock->expects($this->once())

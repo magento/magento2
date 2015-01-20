@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -53,7 +54,6 @@ class Theme
     protected function _extractData($configContent)
     {
         $data = [
-            'version' => null,
             'title' => null,
             'media' => null,
             'parent' => null,
@@ -71,23 +71,11 @@ class Theme
             $mediaNode = $themeNode->getElementsByTagName('media')->item(0);
             $previewImage = $mediaNode ? $mediaNode->getElementsByTagName('preview_image')->item(0)->nodeValue : '';
             $data['media']['preview_image'] = $previewImage;
-            $themeVersionNode = $themeNode->getElementsByTagName('version')->item(0);
-            $data['version'] = $themeVersionNode ? $themeVersionNode->nodeValue : null;
             $themeParentNode = $themeNode->getElementsByTagName('parent')->item(0);
             $data['parent'] = $themeParentNode ? $themeParentNode->nodeValue : null;
         }
 
         return $data;
-    }
-
-    /**
-     * Get title for specified package code
-     *
-     * @return string
-     */
-    public function getThemeVersion()
-    {
-        return $this->_data['version'];
     }
 
     /**

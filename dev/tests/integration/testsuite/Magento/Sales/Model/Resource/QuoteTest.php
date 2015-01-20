@@ -1,20 +1,21 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Resource;
 
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Quote
+     * @var \Magento\Quote\Model\Resource\Quote
      */
     protected $_resourceModel;
 
     protected function setUp()
     {
         $this->_resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Resource\Quote'
+            'Magento\Quote\Model\Resource\Quote'
         );
     }
 

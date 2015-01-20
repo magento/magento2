@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
@@ -43,15 +44,15 @@ class Option
     /**
      * Init stock item
      *
-     * @param \Magento\Sales\Model\Quote\Item\Option $option
-     * @param \Magento\Sales\Model\Quote\Item $quoteItem
+     * @param \Magento\Quote\Model\Quote\Item\Option $option
+     * @param \Magento\Quote\Model\Quote\Item $quoteItem
      *
      * @return \Magento\CatalogInventory\Model\Stock\Item
      * @throws \Magento\Framework\Model\Exception
      */
     public function getStockItem(
-        \Magento\Sales\Model\Quote\Item\Option $option,
-        \Magento\Sales\Model\Quote\Item $quoteItem
+        \Magento\Quote\Model\Quote\Item\Option $option,
+        \Magento\Quote\Model\Quote\Item $quoteItem
     ) {
         $stockItem = $this->stockRegistry->getStockItem(
             $option->getProduct()->getId(),
@@ -75,16 +76,16 @@ class Option
     /**
      * Initialize item option
      *
-     * @param \Magento\Sales\Model\Quote\Item\Option $option
-     * @param \Magento\Sales\Model\Quote\Item $quoteItem
+     * @param \Magento\Quote\Model\Quote\Item\Option $option
+     * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @param int $qty
      *
      * @return \Magento\Framework\Object
      * @throws \Magento\Framework\Model\Exception
      */
     public function initialize(
-        \Magento\Sales\Model\Quote\Item\Option $option,
-        \Magento\Sales\Model\Quote\Item $quoteItem,
+        \Magento\Quote\Model\Quote\Item\Option $option,
+        \Magento\Quote\Model\Quote\Item $quoteItem,
         $qty
     ) {
         $optionValue = $option->getValue();

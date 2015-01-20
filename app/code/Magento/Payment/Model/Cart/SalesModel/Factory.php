@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Cart\SalesModel;
 
@@ -25,14 +26,14 @@ class Factory
     /**
      * Wrap sales model with Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
      *
-     * @param \Magento\Sales\Model\Order|\Magento\Sales\Model\Quote $salesModel
+     * @param \Magento\Sales\Model\Order|\Magento\Quote\Model\Quote $salesModel
      * @return \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
      * @throws \InvalidArgumentException
      */
     public function create($salesModel)
     {
         $arguments = ['salesModel' => $salesModel];
-        if ($salesModel instanceof \Magento\Sales\Model\Quote) {
+        if ($salesModel instanceof \Magento\Quote\Model\Quote) {
             return $this->_objectManager->create('Magento\Payment\Model\Cart\SalesModel\Quote', $arguments);
         } elseif ($salesModel instanceof \Magento\Sales\Model\Order) {
             return $this->_objectManager->create('Magento\Payment\Model\Cart\SalesModel\Order', $arguments);

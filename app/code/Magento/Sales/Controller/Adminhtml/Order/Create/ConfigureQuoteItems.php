@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
@@ -23,14 +24,14 @@ class ConfigureQuoteItems extends \Magento\Sales\Controller\Adminhtml\Order\Crea
                 throw new \Magento\Framework\Model\Exception(__('Quote item id is not received.'));
             }
 
-            $quoteItem = $this->_objectManager->create('Magento\Sales\Model\Quote\Item')->load($quoteItemId);
+            $quoteItem = $this->_objectManager->create('Magento\Quote\Model\Quote\Item')->load($quoteItemId);
             if (!$quoteItem->getId()) {
                 throw new \Magento\Framework\Model\Exception(__('Quote item is not loaded.'));
             }
 
             $configureResult->setOk(true);
             $optionCollection = $this->_objectManager->create(
-                'Magento\Sales\Model\Quote\Item\Option'
+                'Magento\Quote\Model\Quote\Item\Option'
             )->getCollection()->addItemFilter(
                 [$quoteItemId]
             );

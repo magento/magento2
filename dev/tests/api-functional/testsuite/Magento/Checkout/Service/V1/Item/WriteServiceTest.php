@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\Item;
@@ -32,8 +33,8 @@ class WriteServiceTest extends WebapiAbstract
     {
         $product = $this->objectManager->create('Magento\Catalog\Model\Product')->load(2);
         $productSku = $product->getSku();
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
         $serviceInfo = [
@@ -65,8 +66,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testRemoveItem()
     {
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
         $product = $this->objectManager->create('Magento\Catalog\Model\Product');
@@ -90,7 +91,7 @@ class WriteServiceTest extends WebapiAbstract
             "itemId" => $itemId,
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $this->assertFalse($quote->hasProductId($productId));
     }
@@ -100,8 +101,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testUpdateItem()
     {
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $cartId = $quote->getId();
         $product = $this->objectManager->create('Magento\Catalog\Model\Product');
@@ -128,7 +129,7 @@ class WriteServiceTest extends WebapiAbstract
             ],
         ];
         $this->assertTrue($this->_webApiCall($serviceInfo, $requestData));
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_item_with_items', 'reserved_order_id');
         $this->assertTrue($quote->hasProductId(1));
         $this->assertEquals(5, $quote->getItemByProduct($product)->getQty());

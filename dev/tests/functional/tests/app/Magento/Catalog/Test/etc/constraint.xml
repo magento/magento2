@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <constraint>
@@ -37,7 +38,7 @@
         <require>
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+            <category class="Magento\Catalog\Test\Fixture\Category" />
             <product class="Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductVisibleInCategory>
@@ -46,7 +47,7 @@
         <require>
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+            <category class="Magento\Catalog\Test\Fixture\Category" />
             <product class="Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductNotVisibleInCategory>
@@ -64,7 +65,7 @@
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <product class="Mtf\Fixture\FixtureInterface" />
-            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+            <category class="Magento\Catalog\Test\Fixture\Category" />
         </require>
     </assertProductInCategory>
     <assertProductInCart module="Magento_Catalog">
@@ -129,7 +130,7 @@
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <product class="Mtf\Fixture\FixtureInterface" />
-            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+            <category class="Magento\Catalog\Test\Fixture\Category" />
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
             <catalogSearchResult class="Magento\CatalogSearch\Test\Page\CatalogsearchResult" />
         </require>
@@ -290,13 +291,13 @@
         <require>
             <browser class="Mtf\Client\Browser" />
             <categoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
-            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+            <category class="Magento\Catalog\Test\Fixture\Category" />
         </require>
     </assertCategoryAbsenceOnFrontend>
     <assertCategoryAbsenceOnBackend module="Magento_Catalog">
         <severity>low</severity>
         <require>
-            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+            <category class="Magento\Catalog\Test\Fixture\Category" />
             <catalogCategoryIndex class="Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex" />
         </require>
     </assertCategoryAbsenceOnBackend>

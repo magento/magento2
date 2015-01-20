@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
 
@@ -54,6 +55,12 @@ class OrderCreateTest extends WebapiAbstract
 
         $email = uniqid() . 'email@example.com';
         $orderItem->setSku('sku#1');
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $orderItem->setData('parent_item', $orderItem->getData() + ['parent_item' => null]);
+            $orderItem->setAdditionalData('test');
+        } else {
+            $orderItem->setData('parent_item', ['weight' => 1]);
+        }
         $orderPayment->setCcLast4('4444');
         $orderPayment->setMethod('checkmo');
         $orderPayment->setAccountStatus('ok');

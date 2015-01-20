@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Adapter;
 
@@ -260,11 +261,16 @@ abstract class AbstractAdapter implements AdapterInterface
      * Initialize default values
      *
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, array $data = [])
-    {
+    public function __construct(
+        \Magento\Framework\Filesystem $filesystem,
+        \Psr\Log\LoggerInterface $logger,
+        array $data = []
+    ) {
         $this->_filesystem = $filesystem;
+        $this->logger = $logger;
         $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
     }
 

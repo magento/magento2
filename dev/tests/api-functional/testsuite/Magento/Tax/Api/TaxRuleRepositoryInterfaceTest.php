@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tax\Api;
@@ -268,10 +269,12 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
 
         $fixtureRule = $this->getFixtureTaxRules()[1];
 
+        $searchData = $this->searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -279,8 +282,6 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $searchData = $this->searchCriteriaBuilder->create()->__toArray();
-        $requestData = ['searchCriteria' => $searchData];
 
         /** @var \Magento\Framework\Api\SearchResults $searchResults */
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
@@ -323,10 +324,12 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
 
         $fixtureRule = $this->getFixtureTaxRules()[1];
 
+        $searchData = $this->searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -334,8 +337,6 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $searchData = $this->searchCriteriaBuilder->create()->__toArray();
-        $requestData = ['searchCriteria' => $searchData];
 
         /** @var \Magento\Framework\Api\SearchResults $searchResults */
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
@@ -513,17 +514,6 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
     {
         $fixtureRule = $this->getFixtureTaxRules()[0];
 
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'GetList',
-            ],
-        ];
 
         $filter = $this->filterBuilder->setField('code')
             ->setValue($fixtureRule->getCode())
@@ -531,6 +521,17 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         $this->searchCriteriaBuilder->addFilter([$filter]);
         $searchData = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(1, $searchResults['total_count']);
         $this->assertEquals($fixtureRule->getId(), $searchResults['items'][0]["id"]);

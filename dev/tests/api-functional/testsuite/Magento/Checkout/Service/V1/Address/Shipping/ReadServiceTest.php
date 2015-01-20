@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\Address\Shipping;
@@ -31,10 +32,10 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetAddress()
     {
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
 
-        /** @var \Magento\Sales\Model\Quote\Address  $address */
+        /** @var \Magento\Quote\Model\Quote\Address  $address */
         $address = $quote->getShippingAddress();
 
         $data = [
@@ -82,7 +83,7 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetAddressOfQuoteWithVirtualProduct()
     {
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $cartId = $quote->load('test_order_with_virtual_product', 'reserved_order_id')->getId();
 
         $serviceInfo = $this->getServiceInfo();

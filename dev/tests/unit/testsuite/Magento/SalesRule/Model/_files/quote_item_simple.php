@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 return [
@@ -68,7 +69,6 @@ return [
     'product' => null,
     'tax_class_id' => '2',
     'has_error' => false,
-    'is_nominal' => false,
     'base_calculation_price' => 10,
     'calculation_price' => 10,
     'converted_price' => 10,

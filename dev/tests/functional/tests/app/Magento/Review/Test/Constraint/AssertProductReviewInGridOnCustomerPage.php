@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Review\Test\Constraint;
@@ -9,7 +10,7 @@ use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Review\Test\Block\Adminhtml\Product\Grid as ReviewsGrid;
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -26,8 +27,8 @@ class AssertProductReviewInGridOnCustomerPage extends AbstractConstraint
      * Asserts all Product Review variables in the reviews grid on customer page
      *
      * @param CustomerInjectable $customer
-     * @param ReviewInjectable $reviewInitial
-     * @param ReviewInjectable $review
+     * @param Review $reviewInitial
+     * @param Review $review
      * @param CustomerIndexEdit $customerIndexEdit
      * @param CustomerIndex $customerIndex
      * @param AssertProductReviewInGrid $assertProductReviewInGrid
@@ -35,8 +36,8 @@ class AssertProductReviewInGridOnCustomerPage extends AbstractConstraint
      */
     public function processAssert(
         CustomerInjectable $customer,
-        ReviewInjectable $reviewInitial,
-        ReviewInjectable $review,
+        Review $reviewInitial,
+        Review $review,
         CustomerIndexEdit $customerIndexEdit,
         CustomerIndex $customerIndex,
         AssertProductReviewInGrid $assertProductReviewInGrid
@@ -60,11 +61,11 @@ class AssertProductReviewInGridOnCustomerPage extends AbstractConstraint
     /**
      * Prepare Review data
      *
-     * @param ReviewInjectable $review
-     * @param ReviewInjectable $reviewInitial
+     * @param Review $review
+     * @param Review $reviewInitial
      * @return array
      */
-    protected function prepareData(ReviewInjectable $review, ReviewInjectable $reviewInitial)
+    protected function prepareData(Review $review, Review $reviewInitial)
     {
         $dataReviewInitial = $reviewInitial->getData();
         $data = $review->getData();

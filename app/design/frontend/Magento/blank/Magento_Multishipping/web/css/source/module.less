@@ -1,12 +1,13 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .multicheckout {
     .title {
@@ -54,7 +55,7 @@
             }
         }
     }
-    
+
     > .actions-toolbar {
         margin-top: @indent-xl-base;
     }
@@ -84,7 +85,7 @@
         &:extend(.abs-product-options-list all);
         &:extend(.abs-add-clearfix all);
     }
-    
+
     &:extend(.abs-account-blocks all);
 
     .block {
@@ -120,7 +121,7 @@
         strong {
             font-weight: @font-weight-base;
             span {
-                color: @color-primary-light;
+                .css(color, @color-primary-light);
             }
         }
     }
@@ -196,7 +197,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .multicheckout {
         .data.table {
             .address {
@@ -253,7 +254,7 @@
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .multicheckout {
         .actions-toolbar {
             .column:not(.sidebar-main) & {
