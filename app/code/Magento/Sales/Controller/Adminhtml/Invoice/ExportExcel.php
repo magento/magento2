@@ -52,7 +52,7 @@ class ExportExcel extends \Magento\Backend\App\Action
     public function execute()
     {
         $fileName = 'invoices.xml';
-        $exportBlock = $exportBlock = $this->resultLayoutFactory->create()
+        $exportBlock = $this->resultLayoutFactory->create()
             ->getLayout()
             ->getChildBlock('sales.invoice.grid', 'grid.export');
         return $this->_fileFactory->create(

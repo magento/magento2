@@ -137,7 +137,7 @@ class Guest extends \Magento\Core\Helper\Data
 
         $fromCookie = $this->cookieManager->getCookie(self::COOKIE_NAME);
         if (empty($post) && !$fromCookie) {
-            return $this->resultRedirectFactory->create()->setPath('sales/order/form');
+            return $this->resultRedirectFactory->create()->setPath('sales/guest/form');
         } elseif (!empty($post) && isset($post['oar_order_id']) && isset($post['oar_type'])) {
             $type = $post['oar_type'];
             $incrementId = $post['oar_order_id'];
@@ -194,7 +194,7 @@ class Guest extends \Magento\Core\Helper\Data
         }
 
         $this->messageManager->addError(__('You entered incorrect data. Please try again.'));
-        return $this->resultRedirectFactory->create()->setPath('sales/order/form');
+        return $this->resultRedirectFactory->create()->setPath('sales/guest/form');
     }
 
     /**

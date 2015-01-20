@@ -24,6 +24,8 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create\Index
      */
     public function execute()
     {
+        $this->_initSession();
+
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Sales::sales_order');
