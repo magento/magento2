@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
     <variation>
         <data name="description">Re-authorize integration</data>
         <data name="constraint">assertIntegrationSuccessReauthorizeMessage, assertIntegrationForm, assertIntegrationTokensAfterReauthorize</data>

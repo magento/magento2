@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
     <variation>
         <data name="taxRule/dataSet">tax_rule_with_custom_tax_classes</data>
         <data name="address/data/country_id">United States</data>

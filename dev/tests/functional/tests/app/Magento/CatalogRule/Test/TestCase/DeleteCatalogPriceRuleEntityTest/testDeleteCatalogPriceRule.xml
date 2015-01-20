@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
     <variation>
         <data name="catalogPriceRule/dataSet">active_catalog_price_rule_with_conditions</data>
         <data name="constraint">assertCatalogPriceRuleSuccessDeleteMessage, assertCatalogPriceRuleNotInGrid</data>

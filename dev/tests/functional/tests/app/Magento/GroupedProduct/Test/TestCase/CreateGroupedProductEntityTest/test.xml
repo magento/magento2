@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
     <variation>
         <data name="product/data/name">GroupedProduct %isolation%</data>
         <data name="product/data/sku">GroupedProduct_sku%isolation%</data>
