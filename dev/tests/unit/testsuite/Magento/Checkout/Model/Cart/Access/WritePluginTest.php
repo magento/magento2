@@ -9,7 +9,7 @@ namespace Magento\Checkout\Model\Cart\Access;
 class WritePluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Checkout\Model\Cart\Access\WritePlugin
+     * @var \Magento\Checkout\Model\Cart\Access\CartManagementPlugin
      */
     protected $model;
 
@@ -27,7 +27,7 @@ class WritePluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->userContextMock = $this->getMock('Magento\Authorization\Model\UserContextInterface');
         $this->subjectMock = $this->getMock('\Magento\Checkout\Service\V1\Cart\WriteServiceInterface');
-        $this->model = new WritePlugin($this->userContextMock);
+        $this->model = new CartManagementPlugin($this->userContextMock);
     }
 
     /**

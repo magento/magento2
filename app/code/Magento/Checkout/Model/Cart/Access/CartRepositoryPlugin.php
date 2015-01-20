@@ -6,10 +6,11 @@
 
 namespace Magento\Checkout\Model\Cart\Access;
 
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Authorization\Model\UserContextInterface;
 
-class WritePlugin
+class CartRepositoryPlugin
 {
     /**
      * @var UserContextInterface
@@ -33,20 +34,37 @@ class WritePlugin
     }
 
     /**
-     * Check whether access is allowed for create cart resource
+     * Check whether access is allowed for cart resource
      *
-     * @param \Magento\Checkout\Service\V1\Cart\WriteServiceInterface $subject
+     * @param \Magento\Quote\Api\CartRepositoryInterface $subject
      * @param int $cartId
-     * @param int $customerId
      *
      * @return void
      * @throws AuthorizationException if access denied
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeAssignCustomer(
-        \Magento\Checkout\Service\V1\Cart\WriteServiceInterface $subject,
-        $cartId,
-        $customerId
+    public function beforeGet(
+        \Magento\Quote\Api\CartRepositoryInterface $subject,
+        $cartId
+    ) {
+        if (!in_array($this->userContext->getUserType(), $this->allowedUserTypes)) {
+            throw new AuthorizationException('Access denied');
+        }
+    }
+
+    /**
+     * Check whether access is allowed for cart list resource
+     *
+     * @param \Magento\Quote\Api\CartRepositoryInterface $subject
+     * @param SearchCriteria $searchCriteria
+     *
+     * @return void
+     * @throws AuthorizationException if access denied
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeGetList(
+        \Magento\Quote\Api\CartRepositoryInterface $subject,
+        SearchCriteria $searchCriteria
     ) {
         if (!in_array($this->userContext->getUserType(), $this->allowedUserTypes)) {
             throw new AuthorizationException('Access denied');

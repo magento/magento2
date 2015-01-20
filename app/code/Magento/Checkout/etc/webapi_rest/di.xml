@@ -6,10 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Checkout\Service\V1\Cart\ReadServiceInterface">
-        <plugin name="admin_access" type="\Magento\Checkout\Model\Cart\Access\ReadPlugin" />
+    <type name="Magento\Quote\Api\CartRepositoryInterface">
+        <plugin name="admin_access" type="\Magento\Checkout\Model\Cart\Access\CartRepositoryPlugin" />
     </type>
-    <type name="Magento\Checkout\Service\V1\Cart\WriteServiceInterface">
-        <plugin name="admin_access" type="\Magento\Checkout\Model\Cart\Access\WritePlugin" />
+    <type name="Magento\Quote\Api\CartManagementInterface">
+        <plugin name="admin_access" type="\Magento\Checkout\Model\Cart\Access\CartManagementPlugin" />
     </type>
 </config>

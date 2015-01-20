@@ -9,7 +9,7 @@ namespace Magento\Checkout\Model\Cart\Access;
 class ReadPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Checkout\Model\Cart\Access\ReadPlugin
+     * @var \Magento\Checkout\Model\Cart\Access\CartRepositoryPlugin
      */
     protected $model;
 
@@ -26,18 +26,18 @@ class ReadPluginTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->userContextMock = $this->getMock('Magento\Authorization\Model\UserContextInterface');
-        $this->subjectMock = $this->getMock('\Magento\Checkout\Service\V1\Cart\ReadServiceInterface');
-        $this->model = new ReadPlugin($this->userContextMock);
+        $this->subjectMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
+        $this->model = new CartRepositoryPlugin($this->userContextMock);
     }
 
     /**
      * @param int $userType
      * @dataProvider successTypeDataProvider
      */
-    public function testBeforeGetCartSuccess($userType)
+    public function testBeforeGetSuccess($userType)
     {
         $this->userContextMock->expects($this->once())->method('getUserType')->will($this->returnValue($userType));
-        $this->model->beforeGetCart($this->subjectMock, 1);
+        $this->model->beforeGet($this->subjectMock, 1);
     }
 
     /**
@@ -48,7 +48,7 @@ class ReadPluginTest extends \PHPUnit_Framework_TestCase
     {
         $this->userContextMock->expects($this->once())->method('getUserType')
             ->will($this->returnValue(\Magento\Authorization\Model\UserContextInterface::USER_TYPE_CUSTOMER));
-        $this->model->beforeGetCart($this->subjectMock, 1);
+        $this->model->beforeGet($this->subjectMock, 1);
     }
 
     public function successTypeDataProvider()
@@ -63,10 +63,10 @@ class ReadPluginTest extends \PHPUnit_Framework_TestCase
      * @param int $userType
      * @dataProvider successTypeDataProvider
      */
-    public function testBeforeGetCartListSuccess($userType)
+    public function testBeforeGetCartSuccess($userType)
     {
         $this->userContextMock->expects($this->once())->method('getUserType')->will($this->returnValue($userType));
-        $this->model->beforeGetCartList(
+        $this->model->beforeGetList(
             $this->subjectMock,
             $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false)
         );
@@ -76,11 +76,11 @@ class ReadPluginTest extends \PHPUnit_Framework_TestCase
      * @expectedException \Magento\Framework\Exception\AuthorizationException
      * @expectedExceptionMessage Access denied
      */
-    public function testBeforeGetCartListDenied()
+    public function testBeforeGetListDenied()
     {
         $this->userContextMock->expects($this->once())->method('getUserType')
             ->will($this->returnValue(\Magento\Authorization\Model\UserContextInterface::USER_TYPE_CUSTOMER));
-        $this->model->beforeGetCartList(
+        $this->model->beforeGetList(
             $this->subjectMock,
             $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false)
         );
