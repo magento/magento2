@@ -112,9 +112,6 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
         //following checks will be uncommented when all cart related services are ready
         $this->assertContains('customer', $cartData);
         $this->assertEquals(true, $cartData['customer_is_guest']);
-        $this->assertContains('totals_object', $cartData);
-        $this->assertEquals($cart->getSubtotal(), $cartData['totals_object']['subtotal']);
-        $this->assertEquals($cart->getGrandTotal(), $cartData['totals_object']['grand_total']);
         $this->assertContains('currency', $cartData);
         $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
         $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);
@@ -211,9 +208,6 @@ class CartRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($cart->getUpdatedAt(), $cartData['updated_at']);
         $this->assertEquals($cart->getIsActive(), $cartData['is_active']);
 
-        $this->assertContains('totals_object', $cartData);
-        $this->assertEquals($cart->getBaseSubtotal(), $cartData['totals_object']['base_subtotal']);
-        $this->assertEquals($cart->getBaseGrandTotal(), $cartData['totals_object']['base_grand_total']);
         $this->assertContains('customer_is_guest', $cartData);
         $this->assertEquals(1, $cartData['customer_is_guest']);
     }
