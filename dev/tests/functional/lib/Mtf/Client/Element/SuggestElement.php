@@ -59,8 +59,9 @@ class SuggestElement extends SimpleElement
 
         $this->clear();
         foreach (str_split($value) as $symbol) {
-            $this->find($this->suggest)->click();
-            $this->keys([$symbol]);
+            $input = $this->find($this->suggest);
+            $input->click();
+            $input->keys([$symbol]);
             $this->waitResult();
             $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
             if ($searchedItem->isVisible()) {
@@ -90,7 +91,7 @@ class SuggestElement extends SimpleElement
      */
     public function waitResult()
     {
-        $browser = clone $this;
+        $browser = $this;
         $selector = $this->suggestStateLoader;
         $browser->waitUntil(
             function () use ($browser, $selector) {
