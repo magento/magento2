@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\System\Config;
+use Mtf\Config;
 use Mtf\Handler\HandlerFactory;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\InjectableFixture;

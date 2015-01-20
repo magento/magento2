@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/TestCase/etc/testcase.xsd">
+  <scenario name="ReorderOrderEntityTest" firstStep="setupConfiguration">
+    <step name="setupConfiguration" next="createOrder"/>
+    <step name="createOrder" next="openOrder"/>
+    <step name="openOrder" next="reorder"/>
+    <step name="reorder" next="fillBillingAddress"/>
+    <step name="fillBillingAddress" next="selectPaymentMethodForOrder"/>
+    <step name="selectPaymentMethodForOrder" next="selectShippingMethodForOrder"/>
+    <step name="selectShippingMethodForOrder" next="submitOrder"/>
+    <step name="submitOrder"/>
+  </scenario>
+  <scenario name="CreateOrderBackendTest" firstStep="setupConfiguration">
+    <step name="setupConfiguration" next="createProducts"/>
+    <step name="createProducts" next="createCustomer"/>
+    <step name="createCustomer" next="openSalesOrders">
+      <item name="customer">
+        <item name="dataSet" value="johndoe_with_addresses"/>
+      </item>
+    </step>
+    <step name="openSalesOrders" next="createNewOrder"/>
+    <step name="createNewOrder" next="selectCustomerOrder"/>
+    <step name="selectCustomerOrder" next="selectStore"/>
+    <step name="selectStore" next="addProducts"/>
+    <step name="addProducts" next="updateProductsData"/>
+    <step name="updateProductsData" next="fillBillingAddress"/>
+    <step name="fillBillingAddress" next="selectPaymentMethodForOrder"/>
+    <step name="selectPaymentMethodForOrder" next="selectShippingMethodForOrder"/>
+    <step name="selectShippingMethodForOrder" next="submitOrder"/>
+    <step name="submitOrder"/>
+  </scenario>
+  <scenario name="MoveRecentlyViewedProductsOnOrderPageTest" firstStep="createProducts">
+    <step name="createProducts" next="createCustomer"/>
+    <step name="createCustomer" next="loginCustomerOnFrontend">
+      <item name="customer">
+        <item name="dataSet" value="default"/>
+      </item>
+    </step>
+    <step name="loginCustomerOnFrontend" next="openProductsOnFrontend"/>
+    <step name="openProductsOnFrontend" next="openCustomerOnBackend"/>
+    <step name="openCustomerOnBackend" next="createOrderFromCustomerAccount"/>
+    <step name="createOrderFromCustomerAccount" next="addRecentlyViewedProductsToCart"/>
+    <step name="addRecentlyViewedProductsToCart" next="configureProducts"/>
+    <step name="configureProducts"/>
+  </scenario>
+  <scenario name="PrintOrderFrontendGuestTest" firstStep="createProducts">
+    <step name="createProducts" next="createCustomer"/>
+    <step name="createCustomer" next="openSalesOrders">
+      <item name="customer">
+        <item name="dataSet" value="johndoe_with_addresses"/>
+      </item>
+    </step>
+    <step name="openSalesOrders" next="createNewOrder"/>
+    <step name="createNewOrder" next="selectCustomerOrder"/>
+    <step name="selectCustomerOrder" next="selectStore"/>
+    <step name="selectStore" next="addProducts"/>
+    <step name="addProducts" next="fillBillingAddress"/>
+    <step name="fillBillingAddress" next="selectPaymentMethodForOrder">
+      <item name="billingAddress">
+        <item name="dataSet" value="customer_US"/>
+      </item>
+    </step>
+    <step name="selectPaymentMethodForOrder" next="selectShippingMethodForOrder">
+      <item name="payment">
+        <item name="method" value="checkmo"/>
+      </item>
+    </step>
+    <step name="selectShippingMethodForOrder" next="submitOrder"/>
+    <step name="submitOrder" next="openSalesOrderOnFrontendForGuest"/>
+    <step name="openSalesOrderOnFrontendForGuest" next="printOrderOnFrontend"/>
+    <step name="printOrderOnFrontend"/>
+  </scenario>
+</config>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/TestCase/etc/testcase.xsd">
+  <scenario name="UpdateConfigurableProductEntityTest" firstStep="createProduct">
+    <step name="createProduct" next="openProductOnBackend">
+      <item name="product" value="configurableProductInjectable::default"/>
+    </step>
+    <step name="openProductOnBackend" next="updateConfigurableProduct"/>
+    <step name="updateConfigurableProduct" next="saveProduct"/>
+    <step name="saveProduct"/>
+  </scenario>
+</config>
