@@ -319,14 +319,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $customerRepository;
 
     /**
-     * @var \Magento\Quote\Api\Data\TotalsDataBuilder
+     * @var Cart\CurrencyFactory
      */
-    protected $totalsBuilder;
-
-    /**
-     * @var \Magento\Quote\Api\Data\CurrencyDataBuilder
-     */
-    protected $currencyBuilder;
+    protected $currencyFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -359,8 +354,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
-     * @param \Magento\Quote\Api\Data\TotalsDataBuilder $totalsBuilder
-     * @param \Magento\Quote\Api\Data\CurrencyDataBuilder $currencyBuilder
+     * @param Cart\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -396,8 +390,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        \Magento\Quote\Api\Data\TotalsDataBuilder $totalsBuilder,
-        \Magento\Quote\Api\Data\CurrencyDataBuilder $currencyBuilder,
+        \Magento\Quote\Model\Cart\CurrencyFactory $currencyFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -428,8 +421,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->customerBuilder = $customerBuilder;
         $this->customerRepository = $customerRepository;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
-        $this->totalsBuilder = $totalsBuilder;
-        $this->currencyBuilder = $currencyBuilder;
+        $this->currencyFactory = $currencyFactory;
         parent::__construct(
             $context,
             $registry,
@@ -452,13 +444,15 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
+     * @codeCoverageIgnoreStart
+     *
      * {@inheritdoc}
      */
     public function getCurrency()
     {
         $currency = $this->getData('currency');
         if (!$currency) {
-            $this->currencyBuilder
+            $currency = $this->currencyFactory->create()
                 ->setGlobalCurrencyCode($this->getGlobalCurrencyCode())
                 ->setBaseCurrencyCode($this->getBaseCurrencyCode())
                 ->setStoreCurrencyCode($this->getStoreCurrencyCode())
@@ -467,14 +461,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                 ->setStoreToQuoteRate($this->getStoreToQuoteRate())
                 ->setBaseToGlobalRate($this->getBaseToGlobalRate())
                 ->setBaseToQuoteRate($this->getBaseToQuoteRate());
-            $currency = $this->currencyBuilder->create();
         }
         return $currency;
     }
 
     /**
-     * @codeCoverageIgnoreStart
-     *
      * {@inheritdoc}
      */
     public function getItems()

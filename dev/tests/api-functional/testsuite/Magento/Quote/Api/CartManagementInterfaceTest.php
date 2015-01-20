@@ -336,9 +336,6 @@ class CartManagementInterfaceTest extends WebapiAbstract
 
         $this->assertContains('customer', $cartData);
         $this->assertEquals(false, $cartData['customer_is_guest']);
-        $this->assertContains('totals_object', $cartData);
-        $this->assertEquals($cart->getSubtotal(), $cartData['totals_object']['subtotal']);
-        $this->assertEquals($cart->getGrandTotal(), $cartData['totals_object']['grand_total']);
         $this->assertContains('currency', $cartData);
         $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
         $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);
