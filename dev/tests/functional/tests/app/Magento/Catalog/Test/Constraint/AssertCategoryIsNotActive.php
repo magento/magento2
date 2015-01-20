@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -28,10 +28,10 @@ class AssertCategoryIsNotActive extends AbstractConstraint
      *
      * @param CmsIndex $cmsIndex
      * @param Category $category
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
-    public function processAssert(CmsIndex $cmsIndex, Category $category, Browser $browser)
+    public function processAssert(CmsIndex $cmsIndex, Category $category, BrowserInterface $browser)
     {
         $cmsIndex->open();
         \PHPUnit_Framework_Assert::assertFalse(
