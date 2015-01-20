@@ -1,5 +1,5 @@
 "description";"catalogSearch/data/query_text/value";"constraint";"tag"
-"MAGETWO-12420: Use Quick Search to Find the Product";"catalogProductSimple::default::sku";"assertProductCanBeOpenedFromSearchResult";"bamboo_plan:BAT"
+"MAGETWO-12420: Use Quick Search to Find the Product";"catalogProductSimple::default::sku";"assertProductCanBeOpenedFromSearchResult";"bamboo_plan:BAT,test_type:acceptance_test"
 "Search simple product";"catalogProductSimple::default::simple";"assertCatalogSearchResult";""
 "Search virtual product";"catalogProductVirtual::default::virtual";"assertCatalogSearchResult";""
 "Search configurable product";"configurableProductInjectable::default::configurable";"assertCatalogSearchResult";""

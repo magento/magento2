@@ -13,10 +13,13 @@ use Mtf\TestCase\Functional;
 /**
  * Class CreateGroupedTest
  * Grouped product
- *
  */
 class CreateGroupedTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Login into backend area before test
      *
