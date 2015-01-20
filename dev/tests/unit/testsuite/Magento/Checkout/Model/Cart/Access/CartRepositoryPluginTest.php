@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Model\Cart\Access;
 
-class ReadPluginTest extends \PHPUnit_Framework_TestCase
+class CartRepositoryPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Checkout\Model\Cart\Access\CartRepositoryPlugin
