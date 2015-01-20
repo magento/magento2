@@ -124,7 +124,7 @@ class CustomerInjectable extends AbstractRepository
             'email' => 'JohnDoe_%isolation%@example.com',
             'password' => '123123q',
             'password_confirmation' => '123123q',
-            'address' => ['presets' => 'US_address, US_address'],
+            'address' => ['presets' => 'US_address_NY, US_address'],
         ];
     }
 }
