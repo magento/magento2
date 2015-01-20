@@ -49,7 +49,7 @@ class PrintCreditmemo extends \Magento\Sales\Controller\AbstractController\Print
     public function execute()
     {
         $result = $this->orderLoader->load($this->_request);
-        if ($result instanceof \Magento\Framework\Controller\Result\Redirect) {
+        if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
             return $result;
         }
 
