@@ -46,7 +46,7 @@ class ItemRepositoryTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'getItemMessage',
+                'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
 
@@ -87,7 +87,7 @@ class ItemRepositoryTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'SetForItem',
+                'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
 
