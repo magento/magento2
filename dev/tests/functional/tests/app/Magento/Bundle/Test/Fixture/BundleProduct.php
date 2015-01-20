@@ -10,7 +10,7 @@ use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\InjectableFixture;
 use Mtf\Handler\HandlerFactory;
 use Mtf\Repository\RepositoryFactory;
-use Mtf\System\Config;
+use Mtf\Config;
 use Mtf\System\Event\EventManagerInterface;
 
 /**

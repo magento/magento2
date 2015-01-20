@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Tax\Test\Fixture\TaxClass as FixtureTaxClass;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
-use Mtf\System\Config;
+use Mtf\Config;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;

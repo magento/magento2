@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Test\Handler\DownloadableProductInjectable;
 
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
 use Mtf\Fixture\FixtureInterface;
-use Mtf\System\Config;
+use Mtf\Config;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;

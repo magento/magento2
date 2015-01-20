@@ -9,7 +9,7 @@ namespace Magento\Customer\Test\Handler\CustomerInjectable;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Handler\Curl as AbstractCurl;
-use Mtf\System\Config;
+use Mtf\Config;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;

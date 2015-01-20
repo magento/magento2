@@ -8,7 +8,7 @@ namespace Magento\Integration\Test\Handler\Integration;
 
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Handler\Curl as AbstractCurl;
-use Mtf\System\Config;
+use Mtf\Config;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;

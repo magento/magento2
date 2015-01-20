@@ -8,7 +8,7 @@ namespace Magento\Bundle\Test\Fixture;
 
 use Magento\Catalog\Test\Fixture\Product;
 use Mtf\Factory\Factory;
-use Mtf\System\Config;
+use Mtf\Config;
 
 /**
  * Class Bundle

@@ -10,7 +10,7 @@ use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\InjectableFixture;
 use Mtf\Handler\HandlerFactory;
 use Mtf\Repository\RepositoryFactory;
-use Mtf\System\Config;
+use Mtf\Config;
 use Mtf\System\Event\EventManagerInterface;
 
 /**
@@ -215,7 +215,7 @@ class User extends InjectableFixture
         $persist = false
     ) {
         $this->defaultDataSet['current_password'] = $configuration
-            ->getConfigParam('application/backend_user_credentials/password');
+            ->getParameter('application/backendPassword');
         parent::__construct(
             $configuration,
             $repositoryFactory,

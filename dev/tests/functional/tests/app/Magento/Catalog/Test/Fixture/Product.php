@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Fixture;
 use Mtf\Factory\Factory;
 use Mtf\Fixture\DataFixture;
 use Mtf\ObjectManager;
-use Mtf\System\Config;
+use Mtf\Config;
 
 class Product extends DataFixture
 {

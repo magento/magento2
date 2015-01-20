@@ -10,7 +10,7 @@ use Magento\Backend\Test\Handler\Extractor;
 use Magento\Sitemap\Test\Handler\Sitemap;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Handler\Curl as AbstractCurl;
-use Mtf\System\Config;
+use Mtf\Config;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
