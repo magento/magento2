@@ -48,6 +48,14 @@ class System extends StreamHandler
         if (!$this->filesystem->isDirectory($logDir)) {
             $this->filesystem->createDirectory($logDir, 0777);
         }
-        parent::write($record);
+
+        if (isset($record['context']['is_exception']) && $record['context']['is_exception']) {
+            unset($record['context']['is_exception']);
+            $exceptionHandler = new StreamHandler(BP . '/var/log/exception.log', $this->loggerType);
+            $exceptionHandler->handle($record);
+        } else {
+            unset($record['context']['is_exception']);
+            parent::write($record);
+        }
     }
 }
