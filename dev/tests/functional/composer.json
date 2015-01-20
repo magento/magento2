@@ -1,6 +1,6 @@
 {
     "require": {
-        "magento/mtf": "1.0.0-rc12",
+        "magento/mtf": "1.0.0-rc13",
         "php": ">=5.4.0",
         "phpunit/phpunit": "4.1.0",
         "phpunit/phpunit-selenium": ">=1.2",
