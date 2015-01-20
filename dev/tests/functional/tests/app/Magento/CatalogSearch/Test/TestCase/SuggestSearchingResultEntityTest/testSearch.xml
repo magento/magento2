@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="catalogSearch/data/query_text/value">catalogProductSimple::name</data>
+        <data name="catalogSearch/data/num_results">-</data>
+        <data name="constraint">assertSuggestSearchingResult</data>
+    </variation>
+    <variation>
+        <data name="catalogSearch/data/query_text/value">catalogProductSimple::sku</data>
+        <data name="catalogSearch/data/num_results">1</data>
+        <data name="constraint">assertSuggestSearchingResult</data>
+    </variation>
+</variations>

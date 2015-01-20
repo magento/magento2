@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="description">view products on front and verify they all reflected in Year report</data>
+        <data name="total">2, 1</data>
+        <data name="products">catalogProductSimple::default, catalogProductVirtual::default</data>
+        <data name="viewsReport/period_type">Year</data>
+        <data name="viewsReport/from">m/d/Y -1 year</data>
+        <data name="viewsReport/to">m/d/Y</data>
+        <data name="viewsReport/show_empty_rows">No</data>
+        <data name="constraint">assertProductViewsReportTotalResult</data>
+    </variation>
+    <variation>
+        <data name="description">view products on front and verify they all reflected in Month report</data>
+        <data name="total">1, 1</data>
+        <data name="products">downloadableProductInjectable::default, bundleProduct::bundle_dynamic_product</data>
+        <data name="viewsReport/period_type">Month</data>
+        <data name="viewsReport/from">m/d/Y</data>
+        <data name="viewsReport/to">m/d/Y</data>
+        <data name="viewsReport/show_empty_rows">No</data>
+        <data name="constraint">assertProductViewsReportTotalResult</data>
+    </variation>
+    <variation>
+        <data name="description">view products on front and verify they all reflected in Day report</data>
+        <data name="total">1, 1</data>
+        <data name="products">configurableProductInjectable::default, groupedProductInjectable::default</data>
+        <data name="viewsReport/period_type">Day</data>
+        <data name="viewsReport/from">m/d/Y -1 day</data>
+        <data name="viewsReport/to">m/d/Y +1 day</data>
+        <data name="viewsReport/show_empty_rows">Yes</data>
+        <data name="constraint">assertProductViewsReportTotalResult</data>
+    </variation>
+</variations>

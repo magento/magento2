@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="attributeSet/data/attribute_set_name">ProductTemplateEdit1%isolation%</data>
+        <data name="attributeSet/data/group">Custom-group%isolation%</data>
+        <data name="attributeSetOriginal/dataSet">custom_attribute_set</data>
+        <data name="productAttributeOriginal/dataSet">attribute_type_text_field</data>
+        <data name="constraint">assertProductTemplateSuccessSaveMessage, assertProductTemplateForm, assertProductTemplateInGrid, assertProductTemplateOnProductForm, assertProductTemplateGroupOnProductForm</data>
+    </variation>
+</variations>

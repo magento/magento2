@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="catalogPriceRuleOriginal/dataSet">active_catalog_price_rule_with_conditions</data>
+        <data name="catalogPriceRule/data/name">New Catalog Price Rule Name %isolation%</data>
+        <data name="catalogPriceRule/data/description">-</data>
+        <data name="catalogPriceRule/data/is_active">Inactive</data>
+        <data name="catalogPriceRule/data/conditions">-</data>
+        <data name="catalogPriceRule/data/simple_action">-</data>
+        <data name="catalogPriceRule/data/discount_amount">-</data>
+        <data name="saveAction">save</data>
+        <data name="price/sub_total">-</data>
+        <data name="price/grand_total">-</data>
+        <data name="price/discount_amount">-</data>
+        <data name="price/special">-</data>
+        <data name="price/regular">-</data>
+        <data name="constraint">assertCatalogPriceRuleSuccessSaveMessage, assertCatalogPriceRuleNoticeMessage, assertCatalogPriceRuleForm, assertCatalogPriceRuleInGrid</data>
+    </variation>
+    <variation>
+        <data name="catalogPriceRuleOriginal/dataSet">active_catalog_price_rule_with_conditions</data>
+        <data name="catalogPriceRule/data/name">New Catalog Price Rule Name %isolation%</data>
+        <data name="catalogPriceRule/data/description">New Catalog Price Rule Description %isolation%</data>
+        <data name="catalogPriceRule/data/is_active">Active</data>
+        <data name="catalogPriceRule/data/conditions">[Category|is|%category_1%]</data>
+        <data name="catalogPriceRule/data/simple_action">By Fixed Amount</data>
+        <data name="catalogPriceRule/data/discount_amount">35</data>
+        <data name="saveAction">saveAndApply</data>
+        <data name="price/sub_total">100</data>
+        <data name="price/grand_total">65</data>
+        <data name="price/discount_amount">35</data>
+        <data name="price/special">65</data>
+        <data name="price/regular">100</data>
+        <data name="constraint">assertCatalogPriceRuleSuccessSaveMessage, assertCatalogPriceRuleAppliedProductPage, assertCatalogPriceRuleForm, assertCatalogPriceRuleInGrid</data>
+    </variation>
+</variations>

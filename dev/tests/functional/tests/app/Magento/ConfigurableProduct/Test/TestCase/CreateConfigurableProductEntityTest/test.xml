@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="product/data/configurable_attributes_data/preset">two_new_options</data>
+        <data name="product/data/checkout_data/preset">two_new_options</data>
+        <data name="product/data/name">Configurable Product %isolation%</data>
+        <data name="product/data/sku">configurable_sku_%isolation%</data>
+        <data name="product/data/tax_class_id">-</data>
+        <data name="product/data/price/value">100</data>
+        <data name="product/data/special_price">-</data>
+        <data name="product/data/category_ids/presets">default_subcategory</data>
+        <data name="product/data/short_description">Configurable short description</data>
+        <data name="product/data/description">Configurable Product description %isolation%</data>
+        <data name="product/data/weight">2</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+        <data name="product/data/affected_attribute_set">custom_attribute_set_%isolation%</data>
+        <data name="constraint">assertProductSaveMessage,  assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertProductInCategory, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart, assertChildProductIsNotDisplayedSeparately</data>
+        <data name="issue"/>
+    </variation>
+    <variation>
+        <data name="product/data/configurable_attributes_data/preset">two_options</data>
+        <data name="product/data/checkout_data/preset">two_options</data>
+        <data name="product/data/name">Configurable Product %isolation%</data>
+        <data name="product/data/sku">configurable_sku_%isolation%</data>
+        <data name="product/data/tax_class_id">-</data>
+        <data name="product/data/price/value">100</data>
+        <data name="product/data/special_price">-</data>
+        <data name="product/data/category_ids/presets">-</data>
+        <data name="product/data/short_description">Configurable short description</data>
+        <data name="product/data/description">Configurable Product description %isolation%</data>
+        <data name="product/data/weight">2</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">-</data>
+        <data name="product/data/affected_attribute_set">custom_attribute_set_%isolation%</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart</data>
+        <data name="issue"/>
+    </variation>
+    <variation>
+        <data name="product/data/configurable_attributes_data/preset">two_new_options</data>
+        <data name="product/data/checkout_data/preset">two_new_options_with_special_price</data>
+        <data name="product/data/name">Configurable Product %isolation%</data>
+        <data name="product/data/sku">configurable_sku_%isolation%</data>
+        <data name="product/data/tax_class_id">-</data>
+        <data name="product/data/price/value">100</data>
+        <data name="product/data/special_price">10</data>
+        <data name="product/data/category_ids/presets">-</data>
+        <data name="product/data/short_description">Configurable short description</data>
+        <data name="product/data/description">Configurable Product description %isolation%</data>
+        <data name="product/data/weight">2</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+        <data name="product/data/affected_attribute_set">custom_attribute_set_%isolation%</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertChildProductsInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart, assertProductSpecialPriceOnProductPage</data>
+        <data name="issue"/>
+    </variation>
+    <variation>
+        <data name="product/data/configurable_attributes_data/preset">two_options_with_assigned_product</data>
+        <data name="product/data/checkout_data/preset">two_options_with_assigned_product</data>
+        <data name="product/data/name">Configurable Product %isolation%</data>
+        <data name="product/data/sku">configurable_sku_%isolation%</data>
+        <data name="product/data/tax_class_id">-</data>
+        <data name="product/data/price/value">100</data>
+        <data name="product/data/special_price">-</data>
+        <data name="product/data/category_ids/presets">-</data>
+        <data name="product/data/short_description">Configurable short description</data>
+        <data name="product/data/description">Configurable Product description %isolation%</data>
+        <data name="product/data/weight">2</data>
+        <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+        <data name="product/data/affected_attribute_set">custom_attribute_set_%isolation%</data>
+        <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertConfigurableProductForm, assertConfigurableProductPage, assertProductInStock, assertConfigurableProductInCart</data>
+        <data name="issue"/>
+    </variation>
+</variations>

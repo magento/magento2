@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="website/dataSet">custom_website</data>
+        <data name="createBackup">Yes</data>
+        <data name="constraint">assertWebsiteSuccessDeleteAndBackupMessages, assertWebsiteNotInGrid, assertBackupInGrid</data>
+    </variation>
+    <variation>
+        <data name="website/dataSet">custom_website</data>
+        <data name="createBackup">No</data>
+        <data name="constraint">assertWebsiteSuccessDeleteMessage, assertWebsiteNotInGrid</data>
+    </variation>
+</variations>

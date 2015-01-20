@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
+    <variation>
+        <data name="review/data/type">Administrator</data>
+        <data name="review/data/entity_id/dataSet">catalogProductSimple::default</data>
+        <data name="review/data/status_id">Approved</data>
+        <data name="review/data/select_stores/0">Main Website/Main Website Store/Default Store View</data>
+        <data name="review/data/ratings/rating_0/dataSet">visibleOnDefaultWebsite</data>
+        <data name="review/data/ratings/rating_0/rating">3</data>
+        <data name="review/data/nickname">John</data>
+        <data name="review/data/title">title %isolation%</data>
+        <data name="review/data/detail">review detail %isolation%</data>
+        <data name="constraint">assertProductReviewBackendSuccessSaveMessage, assertProductReviewInGrid, assertProductRatingInProductPage</data>
+    </variation>
+    <variation>
+        <data name="review/data/type">Administrator</data>
+        <data name="review/data/entity_id/dataSet">catalogProductSimple::default</data>
+        <data name="review/data/status_id">Pending</data>
+        <data name="review/data/select_stores/0">Main Website/Main Website Store/Default Store View</data>
+        <data name="review/data/ratings/rating_0/dataSet">visibleOnDefaultWebsite</data>
+        <data name="review/data/ratings/rating_0/rating">4</data>
+        <data name="review/data/nickname">Britney</data>
+        <data name="review/data/title">title %isolation%</data>
+        <data name="review/data/detail">review detail %isolation%</data>
+        <data name="constraint">assertProductReviewBackendSuccessSaveMessage, assertProductReviewInGrid, assertProductRatingInProductPage</data>
+    </variation>
+    <variation>
+        <data name="review/data/type">Administrator</data>
+        <data name="review/data/entity_id/dataSet">catalogProductSimple::default</data>
+        <data name="review/data/status_id">Not Approved</data>
+        <data name="review/data/select_stores/0">Main Website/Main Website Store/Default Store View</data>
+        <data name="review/data/ratings/rating_0/dataSet">visibleOnDefaultWebsite</data>
+        <data name="review/data/ratings/rating_0/rating">5</data>
+        <data name="review/data/nickname">Michael</data>
+        <data name="review/data/title">title %isolation%</data>
+        <data name="review/data/detail">review detail %isolation%</data>
+        <data name="constraint">assertProductReviewBackendSuccessSaveMessage, assertProductReviewInGrid, assertProductRatingInProductPage</data>
+    </variation>
+</variations>
