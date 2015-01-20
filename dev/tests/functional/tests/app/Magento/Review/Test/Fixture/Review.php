@@ -6,30 +6,230 @@
 
 namespace Magento\Review\Test\Fixture;
 
-use Mtf\Factory\Factory;
-use Mtf\Fixture\DataFixture;
+use Mtf\Fixture\InjectableFixture;
 
 /**
- * Review fixture
+ * Product review fixture.
  *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class Review extends DataFixture
+class Review extends InjectableFixture
 {
     /**
-     * Get review title
-     *
-     * @return string
+     * @var string
      */
-    public function getTitle()
-    {
-        return $this->getData('fields/title/value');
-    }
+    protected $repositoryClass = 'Magento\Review\Test\Repository\Review';
 
     /**
-     * {inheritdoc}
+     * @var string
      */
-    protected function _initData()
+    protected $handlerInterface = 'Magento\Review\Test\Handler\Review\ReviewInterface';
+
+    /**
+     * Default data
+     *
+     * @var array
+     */
+    protected $defaultDataSet = [
+        'status_id' => 'Approved',
+        'select_stores' => ['Main Website/Main Website Store/Default Store View'],
+        'nickname' => 'Guest customer %isolation%',
+        'title' => 'Summary review %isolation%',
+        'detail' => 'Text review %isolation%',
+        'ratings' => [
+            [
+                'dataSet' => 'visibleOnDefaultWebsite',
+                'rating' => 4
+            ]
+        ],
+        'entity_id' => ['dataSet' => 'catalogProductSimple::default'],
+        'type' => 'Administrator'
+    ];
+
+    protected $review_id = [
+        'attribute_code' => 'review_id',
+        'backend_type' => 'bigint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+    ];
+
+    protected $created_at = [
+        'attribute_code' => 'created_at',
+        'backend_type' => 'timestamp',
+        'is_required' => '',
+        'default_value' => 'CURRENT_TIMESTAMP',
+        'input' => '',
+    ];
+
+    protected $entity_id = [
+        'attribute_code' => 'entity_id',
+        'backend_type' => 'smallint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+        'source' => 'Magento\Review\Test\Fixture\Review\EntityId'
+    ];
+
+    protected $entity_pk_value = [
+        'attribute_code' => 'entity_pk_value',
+        'backend_type' => 'int',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+    ];
+
+    protected $status_id = [
+        'attribute_code' => 'status_id',
+        'backend_type' => 'smallint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+    ];
+
+    protected $detail_id = [
+        'attribute_code' => 'detail_id',
+        'backend_type' => 'bigint',
+        'is_required' => '1',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $store_id = [
+        'attribute_code' => 'store_id',
+        'backend_type' => 'smallint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+    ];
+
+    protected $title = [
+        'attribute_code' => 'title',
+        'backend_type' => 'varchar',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $detail = [
+        'attribute_code' => 'detail',
+        'backend_type' => 'text',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $nickname = [
+        'attribute_code' => 'nickname',
+        'backend_type' => 'varchar',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $customer_id = [
+        'attribute_code' => 'customer_id',
+        'backend_type' => 'int',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $select_stores = [
+        'attribute_code' => 'select_stores',
+        'backend_type' => 'virtual',
+        'is_required' => '1',
+        'default_value' => '0',
+        'input' => 'multiselectgrouplist',
+    ];
+
+    protected $ratings = [
+        'attribute_code' => 'ratings',
+        'backend_type' => 'virtual',
+        'source' => 'Magento\Review\Test\Fixture\Review\Ratings',
+    ];
+
+    protected $type = [
+        'attribute_code' => 'type',
+        'backend_type' => 'string',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $customer = [
+        'attribute_code' => 'customer',
+        'backend_type' => 'virtual',
+    ];
+
+    public function getType()
     {
+        return $this->getData('type');
+    }
+
+    public function getSelectStores()
+    {
+        return $this->getData('select_stores');
+    }
+
+    public function getReviewId()
+    {
+        return $this->getData('review_id');
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->getData('created_at');
+    }
+
+    public function getEntityId()
+    {
+        return $this->getData('entity_id');
+    }
+
+    public function getEntityPkValue()
+    {
+        return $this->getData('entity_pk_value');
+    }
+
+    public function getStatusId()
+    {
+        return $this->getData('status_id');
+    }
+
+    public function getDetailId()
+    {
+        return $this->getData('detail_id');
+    }
+
+    public function getStoreId()
+    {
+        return $this->getData('store_id');
+    }
+
+    public function getTitle()
+    {
+        return $this->getData('title');
+    }
+
+    public function getDetail()
+    {
+        return $this->getData('detail');
+    }
+
+    public function getNickname()
+    {
+        return $this->getData('nickname');
+    }
+
+    public function getCustomerId()
+    {
+        return $this->getData('customer_id');
+    }
+
+    public function getRatings()
+    {
+        return $this->getData('ratings');
         $this->_data = [
             'fields' => [
                 'nickname' => [

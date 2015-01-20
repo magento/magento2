@@ -1,0 +1,31 @@
+Subtotal,小计
+Discount,折扣
+"Grand Total",总计
+Tax,传真
+Shipping,运送
+"Store Credit",店铺信用
+"An item option with code %1 already exists.","An item option with code %1 already exists."
+"Discount (%1)","Discount (%1)"
+"Shipping & Handling",运费和手续费
+"Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself.","Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself."
+"We found an invalid request for adding product to quote.","We found an invalid request for adding product to quote."
+"This is the wrong quote item id to update configuration.","This is the wrong quote item id to update configuration."
+"This shipping method is not available. To use this shipping method, please contact us.","This shipping method is not available. To use this shipping method, please contact us."
+"The address model is not defined.","The address model is not defined."
+"The address total model should be extended from \Magento\Quote\Model\Quote\Address\Total\AbstractTotal.","地址总模块应扩展自\Magento\Quote\Model\Quote\Address\Total\AbstractTotal。"
+"Subscription Items","Subscription Items"
+"Regular Payment",正常支付
+"Shipping & Handling (%1)","Shipping & Handling (%1)"
+"We found an invalid item option format.","We found an invalid item option format."
+"Item qty declaration error","Item qty declaration error"
+"Some of the products below do not have all the required options.","Some of the products below do not have all the required options."
+"Something went wrong during the item options declaration.","Something went wrong during the item options declaration."
+"We found an item options declaration error.","We found an item options declaration error."
+"Some of the selected options are not currently available.","Some of the selected options are not currently available."
+"Selected option(s) or their combination is not currently available.","Selected option(s) or their combination is not currently available."
+"Some item options or their combination are not currently available.","Some item options or their combination are not currently available."
+"The requested Payment Method is not available.",请求的支付方式不可用。
+"Please check the shipping address information. %1","Please check the shipping address information. %1"
+"Please specify a shipping method.",请指定一个配送方法。
+"Please check the billing address information. %1","Please check the billing address information. %1"
+"Please select a valid payment method.",请选择有效的支付方式。

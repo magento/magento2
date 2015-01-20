@@ -7,8 +7,8 @@ namespace Magento\Checkout\Service\V1\Cart;
 
 use Magento\Checkout\Service\V1\Data\Cart\Totals;
 use Magento\Checkout\Service\V1\Data\Cart;
-use Magento\Sales\Model\Quote;
-use Magento\Sales\Model\QuoteRepository;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Cart totals service object.
@@ -74,7 +74,7 @@ class TotalsService implements TotalsServiceInterface
         /**
          * Quote.
          *
-         * @var \Magento\Sales\Model\Quote $quote
+         * @var \Magento\Quote\Model\Quote $quote
          */
         $quote = $this->quoteRepository->getActive($cartId);
 
