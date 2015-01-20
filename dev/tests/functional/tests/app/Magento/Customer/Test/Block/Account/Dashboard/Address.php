@@ -26,14 +26,14 @@ class Address extends Block
      *
      * @var string
      */
-    protected $shippingAddressBlock = '.box-address-shipping';
+    protected $shippingAddressBlock = '.box-shipping-address';
 
     /**
      * Billing address block selector
      *
      * @var string
      */
-    protected $billingAddressBlock = '.box-address-billing';
+    protected $billingAddressBlock = '.box-billing-address';
 
     /**
      * Edit Default Billing Address

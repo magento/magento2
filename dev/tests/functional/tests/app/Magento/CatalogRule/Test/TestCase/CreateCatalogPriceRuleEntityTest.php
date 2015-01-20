@@ -24,6 +24,11 @@ use Magento\CatalogRule\Test\Fixture\CatalogRule;
  */
 class CreateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Create Catalog Price Rule
      *

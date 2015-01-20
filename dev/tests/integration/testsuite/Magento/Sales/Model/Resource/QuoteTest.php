@@ -8,14 +8,14 @@ namespace Magento\Sales\Model\Resource;
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Quote
+     * @var \Magento\Quote\Model\Resource\Quote
      */
     protected $_resourceModel;
 
     protected function setUp()
     {
         $this->_resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Resource\Quote'
+            'Magento\Quote\Model\Resource\Quote'
         );
     }
 

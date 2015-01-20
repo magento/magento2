@@ -179,7 +179,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeId')
             ->willReturn($productType);
 
-        $item = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
+        $item = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
             ->getMock();
@@ -188,7 +188,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getProduct')
             ->willReturn($product);
 
-        $quote = $this->getMockBuilder('\Magento\Sales\Model\Quote')
+        $quote = $this->getMockBuilder('\Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->setMethods(['getAllItems'])
             ->getMock();
