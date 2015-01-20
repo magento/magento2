@@ -36,6 +36,7 @@
         <env name="server_config_path" value="config/server.yml.dist" />
         <env name="isolation_config_path" value="config/isolation.yml.dist" />
         <env name="handlers_config_path" value="config/handler.yml.dist" />
+        <env name="install_config_path" value="config/install_data.yml.dist" />
         <env name="testsuite_rule" value="basic" />
         <env name="testsuite_rule_path" value="Mtf/TestSuite/InjectableTests" />
         <env name="log_directory" value="var/log" />

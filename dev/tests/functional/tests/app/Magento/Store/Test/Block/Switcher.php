@@ -9,7 +9,7 @@ namespace Magento\Store\Test\Block;
 
 use Magento\Store\Test\Fixture\Store;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Switcher
