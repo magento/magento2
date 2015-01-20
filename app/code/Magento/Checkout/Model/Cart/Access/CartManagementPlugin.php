@@ -38,6 +38,7 @@ class CartManagementPlugin
      * @param \Magento\Quote\Api\CartManagementInterface $subject
      * @param int $cartId
      * @param int $customerId
+     * @param int $storeId
      *
      * @return void
      * @throws AuthorizationException if access denied
@@ -46,7 +47,8 @@ class CartManagementPlugin
     public function beforeAssignCustomer(
         \Magento\Quote\Api\CartManagementInterface $subject,
         $cartId,
-        $customerId
+        $customerId,
+        $storeId
     ) {
         if (!in_array($this->userContext->getUserType(), $this->allowedUserTypes)) {
             throw new AuthorizationException('Access denied');
