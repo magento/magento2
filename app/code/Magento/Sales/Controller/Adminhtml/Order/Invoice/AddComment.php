@@ -39,20 +39,20 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
     protected $resultRawFactory;
 
     /**
-     * @param Action\Context $context
+     * @param Context $context
      * @param Registry $registry
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param InvoiceCommentSender $invoiceCommentSender
      * @param JSONFactory $resultJsonFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param PageFactory $resultPageFactory
      * @param RawFactory $resultRawFactory
      */
     public function __construct(
         Context $context,
         Registry $registry,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         InvoiceCommentSender $invoiceCommentSender,
         JSONFactory $resultJsonFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory,
         RawFactory $resultRawFactory
     ) {
@@ -62,6 +62,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct($context, $registry, $resultForwardFactory);
     }
+
     /**
      * Add comment to invoice action
      *
