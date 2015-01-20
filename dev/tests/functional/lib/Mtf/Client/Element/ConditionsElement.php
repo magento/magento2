@@ -8,6 +8,7 @@ namespace Mtf\Client\Element;
 
 use Mtf\ObjectManager;
 use Mtf\Client\Locator;
+use Mtf\Client\ElementInterface;
 
 /**
  * Class ConditionsElement
@@ -185,10 +186,10 @@ class ConditionsElement extends SimpleElement
      * Add condition combination
      *
      * @param string $condition
-     * @param SimpleElement $context
-     * @return SimpleElement
+     * @param ElementInterface $context
+     * @return ElementInterface
      */
-    protected function addConditionsCombination($condition, SimpleElement $context)
+    protected function addConditionsCombination($condition, ElementInterface $context)
     {
         $condition = $this->parseCondition($condition);
         $newCondition = $context->find($this->newCondition, Locator::SELECTOR_XPATH);
@@ -208,10 +209,10 @@ class ConditionsElement extends SimpleElement
      * Add conditions
      *
      * @param array $conditions
-     * @param SimpleElement $context
+     * @param ElementInterface $context
      * @return void
      */
-    protected function addMultipleCondition(array $conditions, SimpleElement $context)
+    protected function addMultipleCondition(array $conditions, ElementInterface $context)
     {
         foreach ($conditions as $key => $condition) {
             $elementContext = is_numeric($key) ? $context : $this->addConditionsCombination($key, $context);
@@ -227,10 +228,10 @@ class ConditionsElement extends SimpleElement
      * Add single Condition
      *
      * @param string $condition
-     * @param SimpleElement $context
+     * @param ElementInterface $context
      * @return void
      */
-    protected function addSingleCondition($condition, SimpleElement $context)
+    protected function addSingleCondition($condition, ElementInterface $context)
     {
         $condition = $this->parseCondition($condition);
 
@@ -253,15 +254,15 @@ class ConditionsElement extends SimpleElement
      * Fill single condition
      *
      * @param array $rules
-     * @param SimpleElement $element
+     * @param ElementInterface $element
      * @return void
      * @throws \Exception
      */
-    protected function fillCondition(array $rules, SimpleElement $element)
+    protected function fillCondition(array $rules, ElementInterface $element)
     {
         $this->resetKeyParam();
         foreach ($rules as $rule) {
-            /** @var SimpleElement $param */
+            /** @var ElementInterface $param */
             $param = $this->findNextParam($element);
             $param->find('a')->click();
 
@@ -354,11 +355,11 @@ class ConditionsElement extends SimpleElement
     /**
      * Find next param of condition for fill
      *
-     * @param SimpleElement $context
-     * @return SimpleElement
+     * @param ElementInterface $context
+     * @return ElementInterface
      * @throws \Exception
      */
-    protected function findNextParam(SimpleElement $context)
+    protected function findNextParam(ElementInterface $context)
     {
         do {
             if (!isset($this->mapParams[$this->findKeyParam])) {
@@ -387,7 +388,7 @@ class ConditionsElement extends SimpleElement
      *
      * @return void
      */
-    protected function waitForCondition(SimpleElement $element)
+    protected function waitForCondition(ElementInterface $element)
     {
         $this->waitUntil(
             function () use ($element) {

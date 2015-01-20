@@ -6,6 +6,8 @@
 
 namespace Mtf\Client\Element;
 
+use Mtf\Client\ElementInterface;
+
 /**
  * Class JquerytreeElement
  * Typified element class for JqueryTree elements
@@ -60,11 +62,11 @@ class JquerytreeElement extends Tree
     /**
      *  Recursive walks tree
      *
-     * @param SimpleElement $node
+     * @param ElementInterface $node
      * @param string $parentCssClass
      * @return array
      */
-    protected function _getNodeContent(SimpleElement $node, $parentCssClass)
+    protected function _getNodeContent(ElementInterface $node, $parentCssClass)
     {
         $counter = 1;
         $nextNodeSelector = $parentCssClass . " > " . $this->nodeSelector . ":nth-of-type($counter)";

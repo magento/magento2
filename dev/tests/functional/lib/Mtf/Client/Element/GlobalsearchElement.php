@@ -178,7 +178,7 @@ class GlobalsearchElement extends SimpleElement
         $resultItems = $searchResult->getElements($this->resultItem);
         $resultArray = [];
 
-        /** @var SimpleElement $resultItem */
+        /** @var ElementInterface $resultItem */
         foreach ($resultItems as $resultItem) {
             $resultItemLink = $resultItem->find('a');
             $resultText = $resultItemLink->isVisible()

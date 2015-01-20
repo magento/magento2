@@ -7,6 +7,7 @@
 namespace Mtf\Client\Element;
 
 use Mtf\Client\Locator;
+use Mtf\Client\ElementInterface;
 
 /**
  * Class MultiselectgrouplistElement
@@ -151,11 +152,11 @@ class MultiselectgrouplistElement extends MultiselectElement
      * Get optgroup
      *
      * @param string $value
-     * @param SimpleElement $context
-     * @return SimpleElement
+     * @param ElementInterface $context
+     * @return ElementInterface
      * @throws \Exception
      */
-    protected function getOptgroup($value, SimpleElement $context)
+    protected function getOptgroup($value, ElementInterface $context)
     {
         $optgroup = $context->find(sprintf($this->optgroupByLabel, $value), Locator::SELECTOR_XPATH);
         if (!$optgroup->isVisible()) {
@@ -169,11 +170,11 @@ class MultiselectgrouplistElement extends MultiselectElement
      * Get child optgroup
      *
      * @param string $value
-     * @param SimpleElement $context
-     * @return SimpleElement
+     * @param ElementInterface $context
+     * @return ElementInterface
      * @throws \Exception
      */
-    protected function getChildOptgroup($value, SimpleElement $context)
+    protected function getChildOptgroup($value, ElementInterface $context)
     {
         $childOptgroup = null;
         $count = 1;
@@ -210,7 +211,7 @@ class MultiselectgrouplistElement extends MultiselectElement
         foreach ($this->getSelectedOptions() as $option) {
             $value = [];
 
-            /** @var SimpleElement $option */
+            /** @var ElementInterface $option */
             $optionText = $option->getText();
             $optionValue = trim($optionText, $this->trim);
             $value[] = $optionValue;
@@ -254,7 +255,7 @@ class MultiselectgrouplistElement extends MultiselectElement
     /**
      * Get options
      *
-     * @return SimpleElement[]
+     * @return ElementInterface[]
      */
     protected function getOptions()
     {

@@ -94,7 +94,7 @@ abstract class Tree extends SimpleElement
             ++$pathChunkCounter;
         }
         if ($structureChunk) {
-            /** @var SimpleElement $needleElement */
+            /** @var ElementInterface $needleElement */
             $needleElement = $structureChunk->find($this->nodeName);
             $needleElement->click();
         } else {
@@ -108,7 +108,7 @@ abstract class Tree extends SimpleElement
      *
      * @param string $pathChunk
      * @param array $structureChunk
-     * @return array|SimpleElement|false
+     * @return array|ElementInterface|false
      */
     protected function deep($pathChunk, $structureChunk)
     {
@@ -127,11 +127,11 @@ abstract class Tree extends SimpleElement
     /**
      *  Recursive walks tree
      *
-     * @param SimpleElement $node
+     * @param ElementInterface $node
      * @param string $parentCssClass
      * @return array
      */
-    protected function _getNodeContent(SimpleElement $node, $parentCssClass)
+    protected function _getNodeContent(ElementInterface $node, $parentCssClass)
     {
         $nodeArray = [];
         $nodeList = [];
@@ -145,7 +145,7 @@ abstract class Tree extends SimpleElement
         }
         //Write to array values of current node
         foreach ($nodeList as $currentNode) {
-            /** @var SimpleElement $currentNode */
+            /** @var ElementInterface $currentNode */
             $nodesNames = $currentNode->find($this->nodeName);
             $nodesContents = $currentNode->find($this->nodeCssClass);
             $text = ltrim($nodesNames->getText());

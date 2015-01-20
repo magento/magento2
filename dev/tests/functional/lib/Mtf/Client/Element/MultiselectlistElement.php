@@ -39,7 +39,7 @@ class MultiselectlistElement extends MultiselectElement
         $values = is_array($values) ? $values : [$values];
 
         foreach ($options as $option) {
-            /** @var SimpleElement $option */
+            /** @var \Mtf\Client\ElementInterface $option */
             $optionText = $option->getText();
             $isChecked = $option->find($this->optionCheckedElement, Locator::SELECTOR_XPATH)->isVisible();
             $inArray = in_array($optionText, $values);
@@ -60,7 +60,7 @@ class MultiselectlistElement extends MultiselectElement
         $options = $this->getOptions();
 
         foreach ($options as $option) {
-            /** @var SimpleElement $option */
+            /** @var \Mtf\Client\ElementInterface $option */
             $checkedOption = $option->find($this->optionCheckedElement, Locator::SELECTOR_XPATH);
             if ($checkedOption->isVisible()) {
                 $checkedOptions[] = $checkedOption->getText();
@@ -101,7 +101,7 @@ class MultiselectlistElement extends MultiselectElement
         $options = $this->getOptions();
 
         foreach ($options as $option) {
-            /** @var SimpleElement $option */
+            /** @var \Mtf\Client\ElementInterface $option */
             $optionsValue[] = $option->getText();
         }
 

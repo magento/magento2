@@ -73,7 +73,7 @@ class MultisuggestElement extends SuggestElement
         $values = [];
 
         foreach ($choices as $choice) {
-            /** @var SimpleElement $choice */
+            /** @var \Mtf\Client\ElementInterface $choice */
             $values[] = $choice->getText();
         }
         return $values;
