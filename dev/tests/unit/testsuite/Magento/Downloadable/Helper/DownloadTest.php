@@ -226,7 +226,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         $this->fileReadFactory->expects(
             $this->once()
         )->method(
-            'createWithDriverCode'
+            'create'
         )->will(
             $this->returnValue($this->_handleMock)
         );
