@@ -11,6 +11,8 @@ module.exports = function (grunt) {
     // Require
     // --------------------------------------
 
+    require('./dev/tools/grunt/tasks/mage-minify')(grunt);
+
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
@@ -136,13 +138,15 @@ module.exports = function (grunt) {
             }
         },
 
-        uglify: {
+        'mage-minify': {
             legacy: {
                 options: {
-                    mangle: false
+                    type: 'yui-js',
+                    tempPath: 'var/cache/'
                 },
                 files: {
                     '<%= config.path.uglify.legacy %>': [
+                        'lib/web/prototype/prototype.js',
                         'lib/web/prototype/window.js',
                         'lib/web/scriptaculous/builder.js',
                         'lib/web/scriptaculous/effects.js',
@@ -162,7 +166,7 @@ module.exports = function (grunt) {
      * Mostly prototype dependant libraries.
      */
     grunt.registerTask('legacy-build', [
-        'uglify:legacy'
+        'mage-minify:legacy'
     ]);
 
     // Default task
