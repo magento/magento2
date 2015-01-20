@@ -101,13 +101,6 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getBillingAddress();
 
     /**
-     * Returns information about cart totals.
-     *
-     * @return \Magento\Quote\Api\Data\TotalsInterface|null Information about cart totals. Otherwise, null.
-     */
-    public function getTotalsObject();
-
-    /**
      * Returns the reserved order ID for the cart.
      *
      * @return string|null Reserved order ID. Otherwise, null.

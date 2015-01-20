@@ -1869,20 +1869,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getTotalsObject()
-    {
-        // TODO: refactor to getTotals()
-        $shippingAddress = $this->getShippingAddress();
-        $totals = array_merge($shippingAddress->getData(), $this->getData());
-        $this->totalsBuilder->populateWithArray($totals);
-        $this->totalsBuilder->setItems($this->getAllItems());
-
-        return $this->totalsBuilder->create();
-    }
-
-    /**
      * Get all quote totals (sorted by priority)
      * Method process quote states isVirtual and isMultiShipping
      *
