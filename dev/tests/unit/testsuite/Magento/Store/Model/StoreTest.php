@@ -6,6 +6,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -399,7 +400,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     'scope_code',
                     'UAH'
                 ],

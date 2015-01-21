@@ -117,7 +117,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_config->getValue(
             'customer/captcha/' . $key,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

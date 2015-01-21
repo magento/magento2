@@ -76,7 +76,7 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
         if ($this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
                 ->getValue(
                     \Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 ) != 1
             && !$this->_customerSession->isLoggedIn()
         ) {

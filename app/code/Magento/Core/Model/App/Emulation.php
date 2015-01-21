@@ -130,7 +130,7 @@ class Emulation extends \Magento\Framework\Object
         // emulate locale
         $newLocaleCode = $this->_scopeConfig->getValue(
             $this->_localeResolver->getDefaultLocalePath(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $this->_localeResolver->setLocaleCode($newLocaleCode);

@@ -6,7 +6,7 @@
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\Checkout\Model\Agreements\AgreementsProviderInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Provide Agreements stored in db

@@ -5,7 +5,7 @@
  */
 namespace Magento\Msrp\Model;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Framework\Escaper;
@@ -77,7 +77,7 @@ class Config
     {
         return (bool)$this->scopeConfig->getValue(
             self::XML_PATH_MSRP_ENABLED,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->storeId
         );
     }
@@ -91,7 +91,7 @@ class Config
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_MSRP_DISPLAY_ACTUAL_PRICE_TYPE,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->storeId
         );
     }
@@ -106,7 +106,7 @@ class Config
         return $this->escaper->escapeHtml(
             $this->scopeConfig->getValue(
                 self::XML_PATH_MSRP_EXPLANATION_MESSAGE,
-                ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this->storeId
             ),
             ['b', 'br', 'strong', 'i', 'u', 'p', 'span']
@@ -123,7 +123,7 @@ class Config
         return $this->escaper->escapeHtml(
             $this->scopeConfig->getValue(
                 self::XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS,
-                ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this->storeId
             ),
             ['b', 'br', 'strong', 'i', 'u', 'p', 'span']

@@ -99,7 +99,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
         }
         if (!$this->_scopeConfig->getValue(
             self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $this;
@@ -109,7 +109,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_LOG_CLEAN_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         )->setTemplateOptions(
             [
@@ -121,12 +121,12 @@ class Cron extends \Magento\Framework\Model\AbstractModel
         )->setFrom(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_LOG_CLEAN_IDENTITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         )->addTo(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_LOG_CLEAN_RECIPIENT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
         )->getTransport();
 
@@ -146,7 +146,7 @@ class Cron extends \Magento\Framework\Model\AbstractModel
     {
         if (!$this->_scopeConfig->isSetFlag(
             self::XML_PATH_LOG_CLEAN_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             return $this;

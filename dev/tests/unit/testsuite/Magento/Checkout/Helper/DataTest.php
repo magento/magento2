@@ -6,7 +6,7 @@
 namespace Magento\Checkout\Helper;
 
 use Magento\TestFramework\Helper\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,49 +78,49 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     [
                         [
                             'checkout/payment_failed/template',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             8,
                             'fixture_email_template_payment_failed'
                         ],
                         [
                             'checkout/payment_failed/receiver',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             8,
                             'sysadmin'
                         ],
                         [
                             'trans_email/ident_sysadmin/email',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             8,
                             'sysadmin@example.com'
                         ],
                         [
                             'trans_email/ident_sysadmin/name',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             8,
                             'System Administrator'
                         ],
                         [
                             'checkout/payment_failed/identity',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             8,
                             'noreply@example.com'
                         ],
                         [
                             'carriers/ground/title',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             null,
                             'Ground Shipping'
                         ],
                         [
                             'payment/fixture-payment-method/title',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             null,
                             'Check Money Order'
                         ],
                         [
                             'checkout/options/onepage_checkout_enabled',
-                            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                             null,
                             'One Page Checkout'
                         ]
@@ -339,7 +339,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_scopeConfig->expects($this->once())->method('isSetFlag')->with(
             'checkout/options/customer_must_be_logged',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->will($this->returnValue(true));
         $this->assertTrue($this->_helper->isCustomerMustBeLogged());
     }

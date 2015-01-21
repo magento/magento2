@@ -217,7 +217,7 @@ class Config extends \Magento\Framework\Object
     {
         $wysiwygState = $this->_scopeConfig->getValue(
             self::WYSIWYG_STATUS_CONFIG_PATH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
         return in_array($wysiwygState, [self::WYSIWYG_ENABLED, self::WYSIWYG_HIDDEN]);
@@ -232,7 +232,7 @@ class Config extends \Magento\Framework\Object
     {
         $status = $this->_scopeConfig->getValue(
             self::WYSIWYG_STATUS_CONFIG_PATH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         return $status == self::WYSIWYG_HIDDEN;
     }

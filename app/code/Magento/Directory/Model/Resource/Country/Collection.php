@@ -101,7 +101,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function loadByStore($store = null)
     {
-        $allowCountries = explode(',', (string)$this->_scopeConfig->getValue('general/country/allow', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store));
+        $allowCountries = explode(',', (string)$this->_scopeConfig->getValue('general/country/allow', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store));
         if (!empty($allowCountries)) {
             $this->addFieldToFilter("country_id", ['in' => $allowCountries]);
         }

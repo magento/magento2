@@ -111,7 +111,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     {
         $this->_isLive = (bool)(!$this->_scopeConfig->getValue(
             'sales/dashboard/use_aggregated_data',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ));
         return $this;
     }
@@ -417,7 +417,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
                 $dateStart->setDay(
                     $this->_scopeConfig->getValue(
                         'reports/dashboard/mtd_start',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     )
                 );
                 break;
@@ -433,7 +433,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
                     ',',
                     $this->_scopeConfig->getValue(
                         'reports/dashboard/ytd_start',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     )
                 );
                 $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
@@ -583,7 +583,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 
         if ($this->_scopeConfig->getValue(
             'sales/dashboard/use_aggregated_data',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             $this->setMainTable('sales_order_aggregated_created');

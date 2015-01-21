@@ -177,7 +177,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
         $priceRangeCalculation = $this->_scopeConfig->getValue(
             \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory::XML_PATH_RANGE_CALCULATION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if ($priceRangeCalculation) {
             $this->requestBuilder->bind('price_dynamic_algorithm', $priceRangeCalculation);

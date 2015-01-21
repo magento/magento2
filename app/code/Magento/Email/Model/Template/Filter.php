@@ -568,7 +568,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (isset($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
                 $params['path'],
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }

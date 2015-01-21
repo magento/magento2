@@ -129,7 +129,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         }
         return $this->_scopeConfig->getValue(
             \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -142,7 +142,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\Downloadable\Model\Link::XML_PATH_TARGET_NEW_WINDOW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 

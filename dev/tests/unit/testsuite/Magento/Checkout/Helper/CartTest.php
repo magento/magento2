@@ -159,7 +159,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 1;
         $this->scopeConfigMock->expects($this->once())->method('isSetFlag')
-            ->with(Cart::XML_PATH_REDIRECT_TO_CART, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+            ->with(Cart::XML_PATH_REDIRECT_TO_CART, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId)
             ->will($this->returnValue(true));
         $this->assertTrue($this->helper->getShouldRedirectToCart($storeId));
     }

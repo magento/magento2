@@ -166,7 +166,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         if (!isset($this->_config[$websiteId])) {
             $this->_config[$websiteId] = $this->_scopeConfig->getValue(
                 'customer/address',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             );
         }
@@ -318,7 +318,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_VAT_VALIDATION_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -332,7 +332,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -346,7 +346,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_VIV_ON_EACH_TRANSACTION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -361,7 +361,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (string)$this->_scopeConfig->getValue(
             self::XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -375,7 +375,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_VAT_FRONTEND_VISIBILITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 }

@@ -754,10 +754,10 @@ class Multishipping extends \Magento\Framework\Object
     {
         return !($this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) && $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/multi_address',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) && !$this->getQuote()->validateMinimumAmount());
     }
 
@@ -770,12 +770,12 @@ class Multishipping extends \Magento\Framework\Object
     {
         $descr = $this->_scopeConfig->getValue(
             'sales/minimum_order/multi_address_description',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if (empty($descr)) {
             $descr = $this->_scopeConfig->getValue(
                 'sales/minimum_order/description',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $descr;
@@ -788,12 +788,12 @@ class Multishipping extends \Magento\Framework\Object
     {
         $error = $this->_scopeConfig->getValue(
             'sales/minimum_order/multi_address_error_message',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if (empty($error)) {
             $error = $this->_scopeConfig->getValue(
                 'sales/minimum_order/error_message',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
         }
         return $error;

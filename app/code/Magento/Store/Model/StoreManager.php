@@ -5,6 +5,8 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\Store\ScopeInterface;
+
 class StoreManager implements \Magento\Framework\Store\StoreManagerInterface
 {
     /**
@@ -276,7 +278,7 @@ class StoreManager implements \Magento\Framework\Store\StoreManagerInterface
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 }

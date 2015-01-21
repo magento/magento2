@@ -95,7 +95,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
             if ($this->_getSession()->isLoggedIn()) {
                 if (!$this->scopeConfig->isSetFlag(
                     CustomerUrl::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
                 ) {
                     $referer = $this->getRequest()->getParam(CustomerUrl::REFERER_QUERY_PARAM_NAME);

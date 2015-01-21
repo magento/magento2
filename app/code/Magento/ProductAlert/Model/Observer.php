@@ -185,7 +185,7 @@ class Observer
             }
             if (!$this->_scopeConfig->getValue(
                 self::XML_PATH_PRICE_ALLOW,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $website->getDefaultGroup()->getDefaultStore()->getId()
             )
             ) {
@@ -271,7 +271,7 @@ class Observer
             }
             if (!$this->_scopeConfig->getValue(
                 self::XML_PATH_STOCK_ALLOW,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $website->getDefaultGroup()->getDefaultStore()->getId()
             )
             ) {
@@ -350,7 +350,7 @@ class Observer
         if (count($this->_errors)) {
             if (!$this->_scopeConfig->getValue(
                 self::XML_PATH_ERROR_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
             ) {
                 return $this;
@@ -361,7 +361,7 @@ class Observer
             $transport = $this->_transportBuilder->setTemplateIdentifier(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_TEMPLATE,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             )->setTemplateOptions(
                 [
@@ -373,12 +373,12 @@ class Observer
             )->setFrom(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             )->addTo(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_RECIPIENT,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             )->getTransport();
 

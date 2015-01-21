@@ -99,7 +99,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(Configuration::XML_PATH_CAN_SUBTRACT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, 1)
+            ->with(Configuration::XML_PATH_CAN_SUBTRACT, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, 1)
             ->willReturn(true);
         $this->assertTrue($this->model->canSubtractQty(1));
     }
@@ -109,7 +109,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $qty = 1;
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(Configuration::XML_PATH_MIN_QTY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, 1)
+            ->with(Configuration::XML_PATH_MIN_QTY, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, 1)
             ->willReturn($qty);
         $this->assertEquals($qty, $this->model->getMinQty(1));
     }
@@ -132,7 +132,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $store = 1;
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(Configuration::XML_PATH_MAX_SALE_QTY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
+            ->with(Configuration::XML_PATH_MAX_SALE_QTY, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
         $this->assertEquals(1, $this->model->getMaxSaleQty($store));
     }
@@ -143,7 +143,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(Configuration::XML_PATH_NOTIFY_STOCK_QTY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
+            ->with(Configuration::XML_PATH_NOTIFY_STOCK_QTY, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
         $this->assertEquals(1, $this->model->getNotifyStockQty($store));
     }
@@ -156,7 +156,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 Configuration::XML_PATH_ENABLE_QTY_INCREMENTS,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             )->willReturn(1);
         $this->assertEquals(1, $this->model->getEnableQtyIncrements($store));
@@ -168,7 +168,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(Configuration::XML_PATH_QTY_INCREMENTS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
+            ->with(Configuration::XML_PATH_QTY_INCREMENTS, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
         $this->assertEquals(1, $this->model->getQtyIncrements($store));
     }
@@ -178,7 +178,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $store = 1;
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(Configuration::XML_PATH_BACKORDERS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
+            ->with(Configuration::XML_PATH_BACKORDERS, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
         $this->model->getBackorders($store);
     }
@@ -188,7 +188,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $store = 1;
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(Configuration::XML_PATH_CAN_BACK_IN_STOCK, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
+            ->with(Configuration::XML_PATH_CAN_BACK_IN_STOCK, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
         $this->assertEquals(1, $this->model->getCanBackInStock($store));
     }
@@ -198,7 +198,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $store = 1;
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
+            ->with(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
         $this->assertEquals(1, $this->model->isShowOutOfStock($store));
     }
@@ -208,7 +208,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $store = 1;
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(Configuration::XML_PATH_ITEM_AUTO_RETURN, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
+            ->with(Configuration::XML_PATH_ITEM_AUTO_RETURN, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
             ->willReturn(1);
         $this->assertEquals(1, $this->model->isAutoReturnEnabled($store));
     }
@@ -220,7 +220,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(
                 Configuration::XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->willReturn(1);
@@ -236,7 +236,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 Configuration::XML_PATH_ITEM . $field,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->willReturn(1);

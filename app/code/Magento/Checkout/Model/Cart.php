@@ -618,7 +618,7 @@ class Cart extends Object implements CartInterface
         if ($quoteId && $this->_summaryQty === null) {
             $useQty = $this->_scopeConfig->getValue(
                 'checkout/cart_link/use_qty',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             $this->_summaryQty = $useQty ? $this->getItemsQty() : $this->getItemsCount();
         }

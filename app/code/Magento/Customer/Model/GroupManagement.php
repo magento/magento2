@@ -114,7 +114,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
         try {
             $groupId = $this->scopeConfig->getValue(
                 self::XML_PATH_DEFAULT_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         } catch (\Magento\Framework\App\InitException $e) {

@@ -78,7 +78,7 @@ class Config
     public function assignToStore(
         $theme,
         array $stores = [],
-        $scope = \Magento\Store\Model\ScopeInterface::SCOPE_STORES
+        $scope = \Magento\Framework\Store\ScopeInterface::SCOPE_STORES
     ) {
         $isReassigned = false;
 

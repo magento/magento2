@@ -119,7 +119,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'addFieldToFilter'
         )->with(
             'scope',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORES
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES
         )->will(
             $this->returnValue($this->_configData)
         );
@@ -170,7 +170,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'addFieldToFilter'
         )->with(
             'scope',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORES
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES
         )->will(
             $this->returnValue($this->_configData)
         );

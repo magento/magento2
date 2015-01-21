@@ -41,7 +41,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             $datetimeTo->setTimezone(
                 $this->_scopeConfig->getValue(
                     $this->_localeDate->getDefaultTimezonePath(),
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 )
             );
             $datetimeTo->addDay(1)->subSecond(1);
@@ -67,7 +67,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                 $dateObj->setTimezone(
                     $this->_scopeConfig->getValue(
                         $this->_localeDate->getDefaultTimezonePath(),
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     )
                 );
 

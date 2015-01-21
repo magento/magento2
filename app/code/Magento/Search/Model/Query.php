@@ -239,7 +239,7 @@ class Query extends AbstractModel implements QueryInterface
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_MIN_QUERY_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
     }
@@ -253,7 +253,7 @@ class Query extends AbstractModel implements QueryInterface
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_MAX_QUERY_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->getStoreId()
         );
     }

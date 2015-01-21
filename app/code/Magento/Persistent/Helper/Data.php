@@ -9,7 +9,7 @@
  */
 namespace Magento\Persistent\Helper;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 class Data extends \Magento\Core\Helper\Data
 {

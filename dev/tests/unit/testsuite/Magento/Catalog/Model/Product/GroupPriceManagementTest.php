@@ -121,7 +121,7 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue($configValue));
         $this->priceBuilderMock
             ->expects($this->once())
@@ -160,7 +160,7 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue(0));
         $this->priceModifierMock->expects($this->once())->method('removeGroupPrice')->with($this->productMock, 4, 0);
 
@@ -192,7 +192,7 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue(1));
         $this->priceModifierMock->expects($this->once())->method('removeGroupPrice')->with($this->productMock, 4, 1);
 
@@ -212,7 +212,7 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue(1));
 
         $this->productMock->expects($this->once())->method('setData')->with(
@@ -244,7 +244,7 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE)
             ->will($this->returnValue(0));
 
         $this->productMock->expects($this->once())->method('setData')->with(

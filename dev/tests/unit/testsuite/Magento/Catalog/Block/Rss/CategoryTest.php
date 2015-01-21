@@ -194,7 +194,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testIsAllowed()
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
-            ->with('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('rss/catalog/category', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
         $this->assertEquals(true, $this->block->isAllowed());
     }
@@ -202,7 +202,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testGetFeeds()
     {
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
-            ->with('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('rss/catalog/category', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
 
         $category = $this->getMockBuilder('\Magento\Catalog\Model\Category')

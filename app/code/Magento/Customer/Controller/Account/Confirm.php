@@ -16,7 +16,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\StateException;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Class Confirm

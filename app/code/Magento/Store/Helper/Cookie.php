@@ -79,7 +79,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
         $acceptedSaveCookiesWebsites = $this->_getAcceptedSaveCookiesWebsites();
         return $this->_scopeConfig->getValue(
             self::XML_PATH_COOKIE_RESTRICTION,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->_currentStore
         ) && empty($acceptedSaveCookiesWebsites[$this->_website->getId()]);
     }
@@ -117,7 +117,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int)$this->_scopeConfig->getValue(
             self::XML_PATH_COOKIE_RESTRICTION_LIFETIME,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->_currentStore
         );
     }

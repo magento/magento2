@@ -130,7 +130,7 @@ class Config extends \Magento\Framework\Config\Data
                 )->setTitle(
                     (string)$typeConfig['title']
                 )->setDefaultFormat(
-                    $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
+                    $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
                 )->setEscapeHtml(
                     $escapeHtml
                 );

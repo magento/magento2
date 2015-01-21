@@ -137,7 +137,7 @@ class Data extends \Magento\Core\Helper\Url
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\ProductAlert\Model\Observer::XML_PATH_STOCK_ALLOW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -150,7 +150,7 @@ class Data extends \Magento\Core\Helper\Url
     {
         return $this->_scopeConfig->isSetFlag(
             \Magento\ProductAlert\Model\Observer::XML_PATH_PRICE_ALLOW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 }

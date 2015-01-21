@@ -170,25 +170,25 @@ class Shipping implements RateCollectorInterface
             $request->setCountryId(
                 $this->_scopeConfig->getValue(
                     Shipment::XML_PATH_STORE_COUNTRY_ID,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $request->getStore()
                 )
             )->setRegionId(
                 $this->_scopeConfig->getValue(
                     Shipment::XML_PATH_STORE_REGION_ID,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $request->getStore()
                 )
             )->setCity(
                 $this->_scopeConfig->getValue(
                     Shipment::XML_PATH_STORE_CITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $request->getStore()
                 )
             )->setPostcode(
                 $this->_scopeConfig->getValue(
                     Shipment::XML_PATH_STORE_ZIP,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $request->getStore()
                 )
             );
@@ -198,7 +198,7 @@ class Shipping implements RateCollectorInterface
         if (!$limitCarrier) {
             $carriers = $this->_scopeConfig->getValue(
                 'carriers',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
 
@@ -212,7 +212,7 @@ class Shipping implements RateCollectorInterface
             foreach ($limitCarrier as $carrierCode) {
                 $carrierConfig = $this->_scopeConfig->getValue(
                     'carriers/' . $carrierCode,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $storeId
                 );
                 if (!$carrierConfig) {

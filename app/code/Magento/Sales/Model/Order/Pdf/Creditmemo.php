@@ -157,7 +157,7 @@ class Creditmemo extends AbstractPdf
                 $order,
                 $this->_scopeConfig->isSetFlag(
                     self::XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $order->getStoreId()
                 )
             );

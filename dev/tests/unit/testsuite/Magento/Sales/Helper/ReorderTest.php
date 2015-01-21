@@ -129,7 +129,7 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 Reorder::XML_PATH_SALES_REORDER_ALLOW,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this->storeParam
             )
             ->will($this->returnValue($returnValue));

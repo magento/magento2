@@ -181,7 +181,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             foreach ($configMap as $field => $const) {
                 $this->{$field} = (int) $this->_scopeConfig->getValue(
                     $const,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 );
             }
 

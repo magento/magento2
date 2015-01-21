@@ -143,7 +143,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
     {
         $sorts = $this->_scopeConfig->getValue(
             self::XML_PATH_SALES_TOTALS_SORT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->_store
         );
         foreach ($sorts as $code => $sortOrder) {

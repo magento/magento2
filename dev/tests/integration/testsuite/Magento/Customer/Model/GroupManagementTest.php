@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Model;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -54,7 +54,7 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
         $scopeConfig->setValue(
             \Magento\Customer\Model\GroupManagement::XML_PATH_DEFAULT_ID,
             2,
-            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             'secondstore'
         );
         $testGroup = ['id' => 2, 'code' => 'Wholesale', 'tax_class_id' => 3, 'tax_class_name' => 'Retail Customer'];

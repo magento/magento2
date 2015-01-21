@@ -90,7 +90,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
         $tierPrices = $product->getData('tier_price');
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        if ($this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE) != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $found = false;
@@ -145,7 +145,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     {
         $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        if ($this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE) != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $this->priceModifier->removeTierPrice($product, $customerGroupId, $qty, $websiteIdentifier);
@@ -160,7 +160,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
 
         $priceKey = 'website_price';
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) == 0) {
+        if ($this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE) == 0) {
             $priceKey = 'price';
         }
 

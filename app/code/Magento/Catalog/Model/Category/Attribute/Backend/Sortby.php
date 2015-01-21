@@ -66,7 +66,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $attributeCode
             ) : $this->_scopeConfig->getValue(
                 "catalog/frontend/default_sort_by",
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             );
             if (!in_array($data, $available) && !in_array('available_sort_by', $postDataConfig)) {
                 throw new \Magento\Framework\Model\Exception(

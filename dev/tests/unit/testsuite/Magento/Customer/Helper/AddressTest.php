@@ -155,7 +155,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('1'));
         $this->scopeConfig->expects($this->once())//test method cache
             ->method('getValue')
-            ->with('customer/address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
+            ->with('customer/address', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
             ->will($this->returnValue($result));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->assertNull($this->helper->getConfig('unavailable_key'));
@@ -231,7 +231,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VAT_VALIDATION_ENABLED,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->will($this->returnValue($result));
@@ -261,7 +261,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VIV_ON_EACH_TRANSACTION,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->will($this->returnValue($result));
@@ -291,7 +291,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $store
             )
             ->will($this->returnValue($result));
@@ -316,7 +316,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
             ->will($this->returnValue(true));
         $this->assertTrue($this->helper->isDisableAutoGroupAssignDefaultValue());
@@ -328,7 +328,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 \Magento\Customer\Helper\Address::XML_PATH_VAT_FRONTEND_VISIBILITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             )
             ->will($this->returnValue(true));
         $this->assertTrue($this->helper->isVatAttributeVisible());

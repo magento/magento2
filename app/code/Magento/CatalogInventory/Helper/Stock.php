@@ -108,7 +108,7 @@ class Stock
     {
         $manageStock = $this->scopeConfig->getValue(
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         $cond = [
             '{{table}}.use_config_manage_stock = 0 AND {{table}}.manage_stock=1 AND {{table}}.is_in_stock=1',

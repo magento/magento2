@@ -80,7 +80,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
     {
         return $this->_config->getValue(
             self::XML_PATH_CUSTOMER_ACCOUNT_SHARE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) == self::SHARE_WEBSITE;
     }
 

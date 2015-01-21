@@ -10,7 +10,7 @@ use Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementC
 use Magento\CheckoutAgreements\Model\Agreement;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Store\StoreManagerInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\CheckoutAgreements\Service\V1\Data\AgreementBuilder;
 use Magento\CheckoutAgreements\Service\V1\Data\Agreement as AgreementDataObject;
 

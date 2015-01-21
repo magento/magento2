@@ -130,7 +130,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
             $theme->getId(),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             'fixturestore'
         );
     }

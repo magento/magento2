@@ -30,16 +30,16 @@ class Index extends \Magento\Checkout\Controller\Cart
                 )->toCurrency(
                     $this->_scopeConfig->getValue(
                         'sales/minimum_order/amount',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     )
                 );
 
                 $warning = $this->_scopeConfig->getValue(
                     'sales/minimum_order/description',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 ) ? $this->_scopeConfig->getValue(
                     'sales/minimum_order/description',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                 ) : __(
                     'Minimum order amount is %1',
                     $minimumAmount

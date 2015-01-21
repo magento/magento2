@@ -355,7 +355,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES,
             $this->getStoreIds()
         );
         return parent::beforeDelete();

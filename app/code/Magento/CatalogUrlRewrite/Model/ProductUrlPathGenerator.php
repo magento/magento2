@@ -111,7 +111,7 @@ class ProductUrlPathGenerator
         if (!isset($this->productUrlSuffix[$storeId])) {
             $this->productUrlSuffix[$storeId] = $this->scopeConfig->getValue(
                 self::XML_PATH_PRODUCT_URL_SUFFIX,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }

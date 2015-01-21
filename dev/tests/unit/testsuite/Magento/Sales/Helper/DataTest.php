@@ -198,7 +198,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('isSetFlag')
             ->with(
                 $flagName,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
             ->will($this->returnValue($returnValue));

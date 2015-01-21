@@ -95,7 +95,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
         $scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
+            ->with($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, null)
             ->will($this->returnValue($configValue));
 
         /** @var \Magento\Tax\Model\Config */

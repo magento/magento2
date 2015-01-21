@@ -146,7 +146,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue(true)
         );
@@ -165,7 +165,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             'getValue'
         )->with(
             \Magento\Store\Model\StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue(false)
         );

@@ -78,7 +78,7 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function getLocalValidPaths()
     {
-        $paths = $this->_scopeConfig->getValue(self::XML_PATH_EXPORT_LOCAL_VALID_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $paths = $this->_scopeConfig->getValue(self::XML_PATH_EXPORT_LOCAL_VALID_PATH, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
         return $paths;
     }
 
@@ -89,6 +89,6 @@ class Data extends \Magento\Core\Helper\Data
      */
     public function getBunchSize()
     {
-        return (int)$this->_scopeConfig->getValue(self::XML_PATH_BUNCH_SIZE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (int)$this->_scopeConfig->getValue(self::XML_PATH_BUNCH_SIZE, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 }

@@ -137,7 +137,7 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
      */
     public function getConfig($path)
     {
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 
     /**

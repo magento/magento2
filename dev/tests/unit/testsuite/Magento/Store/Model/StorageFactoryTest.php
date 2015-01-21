@@ -190,7 +190,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             'isSetFlag'
         )->with(
             \Magento\Framework\Session\SidResolver::XML_PATH_USE_FRONTEND_SID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )->will(
             $this->returnValue(true)
         );
@@ -290,12 +290,12 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['', '', 21, 11, 'store1'],
-            ['11', \Magento\Store\Model\ScopeInterface::SCOPE_GROUP, 21, null, 'store1'],
-            ['12', \Magento\Store\Model\ScopeInterface::SCOPE_GROUP, 22, null, null],
-            ['11', \Magento\Store\Model\ScopeInterface::SCOPE_GROUP, null, null, null],
-            ['website1', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, 21, 11, 'store1'],
-            ['31', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, 22, null, null],
-            ['website1', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE, null, 0, null],
+            ['11', \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP, 21, null, 'store1'],
+            ['12', \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP, 22, null, null],
+            ['11', \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP, null, null, null],
+            ['website1', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE, 21, 11, 'store1'],
+            ['31', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE, 22, null, null],
+            ['website1', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE, null, 0, null],
         ];
     }
 
@@ -345,9 +345,9 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     public function getFromCookieDataProvider()
     {
         return [
-            ['website1', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE],
-            ['11', \Magento\Store\Model\ScopeInterface::SCOPE_GROUP],
-            ['store1', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            ['website1', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE],
+            ['11', \Magento\Framework\Store\ScopeInterface::SCOPE_GROUP],
+            ['store1', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE],
         ];
     }
 

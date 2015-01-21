@@ -192,7 +192,7 @@ class Data extends AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             SearchQuery::XML_PATH_MIN_QUERY_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -207,7 +207,7 @@ class Data extends AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             SearchQuery::XML_PATH_MAX_QUERY_LENGTH,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
     }

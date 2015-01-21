@@ -195,7 +195,7 @@ abstract class AbstractEntity
             $data['page_size']
         ) ? $data['page_size'] : (static::XML_PATH_PAGE_SIZE ? (int)$this->_scopeConfig->getValue(
             static::XML_PATH_PAGE_SIZE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) : 0);
         $this->_byPagesIterator = isset(
             $data['collection_by_pages_iterator']

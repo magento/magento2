@@ -15,7 +15,7 @@ use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface as 
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\IntervalFactory;
 use Magento\Framework\Search\Request\BucketInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 class DataProvider implements DataProviderInterface
 {

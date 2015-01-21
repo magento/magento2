@@ -37,7 +37,7 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             'dev/translate_inline/active',
             true,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );
     }

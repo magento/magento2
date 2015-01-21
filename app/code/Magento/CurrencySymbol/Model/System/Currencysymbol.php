@@ -152,7 +152,7 @@ class Currencysymbol
             self::ALLOWED_CURRENCIES_CONFIG_SEPARATOR,
             $this->_scopeConfig->getValue(
                 self::XML_PATH_ALLOWED_CURRENCIES,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 null
             )
         );
@@ -179,7 +179,7 @@ class Currencysymbol
                     }
                     $storeSymbols = $this->_scopeConfig->getValue(
                         self::XML_PATH_ALLOWED_CURRENCIES,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                         $store
                     );
                     $allowedCurrencies = array_merge(
@@ -312,7 +312,7 @@ class Currencysymbol
         $result = [];
         $configData = (string)$this->_scopeConfig->getValue(
             $configPath,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if ($configData) {

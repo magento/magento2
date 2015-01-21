@@ -75,7 +75,7 @@ class Cart extends \Magento\Framework\App\Action\Action implements ViewInterface
             $this->getResponse()->setRedirect($returnUrl);
         } elseif (!$this->_scopeConfig->getValue(
             'checkout/cart/redirect_to_cart',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         ) && !$this->getRequest()->getParam(
             'in_cart'
         ) && ($backUrl = $this->_redirect->getRefererUrl())

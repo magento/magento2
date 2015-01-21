@@ -130,7 +130,7 @@ class Observer
                 'group'
             ) === null && $this->_scopeConfig->getValue(
                 'system/cron/' . $groupId . '/use_separate_process',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
             ) == 1
             ) {
                 $this->_shell->execute(
@@ -186,7 +186,7 @@ class Observer
     {
         $scheduleLifetime = (int)$this->_scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_LIFETIME,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         $scheduleLifetime = $scheduleLifetime * self::SECONDS_IN_MINUTE;
         if ($scheduledTime < $currentTime - $scheduleLifetime) {
@@ -244,7 +244,7 @@ class Observer
         $lastRun = (int)$this->_cache->load(self::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . $groupId);
         $rawSchedulePeriod = (int)$this->_scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_GENERATE_EVERY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         $schedulePeriod = $rawSchedulePeriod * self::SECONDS_IN_MINUTE;
         if ($lastRun > time() - $schedulePeriod) {
@@ -316,7 +316,7 @@ class Observer
         $lastCleanup = (int)$this->_cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId);
         $historyCleanUp = (int)$this->_scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_HISTORY_CLEANUP_EVERY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if ($lastCleanup > time() - $historyCleanUp * self::SECONDS_IN_MINUTE) {
             return $this;
@@ -332,11 +332,11 @@ class Observer
 
         $historySuccess = (int)$this->_scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_HISTORY_SUCCESS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         $historyFailure = (int)$this->_scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_HISTORY_FAILURE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         $historyLifetimes = [
             Schedule::STATUS_SUCCESS => $historySuccess * self::SECONDS_IN_MINUTE,
@@ -366,7 +366,7 @@ class Observer
     {
         $cronExpr = $this->_scopeConfig->getValue(
             $jobConfig['config_path'],
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         return $cronExpr;
@@ -424,7 +424,7 @@ class Observer
     {
         $scheduleAheadFor = (int)$this->_scopeConfig->getValue(
             'system/cron/' . $groupId . '/' . self::XML_PATH_SCHEDULE_AHEAD_FOR,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         $scheduleAheadFor = $scheduleAheadFor * self::SECONDS_IN_MINUTE;
 

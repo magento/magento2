@@ -126,33 +126,33 @@
     </type>
     <type name="Magento\Framework\Module\Output\Config">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Session\Config">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Session\SidResolver">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Session\Validator">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\Element\Layout">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\DesignExceptions">
         <arguments>
             <argument name="exceptionConfigPath" xsi:type="string">design/theme/ua_regexp</argument>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\Store\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
 </config>

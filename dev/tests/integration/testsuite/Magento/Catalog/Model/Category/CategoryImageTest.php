@@ -47,7 +47,7 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             'dev/log/active',
             $this->_oldLogActive,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         $this->_oldLogActive = null;
@@ -57,7 +57,7 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             'dev/log/exception_file',
             $this->_oldExceptionFile,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         $this->_oldExceptionFile = null;

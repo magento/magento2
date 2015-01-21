@@ -36,7 +36,7 @@ class Popular extends \Magento\Framework\App\Action\Action
     {
         $searchTerms = $this->scopeConfig->getValue(
             'catalog/seo/search_terms',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
         if (!$searchTerms) {
             $this->_redirect('noroute');

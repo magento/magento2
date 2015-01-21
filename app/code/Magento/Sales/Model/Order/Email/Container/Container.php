@@ -60,7 +60,7 @@ abstract class Container implements IdentityInterface
     {
         return $this->scopeConfig->getValue(
             $path,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }

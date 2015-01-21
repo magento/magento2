@@ -74,7 +74,7 @@ class RequestPreprocessor
                     );
                     $redirectCode = (int)$this->_scopeConfig->getValue(
                         'web/url/redirect_to_base',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     ) !== 301 ? 302 : 301;
 
                     $response = $this->_responseFactory->create();
@@ -97,7 +97,7 @@ class RequestPreprocessor
     {
         return (bool)$this->_scopeConfig->getValue(
             'web/url/redirect_to_base',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 

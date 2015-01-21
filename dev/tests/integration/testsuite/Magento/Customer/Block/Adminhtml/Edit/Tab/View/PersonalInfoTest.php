@@ -162,7 +162,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             ->getDefaultTimezonePath();
         $timezone = $this->_context->getScopeConfig()->getValue(
             $defaultTimeZonePath,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $this->_loadCustomer()->getStoreId()
         );
         $this->assertEquals($timezone, $this->_block->getStoreCreateDateTimezone());

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Layer\Filter\Dynamic;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Model\Exception;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 class AlgorithmFactory
 {

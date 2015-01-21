@@ -6,7 +6,7 @@
 namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Catalog\Model\Category;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
@@ -185,7 +185,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $passedStoreId = $storeId ? $storeId : $categoryStoreId;
         $this->scopeConfig->expects($this->once())->method('getValue')
-            ->with(CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $passedStoreId)
+            ->with(CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $passedStoreId)
             ->will($this->returnValue($suffix));
 
         $this->assertEquals(
@@ -212,7 +212,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->once())->method('getId')->will($this->returnValue($currentStoreId));
         $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
         $this->scopeConfig->expects($this->once())->method('getValue')
-            ->with(CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX, ScopeInterface::SCOPE_STORE, $currentStoreId)
+            ->with(CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $currentStoreId)
             ->will($this->returnValue($suffix));
 
         $this->assertEquals(

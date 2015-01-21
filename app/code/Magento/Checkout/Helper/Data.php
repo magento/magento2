@@ -142,7 +142,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (bool)$this->_scopeConfig->getValue(
             'checkout/options/onepage_checkout_enabled',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -214,14 +214,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $template = $this->_scopeConfig->getValue(
             'checkout/payment_failed/template',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $checkout->getStoreId()
         );
 
         $copyTo = $this->_getEmails('checkout/payment_failed/copy_to', $checkout->getStoreId());
         $copyMethod = $this->_scopeConfig->getValue(
             'checkout/payment_failed/copy_method',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $checkout->getStoreId()
         );
         $bcc = [];
@@ -231,19 +231,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $_receiver = $this->_scopeConfig->getValue(
             'checkout/payment_failed/receiver',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $checkout->getStoreId()
         );
         $sendTo = [
             [
                 'email' => $this->_scopeConfig->getValue(
                     'trans_email/ident_' . $_receiver . '/email',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
                 ),
                 'name' => $this->_scopeConfig->getValue(
                     'trans_email/ident_' . $_receiver . '/name',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
                 ),
             ],
@@ -292,11 +292,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     'shippingAddress' => $checkout->getShippingAddress(),
                     'shippingMethod' => $this->_scopeConfig->getValue(
                         'carriers/' . $shippingMethod . '/title',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     ),
                     'paymentMethod' => $this->_scopeConfig->getValue(
                         'payment/' . $paymentMethod . '/title',
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
                     ),
                     'items' => nl2br($items),
                     'total' => $total,
@@ -304,7 +304,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             )->setFrom(
                 $this->_scopeConfig->getValue(
                     'checkout/payment_failed/identity',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                     $checkout->getStoreId()
                 )
             )->addTo(
@@ -329,7 +329,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getEmails($configPath, $storeId)
     {
-        $data = $this->_scopeConfig->getValue($configPath, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
+        $data = $this->_scopeConfig->getValue($configPath, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId);
         if (!empty($data)) {
             return explode(',', $data);
         }
@@ -351,7 +351,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         $guestCheckout = $this->_scopeConfig->isSetFlag(
             self::XML_PATH_GUEST_CHECKOUT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $store
         );
 
@@ -388,7 +388,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->isSetFlag(
             self::XML_PATH_CUSTOMER_MUST_BE_LOGGED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
     }
 }

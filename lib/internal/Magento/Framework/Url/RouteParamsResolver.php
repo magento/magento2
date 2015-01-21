@@ -110,7 +110,7 @@ class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\
             $store = $this->getScope() ?: $this->_storeManager->getStore();
             if (!$this->_scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this->getScope()
             ) && !$this->_storeManager->hasSingleStore()
             ) {
