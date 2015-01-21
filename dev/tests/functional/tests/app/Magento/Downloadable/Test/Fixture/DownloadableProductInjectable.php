@@ -144,7 +144,7 @@ class DownloadableProductInjectable extends InjectableFixture
         'default_value' => '',
         'input' => 'text',
         'group' => 'advanced-pricing',
-        'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions',
+        'source' => '\Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\GroupPriceOptions'
     ];
 
     protected $has_options = [

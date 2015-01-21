@@ -7,7 +7,7 @@
 namespace Magento\Sitemap\Test\Block\Adminhtml;
 
 use Magento\Backend\Test\Block\Widget\Grid;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class SitemapGrid

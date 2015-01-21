@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\Create;
 
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Factory\Factory;
 
 /**
