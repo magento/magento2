@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
+use Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Category\Tab\ProductGrid;
-use Mtf\Client\Element;
 
 /**
  * Products grid of Category Products tab.
@@ -33,10 +33,10 @@ class Product extends Tab
      * Fill category products.
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return void
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         if (!isset($fields['category_products'])) {
             return;
@@ -50,10 +50,10 @@ class Product extends Tab
      * Get data of tab.
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, Element $element = null)
+    public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
         $result = [];

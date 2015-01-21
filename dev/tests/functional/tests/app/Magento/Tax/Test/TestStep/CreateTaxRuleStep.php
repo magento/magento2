@@ -10,7 +10,6 @@ use Mtf\Fixture\FixtureFactory;
 use Mtf\TestStep\TestStepInterface;
 
 /**
- * Class CreateTaxRuleStep
  * Creating tax rule
  */
 class CreateTaxRuleStep implements TestStepInterface

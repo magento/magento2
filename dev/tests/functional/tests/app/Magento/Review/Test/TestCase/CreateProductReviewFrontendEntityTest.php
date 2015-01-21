@@ -11,7 +11,7 @@ use Magento\Review\Test\Constraint\AssertProductReviewIsAbsentOnProductPage;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\TestCase\Injectable;
 
 /**
@@ -90,13 +90,13 @@ class CreateProductReviewFrontendEntityTest extends Injectable
      * Run create frontend product rating test.
      *
      * @param Review $review
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param AssertProductReviewIsAbsentOnProductPage $assertProductReviewIsAbsentOnProductPage
      * @return array
      */
     public function test(
         Review $review,
-        Browser $browser,
+        BrowserInterface $browser,
         AssertProductReviewIsAbsentOnProductPage $assertProductReviewIsAbsentOnProductPage
     ) {
         // Prepare for tear down
