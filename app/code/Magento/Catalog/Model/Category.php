@@ -1026,7 +1026,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
         $affectedProductIds = $this->getAffectedProductIds();
         $productIndexer = $this->indexerRegistry->get(Indexer\Category\Product::INDEXER_ID);
-        if (!$productIndexer->isScheduled() && $affectedProductIds != null) {
+        if (!$productIndexer->isScheduled() && !empty($affectedProductIds)) {
             $productIndexer->reindexList($this->getPathIds());
         }
     }

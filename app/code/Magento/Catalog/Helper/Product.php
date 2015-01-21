@@ -185,15 +185,13 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Catalog\Model\Product $data
      * @return boolean
      */
-    public function isDataForProductCategoryIndexerWasChanged($data)
+    public function isDataForProductCategoryIndexerWasChanged(\Magento\Catalog\Model\Product $data)
     {
-        if ($data instanceof ModelProduct) {
             foreach ($this->_reindexProductCategoryIndexerData['byDataChange'] as $param) {
                 if ($data->dataHasChangedFor($param)) {
                     return true;
                 }
             }
-        }
         return false;
     }
 
