@@ -167,7 +167,7 @@ abstract class AbstractAssertTaxWithCrossBorderApplying extends AbstractConstrai
         $actualPrices['cart_item_subtotal_incl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPriceInclTax();
         $actualPrices['grand_total'] =
-            $this->checkoutCart->getTotalsBlock()->getGrandTotal();
+            $this->checkoutCart->getTotalsBlock()->getGrandTotalIncludingTax();
         return $actualPrices;
     }
 

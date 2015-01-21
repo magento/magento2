@@ -69,6 +69,8 @@ class GroupPriceOptions implements FixtureInterface
     }
 
     /**
+     * Get preset array
+     *
      * @param string $name
      * @return mixed|null
      */

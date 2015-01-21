@@ -13,7 +13,7 @@ use Magento\Mtf\Client\Locator;
  * Class Totals
  * Invoice totals block
  */
-class Totals extends Block
+class Totals extends \Magento\Sales\Test\Block\Adminhtml\Order\Totals
 {
     /**
      * Submit invoice button selector

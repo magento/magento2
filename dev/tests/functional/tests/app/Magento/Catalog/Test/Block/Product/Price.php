@@ -294,21 +294,23 @@ class Price extends Block
      * Get price excluding tax
      *
      * @param string $currency
-     * @return string
+     * @return string|null
      */
     public function getPriceExcludingTax($currency = '$')
     {
-        return trim($this->_rootElement->find($this->priceExcludingTax)->getText(), $currency);
+        $priceElement = $this->_rootElement->find($this->priceExcludingTax);
+        return $priceElement->isVisible() ? trim($priceElement->getText(), $currency) : null;
     }
 
     /**
      * Get price including tax
      *
      * @param string $currency
-     * @return string
+     * @return string|null
      */
     public function getPriceIncludingTax($currency = '$')
     {
-        return trim($this->_rootElement->find($this->priceIncludingTax)->getText(), $currency);
+        $priceElement = $this->_rootElement->find($this->priceIncludingTax);
+        return $priceElement->isVisible() ? trim($priceElement->getText(), $currency) : null;
     }
 }
