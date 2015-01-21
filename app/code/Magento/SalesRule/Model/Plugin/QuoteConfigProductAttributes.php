@@ -27,13 +27,13 @@ class QuoteConfigProductAttributes
     /**
      * Append sales rule product attribute keys to select by quote item collection
      *
-     * @param \Magento\Sales\Model\Quote\Config $subject
+     * @param \Magento\Quote\Model\Quote\Config $subject
      * @param array $attributeKeys
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetProductAttributes(\Magento\Sales\Model\Quote\Config $subject, array $attributeKeys)
+    public function afterGetProductAttributes(\Magento\Quote\Model\Quote\Config $subject, array $attributeKeys)
     {
         $attributes = $this->_ruleResource->getActiveAttributes();
         foreach ($attributes as $attribute) {

@@ -23,15 +23,23 @@ class Provider implements TokenProviderInterface
     protected $_tokenFactory;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
      * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
-        \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
+        \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_tokenFactory = $tokenFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -94,14 +102,17 @@ class Provider implements TokenProviderInterface
      */
     public function getAccessToken($consumer)
     {
-        /** TODO: log the request token in dev mode since its not persisted. */
-        $token = $this->getIntegrationTokenByConsumerId($consumer->getId());
+        $consumerId = $consumer->getId();
+        $token = $this->getIntegrationTokenByConsumerId($consumerId);
         if (Token::TYPE_REQUEST != $token->getType()) {
             throw new \Magento\Framework\Oauth\Exception(
                 'Cannot get access token because consumer token is not a request token'
             );
         }
         $accessToken = $token->convertToAccess();
+        $this->logger->info(
+            'Request token ' . $token->getToken() . ' was exchanged to obtain access token for consumer ' . $consumerId
+        );
         return ['oauth_token' => $accessToken->getToken(), 'oauth_token_secret' => $accessToken->getSecret()];
     }
 

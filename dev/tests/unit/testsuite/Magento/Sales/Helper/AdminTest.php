@@ -268,7 +268,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $orderMock->expects($this->any())
             ->method('getProductType')
             ->will($this->returnValue($type));
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
         $quoteMock->expects($this->any())

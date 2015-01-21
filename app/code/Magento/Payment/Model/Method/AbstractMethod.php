@@ -735,7 +735,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
      *
      * TODO: payment method instance is not supposed to know about quote
      *
-     * @param \Magento\Sales\Model\Quote|null $quote
+     * @param \Magento\Quote\Model\Quote|null $quote
      * @return bool
      */
     public function isAvailable($quote = null)

@@ -62,7 +62,7 @@ abstract class AbstractCollectorPositionsTest extends \PHPUnit_Framework_TestCas
     {
         switch ($configType) {
             case 'quote':
-                $configClass = 'Magento\Sales\Model\Quote\Address\Total\Collector';
+                $configClass = 'Magento\Quote\Model\Quote\Address\Total\Collector';
                 $methodGetCollectors = 'getCollectors';
                 break;
             case 'invoice':

@@ -47,15 +47,15 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * Gets \Magento\Sales\Model\Quote\Item from \Magento\Sales\Model\Quote by product id
+     * Gets \Magento\Quote\Model\Quote\Item from \Magento\Quote\Model\Quote by product id
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param mixed $productId
-     * @return \Magento\Sales\Model\Quote\Item|null
+     * @return \Magento\Quote\Model\Quote\Item|null
      */
-    private function _getQuoteItemIdByProductId(\Magento\Sales\Model\Quote $quote, $productId)
+    private function _getQuoteItemIdByProductId(\Magento\Quote\Model\Quote $quote, $productId)
     {
-        /** @var $quoteItems \Magento\Sales\Model\Quote\Item[] */
+        /** @var $quoteItems \Magento\Quote\Model\Quote\Item[] */
         $quoteItems = $quote->getAllItems();
         foreach ($quoteItems as $quoteItem) {
             if ($productId == $quoteItem->getProductId()) {
