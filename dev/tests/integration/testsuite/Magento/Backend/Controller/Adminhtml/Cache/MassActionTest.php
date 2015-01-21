@@ -26,14 +26,21 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
         self::$typesSegment = new ConfigSegment($data);
     }
 
+    protected function setUp()
+    {
+        if (defined('HHVM_VERSION')) {
+            $this->markTestIncomplete('Test incompleted by https://github.com/facebook/hhvm/issues/1447');
+        }
+    }
+
     protected function tearDown()
     {
         /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
         $cacheState = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\StateInterface');
         foreach (self::$typesSegment->getData() as $type => $value) {
             $cacheState->setEnabled($type, $value);
-            $cacheState->persist();
         }
+        $cacheState->persist();
         parent::tearDown();
     }
 
