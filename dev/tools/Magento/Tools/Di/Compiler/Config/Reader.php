@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -150,6 +149,9 @@ class Reader
      *
      * @param ConfigInterface $config
      * @param DefinitionsCollection $definitionsCollection
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     *
+     * @return void
      */
     private function fillThirdPartyInterfaces(ConfigInterface $config, DefinitionsCollection $definitionsCollection)
     {

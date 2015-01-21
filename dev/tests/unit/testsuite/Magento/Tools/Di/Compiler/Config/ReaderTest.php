@@ -106,7 +106,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap($this->getPreferencesMap());
 
         $isConcreteMap = [];
-        foreach($definitionCollection->getInstancesNamesList() as $instanceType) {
+        foreach ($definitionCollection->getInstancesNamesList() as $instanceType) {
             $isConcreteMap[] = [$instanceType, strpos($instanceType, 'Interface') === false];
 
             $getResolvedConstructorArgumentsMap[] = [
