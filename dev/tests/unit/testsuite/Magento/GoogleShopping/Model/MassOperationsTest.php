@@ -50,7 +50,10 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
         $this->itemFactory = $this->getMock('Magento\GoogleShopping\Model\ItemFactory', ['create'], [], '', false);
-        $this->productRepository = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface', ['save','get', 'delete', 'getById', 'deleteById', 'getList'], [], '', false);
+        $this->productRepository = $this->getMock(
+            '\Magento\Catalog\Api\ProductRepositoryInterface',
+            ['save', 'get', 'delete', 'getById', 'deleteById', 'getList'], [], '', false
+        );
         $this->notificationInterface = $this->getMock('Magento\Framework\Notification\NotifierInterface');
         $this->storeManagerInterface = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
@@ -121,7 +124,7 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
            ['\Zend_Db_Statement_Exception'],
            ['\Magento\Framework\Model\Exception'],
            ['\Exception']
-        ];
+       ];
     }
 
     public function testSynchronizeItems()

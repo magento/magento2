@@ -73,10 +73,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->addRatingFieldset();
         $this->addVisibilityFieldset();
         if ($this->_coreRegistry->registry('rating_data')) {
-            $this->getForm()->getElement('position')->setValue($this->_coreRegistry->registry('rating_data')
-                ->getPosition());
-            $this->getForm()->getElement('is_active')->setIsChecked($this->_coreRegistry->registry('rating_data')
-                ->getIsActive());
+            $this->getForm()->getElement('position')->setValue(
+                $this->_coreRegistry->registry('rating_data')->getPosition()
+            );
+            $this->getForm()->getElement('is_active')->setIsChecked(
+                $this->_coreRegistry->registry('rating_data')->getIsActive()
+            );
         }
 
         return parent::_prepareForm();
@@ -211,8 +213,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             );
             $field->setRenderer($renderer);
             if ($this->_coreRegistry->registry('rating_data')) {
-                $this->getForm()->getElement('stores')->setValue($this->_coreRegistry->registry('rating_data')
-                    ->getStores());
+                $this->getForm()->getElement('stores')->setValue(
+                    $this->_coreRegistry->registry('rating_data')->getStores()
+                );
             }
         }
         $this->getFieldset('visibility_form')->addField(
@@ -243,6 +246,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Get fieldset by form id
      *
+     * @param string $formId
      * @return \Magento\Framework\Data\Form\Element\Fieldset|null
      */
     protected function getFieldset($formId)

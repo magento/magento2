@@ -948,8 +948,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * @param $dataRow
-     * @param $multirawData
+     * @param array $dataRow
+     * @param array $multirawData
      * @return array
      */
     protected function addMultirowData($dataRow, $multirawData)
@@ -961,7 +961,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         unset($dataRow['product_id']);
         unset($dataRow['store_id']);
 
-        while(true) {
+        while (true) {
             if (Store::DEFAULT_STORE_ID == $storeId) {
                 unset($dataRow[self::COL_STORE]);
                 $this->updateDataWithCategoryColumns($dataRow, $multirawData['rowCategories'], $productId);
@@ -1011,7 +1011,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
             if (empty($dataRow)) {
                 break;
-            } elseif($storeId != Store::DEFAULT_STORE_ID) {
+            } elseif ($storeId != Store::DEFAULT_STORE_ID) {
                 $dataRow[self::COL_STORE] = $this->_storeIdToCode[$storeId];
                 $dataRow[self::COL_SKU] = null;
                 $dataRow[self::COL_ATTR_SET] = null;

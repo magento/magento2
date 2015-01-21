@@ -63,7 +63,7 @@ class Links
         // save links and relations
         if ($linksData['product_ids']) {
             $this->deleteOldLinks(array_keys($linksData['product_ids']));
-            $mainData = array();
+            $mainData = [];
             foreach ($linksData['relation'] as $productData) {
                 $mainData[] = [
                     'product_id' => $productData['parent_id'],
@@ -81,7 +81,7 @@ class Links
             $savedData = $this->connection->fetchPairs(
                 $this->connection->select()->from(
                     $mainTable,
-                    array(new \Zend_Db_Expr('CONCAT_WS(" ", product_id, linked_product_id)'), 'link_id')
+                    [new \Zend_Db_Expr('CONCAT_WS(" ", product_id, linked_product_id)'), 'link_id']
                 )->where(
                     'product_id IN (?) AND link_type_id = ' . $this->connection->quote($this->getLinkTypeId()),
                     array_keys($linksData['attr_product_ids'])
@@ -133,10 +133,10 @@ class Links
                 ['id' => 'product_link_attribute_id', 'code' => 'product_link_attribute_code', 'type' => 'data_type']
             )->where('link_type_id = ?', $this->getLinkTypeId());
             foreach ($this->connection->fetchAll($select) as $row) {
-                $this->attributes[$row['code']] = array(
+                $this->attributes[$row['code']] = [
                     'id' => $row['id'],
                     'table' => $this->productLink->getAttributeTypeTable($row['type'])
-                );
+                ];
             }
         }
         return $this->attributes;
