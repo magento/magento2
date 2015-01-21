@@ -69,9 +69,9 @@ class InstallTest extends Injectable
     public function __prepare(Config $config)
     {
         // Prepare config data
-        $configData['dbHost'] = $config->get('install/dbHost');
-        $configData['dbUser'] = $config->get('install/dbUser');
-        $configData['dbPassword'] = $config->get('install/dbPassword');
+        $configData['dbHost'] = $config->get('install/host');
+        $configData['dbUser'] = $config->get('install/user');
+        $configData['dbPassword'] = $config->get('install/password');
         $configData['dbName'] = $config->get('install/dbName');
         $configData['web'] = $config->get('install/baseUrl');
         $configData['admin'] = $config->get('install/backendName');;
