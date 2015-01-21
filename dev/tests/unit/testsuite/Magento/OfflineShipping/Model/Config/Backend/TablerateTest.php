@@ -19,7 +19,8 @@ class TablerateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->tableateFactoryMock = $this->getMockBuilder('Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory')
+        $this->tableateFactoryMock =
+            $this->getMockBuilder('Magento\OfflineShipping\Model\Resource\Carrier\TablerateFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

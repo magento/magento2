@@ -23,17 +23,17 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected $backendHelperMock;
 
     /**
-     * @var \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $tablerateMock;
 
     /**
-     * @var \Magento\Backend\Block\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $collectionFactoryMock;
 
@@ -53,7 +53,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->collectionFactoryMock = $this->getMockBuilder('\Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\CollectionFactory')
+        $this->collectionFactoryMock =
+            $this->getMockBuilder('\Magento\OfflineShipping\Model\Resource\Carrier\Tablerate\CollectionFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
