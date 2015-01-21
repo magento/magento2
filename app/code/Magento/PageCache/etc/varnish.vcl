@@ -54,7 +54,7 @@ sub vcl_recv {
     std.collect(req.http.Cookie);
 
     # static files are always cacheable. remove SSL flag and cookie
-    if (req.url ~ "^/(media|js|skin)/.*\.(png|jpg|jpeg|gif|css|js|swf|ico)$") {
+    if (req.url ~ "^/pub/.*\.(png|jpg|jpeg|gif|css|js|swf|ico)$") {
         unset req.http.Https;
         unset req.http.Cookie;
     }
