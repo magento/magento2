@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Actions
@@ -171,7 +171,7 @@ class Actions extends Block
     public function cancel()
     {
         $this->_rootElement->find($this->cancel)->click();
-        $this->_rootElement->acceptAlert();
+        $this->browser->acceptAlert();
     }
 
     /**

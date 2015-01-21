@@ -4,15 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Element;
+use Mtf\Client\ElementInterface;
 
 /**
  * Class JquerytreeElement
  * Typified element class for JqueryTree elements
- *
- * @package Mtf\Client\Element
  */
 class JquerytreeElement extends Tree
 {
@@ -64,11 +62,11 @@ class JquerytreeElement extends Tree
     /**
      *  Recursive walks tree
      *
-     * @param Element $node
+     * @param ElementInterface $node
      * @param string $parentCssClass
      * @return array
      */
-    protected function _getNodeContent($node, $parentCssClass)
+    protected function _getNodeContent(ElementInterface $node, $parentCssClass)
     {
         $counter = 1;
         $nextNodeSelector = $parentCssClass . " > " . $this->nodeSelector . ":nth-of-type($counter)";

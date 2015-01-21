@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Typified element class for multi suggest element.
@@ -15,74 +14,73 @@ use Mtf\Client\Element\Locator;
 class MultisuggestElement extends SuggestElement
 {
     /**
-     * Selector list choice.
+     * Selector list choice
      *
      * @var string
      */
     protected $listChoice = './/ul[contains(@class,"mage-suggest-choices")]';
 
     /**
-     * Selector choice item.
+     * Selector choice item
      *
      * @var string
      */
     protected $choice = './/li/div[text()="%s"]/..';
 
     /**
-     * Selector choice value.
+     * Selector choice value
      *
      * @var string
      */
     protected $choiceValue = './/li[contains(@class,"mage-suggest-choice")]/div';
 
     /**
-     * Selector remove choice item.
+     * Selector remove choice item
      *
      * @var string
      */
     protected $choiceClose = '.mage-suggest-choice-close';
 
     /**
-     * Set value.
+     * Set value
      *
      * @param array|string $values
      * @return void
      */
     public function setValue($values)
     {
-        $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
+        $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
         $this->clear();
         foreach ((array)$values as $value) {
             if (!$this->isChoice($value)) {
-                $this->selectWindow();
                 parent::setValue($value);
             }
         }
     }
 
     /**
-     * Get value.
+     * Get value
      *
      * @return array
      */
     public function getValue()
     {
-        $this->_eventManager->dispatchEvent(['get_value'], [(string) $this->_locator]);
+        $this->eventManager->dispatchEvent(['get_value'], [(string) $this->getAbsoluteSelector()]);
 
         $listChoice = $this->find($this->listChoice, Locator::SELECTOR_XPATH);
-        $choices = $listChoice->find($this->choiceValue, Locator::SELECTOR_XPATH)->getElements();
+        $choices = $listChoice->getElements($this->choiceValue, Locator::SELECTOR_XPATH);
         $values = [];
 
         foreach ($choices as $choice) {
-            /** @var Element $choice */
+            /** @var \Mtf\Client\ElementInterface $choice */
             $values[] = $choice->getText();
         }
         return $values;
     }
 
     /**
-     * Check exist selected item.
+     * Check exist selected item
      *
      * @param string $value
      * @return bool
@@ -93,7 +91,7 @@ class MultisuggestElement extends SuggestElement
     }
 
     /**
-     * Clear element.
+     * Clear element
      *
      * @return void
      */
@@ -104,16 +102,5 @@ class MultisuggestElement extends SuggestElement
             $choiceClose->click();
             $choiceClose = $this->find($this->choiceClose);
         }
-    }
-
-    /**
-     * Select to last window.
-     *
-     * @return void
-     */
-    protected function selectWindow()
-    {
-        $windowHandles = $this->_driver->windowHandles();
-        $this->_driver->window(end($windowHandles));
     }
 }

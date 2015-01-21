@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Test\Block\Product\ProductList;
 
-use Magento\Catalog\Test\Fixture\Product;
 use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
+use Mtf\Client\Element\SimpleElement;
+use Magento\Catalog\Test\Fixture\Product;
 
 /**
  * Class Crosssell
@@ -41,7 +41,7 @@ class Crosssell extends Block
      * Click on cross-sell product link
      *
      * @param Product $product
-     * @return Element
+     * @return SimpleElement
      */
     public function clickLink($product)
     {

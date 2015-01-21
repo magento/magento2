@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Typified element class for  Multiple Select List elements
@@ -29,21 +28,6 @@ class MultiselectlistElement extends MultiselectElement
     protected $optionCheckedElement = './/*[contains(@class, "mselect-checked")]/following-sibling::span';
 
     /**
-     * Return Wrapped Element.
-     * If element was not created before:
-     * 1. Context is defined. If context was not passed to constructor - test case (all page) is taken as context
-     * 2. Attempt to get selenium element is performed in loop
-     * that is terminated if element is found or after timeout set in configuration
-     *
-     * @param bool $waitForElementPresent
-     * @return \PHPUnit_Extensions_Selenium2TestCase_Element|\PHPUnit_Extensions_Selenium2TestCase_Element_Select
-     */
-    protected function _getWrappedElement($waitForElementPresent = true)
-    {
-        return Element::_getWrappedElement($waitForElementPresent);
-    }
-
-    /**
      * Select options by values in multiple select list
      *
      * @param array|string $values
@@ -55,7 +39,7 @@ class MultiselectlistElement extends MultiselectElement
         $values = is_array($values) ? $values : [$values];
 
         foreach ($options as $option) {
-            /** @var Element $option */
+            /** @var \Mtf\Client\ElementInterface $option */
             $optionText = $option->getText();
             $isChecked = $option->find($this->optionCheckedElement, Locator::SELECTOR_XPATH)->isVisible();
             $inArray = in_array($optionText, $values);
@@ -76,7 +60,7 @@ class MultiselectlistElement extends MultiselectElement
         $options = $this->getOptions();
 
         foreach ($options as $option) {
-            /** @var Element $option */
+            /** @var \Mtf\Client\ElementInterface $option */
             $checkedOption = $option->find($this->optionCheckedElement, Locator::SELECTOR_XPATH);
             if ($checkedOption->isVisible()) {
                 $checkedOptions[] = $checkedOption->getText();
@@ -117,7 +101,7 @@ class MultiselectlistElement extends MultiselectElement
         $options = $this->getOptions();
 
         foreach ($options as $option) {
-            /** @var Element $option */
+            /** @var \Mtf\Client\ElementInterface $option */
             $optionsValue[] = $option->getText();
         }
 
