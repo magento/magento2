@@ -43,7 +43,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $customerSession;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -94,7 +94,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $store = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
         $store->expects($this->any())->method('getId')->willReturn($this->storeId);
-        $this->storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface', ['getStore']);
+        $this->storeManager = $this->getMockForAbstractClass('Magento\Framework\Store\StoreManagerInterface', ['getStore']);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->stockConfiguration = $this->getMock(

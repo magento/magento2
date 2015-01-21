@@ -43,7 +43,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         );
         /* Called getConfig as workaround for setConfig bug */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->getStore(
             $this->_storeId
         )->getConfig(
@@ -66,7 +66,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(
             $this->_model->isAllowed(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    'Magento\Framework\Store\StoreManagerInterface'
                 )->getStore(
                     $this->_storeId
                 )
@@ -78,7 +78,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(
             $this->_model->isAllowed(
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    'Magento\Framework\Store\StoreManagerInterface'
                 )->getStore(
                     $this->_storeId
                 )

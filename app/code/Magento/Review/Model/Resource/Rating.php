@@ -17,7 +17,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -36,7 +36,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Review\Helper\Data $ratingData
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\Resource\Review\Summary $reviewSummary
      */
     public function __construct(
@@ -44,7 +44,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Review\Helper\Data $ratingData,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Review\Model\Resource\Review\Summary $reviewSummary
     ) {
         $this->moduleManager = $moduleManager;

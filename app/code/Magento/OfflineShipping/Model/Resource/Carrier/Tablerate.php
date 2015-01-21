@@ -91,7 +91,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_logger;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -121,7 +121,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\App\Resource $resource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
@@ -131,7 +131,7 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\App\Resource $resource,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,

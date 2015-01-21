@@ -67,7 +67,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->userContextMock = $this->getMock('\Magento\Authorization\Model\UserContextInterface');
 

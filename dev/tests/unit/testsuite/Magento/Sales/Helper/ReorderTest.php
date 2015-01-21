@@ -47,7 +47,7 @@ class ReorderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

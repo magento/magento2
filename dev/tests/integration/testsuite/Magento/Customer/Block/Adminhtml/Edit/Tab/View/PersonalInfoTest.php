@@ -31,7 +31,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Customer\Api\GroupRepositoryInterface */
     private $_groupRepository;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\Store\StoreManagerInterface */
     private $_storeManager;
 
     /** @var \Magento\Framework\ObjectManagerInterface */
@@ -52,7 +52,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManager = $this->_objectManager->get('Magento\Framework\Store\StoreManagerInterface');
         $this->_context = $this->_objectManager->get(
             'Magento\Backend\Block\Template\Context',
             ['storeManager' => $this->_storeManager]

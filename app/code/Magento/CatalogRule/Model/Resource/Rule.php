@@ -75,7 +75,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     protected $_conditionFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -91,7 +91,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Product\ConditionFactory $conditionFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -103,7 +103,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\ConditionFactory $conditionFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
         \Magento\Eav\Model\Config $eavConfig,

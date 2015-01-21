@@ -43,7 +43,7 @@ class Observer
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -61,7 +61,7 @@ class Observer
      * @param \Magento\Directory\Model\Currency\Import\Factory $importFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      */
@@ -69,7 +69,7 @@ class Observer
         \Magento\Directory\Model\Currency\Import\Factory $importFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
     ) {

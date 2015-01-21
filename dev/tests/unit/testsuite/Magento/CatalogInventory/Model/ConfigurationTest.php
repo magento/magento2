@@ -46,7 +46,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->minSaleQtyHelperMock = $this->getMockBuilder('Magento\CatalogInventory\Helper\Minsaleqty')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Configuration(

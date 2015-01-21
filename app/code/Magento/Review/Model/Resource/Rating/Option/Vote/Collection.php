@@ -15,7 +15,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Store list manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -29,7 +29,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
@@ -39,7 +39,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null

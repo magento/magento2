@@ -26,7 +26,7 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
         );
         /* Called getConfig as workaround for setConfig bug */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->getStore(
             $this->_storeId
         )->getConfig(

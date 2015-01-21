@@ -25,7 +25,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory
      * @param \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory
@@ -38,7 +38,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateResultFactory,
         \Magento\Shipping\Model\Shipment\RequestFactory $shipmentRequestFactory,

@@ -11,7 +11,7 @@ namespace Magento\Backend\Model\Session;
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -181,7 +181,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            'Magento\Framework\Store\StoreManagerInterface',
             [],
             '',
             false

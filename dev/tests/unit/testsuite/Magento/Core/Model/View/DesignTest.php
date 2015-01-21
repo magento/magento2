@@ -19,7 +19,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\Store\StoreManagerInterface');
         $flyweightThemeFactory = $this->getMock(
             '\Magento\Framework\View\Design\Theme\FlyweightFactory', [], [], '', false
         );

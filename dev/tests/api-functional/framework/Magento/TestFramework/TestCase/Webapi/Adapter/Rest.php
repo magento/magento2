@@ -53,7 +53,7 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
             'Magento\TestFramework\TestCase\Webapi\Adapter\Rest\DocumentationGenerator'
         );
         $this->defaultStoreCode = Bootstrap::getObjectManager()
-            ->get('Magento\Store\Model\StoreManagerInterface')
+            ->get('Magento\Framework\Store\StoreManagerInterface')
             ->getStore()
             ->getCode();
     }

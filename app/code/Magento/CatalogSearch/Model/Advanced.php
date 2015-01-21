@@ -19,7 +19,7 @@ use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\Exception;
 use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
@@ -90,7 +90,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -119,7 +119,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param EngineProvider $engineProvider
      * @param CurrencyFactory $currencyFactory
      * @param ProductFactory $productFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(

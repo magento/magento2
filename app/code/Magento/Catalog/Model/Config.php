@@ -80,7 +80,7 @@ class Config extends \Magento\Eav\Model\Config
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -125,7 +125,7 @@ class Config extends \Magento\Eav\Model\Config
      * @param \Magento\Catalog\Model\Product\TypeFactory $productTypeFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -141,7 +141,7 @@ class Config extends \Magento\Eav\Model\Config
         \Magento\Catalog\Model\Product\TypeFactory $productTypeFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->_scopeConfig = $scopeConfig;

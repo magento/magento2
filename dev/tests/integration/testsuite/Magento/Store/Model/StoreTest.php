@@ -117,7 +117,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->model->getWebsite());
         $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\Store\StoreManagerInterface'
         )->getWebsite();
         $this->model->setWebsite($website);
         $actualResult = $this->model->getWebsite();

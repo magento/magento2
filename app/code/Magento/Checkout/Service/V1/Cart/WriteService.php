@@ -25,7 +25,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Store manager interface.
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -59,7 +59,7 @@ class WriteService implements WriteServiceInterface
      * Constructs a cart write service object.
      *
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager.
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager Store manager.
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository Customer registry.
      * @param UserContextInterface $userContext User context.
      * @param \Magento\Quote\Model\QuoteManagement $quoteServiceFactory Quote service factory.
@@ -67,7 +67,7 @@ class WriteService implements WriteServiceInterface
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         UserContextInterface $userContext,
         \Magento\Quote\Model\QuoteManagement $quoteServiceFactory,

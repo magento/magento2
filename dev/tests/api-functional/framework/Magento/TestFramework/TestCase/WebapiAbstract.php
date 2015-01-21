@@ -487,7 +487,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         if ($cleanAppCache) {
             if ($updateLocalConfig) {
                 $objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface')->reinit();
-                $objectManager->get('Magento\Store\Model\StoreManagerInterface')->reinitStores();
+                $objectManager->get('Magento\Framework\Store\StoreManagerInterface')->reinitStores();
             }
 
             if (!$this->_cleanAppConfigCache()) {

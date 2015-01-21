@@ -9,7 +9,7 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Url\DecoderInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
@@ -25,7 +25,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
 
-    /** @var StoreManagerInterface */
+    /** @var \Magento\Framework\Store\StoreManagerInterface */
     protected $storeManager;
 
     /** @var AccountManagementInterface */

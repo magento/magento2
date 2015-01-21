@@ -36,7 +36,7 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
     protected $rssModel;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 

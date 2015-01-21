@@ -14,7 +14,7 @@ use Magento\Framework\App\Rss\DataProviderInterface;
 class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements DataProviderInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 

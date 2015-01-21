@@ -325,11 +325,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
         /**
-         * @var \Magento\Store\Model\StoreManagerInterface
+         * @var \Magento\Framework\Store\StoreManagerInterface
          * |\PHPUnit_Framework_MockObject_MockObject $storeManagerMock
          */
         $storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            'Magento\Framework\Store\StoreManagerInterface',
             [],
             '',
             false,
@@ -405,7 +405,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                         ['Magento\Backend\Model\Auth\Session', $sessionMock],
                         ['Magento\Framework\Registry', $registryMock],
                         ['Magento\Cms\Model\Wysiwyg\Config', $wysiwygConfigMock],
-                        ['Magento\Store\Model\StoreManagerInterface', $storeManagerMock],
+                        ['Magento\Framework\Store\StoreManagerInterface', $storeManagerMock],
                     ]
                 )
             );

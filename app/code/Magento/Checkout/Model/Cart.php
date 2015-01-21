@@ -45,7 +45,7 @@ class Cart extends Object implements CartInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -92,7 +92,7 @@ class Cart extends Object implements CartInterface
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Resource\Cart $resourceCart
      * @param Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
@@ -106,7 +106,7 @@ class Cart extends Object implements CartInterface
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Resource\Cart $resourceCart,
         Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,

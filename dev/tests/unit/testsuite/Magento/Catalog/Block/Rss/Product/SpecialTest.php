@@ -54,7 +54,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -95,7 +95,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
         $this->rssModel = $this->getMock('Magento\Catalog\Model\Rss\Product\Special', [], [], '', false);
         $this->rssUrlBuilder = $this->getMock('Magento\Framework\App\Rss\UrlBuilderInterface');
 
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $store = $this->getMockBuilder('\Magento\Store\Model\Store')
             ->setMethods(['getId', 'getFrontendName', '__wakeup'])->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));

@@ -21,7 +21,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param CustomerCart $cart
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
@@ -30,7 +30,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         CustomerCart $cart,
         \Magento\Quote\Model\QuoteRepository $quoteRepository

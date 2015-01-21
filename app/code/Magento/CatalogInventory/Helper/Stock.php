@@ -6,7 +6,7 @@
 namespace Magento\CatalogInventory\Helper;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -46,7 +46,7 @@ class Stock
 
     /**
      * @param StockRegistryInterface $stockRegistry
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param ObjectManagerInterface $objectManager
      */

@@ -128,7 +128,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     protected $_calculatorFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -158,7 +158,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory
      * @param \Magento\Framework\Math\CalculatorFactory $calculatorFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Creditmemo\CommentFactory $commentFactory
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
@@ -177,7 +177,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory,
         \Magento\Framework\Math\CalculatorFactory $calculatorFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Creditmemo\CommentFactory $commentFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
         PriceCurrencyInterface $priceCurrency,

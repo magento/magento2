@@ -40,7 +40,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
     protected $httpContext;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 

@@ -25,7 +25,7 @@ class AbstractAction
     protected $resource;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -45,12 +45,12 @@ class AbstractAction
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper
     ) {
         $this->resource = $resource;

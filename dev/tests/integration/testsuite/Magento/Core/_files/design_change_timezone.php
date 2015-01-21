@@ -14,7 +14,7 @@ $designChanges = [
 ];
 foreach ($designChanges as $designChangeData) {
     $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        'Magento\Framework\Store\StoreManagerInterface'
     )->getStore(
         $designChangeData['store']
     )->getId();

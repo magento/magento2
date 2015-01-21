@@ -306,7 +306,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -329,7 +329,7 @@ class Store extends AbstractModel implements
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,

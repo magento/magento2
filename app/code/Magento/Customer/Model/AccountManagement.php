@@ -33,7 +33,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\String as StringHelper;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Handle various customer account actions
@@ -108,7 +108,7 @@ class AccountManagement implements AccountManagementInterface
     private $eventManager;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     private $storeManager;
 

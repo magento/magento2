@@ -26,7 +26,7 @@ class Index extends \Magento\Catalog\Controller\Product\Compare
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param FormKeyValidator $formKeyValidator
      * @param Result\RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
@@ -43,7 +43,7 @@ class Index extends \Magento\Catalog\Controller\Product\Compare
         \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         FormKeyValidator $formKeyValidator,
         Result\RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,

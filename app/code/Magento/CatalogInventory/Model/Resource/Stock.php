@@ -7,7 +7,7 @@
 namespace Magento\CatalogInventory\Model\Resource;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Stock resource model
@@ -74,7 +74,7 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 

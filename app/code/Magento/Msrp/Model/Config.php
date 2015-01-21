@@ -7,7 +7,7 @@ namespace Magento\Msrp\Model;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Framework\Escaper;
 
 class Config
@@ -27,7 +27,7 @@ class Config
     protected $scopeConfig;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -43,12 +43,12 @@ class Config
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Escaper $escaper
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         Escaper $escaper
     ) {
         $this->scopeConfig = $scopeConfig;

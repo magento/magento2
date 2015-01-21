@@ -14,7 +14,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
     protected $categoryTreeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManagerMock;
 
@@ -58,7 +58,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->storeManagerMock = $this->getMockBuilder(
-                '\Magento\Store\Model\StoreManagerInterface'
+                '\Magento\Framework\Store\StoreManagerInterface'
             )->disableOriginalConstructor()
             ->getMock();
 

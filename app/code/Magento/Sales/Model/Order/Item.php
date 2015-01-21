@@ -164,7 +164,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     protected $productRepository;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -179,7 +179,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -188,7 +188,7 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         AttributeDataBuilder $customAttributeBuilder,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,

@@ -54,7 +54,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected $customerSession;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -105,7 +105,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->imageHelper = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
         $this->customerSession = $this->getMock('Magento\Customer\Model\Session', ['getId'], [], '', false);
         $this->customerSession->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $store = $this->getMockBuilder('\Magento\Store\Model\Store')
             ->setMethods(['getId', '__wakeup'])->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));

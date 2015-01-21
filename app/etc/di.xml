@@ -20,7 +20,7 @@
     <preference for="Magento\Framework\App\CacheInterface" type="Magento\Framework\App\Cache\Proxy" />
     <preference for="Magento\Framework\App\Cache\StateInterface" type="Magento\Framework\App\Cache\State" />
     <preference for="Magento\Framework\App\Cache\TypeListInterface" type="Magento\Framework\App\Cache\TypeList" />
-    <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
+    <preference for="Magento\Framework\Store\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
     <preference for="Magento\Framework\View\DesignInterface" type="Magento\Core\Model\View\Design\Proxy" />
     <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Core\Model\Theme" />
     <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Core\Model\Theme\Resolver" />

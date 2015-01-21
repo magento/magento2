@@ -11,7 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class StoresConfig
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -21,11 +21,11 @@ class StoresConfig
     protected $_config;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
         $this->_storeManager = $storeManager;

@@ -12,7 +12,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Build base Query for Index
@@ -30,14 +30,14 @@ class IndexBuilder implements IndexBuilderInterface
     private $config;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     private $storeManager;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param ScopeConfigInterface $config
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(Resource $resource, ScopeConfigInterface $config, StoreManagerInterface $storeManager)
     {

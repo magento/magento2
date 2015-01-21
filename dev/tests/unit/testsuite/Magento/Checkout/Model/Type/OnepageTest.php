@@ -38,7 +38,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerSessionMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Store\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
 
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -129,7 +129,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->requestMock = $this->getMock(
             'Magento\Framework\App\RequestInterface',
             ['isAjax', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie']

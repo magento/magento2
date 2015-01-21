@@ -14,7 +14,7 @@ use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory as WebsiteFactory;
 
-class Db implements \Magento\Store\Model\StoreManagerInterface
+class Db implements \Magento\Framework\Store\StoreManagerInterface
 {
     /**
      * Flag that shows that system has only one store view

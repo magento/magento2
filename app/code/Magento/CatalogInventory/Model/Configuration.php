@@ -9,7 +9,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Helper\Minsaleqty as MinsaleqtyHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Class Configuration
@@ -129,13 +129,13 @@ class Configuration implements StockConfigurationInterface
      * @param ConfigInterface $config
      * @param ScopeConfigInterface $scopeConfig
      * @param MinsaleqtyHelper $minsaleqtyHelper
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         ConfigInterface $config,
         ScopeConfigInterface $scopeConfig,
         MinsaleqtyHelper $minsaleqtyHelper,
-        StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->config = $config;
         $this->scopeConfig = $scopeConfig;

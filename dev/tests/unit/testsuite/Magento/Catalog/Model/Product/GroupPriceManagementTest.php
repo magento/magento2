@@ -70,7 +70,7 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('\Magento\Framework\Store\StoreManagerInterface')
             ->setMethods(['getWebsite'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -92,7 +92,7 @@ class GroupPriceManagementTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock->expects($this->any())->method('get')->with('product_sku')
             ->will($this->returnValue($this->productMock));
         $this->configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->groupPriceManagement = new GroupPriceManagement(
             $this->productRepositoryMock,
             $this->priceBuilderMock,

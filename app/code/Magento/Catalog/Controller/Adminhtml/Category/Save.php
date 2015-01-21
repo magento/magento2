@@ -90,7 +90,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 if (!$parentId) {
                     if ($storeId) {
                         $parentId = $this->_objectManager->get(
-                            'Magento\Store\Model\StoreManagerInterface'
+                            'Magento\Framework\Store\StoreManagerInterface'
                         )->getStore(
                             $storeId
                         )->getRootCategoryId();

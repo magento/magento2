@@ -174,7 +174,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
      * @param AttributeDataBuilder $customAttributeBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Resource\Category\Tree $categoryTreeResource
      * @param Resource\Category\TreeFactory $categoryTreeFactory
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
@@ -196,7 +196,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
         AttributeDataBuilder $customAttributeBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTreeResource,
         \Magento\Catalog\Model\Resource\Category\TreeFactory $categoryTreeFactory,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
