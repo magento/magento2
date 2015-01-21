@@ -126,7 +126,7 @@
             <default_value xsi:type="null" />
             <input>text</input>
             <group>advanced-pricing</group>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions</source>
+            <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\GroupPriceOptions</source>
         </field>
         <field name="has_options">
             <attribute_code>has_options</attribute_code>

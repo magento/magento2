@@ -6,8 +6,6 @@
  */
 namespace Magento\Framework\Interception;
 
-use Magento\Framework\ObjectManager\Config\Config as ObjectManagerConfig;
-
 /**
  * Class GeneralTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

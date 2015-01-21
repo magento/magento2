@@ -35,7 +35,7 @@
         clear: left;
         margin: 0 @indent-s-base @indent-xs-base 0;
         &:after {
-            content: ': ';  
+            content: ': ';
         }
     }
     dd {
@@ -49,7 +49,7 @@
     @abs-product-options-list();
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-product-options-list-desktop {
         @abs-product-options-list();
     }
@@ -66,13 +66,13 @@
     @abs-button-responsive();
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-button-desktop {
         width: auto;
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .abs-button-responsive-smaller {
         @abs-button-responsive();
     }
@@ -92,13 +92,13 @@
     }
 };
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-blocks-2columns {
         @abs-blocks-2columns();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-blocks-2columns-s {
         @abs-blocks-2columns();
     }
@@ -221,9 +221,9 @@
         @_icon-font-size: 26px,
         @_icon-font-line-height: 15px,
         @_icon-font-text-hide: true,
-        @_icon-font-color: #303030,
-        @_icon-font-color-hover: #303030,
-        @_icon-font-color-active: #303030
+        @_icon-font-color: @color-gray19,
+        @_icon-font-color-hover: @color-gray19,
+        @_icon-font-color-active: @color-gray19
     );
 }
 
@@ -232,10 +232,10 @@
 //--------------------------------------
 .abs-product-link {
     .link(
-        @_link-color: #303030,
-        @_link-color-hover: #303030,
-        @_link-color-active: #303030,
-        @_link-color-visited: #303030
+        @_link-color: @color-gray19,
+        @_link-color-hover: @color-gray19,
+        @_link-color-active: @color-gray19,
+        @_link-color-visited: @color-gray19
     );
 }
 
@@ -250,13 +250,13 @@
     @abs-reset-left-margin();
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-reset-left-margin-desktop {
         @abs-reset-left-margin();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-reset-left-margin-desktop-s {
         @abs-reset-left-margin();
     }
@@ -280,7 +280,7 @@
 //
 //    Action with icon remove with text for desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-action-remove-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
         top: 6px;
         margin-left: @form-field-type-inline-label-width + 50%;
@@ -327,7 +327,7 @@
 //
 //    Add Recipient for desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-add-fields-desktop {
         .fieldset {
             > .field:not(.choice) {
@@ -351,13 +351,13 @@
     .css(margin-left, @form-field-type-inline-label-width);
 };
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-margin-for-forms-desktop {
         @abs-margin-for-forms-desktop();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-margin-for-forms-desktop-s {
         @abs-margin-for-forms-desktop();
     }
@@ -381,25 +381,25 @@
     @abs-visually-hidden();
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-visually-hidden-mobile {
         @abs-visually-hidden();
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .abs-visually-hidden-mobile-m {
         @abs-visually-hidden();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-visually-hidden-desktop-s {
         @abs-visually-hidden();
     }
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-visually-hidden-desktop {
         @abs-visually-hidden();
     }
@@ -416,25 +416,25 @@
     @abs-add-clearfix();
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-add-clearfix-desktop {
         @abs-add-clearfix();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-add-clearfix-desktop-s {
         @abs-add-clearfix();
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-add-clearfix-mobile {
         @abs-add-clearfix();
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .abs-add-clearfix-mobile-m {
         @abs-add-clearfix();
     }
@@ -451,13 +451,13 @@
     @abs-add-box-sizing();
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-add-box-sizing-desktop {
         @abs-add-box-sizing();
     }
 }
 
-.responsive-min-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-s) {
     .abs-add-box-sizing-desktop-s {
         @abs-add-box-sizing();
     }
@@ -466,7 +466,7 @@
 //
 //    Revert field type
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-revert-field-type-desktop {
         .fieldset {
             > .field,
@@ -648,7 +648,7 @@
 //
 //    Checkout order review
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-checkout-order-review {
         tbody tr {
             &:not(:last-child) {
@@ -705,7 +705,7 @@
     );
 }
 
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .abs-icon-add-mobile {
         .icon-font(
             @_icon-font-content: @icon-expand,
@@ -739,7 +739,7 @@
 //
 //    Abstract toggle title block
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .abs-toggling-title-mobile {
         border-top: @border-width-base solid @border-color-base;
         border-bottom: @border-width-base solid @border-color-base;
@@ -779,13 +779,13 @@
     @abs-no-display();
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-no-display-s {
         @abs-no-display();
     }
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-no-display-desktop {
         @abs-no-display();
     }
@@ -802,7 +802,7 @@
 //
 //    Pager toolbar for non-catalog pages mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .abs-pager-toolbar-mobile {
         .toolbar-amount,
         .limiter,
@@ -816,7 +816,7 @@
 //
 //    Pager toolbar for non-catalog pages mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .abs-pager-toolbar-mobile-s {
         .toolbar-amount,
         .limiter,
@@ -829,7 +829,7 @@
 //
 //    Pager toolbar for non-catalog pages desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-pager-toolbar {
         margin-bottom: @indent-base;
         position: relative;
@@ -907,7 +907,7 @@
     }
 }
 
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .abs-shopping-cart-items-desktop {
         float: left;
         width: 73%;

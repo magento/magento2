@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Page;
 
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Factory\Factory;
 use Mtf\Page\Page;
 

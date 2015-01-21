@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Page\Address;
 
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Factory\Factory;
 use Mtf\Page\Page;
 
@@ -26,7 +26,7 @@ class DefaultAddress extends Page
      *
      * @var string
      */
-    protected $defaultAddressesSelector = '.block-addresses-default .box-address-billing';
+    protected $defaultAddressesSelector = '.block-addresses-default .box-billing-address';
 
     /**
      * Get default addresses block

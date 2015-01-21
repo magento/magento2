@@ -42,7 +42,7 @@ class Onepage
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Quote\Model\Quote
      */
     protected $_quote = null;
 
@@ -96,11 +96,6 @@ class Onepage
     protected $_customerFactory;
 
     /**
-     * @var \Magento\Sales\Model\Service\QuoteFactory
-     */
-    protected $_serviceQuoteFactory;
-
-    /**
      * @var \Magento\Sales\Model\OrderFactory
      */
     protected $_orderFactory;
@@ -151,7 +146,7 @@ class Onepage
     protected $orderSender;
 
     /**
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -166,6 +161,11 @@ class Onepage
     protected $extensibleDataObjectConverter;
 
     /**
+     * @var \Magento\Quote\Model\QuoteManagement
+     */
+    protected $quoteManagement;
+
+    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Checkout\Helper\Data $helper
      * @param \Magento\Customer\Model\Url $customerUrl
@@ -177,7 +177,6 @@ class Onepage
      * @param \Magento\Customer\Model\AddressFactory $customrAddrFactory
      * @param \Magento\Customer\Model\FormFactory $customerFormFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Object\Copy $objectCopyService
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -190,8 +189,9 @@ class Onepage
      * @param AccountManagementInterface $accountManagement
      * @param OrderSender $orderSender
      * @param CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -205,7 +205,6 @@ class Onepage
         \Magento\Customer\Model\AddressFactory $customrAddrFactory,
         \Magento\Customer\Model\FormFactory $customerFormFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Sales\Model\Service\QuoteFactory $serviceQuoteFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Object\Copy $objectCopyService,
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -218,8 +217,9 @@ class Onepage
         AccountManagementInterface $accountManagement,
         OrderSender $orderSender,
         CustomerRepositoryInterface $customerRepository,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        \Magento\Quote\Model\QuoteManagement $quoteManagement
     ) {
         $this->_eventManager = $eventManager;
         $this->_customerUrl = $customerUrl;
@@ -232,7 +232,6 @@ class Onepage
         $this->_customrAddrFactory = $customrAddrFactory;
         $this->_customerFormFactory = $customerFormFactory;
         $this->_customerFactory = $customerFactory;
-        $this->_serviceQuoteFactory = $serviceQuoteFactory;
         $this->_orderFactory = $orderFactory;
         $this->_objectCopyService = $objectCopyService;
         $this->messageManager = $messageManager;
@@ -247,6 +246,7 @@ class Onepage
         $this->customerRepository = $customerRepository;
         $this->quoteRepository = $quoteRepository;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->quoteManagement = $quoteManagement;
     }
 
     /**
@@ -262,7 +262,7 @@ class Onepage
     /**
      * Quote object getter
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {
@@ -275,10 +275,10 @@ class Onepage
     /**
      * Declare checkout quote instance
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      */
-    public function setQuote(\Magento\Sales\Model\Quote $quote)
+    public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
         $this->_quote = $quote;
         return $this;
@@ -431,7 +431,7 @@ class Onepage
             $address = $this->getQuote()->getBillingAddress();
         }
 
-        if (!$this->getQuote()->getCustomerId() && self::METHOD_REGISTER == $this->getQuote()->getCheckoutMethod()) {
+        if (!$this->getQuote()->getCustomerId() && $this->isCheckoutMethodRegister()) {
             if ($this->_customerEmailExists($address->getEmail(), $this->_storeManager->getWebsite()->getId())) {
                 return [
                     'error' => 1,
@@ -492,13 +492,19 @@ class Onepage
                     )->setCollectShippingRates(
                         true
                     )->collectTotals();
-                    $shipping->save();
+                    if (!$this->isCheckoutMethodRegister()) {
+                        $shipping->save();
+                    }
                     $this->getCheckout()->setStepData('shipping', 'complete', true);
                     break;
             }
         }
 
-        $this->quoteRepository->save($this->getQuote());
+        if ($this->isCheckoutMethodRegister()) {
+            $this->quoteRepository->save($this->getQuote());
+        } else {
+            $address->save();
+        }
 
         $this->getCheckout()->setStepData(
             'billing',
@@ -515,6 +521,16 @@ class Onepage
         );
 
         return [];
+    }
+
+    /**
+     * Check whether checkout method is "register"
+     *
+     * @return bool
+     */
+    protected function isCheckoutMethodRegister()
+    {
+        return $this->getQuote()->getCheckoutMethod() == self::METHOD_REGISTER;
     }
 
     /**
@@ -917,11 +933,7 @@ class Onepage
                 $this->_prepareCustomerQuote();
                 break;
         }
-
-        /** @var \Magento\Sales\Model\Service\Quote $quoteService */
-        $quoteService = $this->_serviceQuoteFactory->create(['quote' => $this->getQuote()]);
-        $quoteService->submitAllWithDataObject();
-
+        $order = $this->quoteManagement->submit($this->getQuote());
         if ($isNewCustomer) {
             try {
                 $this->_involveNewCustomer();
@@ -929,14 +941,14 @@ class Onepage
                 $this->_logger->critical($e);
             }
         }
-
         $this->_checkoutSession->setLastQuoteId(
             $this->getQuote()->getId()
         )->setLastSuccessQuoteId(
             $this->getQuote()->getId()
+        )->setLastOrderId(
+            $order->getIncrementId()
         )->clearHelperData();
 
-        $order = $quoteService->getOrder();
         if ($order) {
             $this->_eventManager->dispatch(
                 'checkout_type_onepage_save_order_after',

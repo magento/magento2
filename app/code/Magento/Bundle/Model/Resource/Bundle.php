@@ -85,7 +85,7 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $quoteItemIds = $this->_getReadAdapter()->fetchCol(
             $this->_getReadAdapter()->select()->from(
-                $this->getTable('sales_quote_item'),
+                $this->getTable('quote_item'),
                 ['item_id']
             )->where(
                 'product_id = :product_id'
@@ -95,7 +95,7 @@ class Bundle extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if ($quoteItemIds) {
             $this->_getWriteAdapter()->delete(
-                $this->getTable('sales_quote_item'),
+                $this->getTable('quote_item'),
                 ['parent_item_id IN(?)' => $quoteItemIds]
             );
         }

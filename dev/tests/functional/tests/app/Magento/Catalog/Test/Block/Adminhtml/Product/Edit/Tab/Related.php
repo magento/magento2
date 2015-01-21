@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Related\Grid as RelatedGrid;
-use Mtf\Client\Element;
+use Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Related
@@ -32,12 +32,13 @@ class Related extends AbstractRelated
     /**
      * Return related products grid
      *
-     * @param Element|null $element [optional]
+     * @param SimpleElement|null $element [optional]
      * @return RelatedGrid
      */
-    protected function getRelatedGrid(Element $element = null)
+    protected function getRelatedGrid(SimpleElement $element = null)
     {
         $element = $element ? $element : $this->_rootElement;
+
         return $this->blockFactory->create(
             '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Related\Grid',
             ['element' => $element->find($this->relatedGrid)]

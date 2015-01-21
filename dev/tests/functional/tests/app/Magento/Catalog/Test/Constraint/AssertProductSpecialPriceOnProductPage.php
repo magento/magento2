@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Block\Product\View;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureInterface;
 
@@ -32,12 +32,15 @@ class AssertProductSpecialPriceOnProductPage extends AbstractConstraint implemen
      * Assert that displayed special price on product page equals passed from fixture
      *
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param FixtureInterface $product
      * @return void
      */
-    public function processAssert(CatalogProductView $catalogProductView, Browser $browser, FixtureInterface $product)
-    {
+    public function processAssert(
+        CatalogProductView $catalogProductView,
+        BrowserInterface $browser,
+        FixtureInterface $product
+    ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         //Process assertions

@@ -51,7 +51,7 @@ class Available extends \Magento\Framework\Data\Form\Element\Multiselect
 
         $html .= ' onclick="toggleValueElements(this, this.parentNode);" class="checkbox" type="checkbox" />';
         $html .= ' <label for="' . $htmlId . '" class="normal">' . __('Use All Available Attributes') . '</label>';
-        $html .= '<script type="text/javascript">toggleValueElements($(\'' .
+        $html .= '<script>toggleValueElements($(\'' .
             $htmlId .
             '\'), $(\'' .
             $htmlId .

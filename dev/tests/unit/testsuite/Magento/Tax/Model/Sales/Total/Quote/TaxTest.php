@@ -53,7 +53,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         $product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $item = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $item = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getParentItem', 'getHasChildren', 'getProduct', 'getQuote', 'getCode', '__wakeup'])
             ->getMock();
@@ -253,12 +253,12 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getStoreId')
             ->will($this->returnValue(1));
-        $quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $quote
             ->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($store));
-        $address = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address')
+        $address = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
             ->setMethods(['getAssociatedTaxables',
                           'getQuote', 'getBillingAddress', 'getRegionId',
@@ -289,7 +289,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($address));
 
-        $addressData["cached_items_nonnominal"] = $items;
+        $addressData["cached_items_all"] = $items;
         foreach ($addressData as $key => $value) {
             $address->setData($key, $value);
         }
@@ -513,7 +513,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($regionBuilder));
 
         $product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $item = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $item = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getParentItem', 'getHasChildren', 'getProduct', 'getQuote', 'getCode', '__wakeup'])
             ->getMock();
@@ -539,9 +539,9 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         }
 
         $items = [$item];
-        $quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
 
-        $address = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address')
+        $address = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
             ->setMethods(['getAssociatedTaxables', 'getQuote', 'getBillingAddress', 'getRegionId', '__wakeup'])
             ->getMock();
@@ -550,7 +550,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getBillingAddress')
             ->will($this->returnValue($address));
 
-        $addressData["cached_items_nonnominal"] = $items;
+        $addressData["cached_items_all"] = $items;
         foreach ($addressData as $key => $value) {
             $address->setData($key, $value);
         }
@@ -616,13 +616,13 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['convertPrice', '__wakeup'])
             ->getMock();
-        $quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $items = [];
 
         $address = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             [
-                'getAppliedTaxes', 'getQuote', 'getAllNonNominalItems', 'getGrandTotal', '__wakeup',
+                'getAppliedTaxes', 'getQuote', 'getAllItems', 'getGrandTotal', '__wakeup',
                 'addTotal', 'getTaxAmount'
             ],
             [],
@@ -639,7 +639,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quote));
         $address
             ->expects($this->once())
-            ->method('getAllNonNominalItems')
+            ->method('getAllItems')
             ->will($this->returnValue($items));
         $address
             ->expects($this->any())
@@ -654,7 +654,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getTaxAmount')
             ->will($this->returnValue(8));
 
-        $addressData["cached_items_nonnominal"] = $items;
+        $addressData["cached_items_all"] = $items;
         foreach ($addressData as $key => $value) {
             $address->setData($key, $value);
         }
@@ -708,12 +708,12 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyAddress()
     {
-        /** @var $address \Magento\Sales\Model\Quote\Address|PHPUnit_Framework_MockObject_MockObject */
-        $address = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address')
+        /** @var $address \Magento\Quote\Model\Quote\Address|PHPUnit_Framework_MockObject_MockObject */
+        $address = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                    'getAllNonNominalItems',
+                    'getAllItems',
                     '__wakeup',
                 ]
             )->getMock();
@@ -730,7 +730,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $address->setBaseSubtotalInclTax(1);
 
         $address->expects($this->once())
-            ->method('getAllNonNominalItems')
+            ->method('getAllItems')
             ->will($this->returnValue([]));
 
         $objectManager = new ObjectManager($this);

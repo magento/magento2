@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\Block\Message;
 
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Mtf\Block\Form;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Inline

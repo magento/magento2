@@ -41,7 +41,7 @@ class Link extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {
