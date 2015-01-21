@@ -37,46 +37,15 @@ class Subtotal extends AbstractTotal
 
         $allowedSubtotal = $order->getSubtotal() - $order->getSubtotalInvoiced();
         $baseAllowedSubtotal = $order->getBaseSubtotal() - $order->getBaseSubtotalInvoiced();
-        $allowedSubtotalInclTax = $allowedSubtotal +
-            $order->getHiddenTaxAmount() +
-            $order->getTaxAmount() -
-            $order->getTaxInvoiced() -
-            $order->getHiddenTaxInvoiced();
-        $baseAllowedSubtotalInclTax = $baseAllowedSubtotal +
-            $order->getBaseHiddenTaxAmount() +
-            $order->getBaseTaxAmount() -
-            $order->getBaseTaxInvoiced() -
-            $order->getBaseHiddenTaxInvoiced();
-
-        /**
-         * Check if shipping tax calculation is included to current invoice.
-         */
-        $includeShippingTax = true;
-        foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
-            if ($previousInvoice->getShippingAmount() && !$previousInvoice->isCanceled()) {
-                $includeShippingTax = false;
-                break;
-            }
-        }
-
-        if ($includeShippingTax) {
-            $allowedSubtotalInclTax -= $order->getShippingTaxAmount();
-            $baseAllowedSubtotalInclTax -= $order->getBaseShippingTaxAmount();
-        } else {
-            $allowedSubtotalInclTax += $order->getShippingHiddenTaxAmount();
-            $baseAllowedSubtotalInclTax += $order->getBaseShippingHiddenTaxAmount();
-        }
+        //Note: The $subtotalInclTax and $baseSubtotalInclTax are not adjusted from those provide by the line items
+        //because the "InclTax" is displayed before any tax adjustments based on discounts, shipping, etc.
 
         if ($invoice->isLast()) {
             $subtotal = $allowedSubtotal;
             $baseSubtotal = $baseAllowedSubtotal;
-            $subtotalInclTax = $allowedSubtotalInclTax;
-            $baseSubtotalInclTax = $baseAllowedSubtotalInclTax;
         } else {
             $subtotal = min($allowedSubtotal, $subtotal);
             $baseSubtotal = min($baseAllowedSubtotal, $baseSubtotal);
-            $subtotalInclTax = min($allowedSubtotalInclTax, $subtotalInclTax);
-            $baseSubtotalInclTax = min($baseAllowedSubtotalInclTax, $baseSubtotalInclTax);
         }
 
         $invoice->setSubtotal($subtotal);
