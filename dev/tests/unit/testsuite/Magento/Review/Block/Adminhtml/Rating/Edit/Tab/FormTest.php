@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Rewiew\Block\Adminhtml\Rating\Edit\Tab;
+namespace Magento\Review\Block\Adminhtml\Rating\Edit\Tab;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
