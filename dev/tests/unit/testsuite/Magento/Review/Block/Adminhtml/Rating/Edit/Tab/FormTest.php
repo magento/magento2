@@ -7,7 +7,7 @@ namespace Magento\Review\Block\Adminhtml\Rating\Edit\Tab;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
-class Form extends \PHPUnit_Framework_TestCase
+class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Review\Model\Rating
