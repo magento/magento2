@@ -20,7 +20,7 @@ class ExportCsv extends \Magento\Sales\Controller\Adminhtml\Order
     {
         $fileName = 'orders.csv';
         /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
-        $exportBlock = $this->resultLayoutFactory->create()
+        $exportBlock = $this->resultPageFactory->create()
             ->getLayout()
             ->getChildBlock('sales.order.grid', 'grid.export');
         return $this->_fileFactory->create($fileName, $exportBlock->getCsvFile(), DirectoryList::VAR_DIR);
