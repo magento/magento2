@@ -111,7 +111,7 @@ class Editor extends Textarea
                 '
                 <script type="text/javascript">
                 //<![CDATA[
-                require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup"], function(jQuery){' .
+                require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup", "mage/adminhtml/wysiwyg/widget"], function(jQuery){' .
                 "\n" .
                 '(function($) {$.mage.translate.add(' .
                 \Zend_Json::encode(
