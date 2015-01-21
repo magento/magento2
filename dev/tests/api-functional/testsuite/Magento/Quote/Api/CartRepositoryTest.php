@@ -14,7 +14,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
-class CartRepositoryInterfaceTest extends WebapiAbstract
+class CartRepositoryTest extends WebapiAbstract
 {
     /**
      * @var ObjectManager

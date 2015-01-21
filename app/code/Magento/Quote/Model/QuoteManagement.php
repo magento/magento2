@@ -169,6 +169,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $this->quoteRepository->getForCustomer($customerId);
             throw new StateException('Cannot assign customer to the given cart. Customer already has active cart.');
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+
         }
 
         $quote->setCustomer($customer);
@@ -205,8 +206,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         try {
             $this->quoteRepository->getActiveForCustomer($this->userContext->getUserId());
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             throw new CouldNotSaveException('Cannot create quote');
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+
         }
 
         /** @var \Magento\Quote\Model\Quote $quote */
