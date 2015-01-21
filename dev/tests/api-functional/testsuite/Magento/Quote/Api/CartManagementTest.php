@@ -9,7 +9,7 @@ namespace Magento\Quote\Api;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
-class CartManagementInterfaceTest extends WebapiAbstract
+class CartManagementTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'quoteCartManagementV1';
