@@ -7,6 +7,8 @@
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Framework\Model\Exception;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
 
 class Void extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {

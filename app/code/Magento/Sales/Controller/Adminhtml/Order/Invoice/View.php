@@ -29,8 +29,7 @@ class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
         Registry $registry,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory
-    )
-    {
+    ) {
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context, $registry, $resultForwardFactory);
     }

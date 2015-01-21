@@ -29,8 +29,7 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\
         Registry $registry,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         RedirectFactory $resultRedirectFactory
-    )
-    {
+    ) {
         $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context, $registry, $resultForwardFactory);
     }
