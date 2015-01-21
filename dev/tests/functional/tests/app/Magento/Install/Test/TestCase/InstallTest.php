@@ -10,6 +10,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Install\Test\Page\Install;
 use Magento\Install\Test\Fixture\Install as InstallConfig;
 use Magento\User\Test\Fixture\User;
+use Mtf\Config;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
 use Mtf\Config\GlobalConfig;
@@ -18,7 +19,7 @@ use Magento\Install\Test\Constraint\AssertSuccessfulReadinessCheck;
 
 /**
  * PLEASE ADD NECESSARY INFO BEFORE RUNNING TEST TO
- * ../dev/tests/functional/config/install_data.yml.dist
+ * ../dev/tests/functional/config/config.xml
  *
  * Test Flow:
  *
@@ -62,18 +63,18 @@ class InstallTest extends Injectable
     /**
      * Uninstall Magento before test.
      *
-     * @param GlobalConfig $config
+     * @param Config $config
      * @return array
      */
-    public function __prepare(GlobalConfig $config)
+    public function __prepare(Config $config)
     {
         // Prepare config data
-        $configData['dbHost'] = $config->get('install/host');
-        $configData['dbUser'] = $config->get('install/user');
-        $configData['dbPassword'] = $config->get('install/password');
+        $configData['dbHost'] = $config->get('install/dbHost');
+        $configData['dbUser'] = $config->get('install/dbUser');
+        $configData['dbPassword'] = $config->get('install/dbPassword');
         $configData['dbName'] = $config->get('install/dbName');
-        $configData['web'] = $config->get('install/base_url');
-        $configData['admin'] = $config->get('install/backend_name');;
+        $configData['web'] = $config->get('install/baseUrl');
+        $configData['admin'] = $config->get('install/backendName');;
 
         return ['configData' => $configData];
     }
