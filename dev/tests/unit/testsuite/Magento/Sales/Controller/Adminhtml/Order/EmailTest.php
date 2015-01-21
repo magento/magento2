@@ -193,9 +193,13 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->with('You sent the order email.');
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
-            ->with('sales/order/view', ['order_id' => $orderId]);
+            ->with('sales/order/view', ['order_id' => $orderId])
+            ->willReturnSelf();
 
-        $this->orderEmail->execute();
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Redirect',
+            $this->orderEmail->execute()
+        );
         $this->assertEquals($this->response, $this->orderEmail->getResponse());
     }
 
@@ -226,8 +230,12 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
-            ->with('sales/*/');
+            ->with('sales/*/')
+            ->willReturnSelf();
 
-        $this->assertNull($this->orderEmail->execute());
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Redirect',
+            $this->orderEmail->execute()
+        );
     }
 }
