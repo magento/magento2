@@ -40,6 +40,8 @@ class Config
     const XML_VARNISH_PAGECACHE_BACKEND_PORT = 'system/full_page_cache/varnish/backend_port';
 
     const XML_VARNISH_PAGECACHE_BACKEND_HOST = 'system/full_page_cache/varnish/backend_host';
+    
+    const XML_VARNISH_PAGECACHE_VERSION = 'system/full_page_cache/varnish/varnish_version';
 
     const XML_VARNISH_PAGECACHE_DESIGN_THEME_REGEX = 'design/theme/ua_regexp';
 
@@ -49,10 +51,15 @@ class Config
     protected $_scopeConfig;
 
     /**
-     * XML path to value for saving temporary .vcl configuration
+     * XML base path for varnish configurations
      */
-    const VARNISH_CONFIGURATION_PATH = 'system/full_page_cache/varnish/path';
+    const VARNISH_CONFIGURATION_BASE_PATH = 'system/full_page_cache/varnish/path';
 
+    /**
+     * XML path template for version specific .vcl configurations
+     */
+    const VARNISH_CONFIGURATION_PATH = '{{ varnish_configuration_base_path }}/{{ varnish_version }}/vcl';
+    
     /**
      * @var \Magento\Framework\App\Cache\StateInterface $_cacheState
      */
@@ -97,6 +104,30 @@ class Config
     {
         return $this->_scopeConfig->getValue(self::XML_PAGECACHE_TTL);
     }
+    
+    /**
+     * Retrieve varnish version
+     * 
+     * @return string
+     */
+    public function getVarnishVersion()
+    {
+        return $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_VERSION);
+    }
+    
+    /**
+     * Retrieve vcl file path
+     * 
+     * @return string
+     */
+    public function getVclFilePath()
+    {
+        $vclPath = strtr(
+            self::VARNISH_CONFIGURATION_PATH,
+            $this->_getVclFilePathReplacements()
+        );
+        return $this->_scopeConfig->getValue($vclPath);
+    }
 
     /**
      * Return generated varnish.vcl configuration file
@@ -105,8 +136,22 @@ class Config
      */
     public function getVclFile()
     {
-        $data = $this->_modulesDirectory->readFile($this->_scopeConfig->getValue(self::VARNISH_CONFIGURATION_PATH));
+        $vclPath = $this->getVclFilePath();
+        $data = $this->_modulesDirectory->readFile($vclPath);
         return strtr($data, $this->_getReplacements());
+    }
+
+    /**
+     * retrieve replacements for self::XML_VARNISH_CONFIGURATION_FULL_PATH
+     * 
+     * @return array
+     */
+    protected function _getVclFilePathReplacements()
+    {
+        return [
+            '{{ varnish_configuration_base_path }}' => self::VARNISH_CONFIGURATION_BASE_PATH,
+            '{{ varnish_version }}' => $this->getVarnishVersion()
+        ];
     }
 
     /**
