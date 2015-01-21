@@ -160,12 +160,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->resultForwardFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\ForwardFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->controller = $objectManager->getObject(

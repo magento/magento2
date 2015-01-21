@@ -127,17 +127,17 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
 
         $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->resultRawFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->controller = $objectManager->getObject(

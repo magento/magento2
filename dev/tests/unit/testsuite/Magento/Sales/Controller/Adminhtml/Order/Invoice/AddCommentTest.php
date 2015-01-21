@@ -143,7 +143,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
         $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
@@ -153,12 +153,12 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRawFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->commentSenderMock = $this->getMockBuilder('Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender')
