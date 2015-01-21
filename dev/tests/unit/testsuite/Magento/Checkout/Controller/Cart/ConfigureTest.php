@@ -155,10 +155,10 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
     {
         $quoteId = 1;
         $actualProductId = 1;
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->getMock();
-        $quoteItemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $quoteItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
@@ -222,10 +222,10 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
         $quotaId = 1;
         $productIdInQuota = 1;
         $productIdInRequest = null;
-        $quoteItemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $quoteItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->getMock();
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->getMock();
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
