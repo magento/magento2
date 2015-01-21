@@ -199,7 +199,11 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->with($userId)
             ->willReturn($customerMock);
 
-        $this->quoteRepositoryMock->expects($this->once())->method('getActiveForCustomer')->with($userId);
+        $this->quoteRepositoryMock
+            ->expects($this->once())
+            ->method('getActiveForCustomer')
+            ->with($userId)
+            ->willThrowException(new NoSuchEntityException());
 
         $this->quoteRepositoryMock->expects($this->once())->method('create')->willReturn($quoteMock);
         $quoteMock->expects($this->any())->method('setStoreId')->with($storeId);
@@ -238,7 +242,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepositoryMock
             ->expects($this->once())
             ->method('getActiveForCustomer')
-            ->willThrowException(new NoSuchEntityException('123'));
+            ->with($userId);
 
         $this->quoteRepositoryMock->expects($this->never())->method('create')->willReturn($quoteMock);
 
@@ -404,8 +408,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepositoryMock
             ->expects($this->once())
             ->method('getForCustomer')
-            ->with($customerId)
-            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
+            ->with($customerId);
 
         $this->model->assignCustomer($cartId, $customerId, $storeId);
     }
@@ -461,7 +464,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepositoryMock
             ->expects($this->once())
             ->method('getForCustomer')
-            ->with($customerId);
+            ->with($customerId)
+            ->willThrowException(new NoSuchEntityException());
 
         $quoteMock->expects($this->once())->method('setCustomer')->with($customerMock);
         $quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(0);
