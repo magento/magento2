@@ -70,7 +70,7 @@ define([
 };
 
     return function (config, element) {
-        config = config.url || {};
+        config = config || {};
         jQuery(element).on('click', function (event) {
             categorySubmit(config.url, config.ajax);
         });
