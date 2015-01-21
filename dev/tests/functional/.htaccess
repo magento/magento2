@@ -170,6 +170,8 @@
 ## http://developer.yahoo.com/performance/rules.html#expires
 
     ExpiresDefault "access plus 1 year"
+    ExpiresByType text/html A0
+    ExpiresByType text/plain A0
 
 </IfModule>
 
