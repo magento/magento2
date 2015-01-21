@@ -8,8 +8,7 @@
 
 namespace Magento\TestModule4\Service\V1\Entity;
 
-class ExtensibleRequest extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements ExtensibleRequestInterface
+class ExtensibleRequest extends \Magento\Framework\Model\AbstractExtensibleModel implements ExtensibleRequestInterface
 {
     public function getName()
     {

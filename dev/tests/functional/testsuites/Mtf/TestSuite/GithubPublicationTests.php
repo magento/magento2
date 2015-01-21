@@ -28,13 +28,13 @@ class GithubPublicationTests
         $suite->addTestSuite('Magento\Checkout\Test\TestCase\ShippingCarrierTest');
 
         // Adding temporary redirect for product (MAGETWO-12409)
-        $suite->addTestSuite('Magento\UrlRewrite\Test\TestCase\ProductTest');
+        $suite->addTestSuite('Magento\UrlRewrite\Test\TestCase\CreateProductUrlRewriteEntityTest');
 
         // Creating offline order for registered/new customer in admin (MAGETWO-12395, MAGETWO-12520)
         $suite->addTestSuite('Magento\Sales\Test\TestCase\CreateOrderTest');
 
         // Creating customer account (MAGETWO-12394)
-        $suite->addTestSuite('Magento\Customer\Test\TestCase\CreateOnFrontendTest');
+        $suite->addTestSuite('Magento\Customer\Test\TestCase\RegisterCustomerFrontendEntityTest');
 
         // Creating Grouped product and assign it to the category (MAGETWO-13610)
         $suite->addTestSuite('Magento\GroupedProduct\Test\TestCase\CreateGroupedTest');
@@ -58,7 +58,7 @@ class GithubPublicationTests
         $suite->addTestSuite('Magento\Catalog\Test\TestCase\Layer\FilterProductListTest');
 
         // Using quick search to find the product (MAGETWO-12420)
-        $suite->addTestSuite('Magento\CatalogSearch\Test\TestCase\SearchTest');
+        $suite->addTestSuite('Magento\CatalogSearch\Test\TestCase\SearchEntityResultsTest');
 
         // Product Up-selling (MAGETWO-12391)
         $suite->addTestSuite('Magento\Catalog\Test\TestCase\Product\UpsellTest');

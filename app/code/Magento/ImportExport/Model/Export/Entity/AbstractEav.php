@@ -26,13 +26,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
     protected $_attributeValues = [];
 
     /**
-     * Attribute code to its values. Only attributes with options and only default store values used
-     *
-     * @var array
-     */
-    protected $_attributeCodes = null;
-
-    /**
      * Entity type id.
      *
      * @var int
@@ -45,13 +38,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      * @var string[]
      */
     protected $_indexValueAttributes = [];
-
-    /**
-     * Permanent entity columns
-     *
-     * @var string[]
-     */
-    protected $_permanentAttributes = [];
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
@@ -84,43 +70,6 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
         } else {
             $this->_entityTypeId = $eavConfig->getEntityType($this->getEntityTypeCode())->getEntityTypeId();
         }
-    }
-
-    /**
-     * Get attributes codes which are appropriate for export
-     *
-     * @return array
-     */
-    protected function _getExportAttributeCodes()
-    {
-        if (null === $this->_attributeCodes) {
-            if (!empty($this->_parameters[Export::FILTER_ELEMENT_SKIP]) && is_array(
-                $this->_parameters[Export::FILTER_ELEMENT_SKIP]
-            )
-            ) {
-                $skippedAttributes = array_flip(
-                    $this->_parameters[Export::FILTER_ELEMENT_SKIP]
-                );
-            } else {
-                $skippedAttributes = [];
-            }
-            $attributeCodes = [];
-
-            /** @var $attribute AbstractAttribute */
-            foreach ($this->filterAttributeCollection($this->getAttributeCollection()) as $attribute) {
-                if (!isset(
-                    $skippedAttributes[$attribute->getAttributeId()]
-                ) || in_array(
-                    $attribute->getAttributeCode(),
-                    $this->_permanentAttributes
-                )
-                ) {
-                    $attributeCodes[] = $attribute->getAttributeCode();
-                }
-            }
-            $this->_attributeCodes = $attributeCodes;
-        }
-        return $this->_attributeCodes;
     }
 
     /**

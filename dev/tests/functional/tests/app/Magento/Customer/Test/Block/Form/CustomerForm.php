@@ -7,6 +7,8 @@
 namespace Magento\Customer\Test\Block\Form;
 
 use Mtf\Block\Form;
+use Mtf\Client\Element\SimpleElement;
+use Mtf\Fixture\FixtureInterface;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 
 /**
@@ -43,6 +45,21 @@ class CustomerForm extends Form
     public function submit()
     {
         $this->_rootElement->find($this->saveButton)->click();
+    }
+
+    /**
+     * Fill the customer data
+     *
+     * @param FixtureInterface $customer
+     * @param SimpleElement|null $element
+     * @return $this
+     */
+    public function fill(FixtureInterface $customer, SimpleElement $element = null)
+    {
+        /** @var CustomerInjectable $customer */
+        if ($customer->hasData()) {
+            return parent::fill($customer, $element);
+        }
     }
 
     /**

@@ -196,8 +196,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @param Product $product
-     * @param null|false|\Magento\Sales\Model\Quote\Address $shipping
-     * @param null|false|\Magento\Sales\Model\Quote\Address $billing
+     * @param null|false|\Magento\Quote\Model\Quote\Address $shipping
+     * @param null|false|\Magento\Quote\Model\Quote\Address $billing
      * @param Website $website
      * @param bool $calculateTax
      * @return \Magento\Framework\Object[]

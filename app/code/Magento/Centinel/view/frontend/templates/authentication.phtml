@@ -16,7 +16,7 @@
         </div>
     </div>
 <?php else:?>
-    <script type="text/javascript">
+    <script>
 require(['jquery'], function(jQuery){
 
     jQuery('[data-container="body"]').trigger("paymentAuthentication", {state: "cancel"});

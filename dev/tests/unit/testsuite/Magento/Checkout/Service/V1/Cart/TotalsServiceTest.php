@@ -44,7 +44,7 @@ class TotalsServiceTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote', [], [], '', false
+            'Magento\Quote\Model\Quote', [], [], '', false
         );
         $this->totalsBuilderMock = $this->getMock(
             'Magento\Checkout\Service\V1\Data\Cart\TotalsBuilder',
@@ -57,7 +57,7 @@ class TotalsServiceTest extends \PHPUnit_Framework_TestCase
             'Magento\Checkout\Service\V1\Data\Cart\TotalsMapper', [], [], '', false
         );
         $this->quoteRepositoryMock = $this->getMock(
-            'Magento\Sales\Model\QuoteRepository', [], [], '', false
+            'Magento\Quote\Model\QuoteRepository', [], [], '', false
         );
         $this->itemTotalsMapperMock = $this->getMock(
             'Magento\Checkout\Service\V1\Data\Cart\Totals\ItemMapper', ['extractDto'], [], '', false
@@ -82,7 +82,7 @@ class TotalsServiceTest extends \PHPUnit_Framework_TestCase
             ->with($this->quoteMock)
             ->will($this->returnValue(['test']));
 
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $this->quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$item]));
         $this->service->getTotals($cartId);
     }

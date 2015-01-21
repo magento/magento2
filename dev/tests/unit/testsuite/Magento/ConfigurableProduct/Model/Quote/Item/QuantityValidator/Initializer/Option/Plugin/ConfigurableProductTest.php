@@ -25,7 +25,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $quoteItemMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item', ['getProductType', '__wakeup'], [], '', false
+            'Magento\Quote\Model\Quote\Item', ['getProductType', '__wakeup'], [], '', false
         );
         $quoteItemMock->expects($this->once())
             ->method('getProductType')
@@ -39,7 +39,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
             ->method('setProductName');
 
         $optionMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item\Option', ['getProduct', '__wakeup'], [], '', false
+            'Magento\Quote\Model\Quote\Item\Option', ['getProduct', '__wakeup'], [], '', false
         );
 
         $proceed = function () use ($stockItemMock) {

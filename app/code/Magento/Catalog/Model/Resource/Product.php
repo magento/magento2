@@ -118,7 +118,7 @@ class Product extends AbstractResource
      */
     protected function _getDefaultAttributes()
     {
-        return ['entity_id', 'entity_type_id', 'attribute_set_id', 'type_id', 'created_at', 'updated_at'];
+        return ['entity_id', 'attribute_set_id', 'type_id', 'created_at', 'updated_at'];
     }
 
     /**
@@ -453,9 +453,7 @@ class Product extends AbstractResource
      */
     public function duplicate($oldId, $newId)
     {
-        $adapter = $this->_getWriteAdapter();
         $eavTables = ['datetime', 'decimal', 'int', 'text', 'varchar'];
-
         $adapter = $this->_getWriteAdapter();
 
         // duplicate EAV store values
@@ -465,7 +463,6 @@ class Product extends AbstractResource
             $select = $adapter->select()->from(
                 $tableName,
                 [
-                    'entity_type_id',
                     'attribute_id',
                     'store_id',
                     'entity_id' => new \Zend_Db_Expr($adapter->quote($newId)),
@@ -483,7 +480,7 @@ class Product extends AbstractResource
                 $adapter->insertFromSelect(
                     $select,
                     $tableName,
-                    ['entity_type_id', 'attribute_id', 'store_id', 'entity_id', 'value'],
+                    ['attribute_id', 'store_id', 'entity_id', 'value'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );

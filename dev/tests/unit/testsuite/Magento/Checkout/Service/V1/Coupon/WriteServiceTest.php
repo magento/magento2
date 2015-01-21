@@ -49,12 +49,12 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->couponBuilderMock =
             $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\CouponBuilder', [], [], '', false);
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->quoteMock = $this->getMock(
-            '\Magento\Sales\Model\Quote',
+            '\Magento\Quote\Model\Quote',
             [
                 'getItemsCount',
                 'setCouponCode',
@@ -70,7 +70,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->couponCodeDataMock = $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\Coupon', [], [], '', false);
         $this->quoteAddressMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             [
                 'setCollectShippingRates',
                 '__wakeup'

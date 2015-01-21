@@ -77,7 +77,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * Retrieve quote model object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {

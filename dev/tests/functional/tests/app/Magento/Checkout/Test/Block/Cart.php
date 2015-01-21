@@ -10,7 +10,7 @@ use Exception;
 use Magento\Checkout\Test\Block\Cart\CartItem;
 use Magento\Checkout\Test\Block\Onepage\Link;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Factory\Factory;
 use Mtf\Fixture\FixtureInterface;
 

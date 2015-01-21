@@ -783,8 +783,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function setQty($qty)
     {
-        $this->setData('qty', $qty);
-        $this->reloadPriceInfo();
+        if ($this->getData('qty') != $qty) {
+            $this->setData('qty', $qty);
+            $this->reloadPriceInfo();
+        }
         return $this;
     }
 

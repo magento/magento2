@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\Template;
 /**
  * Grid widget massaction block
  *
- * @method \Magento\Sales\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
+ * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @author      Magento Core Team <core@magentocommerce.com>
  */

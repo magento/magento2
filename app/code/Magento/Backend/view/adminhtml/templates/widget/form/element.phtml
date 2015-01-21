@@ -61,7 +61,7 @@
     <span class="form_row">
       <label for="<?php echo $element->getHtmlId() ?>"><?php echo $element->getLabel() ?>:</label>
         <script type="text/javascript" src="<?php echo $this->getViewFileUrl('tiny_mce/tiny_mce.js') ?>"></script>
-        <script type="text/javascript">
+        <script>
 
         //<![CDATA[
         tinyMCE.init({
@@ -105,7 +105,7 @@
       <?php break;
 } ?>
 <?php if ($element->getScript()): ?>
-<script type="text/javascript">
+<script>
     <?php echo $element->getScript() ?>
 </script>
 <?php endif; ?>

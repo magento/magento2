@@ -281,7 +281,7 @@ class Observer
      */
     public function quoteCollectTotalsBefore(\Magento\Framework\Event\Observer $observer)
     {
-        /* @var $quote \Magento\Sales\Model\Quote */
+        /* @var $quote \Magento\Quote\Model\Quote */
         $quote = $observer->getEvent()->getQuote();
         foreach ($quote->getAllAddresses() as $address) {
             $address->setExtraTaxAmount(0);
@@ -306,7 +306,7 @@ class Observer
             return $this;
         }
 
-        $algorithm = $this->_taxData->getCalculationAgorithm();
+        $algorithm = $this->_taxData->getCalculationAlgorithm();
         $options['calculationAlgorithm'] = $algorithm;
         // prepare correct template for options render
         if ($this->_taxData->displayBothPrices()) {

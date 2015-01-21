@@ -13,7 +13,7 @@ if ($this->getIsShipping()):
     $_fieldsContainerId = 'order-shipping_address_fields';
     $_addressChoiceContainerId = 'order-shipping_address_choice';
     ?>
-    <script type="text/javascript">
+    <script>
     require(["Magento_Sales/order/create/form"], function(){
 
         order.shippingAddressContainer = '<?php echo $_fieldsContainerId ?>';
@@ -26,7 +26,7 @@ else:
     $_fieldsContainerId = 'order-billing_address_fields';
     $_addressChoiceContainerId = 'order-billing_address_choice';
     ?>
-    <script type="text/javascript">
+    <script>
         require(["Magento_Sales/order/create/form"], function(){
             order.billingAddressContainer = '<?php echo $_fieldsContainerId ?>';
         });
@@ -72,7 +72,7 @@ endif; ?>
     </div>
     <?php $hideElement = 'address-' . ($this->getIsShipping() ? 'shipping' : 'billing') . '-overlay'; ?>
     <div style="display:none;" id="<?php echo $hideElement ?>" class="overlay"><span><?php echo __('You don\'t need to select a shipping address.') ?></span></div>
-    <script type="text/javascript">
+    <script>
         require(["Magento_Sales/order/create/form"], function(){
                 order.bindAddressFields('<?php echo $_fieldsContainerId ?>');
                 order.bindAddressFields('<?php echo $_addressChoiceContainerId ?>');

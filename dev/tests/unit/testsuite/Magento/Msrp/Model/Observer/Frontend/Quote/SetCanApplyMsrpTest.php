@@ -5,7 +5,7 @@
  */
 namespace Magento\Msrp\Model\Observer\Frontend\Quote;
 
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 use Magento\TestFramework\Helper\ObjectManager;
 
 /**
@@ -47,7 +47,7 @@ class SetCanApplyMsrpTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getQuote'])
             ->getMock();
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'setCanApplyMsrp', 'getAllAddresses'])
             ->getMock();

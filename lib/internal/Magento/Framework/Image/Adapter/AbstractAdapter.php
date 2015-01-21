@@ -262,12 +262,17 @@ abstract class AbstractAdapter implements AdapterInterface
      * Initialize default values
      *
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, array $data = [])
-    {
+    public function __construct(
+        \Magento\Framework\Filesystem $filesystem,
+        \Psr\Log\LoggerInterface $logger,
+        array $data = []
+    ) {
         $this->_filesystem = $filesystem;
+        $this->logger = $logger;
         $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
     }
 

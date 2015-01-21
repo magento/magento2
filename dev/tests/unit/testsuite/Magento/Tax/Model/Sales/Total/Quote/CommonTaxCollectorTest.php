@@ -26,12 +26,12 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
     private $taxConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Address
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Address
      */
     private $address;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote
      */
     private $quote;
 
@@ -64,7 +64,7 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['__wakeup'])
             ->getMock();
 
-        $this->quote = $this->getMockBuilder('\Magento\Sales\Model\Quote')
+        $this->quote = $this->getMockBuilder('\Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getStore'])
             ->getMock();
@@ -73,7 +73,7 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->store));
 
-        $this->address = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address')
+        $this->address = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getQuote', 'getShippingDiscountAmount', 'getBaseShippingDiscountAmount'])
             ->getMock();

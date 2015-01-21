@@ -30,7 +30,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Item  */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item  */
     protected $itemMock;
 
     /**
@@ -65,7 +65,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getQuote', '__wakeup'])
             ->getMock();
 
-        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->setMethods(['getStore', '__wakeup'])
             ->getMock();
@@ -143,7 +143,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getBlock'])
             ->getMock();
 
-        $this->itemMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
+        $this->itemMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMock();
@@ -197,7 +197,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array|int $tierPrices
      * @param string $productType
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Item
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item
      */
     protected function prepareItem($tierPrices, $productType)
     {
@@ -207,7 +207,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $product->expects($this->once())->method('getTierPrice')->will($this->returnValue($tierPrices));
         $item = $this->getMock(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             [],
             ['getProduct', 'getProductType'],
             '',
@@ -231,7 +231,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $blockMock = $this->getMock('Magento\Framework\View\Element\AbstractBlock', ['getItems'], [], '', false);
 
         $itemMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item',
+            'Magento\Quote\Model\Quote\Item',
             ['getProduct', 'setHasError', 'setQty', 'getQty', '__sleep', '__wakeup'],
             [],
             '',

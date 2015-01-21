@@ -6,7 +6,7 @@
 namespace Magento\Checkout\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Sales\Model\Quote;
+use Magento\Quote\Model\Quote;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -57,7 +57,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_customerSession;
 
     /**
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -92,7 +92,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -110,7 +110,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,

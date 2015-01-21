@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Sales\Model\Quote\Item as QuoteItem;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
 
 /**
  * Catalog inventory module observer
@@ -334,7 +334,7 @@ class Observer
      */
     public function subtractQuoteInventory(EventObserver $observer)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $observer->getEvent()->getQuote();
 
         // Maybe we've already processed this quote in some event during order placement

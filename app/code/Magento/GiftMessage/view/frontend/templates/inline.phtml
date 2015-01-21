@@ -52,7 +52,7 @@
                                 </div>
                             </div>
                         </fieldset>
-                        <script type="text/javascript">
+                        <script>
 require(['jquery'], function(jQuery){
 
     jQuery('#add-gift-options-<?php echo $this->getEntity()->getId() ?>')
@@ -119,7 +119,7 @@ require(['jquery'], function(jQuery){
                     <?php endforeach; ?>
                 </ol>
             </dd>
-            <script type="text/javascript">
+            <script>
 require(['jquery'], function(jQuery){
 
     jQuery('#add-gift-options-<?php echo $this->getEntity()->getId() ?>')
@@ -131,7 +131,7 @@ require(['jquery'], function(jQuery){
             <dt class="extra-options-container" id="extra-options-container-<?php echo $this->getEntity()->getId() ?>"></dt>
         </dl>
     </fieldset>
-    <script type="text/javascript">
+    <script>
 require([
     'jquery',
     'mage/mage'
@@ -253,7 +253,7 @@ require([
             <dt class="extra-options-container" id="extra-options-container-<?php echo $this->getEntity()->getId() ?>"></dt>
         </dl>
     </fieldset>
-<script type="text/javascript">
+<script>
     require(['jquery', 'mage/mage'], function(jQuery){
 
     jQuery('#allow_gift_options_<?php echo $this->getEntity()->getId() ?>')
@@ -266,7 +266,7 @@ require([
     <?php break; ?>
 <?php endswitch ?>
 <?php if ($_giftMessage): ?>
-<script type="text/javascript">
+<script>
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('#shipping_method_form').mage('validation');

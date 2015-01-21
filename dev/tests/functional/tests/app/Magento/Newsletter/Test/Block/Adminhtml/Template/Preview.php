@@ -7,8 +7,7 @@
 namespace Magento\Newsletter\Test\Block\Adminhtml\Template;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Newsletter template preview.
@@ -45,6 +44,7 @@ class Preview extends Block
             }
         );
         $this->browser->switchToFrame(new Locator($this->iFrame));
+
         return $this->_rootElement->getText();
     }
 }

@@ -19,8 +19,6 @@ No,Nee
 "Apply Coupon Code","Vul couponcode in"
 "Remove Coupon Code","haal couponcode weg"
 Qty,hoeveelheid
-Subtotal,subtotaal
-Discount,korting
 "Row Subtotal","rij van het subtotaal"
 Action,actie
 "No ordered items","geen bestelde items"
@@ -40,9 +38,6 @@ Sku,Sku
 Orders,Bestellingen
 Customer,Klant
 Guest,Gast
-"Grand Total","Groot Totaal"
-Tax,Belasting
-Shipping,Transport
 "Account Information","Account Gegevens"
 "First Name","Klant Naam"
 "Last Name","Klant Achternaam"
@@ -118,7 +113,6 @@ Date,Datum
 "Order Total","Bestelling Totaalbedrag"
 "Purchase Point","Gekocht van (winkel)"
 "Recent Orders","Recente Bestellingen"
-"Store Credit","Sla Krediet op"
 Notified,Ingelicht
 "Notify Customer by Email","Licht klant in via e-mail"
 Billing,Facturatie
@@ -132,7 +126,6 @@ Message,Boodschap
 Information,Informatie
 "Gift Options",Cadeauopties
 "If you don't want to leave a gift message for the entire order, leave this box blank.","If you don't want to leave a gift message for the entire order, leave this box blank."
-"An item option with code %1 already exists.","An item option with code %1 already exists."
 New,Nieuw
 "Custom Price","Aangepaste prijs"
 Processing,Verwerken
@@ -174,7 +167,6 @@ Returned,Teruggestuurd
 "Please select products.","Please select products."
 Number,Aantal
 "Order Date: %1","Order Date: %1"
-"Discount (%1)","Discount (%1)"
 "Shipping &amp; Handling","Verzending &amp; behandeling"
 "Credit Memos",Creditnota's
 Invoices,Facturen
@@ -298,7 +290,6 @@ Transactions,Transacties
 "Order View","Kijk naar de bestelling"
 "Applies to Any of the Specified Order Statuses","Applies to Any of the Specified Order Statuses"
 "Show Actual Values","Show Actual Values"
-"Shipping & Handling","Verzending & Transport"
 Fetch,Halen
 "Transaction # %1 | %2","Transaction # %1 | %2"
 Key,sleutel
@@ -484,32 +475,10 @@ Mixed,Gemengd
 "We cannot create an empty shipment.","We cannot create an empty shipment."
 "We found an invalid qty to ship for item ""%1"".","We found an invalid qty to ship for item ""%1""."
 "The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal.","The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal."
-"Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself.","Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself."
-"We found an invalid request for adding product to quote.","We found an invalid request for adding product to quote."
-"This is the wrong quote item id to update configuration.","This is the wrong quote item id to update configuration."
-"This shipping method is not available. To use this shipping method, please contact us.","This shipping method is not available. To use this shipping method, please contact us."
-"The address model is not defined.","The address model is not defined."
-"The address total model should be extended from \Magento\Sales\Model\Quote\Address\Total\AbstractTotal.","Het totale adresmodel moet uitgebreid worden van \Magento\Sales\Model\Quote\Address\Total\AbstractTotal."
-"Subscription Items","Subscription Items"
-"Regular Payment",Overboeking
-"Shipping & Handling (%1)","Shipping & Handling (%1)"
-"We found an invalid item option format.","We found an invalid item option format."
-"Item qty declaration error","Item qty declaration error"
-"Some of the products below do not have all the required options.","Some of the products below do not have all the required options."
-"Something went wrong during the item options declaration.","Something went wrong during the item options declaration."
-"We found an item options declaration error.","We found an item options declaration error."
-"Some of the selected options are not currently available.","Some of the selected options are not currently available."
-"Selected option(s) or their combination is not currently available.","Selected option(s) or their combination is not currently available."
-"Some item options or their combination are not currently available.","Some item options or their combination are not currently available."
-"The requested Payment Method is not available.","De aangevraagde betaalmethode is niet beschikbaar."
 "We cannot determine the field name.","We cannot determine the field name."
 "Please specify a valid grid column alias name that exists in the grid table.","Please specify a valid grid column alias name that exists in the grid table."
 "We don't have enough information to save the parent transaction ID.","We don't have enough information to save the parent transaction ID."
 "The last status can't be unassigned from its current state.","The last status can't be unassigned from its current state."
-"Please check the shipping address information. %1","Please check the shipping address information. %1"
-"Please specify a shipping method.","Gelieve een bezorgingsmethode te specificeren."
-"Please check the billing address information. %1","Please check the billing address information. %1"
-"Please select a valid payment method.","Gelieve een geldige betalingsmethode te selecteren."
 "Pending Payment","In afwachting van betaling"
 "On Hold","In de wacht"
 Complete,Gereed

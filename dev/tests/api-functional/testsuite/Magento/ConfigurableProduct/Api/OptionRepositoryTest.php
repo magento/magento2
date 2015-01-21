@@ -289,5 +289,4 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         ];
         return $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
     }
-
 }

@@ -43,7 +43,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->quoteMethodConverterMock = $this->getMock(
             '\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Converter', [], [], '', false
         );
@@ -66,8 +66,8 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetPaymentIfPaymentMethodNotSet()
     {
         $cartId = 11;
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
-        $paymentMock = $this->getMock('\Magento\Sales\Model\Quote\Payment', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $paymentMock = $this->getMock('\Magento\Quote\Model\Quote\Payment', [], [], '', false);
         $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
         $paymentMock->expects($this->once())->method('getId')->will($this->returnValue(null));
 
@@ -83,10 +83,10 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 11;
 
-        $paymentMock = $this->getMock('\Magento\Sales\Model\Quote\Payment', [], [], '', false);
+        $paymentMock = $this->getMock('\Magento\Quote\Model\Quote\Payment', [], [], '', false);
         $paymentMock->expects($this->once())->method('getId')->will($this->returnValue(1));
 
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
 
         $this->quoteRepositoryMock->expects($this->once())
@@ -107,7 +107,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $cartId = 10;
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')

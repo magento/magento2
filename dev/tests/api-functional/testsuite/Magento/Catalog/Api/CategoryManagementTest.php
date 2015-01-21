@@ -40,7 +40,7 @@ class CategoryManagementTest extends WebapiAbstract
         ];
         $result = $this->_webApiCall($serviceInfo, $requestData);
 
-        for($i = 0; $i < $expectedLevel; $i++) {
+        for ($i = 0; $i < $expectedLevel; $i++) {
             $result = $result['children_data'][0];
         }
         $this->assertEquals($expectedId, $result['id']);
