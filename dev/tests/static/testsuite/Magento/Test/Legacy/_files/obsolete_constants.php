@@ -4,7 +4,8 @@
  *
  * Format: array(<constant_name>[, <class_scope> = ''[, <replacement>]])
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 return [
     ['ADMIN_STORE_ID', 'Magento\Framework\AppInterface'],
@@ -180,7 +181,7 @@ return [
     ['XML_PATH_LOCALE_INHERITANCE', 'Mage_Core_Model_Translate'],
     ['XML_PATH_PRODUCT_ATTRIBUTES', 'Magento\Wishlist\Model\Config'],
     ['XML_PATH_PRODUCT_COLLECTION_ATTRIBUTES', 'Magento\Catalog\Model\Config'],
-    ['XML_PATH_QUOTE_PRODUCT_ATTRIBUTES', 'Magento\Sales\Model\Quote\Config'],
+    ['XML_PATH_QUOTE_PRODUCT_ATTRIBUTES', 'Magento\Quote\Model\Quote\Config'],
     ['XML_PATH_SENDING_SET_RETURN_PATH', 'Mage_Newsletter_Model_Subscriber'],
     [
         'XML_PATH_SKIP_PROCESS_MODULES_UPDATES',

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\TestCase\Product;
@@ -10,7 +11,7 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\InjectableFixture;
@@ -40,7 +41,7 @@ abstract class AbstractCompareProductsTest extends Injectable
     /**
      * Browser.
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -98,14 +99,14 @@ abstract class AbstractCompareProductsTest extends Injectable
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CustomerAccountLogin $customerAccountLogin
      * @return void
      */
     public function __inject(
         CmsIndex $cmsIndex,
         CatalogProductView $catalogProductView,
-        Browser $browser,
+        BrowserInterface $browser,
         CustomerAccountLogin $customerAccountLogin
     ) {
         $this->cmsIndex = $cmsIndex;

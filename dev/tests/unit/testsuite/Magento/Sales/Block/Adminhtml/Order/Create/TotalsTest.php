@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
@@ -22,7 +23,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     protected $totals;
 
     /**
-     * @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteMock;
 
@@ -36,7 +37,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->quoteMock = $this->getMock(
-            '\Magento\Sales\Model\Quote', ['getCustomerNoteNotify'], [], '', false
+            '\Magento\Quote\Model\Quote', ['getCustomerNoteNotify'], [], '', false
         );
         $this->sessionQuoteMock = $this->getMock(
             '\Magento\Backend\Model\Session\Quote', [], [], '', false

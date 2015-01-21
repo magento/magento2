@@ -1,10 +1,9 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Resource\Eav;
-
-use \Magento\Catalog\Model\Resource\Eav\Attribute;
 
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
@@ -91,7 +90,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
-                '\Magento\Catalog\Model\Resource\Eav\Attribute',
+                'Magento\Catalog\Model\Resource\Eav\Attribute',
                 [
                     'context' => $this->contextMock,
                     'productFlatIndexerProcessor' => $this->_processor,

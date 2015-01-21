@@ -1,6 +1,7 @@
 /**
  * @category    frontend Checkout region-updater
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true expr:true*/
 define([
@@ -60,9 +61,10 @@ define([
          */
         _renderSelectOption: function(selectElement, key, value) {
             selectElement.append($.proxy(function() {
-                if (value.code &&  $(value.name).is('span')) {
+                var name = value.name.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&");
+                if (value.code &&  $(name).is('span')) {
                     key = value.code;
-                    value.name = $(value.name).text();
+                    value.name = $(name).text();
                 }
                 $.template('regionTemplate', this.options.regionTemplate);
                 if (this.options.defaultRegion === key) {

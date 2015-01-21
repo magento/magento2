@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Model\Carrier;
 
-use Magento\Sales\Model\Quote\Address\AbstractCarrierInterface;
-use Magento\Sales\Model\Quote\Address\RateResult\Error;
+use Magento\Quote\Model\Quote\Address\AbstractCarrierInterface;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
 
 abstract class AbstractCarrier extends \Magento\Framework\Object implements AbstractCarrierInterface
@@ -81,7 +82,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory
      */
     protected $_rateErrorFactory;
 
@@ -92,13 +93,13 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
         array $data = []
     ) {
@@ -149,11 +150,11 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     /**
      * Collect and get rates
      *
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result|bool|null
      * @abstract
      */
-    abstract public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request);
+    abstract public function collectRates(\Magento\Quote\Model\Quote\Address\RateRequest $request);
 
     /**
      * Do request to shipment
@@ -265,10 +266,10 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
      */
-    public function checkAvailableShipCountries(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function checkAvailableShipCountries(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         $speCountriesAllow = $this->getConfigData('sallowspecific');
         /*
@@ -311,10 +312,10 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     /**
      * Processing additional validation to check is carrier applicable.
      *
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this|bool|Error
      */
-    public function proccessAdditionalValidation(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function proccessAdditionalValidation(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         return $this;
     }
@@ -371,7 +372,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return void
      */
     protected function _updateFreeMethodQuote($request)
@@ -404,12 +405,12 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
 
             $result = $this->_getQuotes();
             if ($result && ($rates = $result->getAllRates()) && count($rates) > 0) {
-                if (count($rates) == 1 && $rates[0] instanceof \Magento\Sales\Model\Quote\Address\RateResult\Method) {
+                if (count($rates) == 1 && $rates[0] instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method) {
                     $price = $rates[0]->getPrice();
                 }
                 if (count($rates) > 1) {
                     foreach ($rates as $rate) {
-                        if ($rate instanceof \Magento\Sales\Model\Quote\Address\RateResult\Method &&
+                        if ($rate instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method &&
                             $rate->getMethod() == $freeMethod
                         ) {
                             $price = $rate->getPrice();

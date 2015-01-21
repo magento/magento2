@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Address;
 
@@ -25,7 +26,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->_customerSession = $objectManager->get('\Magento\Customer\Model\Session');
+        $this->_customerSession = $objectManager->get('Magento\Customer\Model\Session');
         $this->_customerSession->setCustomerId(1);
 
         $this->_context = $objectManager->get('Magento\Backend\Block\Template\Context');

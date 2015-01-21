@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
@@ -49,14 +50,6 @@
                             <argument name="index" xsi:type="string">theme_path</argument>
                             <argument name="filter_index" xsi:type="string">main_table.theme_path</argument>
                             <argument name="column_css_class" xsi:type="string">theme-path</argument>
-                        </arguments>
-                    </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="theme_version">
-                        <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Theme Version</argument>
-                            <argument name="index" xsi:type="string">theme_version</argument>
-                            <argument name="filter_index" xsi:type="string">main_table.theme_version</argument>
-                            <argument name="column_css_class" xsi:type="string">theme-version</argument>
                         </arguments>
                     </block>
                 </block>

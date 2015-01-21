@@ -1,14 +1,15 @@
 <?php
 /**
  * @spi
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Theme\Test\Block\Html;
 
-use Magento\Store\Test\Fixture\Store;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Footer block
@@ -55,7 +56,7 @@ class Footer extends Block
      * Click on link by name
      *
      * @param string $linkName
-     * @return \Mtf\Client\Element
+     * @return void
      * @throws \Exception
      */
     public function clickLink($linkName)

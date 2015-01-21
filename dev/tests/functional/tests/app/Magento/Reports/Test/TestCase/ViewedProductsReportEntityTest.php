@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\TestCase;
 
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\TestCase\Injectable;
 use Mtf\Fixture\FixtureFactory;
 use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
@@ -32,6 +33,11 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
  */
 class ViewedProductsReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Product Report View page
      *
@@ -49,7 +55,7 @@ class ViewedProductsReportEntityTest extends Injectable
     /**
      * Browser interface
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -70,13 +76,13 @@ class ViewedProductsReportEntityTest extends Injectable
      *
      * @param ProductReportView $productReportView
      * @param FixtureFactory $fixtureFactory
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
     public function __inject(
         ProductReportView $productReportView,
         FixtureFactory $fixtureFactory,
-        Browser $browser
+        BrowserInterface $browser
     ) {
         $this->productReportView = $productReportView;
         $this->fixtureFactory = $fixtureFactory;

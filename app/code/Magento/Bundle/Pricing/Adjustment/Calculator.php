@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Pricing\Adjustment;
@@ -313,7 +314,7 @@ class Calculator implements BundleCalculatorInterface
 
         /** @var  Store $store */
         $store = $bundleProduct->getStore();
-        $roundingMethod = $this->taxHelper->getCalculationAgorithm($store);
+        $roundingMethod = $this->taxHelper->getCalculationAlgorithm($store);
         foreach ($amountList as $amountInfo) {
             /** @var \Magento\Framework\Pricing\Amount\AmountInterface $itemAmount */
             $itemAmount = $amountInfo['amount'];

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Oauth\Helper;
 
@@ -196,6 +197,9 @@ class Request
             $responseCode = self::HTTP_UNAUTHORIZED;
         } elseif ($exception instanceof \Magento\Framework\Oauth\OauthInputException) {
             $responseCode = self::HTTP_BAD_REQUEST;
+            if ($errorMsg == \Magento\Framework\Oauth\OauthInputException::DEFAULT_MESSAGE) {
+                $errorMsg = $exception->getAggregatedErrorMessage();
+            }
         } else {
             $errorMsg = 'internal_error&message=' . ($errorMsg ? $errorMsg : 'empty_message');
             $responseCode = self::HTTP_INTERNAL_ERROR;

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Config\Backend;
 
@@ -50,9 +51,9 @@ class ManagestockTest extends \PHPUnit_Framework_TestCase
             ->method('rebuild');
 
         $manageStock = new Managestock(
-            Bootstrap::getObjectManager()->get('\Magento\Framework\Model\Context'),
-            Bootstrap::getObjectManager()->get('\Magento\Framework\Registry'),
-            Bootstrap::getObjectManager()->get('\Magento\Framework\App\Config\ScopeConfigInterface'),
+            Bootstrap::getObjectManager()->get('Magento\Framework\Model\Context'),
+            Bootstrap::getObjectManager()->get('Magento\Framework\Registry'),
+            Bootstrap::getObjectManager()->get('Magento\Framework\App\Config\ScopeConfigInterface'),
             $stockManagement,
             Bootstrap::getObjectManager()->get('Magento\CatalogInventory\Model\Indexer\Stock\Processor'),
             Bootstrap::getObjectManager()->get('Magento\Core\Model\Resource\Config')

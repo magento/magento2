@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\ShippingMethod;
@@ -36,10 +37,10 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->addressFactoryMock = $this->getMock('\Magento\Sales\Model\Quote\AddressFactory', [], [], '', false);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->addressFactoryMock = $this->getMock('\Magento\Quote\Model\Quote\AddressFactory', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->quoteMock = $this->getMock(
-            '\Magento\Sales\Model\Quote',
+            '\Magento\Quote\Model\Quote',
             [
                 'getItemsCount',
                 'isVirtual',
@@ -55,7 +56,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->shippingAddressMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             [
                 'setShippingMethod',
                 'requestShippingRates',
@@ -152,7 +153,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressMock->expects($this->once())
             ->method('getCountryId')->will($this->returnValue($countryId));
         $billingAddressMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             ['getCountryId', '__wakeup'],
             [],
             '',
@@ -182,7 +183,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
         $billingAddressMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             ['getCountryId', '__wakeup'],
             [],
             '',
@@ -222,7 +223,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressMock->expects($this->once())
             ->method('getCountryId')->will($this->returnValue($countryId));
         $billingAddressMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             [
                 'getCountryId',
                 '__wakeup'
@@ -281,7 +282,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
         $billingAddressMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Address',
+            '\Magento\Quote\Model\Quote\Address',
             [
                 'getCountryId',
                 '__wakeup'

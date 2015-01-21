@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
 
@@ -63,7 +64,7 @@ class FreeTest extends \PHPUnit_Framework_TestCase
     {
         $quote = null;
         if ($notEmptyQuote) {
-            $quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+            $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
             $quote->expects($this->any())
                 ->method('__call')
                 ->with($this->equalTo('getGrandTotal'))

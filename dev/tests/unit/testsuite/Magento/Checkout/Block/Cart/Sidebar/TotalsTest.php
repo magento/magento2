@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart\Sidebar;
 
@@ -16,7 +17,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     protected $totalsObj;
 
     /**
-     * @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quote;
 
@@ -25,7 +26,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
+        $this->quote = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->setMethods(['getTotals', '__wakeup'])
             ->getMock();
@@ -40,7 +41,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->quote));
 
         $this->totalsObj = $objectManager->getObject(
-            '\Magento\Checkout\Block\Cart\Sidebar\Totals',
+            'Magento\Checkout\Block\Cart\Sidebar\Totals',
             ['checkoutSession' => $checkoutSession]
         );
     }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Service\V1;
 
@@ -14,7 +15,7 @@ class ReadService implements ReadServiceInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -35,12 +36,12 @@ class ReadService implements ReadServiceInterface
     /**
      * Constructs a shopping cart gift message service object.
      *
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
      * @param \Magento\GiftMessage\Model\MessageFactory $messageFactory Message factory.
      * @param \Magento\GiftMessage\Service\V1\Data\MessageMapper $messageMapper Message mapper.
      */
     public function __construct(
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\GiftMessage\Model\MessageFactory $messageFactory,
         \Magento\GiftMessage\Service\V1\Data\MessageMapper $messageMapper
     ) {
@@ -57,7 +58,7 @@ class ReadService implements ReadServiceInterface
      */
     public function get($cartId)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
 
         $messageId = $quote->getGiftMessageId();
@@ -84,7 +85,7 @@ class ReadService implements ReadServiceInterface
         /**
          * Quote.
          *
-         * @var \Magento\Sales\Model\Quote $quote
+         * @var \Magento\Quote\Model\Quote $quote
          */
         $quote = $this->quoteRepository->getActive($cartId);
         if (!$item = $quote->getItemById($itemId)) {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CustomerImportExport\Model\Import;
@@ -199,7 +200,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                     $this->getMock('Magento\Framework\Registry'),
                     $this->getMock('Magento\Core\Helper\Data', [], [], '', false, false),
                     $this->getMock('Magento\Eav\Model\Config', [], [], '', false, false),
-                    $this->getMock('Magento\Eav\Model\Entity\TypeFactory'),
+                    $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false),
                     $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
                     $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false, false),
                     $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false, false)

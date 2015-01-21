@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Install\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
-use Mtf\Client\Driver\Selenium\Browser;
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Mtf\Client\BrowserInterface;
+use Magento\Catalog\Test\Fixture\Category;
 
 /**
  * Assert that apache redirect correct works.
@@ -22,11 +23,11 @@ class AssertRewritesEnabled extends AbstractConstraint
     /**
      * Assert that apache redirect works by opening category page and asserting index.php in its url
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @param CmsIndex $homePage
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      */
-    public function processAssert(CatalogCategory $category, CmsIndex $homePage, Browser $browser)
+    public function processAssert(Category $category, CmsIndex $homePage, BrowserInterface $browser)
     {
         $category->persist();
         $homePage->open();

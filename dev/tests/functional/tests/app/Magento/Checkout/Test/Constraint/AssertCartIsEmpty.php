@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\Constraint;
 
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -30,10 +31,10 @@ class AssertCartIsEmpty extends AbstractConstraint
      * Click here to continue shopping." where 'here' is link that leads to index page
      *
      * @param CheckoutCart $checkoutCart
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, Browser $browser)
+    public function processAssert(CheckoutCart $checkoutCart, BrowserInterface $browser)
     {
         $checkoutCart->open();
         $cartEmptyBlock = $checkoutCart->getCartEmptyBlock();

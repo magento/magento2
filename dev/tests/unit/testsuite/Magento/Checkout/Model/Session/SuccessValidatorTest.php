@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model\Session;
 
@@ -8,16 +9,12 @@ use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var SuccessValidator|\PHPUnit_Framework_MockObject_MockObject */
-    protected $object;
-
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->object = $this->objectManagerHelper->getObject('Magento\Checkout\Model\Session\SuccessValidator');
     }
 
     public function testIsValid()
@@ -25,7 +22,7 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
         $checkoutSession = $this->getMockBuilder(
             '\Magento\Checkout\Model\Session'
         )->disableOriginalConstructor()->getMock();
-        $this->assertFalse($this->object->isValid($checkoutSession));
+        $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
     public function testIsValidWithNotEmptyGetLastSuccessQuoteId()
@@ -46,7 +43,7 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
 
         $checkoutSession->expects($this->at(1))->method('__call')->with('getLastQuoteId')->will($this->returnValue(0));
 
-        $this->assertFalse($this->object->isValid($checkoutSession));
+        $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
     public function testIsValidWithEmptyQuoteAndOrder()
@@ -68,7 +65,7 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
 
         $checkoutSession->expects($this->at(2))->method('__call')->with('getLastOrderId')->will($this->returnValue(0));
 
-        $this->assertFalse($this->object->isValid($checkoutSession));
+        $this->assertFalse($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
     }
 
     public function testIsValidTrue()
@@ -90,6 +87,13 @@ class SuccessValidatorTest extends \PHPUnit_Framework_TestCase
 
         $checkoutSession->expects($this->at(2))->method('__call')->with('getLastOrderId')->will($this->returnValue(1));
 
-        $this->assertTrue($this->object->isValid($checkoutSession));
+        $this->assertTrue($this->createSuccessValidator($checkoutSession)->isValid($checkoutSession));
+    }
+
+    protected function createSuccessValidator(\PHPUnit_Framework_MockObject_MockObject $checkoutSession)
+    {
+        return $this->objectManagerHelper->getObject(
+            'Magento\Checkout\Model\Session\SuccessValidator', ['checkoutSession' => $checkoutSession]
+        );
     }
 }

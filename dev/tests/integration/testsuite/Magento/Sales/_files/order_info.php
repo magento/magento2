@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(
@@ -29,7 +30,7 @@ $product->load(1);
 $addressData = include __DIR__ . '/address_data.php';
 
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Quote\Address',
+    'Magento\Quote\Model\Quote\Address',
     ['data' => $addressData]
 );
 $billingAddress->setAddressType('billing');
@@ -38,8 +39,8 @@ $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 $shippingAddress->setShippingMethod('flatrate_flatrate');
 
-/** @var $quote \Magento\Sales\Model\Quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+/** @var $quote \Magento\Quote\Model\Quote */
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
 $quote->setCustomerIsGuest(
     true
 )->setStoreId(
@@ -66,16 +67,10 @@ $quote->collectTotals();
 $quote->save();
 
 $quote->setCustomerEmail('admin@example.com');
-/** @var $service \Magento\Sales\Model\Service\Quote */
-$service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Service\Quote',
-    ['quote' => $quote]
-);
-$service->setOrderData(['increment_id' => '100000001']);
-$service->submitAllWithDataObject();
+$quoteManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Quote\Model\QuoteManagement');
 
-$order = $service->getOrder();
-$order->save();
+$order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
 
 $orderItems = $order->getAllItems();
 

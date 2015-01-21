@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\TestStep;
@@ -8,7 +9,7 @@ namespace Magento\Checkout\Test\TestStep;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\TestStep\TestStepInterface;
 
 /**
@@ -48,7 +49,7 @@ class AddProductsToTheCartStep implements TestStepInterface
     /**
      * Interface Browser
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -57,14 +58,14 @@ class AddProductsToTheCartStep implements TestStepInterface
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $checkoutCart
      * @param CmsIndex $cmsIndex
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param array $products
      */
     public function __construct(
         CatalogProductView $catalogProductView,
         CheckoutCart $checkoutCart,
         CmsIndex $cmsIndex,
-        Browser $browser,
+        BrowserInterface $browser,
         array $products
     ) {
         $this->products = $products;

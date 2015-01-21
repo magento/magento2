@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
@@ -8,7 +9,7 @@ namespace Magento\Catalog\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureInterface;
 
@@ -27,14 +28,14 @@ class AssertProductInCart extends AbstractConstraint
      *
      * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CheckoutCart $checkoutCart
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         FixtureInterface $product,
-        Browser $browser,
+        BrowserInterface $browser,
         CheckoutCart $checkoutCart
     ) {
         // Add product to cart

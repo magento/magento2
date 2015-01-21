@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -244,7 +245,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $entityData = [
             'entity_id' => $addressId,
-            'entity_type_id' => $addressModel->getEntityTypeId(),
             'parent_id' => $customerId,
             'created_at' => $dateTime->now(),
             'updated_at' => $dateTime->now(),

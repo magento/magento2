@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GroupedProduct\Test\Block\Checkout\Cart;
@@ -115,7 +116,6 @@ class CartItem extends AbstractCartItem
     {
         foreach ($this->config['associated_cart_items'] as $cartItem) {
             /** @var CheckoutCartItem $cartItem */
-            $cartItem->reinitRootElement();
             $cartItem->removeItem();
         }
     }

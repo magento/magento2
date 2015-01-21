@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
@@ -492,7 +493,6 @@ class Address extends AbstractCustomer
         // entity table data
         $entityRow = [
             'entity_id' => $addressId,
-            'entity_type_id' => $this->getEntityTypeId(),
             'parent_id' => $customerId,
             'created_at' => $this->dateTime->now(),
             'updated_at' => $this->dateTime->now(),
@@ -562,7 +562,6 @@ class Address extends AbstractCustomer
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = [
                         'entity_id' => $addressId,
-                        'entity_type_id' => $this->getEntityTypeId(),
                         'attribute_id' => $attributeId,
                         'value' => $value,
                     ];
@@ -583,7 +582,6 @@ class Address extends AbstractCustomer
     {
         /** @var $entity \Magento\Customer\Model\Customer */
         $entity = $this->_customerFactory->create();
-        $entityTypeId = $entity->getEntityTypeId();
 
         foreach ($defaults as $tableName => $data) {
             $tableData = [];
@@ -591,7 +589,6 @@ class Address extends AbstractCustomer
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = [
                         'entity_id' => $customerId,
-                        'entity_type_id' => $entityTypeId,
                         'attribute_id' => $attributeId,
                         'value' => $value,
                     ];

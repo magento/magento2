@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\TestStep;
 
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\TestStep\TestStepInterface;
 
 /**
@@ -23,7 +24,7 @@ class OpenProductsOnFrontendStep implements TestStepInterface
     /**
      * Browser.
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -32,9 +33,9 @@ class OpenProductsOnFrontendStep implements TestStepInterface
      *
      * @constructor
      * @param array $products
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      */
-    public function __construct(array $products, Browser $browser)
+    public function __construct(array $products, BrowserInterface $browser)
     {
         $this->products = $products;
         $this->browser = $browser;

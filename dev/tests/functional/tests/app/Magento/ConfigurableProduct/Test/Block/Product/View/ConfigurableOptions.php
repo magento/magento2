@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Test\Block\Product\View;
@@ -9,9 +10,10 @@ use Magento\Catalog\Test\Block\Product\View\CustomOptions;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
 use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
+use Mtf\Client\Element\SimpleElement;
 
 /**
  * Class ConfigurableOptions
@@ -60,7 +62,7 @@ class ConfigurableOptions extends CustomOptions
                 throw new \Exception("Can't find option: \"{$title}\"");
             }
 
-            /** @var Element $optionElement */
+            /** @var SimpleElement $optionElement */
             $optionElement = $listOptions[$title];
             $typeMethod = preg_replace('/[^a-zA-Z]/', '', $option['frontend_input']);
             $getTypeData = 'get' . ucfirst(strtolower($typeMethod)) . 'Data';

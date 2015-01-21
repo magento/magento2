@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tools\Di\Compiler\Config;
@@ -66,22 +67,25 @@ class Reader
      *
      * @param DefinitionsCollection $definitionsCollection
      * @param string $areaCode
-     * @param bool $extendConfig
      *
      * @return array
      */
     public function generateCachePerScope(
         DefinitionsCollection $definitionsCollection,
-        $areaCode,
-        $extendConfig = false
+        $areaCode
     ) {
         $areaConfig = clone $this->diContainerConfig;
-        if ($extendConfig) {
+        if ($areaCode !== App\Area::AREA_GLOBAL) {
             $areaConfig->extend($this->configLoader->load($areaCode));
         }
 
         $config = [];
         $config['arguments'] = $this->getConfigForScope($definitionsCollection, $areaConfig);
+        foreach ($config['arguments'] as $key => $value) {
+            if ($value !== null) {
+                $config['arguments'][$key] = serialize($value);
+            }
+        }
         foreach ($definitionsCollection->getInstancesNamesList() as $instanceName) {
             if (!$areaConfig->isShared($instanceName)) {
                 $config['nonShared'][$instanceName] = true;

@@ -1,15 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\TestCase;
 
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
-use Mtf\Client\Browser;
-use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
+use Mtf\Fixture\FixtureFactory;
+use Mtf\Client\BrowserInterface;
+use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
  * Test Flow:
@@ -32,6 +33,11 @@ use Mtf\TestCase\Injectable;
  */
 class AbandonedCartsReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog Product View page.
      *
@@ -42,7 +48,7 @@ class AbandonedCartsReportEntityTest extends Injectable
     /**
      * Browser interface.
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -56,13 +62,13 @@ class AbandonedCartsReportEntityTest extends Injectable
     /**
      * Inject pages.
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param FixtureFactory $fixtureFactory
      * @param CatalogProductView $catalogProductView
      * @return void
      */
     public function __inject(
-        Browser $browser,
+        BrowserInterface $browser,
         FixtureFactory $fixtureFactory,
         CatalogProductView $catalogProductView
     ) {

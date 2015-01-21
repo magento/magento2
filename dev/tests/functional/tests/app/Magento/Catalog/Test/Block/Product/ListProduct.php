@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Product;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
+use Mtf\Client\Element\SimpleElement;
 use Mtf\Factory\Factory;
 
 /**
@@ -134,7 +135,7 @@ class ListProduct extends Block
      * This method returns the element representing the product details for the named product.
      *
      * @param string $productName String containing the name of the product
-     * @return Element
+     * @return SimpleElement
      */
     protected function getProductDetailsElement($productName)
     {
@@ -148,7 +149,7 @@ class ListProduct extends Block
      * This method returns the element on the page associated with the product name.
      *
      * @param string $productName String containing the name of the product
-     * @return Element
+     * @return SimpleElement
      */
     protected function getProductNameElement($productName)
     {

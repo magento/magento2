@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\TestCase;
@@ -13,8 +14,8 @@ use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Reports\Test\Page\Adminhtml\ProductReportReview;
-use Magento\Review\Test\Fixture\ReviewInjectable;
-use Mtf\Client\Browser;
+use Magento\Review\Test\Fixture\Review;
+use Mtf\Client\BrowserInterface;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
 
@@ -40,6 +41,11 @@ use Mtf\TestCase\Injectable;
  */
 class CustomerReviewReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Customer frontend logout page
      *
@@ -126,20 +132,20 @@ class CustomerReviewReportEntityTest extends Injectable
     /**
      * Test Creation for CustomerReviewReportEntity
      *
-     * @param ReviewInjectable $review
+     * @param Review $review
      * @param CustomerInjectable $customer
      * @param $customerLogin
      * @param CatalogProductSimple $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return array
      *
      * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
      */
     public function test(
-        ReviewInjectable $review,
+        Review $review,
         CustomerInjectable $customer,
         CatalogProductSimple $product,
-        Browser $browser,
+        BrowserInterface $browser,
         $customerLogin
     ) {
         // Preconditions

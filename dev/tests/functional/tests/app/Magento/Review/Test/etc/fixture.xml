@@ -1,18 +1,19 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <fixture>
-    <reviewInjectable module="Magento_Review">
+    <review module="Magento_Review">
         <type>composite</type>
         <entities>
             <review>review</review>
             <review_detail>review_detail</review_detail>
         </entities>
         <collection>Magento\Review\Model\Resource\Review\Collection</collection>
-    </reviewInjectable>
+    </review>
     <rating module="Magento_Review">
         <type>flat</type>
         <entity_type>rating</entity_type>

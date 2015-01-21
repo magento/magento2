@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
@@ -14,6 +15,6 @@ class LoginSuccessCallback extends \Magento\Integration\Controller\Adminhtml\Int
      */
     public function execute()
     {
-        $this->getResponse()->setBody('<script type="text/javascript">setTimeout("self.close()",1000);</script>');
+        $this->getResponse()->setBody('<script>setTimeout("self.close()",1000);</script>');
     }
 }

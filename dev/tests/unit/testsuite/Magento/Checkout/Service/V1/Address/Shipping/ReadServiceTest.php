@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Service\V1\Address\Shipping;
@@ -25,7 +26,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->converterMock = $this->getMock('\Magento\Checkout\Service\V1\Address\Converter', [], [], '', false);
 
         $this->service = new ReadService($this->quoteRepositoryMock, $this->converterMock);
@@ -33,12 +34,12 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddress()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
             $this->returnValue($quoteMock)
         );
 
-        $addressMock = $this->getMock('\Magento\Sales\Model\Quote\Address', [], [], '', false);
+        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
         $quoteMock->expects($this->any())->method('getShippingAddress')->will($this->returnValue($addressMock));
         $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue(false));
 
@@ -54,7 +55,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAddressOfQuoteWithVirtualProducts()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
             $this->returnValue($quoteMock)
         );

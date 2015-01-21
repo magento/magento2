@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
 
@@ -189,6 +190,23 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
         $this->order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW);
         $this->assertFalse($this->order->canCancel());
+    }
+
+    public function testCanEditIfHasInvoices()
+    {
+        $invoiceCollection = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Invoice\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['count'])
+            ->getMock();
+
+        $invoiceCollection->expects($this->once())
+            ->method('count')
+            ->willReturn(2);
+
+        $this->order->setInvoiceCollection($invoiceCollection);
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
+
+        $this->assertFalse($this->order->canEdit());
     }
 
     public function testCanCancelCanReviewPayment()

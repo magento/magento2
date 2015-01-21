@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Helper;
 
@@ -13,27 +14,6 @@ use Magento\Store\Model\Store;
  */
 class Data extends \Magento\Core\Helper\Data
 {
-    /**
-     * Maximum available number
-     */
-    const MAXIMUM_AVAILABLE_NUMBER = 99999999;
-
-    /**
-     * Check quote amount
-     *
-     * @param \Magento\Sales\Model\Quote $quote
-     * @param float $amount
-     * @return $this
-     */
-    public function checkQuoteAmount(\Magento\Sales\Model\Quote $quote, $amount)
-    {
-        if (!$quote->getHasError() && $amount >= self::MAXIMUM_AVAILABLE_NUMBER) {
-            $quote->setHasError(true);
-            $quote->addMessage(__('This item price or quantity is not valid for checkout.'));
-        }
-        return $this;
-    }
-
     /**
      * Check allow to send new order confirmation email
      *

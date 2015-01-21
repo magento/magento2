@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Service\V1\Address\Shipping;
 
@@ -14,14 +15,14 @@ class WriteService implements WriteServiceInterface
     /**
      * Quote repository.
      *
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
     /**
      * Quote address factory.
      *
-     * @var \Magento\Sales\Model\Quote\AddressFactory
+     * @var \Magento\Quote\Model\Quote\AddressFactory
      */
     protected $quoteAddressFactory;
 
@@ -49,17 +50,17 @@ class WriteService implements WriteServiceInterface
     /**
      * Constructs a quote shipping address write service object.
      *
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
      * @param \Magento\Checkout\Service\V1\Address\Converter $addressConverter Address converter.
      * @param \Magento\Checkout\Service\V1\Address\Validator $addressValidator Address validator.
-     * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory Quote address factory.
+     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory Quote address factory.
      * @param Logger $logger Logger.
      */
     public function __construct(
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Checkout\Service\V1\Address\Converter $addressConverter,
         \Magento\Checkout\Service\V1\Address\Validator $addressValidator,
-        \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory,
+        \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
         Logger $logger
     ) {
         $this->quoteRepository = $quoteRepository;
@@ -80,14 +81,14 @@ class WriteService implements WriteServiceInterface
      */
     public function setAddress($cartId, $addressData)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
                 'Cart contains virtual product(s) only. Shipping address is not applicable'
             );
         }
-        /** @var \Magento\Sales\Model\Quote\Address $address */
+        /** @var \Magento\Quote\Model\Quote\Address $address */
         $address = $this->quoteAddressFactory->create();
         $this->addressValidator->validate($addressData);
         if ($addressData->getId()) {

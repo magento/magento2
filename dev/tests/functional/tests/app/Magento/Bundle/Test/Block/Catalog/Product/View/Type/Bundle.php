@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Test\Block\Catalog\Product\View\Type;
@@ -8,9 +9,10 @@ namespace Magento\Bundle\Test\Block\Catalog\Product\View\Type;
 use Magento\Bundle\Test\Fixture\Bundle as BundleDataFixture;
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option;
+use Mtf\Client\Element\SimpleElement;
 use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
 
@@ -110,7 +112,7 @@ class Bundle extends Block
                 throw new \Exception("Can't find option: \"{$title}\"");
             }
 
-            /** @var Element $optionElement */
+            /** @var SimpleElement $optionElement */
             $optionElement = $listFormOptions[$title];
             $getTypeData = 'get' . $this->optionNameConvert($option['type']) . 'Data';
 
@@ -151,10 +153,10 @@ class Bundle extends Block
     /**
      * Get data of "Drop-down" option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getDropdownData(Element $option)
+    protected function getDropdownData(SimpleElement $option)
     {
         $select = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'select');
         // Skip "Choose option ..."(option #1)
@@ -164,10 +166,10 @@ class Bundle extends Block
     /**
      * Get data of "Multiple select" option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getMultipleselectData(Element $option)
+    protected function getMultipleselectData(SimpleElement $option)
     {
         $multiselect = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'multiselect');
         $data = $this->getSelectOptionsData($multiselect, 1);
@@ -183,13 +185,13 @@ class Bundle extends Block
     /**
      * Get data of "Radio buttons" option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getRadiobuttonsData(Element $option)
+    protected function getRadiobuttonsData(SimpleElement $option)
     {
         $listOptions = [];
-        $optionLabels = $option->find($this->optionLabel, Locator::SELECTOR_XPATH)->getElements();
+        $optionLabels = $option->getElements($this->optionLabel, Locator::SELECTOR_XPATH);
 
         foreach ($optionLabels as $optionLabel) {
             if ($optionLabel->isVisible()) {
@@ -203,10 +205,10 @@ class Bundle extends Block
     /**
      * Get data of "Checkbox" option
      *
-     * @param Element $option
+     * @param SimpleElement $option
      * @return array
      */
-    protected function getCheckboxData(Element $option)
+    protected function getCheckboxData(SimpleElement $option)
     {
         $data =  $this->getRadiobuttonsData($option);
 
@@ -221,11 +223,11 @@ class Bundle extends Block
     /**
      * Get data from option of select and multiselect
      *
-     * @param Element $element
+     * @param SimpleElement $element
      * @param int $firstOption
      * @return array
      */
-    protected function getSelectOptionsData(Element $element, $firstOption = 1)
+    protected function getSelectOptionsData(SimpleElement $element, $firstOption = 1)
     {
         $listOptions = [];
 

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 
@@ -27,16 +28,16 @@ class RowsTest extends \PHPUnit_Framework_TestCase
     public function testProductUpdate()
     {
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Catalog\Model\CategoryFactory'
+            'Magento\Catalog\Model\CategoryFactory'
         );
         /** @var \Magento\Catalog\Block\Product\ListProduct $listProduct */
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Catalog\Block\Product\ListProduct'
+            'Magento\Catalog\Block\Product\ListProduct'
         );
 
         /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder $stockRegistry */
         $stockItemBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder'
+            'Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder'
         );
 
         /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
@@ -45,12 +46,12 @@ class RowsTest extends \PHPUnit_Framework_TestCase
         );
         /** @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository */
         $stockItemRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\CatalogInventory\Api\StockItemRepositoryInterface'
+            'Magento\CatalogInventory\Api\StockItemRepositoryInterface'
         );
 
         /** @var \Magento\CatalogInventory\Model\Resource\Stock\Item $stockItemResource */
         $stockItemResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\CatalogInventory\Model\Resource\Stock\Item'
+            'Magento\CatalogInventory\Model\Resource\Stock\Item'
         );
 
         $stockItem = $stockRegistry->getStockItem(1, 1);

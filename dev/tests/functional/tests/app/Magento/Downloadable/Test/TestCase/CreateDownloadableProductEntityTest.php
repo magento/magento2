@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Downloadable\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
@@ -23,15 +24,20 @@ use Mtf\TestCase\Injectable;
  * 6. Save product.
  * 7. Verify created product.
  *
- * @group Downloadable_Product_(CS)
+ * @group Downloadable_Product_(MX)
  * @ZephyrId MAGETWO-23425
  */
 class CreateDownloadableProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Fixture category
      *
-     * @var CatalogCategory
+     * @var Category
      */
     protected $category;
 
@@ -52,10 +58,10 @@ class CreateDownloadableProductEntityTest extends Injectable
     /**
      * Persist category
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return array
      */
-    public function __prepare(CatalogCategory $category)
+    public function __prepare(Category $category)
     {
         $category->persist();
         return [
@@ -66,13 +72,13 @@ class CreateDownloadableProductEntityTest extends Injectable
     /**
      * Filling objects of the class
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @param CatalogProductIndex $catalogProductIndexNewPage
      * @param CatalogProductNew $catalogProductNewPage
      * @return void
      */
     public function __inject(
-        CatalogCategory $category,
+        Category $category,
         CatalogProductIndex $catalogProductIndexNewPage,
         CatalogProductNew $catalogProductNewPage
     ) {
@@ -85,10 +91,10 @@ class CreateDownloadableProductEntityTest extends Injectable
      * Test create downloadable product
      *
      * @param DownloadableProductInjectable $product
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function test(DownloadableProductInjectable $product, CatalogCategory $category)
+    public function test(DownloadableProductInjectable $product, Category $category)
     {
         // Steps
         $this->catalogProductIndex->open();

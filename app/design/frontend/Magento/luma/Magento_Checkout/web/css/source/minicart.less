@@ -1,12 +1,13 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 //
 //    Minicart
@@ -118,9 +119,9 @@
             &.empty {
                display: none;
             }
-            background: @color-active;
+            .css(background, @color-active);
             border-radius: 2px;
-            color: @page-bg-color;
+            .css(color, @page-bg-color);
             clip: none;
             display: inline-block;
             height: 24px;
@@ -164,7 +165,7 @@
             font-weight: @font-weight-base;
             margin-top: 0;
             a {
-                color: @link-color;
+                .css(color, @link-color);
             }
         }
         &-item-details {
@@ -178,7 +179,7 @@
             &:after {
                 position: static;
                 margin: 0 0 0 @indent-xs-base;
-                color: @color-gray56;
+                .css(color, @color-gray56);
             }
             border: 0;
             padding: 0 @indent-xl-base @indent-xs-base 0;
@@ -240,13 +241,13 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-xs) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-xs) {
     .minicart-wrapper .block-minicart {
         width: 290px;
     }
 }
 
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .minicart-wrapper {
         margin-top: @indent-s-base;
     }
@@ -255,7 +256,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .minicart-wrapper {
         margin-left: 13px;
         .block-minicart {

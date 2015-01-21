@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Block\Onepage;
@@ -50,7 +51,7 @@ class ProgressTest extends \PHPUnit_Framework_TestCase
     protected $taxHelper;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $shippingAddress;
 
@@ -65,14 +66,14 @@ class ProgressTest extends \PHPUnit_Framework_TestCase
             ['resourceSession' => $this->checkoutSession, 'taxData' => $this->taxHelper]
         );
         $this->shippingAddress = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             ['getShippingRateByCode', '__wakeup'],
             [],
             '',
             false
         );
         $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $quote->expects($this->any())->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
         $quote->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
         $this->checkoutSession->expects($this->any())->method('getQuote')->will($this->returnValue($quote));
@@ -83,7 +84,7 @@ class ProgressTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetShippingRate()
     {
-        $rate = $this->getMock('Magento\Sales\Model\Quote\Address\Rate', ['__wakeup'], [], '', false);
+        $rate = $this->getMock('Magento\Quote\Model\Quote\Address\Rate', ['__wakeup'], [], '', false);
         $this->shippingAddress->setShippingMethod(self::SHIPPING_METHOD);
         $this->shippingAddress->expects($this->once())
             ->method('getShippingRateByCode')

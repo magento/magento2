@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
 
@@ -62,7 +63,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Check whether method is available
      *
-     * @param \Magento\Sales\Model\Quote|null $quote
+     * @param \Magento\Quote\Model\Quote|null $quote
      * @return bool
      */
     public function isAvailable($quote = null)
