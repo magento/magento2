@@ -118,6 +118,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param CurrencyFactory $currencyFactory
      * @param ProductFactory $productFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param ResourceProvider $resourceProvider
      * @param array $data
      */
     public function __construct(
