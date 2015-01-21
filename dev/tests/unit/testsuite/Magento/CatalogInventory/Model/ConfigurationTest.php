@@ -143,7 +143,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(Configuration::XML_PATH_NOTIFY_STOCK_QTY, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
+            ->with(
+                Configuration::XML_PATH_NOTIFY_STOCK_QTY,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                $store
+            )
             ->willReturn(1);
         $this->assertEquals(1, $this->model->getNotifyStockQty($store));
     }
@@ -188,7 +192,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $store = 1;
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(Configuration::XML_PATH_CAN_BACK_IN_STOCK, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
+            ->with(
+                Configuration::XML_PATH_CAN_BACK_IN_STOCK,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                $store
+            )
             ->willReturn(1);
         $this->assertEquals(1, $this->model->getCanBackInStock($store));
     }
@@ -198,7 +206,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $store = 1;
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
+            ->with(
+                Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                $store
+            )
             ->willReturn(1);
         $this->assertEquals(1, $this->model->isShowOutOfStock($store));
     }
@@ -208,7 +220,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $store = 1;
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(Configuration::XML_PATH_ITEM_AUTO_RETURN, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $store)
+            ->with(
+                Configuration::XML_PATH_ITEM_AUTO_RETURN,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                $store
+            )
             ->willReturn(1);
         $this->assertEquals(1, $this->model->isAutoReturnEnabled($store));
     }

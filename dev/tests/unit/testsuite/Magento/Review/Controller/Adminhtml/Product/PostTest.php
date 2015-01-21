@@ -133,7 +133,9 @@ class PostTest extends \PHPUnit_Framework_TestCase
         );
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_messageManagerMock = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
-        $this->_storeManagerInterfaceMock = $this->getMockForAbstractClass('Magento\Framework\Store\StoreManagerInterface');
+        $this->_storeManagerInterfaceMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Store\StoreManagerInterface'
+        );
         $this->_storeModelMock = $this->getMock(
             'Magento\Store\Model\Store', ['__wakeup', 'getId'], [], '', false
         );

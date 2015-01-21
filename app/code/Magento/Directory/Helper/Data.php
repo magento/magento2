@@ -260,7 +260,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCountriesWithStatesRequired($asJson = false)
     {
         $value = trim(
-            $this->_config->getValue(self::XML_PATH_STATES_REQUIRED, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            $this->_config->getValue(
+                self::XML_PATH_STATES_REQUIRED,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            )
         );
         $countryList = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
         if ($asJson) {

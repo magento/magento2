@@ -3,7 +3,6 @@
     "description": "N/A",
     "require": {
         "php": "~5.4.11|~5.5.0|~5.6.0",
-        "magento/module-store": "0.42.0-beta4",
         "magento/module-backend": "0.42.0-beta4",
         "magento/framework": "0.42.0-beta4",
         "magento/magento-composer-installer": "*"

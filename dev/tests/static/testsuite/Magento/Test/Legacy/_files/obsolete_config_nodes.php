@@ -45,7 +45,7 @@ return [
     '/config/global/session' => 'This configuration moved to Di configuration of \Magento\Framework\Session\Validator',
     '/config/global/ignore_user_agents' => 'This configuration moved to Di configuration of \Magento\Log\Model\Visitor',
     '/config/global/request' => 'This configuration moved to Di configuration of \Magento\Framework\App\RequestInterface',
-    '/config/global/secure_url' => 'This configuration moved to Di configuration of \Magento\Core\Model\Url\SecurityInfo',
+    '/config/global/secure_url' => 'This configuration moved to Di configuration of \Magento\Framework\Url\SecurityInfo',
     '/config/global/dev' => 'This configuration moved to Di configuration of \Magento\Framework\App\Action\Context',
     '/config/global/webapi' => 'This configuration moved to Di configuration of \Magento\Webapi\Controller\Request\Rest\Interpreter\Factory' .
     ' and \Magento\Webapi\Controller\Response\Rest\Renderer\Factory',

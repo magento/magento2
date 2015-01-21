@@ -211,7 +211,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfig->expects($this->exactly(1))
             ->method('isSetFlag')
-            ->with(Observer::XML_PATH_DISABLE_GUEST_CHECKOUT, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $this->storeMock)
+            ->with(
+                Observer::XML_PATH_DISABLE_GUEST_CHECKOUT,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                $this->storeMock
+            )
             ->willReturn(true);
 
         $this->observerMock->expects($this->exactly(3))
@@ -254,7 +258,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfig->expects($this->exactly(1))
             ->method('isSetFlag')
-            ->with(Observer::XML_PATH_DISABLE_GUEST_CHECKOUT, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $this->storeMock)
+            ->with(
+                Observer::XML_PATH_DISABLE_GUEST_CHECKOUT,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                $this->storeMock
+            )
             ->willReturn(false);
 
         $this->observerMock->expects($this->exactly(2))

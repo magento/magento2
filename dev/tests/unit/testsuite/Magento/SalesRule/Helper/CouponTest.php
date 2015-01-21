@@ -129,7 +129,10 @@ class CouponTest extends \PHPUnit_Framework_TestCase
         $defaultDashInterval = 4;
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
-            ->with($helper::XML_PATH_SALES_RULE_COUPON_DASH_INTERVAL, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE)
+            ->with(
+                $helper::XML_PATH_SALES_RULE_COUPON_DASH_INTERVAL,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            )
             ->will($this->returnValue($defaultDashInterval));
 
         $this->assertEquals($defaultDashInterval, $helper->getDefaultDashInterval());
