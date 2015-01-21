@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -29,13 +29,16 @@ class AssertCategoryAbsenceOnFrontend extends AbstractConstraint
     /**
      * Assert that not displayed category in frontend main menu
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogCategoryView $categoryView
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return void
      */
-    public function processAssert(Browser $browser, CatalogCategoryView $categoryView, CatalogCategory $category)
-    {
+    public function processAssert(
+        BrowserInterface $browser,
+        CatalogCategoryView $categoryView,
+        Category $category
+    ) {
         $browser->open($_ENV['app_frontend_url'] . $category->getUrlKey() . '.html');
         \PHPUnit_Framework_Assert::assertEquals(
             self::NOT_FOUND_MESSAGE,

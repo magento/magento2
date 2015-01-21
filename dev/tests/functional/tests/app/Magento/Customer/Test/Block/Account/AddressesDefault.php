@@ -7,7 +7,7 @@
 namespace Magento\Customer\Test\Block\Account;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Addresses default block
@@ -20,7 +20,7 @@ class AddressesDefault extends Block
      *
      * @var string
      */
-    protected $changeBillingAddressSelector = '.box-address-billing a';
+    protected $changeBillingAddressSelector = '.box-billing-address a';
 
     /**
      * Click on address book menu item

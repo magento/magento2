@@ -38,6 +38,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateConfigurableProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Product page with a grid
      *

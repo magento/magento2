@@ -50,6 +50,6 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             });",
             $this->getUrl('adminhtml/*/quickEdit')
         );
-        return sprintf('<script type="text/javascript">%s</script>', $script);
+        return sprintf('<script>%s</script>', $script);
     }
 }

@@ -26,6 +26,11 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
  */
 class ApplySeveralCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Apply several catalog price rules
      *

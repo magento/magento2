@@ -38,7 +38,7 @@ class Methods extends \Magento\Payment\Block\Form\Container
     }
 
     /**
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {
