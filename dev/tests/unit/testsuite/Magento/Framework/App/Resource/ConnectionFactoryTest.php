@@ -38,6 +38,8 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateNull()
     {
+        $this->objectManagerMock->expects($this->never())
+            ->method('get');
         $this->assertNull($this->model->create([]));
         $this->assertNull($this->model->create(['something']));
         $this->assertNull($this->model->create(['active' => null]));
@@ -51,21 +53,24 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
         $loggerMock = $this->getMockBuilder('Magento\Framework\DB\LoggerInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterInstanceMock = $this->getMockBuilder('Magento\Framework\App\Resource\ConnectionAdapterInterface')
+        $connectionAdapterMock = $this->getMockBuilder('Magento\Framework\App\Resource\ConnectionAdapterInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['setCacheAdapter', 'getConnection'])
+            ->getMock();
+        $adapterInstanceMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+            ->disableOriginalConstructor()
             ->getMock();
         $adapterInstanceMock->expects($this->once())
             ->method('setCacheAdapter')
             ->with($cacheAdapterMock)
             ->willReturnSelf();
-        $adapterInstanceMock->expects($this->once())
+        $connectionAdapterMock->expects($this->once())
             ->method('getConnection')
             ->with($loggerMock)
-            ->willReturnSelf();
+            ->will($this->returnValue($adapterInstanceMock));
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($adapterInstanceMock));
+            ->with('Magento\Framework\App\Resource\ConnectionAdapterInterface')
+            ->will($this->returnValue($connectionAdapterMock));
         $poolMock = $this->getMockBuilder('Magento\Framework\App\Cache\Type\FrontendPool')
             ->disableOriginalConstructor()
             ->getMock();
