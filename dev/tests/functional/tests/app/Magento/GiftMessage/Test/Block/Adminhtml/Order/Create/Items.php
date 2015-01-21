@@ -7,7 +7,7 @@
 namespace Magento\GiftMessage\Test\Block\Adminhtml\Order\Create;
 
 use Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\Items\ItemProduct;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\InjectableFixture;
 
 /**

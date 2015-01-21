@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -25,14 +25,14 @@ class AssertConfigurableAttributesAbsentOnProductPage extends AbstractConstraint
      * Assert that deleted configurable attributes are absent on product page on frontend.
      *
      * @param CatalogProductAttribute[] $deletedProductAttributes
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
      * @param ConfigurableProductInjectable $product
      * @return void
      */
     public function processAssert(
         array $deletedProductAttributes,
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductView $catalogProductView,
         ConfigurableProductInjectable $product
     ) {

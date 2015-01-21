@@ -175,9 +175,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with('You sent the order email.');
-        $path = 'sales/order/view';
-        $arguments = ['order_id' => $orderId];
-        $this->prepareRedirect($path, $arguments, 0);
 
         $this->orderEmail->execute();
         $this->assertEquals($this->response, $this->orderEmail->getResponse());
@@ -208,34 +205,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('set')
             ->with('', 'no-dispatch', true)
             ->will($this->returnValue(true));
-        $path = 'sales/*/';
-        $this->prepareRedirect($path, [], 0);
 
         $this->assertNull($this->orderEmail->execute());
-    }
-
-    /**
-     * @param string $path
-     * @param array $arguments
-     * @param int $index
-     */
-    protected function prepareRedirect($path, $arguments, $index)
-    {
-        $this->actionFlag->expects($this->any())
-            ->method('get')
-            ->with('', 'check_url_settings')
-            ->will($this->returnValue(true));
-        $this->session->expects($this->any())
-            ->method('setIsUrlNotice')
-            ->with(true);
-
-        $url = $path . '/' . (!empty($arguments) ? $arguments['order_id'] : '');
-        $this->helper->expects($this->at($index))
-            ->method('getUrl')
-            ->with($path, $arguments)
-            ->will($this->returnValue($url));
-        $this->response->expects($this->at($index))
-            ->method('setRedirect')
-            ->with($url);
     }
 }

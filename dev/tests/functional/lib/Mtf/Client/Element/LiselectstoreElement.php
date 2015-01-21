@@ -4,16 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class LiselectstoreElement
  * Typified element class for lists selectors
  */
-class LiselectstoreElement extends Element
+class LiselectstoreElement extends SimpleElement
 {
     /**
      * Template for each element of option
@@ -65,8 +64,8 @@ class LiselectstoreElement extends Element
      */
     public function setValue($value)
     {
-        $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
-        $this->_context->find($this->toggleSelector)->click();
+        $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
+        $this->driver->find($this->toggleSelector)->click();
 
         $value = explode('/', $value);
         $optionSelector = [];
@@ -75,7 +74,7 @@ class LiselectstoreElement extends Element
         }
         $optionSelector = './/' . implode($this->optionMaskFollowing, $optionSelector) . '/a';
 
-        $option = $this->_context->find($optionSelector, Locator::SELECTOR_XPATH);
+        $option = $this->driver->find($optionSelector, Locator::SELECTOR_XPATH);
         if (!$option->isVisible()) {
             throw new \Exception('[' . implode('/', $value) . '] option is not visible in store switcher.');
         }
@@ -89,13 +88,11 @@ class LiselectstoreElement extends Element
      */
     protected function getLiElements()
     {
-        $this->_context->find($this->toggleSelector)->click();
-        $criteria = new \PHPUnit_Extensions_Selenium2TestCase_ElementCriteria('css selector');
-        $criteria->value('li');
-        $elements = $this->_getWrappedElement()->elements($criteria);
+        $this->driver->find($this->toggleSelector)->click();
+        $elements = $this->driver->getElements($this, 'li', Locator::SELECTOR_TAG_NAME);
         $dropdownData = [];
         foreach ($elements as $element) {
-            $class = $element->attribute('class');
+            $class = $element->getAttribute('class');
             $dropdownData[] = [
                 'element' => $element,
                 'storeView' => $this->isSubstring($class, "store-switcher-store-view"),
@@ -121,7 +118,7 @@ class LiselectstoreElement extends Element
             if ($dropdownElement['storeView']) {
                 $data[] = $this->findNearestElement('website', $key, $dropdownData) . "/"
                     . $this->findNearestElement('store', $key, $dropdownData) . "/"
-                    . $dropdownElement['element']->text();
+                    . $dropdownElement['element']->getText();
             }
         }
         return $data;
@@ -151,7 +148,7 @@ class LiselectstoreElement extends Element
     {
         $elementText = false;
         while ($elementText == false) {
-            $elementText = $elements[$key][$criteria] == true ? $elements[$key]['element']->text() : false;
+            $elementText = $elements[$key][$criteria] == true ? $elements[$key]['element']->getText() : false;
             $key--;
         }
         return $elementText;
@@ -165,18 +162,20 @@ class LiselectstoreElement extends Element
      */
     public function getValue()
     {
-        $this->_eventManager->dispatchEvent(['get_value'], [(string)$this->_locator]);
+        $this->eventManager->dispatchEvent(['get_value'], [$this->getAbsoluteSelector()]);
         $elements = $this->getLiElements();
         foreach ($elements as $key => $element) {
             if ($element['current'] == true) {
                 if ($element['default_config'] == true) {
-                    return $element['element']->text();
+                    return $element['element']->getText();
                 }
                 $path = $this->findNearestElement('website', $key, $elements) . "/"
                     . $this->findNearestElement('store', $key, $elements) . "/"
-                    . $element['element']->text();
+                    . $element['element']->getText();
                 return $path;
             }
         }
+
+        return '';
     }
 }

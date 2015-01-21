@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Typified element class for option group selectors.
@@ -35,14 +34,11 @@ class SelectstoreElement extends SelectElement
      */
     public function getValue()
     {
-        $selectedLabel = trim($this->_getWrappedElement()->selectedLabel());
-        $value = trim(
-            $this->_getWrappedElement()->byXPath(sprintf($this->website, $selectedLabel))->attribute('label')
-        );
-        $value .= '/' . trim(
-            $this->_getWrappedElement()->byXPath(sprintf($this->storeGroup, $selectedLabel))->attribute('label'),
-            chr(0xC2) . chr(0xA0)
-        );
+        $selectedLabel = trim(parent::getValue());
+        $element = $this->find(sprintf($this->website, $selectedLabel), Locator::SELECTOR_XPATH);
+        $value = trim($element->getAttribute('label'));
+        $element = $this->find(sprintf($this->storeGroup, $selectedLabel), Locator::SELECTOR_XPATH);
+        $value .= '/' . trim($element->getAttribute('label'), chr(0xC2) . chr(0xA0));
         $value .= '/' . $selectedLabel;
         return $value;
     }
@@ -67,7 +63,7 @@ class SelectstoreElement extends SelectElement
                 . $pieces[2] . '")]';
         }
 
-        $option = $this->_context->find($optionLocator, Locator::SELECTOR_XPATH);
+        $option = $this->context->find($optionLocator, Locator::SELECTOR_XPATH);
         if (!$option->isVisible()) {
             throw new \Exception('[' . implode('/', $pieces) . '] option is not visible in store switcher.');
         }

@@ -8,7 +8,7 @@
 namespace Magento\UrlRewrite\Test\Block\Adminhtml;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Selector

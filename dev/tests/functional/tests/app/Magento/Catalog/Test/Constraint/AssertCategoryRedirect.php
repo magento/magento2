@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\Category;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -24,12 +24,15 @@ class AssertCategoryRedirect extends AbstractConstraint
      * Assert that old Category URL lead to appropriate Category in frontend
      *
      * @param Category $category
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param Category $initialCategory
      * @return void
      */
-    public function processAssert(Category $category, Browser $browser, Category $initialCategory)
-    {
+    public function processAssert(
+        Category $category,
+        BrowserInterface $browser,
+        Category $initialCategory
+    ) {
         $browser->open($_ENV['app_frontend_url'] . $initialCategory->getUrlKey() . '.html');
 
         \PHPUnit_Framework_Assert::assertEquals(

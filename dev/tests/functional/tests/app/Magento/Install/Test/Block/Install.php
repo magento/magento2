@@ -7,7 +7,7 @@
 namespace Magento\Install\Test\Block;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Install block.
@@ -61,9 +61,9 @@ class Install extends Block
     public function getAdminInfo()
     {
         $adminData = [];
-        $rows = $this->_rootElement->find('#admin-info .row')->getElements();
+        $rows = $this->_rootElement->getElements('#admin-info .row');
         foreach ($rows as $row) {
-            $dataRow = $row->find('div')->getElements();
+            $dataRow = $row->getElements('div');
             $key = strtolower(str_replace(' ', '_', str_replace(':', '', $dataRow[0]->getText())));
             $adminData[$key] = $dataRow[1]->getText();
         }
@@ -79,9 +79,9 @@ class Install extends Block
     public function getDbInfo()
     {
         $dbData = [];
-        $rows = $this->_rootElement->find('#db-info .row')->getElements();
+        $rows = $this->_rootElement->getElements('#db-info .row');
         foreach ($rows as $row) {
-            $dataRow = $row->find('div')->getElements();
+            $dataRow = $row->getElements('div');
             $key = strtolower(str_replace(' ', '_', str_replace(':', '', $dataRow[0]->getText())));
             $dbData[$key] = $dataRow[1]->getText();
         }

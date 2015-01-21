@@ -61,6 +61,16 @@ class EmailTest extends \PHPUnit_Framework_TestCase
      */
     protected $helper;
 
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactoryMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -105,6 +115,13 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->session = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
         $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
         $this->helper = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
+        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->context->expects($this->once())
             ->method('getMessageManager')
             ->will($this->returnValue($this->messageManager));
@@ -131,7 +148,8 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $this->context,
                 'request' => $this->request,
-                'response' => $this->response
+                'response' => $this->response,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
     }
@@ -143,6 +161,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $cmNotifierClassName = 'Magento\Sales\Model\Order\CreditmemoNotifier';
         $creditmemo = $this->getMock($creditmemoClassName, ['load', '__wakeup'], [], '', false);
         $cmNotifier = $this->getMock($cmNotifierClassName, ['notify', '__wakeup'], [], '', false);
+        $this->prepareRedirect($cmId);
 
         $this->request->expects($this->once())
             ->method('getParam')
@@ -167,9 +186,10 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('addSuccess')
             ->with('We sent the message.');
 
-        $this->prepareRedirect($cmId);
-
-        $this->creditmemoEmail->execute();
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Redirect',
+            $this->creditmemoEmail->execute()
+        );
         $this->assertEquals($this->response, $this->creditmemoEmail->getResponse());
     }
 
@@ -179,6 +199,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('creditmemo_id')
             ->will($this->returnValue(null));
+
         $this->assertNull($this->creditmemoEmail->execute());
     }
 
@@ -209,20 +230,12 @@ class EmailTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareRedirect($cmId)
     {
-        $this->actionFlag->expects($this->once())
-            ->method('get')
-            ->with('', 'check_url_settings')
-            ->will($this->returnValue(true));
-        $this->session->expects($this->once())
-            ->method('setIsUrlNotice')
-            ->with(true);
-        $path = 'sales/order_creditmemo/view';
-        $this->response->expects($this->once())
-            ->method('setRedirect')
-            ->with($path . '/' . $cmId);
-        $this->helper->expects($this->atLeastOnce())
-            ->method('getUrl')
-            ->with($path, ['creditmemo_id' => $cmId])
-            ->will($this->returnValue($path . '/' . $cmId));
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('sales/order_creditmemo/view', ['creditmemo_id' => $cmId])
+            ->willReturnSelf();
     }
 }
