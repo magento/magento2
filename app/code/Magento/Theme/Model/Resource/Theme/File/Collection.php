@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Resource\Theme\File;
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
 
 /**
  * Theme files collection

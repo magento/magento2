@@ -83,7 +83,8 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if ($check) {
             throw new \Magento\Framework\Model\Exception(
                 __(
-                    'Your design change for the specified store intersects with another one, please specify another date range.'
+                    'Your design change for the specified store intersects with another one, please specify another
+                    date range.'
                 )
             );
         }
