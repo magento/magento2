@@ -6,8 +6,8 @@
 namespace Magento\Catalog\Test\Block\Product;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
+use Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Price
@@ -267,7 +267,7 @@ class Price extends Block
      * Get specify type price element
      *
      * @param string $type
-     * @return Element
+     * @return SimpleElement
      */
     protected function getTypePriceElement($type)
     {
@@ -294,21 +294,23 @@ class Price extends Block
      * Get price excluding tax
      *
      * @param string $currency
-     * @return string
+     * @return string|null
      */
     public function getPriceExcludingTax($currency = '$')
     {
-        return trim($this->_rootElement->find($this->priceExcludingTax)->getText(), $currency);
+        $priceElement = $this->_rootElement->find($this->priceExcludingTax);
+        return $priceElement->isVisible() ? trim($priceElement->getText(), $currency) : null;
     }
 
     /**
      * Get price including tax
      *
      * @param string $currency
-     * @return string
+     * @return string|null
      */
     public function getPriceIncludingTax($currency = '$')
     {
-        return trim($this->_rootElement->find($this->priceIncludingTax)->getText(), $currency);
+        $priceElement = $this->_rootElement->find($this->priceIncludingTax);
+        return $priceElement->isVisible() ? trim($priceElement->getText(), $currency) : null;
     }
 }

@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\Block\Order\View;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Order view block.

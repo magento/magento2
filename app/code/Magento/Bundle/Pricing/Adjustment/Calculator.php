@@ -314,7 +314,7 @@ class Calculator implements BundleCalculatorInterface
 
         /** @var  Store $store */
         $store = $bundleProduct->getStore();
-        $roundingMethod = $this->taxHelper->getCalculationAgorithm($store);
+        $roundingMethod = $this->taxHelper->getCalculationAlgorithm($store);
         foreach ($amountList as $amountInfo) {
             /** @var \Magento\Framework\Pricing\Amount\AmountInterface $itemAmount */
             $itemAmount = $amountInfo['amount'];

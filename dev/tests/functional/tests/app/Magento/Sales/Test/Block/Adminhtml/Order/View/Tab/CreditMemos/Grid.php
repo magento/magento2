@@ -58,7 +58,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     public function getIds()
     {
         $result = [];
-        $creditMemoIds = $this->_rootElement->find($this->editLink)->getElements();
+        $creditMemoIds = $this->_rootElement->getElements($this->editLink);
         foreach ($creditMemoIds as $creditMemoId) {
             $result[] = trim($creditMemoId->getText());
         }
