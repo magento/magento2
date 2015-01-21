@@ -5,6 +5,7 @@
  */
 namespace Magento\Webapi\Controller;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Webapi\Controller\Rest\Request as RestRequest;
@@ -13,10 +14,14 @@ use Magento\Webapi\Controller\Rest\Response\DataObjectConverter;
 use Magento\Webapi\Controller\Rest\Response\PartialResponseProcessor;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
+use Magento\Webapi\Model\Config\Converter;
 use Magento\Webapi\Model\PathProcessor;
 
 /**
  * Front controller for WebAPI REST area.
+ *
+ * TODO: Consider warnings suppression removal
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rest implements \Magento\Framework\App\FrontControllerInterface
@@ -82,6 +87,16 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $partialResponseProcessor;
 
     /**
+     * @var \Magento\Framework\Session\Generic
+     */
+    protected $session;
+
+    /**
+     * @var \Magento\Authorization\Model\UserContextInterface
+     */
+    protected $userContext;
+
+    /**
      * @var DataObjectConverter $dataObjectConverter
      */
     protected $dataObjectConverter;
@@ -100,7 +115,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param PathProcessor $pathProcessor
      * @param \Magento\Framework\App\AreaList $areaList
      * @param PartialResponseProcessor $partialResponseProcessor
+     * @param UserContextInterface $userContext
      * @param DataObjectConverter $dataObjectConverter
+     *
+     * TODO: Consider removal of warning suppression
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         RestRequest $request,
@@ -114,6 +133,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         PathProcessor $pathProcessor,
         \Magento\Framework\App\AreaList $areaList,
         PartialResponseProcessor $partialResponseProcessor,
+        UserContextInterface $userContext,
         DataObjectConverter $dataObjectConverter
     ) {
         $this->_router = $router;
@@ -127,6 +147,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->_pathProcessor = $pathProcessor;
         $this->areaList = $areaList;
         $this->partialResponseProcessor = $partialResponseProcessor;
+        $this->userContext = $userContext;
         $this->dataObjectConverter = $dataObjectConverter;
     }
 
@@ -149,9 +170,10 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
                 throw new \Magento\Webapi\Exception(__('Operation allowed only in HTTPS'));
             }
             /** @var array $inputData */
-            $inputData = $this->_request->processRequestData($route->getParameters());
+            $inputData = $this->_request->getRequestData();
             $serviceMethodName = $route->getServiceMethod();
             $serviceClassName = $route->getServiceClass();
+            $inputData = $this->overrideParams($inputData, $route->getParameters());
             $inputParams = $this->_serializer->getInputData($serviceClassName, $serviceMethodName, $inputData);
             $service = $this->_objectManager->get($serviceClassName);
             /** @var \Magento\Framework\Api\AbstractExtensibleObject $outputData */
@@ -170,6 +192,74 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $this->_response->setException($maskedException);
         }
         return $this->_response;
+    }
+
+    /**
+     * Override parameter values based on webapi.xml
+     *
+     * @param array $inputData Incoming data from request
+     * @param array $parameters Contains parameters to replace or default
+     * @return array Data in same format as $inputData with appropriate parameters added or changed
+     */
+    protected function overrideParams(array $inputData, array $parameters)
+    {
+        foreach ($parameters as $name => $paramData) {
+            $arrayKeys = explode('.', $name);
+            if ($paramData[Converter::KEY_FORCE] || !$this->isNestedArrayValueSet($inputData, $arrayKeys)) {
+                if ($paramData[Converter::KEY_VALUE] == '%customer_id%'
+                    && $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
+                ) {
+                    $value = $this->userContext->getUserId();
+                } else {
+                    $value = $paramData[Converter::KEY_VALUE];
+                }
+                $this->setNestedArrayValue($inputData, $arrayKeys, $value);
+            }
+        }
+        return $inputData;
+    }
+
+    /**
+     * Determine if a nested array value is set.
+     *
+     * @param array &$nestedArray
+     * @param string[] $arrayKeys
+     * @return bool true if array value is set
+     */
+    protected function isNestedArrayValueSet(&$nestedArray, $arrayKeys)
+    {
+        $currentArray = &$nestedArray;
+
+        foreach ($arrayKeys as $key) {
+            if (!isset($currentArray[$key])) {
+                return false;
+            }
+            $currentArray = &$currentArray[$key];
+        }
+        return true;
+    }
+
+    /**
+     * Set a nested array value.
+     *
+     * @param array &$nestedArray
+     * @param string[] $arrayKeys
+     * @param string $valueToSet
+     * @return void
+     */
+    protected function setNestedArrayValue(&$nestedArray, $arrayKeys, $valueToSet)
+    {
+        $currentArray = &$nestedArray;
+        $lastKey = array_pop($arrayKeys);
+
+        foreach ($arrayKeys as $key) {
+            if (!isset($currentArray[$key])) {
+                $currentArray[$key] = [];
+            }
+            $currentArray = &$currentArray[$key];
+        }
+
+        $currentArray[$lastKey] = $valueToSet;
     }
 
     /**

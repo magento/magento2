@@ -9,9 +9,7 @@
 namespace Magento\Webapi\Controller\Rest;
 
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Webapi\Model\Config\Converter;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
-use Magento\Authorization\Model\UserContextInterface;
 
 class Request extends \Magento\Webapi\Controller\Request
 {
@@ -36,18 +34,12 @@ class Request extends \Magento\Webapi\Controller\Request
     protected $_deserializerFactory;
 
     /**
-     * @var \Magento\Authorization\Model\UserContextInterface
-     */
-    protected $userContext;
-
-    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\App\AreaList $areaList
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader
      * @param \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory $deserializerFactory
-     * @param UserContextInterface $userContext
      * @param null|string $uri
      */
     public function __construct(
@@ -55,12 +47,10 @@ class Request extends \Magento\Webapi\Controller\Request
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader,
         \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory $deserializerFactory,
-        UserContextInterface $userContext,
         $uri = null
     ) {
         parent::__construct($areaList, $configScope, $cookieReader, $uri);
         $this->_deserializerFactory = $deserializerFactory;
-        $this->userContext = $userContext;
     }
 
     /**
@@ -168,10 +158,9 @@ class Request extends \Magento\Webapi\Controller\Request
     /**
      * Fetch and return parameter data from the request.
      *
-     * @param string $routeParams parameters from request uri
      * @return array
      */
-    public function processRequestData($routeParams)
+    public function getRequestData()
     {
         $requestBodyParams = [];
         $params = $this->getParams();
@@ -190,8 +179,7 @@ class Request extends \Magento\Webapi\Controller\Request
             $requestBodyParams = $this->overrideRequestBodyIdWithPathParam($params);
         }
 
-        $params =  array_merge($requestBodyParams, $params);
-        return $this->overrideParams($params, $routeParams);
+        return array_merge($requestBodyParams, $params);
     }
 
     /**
@@ -247,74 +235,5 @@ class Request extends \Magento\Webapi\Controller\Request
         } else {
             $requestData[$snakeCaseKey] = $value;
         }
-    }
-
-    /**
-     * Override parameter values based on webapi.xml
-     *
-     * @param array $inputData Incoming data from request
-     * @param array $parameters Contains parameters to replace or default
-     * @return array Data in same format as $inputData with appropriate parameters added or changed
-     */
-    protected function overrideParams(array $inputData, array $parameters)
-    {
-        foreach ($parameters as $name => $paramData) {
-            $arrayKeys = explode('.', $name);
-            if ($paramData[Converter::KEY_FORCE] || !$this->isNestedArrayValueSet($inputData, $arrayKeys)) {
-                if ($paramData[Converter::KEY_VALUE] == '%customer_id%'
-                    && $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
-                ) {
-                    $value = $this->userContext->getUserId();
-                } else {
-                    $value = $paramData[Converter::KEY_VALUE];
-                }
-                $this->setNestedArrayValue($inputData, $arrayKeys, $value);
-            }
-        }
-        return $inputData;
-    }
-
-
-    /**
-     * Determine if a nested array value is set.
-     *
-     * @param array &$nestedArray
-     * @param string[] $arrayKeys
-     * @return bool true if array value is set
-     */
-    protected function isNestedArrayValueSet(&$nestedArray, $arrayKeys)
-    {
-        $currentArray = &$nestedArray;
-
-        foreach ($arrayKeys as $key) {
-            if (!isset($currentArray[$key])) {
-                return false;
-            }
-            $currentArray = &$currentArray[$key];
-        }
-        return true;
-    }
-
-    /**
-     * Set a nested array value.
-     *
-     * @param array &$nestedArray
-     * @param string[] $arrayKeys
-     * @param string $valueToSet
-     * @return bool true if array value is set
-     */
-    protected function setNestedArrayValue(&$nestedArray, $arrayKeys, $valueToSet)
-    {
-        $currentArray = &$nestedArray;
-        $lastKey = array_pop($arrayKeys);
-
-        foreach ($arrayKeys as $key) {
-            if (!isset($currentArray[$key])) {
-                $currentArray[$key] = [];
-            }
-            $currentArray = &$currentArray[$key];
-        }
-
-        $currentArray[$lastKey] = $valueToSet;
     }
 }
