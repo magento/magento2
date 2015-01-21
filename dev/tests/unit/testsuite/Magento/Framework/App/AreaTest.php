@@ -128,7 +128,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadConfig()
     {
-        $this->mockLoadConfig();
+        $this->verifyLoadConfig();
         $this->object->load(Area::PART_CONFIG);
     }
 
@@ -175,7 +175,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $this->mockLoadConfig();
+        $this->verifyLoadConfig();
         $this->translatorMock->expects($this->once())
             ->method('loadData');
         $renderMock = $this->getMockBuilder('Magento\Framework\Phrase\RendererInterface')
@@ -201,7 +201,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $this->object->load();
     }
 
-    private function mockLoadConfig()
+    private function verifyLoadConfig()
     {
         $configs = ['dummy configs'];
         $this->diConfigLoaderMock->expects($this->once())
