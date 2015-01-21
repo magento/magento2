@@ -59,5 +59,6 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
         foreach ($result as $path) {
             $this->assertNotContains('unknown.txt', $path);
-        }    }
+        }
+    }
 }
