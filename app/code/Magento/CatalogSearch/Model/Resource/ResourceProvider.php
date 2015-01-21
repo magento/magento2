@@ -64,7 +64,7 @@ class ResourceProvider
     }
 
     /**
-     * @return \Magento\Solr\Model\Resource\Collection|\Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
      */
     public function getResultCollection()
     {
@@ -72,7 +72,7 @@ class ResourceProvider
     }
 
     /**
-     * @return \Magento\Solr\Model\Resource\Collection|\Magento\CatalogSearch\Model\Resource\Advanced\Collection
+     * @return \Magento\CatalogSearch\Model\Resource\Advanced\Collection
      */
     public function getAdvancedResultCollection()
     {
