@@ -60,7 +60,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                 'relation' => []
             ];
             foreach ($bunch as $rowNum => $rowData) {
-                $associatedSku = $rowData['_associated_sku'];
+                $associatedSku = isset($rowData['_associated_sku']) ? $rowData['_associated_sku'] : null;
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum) || empty($associatedSku)) {
                     continue;
                 }
