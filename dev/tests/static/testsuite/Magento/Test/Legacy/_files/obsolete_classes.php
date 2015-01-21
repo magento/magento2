@@ -2854,4 +2854,5 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Collector'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
+    ['Magento\Core\Model\Validator\Factory', 'Magento\Framework\Validator\Factory'],
 ];
