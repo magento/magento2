@@ -6,7 +6,7 @@
 
 namespace Magento\Shipping\Test\Block\Order;
 
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Info block on order's view page.

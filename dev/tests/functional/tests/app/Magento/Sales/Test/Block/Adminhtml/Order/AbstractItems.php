@@ -77,7 +77,7 @@ class AbstractItems extends Block
      */
     public function getData()
     {
-        $items = $this->_rootElement->find($this->rowItem)->getElements();
+        $items = $this->_rootElement->getElements($this->rowItem);
         $data = [];
 
         foreach ($items as $item) {

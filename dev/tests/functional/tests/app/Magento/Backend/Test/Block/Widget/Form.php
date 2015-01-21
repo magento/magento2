@@ -8,7 +8,7 @@
 namespace Magento\Backend\Test\Block\Widget;
 
 use Mtf\Block\Form as FormInstance;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Factory\Factory;
 use Mtf\Fixture\FixtureInterface;
 

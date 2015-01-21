@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\Driver\Selenium\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\InjectableFixture;
 
@@ -28,7 +28,7 @@ class AssertProductAttributeIsHtmlAllowed extends AbstractConstraint
      * @param InjectableFixture $product
      * @param CatalogProductAttribute $attribute
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @throws \Exception
      * @return void
      */
@@ -36,7 +36,7 @@ class AssertProductAttributeIsHtmlAllowed extends AbstractConstraint
         InjectableFixture $product,
         CatalogProductAttribute $attribute,
         CatalogProductView $catalogProductView,
-        Browser $browser
+        BrowserInterface $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
