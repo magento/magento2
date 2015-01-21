@@ -12,8 +12,6 @@ $customer = $objectManager->create('Magento\Customer\Model\Customer');
 /** @var Magento\Customer\Model\Customer $customer */
 $customer->setWebsiteId(1)
     ->setId(1)
-    ->setEntityTypeId(1)
-    ->setAttributeSetId(1)
     ->setEmail('customer@example.com')
     ->setPassword('password')
     ->setGroupId(1)

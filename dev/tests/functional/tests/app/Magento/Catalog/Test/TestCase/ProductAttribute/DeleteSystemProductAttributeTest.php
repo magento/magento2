@@ -25,6 +25,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteSystemProductAttributeTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Run delete system product attribute test
      *

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Block\Product\View;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureInterface;
 
@@ -38,13 +38,13 @@ class AssertProductTierPriceOnProductPage extends AbstractConstraint implements 
     /**
      * Assertion that tier prices are displayed correctly
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
      * @return void
      */
     public function processAssert(
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductView $catalogProductView,
         FixtureInterface $product
     ) {

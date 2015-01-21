@@ -6,7 +6,7 @@
 
 namespace Magento\Review\Test\Constraint;
 
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
 use Mtf\Constraint\AbstractConstraint;
 
@@ -28,11 +28,11 @@ class AssertProductReviewMassActionSuccessMessage extends AbstractConstraint
     /**
      * Assert that success message is displayed after updated via mass actions
      *
-     * @param ReviewInjectable|ReviewInjectable[] $review
+     * @param Review|Review[] $review
      * @param ReviewIndex $reviewIndex
      * @return void
      */
-    public function processAssert(ReviewInjectable $review, ReviewIndex $reviewIndex)
+    public function processAssert(Review $review, ReviewIndex $reviewIndex)
     {
         $reviews = is_array($review) ? $review : [$review];
         $successMessage = sprintf(self::SUCCESS_MESSAGE, count($reviews));
