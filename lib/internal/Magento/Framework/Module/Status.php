@@ -8,8 +8,6 @@ namespace Magento\Framework\Module;
 
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\State\Cleanup;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Tools\Dependency\Report\Framework\Data\Dependency;
 
 /**
  * A service for controlling module status
