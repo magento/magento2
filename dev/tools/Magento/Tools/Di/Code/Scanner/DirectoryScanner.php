@@ -26,8 +26,8 @@ class DirectoryScanner
                 continue;
             }
 
+            $filePath = str_replace('\\', '/', $file->getRealPath());
             foreach ($patterns as $type => $pattern) {
-                $filePath = str_replace('\\', '/', $file->getRealPath());
                 if (preg_match($pattern, $filePath)) {
                     $output[$type][] = $filePath;
                     break;
