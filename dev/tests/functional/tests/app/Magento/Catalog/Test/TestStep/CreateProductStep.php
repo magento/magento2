@@ -55,7 +55,6 @@ class CreateProductStep implements TestStepInterface
         if ($product->hasData('id') === false) {
             $product->persist();
         }
-
-        return ['product' => $product];
+         return ['product' => $product];
     }
 }

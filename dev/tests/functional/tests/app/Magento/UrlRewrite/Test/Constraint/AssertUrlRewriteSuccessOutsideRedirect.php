@@ -7,7 +7,7 @@
 namespace Magento\UrlRewrite\Test\Constraint;
 
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -24,11 +24,11 @@ class AssertUrlRewriteSuccessOutsideRedirect extends AbstractConstraint
      * Assert that outside redirect was success
      *
      * @param UrlRewrite $urlRewrite
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param UrlRewrite|null $initialRewrite [optional]
      * @return void
      */
-    public function processAssert(UrlRewrite $urlRewrite, Browser $browser, UrlRewrite $initialRewrite = null)
+    public function processAssert(UrlRewrite $urlRewrite, BrowserInterface $browser, UrlRewrite $initialRewrite = null)
     {
         $urlRequestPath = $urlRewrite->hasData('request_path')
             ? $urlRewrite->getRequestPath()

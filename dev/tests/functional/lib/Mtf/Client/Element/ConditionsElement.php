@@ -4,12 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Driver\Selenium\Element as AbstractElement;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
 use Mtf\ObjectManager;
+use Mtf\Client\Locator;
+use Mtf\Client\ElementInterface;
 
 /**
  * Class ConditionsElement
@@ -37,7 +36,7 @@ use Mtf\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ConditionsElement extends AbstractElement
+class ConditionsElement extends SimpleElement
 {
     /**
      * Main condition
@@ -86,7 +85,7 @@ class ConditionsElement extends AbstractElement
      *
      * @var string
      */
-    protected $created = './/preceding-sibling::li[1]';
+    protected $created = './ul/li[span[contains(@class,"rule-param-new-child")]]/preceding-sibling::li[1]';
 
     /**
      * Children condition
@@ -100,7 +99,7 @@ class ConditionsElement extends AbstractElement
      *
      * @var string
      */
-    protected $param = './span[@class="rule-param"]/span/*[substring(@id,(string-length(@id)-%d+1))="%s"]/../..';
+    protected $param = './span[span[*[substring(@id,(string-length(@id)-%d+1))="%s"]]]';
 
     /**
      * Key of last find param
@@ -187,19 +186,19 @@ class ConditionsElement extends AbstractElement
      * Add condition combination
      *
      * @param string $condition
-     * @param Element $context
-     * @return Element
+     * @param ElementInterface $context
+     * @return ElementInterface
      */
-    protected function addConditionsCombination($condition, Element $context)
+    protected function addConditionsCombination($condition, ElementInterface $context)
     {
         $condition = $this->parseCondition($condition);
         $newCondition = $context->find($this->newCondition, Locator::SELECTOR_XPATH);
         $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
         $typeNewCondition = $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select');
         $typeNewCondition->setValue($condition['type']);
-        $this->ruleParamWait();
 
-        $createdCondition = $newCondition->find($this->created, Locator::SELECTOR_XPATH);
+        $createdCondition = $context->find($this->created, Locator::SELECTOR_XPATH);
+        $this->waitForCondition($createdCondition);
         if (!empty($condition['rules'])) {
             $this->fillCondition($condition['rules'], $createdCondition);
         }
@@ -210,10 +209,10 @@ class ConditionsElement extends AbstractElement
      * Add conditions
      *
      * @param array $conditions
-     * @param Element $context
+     * @param ElementInterface $context
      * @return void
      */
-    protected function addMultipleCondition(array $conditions, Element $context)
+    protected function addMultipleCondition(array $conditions, ElementInterface $context)
     {
         foreach ($conditions as $key => $condition) {
             $elementContext = is_numeric($key) ? $context : $this->addConditionsCombination($key, $context);
@@ -229,10 +228,10 @@ class ConditionsElement extends AbstractElement
      * Add single Condition
      *
      * @param string $condition
-     * @param Element $context
+     * @param ElementInterface $context
      * @return void
      */
-    protected function addSingleCondition($condition, Element $context)
+    protected function addSingleCondition($condition, ElementInterface $context)
     {
         $condition = $this->parseCondition($condition);
 
@@ -246,9 +245,8 @@ class ConditionsElement extends AbstractElement
             }
         );
         $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select')->setValue($condition['type']);
-        $this->ruleParamWait();
-
-        $createdCondition = $newCondition->find($this->created, Locator::SELECTOR_XPATH);
+        $createdCondition = $context->find($this->created, Locator::SELECTOR_XPATH);
+        $this->waitForCondition($createdCondition);
         $this->fillCondition($condition['rules'], $createdCondition);
     }
 
@@ -256,14 +254,15 @@ class ConditionsElement extends AbstractElement
      * Fill single condition
      *
      * @param array $rules
-     * @param Element $element
+     * @param ElementInterface $element
      * @return void
      * @throws \Exception
      */
-    protected function fillCondition(array $rules, Element $element)
+    protected function fillCondition(array $rules, ElementInterface $element)
     {
         $this->resetKeyParam();
         foreach ($rules as $rule) {
+            /** @var ElementInterface $param */
             $param = $this->findNextParam($element);
             $param->find('a')->click();
 
@@ -287,13 +286,13 @@ class ConditionsElement extends AbstractElement
                     return $element->isVisible() ? true : null;
                 }
             );
-            $value = $param->find('select', Locator::SELECTOR_CSS, 'select');
+            $value = $param->find('select', Locator::SELECTOR_TAG_NAME, 'select');
             if ($value->isVisible()) {
                 $value->setValue($rule);
                 $this->click();
                 continue;
             }
-            $value = $param->find('input');
+            $value = $param->find('input', Locator::SELECTOR_TAG_NAME);
             if ($value->isVisible()) {
                 $value->setValue($rule);
 
@@ -356,11 +355,11 @@ class ConditionsElement extends AbstractElement
     /**
      * Find next param of condition for fill
      *
-     * @param Element $context
-     * @return Element
+     * @param ElementInterface $context
+     * @return ElementInterface
      * @throws \Exception
      */
-    protected function findNextParam(Element $context)
+    protected function findNextParam(ElementInterface $context)
     {
         do {
             if (!isset($this->mapParams[$this->findKeyParam])) {
@@ -389,14 +388,11 @@ class ConditionsElement extends AbstractElement
      *
      * @return void
      */
-    protected function ruleParamWait()
+    protected function waitForCondition(ElementInterface $element)
     {
-        $browser = $this;
-        $ruleParamWait = $this->ruleParamWait;
-        $browser->waitUntil(
-            function () use ($browser, $ruleParamWait) {
-                $element = $browser->find($ruleParamWait, Locator::SELECTOR_XPATH);
-                return $element->isVisible() ? null : true;
+        $this->waitUntil(
+            function () use ($element) {
+                return $element->getAttribute('class') == 'rule-param-wait' ? null : true;
             }
         );
     }
