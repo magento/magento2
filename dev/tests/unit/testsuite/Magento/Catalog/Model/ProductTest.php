@@ -424,10 +424,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetQty()
     {
-        $this->productTypeInstanceMock->expects($this->once())
+        $this->productTypeInstanceMock->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->with($this->equalTo($this->model))
             ->will($this->returnValue($this->_priceInfoMock));
+
+        //initialize the priceInfo field
+        $this->model->getPriceInfo();
+        //Calling setQty will reset the priceInfo field
+        $this->assertEquals($this->model, $this->model->setQty(1));
+        //Call the setQty method with the same qty, getPriceInfo should not be called this time
         $this->assertEquals($this->model, $this->model->setQty(1));
         $this->assertEquals($this->model->getPriceInfo(), $this->_priceInfoMock);
     }

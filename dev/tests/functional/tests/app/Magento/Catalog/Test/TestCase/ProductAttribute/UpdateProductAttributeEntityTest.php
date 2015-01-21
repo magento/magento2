@@ -33,6 +33,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateProductAttributeEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Run UpdateProductAttributeEntity test
      *

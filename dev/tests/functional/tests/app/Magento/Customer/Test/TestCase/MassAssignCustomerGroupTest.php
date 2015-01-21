@@ -34,6 +34,11 @@ use Mtf\TestCase\Injectable;
  */
 class MassAssignCustomerGroupTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Customer index page
      *

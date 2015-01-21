@@ -51,7 +51,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     public function getIds()
     {
         $result = [];
-        $shipmentIds = $this->_rootElement->find($this->shipmentId)->getElements();
+        $shipmentIds = $this->_rootElement->getElements($this->shipmentId);
         foreach ($shipmentIds as $shipmentId) {
             $result[] = trim($shipmentId->getText());
         }

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Block\Category;
 
 use Magento\Widget\Test\Fixture\Widget;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class View
@@ -66,8 +66,7 @@ class View extends Block
     {
         $products = [];
         $this->waitForElementVisible($this->recentlyViewedProducts, Locator::SELECTOR_XPATH);
-        $productNames = $this->_rootElement->find($this->recentlyViewedProducts, Locator::SELECTOR_XPATH)
-            ->getElements();
+        $productNames = $this->_rootElement->getElements($this->recentlyViewedProducts, Locator::SELECTOR_XPATH);
         foreach ($productNames as $productName) {
             $products[] = $productName->getText();
         }

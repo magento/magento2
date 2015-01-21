@@ -629,7 +629,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  null|string|bool|int|Store $store
      * @return string
      */
-    public function getCalculationAgorithm($store = null)
+    public function getCalculationAlgorithm($store = null)
     {
         return $this->_config->getAlgorithm($store);
     }
@@ -797,23 +797,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $orderTaxDetails = $this->orderTaxManagement->getOrderTaxDetails($order->getId());
 
-        // Apply any taxes for shipping
-        $shippingTaxAmount = $salesItem->getShippingTaxAmount();
-        $originalShippingTaxAmount = $order->getShippingTaxAmount();
-        if ($shippingTaxAmount && $originalShippingTaxAmount &&
-            $shippingTaxAmount != 0 && floatval($originalShippingTaxAmount)
-        ) {
-            //An invoice or credit memo can have a different qty than its order
-            $shippingRatio = $shippingTaxAmount / $originalShippingTaxAmount;
-            $itemTaxDetails = $orderTaxDetails->getItems();
-            foreach ($itemTaxDetails as $itemTaxDetail) {
-                //Aggregate taxable items associated with shipping
-                if ($itemTaxDetail->getType() == \Magento\Quote\Model\Quote\Address::TYPE_SHIPPING) {
-                    $taxClassAmount = $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $shippingRatio);
-                }
-            }
-        }
-
         // Apply any taxes for the items
         /** @var $item \Magento\Sales\Model\Order\Invoice\Item|\Magento\Sales\Model\Order\Creditmemo\Item */
         foreach ($salesItem->getItems() as $item) {
@@ -841,6 +824,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                         }
                     }
                     $taxClassAmount = $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $ratio);
+                }
+            }
+        }
+
+        // Apply any taxes for shipping
+        $shippingTaxAmount = $salesItem->getShippingTaxAmount();
+        $originalShippingTaxAmount = $order->getShippingTaxAmount();
+        if ($shippingTaxAmount && $originalShippingTaxAmount &&
+            $shippingTaxAmount != 0 && floatval($originalShippingTaxAmount)
+        ) {
+            //An invoice or credit memo can have a different qty than its order
+            $shippingRatio = $shippingTaxAmount / $originalShippingTaxAmount;
+            $itemTaxDetails = $orderTaxDetails->getItems();
+            foreach ($itemTaxDetails as $itemTaxDetail) {
+                //Aggregate taxable items associated with shipping
+                if ($itemTaxDetail->getType() == \Magento\Quote\Model\Quote\Address::TYPE_SHIPPING) {
+                    $taxClassAmount = $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $shippingRatio);
                 }
             }
         }
