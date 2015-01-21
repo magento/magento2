@@ -8,7 +8,7 @@ namespace Magento\Framework\Logger\Handler;
 
 use Monolog\Logger;
 
-class Exception extends System
+class Exception extends Base
 {
     /**
      * @var string

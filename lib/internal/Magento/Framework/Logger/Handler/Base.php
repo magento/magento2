@@ -15,12 +15,12 @@ abstract class Base extends StreamHandler
     /**
      * @var string
      */
-    protected $fileName = '/var/log/system.log';
+    protected $fileName;
 
     /**
      * @var int
      */
-    protected $loggerType = Logger::INFO;
+    protected $loggerType = Logger::DEBUG;
 
     /**
      * @var DriverInterface

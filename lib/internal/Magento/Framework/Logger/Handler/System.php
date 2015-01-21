@@ -51,6 +51,7 @@ class System extends Base
             $this->exceptionHandler->handle($record);
         } else {
             unset($record['context']['is_exception']);
+            $record['formatted'] = $this->getFormatter()->format($record);
             parent::write($record);
         }
     }
