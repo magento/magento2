@@ -13,31 +13,23 @@ class DependencyGraph extends \Magento\Framework\Data\Graph
     private $paths;
 
     /**
-     * Traverse the graph using depth-search traversal
+     * Traverse the graph using breadth-search traversal from a root
      *
      * @return void
      */
     public function traverseGraph($fromNode, $mode = self::DIRECTIONAL)
     {
         $this->_assertNode($fromNode, true);
-        //$this->_traverseGraph($fromNode, $this->getRelations($mode), [$fromNode]);
         $this->_traverseGraphBFS($fromNode, $this->getRelations($mode));
     }
 
-    protected function _traverseGraph($fromNode, $graph, $path = [], &$visited = [])
-    {
-        $visited[$fromNode] = $fromNode;
-        if (isset($graph[$fromNode])) {
-            foreach ($graph[$fromNode] as $node) {
-                if (!isset($visited[$node])) {
-                    $path[] = $node;
-                    $this->paths[$node] = $path;
-                    $this->_traverseGraph($node, $graph, $path, $visited);
-                }
-            }
-        }
-    }
-
+    /**
+     * Traverse helper method
+     *
+     * @param $fromNode
+     * @param $graph
+     * @return void
+     */
     protected function _traverseGraphBFS($fromNode, $graph)
     {
         $queue = [$fromNode];
@@ -45,11 +37,11 @@ class DependencyGraph extends \Magento\Framework\Data\Graph
         $this->paths[$fromNode] = [$fromNode];
         while (!empty($queue)) {
             $node = array_shift($queue);
-            $visited[$node] = $node;
-            if (isset($graph[$node])) {
+            if (!empty($graph[$node])) {
                 foreach ($graph[$node] as $child) {
                     if (!isset($visited[$child])) {
                         $this->paths[$child] = array_merge($this->paths[$node], [$child]);
+                        $visited[$child] = $child;
                         $queue[] = $child;
                     }
                 }
@@ -58,7 +50,7 @@ class DependencyGraph extends \Magento\Framework\Data\Graph
     }
 
     /**
-     * Get chain to node
+     * Get shortest chain to node
      * Note that this is not necessarily the only chain
      *
      * @param string $toNode

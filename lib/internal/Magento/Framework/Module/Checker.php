@@ -10,14 +10,14 @@ use Magento\Framework\Filesystem;
 class Checker
 {
     /**
-     * List of all modules
+     * All Modules composer.json data
      *
      * @var array
      */
-    protected $modules;
+    protected $modulesData;
 
     /**
-     * List of all enabled modules assuming module enable/disable operation succeeds
+     * List of enabled modules
      *
      * @var array
      */
@@ -39,15 +39,15 @@ class Checker
     }
 
     /**
-     * Set list of all modules
+     * Set modules data, this also provide the data to Mapper to create mappings of package name to module name
      *
-     * @param $modules
+     * @param string[] $modulesData
      * @return void
      */
-    public function setModules($modules)
+    public function setModulesData($modulesData)
     {
-        $this->modules = $modules;
-        $this->mapper->setModules($modules);
+        $this->modulesData = $modulesData;
+        $this->mapper->createMapping($modulesData);
     }
 
     /**
@@ -59,16 +59,5 @@ class Checker
     public function setEnabledModules($enabledModules)
     {
         $this->enabledModules = $enabledModules;
-    }
-
-    /**
-     * Check if module is enabled
-     *
-     * @param string $moduleName
-     * @return bool
-     */
-    protected function checkIfEnabled($moduleName)
-    {
-        return array_search($moduleName, $this->enabledModules) !== false;
     }
 }

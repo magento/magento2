@@ -22,30 +22,26 @@ class ConflictChecker extends Checker
     protected $filesystem;
 
     /**
-     * @param Filesystem $filesystem
-     * @param Mapper $mapper
-     */
-    public function __construct(Filesystem $filesystem, Mapper $mapper)
-    {
-        parent::__construct($mapper);
-        $this->filesystem = $filesystem;
-    }
-
-    /**
      * Check if enabling module will conflict any modules
      *
-     * @param $moduleName
+     * @param string[] $moduleNames
      * @return array
      */
-    public function checkConflictWhenEnableModule($moduleName)
+    public function checkConflictsWhenEnableModules($moduleNames)
     {
-        $conflicts = [];
-        foreach ($this->enabledModules as $enabledModule) {
-            if ($this->checkIfConflict($enabledModule, $moduleName)) {
-                $conflicts[] = $enabledModule;
+        // union of currently enabled modules and to-be-enabled modules
+        $this->enabledModules = array_unique(array_merge($this->enabledModules, $moduleNames));
+        $conflictsAll = [];
+        foreach ($moduleNames as $moduleName) {
+            $conflicts = [];
+            foreach ($this->enabledModules as $enabledModule) {
+                if ($this->checkIfConflict($enabledModule, $moduleName)) {
+                    $conflicts[] = $enabledModule;
+                }
             }
+            $conflictsAll[$moduleName] = $conflicts;
         }
-        return $conflicts;
+        return $conflictsAll;
     }
 
     /**
@@ -58,15 +54,8 @@ class ConflictChecker extends Checker
     {
         $jsonDecoder = new \Magento\Framework\Json\Decoder();
 
-        $vendorA = $this->mapper->moduleFullNameToVendorName($enabledModule);
-        $vendorB = $this->mapper->moduleFullNameToVendorName($moduleName);
-        $moduleA = $this->mapper->moduleFullNameToModuleName($enabledModule);
-        $moduleB = $this->mapper->moduleFullNameToModuleName($moduleName);
-
-        $readAdapter = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MODULES);
-
-        $data1 = $jsonDecoder->decode($readAdapter->readFile("$vendorA/$moduleA/composer.json"));
-        $data2 = $jsonDecoder->decode($readAdapter->readFile("$vendorB/$moduleB/composer.json"));
+        $data1 = $jsonDecoder->decode($this->modulesData[$enabledModule]);
+        $data2 = $jsonDecoder->decode($this->modulesData[$moduleName]);
 
         if (isset($data1[self::KEY_CONFLICT])) {
             foreach (array_keys($data1[self::KEY_CONFLICT]) as $packageName) {

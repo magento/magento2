@@ -13,6 +13,7 @@ use Magento\Setup\Model\DeploymentConfigMapper;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\Lists;
+use Magento\Setup\Model\ModuleList;
 use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Zend\Console\Request as ConsoleRequest;
@@ -120,6 +121,13 @@ class ConsoleController extends AbstractActionController
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
+
+    /**
+     * Module List
+     *
+     * @var ModuleList
+     */
+    private $moduleList;
 
     /**
      * Gets router configuration to be used in module definition
@@ -299,12 +307,14 @@ class ConsoleController extends AbstractActionController
         Lists $options,
         InstallerFactory $installerFactory,
         MaintenanceMode $maintenanceMode,
+        ModuleList $moduleList,
         ObjectManagerFactory $objectManagerFactory
     ) {
         $this->log = $consoleLogger;
         $this->options = $options;
         $this->installer = $installerFactory->create($consoleLogger);
         $this->maintenanceMode = $maintenanceMode;
+        $this->moduleList = $moduleList;
         $this->objectManagerFactory = $objectManagerFactory;
     }
 
@@ -477,8 +487,12 @@ class ConsoleController extends AbstractActionController
         $request = $this->getRequest();
         $isEnable = $request->getParam(0) == self::CMD_MODULE_ENABLE;
         $modules = explode(',', $request->getParam('modules'));
+        $reader = $this->getObjectManager()->create(
+            'Magento\Framework\Module\Dir\Reader',
+            ['moduleList' => $this->moduleList]
+        );
         /** @var \Magento\Framework\Module\Status $status */
-        $status = $this->getObjectManager()->get('Magento\Framework\Module\Status');
+        $status = $this->getObjectManager()->create('Magento\Framework\Module\Status', ['reader' => $reader]);
         if (!$request->getParam('force')) {
             $constraints = $status->checkConstraints($isEnable, $modules);
             if ($constraints) {

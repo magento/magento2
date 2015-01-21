@@ -12,56 +12,24 @@ class DependencyGraphFactory
     const KEY_REQUIRE = 'require';
 
     /**
-     * @var Mapper
-     */
-    private $mapper;
-
-    /**
-     * @var array
-     */
-    private $modules;
-
-    /**
-     * Filesystem
-     *
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @param Mapper $mapper
-     */
-    public function __construct(Filesystem $filesystem, Mapper $mapper)
-    {
-        $this->filesystem = $filesystem;
-        $this->mapper = $mapper;
-    }
-
-    /**
-     * @param array $modules
+     * @param array $modulesData
      * @return DependencyGraph
      */
-    public function create($modules)
+    public function create(Mapper $mapper, $modulesData)
     {
-        $readAdapter = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MODULES);
-
-        $this->modules = $modules;
-        $this->mapper->setModules($modules);
-
         $nodes = [];
         $dependencies = [];
 
         // build the graph data
-        foreach ($this->modules as $module) {
+        foreach ($modulesData as $moduleName => $data) {
             $jsonDecoder = new \Magento\Framework\Json\Decoder();
-            $module_partial = $this->mapper->moduleFullNameToModuleName($module);
-            $vendor = $this->mapper->moduleFullNameToVendorName($module);
-            $data = $jsonDecoder->decode($readAdapter->readFile("$vendor/$module_partial/composer.json"));
-            $nodes[] = $module;
+            $data = $jsonDecoder->decode($data);
+            $nodes[] = $moduleName;
             foreach (array_keys($data[self::KEY_REQUIRE]) as $depend) {
-                $depend = $this->mapper->packageNameToModuleFullName($depend);
+                $depend = $mapper->packageNameToModuleFullName($depend);
                 if ($depend) {
-                    $dependencies[] = [$module, $depend];
+                    $dependencies[] = [$moduleName, $depend];
                 }
             }
         }

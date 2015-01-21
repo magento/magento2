@@ -45,19 +45,25 @@ class Status
     private $cleanup;
 
     /**
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
+     * Dependency Checker
+     *
      * @var DependencyChecker
      */
     private $dependencyChecker;
 
     /**
+     * Conflict checker
+     *
      * @var ConflictChecker
      */
     private $conflictChecker;
+
+    /**
+     * Module Directory Reader
+     *
+     * @var Dir\Reader
+     */
+    private $reader;
 
     /**
      * Constructor
@@ -68,22 +74,21 @@ class Status
      * @param Cleanup $cleanup
      * @param ConflictChecker $conflictChecker
      * @param DependencyChecker $dependencyChecker
-     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         ModuleList\Loader $loader,
         ModuleList $list,
+        Dir\Reader $reader,
         Writer $writer,
         Cleanup $cleanup,
         ConflictChecker $conflictChecker,
-        DependencyChecker $dependencyChecker,
-        DeploymentConfig $deploymentConfig
+        DependencyChecker $dependencyChecker
     ) {
         $this->loader = $loader;
         $this->list = $list;
+        $this->reader = $reader;
         $this->writer = $writer;
         $this->cleanup = $cleanup;
-        $this->deploymentConfig = $deploymentConfig;
         $this->conflictChecker = $conflictChecker;
         $this->dependencyChecker = $dependencyChecker;
     }
@@ -91,60 +96,50 @@ class Status
     /**
      * Whether it is allowed to enable or disable specified modules
      *
-     * TODO: not implemented yet (MAGETWO-32613)
-     *
      * @param bool $isEnable
      * @param string[] $modules
      * @return string[]
      */
     public function checkConstraints($isEnable, $modules)
     {
-        // TODO: deploymentConfig only works when application exists
-        $enabledModules = [];
-        $all = $this->deploymentConfig->getSegment(ModuleList\DeploymentConfig::CONFIG_KEY);
-        foreach ($all as $module => $enabled) {
-            if ($enabled) {
-                $enabledModules[] = $module;
-            }
-        }
-
+        $enabledModules = $this->list->getNames();
+        // array keys: module name in module.xml; array values: raw content from composer.json
+        // this raw data is used to create a dependency graph and also a package name-module name mapping
+        $rawData = array_combine(array_keys($this->loader->load()), $this->reader->getComposerJsonFiles()->toArray());
         $errorMessages = [];
 
+        $this->dependencyChecker->setModulesData($rawData);
+        $this->dependencyChecker->setEnabledModules($enabledModules);
         if ($isEnable) {
-            $this->dependencyChecker->setModules(array_keys($all));
-            $this->dependencyChecker->setEnabledModules(array_unique(array_merge($enabledModules, $modules)));
+            $this->conflictChecker->setModulesData($rawData);
+            $this->conflictChecker->setEnabledModules($enabledModules);
 
-            foreach ($modules as $moduleName) {
-                $errorModules = $this->dependencyChecker->checkDependencyWhenEnableModule($moduleName);
-                if (!empty($errorModules)) {
+            $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules($modules);
+            $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules($modules);
+
+            foreach ($errorModulesDependency as $moduleName => $missingDependencies) {
+                if (!empty($missingDependencies)) {
                     $errorMessages[] = "Cannot enable $moduleName, depending on inactive modules:";
-                    foreach ($errorModules as $errorModule => $path) {
+                    foreach ($missingDependencies as $errorModule => $path) {
                         $errorMessages [] = "\t$errorModule: " . implode('->', $path);
                     }
                 }
             }
-            // TODO: consolidate to one for loop
-            $this->conflictChecker->setModules($modules);
-            $this->conflictChecker->setEnabledModules(array_unique(array_merge($enabledModules, $modules)));
-
-            foreach ($modules as $moduleName) {
-                $errorModules = $this->conflictChecker->checkConflictWhenEnableModule($moduleName);
-                if (!empty($errorModules)) {
+            foreach ($errorModulesConflict as $moduleName => $conflictingModules) {
+                if (!empty($conflictingModules)) {
                     $errorMessages[] = "Cannot enable $moduleName, conflicting active modules:";
-                    foreach ($errorModules as $errorModule) {
-                        $errorMessages [] = "\t$errorModule";
+                    foreach ($conflictingModules as $conflictingModule) {
+                        $errorMessages [] = "\t$conflictingModule";
                     }
                 }
             }
         } else {
-            $this->dependencyChecker->setModules(array_keys($all));
-            $this->dependencyChecker->setEnabledModules(array_diff($enabledModules, $modules));
+            $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenDisableModules($modules);
 
-            foreach ($modules as $moduleName) {
-                $errorModules = $this->dependencyChecker->checkDependencyWhenDisableModule($moduleName);
-                if (!empty($errorModules)) {
+            foreach ($errorModulesDependency as $moduleName => $missingDependencies) {
+                if (!empty($missingDependencies)) {
                     $errorMessages[] = "Cannot disable $moduleName, active modules depending on it:";
-                    foreach ($errorModules as $errorModule => $path) {
+                    foreach ($missingDependencies as $errorModule => $path) {
                         $errorMessages [] = "\t$errorModule: " . implode('->', $path);
                     }
                 }

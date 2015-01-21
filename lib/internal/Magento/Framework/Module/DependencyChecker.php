@@ -25,47 +25,71 @@ class DependencyChecker extends Checker
     }
 
     /**
-     * Checks modules that are depending on the to-be-disabled module
+     * Checks dependencies when disabling modules
      *
-     * @param string $moduleName
+     * @param string[] $moduleNames
      * @return array
      */
-    public function checkDependencyWhenDisableModule($moduleName)
+    public function checkDependenciesWhenDisableModules($moduleNames)
     {
-        $dependenciesMissing = [];
-        $graph = $this->factory->create($this->modules);
-        $graph->traverseGraph($moduleName, DependencyGraph::INVERSE);
-        foreach ($this->modules as $module) {
-            $dependencyChain = $graph->getChain($module);
-            if (!empty($dependencyChain) && $this->checkIfEnabled($module)) {
-                $dependenciesMissing[$module] = array_reverse($dependencyChain);
+        // assume disable succeeds: currently enabled modules - to-be-disabled modules
+        $this->enabledModules = array_diff($this->enabledModules, $moduleNames);
+        $dependenciesMissingAll = [];
+        $graph = $this->factory->create($this->mapper, $this->modulesData);
+        foreach ($moduleNames as $moduleName) {
+            $dependenciesMissing = [];
+            $graph->traverseGraph($moduleName, DependencyGraph::INVERSE);
+            foreach (array_keys($this->modulesData) as $module) {
+                $dependencyChain = $graph->getChain($module);
+                if (!empty($dependencyChain) && $this->checkIfEnabled($module)) {
+                    $dependenciesMissing[$module] = array_reverse($dependencyChain);
+                }
             }
+            $dependenciesMissingAll[$moduleName] = $dependenciesMissing;
         }
-        return $dependenciesMissing;
+        return $dependenciesMissingAll;
     }
 
     /**
-     * Checks modules the to-be-enabled module is depending on
+     * Checks dependencies when enabling modules
      *
-     * @param string $moduleName
+     * @param string[] $moduleNames
      * @return array
      */
-    public function checkDependencyWhenEnableModule($moduleName)
+    public function checkDependenciesWhenEnableModules($moduleNames)
     {
-        $dependenciesMissing = [];
-        $graph = $this->factory->create($this->modules);
-        $graph->traverseGraph($moduleName);
-        foreach ($this->modules as $module) {
-            $dependencyChain = $graph->getChain($module);
-            if (!empty($dependencyChain) && !$this->checkIfEnabled($module)) {
-                foreach ($dependencyChain as $key => $node) {
-                    if (!$this->checkIfEnabled($node)) {
-                        $dependencyChain[$key] = $dependencyChain[$key] . '(disabled)';
+        // assume enable succeeds: union of currently enabled modules and to-be-enabled modules
+        $this->enabledModules = array_unique(array_merge($this->enabledModules, $moduleNames));
+        $dependenciesMissingAll = [];
+        $graph = $this->factory->create($this->mapper, $this->modulesData);
+        foreach ($moduleNames as $moduleName) {
+            $dependenciesMissing = [];
+            $graph->traverseGraph($moduleName);
+            foreach (array_keys($this->modulesData) as $module) {
+                $dependencyChain = $graph->getChain($module);
+                if (!empty($dependencyChain) && !$this->checkIfEnabled($module)) {
+                    foreach ($dependencyChain as $key => $node) {
+                        if (!$this->checkIfEnabled($node)) {
+                            $dependencyChain[$key] = $dependencyChain[$key] . '(disabled)';
+                        }
                     }
+                    $dependenciesMissing[$module] = $dependencyChain;
                 }
-                $dependenciesMissing[$module] = $dependencyChain;
             }
+            $dependenciesMissingAll[$moduleName] = $dependenciesMissing;
         }
-        return $dependenciesMissing;
+        return $dependenciesMissingAll;
+    }
+
+
+    /**
+     * Check if module is enabled
+     *
+     * @param string $moduleName
+     * @return bool
+     */
+    protected function checkIfEnabled($moduleName)
+    {
+        return array_search($moduleName, $this->enabledModules) !== false;
     }
 }
