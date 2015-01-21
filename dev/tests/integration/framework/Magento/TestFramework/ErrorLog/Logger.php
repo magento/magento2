@@ -40,4 +40,20 @@ class Logger extends \Magento\Framework\Logger\Monolog
     {
         return $this->messages;
     }
+
+    /**
+     * @{inheritDoc}
+     *
+     * @param  integer $level   The logging level
+     * @param  string  $message The log message
+     * @param  array   $context The log context
+     * @return Boolean Whether the record has been processed
+     */
+    public function addRecord($level, $message, array $context = array())
+    {
+        $this->messages[] = $message;
+        return parent::addRecord($level, $message, $context);
+    }
+
+
 }

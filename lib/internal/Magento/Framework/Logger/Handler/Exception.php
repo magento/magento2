@@ -8,15 +8,15 @@ namespace Magento\Framework\Logger\Handler;
 
 use Monolog\Logger;
 
-class Debug extends Base
+class Exception extends System
 {
     /**
      * @var string
      */
-    protected $fileName = '/var/log/debug.log';
+    protected $fileName = '/var/log/exception.log';
 
     /**
      * @var int
      */
-    protected $loggerType = Logger::DEBUG;
+    protected $loggerType = Logger::INFO;
 }
