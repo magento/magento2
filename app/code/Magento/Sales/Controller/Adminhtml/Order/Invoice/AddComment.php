@@ -78,7 +78,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             }
             $invoice = $this->getInvoice();
             if (!$invoice) {
-                /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+                /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
                 $resultForward = $this->resultForwardFactory->create();
                 return $resultForward->forward('noroute');
             }
@@ -91,7 +91,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             $this->invoiceCommentSender->send($invoice, !empty($data['is_customer_notified']), $data['comment']);
             $invoice->save();
 
-            /** @var \Magento\Framework\View\Result\Page $resultPage */
+            /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
             $resultPage = $this->resultPageFactory->create();
             $resultPage->getConfig()->getTitle()->prepend(__('Invoices'));
             $response = $resultPage->getLayout()->getBlock('invoice_comments')->toHtml();

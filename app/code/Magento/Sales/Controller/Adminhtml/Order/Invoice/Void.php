@@ -42,7 +42,7 @@ class Void extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
     {
         $invoice = $this->getInvoice();
         if (!$invoice) {
-            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+            /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
             $resultForward = $this->resultForwardFactory->create();
             return $resultForward->forward('noroute');
         }
