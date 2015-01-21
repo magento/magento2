@@ -25,4 +25,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="config.xsd">
     <install host="127.0.0.1" user="root" password="123123q" dbName="default" baseUrl="http://127.0.0.1/magento2/" backendName="backend"/>
+    <application reopenBrowser="testCase" backendLogin="admin" backendPassword="123123q" appBackendUrl="http://m2.local/backend/" backendLoginUrl="admin"/>
 </config>

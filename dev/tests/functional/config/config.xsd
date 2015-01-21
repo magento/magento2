@@ -26,7 +26,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="config">
         <xs:complexType>
-            <xs:sequence>
+            <xs:all>
                 <xs:element name="application" minOccurs="0">
                     <xs:complexType>
                         <xs:attribute name="reopenBrowser" type="reopenBrowserType" use="required"/>
@@ -63,7 +63,7 @@
                         <xs:attribute name="backendName" type="notEmptyType"/>
                     </xs:complexType>
                 </xs:element>
-            </xs:sequence>
+            </xs:all>
         </xs:complexType>
     </xs:element>
     <xs:simpleType name="reopenBrowserType">
