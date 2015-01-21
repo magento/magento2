@@ -101,11 +101,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Monolog\Handler\StreamHandler">
-        <arguments>
-            <argument name="stream" xsi:type="string">var/log/system.log</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Model\Context">
         <arguments>
             <argument name="actionValidator" xsi:type="object">Magento\Framework\Model\ActionValidator\RemoveAction\Proxy</argument>
