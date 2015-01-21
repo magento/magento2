@@ -34,12 +34,7 @@ app/code/Magento/Cms/Model/Template/FilterProvider.php
 app/code/Magento/ConfigurableImportExport
 app/code/Magento/ConfigurableProduct
 app/code/Magento/Core/data
-app/code/Magento/Core/Model/Design.php
 app/code/Magento/Core/Model/Layout/Update.php
-app/code/Magento/Core/Model/Resource/Theme
-app/code/Magento/Core/Model/Resource/Theme.php
-app/code/Magento/Core/Model/Theme
-app/code/Magento/Core/Model/Theme.php
 app/code/Magento/Core/Model/Url/SecurityInfo.php
 app/code/Magento/Cron/Model/Config/Converter
 app/code/Magento/Cron/Model/Config/Reader
@@ -113,6 +108,11 @@ app/code/Magento/Shipping/Model/Order/Track.php
 app/code/Magento/Shipping/Model/CarrierFactory.php
 app/code/Magento/Shipping/Model/Resource/Order
 app/code/Magento/Theme
+app/code/Magento/Theme/Model/Design.php
+app/code/Magento/Theme/Model/Resource/Theme
+app/code/Magento/Theme/Model/Resource/Theme.php
+app/code/Magento/Theme/Model/Theme
+app/code/Magento/Theme/Model/Theme.php
 app/code/Magento/Webapi
 app/code/Magento/GroupedProduct
 app/code/Magento/Rss
