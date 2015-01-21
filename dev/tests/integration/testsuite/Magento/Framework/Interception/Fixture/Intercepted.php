@@ -50,4 +50,29 @@ class Intercepted extends InterceptedParent implements InterceptedInterface
     {
         return '<K>' . $param1 . '</K>';
     }
+
+    public function V($param1)
+    {
+        return '<V>' . $param1 . '</V>';
+    }
+
+    public function W($param1)
+    {
+        return '<W>' . $param1 . '</W>';
+    }
+
+    public function X($param1)
+    {
+        return '<X>' . $param1 . '</X>';
+    }
+
+    public function Y($param1)
+    {
+        return '<Y>' . $param1 . '</Y>';
+    }
+
+    public function Z($param1)
+    {
+        return '<Z>' . $param1 . '</Z>';
+    }
 }
