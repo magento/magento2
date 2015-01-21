@@ -66,6 +66,9 @@ class FileFactory
             if ($content['type'] == 'filename') {
                 $isFile = true;
                 $file = $content['value'];
+                if (!$dir->isFile($file)) {
+                    throw new \Exception(__('File not found'));
+                }
                 $contentLength = $dir->stat($file)['size'];
             }
         }
@@ -100,9 +103,6 @@ class FileFactory
 
         if (!is_null($content)) {
             if ($isFile) {
-                if (!$dir->isFile($file)) {
-                    throw new \Exception(__('File not found'));
-                }
                 $this->_response->sendHeaders();
                 $stream = $dir->openFile($file, 'r');
                 while (!$stream->eof()) {
@@ -113,12 +113,27 @@ class FileFactory
                 if (!empty($content['rm'])) {
                     $dir->delete($file);
                 }
-                exit(0);
+                self::exitphp(0);
             } else {
                 $this->_response->clearBody();
                 $this->_response->setBody($content);
             }
         }
         return $this->_response;
+    }
+
+    /**
+     * Call exit
+     *
+     * @param $code
+     * @throws TestingPhpExitException
+     */
+    static function exitphp($code)
+    {
+        if (defined('UNIT_TESTING')) {
+            throw new \Magento\Framework\App\Response\Http\TestingPhpExitException();
+        } else {
+            exit($code);
+        }
     }
 }
