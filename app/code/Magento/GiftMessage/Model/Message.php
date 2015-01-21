@@ -6,6 +6,7 @@
 namespace Magento\GiftMessage\Model;
 
 use Magento\Framework\Api\AttributeDataBuilder;
+
 /**
  * Gift Message model
  *
