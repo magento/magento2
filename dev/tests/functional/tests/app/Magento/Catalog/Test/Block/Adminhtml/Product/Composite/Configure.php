@@ -7,12 +7,11 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Composite;
 
-use Magento\Backend\Test\Block\Template;
-use Magento\Catalog\Test\Block\AbstractConfigureBlock;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Block\AbstractConfigureBlock;
 
 /**
  * Class Configure

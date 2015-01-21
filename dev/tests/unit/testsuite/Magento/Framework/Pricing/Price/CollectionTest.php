@@ -80,6 +80,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnValue($this->priceMock));
         $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
+        //Calling the get method again with the same code, cached copy should be used
+        $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
     }
 
     /**

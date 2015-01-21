@@ -55,7 +55,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     public function getIds()
     {
         $result = [];
-        $invoiceIds = $this->_rootElement->find($this->invoiceId)->getElements();
+        $invoiceIds = $this->_rootElement->getElements($this->invoiceId);
         foreach ($invoiceIds as $invoiceId) {
             $result[] = trim($invoiceId->getText());
         }
