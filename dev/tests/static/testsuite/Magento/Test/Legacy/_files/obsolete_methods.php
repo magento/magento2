@@ -2028,5 +2028,9 @@ return [
     ['getAllNominalItems', 'Magento\Sales\Model\Quote\Address'],
     ['isNominal', 'Magento\Sales\Model\Order\Item'],
     ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
-    ['checkQuoteAmount', 'Magento\Sales\Helper\Data']
+    ['checkQuoteAmount', 'Magento\Sales\Helper\Data'],
+    ['getResource', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getResourceCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface']
 ];
