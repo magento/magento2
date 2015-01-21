@@ -7,7 +7,7 @@
 namespace Magento\Customer\Test\Block\Form;
 
 use Mtf\Block\Form;
-use Mtf\Client\Element;
+use Mtf\Client\Element\SimpleElement;
 use Mtf\Fixture\FixtureInterface;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 
@@ -51,10 +51,10 @@ class CustomerForm extends Form
      * Fill the customer data
      *
      * @param FixtureInterface $customer
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fill(FixtureInterface $customer, Element $element = null)
+    public function fill(FixtureInterface $customer, SimpleElement $element = null)
     {
         /** @var CustomerInjectable $customer */
         if ($customer->hasData()) {

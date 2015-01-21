@@ -7,7 +7,7 @@
 namespace Magento\Downloadable\Test\Block\Catalog\Product;
 
 use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 
 /**

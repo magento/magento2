@@ -8,7 +8,7 @@ namespace Magento\Checkout\Test\Block\Cart;
 
 use Magento\Customer\Test\Fixture\AddressInjectable;
 use Mtf\Block\Form;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Shipping
@@ -125,6 +125,7 @@ class Shipping extends Form
             }
         );
         $selector = sprintf($this->shippingMethod, $carrier, $method);
+
         return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible();
     }
 }
