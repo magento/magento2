@@ -50,6 +50,11 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ModuleList
+     */
+    private $moduleList;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
@@ -72,6 +77,8 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->parameters= $this->getMock('\Zend\Stdlib\Parameters', [], [], '', false);
         $this->request->expects($this->any())->method('getParams')->willReturn($this->parameters);
 
+        $this->moduleList = $this->getMock('Magento\Setup\Model\ModuleList', [], [], '', false);
+
         $this->mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
         $this->mvcEvent->expects($this->once())->method('setRequest')->with($this->request)->willReturn(
             $this->mvcEvent
@@ -90,6 +97,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
             $this->options,
             $installerFactory,
             $this->maintenanceMode,
+            $this->moduleList,
             $objectManagerFactory
         );
         $this->controller->setEvent($this->mvcEvent);
@@ -319,10 +327,13 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->at(1))->method('getParam')->with('modules')->willReturn($modules);
         $this->request->expects($this->at(2))->method('getParam')->with('force')->willReturn($isForce);
         $status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
-        $this->objectManager->expects($this->once())
-            ->method('get')
-            ->with('Magento\Framework\Module\Status')
-            ->willReturn($status);
+        $reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
+        $this->objectManager->expects($this->exactly(2))
+            ->method('create')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\Module\Status', ['reader' => $reader], $status],
+                ['Magento\Framework\Module\Dir\Reader', ['moduleList' => $this->moduleList], $reader],
+            ]));
         return $status;
     }
 
