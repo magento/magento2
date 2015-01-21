@@ -6,24 +6,23 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-
 class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
      * Generate order history for ajax request
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
         $this->_initOrder();
-
-        $html = $this->_view->getLayout()->createBlock(
-            'Magento\Sales\Block\Adminhtml\Order\View\Tab\History'
-        )->toHtml();
-
+        $resultPage = $this->resultPageFactory->create();
+        $html = $resultPage->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\History')->toHtml();
         $this->_translateInline->processResponseBody($html);
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
+        $resultRaw->setContents($html);
 
-        $this->getResponse()->setBody($html);
+        return $resultRaw;
     }
 }

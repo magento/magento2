@@ -22,6 +22,8 @@ class Creditmemos extends \Magento\Sales\Controller\Adminhtml\Order
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
     public function __construct(
         Action\Context $context,
@@ -30,7 +32,9 @@ class Creditmemos extends \Magento\Sales\Controller\Adminhtml\Order
         \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         $this->resultLayoutFactory = $resultLayoutFactory;
         parent::__construct(
@@ -39,7 +43,10 @@ class Creditmemos extends \Magento\Sales\Controller\Adminhtml\Order
             $fileFactory,
             $translateInline,
             $resultPageFactory,
-            $resultRedirectFactory
+            $resultRedirectFactory,
+            $resultJsonFactory,
+            $resultLayoutFactory,
+            $resultRawFactory
         );
     }
 
