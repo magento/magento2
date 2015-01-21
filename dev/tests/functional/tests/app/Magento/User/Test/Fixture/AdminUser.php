@@ -6,10 +6,10 @@
 
 namespace Magento\User\Test\Fixture;
 
-use Mtf\Factory\Factory;
-use Mtf\Fixture\DataFixture;
-use Mtf\ObjectManager;
-use Mtf\Config;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\DataFixture;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Config;
 
 /**
  * Fixture with all necessary data for user creation on backend
@@ -48,8 +48,8 @@ class AdminUser extends DataFixture
     protected function _initData()
     {
         /** @var \Mtf\Config $systemConfig */
-        $systemConfig = ObjectManager::getInstance()->create('Mtf\Config');
-        $superAdminPassword = $systemConfig->getParameter('application/backendPassword');
+        $systemConfig = ObjectManager::getInstance()->create('Magento\Mtf\Config');
+        $superAdminPassword = $systemConfig->getConfigParam('application/backendPassword');
         $this->_data = [
             'fields' => [
                 'email' => [

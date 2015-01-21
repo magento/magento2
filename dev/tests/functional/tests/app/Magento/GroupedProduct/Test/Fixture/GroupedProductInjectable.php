@@ -6,12 +6,12 @@
 
 namespace Magento\GroupedProduct\Test\Fixture;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\InjectableFixture;
-use Mtf\Handler\HandlerFactory;
-use Mtf\Repository\RepositoryFactory;
-use Mtf\Config;
-use Mtf\System\Event\EventManagerInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Handler\HandlerFactory;
+use Magento\Mtf\Repository\RepositoryFactory;
+use Magento\Mtf\Config;
+use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
  * Class GroupedProductInjectable

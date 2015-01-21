@@ -60,7 +60,7 @@ class Grid extends GridInterface
     }
 
     /**
-     * @return mixed|\Mtf\Client\Element
+     * @return mixed|\Magento\Mtf\Client\Element
      */
     private function getInvoiceAmountElement()
     {

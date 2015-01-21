@@ -6,8 +6,8 @@
 
 namespace Magento\User\Test\Repository;
 
-use Mtf\ObjectManager;
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class User
@@ -24,9 +24,9 @@ class User extends AbstractRepository
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        /** @var \Mtf\Config $systemConfig */
-        $systemConfig = ObjectManager::getInstance()->create('Mtf\Config');
-        $superAdminPassword = $systemConfig->getParameter('application/backendPassword');
+        /** @var \Magento\Mtf\Config $systemConfig */
+        $systemConfig = ObjectManager::getInstance()->create('Magento\Mtf\Config');
+        $superAdminPassword = $systemConfig->getConfigParam('application/backendPassword');
         $this->_data['default'] = [
             'username' => 'admin',
             'firstname' => 'FirstName%isolation%',

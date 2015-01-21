@@ -7,9 +7,9 @@
 namespace Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Client\Element;
-use Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class AssociatedProducts

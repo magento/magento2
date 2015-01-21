@@ -6,7 +6,7 @@
 
 namespace Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
 
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Links

@@ -7,7 +7,7 @@
 namespace Magento\Tax\Test\Constraint;
 
 use Magento\Tax\Test\Page\Adminhtml\TaxRateIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertTaxRateSuccessSaveMessage

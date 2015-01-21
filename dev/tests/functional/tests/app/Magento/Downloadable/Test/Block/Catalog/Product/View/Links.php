@@ -6,8 +6,8 @@
 
 namespace Magento\Downloadable\Test\Block\Catalog\Product\View;
 
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Links

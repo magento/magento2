@@ -5,12 +5,12 @@
  */
 namespace Magento\Downloadable\Test\Handler\Curl;
 
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Handler\Curl;
-use Mtf\Config;
-use Mtf\Util\Protocol\CurlInterface;
-use Mtf\Util\Protocol\CurlTransport;
-use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Handler\Curl;
+use Magento\Mtf\Config;
+use Magento\Mtf\Util\Protocol\CurlInterface;
+use Magento\Mtf\Util\Protocol\CurlTransport;
+use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 class CreateDownloadable extends Curl
 {

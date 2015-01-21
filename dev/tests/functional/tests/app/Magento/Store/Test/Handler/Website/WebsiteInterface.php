@@ -6,7 +6,7 @@
 
 namespace Magento\Store\Test\Handler\Website;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface WebsiteInterface

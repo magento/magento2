@@ -7,12 +7,12 @@
 namespace Magento\User\Test\Handler\User;
 
 use Magento\Backend\Test\Handler\Extractor;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Handler\Curl as AbstractCurl;
-use Mtf\Config;
-use Mtf\Util\Protocol\CurlInterface;
-use Mtf\Util\Protocol\CurlTransport;
-use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Handler\Curl as AbstractCurl;
+use Magento\Mtf\Config;
+use Magento\Mtf\Util\Protocol\CurlInterface;
+use Magento\Mtf\Util\Protocol\CurlTransport;
+use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
  * Class Curl

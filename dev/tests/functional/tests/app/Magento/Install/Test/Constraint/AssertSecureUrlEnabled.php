@@ -6,8 +6,8 @@
 
 namespace Magento\Install\Test\Constraint;
 
-use Mtf\Client\BrowserInterface;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 

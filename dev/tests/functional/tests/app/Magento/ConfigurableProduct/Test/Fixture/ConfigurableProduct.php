@@ -9,8 +9,8 @@ namespace Magento\ConfigurableProduct\Test\Fixture;
 use Magento\Catalog\Test\Fixture\Product;
 use Magento\Catalog\Test\Fixture\ProductAttribute;
 use Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct as Repository;
-use Mtf\Factory\Factory;
-use Mtf\Config;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Config;
 
 /**
  * Class ConfigurableProduct

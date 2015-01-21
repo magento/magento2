@@ -6,8 +6,8 @@
 
 namespace Magento\User\Test\Repository;
 
-use Mtf\Factory\Factory;
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class Abstract Repository

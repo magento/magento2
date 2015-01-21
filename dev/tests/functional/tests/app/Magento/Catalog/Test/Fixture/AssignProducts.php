@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\Factory\Factory;
-use Mtf\Config;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Config;
 
 class AssignProducts extends Product
 {

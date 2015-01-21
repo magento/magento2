@@ -8,7 +8,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Related\Grid as RelatedGrid;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Related

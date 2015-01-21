@@ -9,8 +9,8 @@ namespace Magento\ConfigurableProduct\Test\Handler\ConfigurableProductInjectable
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable\ConfigurableAttributesData;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Config;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Config;
 
 /**
  * Class Curl

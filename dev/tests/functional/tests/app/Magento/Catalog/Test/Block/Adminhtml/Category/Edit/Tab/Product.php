@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Category\Tab\ProductGrid;
 
 /**

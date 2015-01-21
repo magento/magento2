@@ -7,9 +7,9 @@
 
 namespace Magento\Customer\Test\Handler\Webapi;
 
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Handler\Webapi;
-use Mtf\Util\Protocol\SoapTransport;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Handler\Webapi;
+use Magento\Mtf\Util\Protocol\SoapTransport;
 
 /**
  * Class CreateCustomer

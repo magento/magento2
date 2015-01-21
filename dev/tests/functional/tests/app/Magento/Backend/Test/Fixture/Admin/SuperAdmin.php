@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Test\Fixture\Admin;
 
-use Mtf\Fixture\DataFixture;
+use Magento\Mtf\Fixture\DataFixture;
 
 /**
  * Class SuperAdmin

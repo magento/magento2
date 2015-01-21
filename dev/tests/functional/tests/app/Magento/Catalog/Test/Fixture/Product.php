@@ -5,10 +5,10 @@
  */
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\Factory\Factory;
-use Mtf\Fixture\DataFixture;
-use Mtf\ObjectManager;
-use Mtf\Config;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\DataFixture;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Config;
 
 class Product extends DataFixture
 {
