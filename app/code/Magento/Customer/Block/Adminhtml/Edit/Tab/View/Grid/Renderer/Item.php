@@ -141,7 +141,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         foreach ($options as $option) {
             $formattedOption = $this->getFormattedOptionValue($option);
             $html .= '<dt>' . $this->escapeHtml($option['label']) . '</dt>';
-            $html .= '<dd>' . $this->escapeHtml($formattedOption['value']) . '</dd>';
+            $html .= '<dd>' . $formattedOption['value'] . '</dd>';
         }
         $html .= '</dl></div>';
 
