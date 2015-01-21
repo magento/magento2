@@ -48,7 +48,7 @@ class ResourceProvider
     }
 
     /**
-     * @return mixed
+     * @return \Magento\Framework\Model\Resource\AbstractResource
      */
     public function getResource()
     {
@@ -56,7 +56,7 @@ class ResourceProvider
     }
 
     /**
-     * @return mixed
+     * @return \Magento\CatalogSearch\Model\Resource\Advanced\Collection
      */
     public function getResourceCollection()
     {
@@ -64,7 +64,7 @@ class ResourceProvider
     }
 
     /**
-     * @return mixed
+     * @return \Magento\Solr\Model\Resource\Collection|\Magento\CatalogSearch\Model\Resource\Fulltext\Collection
      */
     public function getResultCollection()
     {
@@ -72,7 +72,7 @@ class ResourceProvider
     }
 
     /**
-     * @return mixed
+     * @return \Magento\Solr\Model\Resource\Collection|\Magento\CatalogSearch\Model\Resource\Advanced\Collection
      */
     public function getAdvancedResultCollection()
     {
@@ -82,7 +82,7 @@ class ResourceProvider
     /**
      * Create resource
      *
-     * @param $resourceKey
+     * @param string $resourceKey
      * @return mixed
      */
     protected function createResource($resourceKey)

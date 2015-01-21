@@ -58,6 +58,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     protected $productCherry;
 
+    /**
+     * @var \Magento\CatalogSearch\Model\Resource\ResourceProvider
+     */
+    protected $resourceProvider;
+
     protected function setUp()
     {
         /** @var \Magento\Indexer\Model\IndexerInterface indexer */
@@ -74,8 +79,8 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogSearch\Model\Resource\Fulltext'
         );
 
-        $this->fulltext = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\Fulltext'
+        $this->resourceProvider = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            '\Magento\CatalogSearch\Model\Resource\ResourceProvider'
         );
 
         $this->queryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -205,7 +210,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $query = $this->queryFactory->get();
         $query->unsetData()->setQueryText($text)->prepare();
         $products = [];
-        $collection = $this->engine->getResultCollection();
+        $collection = $this->resourceProvider->getResultCollection();
         $collection->addSearchFilter($text);
         foreach ($collection as $product) {
             $products[] = $product;

@@ -101,6 +101,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     protected $_currencyFactory;
 
     /**
+     * Resources factory
+     *
      * @var ResourceProvider
      */
     protected $_resourceProvider;
