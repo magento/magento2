@@ -4,16 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-namespace Mtf\Client\Driver\Selenium\Element;
+namespace Mtf\Client\Element;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class SuggestElement
  * General class for suggest elements.
  */
-class SuggestElement extends Element
+class SuggestElement extends SimpleElement
 {
     /**
      * "Backspace" key code.
@@ -56,12 +55,13 @@ class SuggestElement extends Element
      */
     public function setValue($value)
     {
-        $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
+        $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
         $this->clear();
         foreach (str_split($value) as $symbol) {
-            $this->find($this->suggest)->click();
-            $this->_driver->keys($symbol);
+            $input = $this->find($this->suggest);
+            $input->click();
+            $input->keys([$symbol]);
             $this->waitResult();
             $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
             if ($searchedItem->isVisible()) {
@@ -91,7 +91,7 @@ class SuggestElement extends Element
      */
     public function waitResult()
     {
-        $browser = clone $this;
+        $browser = $this;
         $selector = $this->suggestStateLoader;
         $browser->waitUntil(
             function () use ($browser, $selector) {
@@ -108,7 +108,7 @@ class SuggestElement extends Element
      */
     public function getValue()
     {
-        $this->_eventManager->dispatchEvent(['get_value'], [(string)$this->_locator]);
+        $this->eventManager->dispatchEvent(['get_value'], [__METHOD__, $this->getAbsoluteSelector()]);
 
         return $this->find($this->suggest)->getValue();
     }
@@ -128,6 +128,7 @@ class SuggestElement extends Element
         if (!$searchResult->isVisible()) {
             return false;
         }
+
         return $searchResult->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH)->isVisible();
     }
 }

@@ -30,12 +30,12 @@ interface PriceCurrencyInterface
      * Convert and round price value
      *
      * @param float $amount
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @param \Magento\Directory\Model\Currency|string|null $currency
+     * @param null|string|bool|int|\Magento\Framework\App\ScopeInterface $scope
+     * @param \Magento\Framework\Model\AbstractModel|string|null $currency
      * @param int $precision
      * @return float
      */
-    public function convertAndRound($amount, $store = null, $currency = null, $precision = self::DEFAULT_PRECISION);
+    public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION);
 
     /**
      * Format price value

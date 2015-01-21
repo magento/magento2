@@ -8,7 +8,7 @@
 namespace Magento\Review\Test\Block\Product\View;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element;
+use Mtf\Client\ElementInterface;
 
 /**
  * Reviews frontend block.
@@ -32,7 +32,7 @@ class Summary extends Block
     /**
      * Get add review link.
      *
-     * @return Element
+     * @return ElementInterface
      */
     public function getAddReviewLink()
     {
@@ -53,9 +53,9 @@ class Summary extends Block
     }
 
     /**
-     * Get view review link.
+     * Get view review link
      *
-     * @return Element
+     * @return ElementInterface
      */
     public function getViewReviewLink()
     {

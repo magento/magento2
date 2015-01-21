@@ -7,7 +7,7 @@
 namespace Magento\Backend\Test\Block\Admin;
 
 use Mtf\Block\Form;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Login

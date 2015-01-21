@@ -7,7 +7,7 @@
 namespace Magento\Checkout\Test\Block\Cart;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class CartEmpty

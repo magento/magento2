@@ -221,7 +221,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $data['price_incl_tax_weee_taxable_unit_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => true,
-                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+                'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
             'weee_config' => [
                 'isEnabled' => true,
@@ -261,7 +261,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $data['price_incl_tax_weee_taxable_unit_not_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => true,
-                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+                'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
             'weee_config' => [
                 'isEnabled' => true,
@@ -301,7 +301,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $data['price_excl_tax_weee_taxable_unit_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => false,
-                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+                'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
             'weee_config' => [
                 'isEnabled' => true,
@@ -341,7 +341,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $data['price_incl_tax_weee_non_taxable_unit_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => true,
-                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+                'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
             'weee_config' => [
                 'isEnabled' => true,
@@ -383,7 +383,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $data['price_excl_tax_weee_non_taxable_unit_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => false,
-                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+                'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
             ],
             'weee_config' => [
                 'isEnabled' => true,
@@ -425,7 +425,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $data['price_incl_tax_weee_taxable_row_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => true,
-                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+                'getCalculationAlgorithm' => Calculation::CALC_ROW_BASE,
             ],
             'weee_config' => [
                 'isEnabled' => true,
@@ -465,7 +465,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $data['price_excl_tax_weee_taxable_row_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => false,
-                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+                'getCalculationAlgorithm' => Calculation::CALC_ROW_BASE,
             ],
             'weee_config' => [
                 'isEnabled' => true,
@@ -505,7 +505,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $data['price_incl_tax_weee_non_taxable_row_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => true,
-                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+                'getCalculationAlgorithm' => Calculation::CALC_ROW_BASE,
             ],
             'weee_config' => [
                 'isEnabled' => true,
@@ -547,7 +547,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $data['price_excl_tax_weee_non_taxable_row_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => false,
-                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+                'getCalculationAlgorithm' => Calculation::CALC_ROW_BASE,
             ],
             'weee_config' => [
                 'isEnabled' => true,
@@ -589,7 +589,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $data['price_excl_tax_weee_non_taxable_row_not_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => false,
-                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+                'getCalculationAlgorithm' => Calculation::CALC_ROW_BASE,
             ],
             'weee_config' => [
                 'isEnabled' => true,

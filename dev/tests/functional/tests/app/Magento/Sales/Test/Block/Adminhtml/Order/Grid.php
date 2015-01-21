@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
 use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Class Grid
@@ -42,6 +42,13 @@ class Grid extends GridInterface
      * @var string
      */
     protected $editLink = 'td[class*=col-action] a';
+
+    /**
+     * First row selector
+     *
+     * @var string
+     */
+    protected $firstRowSelector = '//tbody/tr[1]//a';
 
     /**
      * {@inheritdoc}
