@@ -29,7 +29,7 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
     protected function setUp()
     {
         if (defined('HHVM_VERSION')) {
-            $this->markTestIncomplete('Test incompleted by https://github.com/facebook/hhvm/issues/1447');
+            $this->markTestSkipped('Test was skipped by MAGETWO-32880');
         }
     }
 
