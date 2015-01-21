@@ -20,7 +20,7 @@ class ExportExcel extends \Magento\Sales\Controller\Adminhtml\Order
     {
         $fileName = 'orders.xml';
         /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
-        $exportBlock = $this->resultLayoutFactory->create()
+        $exportBlock = $this->resultPageFactory->create()
             ->getLayout()
             ->getChildBlock('sales.order.grid', 'grid.export');
         return $this->_fileFactory->create($fileName, $exportBlock->getExcelFile($fileName), DirectoryList::VAR_DIR);

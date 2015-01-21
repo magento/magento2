@@ -16,13 +16,14 @@ class CommentsHistory extends \Magento\Sales\Controller\Adminhtml\Order
     public function execute()
     {
         $this->_initOrder();
-        $resultPage = $this->resultPageFactory->create();
-        $html = $resultPage->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\History')->toHtml();
+        $resultLayout = $this->resultLayoutFactory->create();
+        $html = $resultLayout->getLayout()
+            ->createBlock('Magento\Sales\Block\Adminhtml\Order\View\Tab\History')
+            ->toHtml();
         $this->_translateInline->processResponseBody($html);
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
         $resultRaw->setContents($html);
-
         return $resultRaw;
     }
 }
