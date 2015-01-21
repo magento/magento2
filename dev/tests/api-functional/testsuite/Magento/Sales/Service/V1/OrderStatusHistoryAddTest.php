@@ -36,6 +36,7 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/order.php
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testOrderCommentAdd()
     {

@@ -50,6 +50,7 @@ class Theme
      *
      * @param string $configContent
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _extractData($configContent)
     {

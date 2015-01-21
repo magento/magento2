@@ -97,6 +97,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoAppIsolation enabled
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetList()
     {
@@ -138,6 +139,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoAppIsolation enabled
      * @dataProvider optionDataProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testSave($optionData)
     {
@@ -284,6 +286,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoAppIsolation enabled
      * @dataProvider validOptionDataProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testUpdateOptionAddingNewValue($optionType)
     {

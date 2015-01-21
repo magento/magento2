@@ -285,6 +285,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function send()
     {

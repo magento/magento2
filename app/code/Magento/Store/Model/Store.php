@@ -22,6 +22,7 @@ use Magento\Framework\Model\AbstractModel;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Store extends AbstractModel implements
     \Magento\Framework\App\ScopeInterface,
