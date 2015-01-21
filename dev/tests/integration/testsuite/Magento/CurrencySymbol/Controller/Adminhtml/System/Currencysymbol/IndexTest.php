@@ -5,11 +5,11 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
-use Magento\TestFramework\Helper\Bootstrap;
-
 class IndexTest extends \Magento\Backend\Utility\Controller
 {
     /**
+     * Test index action
+     *
      * @magentoConfigFixture               currency/options/allow  EUR, USD
      * @magentoDataFixture Magento/CurrencySymbol/_files/currency_symbol.php
      * @magentoDbIsolation enabled

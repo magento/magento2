@@ -9,6 +9,8 @@ class SaveTest extends \Magento\Backend\Utility\Controller
 {
 
     /**
+     * Test save action
+     *
      * @magentoConfigFixture               currency/options/allow  EUR, USD
      * @magentoDataFixture Magento/CurrencySymbol/_files/currency_symbol.php
      * @magentoDbIsolation enabled
@@ -17,27 +19,27 @@ class SaveTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveAction($currencyCode, $inputCurrencySymbol, $outputCurrencySymbol)
     {
-                $request = $this->getRequest();
-                $request->setParam(
-                    'custom_currency_symbol',
-                    [
-                        $currencyCode => $inputCurrencySymbol,
-                    ]
-                );
-                $this->dispatch('backend/admin/system_currencysymbol/save');
+        $request = $this->getRequest();
+        $request->setParam(
+            'custom_currency_symbol',
+            [
+                $currencyCode => $inputCurrencySymbol,
+            ]
+        );
+        $this->dispatch('backend/admin/system_currencysymbol/save');
 
-                $this->assertRedirect();
+        $this->assertRedirect();
 
-                /** @var \Magento\CurrencySymbol\Model\System\Currencysymbol $symbol */
-                $currencySymbol = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                    'Magento\CurrencySymbol\Model\System\Currencysymbol'
-                );
+        /** @var \Magento\CurrencySymbol\Model\System\Currencysymbol $symbol */
+        $currencySymbol = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\CurrencySymbol\Model\System\Currencysymbol'
+        );
 
-                $this->assertEquals(
-                    $outputCurrencySymbol,
-                    $currencySymbol->getCurrencySymbol($currencyCode),
-                    'Currency symbol has not been saved'
-                );
+        $this->assertEquals(
+            $outputCurrencySymbol,
+            $currencySymbol->getCurrencySymbol($currencyCode),
+            'Currency symbol has not been saved'
+        );
     }
 
     /**
