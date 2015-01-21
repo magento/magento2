@@ -19,17 +19,17 @@ class Initializer
     /**
      * @param \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer $subject
      * @param callable $proceed
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\Object $config
      *
-     * @return \Magento\Sales\Model\Quote\Item|string
+     * @return \Magento\Quote\Model\Quote\Item|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundInit(
         \Magento\Sales\Model\AdminOrder\Product\Quote\Initializer $subject,
         \Closure $proceed,
-        \Magento\Sales\Model\Quote $quote,
+        \Magento\Quote\Model\Quote $quote,
         \Magento\Catalog\Model\Product $product,
         \Magento\Framework\Object $config
     ) {

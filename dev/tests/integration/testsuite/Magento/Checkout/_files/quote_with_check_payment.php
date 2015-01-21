@@ -5,10 +5,10 @@
  */
 
 require 'quote_with_address.php';
-/** @var \Magento\Sales\Model\Quote $quote */
+/** @var \Magento\Quote\Model\Quote $quote */
 
-/** @var $rate \Magento\Sales\Model\Quote\Address\Rate */
-$rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote\Address\Rate');
+/** @var $rate \Magento\Quote\Model\Quote\Address\Rate */
+$rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote\Address\Rate');
 $rate->setCode('freeshipping_freeshipping');
 $rate->getPrice(1);
 
@@ -18,7 +18,4 @@ $quote->getPayment()->setMethod('checkmo');
 
 $quote->collectTotals();
 $quote->save();
-
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$quoteService = $objectManager->create('Magento\Sales\Model\Service\Quote', ['quote' => $quote]);
-$quoteService->getQuote()->getPayment()->setMethod('checkmo');
+$quote->getPayment()->setMethod('checkmo');

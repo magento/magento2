@@ -29,8 +29,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testReSetPayment()
     {
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -66,8 +66,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testSetPaymentWithVirtualProduct()
     {
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -102,8 +102,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testSetPaymentWithSimpleProduct()
     {
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -141,8 +141,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testSetPaymentWithVirtualProductWithoutAddress()
     {
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_with_virtual_product_without_address', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -179,8 +179,8 @@ class WriteServiceTest extends WebapiAbstract
      */
     public function testSetPaymentWithSimpleProductWithoutAddress()
     {
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_with_simple_product_without_address', 'reserved_order_id');
         $cartId = $quote->getId();
 

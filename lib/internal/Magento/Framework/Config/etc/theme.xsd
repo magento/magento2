@@ -16,7 +16,6 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="title" type="title"/>
-                <xs:element name="version" type="version"/>
                 <xs:element name="parent" type="parent_theme" minOccurs="0"/>
                 <xs:element name="media" type="media" minOccurs="0"/>
             </xs:sequence>
@@ -33,12 +32,6 @@
     <xs:simpleType name="parent_theme">
         <xs:restriction base="xs:string">
             <xs:pattern value="([^/]+/)?[^/]+"></xs:pattern>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="version">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="(\d+.\d+.\d+(\-[a-zA-Z0-9]+)?)|\*"></xs:pattern>
         </xs:restriction>
     </xs:simpleType>
 

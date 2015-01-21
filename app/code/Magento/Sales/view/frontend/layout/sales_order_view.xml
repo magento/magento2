@@ -23,7 +23,7 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Sales\Block\Order\View" name="order.comments" template="order/order_comments.phtml" before="sales.order.info.links"/>
-            <block class="Magento\Sales\Block\Order\View" name="sales.order.view" cacheable="false">
+            <block class="Magento\Sales\Block\Order\View" name="sales.order.view" cacheable="false" after="sales.order.info.links">
                 <block class="Magento\Sales\Block\Order\Items" name="order_items" template="order/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.items.renderers" as="renderer.list"/>
                     <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="order/totals.phtml">

@@ -120,7 +120,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         if (!$this->_depends) {
             return '';
         }
-        return '<script type="text/javascript">
+        return '<script>
             require(["mage/adminhtml/form"], function(){
         new FormElementDependenceController(' .
             $this->_getDependsJson() .

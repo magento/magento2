@@ -51,7 +51,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'getStreet', 'getCompany', 'getTelephone', 'getFax', 'getPostcode', 'getFirstname', 'getMiddlename',
             'getLastname', 'getPrefix', 'getSuffix', 'getEmail', 'getVatId', 'getCustomField', 'getCity', '__wakeup',
         ];
-        $addressMock = $this->getMock('\Magento\Sales\Model\Quote\Address', $addressMockMethods, [], '', false);
+        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', $addressMockMethods, [], '', false);
 
         $addressMock->expects($this->atLeastOnce())->method('getCountryId')->will($this->returnValue(1));
         $addressMock->expects($this->atLeastOnce())->method('getId')->will($this->returnValue(2));
@@ -118,7 +118,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $dataObjectMock = $this->getMock('Magento\Checkout\Service\V1\Data\Cart\Address', [], [], '', false);
         $methods = ['setData', 'setStreet', 'setRegionId', 'setRegion', '__wakeUp'];
-        $addressMock = $this->getMock('Magento\Sales\Model\Quote\Address', $methods, [], '', false);
+        $addressMock = $this->getMock('Magento\Quote\Model\Quote\Address', $methods, [], '', false);
         $attributeValueMock = $this->getMock('\Magento\Framework\Api\AttributeValue', [], [], '', false);
         $attributeValueMock->expects($this->once())->method('getAttributeCode')->will($this->returnValue('value_code'));
         $attributeValueMock->expects($this->once())->method('getValue')->will($this->returnValue('value'));
