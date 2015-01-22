@@ -16,7 +16,6 @@ use Magento\Framework\Registry;
 
 class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
-
     /**
      * @var JSONFactory
      */
@@ -97,10 +96,9 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
             $response = ['error' => true, 'message' => __('Cannot update item quantity.')];
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
             /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
             $resultJson = $this->resultJsonFactory->create();
-            $resultJson->setJsonData($response);
+            $resultJson->setData($response);
             return $resultJson;
         } else {
             /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */

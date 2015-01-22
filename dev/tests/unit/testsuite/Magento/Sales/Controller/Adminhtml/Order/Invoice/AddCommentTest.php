@@ -265,25 +265,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->will($this->throwException($e));
 
-        $helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $helperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with($response)
-            ->will($this->returnValue(json_encode($response)));
-
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
-
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->resultJsonMock));
 
-        $this->resultJsonMock->expects($this->once())->method('setJsonData')->with(json_encode($response));
+        $this->resultJsonMock->expects($this->once())->method('setData')->with($response);
         $this->assertSame($this->resultJsonMock, $this->controller->execute());
     }
 
@@ -296,25 +282,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->will($this->throwException($e));
 
-        $helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $helperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with($response)
-            ->will($this->returnValue(json_encode($response)));
-
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
-
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->resultJsonMock));
 
-        $this->resultJsonMock->expects($this->once())->method('setJsonData')->with(json_encode($response));
+        $this->resultJsonMock->expects($this->once())->method('setData')->with($response);
         $this->assertSame($this->resultJsonMock, $this->controller->execute());
     }
 }

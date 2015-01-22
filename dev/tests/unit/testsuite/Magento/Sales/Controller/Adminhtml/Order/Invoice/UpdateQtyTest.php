@@ -271,26 +271,12 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('prepend')
             ->with('Invoices');
 
-        $helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $helperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with($response)
-            ->will($this->returnValue(json_encode($response)));
-
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
-
         /** @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject */
         $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $resultJsonMock->expects($this->once())->method('setJsonData')->with(json_encode($response));
+        $resultJsonMock->expects($this->once())->method('setData')->with($response);
 
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
@@ -323,26 +309,12 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('prepend')
             ->with('Invoices');
 
-        $helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $helperMock->expects($this->once())
-            ->method('jsonEncode')
-            ->with($response)
-            ->will($this->returnValue(json_encode($response)));
-
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Core\Helper\Data')
-            ->will($this->returnValue($helperMock));
-
         /** @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject */
         $resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $resultJsonMock->expects($this->once())->method('setJsonData')->with(json_encode($response));
+        $resultJsonMock->expects($this->once())->method('setData')->with($response);
 
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')

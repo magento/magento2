@@ -218,7 +218,7 @@ class Save extends \Magento\Backend\App\Action
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
+        $resultRedirect->setPath('sales/*/new', ['order_id' => $orderId]);
         return $resultRedirect;
     }
 }
