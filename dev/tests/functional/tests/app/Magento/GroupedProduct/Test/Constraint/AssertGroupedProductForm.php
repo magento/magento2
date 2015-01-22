@@ -9,7 +9,7 @@ namespace Magento\GroupedProduct\Test\Constraint;
 use Magento\Catalog\Test\Constraint\AssertProductForm;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertGroupedProductForm

@@ -6,10 +6,10 @@
 
 namespace Magento\Catalog\Test\Block\Product\ProductList;
 
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Fixture\Product;
 
 /**

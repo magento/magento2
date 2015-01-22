@@ -7,8 +7,8 @@
 namespace Magento\Downloadable\Test\TestCase\Create;
 
 use Magento\Downloadable\Test\Fixture\DownloadableProduct;
-use Mtf\Factory\Factory;
-use Mtf\TestCase\Functional;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\TestCase\Functional;
 
 /**
  * Class LinksPurchasedSeparatelyTest

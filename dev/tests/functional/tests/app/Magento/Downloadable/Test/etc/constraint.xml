@@ -20,10 +20,37 @@
         <require>
             <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
             <productPage class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertDownloadableDuplicateForm>
     <assertDownloadableProductInCustomerWishlistOnBackendGrid module="Magento_Downloadable">
         <severity>low</severity>
     </assertDownloadableProductInCustomerWishlistOnBackendGrid>
+    <assertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax module="Magento_Downloadable">
+        <severeness>high</severeness>
+    </assertTaxRuleIsAppliedToAllPricesDownloadableExcludingTax>
+    <assertTaxRuleIsAppliedToAllPricesDownloadableIncludingTax module="Magento_Downloadable">
+        <severeness>high</severeness>
+    </assertTaxRuleIsAppliedToAllPricesDownloadableIncludingTax>
+    <assertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax module="Magento_Downloadable">
+        <severeness>high</severeness>
+    </assertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax>
+    <assertTaxCalculationAfterCheckoutDownloadableExcludingTax module="Magento_Downloadable">
+        <severeness>high</severeness>
+    </assertTaxCalculationAfterCheckoutDownloadableExcludingTax>
+    <assertTaxCalculationAfterCheckoutDownloadableIncludingTax module="Magento_Downloadable">
+        <severeness>high</severeness>
+    </assertTaxCalculationAfterCheckoutDownloadableIncludingTax>
+    <assertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax module="Magento_Downloadable">
+        <severeness>high</severeness>
+    </assertTaxCalculationAfterCheckoutDownloadableExcludingIncludingTax>
+    <assertOrderTaxOnBackendDownloadableExcludingTax module="Magento_Downloadable">
+        <severeness>high</severeness>
+    </assertOrderTaxOnBackendDownloadableExcludingTax>
+    <assertOrderTaxOnBackendDownloadableIncludingTax module="Magento_Downloadable">
+        <severeness>high</severeness>
+    </assertOrderTaxOnBackendDownloadableIncludingTax>
+    <assertOrderTaxOnBackendDownloadableExcludingIncludingTax module="Magento_Downloadable">
+        <severeness>high</severeness>
+    </assertOrderTaxOnBackendDownloadableExcludingIncludingTax>
 </constraint>

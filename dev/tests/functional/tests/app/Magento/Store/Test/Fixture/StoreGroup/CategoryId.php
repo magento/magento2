@@ -7,8 +7,8 @@
 namespace Magento\Store\Test\Fixture\StoreGroup;
 
 use Magento\Catalog\Test\Fixture\Category;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class CategoryId

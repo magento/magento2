@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Test\Block\System\Variable\Edit;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class Form

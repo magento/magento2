@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Test\Fixture;
 
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Date

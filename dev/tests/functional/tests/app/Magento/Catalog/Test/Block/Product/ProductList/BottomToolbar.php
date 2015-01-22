@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Product\ProductList;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class BottomToolbar

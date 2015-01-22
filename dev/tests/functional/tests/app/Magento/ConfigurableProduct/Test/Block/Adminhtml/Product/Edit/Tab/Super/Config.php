@@ -9,9 +9,9 @@ namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Supe
 use Magento\Backend\Test\Block\Template;
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Client\Element;
-use Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Config

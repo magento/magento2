@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\Block\Customer;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Wishlist

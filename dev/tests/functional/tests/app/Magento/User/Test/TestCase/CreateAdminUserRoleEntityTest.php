@@ -9,7 +9,7 @@ namespace Magento\User\Test\TestCase;
 use Magento\User\Test\Fixture\AdminUserRole;
 use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
 use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for CreateAdminUserRolesEntity
