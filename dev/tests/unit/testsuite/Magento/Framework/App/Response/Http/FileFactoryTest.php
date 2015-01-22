@@ -229,6 +229,8 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Get model
+     *
      * @return \Magento\Framework\App\Response\Http\FileFactory
      */
     private function getModel()
@@ -243,6 +245,8 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Get model mock
+     *
      * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit_Framework_MockObject_MockBuilder
      */
     private function getModelMock()
