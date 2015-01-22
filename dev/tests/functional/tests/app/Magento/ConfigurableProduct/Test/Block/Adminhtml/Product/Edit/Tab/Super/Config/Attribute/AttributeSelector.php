@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute;
 
-use Mtf\Client\Element\SuggestElement;
+use Magento\Mtf\Client\Element\SuggestElement;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
 /**

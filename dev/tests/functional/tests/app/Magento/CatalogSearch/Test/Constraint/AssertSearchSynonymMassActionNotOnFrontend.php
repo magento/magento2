@@ -7,8 +7,8 @@
 namespace Magento\CatalogSearch\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\BrowserInterface;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertSearchSynonymMassActionNotOnFrontend

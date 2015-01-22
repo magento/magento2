@@ -7,8 +7,8 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
 use Magento\Sales\Test\Block\Adminhtml\Order\AbstractForm\Product;
-use Mtf\Block\Block;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AbstractItemsNewBlock

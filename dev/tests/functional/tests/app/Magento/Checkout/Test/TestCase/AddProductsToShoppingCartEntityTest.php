@@ -8,10 +8,10 @@ namespace Magento\Checkout\Test\TestCase;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Mtf\Client\BrowserInterface;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\ObjectManager;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for AddProductsToShoppingCartEntity

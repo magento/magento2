@@ -6,8 +6,8 @@
 
 namespace Magento\Shipping\Test\Fixture;
 
-use Mtf\Factory\Factory;
-use Mtf\Fixture\DataFixture;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\DataFixture;
 
 /**
  * Class Method

@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Block\Adminhtml\Rule\Edit;
 
-use Mtf\Block\Form as FormInterface;
+use Magento\Mtf\Block\Form as FormInterface;
 
 /**
  * Class TaxRate

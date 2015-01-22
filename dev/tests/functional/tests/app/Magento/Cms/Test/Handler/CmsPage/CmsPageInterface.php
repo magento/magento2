@@ -6,7 +6,7 @@
 
 namespace Magento\Cms\Test\Handler\CmsPage;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface CmsPageInterface

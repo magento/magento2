@@ -6,9 +6,9 @@
 
 namespace Magento\Backend\Test\Block;
 
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
-use Mtf\Factory\Factory;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Class Actions
