@@ -42,6 +42,9 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('MAGETWO-32917');
+        }
         $this->_storeManagerMock = $this->getMockBuilder(
             'Magento\Store\Model\StoreManager'
         )->disableOriginalConstructor()->getMock();
