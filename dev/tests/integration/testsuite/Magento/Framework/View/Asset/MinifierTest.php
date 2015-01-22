@@ -10,8 +10,13 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Tests for minifier
  */
-class FileSystemTest extends \PHPUnit_Framework_TestCase
+class MinifierTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Request path for test minifier
+     */
+    const REQUEST_PATH = '/frontend/Magento/blank/en_US/css/styles.css';
+
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
@@ -49,5 +54,76 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
             . 'Ensure that new CSS is fully valid for all supported browsers '
             . 'and replace old minified snapshot with new one.'
         );
+    }
+
+    /**
+     * @magentoConfigFixture current_store dev/css/minify_files 1
+     */
+    public function testCssMinification()
+    {
+        /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject $appState */
+        $appState = $this->getMock('\Magento\Framework\App\State', ['getMode'], [], '', false);
+        $appState->expects($this->any())
+            ->method('getMode')
+            ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEFAULT));
+
+        /** @var \Magento\Framework\App\Request\Http $request */
+        $request = $this->objectManager->get('Magento\Framework\App\Request\Http');
+        $request->setRequestUri(self::REQUEST_PATH);
+        $request->setParam('resource', self::REQUEST_PATH);
+
+        $response = $this->getMockForAbstractClass(
+            'Magento\Framework\App\Response\FileInterface',
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['setFilePath']
+        );
+        $response->expects(
+            $this->any()
+        )->method(
+            'setFilePath'
+        )->will(
+            $this->returnCallback(
+                function ($path) {
+                    $this->assertEquals(
+                        file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
+                        file_get_contents($path),
+                        'Minified files are not equal or minification did not work for requested CSS'
+                    );
+                }
+            )
+        );
+
+        $publisher = $this->objectManager->create(
+            'Magento\Framework\App\View\Asset\Publisher',
+            [
+                'appState' => $appState
+            ]
+        );
+
+        /** @var \Magento\Framework\App\StaticResource $staticResourceApp */
+        $staticResourceApp = $this->objectManager->create(
+            'Magento\Framework\App\StaticResource',
+            [
+                'response' => $response,
+                'publisher' => $publisher
+            ]
+        );
+        $initParams = Bootstrap::getInstance()->getAppInitParams();
+        $designPath = $initParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]['design']['path'];
+        $destFile = $designPath . '/frontend/Magento/blank/web/css/styles.css';
+
+        if (!is_readable(dirname($destFile))) {
+            mkdir(dirname($destFile), 777, true);
+        }
+        
+        copy(dirname(__DIR__) . '/_files/static/css/styles.css', $destFile);
+
+        $staticResourceApp->launch();
+
+        unlink($destFile);
     }
 }
