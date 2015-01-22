@@ -7,7 +7,8 @@
 namespace Magento\Review\Test\Block\Adminhtml;
 
 use Magento\Backend\Test\Block\Widget\Form;
-use Mtf\Client\Element\Locator;
+use Magento\Review\Test\Fixture\ReviewInjectable;
+use Mtf\Client\Locator;
 
 /**
  * Class Edit

@@ -5,7 +5,7 @@
  */
 namespace Magento\Shipping\Model;
 
-use Magento\Sales\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class ShippingTest extends \PHPUnit_Framework_TestCase
@@ -68,7 +68,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     {
         $request = new RateRequest();
         /** \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface */
-        $item = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
+        $item = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods([
                 'getQty', 'getIsQtyDecimal', 'getProductType', 'getProduct', 'getWeight', '__wakeup', 'getStore',

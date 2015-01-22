@@ -27,6 +27,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateNewsletterTemplateEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Page for create newsletter template
      *

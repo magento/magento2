@@ -2,16 +2,16 @@
     "name": "magento/module-contact",
     "description": "N/A",
     "require": {
-        "php": "~5.4.11|~5.5.0",
-        "magento/module-store": "0.42.0-beta3",
-        "magento/module-customer": "0.42.0-beta3",
-        "magento/module-backend": "0.42.0-beta3",
-        "magento/module-cms": "0.42.0-beta3",
-        "magento/framework": "0.42.0-beta3",
+        "php": "~5.4.11|~5.5.0|~5.6.0",
+        "magento/module-store": "0.42.0-beta4",
+        "magento/module-customer": "0.42.0-beta4",
+        "magento/module-backend": "0.42.0-beta4",
+        "magento/module-cms": "0.42.0-beta4",
+        "magento/framework": "0.42.0-beta4",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.42.0-beta3",
+    "version": "0.42.0-beta4",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

@@ -7,6 +7,7 @@
 namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit;
 
 use Magento\Backend\Test\Block\Widget\Form;
+use Mtf\Client\Element\SimpleElement;
 use Mtf\Client\Element;
 use Mtf\Fixture\FixtureInterface;
 
@@ -20,13 +21,13 @@ class UrlRewriteForm extends Form
      * Fill the root form
      *
      * @param FixtureInterface $fixture
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @param array $replace [optional]
      * @return $this
      */
     public function fill(
         FixtureInterface $fixture,
-        Element $element = null,
+        SimpleElement $element = null,
         array $replace = []
     ) {
         $data = $fixture->getData();
@@ -43,9 +44,7 @@ class UrlRewriteForm extends Form
             }
         }
 
-        // TODO: delete line after removing old fixture
-        $fields = isset($data['fields']) ? $data['fields'] : $data;
-        $mapping = $this->dataMapping($fields);
+        $mapping = $this->dataMapping($data);
         $this->_fill($mapping, $element);
 
         return $this;

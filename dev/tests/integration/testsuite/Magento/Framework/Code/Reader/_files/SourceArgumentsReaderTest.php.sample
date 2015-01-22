@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Some\Testing\Name\Space;
+
+use Imported\Name\Space\One as FirstImport;
+use Imported\Name\Space\Object;
+use Imported\Name\Space\Test as Testing, \Imported\Name\Space\AnotherTest ;
+
+class AnotherSimpleClass
+{
+    public function __construct(
+        \Some\Testing\Name\Space\Item $itemOne,
+        FirstImport $itemTwo,
+        AnotherTest\Extended $itemThree,
+        Testing $itemFour,
+        Object\Under\Test $itemFive,
+        Object $itemSix,
+        Test $itemSeven,
+        array $itemEight = [],
+        $itemNine = 'test'
+    ) {
+    }
+}

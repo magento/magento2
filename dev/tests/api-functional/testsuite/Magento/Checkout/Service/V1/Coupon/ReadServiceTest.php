@@ -31,8 +31,8 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGet()
     {
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
         $data = [

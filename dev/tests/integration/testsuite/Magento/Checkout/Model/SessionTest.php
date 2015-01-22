@@ -106,7 +106,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     /**
      * Ensure that quote has customer data specified in customer fixture.
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      */
     protected function _validateCustomerDataInQuote($quote)
     {

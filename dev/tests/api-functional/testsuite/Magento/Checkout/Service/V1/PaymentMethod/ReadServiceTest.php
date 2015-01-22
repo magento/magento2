@@ -30,8 +30,8 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetList()
     {
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
 
@@ -64,8 +64,8 @@ class ReadServiceTest extends WebapiAbstract
      */
     public function testGetPayment()
     {
-        /** @var \Magento\Sales\Model\Quote  $quote */
-        $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1_with_payment', 'reserved_order_id');
         $cartId = $quote->getId();
 

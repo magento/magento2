@@ -71,7 +71,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 $freeShippingSubtotal
             ],
         ]));
-        $request = new \Magento\Sales\Model\Quote\Address\RateRequest();
+        $request = new \Magento\Quote\Model\Quote\Address\RateRequest();
         $request->setBaseSubtotalInclTax($requestSubtotal);
         $this->model->setRawRequest($request);
         $price = $this->model->getMethodPrice($cost, $shippingMethod);

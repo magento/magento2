@@ -161,7 +161,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
                     $type = $item->getTypeId();
                 } elseif ($item instanceof \Magento\Sales\Model\Order\Item) {
                     $type = $item->getProductType();
-                } elseif ($item instanceof \Magento\Sales\Model\Quote\Item) {
+                } elseif ($item instanceof \Magento\Quote\Model\Quote\Item) {
                     $type = $item->getProductType();
                 } else {
                     $type = '';
