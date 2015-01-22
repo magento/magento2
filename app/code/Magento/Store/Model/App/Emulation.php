@@ -9,8 +9,9 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\App;
+namespace Magento\Store\Model\App;
 
+use Magento\Framework\Object;
 use Magento\Framework\Translate\Inline\ConfigInterface;
 
 class Emulation extends \Magento\Framework\Object
@@ -145,7 +146,7 @@ class Emulation extends \Magento\Framework\Object
      *
      * Function restores initial store environment
      *
-     * @return \Magento\Core\Model\App\Emulation
+     * @return \Magento\Store\Model\App\Emulation
      */
     public function stopEnvironmentEmulation()
     {
