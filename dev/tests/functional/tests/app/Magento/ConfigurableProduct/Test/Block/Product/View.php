@@ -9,8 +9,8 @@ namespace Magento\ConfigurableProduct\Test\Block\Product;
 use Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class View

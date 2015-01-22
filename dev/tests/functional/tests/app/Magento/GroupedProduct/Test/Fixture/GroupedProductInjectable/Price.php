@@ -7,7 +7,7 @@
 namespace Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple\Price as ParentPrice;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Price

@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\Billing;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class BillingAddress

@@ -12,7 +12,7 @@ use Magento\Reports\Test\Page\Adminhtml\CustomerReportReview;
 use Magento\Review\Test\Constraint\AssertProductReviewInGrid;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductReportByCustomerInGrid

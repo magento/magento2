@@ -6,7 +6,7 @@
 
 namespace Magento\User\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class Admin User Repository

@@ -8,8 +8,8 @@ namespace Magento\Bundle\Test\Constraint;
 
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\BrowserInterface;
-use Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertBundleItemsOnProductPage

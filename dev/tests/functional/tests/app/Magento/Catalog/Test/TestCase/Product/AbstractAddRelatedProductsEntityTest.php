@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\TestCase\Product;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Class AbstractAddRelatedProductsEntityTest

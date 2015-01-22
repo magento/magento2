@@ -7,7 +7,7 @@
 namespace Magento\Core\Test\Block\Adminhtml\System\Variable;
 
 use Magento\Backend\Test\Block\FormPageActions as AbstractFormPageActions;
-use Mtf\Client\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class FormPageActions

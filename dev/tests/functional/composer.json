@@ -1,6 +1,6 @@
 {
     "require": {
-        "magento/mtf": "1.0.0-rc13",
+        "magento/mtf": "1.0.0-rc14",
         "php": "~5.5.0|~5.6.0",
         "phpunit/phpunit": "4.1.0",
         "phpunit/phpunit-selenium": ">=1.2",
@@ -11,8 +11,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Mtf\\": ["lib/Mtf/", "generated/Mtf/", "testsuites/Mtf/"],
-            "Magento\\": ["generated/Magento/", "tests/app/Magento/"],
+            "Magento\\": ["lib/Magento/", "testsuites/Magento", "generated/Magento/", "tests/app/Magento/"],
             "Test\\": "generated/Test/"
         }
     }

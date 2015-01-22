@@ -300,7 +300,7 @@ class Observer
             return $this;
         }
 
-        $algorithm = $this->_taxData->getCalculationAgorithm();
+        $algorithm = $this->_taxData->getCalculationAlgorithm();
         $options['calculationAlgorithm'] = $algorithm;
         // prepare correct template for options render
         if ($this->_taxData->displayBothPrices()) {

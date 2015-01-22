@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\TestStep;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Save attribute on attribute page.

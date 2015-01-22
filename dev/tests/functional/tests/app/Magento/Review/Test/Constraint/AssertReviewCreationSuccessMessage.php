@@ -7,7 +7,7 @@
 namespace Magento\Review\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertReviewCreationSuccessMessage

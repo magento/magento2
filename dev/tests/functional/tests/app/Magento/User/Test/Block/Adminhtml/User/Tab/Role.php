@@ -6,7 +6,7 @@
 
 namespace Magento\User\Test\Block\Adminhtml\User\Tab;
 
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Backend\Test\Block\Widget\Tab;
 
 /**
