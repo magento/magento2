@@ -77,6 +77,7 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
      * @param \Magento\Framework\Stdlib\DateTime\DateFactory $dateFactory
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

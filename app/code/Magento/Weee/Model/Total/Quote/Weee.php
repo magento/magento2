@@ -316,6 +316,7 @@ class Weee extends AbstractTotal
      *
      * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote\Address $address)
     {

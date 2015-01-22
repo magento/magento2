@@ -59,6 +59,7 @@ class ServiceCollection extends AbstractServiceCollection
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadData($printQuery = false, $logQuery = false)
     {

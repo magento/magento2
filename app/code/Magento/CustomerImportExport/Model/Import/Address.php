@@ -585,6 +585,7 @@ class Address extends AbstractCustomer
      *
      * @param array $defaults
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _saveCustomerDefaults(array $defaults)
     {
