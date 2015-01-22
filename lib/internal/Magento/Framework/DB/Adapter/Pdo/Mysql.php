@@ -2453,6 +2453,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return \Zend_Db_Statement_Interface
      * @throws \Zend_Db_Exception
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addIndex(
         $tableName,
@@ -2578,6 +2580,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $schemaName
      * @param string $refSchemaName
      * @return \Zend_Db_Statement_Interface
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function addForeignKey(
         $fkName,
@@ -2692,6 +2695,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $fieldName
      * @param integer|string|array $condition
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function prepareSqlCondition($fieldName, $condition)
     {
@@ -2798,6 +2802,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param array $column     the column describe array
      * @param mixed $value
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function prepareColumnValue(array $column, $value)
     {
@@ -3383,6 +3390,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string|array $table
      * @return string
      * @throws \Magento\Framework\DB\DBException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function updateFromSelect(Select $select, $table)
     {
