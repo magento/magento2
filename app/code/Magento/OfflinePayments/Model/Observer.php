@@ -21,9 +21,11 @@ class Observer
     {
         /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $observer->getEvent()->getPayment();
-        $banktransfer = \Magento\OfflinePayments\Model\Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;
-        if ($payment->getMethod() === $banktransfer) {
-            $payment->setAdditionalInformation('instructions', $payment->getMethodInstance()->getInstructions());
+        if ($payment->getMethod() === Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE) {
+            $payment->setAdditionalInformation(
+                'instructions',
+                $payment->getMethodInstance()->getConfigData('instructions')
+            );
         }
     }
 }

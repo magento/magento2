@@ -6,7 +6,7 @@
 
 namespace Magento\Install\Test\Block;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Web configuration block.

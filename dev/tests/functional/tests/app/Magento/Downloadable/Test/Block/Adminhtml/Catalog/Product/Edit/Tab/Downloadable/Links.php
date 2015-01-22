@@ -5,9 +5,9 @@
  */
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-use Mtf\Block\Form;
-use Mtf\Client\Locator;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Links

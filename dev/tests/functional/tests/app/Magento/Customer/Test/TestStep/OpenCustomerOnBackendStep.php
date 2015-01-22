@@ -8,7 +8,7 @@ namespace Magento\Customer\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class OpenCustomerOnBackendStep
