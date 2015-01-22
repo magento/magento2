@@ -6,7 +6,7 @@
 
 namespace Magento\Wishlist\Test\Block\Customer;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class Sharing

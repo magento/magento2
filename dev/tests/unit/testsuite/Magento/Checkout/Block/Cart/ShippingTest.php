@@ -19,7 +19,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     public function testGetShippingPriceHtml()
     {
-        $shippingRateMock = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address\Rate')
+        $shippingRateMock = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address\Rate')
             ->disableOriginalConstructor()
             ->getMock();
 

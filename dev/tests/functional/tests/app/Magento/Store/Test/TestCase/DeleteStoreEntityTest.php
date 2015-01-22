@@ -11,7 +11,7 @@ use Magento\Backend\Test\Page\Adminhtml\StoreDelete;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backup\Test\Page\Adminhtml\BackupIndex;
 use Magento\Store\Test\Fixture\Store;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for DeleteStoreEntity
@@ -34,6 +34,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteStoreEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Page BackupIndex
      *

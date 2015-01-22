@@ -19,8 +19,6 @@ No,否
 "Apply Coupon Code",应用折价券
 "Remove Coupon Code",删除折价券
 Qty,数量
-Subtotal,小计
-Discount,折扣
 "Row Subtotal",行小计
 Action,操作
 "No ordered items",无订单项
@@ -40,9 +38,6 @@ Sku,Sku
 Orders,订单
 Customer,客户
 Guest,来宾
-"Grand Total",总计
-Tax,传真
-Shipping,运送
 "Account Information",帐户信息
 "First Name",顾客姓名
 "Last Name",客户姓氏
@@ -118,7 +113,6 @@ Date,日期
 "Order Total",订单总数
 "Purchase Point",购买自（店铺）
 "Recent Orders",近期订单
-"Store Credit",店铺信用
 Notified,已通知。
 "Notify Customer by Email",通过电子邮件通知客户
 Billing,账单
@@ -132,7 +126,6 @@ Message,信息
 Information,信息
 "Gift Options",礼品选项
 "If you don't want to leave a gift message for the entire order, leave this box blank.","If you don't want to leave a gift message for the entire order, leave this box blank."
-"An item option with code %1 already exists.","An item option with code %1 already exists."
 New,新建
 "Custom Price",自定义价格
 Processing,正在处理
@@ -174,7 +167,6 @@ Returned,已退款
 "Please select products.","Please select products."
 Number,数字
 "Order Date: %1","Order Date: %1"
-"Discount (%1)","Discount (%1)"
 "Shipping &amp; Handling",运送与手续费
 "Credit Memos",信用记录
 Invoices,发票
@@ -298,7 +290,6 @@ Transactions,交易
 "Order View",订单查看
 "Applies to Any of the Specified Order Statuses","Applies to Any of the Specified Order Statuses"
 "Show Actual Values","Show Actual Values"
-"Shipping & Handling",运费和手续费
 Fetch,获取
 "Transaction # %1 | %2","Transaction # %1 | %2"
 Key,密钥
@@ -484,32 +475,10 @@ Mixed,混合
 "We cannot create an empty shipment.","We cannot create an empty shipment."
 "We found an invalid qty to ship for item ""%1"".","We found an invalid qty to ship for item ""%1""."
 "The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal.","The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal."
-"Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself.","Sorry, but items with payment agreements must be ordered one at a time To continue, please remove or buy the other items in your cart, then order this item by itself."
-"We found an invalid request for adding product to quote.","We found an invalid request for adding product to quote."
-"This is the wrong quote item id to update configuration.","This is the wrong quote item id to update configuration."
-"This shipping method is not available. To use this shipping method, please contact us.","This shipping method is not available. To use this shipping method, please contact us."
-"The address model is not defined.","The address model is not defined."
-"The address total model should be extended from \Magento\Sales\Model\Quote\Address\Total\AbstractTotal.","地址总模块应扩展自\Magento\Sales\Model\Quote\Address\Total\AbstractTotal。"
-"Subscription Items","Subscription Items"
-"Regular Payment",正常支付
-"Shipping & Handling (%1)","Shipping & Handling (%1)"
-"We found an invalid item option format.","We found an invalid item option format."
-"Item qty declaration error","Item qty declaration error"
-"Some of the products below do not have all the required options.","Some of the products below do not have all the required options."
-"Something went wrong during the item options declaration.","Something went wrong during the item options declaration."
-"We found an item options declaration error.","We found an item options declaration error."
-"Some of the selected options are not currently available.","Some of the selected options are not currently available."
-"Selected option(s) or their combination is not currently available.","Selected option(s) or their combination is not currently available."
-"Some item options or their combination are not currently available.","Some item options or their combination are not currently available."
-"The requested Payment Method is not available.",请求的支付方式不可用。
 "We cannot determine the field name.","We cannot determine the field name."
 "Please specify a valid grid column alias name that exists in the grid table.","Please specify a valid grid column alias name that exists in the grid table."
 "We don't have enough information to save the parent transaction ID.","We don't have enough information to save the parent transaction ID."
 "The last status can't be unassigned from its current state.","The last status can't be unassigned from its current state."
-"Please check the shipping address information. %1","Please check the shipping address information. %1"
-"Please specify a shipping method.",请指定一个配送方法。
-"Please check the billing address information. %1","Please check the billing address information. %1"
-"Please select a valid payment method.",请选择有效的支付方式。
 "Pending Payment",挂起的支付
 "On Hold",暂挂
 Complete,完成

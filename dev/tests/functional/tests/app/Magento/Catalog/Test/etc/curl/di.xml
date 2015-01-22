@@ -9,6 +9,6 @@
     <preference for="Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface" type="\Magento\Catalog\Test\Handler\CatalogProductSimple\Curl" />
     <preference for="Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface" type="\Magento\Catalog\Test\Handler\CatalogProductAttribute\Curl" />
     <preference for="Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface" type="\Magento\Catalog\Test\Handler\CatalogAttributeSet\Curl" />
-    <preference for="Magento\Catalog\Test\Handler\CatalogCategory\CatalogCategoryInterface" type="\Magento\Catalog\Test\Handler\CatalogCategory\Curl" />
+    <preference for="Magento\Catalog\Test\Handler\Category\CategoryInterface" type="\Magento\Catalog\Test\Handler\Category\Curl" />
     <preference for="Magento\Catalog\Test\Handler\CatalogProductVirtual\CatalogProductVirtualInterface" type="\Magento\Catalog\Test\Handler\CatalogProductVirtual\Curl" />
 </config>

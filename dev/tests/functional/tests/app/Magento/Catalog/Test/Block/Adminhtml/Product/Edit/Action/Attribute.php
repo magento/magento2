@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action;
 
 use Magento\Backend\Test\Block\Widget\Form;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Product attribute massaction edit page.
@@ -37,7 +37,7 @@ class Attribute extends Form
     {
         $this->_rootElement->find(
             $this->priceFieldEnablerSelector,
-            Element\Locator::SELECTOR_XPATH,
+            Locator::SELECTOR_XPATH,
             'checkbox'
         )->setValue('Yes');
     }

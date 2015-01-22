@@ -53,7 +53,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Item option factory
      *
-     * @var \Magento\Sales\Model\Quote\Item\OptionFactory
+     * @var \Magento\Quote\Model\Quote\Item\OptionFactory
      */
     protected $_itemOptionFactory;
 
@@ -70,7 +70,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory
+     * @param \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory
      * @param \Magento\Catalog\Model\Product\Option\UrlBuilder $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
@@ -82,7 +82,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory,
+        \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo $validatorInfo,
         \Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile $validatorFile,

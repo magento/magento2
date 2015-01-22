@@ -7,8 +7,8 @@
 namespace Magento\GiftMessage\Test\Block\Adminhtml\Order\View;
 
 use Magento\GiftMessage\Test\Block\Adminhtml\Order\View\Items\ItemProduct;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class Items

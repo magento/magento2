@@ -8,9 +8,10 @@ namespace Magento\Customer\Test\Block\Adminhtml\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Customer\Test\Fixture\AddressInjectable;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Addresses
@@ -146,12 +147,12 @@ class Addresses extends Tab
      * Get data to fields on tab
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, Element $element = null)
+    public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
         /* Skip get data for standard method. Use getDataAddresses. */
         return [];
@@ -196,6 +197,7 @@ class Addresses extends Tab
             sprintf($this->customerAddress, $addressNumber),
             Locator::SELECTOR_XPATH
         );
+
         return $addressTab->isVisible();
     }
 }

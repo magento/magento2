@@ -1,13 +1,13 @@
 {
     "name": "magento/language-de_de",
     "description": "German (Germany) language",
-    "version": "0.42.0-beta3",
+    "version": "0.42.0-beta4",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "magento/framework": "0.42.0-beta3",
+        "magento/framework": "0.42.0-beta4",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-language",

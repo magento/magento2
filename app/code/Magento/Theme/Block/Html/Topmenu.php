@@ -62,6 +62,7 @@ class Topmenu extends Template implements IdentityInterface
             'page_block_html_topmenu_gethtml_after',
             ['menu' => $this->_menu, 'transportObject' => $transportObject]
         );
+        $html = $transportObject->getHtml();
 
         return $html;
     }

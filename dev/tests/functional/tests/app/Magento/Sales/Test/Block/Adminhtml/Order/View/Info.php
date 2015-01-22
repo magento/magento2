@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Block for information about customer on order page

@@ -71,7 +71,7 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $quoteItem = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $quoteItem = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->setMethods(
                 [
                     'getParentItem',
@@ -88,7 +88,7 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $parentItem = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $parentItem = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->setMethods(['getQty', 'setIsQtyDecimal', 'getProduct', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -196,7 +196,7 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
         $storeMock->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
-        $quoteItem = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $quoteItem = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->setMethods(['getProduct', 'getParentItem', 'getQtyToAdd', 'getId', 'getQuoteId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();

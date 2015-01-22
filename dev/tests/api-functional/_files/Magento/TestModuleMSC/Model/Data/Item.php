@@ -7,8 +7,7 @@ namespace Magento\TestModuleMSC\Model\Data;
 
 use Magento\TestModuleMSC\Api\Data\ItemInterface;
 
-class Item extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements ItemInterface
+class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements ItemInterface
 {
     /**
      * @return int

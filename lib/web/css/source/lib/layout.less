@@ -12,15 +12,15 @@
 ) when not (@responsive = true) {
     ._layout-width(@_layout-min-width, @_layout-max-width);
     margin: 0 auto;
-    padding-left: @layout-indent;
-    padding-right: @layout-indent;
+    .css(padding-left, @layout-indent);
+    .css(padding-right, @layout-indent);
 }
 
 ._layout-width(
         @_layout-min-width: @layout-min-width,
         @_layout-max-width: @layout-max-width
     ) when (@_layout-min-width = @_layout-max-width) {
-    width: @_layout-min-width;
+    .css(width, @_layout-min-width);
 }
 
 ._layout-width(
@@ -28,8 +28,8 @@
         @_layout-max-width: @layout-max-width
     ) when not (@_layout-min-width = @_layout-max-width) {
     width: auto;
-    min-width: @_layout-min-width;
-    max-width: @_layout-max-width;
+    .css(min-width, @_layout-min-width);
+    .css(max-width, @_layout-max-width);
 }
 
 #layout-columns() {
@@ -91,7 +91,7 @@
 }
 
 ._column-width(@_width, @_check, @_index) when (@_check = true), (@_width = auto) {
-    width: @_width;
+    .css(width, @_width);
     @_index: 1;
 }
 

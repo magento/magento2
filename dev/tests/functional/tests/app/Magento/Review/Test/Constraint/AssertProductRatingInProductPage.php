@@ -9,9 +9,9 @@ namespace Magento\Review\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Review\Test\Fixture\Rating;
-use Magento\Review\Test\Fixture\ReviewInjectable;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Review\Test\Fixture\Review;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductRatingInProductPage
@@ -27,17 +27,17 @@ class AssertProductRatingInProductPage extends AbstractConstraint
      * Assert that product rating is displayed on product review(frontend)
      *
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductSimple $product
-     * @param ReviewInjectable|null $review [optional]
+     * @param Review|null $review [optional]
      * @param Rating|null $productRating [optional]
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductSimple $product,
-        ReviewInjectable $review = null,
+        Review $review = null,
         Rating $productRating = null
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');

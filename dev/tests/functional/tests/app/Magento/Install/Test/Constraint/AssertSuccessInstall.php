@@ -8,7 +8,7 @@ namespace Magento\Install\Test\Constraint;
 
 use Magento\User\Test\Fixture\User;
 use Magento\Install\Test\Page\Install;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Install\Test\Fixture\Install as InstallConfig;
 
 /**

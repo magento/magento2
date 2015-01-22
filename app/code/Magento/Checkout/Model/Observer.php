@@ -62,7 +62,7 @@ class Observer
     public function salesQuoteSaveAfter($observer)
     {
         $quote = $observer->getEvent()->getQuote();
-        /* @var $quote \Magento\Sales\Model\Quote */
+        /* @var $quote \Magento\Quote\Model\Quote */
         if ($quote->getIsCheckoutCart()) {
             $this->_checkoutSession->getQuoteId($quote->getId());
         }
