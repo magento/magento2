@@ -1,15 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Test\Block\Catalog\Product;
 
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Bundle;
 use Magento\Bundle\Test\Fixture\BundleProduct;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class View
@@ -69,7 +70,6 @@ class View extends \Magento\Catalog\Test\Block\Product\View
         $selector = $this->newsletterFormSelector;
         $this->browser->waitUntil(
             function () use ($browser, $selector) {
-                $this->reinitRootElement();
                 $element = $browser->find($selector);
                 return $element->isVisible() ? true : null;
             }

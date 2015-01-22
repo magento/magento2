@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -37,7 +38,6 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
                 [
                     'theme_code' => 'Magento/iphone',
                     'theme_title' => 'Iphone',
-                    'theme_version' => '2.0.0',
                     'parent_theme' => ['default', 'default'],
                     'theme_path' => 'Magento/iphone',
                     'preview_image' => 'images/preview.png',
@@ -48,29 +48,13 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'theme_code' => 'iphone#theme!!!!',
-                    'theme_title' => 'Iphone',
-                    'theme_version' => 'last theme version',
-                    'parent_theme' => ['default', 'default'],
-                    'theme_path' => 'magento_iphone',
-                    'preview_image' => 'images/preview.png',
-                ],
-                false,
-                [
-                    'theme_version' => ['Theme version has not compatible format.']
-                ],
-            ],
-            [
-                [
-                    'theme_code' => 'iphone#theme!!!!',
                     'theme_title' => '',
-                    'theme_version' => '',
                     'parent_theme' => ['default', 'default'],
                     'theme_path' => 'magento_iphone',
                     'preview_image' => 'images/preview.png',
                 ],
                 false,
                 [
-                    'theme_version' => ['Field can\'t be empty'],
                     'theme_title' => ['Field title can\'t be empty']
                 ],
             ],

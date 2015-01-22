@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\Test\Fixture\StoreGroup;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Catalog\Test\Fixture\Category;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class CategoryId
@@ -30,9 +31,9 @@ class CategoryId implements FixtureInterface
     protected $params;
 
     /**
-     * CatalogCategory fixture
+     * Category fixture
      *
-     * @var CatalogCategory
+     * @var Category
      */
     protected $category;
 
@@ -47,8 +48,8 @@ class CategoryId implements FixtureInterface
     {
         $this->params = $params;
         if (isset($data['dataSet'])) {
-            $category = $fixtureFactory->createByCode('catalogCategory', ['dataSet' => $data['dataSet']]);
-            /** @var CatalogCategory $category */
+            $category = $fixtureFactory->createByCode('category', ['dataSet' => $data['dataSet']]);
+            /** @var Category $category */
             if (!$category->getId()) {
                 $category->persist();
             }
@@ -91,9 +92,9 @@ class CategoryId implements FixtureInterface
     }
 
     /**
-     * Return CatalogCategory fixture
+     * Return Category fixture
      *
-     * @return CatalogCategory
+     * @return Category
      */
     public function getCategory()
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\TestCase;
@@ -8,8 +9,8 @@ namespace Magento\CatalogSearch\Test\TestCase;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CatalogSearch\Test\Page\AdvancedSearch;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
@@ -27,6 +28,12 @@ use Mtf\TestCase\Injectable;
  */
 class AdvancedSearchEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Prepare data.
      *

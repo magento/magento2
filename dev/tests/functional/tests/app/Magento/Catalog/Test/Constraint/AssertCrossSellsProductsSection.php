@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
@@ -8,9 +9,9 @@ namespace Magento\Catalog\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AssertCrossSellsProductsSection
@@ -25,7 +26,7 @@ class AssertCrossSellsProductsSection extends AbstractConstraint
     /**
      * Assert that product is displayed in cross-sell section
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CheckoutCart $checkoutCart
      * @param CatalogProductSimple $product
      * @param CatalogProductView $catalogProductView
@@ -33,7 +34,7 @@ class AssertCrossSellsProductsSection extends AbstractConstraint
      * @return void
      */
     public function processAssert(
-        Browser $browser,
+        BrowserInterface $browser,
         CheckoutCart $checkoutCart,
         CatalogProductSimple $product,
         CatalogProductView $catalogProductView,

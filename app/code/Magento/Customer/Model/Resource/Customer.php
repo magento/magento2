@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Resource;
 
@@ -12,7 +13,7 @@ use Magento\Framework\Exception\InputException;
 class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
-     * @var \Magento\Core\Model\Validator\Factory
+     * @var \Magento\Framework\Validator\Factory
      */
     protected $_validatorFactory;
 
@@ -36,7 +37,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Core\Model\Validator\Factory $validatorFactory
+     * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param array $data
      */
@@ -48,7 +49,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Core\Model\Validator\Factory $validatorFactory,
+        \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $data = []
     ) {
@@ -76,8 +77,6 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _getDefaultAttributes()
     {
         return [
-            'entity_type_id',
-            'attribute_set_id',
             'created_at',
             'updated_at',
             'increment_id',

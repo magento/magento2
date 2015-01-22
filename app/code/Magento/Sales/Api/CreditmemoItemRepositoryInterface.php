@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Api;
 
@@ -33,16 +34,16 @@ interface CreditmemoItemRepositoryInterface
     /**
      * Deletes a specified credit memo item.
      *
-     * @param \Magento\Sales\Api\Data\CreditmemoInterface $entity The credit memo item.
+     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $entity The credit memo item.
      * @return bool
      */
-    public function delete(\Magento\Sales\Api\Data\CreditmemoInterface $entity);
+    public function delete(\Magento\Sales\Api\Data\CreditmemoItemInterface $entity);
 
     /**
      * Performs persist operations for a specified credit memo item.
      *
-     * @param \Magento\Sales\Api\Data\CreditmemoInterface $entity The credit memo item.
-     * @return \Magento\Sales\Api\Data\CreditmemoInterface Credit memo interface.
+     * @param \Magento\Sales\Api\Data\CreditmemoItemInterface $entity The credit memo item.
+     * @return \Magento\Sales\Api\Data\CreditmemoItemInterface Credit memo interface.
      */
-    public function save(\Magento\Sales\Api\Data\CreditmemoInterface $entity);
+    public function save(\Magento\Sales\Api\Data\CreditmemoItemInterface $entity);
 }

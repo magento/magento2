@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ProductAlert\Model;
 
@@ -48,10 +49,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\TestFramework\Mail\Template\TransportBuilderMock $transportBuilder */
         $transportBuilder = $this->_objectManager->get('Magento\TestFramework\Mail\Template\TransportBuilderMock');
-
-        $this->assertStringMatchesFormat(
-            '%AHello %A'
-            . $this->_customerViewHelper->getCustomerName($this->_customerSession->getCustomerDataObject()) . ',%A',
+        $this->assertContains(
+            'Hello John Smi=' . PHP_EOL . 'th',
             $transportBuilder->getSentMessage()->getBodyHtml()->getContent()
         );
     }

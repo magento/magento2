@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Upsell;
 use Magento\Catalog\Test\Fixture\Product;
-use Mtf\Factory\Factory;
-use Mtf\TestCase\Functional;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\TestCase\Functional;
 
 /**
  * Class UpsellTest
@@ -16,6 +17,10 @@ use Mtf\TestCase\Functional;
  */
 class UpsellTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Login into backend area before test
      *

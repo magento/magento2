@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Integration\Test\TestCase;
@@ -8,7 +9,7 @@ namespace Magento\Integration\Test\TestCase;
 use Magento\Integration\Test\Fixture\Integration;
 use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
 use Magento\Integration\Test\Page\Adminhtml\IntegrationNew;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Update Integration Entity
@@ -30,6 +31,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateIntegrationEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Integration grid page
      *

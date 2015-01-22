@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Factory\Factory;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Abstract class Grid
@@ -242,7 +243,6 @@ abstract class Grid extends Block
         $this->prepareForSearch($filter);
         $this->_rootElement->find($this->searchButton, Locator::SELECTOR_CSS)->click();
         $this->waitLoader();
-        $this->reinitRootElement();
     }
 
     /**
@@ -322,7 +322,6 @@ abstract class Grid extends Block
         $this->openFilterBlock();
         $this->_rootElement->find($this->resetButton, Locator::SELECTOR_CSS)->click();
         $this->waitLoader();
-        $this->reinitRootElement();
     }
 
     /**
@@ -364,7 +363,7 @@ abstract class Grid extends Block
     {
         $this->_rootElement->find($this->massactionSubmit, Locator::SELECTOR_CSS)->click();
         if ($acceptAlert) {
-            $this->_rootElement->acceptAlert();
+            $this->browser->acceptAlert();
         }
     }
 
@@ -374,7 +373,7 @@ abstract class Grid extends Block
      * @param array $filter
      * @param bool $isSearchable
      * @param bool $isStrict
-     * @return Element
+     * @return SimpleElement
      */
     protected function getRow(array $filter, $isSearchable = true, $isStrict = true)
     {
@@ -405,7 +404,7 @@ abstract class Grid extends Block
     {
         $data = [];
         do {
-            $rows = $this->_rootElement->find($this->rowItem)->getElements();
+            $rows = $this->_rootElement->getElements($this->rowItem);
             foreach ($rows as $row) {
                 $rowData = [];
                 foreach ($columns as $columnName) {
@@ -447,7 +446,6 @@ abstract class Grid extends Block
             $sortBlock->click();
             $this->waitLoader();
         }
-        $this->reinitRootElement();
     }
 
     /**

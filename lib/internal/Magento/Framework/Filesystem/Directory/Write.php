@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
@@ -196,16 +197,15 @@ class Write extends Read implements WriteInterface
      *
      * @param string $path
      * @param string $mode
-     * @param string|null $protocol
      * @return \Magento\Framework\Filesystem\File\WriteInterface
      */
-    public function openFile($path, $mode = 'w', $protocol = null)
+    public function openFile($path, $mode = 'w')
     {
         $folder = dirname($path);
         $this->create($folder);
         $this->assertWritable($folder);
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
-        return $this->fileFactory->create($absolutePath, $protocol, $this->driver, $mode);
+        return $this->fileFactory->create($absolutePath, $this->driver, $mode);
     }
 
     /**
@@ -214,13 +214,12 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @param string $content
      * @param string|null $mode
-     * @param string|null $protocol
      * @return int The number of bytes that were written.
      * @throws FilesystemException
      */
-    public function writeFile($path, $content, $mode = 'w+', $protocol = null)
+    public function writeFile($path, $content, $mode = 'w+')
     {
-        return $this->openFile($path, $mode, $protocol)->write($content);
+        return $this->openFile($path, $mode)->write($content);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Block\Item\Price;
 
@@ -24,7 +25,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $item;
 
@@ -52,7 +53,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['format'])
             ->getMock();
 
-        $this->item = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
+        $this->item = $this->getMockBuilder('\Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods([
                 '__wakeup',

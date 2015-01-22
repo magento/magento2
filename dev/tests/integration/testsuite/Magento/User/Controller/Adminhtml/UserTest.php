@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml;
 
@@ -218,6 +219,6 @@ class UserTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         $this->assertContains('{"error":1,"html_message":', $body);
-        $this->assertContains('Please correct this email address: \"example@domain.cim\"', $body);
+        $this->assertContains('Please correct this email address: &quot;example@domain.cim&quot;', $body);
     }
 }

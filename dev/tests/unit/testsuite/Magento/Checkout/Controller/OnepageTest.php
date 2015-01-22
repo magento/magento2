@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller;
 
@@ -36,7 +37,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     protected $response;
 
     /**
-     * @var \Magento\Sales\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $quote;
 
@@ -51,7 +52,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->quote = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $this->quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
         $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->checkoutSession = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);

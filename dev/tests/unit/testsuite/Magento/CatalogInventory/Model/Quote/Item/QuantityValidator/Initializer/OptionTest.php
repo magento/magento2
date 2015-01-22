@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
@@ -79,7 +80,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             '__wakeup',
         ];
         $this->optionMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Item\Option',
+            'Magento\Quote\Model\Quote\Item\Option',
             $optionMethods,
             [],
             '',
@@ -96,7 +97,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $store->expects($this->any())->method('getWebsiteId')->willReturn($this->websiteId);
 
         $methods = ['getQtyToAdd', '__wakeup', 'getId', 'updateQtyOption', 'setData', 'getQuoteId', 'getStore'];
-        $this->quoteItemMock = $this->getMock('Magento\Sales\Model\Quote\Item', $methods, [], '', false);
+        $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', $methods, [], '', false);
         $this->quoteItemMock->expects($this->any())->method('getStore')->willReturn($store);
 
         $stockItemMethods = [

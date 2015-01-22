@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Model;
 
@@ -92,7 +93,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Core\Model\App\Emulation $appEmulation
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Newsletter\Model\Template\Filter $filter
@@ -105,7 +106,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Registry $registry,
-        \Magento\Core\Model\App\Emulation $appEmulation,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\Filter $filter,

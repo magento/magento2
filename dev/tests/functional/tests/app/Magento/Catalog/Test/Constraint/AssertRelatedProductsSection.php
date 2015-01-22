@@ -1,15 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AssertRelatedProductsSection
@@ -24,14 +25,14 @@ class AssertRelatedProductsSection extends AbstractConstraint
     /**
      * Assert that product is displayed in related products section
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductSimple $product
      * @param InjectableFixture[] $relatedProducts
      * @param CatalogProductView $catalogProductView
      * @return void
      */
     public function processAssert(
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductSimple $product,
         array $relatedProducts,
         CatalogProductView $catalogProductView

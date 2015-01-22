@@ -1,16 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Test\Fixture;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\InjectableFixture;
-use Mtf\Handler\HandlerFactory;
-use Mtf\Repository\RepositoryFactory;
-use Mtf\System\Config;
-use Mtf\System\Event\EventManagerInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Handler\HandlerFactory;
+use Magento\Mtf\Repository\RepositoryFactory;
+use Magento\Mtf\System\Config;
+use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
  * Class BundleProduct

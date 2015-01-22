@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -159,10 +160,10 @@ class Tablerate extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Return table rate array or false by rate request
      *
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array|bool
      */
-    public function getRate(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function getRate(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         $adapter = $this->_getReadAdapter();
         $bind = [

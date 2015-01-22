@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
-use Magento\Backend\Test\Block\Widget\Grid;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element;
+use Magento\Backend\Test\Block\Widget\Grid;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class AbstractRelated
@@ -26,10 +27,10 @@ abstract class AbstractRelated extends Tab
      * Select related products
      *
      * @param array $data
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $data, Element $element = null)
+    public function fillFormTab(array $data, SimpleElement $element = null)
     {
         if (isset($data[$this->relatedType]['value'])) {
             $context = $element ? $element : $this->_rootElement;
@@ -47,10 +48,10 @@ abstract class AbstractRelated extends Tab
      * Get data of tab
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, Element $element = null)
+    public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
         $relatedBlock = $this->getRelatedGrid($element);
         $columns = [
@@ -66,8 +67,8 @@ abstract class AbstractRelated extends Tab
     /**
      * Return related products grid
      *
-     * @param Element $element
+     * @param SimpleElement $element
      * @return Grid
      */
-    abstract protected function getRelatedGrid(Element $element = null);
+    abstract protected function getRelatedGrid(SimpleElement $element = null);
 }

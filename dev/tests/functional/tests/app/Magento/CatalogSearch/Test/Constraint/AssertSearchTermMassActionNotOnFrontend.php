@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\Constraint;
 
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertSearchTermMassActionNotOnFrontend
@@ -25,14 +26,14 @@ class AssertSearchTermMassActionNotOnFrontend extends AbstractConstraint
      *
      * @param array $searchTerms
      * @param CmsIndex $cmsIndex
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param AssertSearchTermNotOnFrontend $assertSearchTermNotOnFrontend
      * @return void
      */
     public function processAssert(
         array $searchTerms,
         CmsIndex $cmsIndex,
-        Browser $browser,
+        BrowserInterface $browser,
         AssertSearchTermNotOnFrontend $assertSearchTermNotOnFrontend
     ) {
         foreach ($searchTerms as $term) {

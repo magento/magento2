@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\TestStep;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\Browser;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class AddProductsToWishlistStep
@@ -32,7 +33,7 @@ class AddProductsToWishlistStep implements TestStepInterface
     /**
      * Interface Browser
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -46,13 +47,13 @@ class AddProductsToWishlistStep implements TestStepInterface
     /**
      * @constructor
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param array $products
      * @param bool $configure [optional]
      */
     public function __construct(
         CatalogProductView $catalogProductView,
-        Browser $browser,
+        BrowserInterface $browser,
         array $products,
         $configure = false
     ) {

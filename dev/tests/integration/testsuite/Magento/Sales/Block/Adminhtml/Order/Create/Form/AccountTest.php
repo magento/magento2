@@ -2,7 +2,8 @@
 /**
  * Test class for \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
@@ -25,7 +26,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $quote = $this->_objectManager->create('Magento\Sales\Model\Quote')->load(1);
+        $quote = $this->_objectManager->create('Magento\Quote\Model\Quote')->load(1);
         $sessionQuoteMock = $this->getMockBuilder(
             'Magento\Backend\Model\Session\Quote'
         )->disableOriginalConstructor()->setMethods(

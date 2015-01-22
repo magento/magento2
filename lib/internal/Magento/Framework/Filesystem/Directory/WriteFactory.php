@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
@@ -29,13 +30,13 @@ class WriteFactory
      * Create a readable directory
      *
      * @param string $path
-     * @param string $protocol
+     * @param string $driverCode
      * @param int $createPermissions
      * @return \Magento\Framework\Filesystem\Directory\Write
      */
-    public function create($path, $protocol = DriverPool::FILE, $createPermissions = null)
+    public function create($path, $driverCode = DriverPool::FILE, $createPermissions = null)
     {
-        $driver = $this->driverPool->getDriver($protocol);
+        $driver = $this->driverPool->getDriver($driverCode);
         $factory = new \Magento\Framework\Filesystem\File\WriteFactory($this->driverPool);
         return new Write($factory, $driver, $path, $createPermissions);
     }

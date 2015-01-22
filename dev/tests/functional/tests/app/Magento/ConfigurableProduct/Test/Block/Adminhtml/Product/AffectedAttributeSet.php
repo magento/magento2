@@ -1,14 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Backend\Test\Block\Widget\Form as ParentForm;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AffectedAttributeSet
@@ -34,10 +36,10 @@ class AffectedAttributeSet extends ParentForm
      * Fill popup form
      *
      * @param FixtureInterface $product
-     * @param Element|null $element [optional]
+     * @param SimpleElement|null $element [optional]
      * @return $this
      */
-    public function fill(FixtureInterface $product, Element $element = null)
+    public function fill(FixtureInterface $product, SimpleElement $element = null)
     {
         $affectedAttributeSet = $product->getData('affected_attribute_set');
 

@@ -2,7 +2,8 @@
 /**
  * Unit Test for \Magento\Framework\Filesystem\Directory\Read
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
@@ -76,7 +77,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['some-stat-data'], $this->read->stat('correct-path'));
     }
 
-    public function testReadFileNoProtocol()
+    public function testReadFile()
     {
         $path = 'filepath';
         $flag = 'flag';
@@ -93,33 +94,5 @@ class ReadTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($contents));
 
         $this->assertEquals($contents, $this->read->readFile($path, $flag, $context));
-    }
-
-    public function testReadFileCustomProtocol()
-    {
-        $path = 'filepath';
-        $flag = 'flag';
-        $context = 'context';
-        $protocol = 'ftp';
-        $contents = 'contents';
-
-        $fileMock = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
-        $fileMock->expects($this->once())
-            ->method('readAll')
-            ->with($flag, $context)
-            ->will($this->returnValue($contents));
-
-        $this->driver->expects($this->once())
-            ->method('getAbsolutePath')
-            ->with($this->path, $path, $protocol)
-            ->will($this->returnValue($path));
-        $this->driver->expects($this->never())
-            ->method('fileGetContents');
-        $this->fileFactory->expects($this->once())
-            ->method('create')
-            ->with($path, $protocol, $this->driver)
-            ->will($this->returnValue($fileMock));
-
-        $this->assertEquals($contents, $this->read->readFile($path, $flag, $context, $protocol));
     }
 }

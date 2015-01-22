@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
 
@@ -74,7 +75,7 @@ class Cart
     /**
      * @param \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Order|\Magento\Sales\Model\Quote $salesModel
+     * @param \Magento\Sales\Model\Order|\Magento\Quote\Model\Quote $salesModel
      */
     public function __construct(
         \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory,

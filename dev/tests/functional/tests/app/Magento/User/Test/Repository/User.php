@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\User\Test\Repository;
 
-use Mtf\ObjectManager;
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class User
@@ -23,8 +24,8 @@ class User extends AbstractRepository
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        /** @var \Mtf\System\Config $systemConfig */
-        $systemConfig = ObjectManager::getInstance()->create('Mtf\System\Config');
+        /** @var \Magento\Mtf\System\Config $systemConfig */
+        $systemConfig = ObjectManager::getInstance()->create('Magento\Mtf\System\Config');
         $superAdminPassword = $systemConfig->getConfigParam('application/backend_user_credentials/password');
         $this->_data['default'] = [
             'username' => 'admin',

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\File;
 
@@ -30,18 +31,14 @@ class WriteFactory
      * Create a readable file.
      *
      * @param string $path
-     * @param string|null $protocol [optional]
-     * @param DriverInterface $driver [optional]
+     * @param DriverInterface|string $driver Driver or driver code
      * @param string $mode [optional]
      * @return Write
-     * @throws \InvalidArgumentException
      */
-    public function create($path, $protocol = null, DriverInterface $driver = null, $mode = 'r')
+    public function create($path, $driver, $mode = 'r')
     {
-        if ($protocol) {
-            $driver = $this->driverPool->getDriver($protocol);
-        } elseif (!$driver) {
-            throw new \InvalidArgumentException('Either driver or protocol must be specified.');
+        if (is_string($driver)) {
+            return new Write($path, $this->driverPool->getDriver($driver), $mode);
         }
         return new Write($path, $driver, $mode);
     }

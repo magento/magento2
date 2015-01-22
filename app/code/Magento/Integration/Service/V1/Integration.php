@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Service\V1;
 
@@ -44,7 +45,6 @@ class Integration implements \Magento\Integration\Service\V1\IntegrationInterfac
     {
         $this->_checkIntegrationByName($integrationData['name']);
         $integration = $this->_integrationFactory->create($integrationData);
-        // TODO: Think about double save issue
         $integration->save();
         $consumerName = 'Integration' . $integration->getId();
         $consumer = $this->_oauthService->createConsumer(['name' => $consumerName]);

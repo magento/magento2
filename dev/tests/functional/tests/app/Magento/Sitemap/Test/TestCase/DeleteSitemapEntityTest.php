@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Sitemap\Test\TestCase;
@@ -8,7 +9,7 @@ namespace Magento\Sitemap\Test\TestCase;
 use Magento\Sitemap\Test\Fixture\Sitemap;
 use Magento\Sitemap\Test\Page\Adminhtml\SitemapEdit;
 use Magento\Sitemap\Test\Page\Adminhtml\SitemapIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Cover deleting Sitemap Entity
@@ -23,11 +24,16 @@ use Mtf\TestCase\Injectable;
  *  4. Click "Delete" button.
  *  5. Perform all assertions.
  *
- * @group XML_Sitemap_(MX)
+ * @group XML_Sitemap_(PS)
  * @ZephyrId MAGETWO-23296
  */
 class DeleteSitemapEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * @var SitemapIndex
      */

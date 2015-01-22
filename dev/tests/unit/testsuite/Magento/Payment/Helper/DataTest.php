@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Payment\Helper;
@@ -41,7 +42,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $layoutFactoryMock->expects($this->once())->method('create')->willReturn($this->layoutMock);
 
         $this->methodFactory = $this->getMock('Magento\Payment\Model\Method\Factory', [], [], '', false);
-        $this->appEmulation = $this->getMock('Magento\Core\Model\App\Emulation', [], [], '', false);
+        $this->appEmulation = $this->getMock('Magento\Store\Model\App\Emulation', [], [], '', false);
         $paymentConfig = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);
         $this->initialConfig = $this->getMock('Magento\Framework\App\Config\Initial', [], [], '', false);
 

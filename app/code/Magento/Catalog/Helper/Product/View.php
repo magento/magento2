@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Helper\Product;
@@ -116,24 +117,26 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             $pageConfig->setPageLayout($settings->getPageLayout());
         }
 
+        $urlSafeSku = rawurlencode($product->getSku());
+
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
                 $resultPage->addPageLayoutHandles(
-                    ['id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId()],
+                    ['id' => $product->getId(), 'sku' => $urlSafeSku, 'type' => $product->getTypeId()],
                     $handle
                 );
             }
         }
 
         $resultPage->addPageLayoutHandles(
-            ['id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId()]
+            ['id' => $product->getId(), 'sku' => $urlSafeSku, 'type' => $product->getTypeId()]
         );
 
         if ($params && $params->getAfterHandles()) {
             foreach ($params->getAfterHandles() as $handle) {
                 $resultPage->addPageLayoutHandles(
-                    ['id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId()],
+                    ['id' => $product->getId(), 'sku' => $urlSafeSku, 'type' => $product->getTypeId()],
                     $handle
                 );
             }

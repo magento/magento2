@@ -2,7 +2,8 @@
 /**
  * Stock item initializer for configurable product type
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin;
 
@@ -13,8 +14,8 @@ class ConfigurableProduct
      *
      * @param \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option $subject
      * @param callable $proceed
-     * @param \Magento\Sales\Model\Quote\Item\Option $option
-     * @param \Magento\Sales\Model\Quote\Item $quoteItem
+     * @param \Magento\Quote\Model\Quote\Item\Option $option
+     * @param \Magento\Quote\Model\Quote\Item $quoteItem
      *
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -22,8 +23,8 @@ class ConfigurableProduct
     public function aroundGetStockItem(
         \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option $subject,
         \Closure $proceed,
-        \Magento\Sales\Model\Quote\Item\Option $option,
-        \Magento\Sales\Model\Quote\Item $quoteItem
+        \Magento\Quote\Model\Quote\Item\Option $option,
+        \Magento\Quote\Model\Quote\Item $quoteItem
     ) {
         $stockItem = $proceed($option, $quoteItem);
         if ($quoteItem->getProductType() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {

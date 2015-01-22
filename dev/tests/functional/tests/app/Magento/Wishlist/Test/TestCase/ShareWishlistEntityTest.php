@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\TestCase;
@@ -14,8 +15,8 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Wishlist\Test\Page\WishlistShare;
-use Mtf\Client\Browser;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for ShareWishlistEntity
@@ -41,6 +42,11 @@ use Mtf\TestCase\Injectable;
  */
 class ShareWishlistEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Cms index page
      *
@@ -143,14 +149,14 @@ class ShareWishlistEntityTest extends Injectable
     /**
      * Share wish list
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CustomerInjectable $customer
      * @param CatalogProductSimple $product
      * @param array $sharingInfo
      * @return void
      */
     public function test(
-        Browser $browser,
+        BrowserInterface $browser,
         CustomerInjectable $customer,
         CatalogProductSimple $product,
         array $sharingInfo

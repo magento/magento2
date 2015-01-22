@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Install\Test\TestCase;
@@ -9,9 +10,9 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Install\Test\Page\Install;
 use Magento\Install\Test\Fixture\Install as InstallConfig;
 use Magento\User\Test\Fixture\User;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestCase\Injectable;
-use Mtf\System\Config;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\System\Config;
 use Magento\Install\Test\Constraint\AssertAgreementTextPresent;
 use Magento\Install\Test\Constraint\AssertSuccessfulReadinessCheck;
 

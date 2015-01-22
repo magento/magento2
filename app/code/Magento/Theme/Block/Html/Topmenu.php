@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
 
@@ -61,6 +62,7 @@ class Topmenu extends Template implements IdentityInterface
             'page_block_html_topmenu_gethtml_after',
             ['menu' => $this->_menu, 'transportObject' => $transportObject]
         );
+        $html = $transportObject->getHtml();
 
         return $html;
     }

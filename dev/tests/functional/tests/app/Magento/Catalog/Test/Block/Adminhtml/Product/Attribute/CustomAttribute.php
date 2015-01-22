@@ -1,17 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Catalog product custom attribute element.
  */
-class CustomAttribute extends Element
+class CustomAttribute extends SimpleElement
 {
     /**
      * Attribute input selector;
@@ -41,7 +42,7 @@ class CustomAttribute extends Element
      */
     public function setValue($data)
     {
-        $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
+        $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
         $element = $this->getElementByClass($this->getElementClass());
         $value = is_array($data) ? $data['value'] : $data;
         $this->find($this->inputSelector, Locator::SELECTOR_CSS, $element)->setValue($value);
@@ -54,7 +55,7 @@ class CustomAttribute extends Element
      */
     public function getValue()
     {
-        $this->_eventManager->dispatchEvent(['get_value'], [__METHOD__, $this->getAbsoluteSelector()]);
+        $this->eventManager->dispatchEvent(['get_value'], [__METHOD__, $this->getAbsoluteSelector()]);
         $inputType = $this->getElementByClass($this->getElementClass());
         return $this->find($this->inputSelector, Locator::SELECTOR_CSS, $inputType)->getValue();
     }
@@ -83,9 +84,6 @@ class CustomAttribute extends Element
      */
     protected function getElementClass()
     {
-        $criteria = new \PHPUnit_Extensions_Selenium2TestCase_ElementCriteria('css selector');
-        $criteria->value($this->inputSelector);
-        $input = $this->_getWrappedElement()->element($criteria);
-        return $input->attribute('class');
+        return $this->find($this->inputSelector, Locator::SELECTOR_CSS)->getAttribute('class');
     }
 }

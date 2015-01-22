@@ -1,14 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Product\Grouped;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Factory\Factory;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Class AssociatedProducts
@@ -19,7 +21,7 @@ class AssociatedProducts extends Tab
     /**
      * 'Create New Option' button
      *
-     * @var Element
+     * @var SimpleElement
      */
     protected $addNewOption = '#grouped-product-container>button';
 
@@ -52,10 +54,10 @@ class AssociatedProducts extends Tab
     /**
      * Get associated products list block
      *
-     * @param Element $context
+     * @param SimpleElement $context
      * @return \Magento\Catalog\Test\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts
      */
-    protected function getListAssociatedProductsBlock(Element $context = null)
+    protected function getListAssociatedProductsBlock(SimpleElement $context = null)
     {
         $element = $context ?: $this->_rootElement;
 
@@ -68,10 +70,10 @@ class AssociatedProducts extends Tab
      * Fill data to fields on tab
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         if (isset($fields['grouped_products'])) {
             foreach ($fields['grouped_products']['value'] as $groupedProduct) {

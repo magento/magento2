@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Model;
@@ -72,9 +73,9 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Eav\Model\Entity\Collection\AbstractCollection', [], [], '', false);
 
         $this->quoteRepositoryMock =
-            $this->getMock('Magento\Sales\Model\QuoteRepository', [], [], '', false);
+            $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
 
-        $this->quoteMock = $this->getMock('Magento\Sales\Model\Quote',
+        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote',
             [
                 'getId',
                 'getIsPersistent',
@@ -180,7 +181,7 @@ class QuoteManagerTest extends \PHPUnit_Framework_TestCase
             ->method('setIsPersistent')->with(false)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('removeAllAddresses')->will($this->returnValue($this->quoteMock));
-        $quoteAddressMock = $this->getMock('Magento\Sales\Model\Quote\Address', [], [], '', false);
+        $quoteAddressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($quoteAddressMock));
         $this->quoteMock->expects($this->once())

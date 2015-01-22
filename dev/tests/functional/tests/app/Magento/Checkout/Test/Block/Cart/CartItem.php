@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Checkout\Test\Block\Cart;
 
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class CartItem
@@ -68,23 +69,27 @@ class CartItem extends AbstractCartItem
     /**
      * Get product price
      *
-     * @return string
+     * @return string|null
      */
     public function getPrice()
     {
-        $cartProductPrice = $this->_rootElement->find($this->price, Locator::SELECTOR_XPATH)->getText();
-        return str_replace(',', '', $this->escapeCurrency($cartProductPrice));
+        $cartProductPrice = $this->_rootElement->find($this->price, Locator::SELECTOR_XPATH);
+        return $cartProductPrice->isVisible()
+            ? str_replace(',', '', $this->escapeCurrency($cartProductPrice->getText()))
+            : null;
     }
 
     /**
      * Get product price including tax
      *
-     * @return string
+     * @return string|null
      */
     public function getPriceInclTax()
     {
-        $cartProductPrice = $this->_rootElement->find($this->priceInclTax, Locator::SELECTOR_XPATH)->getText();
-        return str_replace(',', '', $this->escapeCurrency($cartProductPrice));
+        $cartProductPrice = $this->_rootElement->find($this->priceInclTax, Locator::SELECTOR_XPATH);
+        return $cartProductPrice->isVisible()
+            ? str_replace(',', '', $this->escapeCurrency($cartProductPrice->getText()))
+            : null;
     }
 
     /**
@@ -111,29 +116,33 @@ class CartItem extends AbstractCartItem
     /**
      * Get sub-total for the specified item in the cart
      *
-     * @return string
+     * @return string|null
      */
     public function getSubtotalPrice()
     {
-        $price = $this->_rootElement->find($this->subtotalPrice, Locator::SELECTOR_XPATH)->getText();
-        return str_replace(',', '', $this->escapeCurrency($price));
+        $cartProductPrice = $this->_rootElement->find($this->subtotalPrice, Locator::SELECTOR_XPATH);
+        return $cartProductPrice->isVisible()
+            ? str_replace(',', '', $this->escapeCurrency($cartProductPrice->getText()))
+            : null;
     }
 
     /**
      * Get sub-total including tax for the specified item in the cart
      *
-     * @return string
+     * @return string|null
      */
     public function getSubtotalPriceInclTax()
     {
-        $price = $this->_rootElement->find($this->subTotalPriceInclTax, Locator::SELECTOR_XPATH)->getText();
-        return str_replace(',', '', $this->escapeCurrency($price));
+        $cartProductPrice = $this->_rootElement->find($this->subTotalPriceInclTax, Locator::SELECTOR_XPATH);
+        return $cartProductPrice->isVisible()
+            ? str_replace(',', '', $this->escapeCurrency($cartProductPrice->getText()))
+            : null;
     }
 
     /**
      * Get product options in the cart
      *
-     * @return string
+     * @return array
      */
     public function getOptions()
     {
@@ -141,8 +150,8 @@ class CartItem extends AbstractCartItem
         $options = [];
 
         if ($optionsBlock->isVisible()) {
-            $titles = $optionsBlock->find('./dt', Locator::SELECTOR_XPATH)->getElements();
-            $values = $optionsBlock->find('./dd', Locator::SELECTOR_XPATH)->getElements();
+            $titles = $optionsBlock->getElements('./dt', Locator::SELECTOR_XPATH);
+            $values = $optionsBlock->getElements('./dd', Locator::SELECTOR_XPATH);
 
             foreach ($titles as $key => $title) {
                 $value = $values[$key]->getText();

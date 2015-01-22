@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
 
@@ -127,12 +128,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         // Need to explicitly set this due to discrepancy in the keys between model and data object
         $this->setIsDefaultBilling($address->isDefaultBilling());
         $this->setIsDefaultShipping($address->isDefaultShipping());
-
-        // Need to use attribute set or future updates can cause data loss
         if (!$this->getAttributeSetId()) {
             $this->setAttributeSetId(AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS);
         }
-
         $customAttributes = $address->getCustomAttributes();
         if (!is_null($customAttributes)) {
             foreach ($customAttributes as $attribute) {
@@ -255,21 +253,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * Return Entity Type ID
-     *
-     * @return int
-     */
-    public function getEntityTypeId()
-    {
-        $entityTypeId = $this->getData('entity_type_id');
-        if (!$entityTypeId) {
-            $entityTypeId = $this->getEntityType()->getId();
-            $this->setData('entity_type_id', $entityTypeId);
-        }
-        return $entityTypeId;
-    }
-
-    /**
      * Return Region ID
      *
      * @return int
@@ -297,5 +280,15 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected function _createCustomer()
     {
         return $this->_customerFactory->create();
+    }
+
+    /**
+     * Return Entity Type ID
+     *
+     * @return int
+     */
+    public function getEntityTypeId()
+    {
+        return $this->getEntityType()->getId();
     }
 }

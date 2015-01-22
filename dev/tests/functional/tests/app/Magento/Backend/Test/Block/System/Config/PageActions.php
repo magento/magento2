@@ -2,14 +2,15 @@
 /**
  * Config actions block
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Backend\Test\Block\System\Config;
 
 use Magento\Backend\Test\Block\FormPageActions as AbstractPageActions;
 use Magento\Store\Test\Fixture\Store;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class PageActions
@@ -34,7 +35,7 @@ class PageActions extends AbstractPageActions
     {
         $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselectstore')
             ->setValue($websiteScope);
-        $this->_rootElement->acceptAlert();
+        $this->browser->acceptAlert();
 
         return $this;
     }

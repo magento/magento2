@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -20,9 +21,11 @@ class Observer
     {
         /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $observer->getEvent()->getPayment();
-        $banktransfer = \Magento\OfflinePayments\Model\Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE;
-        if ($payment->getMethod() === $banktransfer) {
-            $payment->setAdditionalInformation('instructions', $payment->getMethodInstance()->getInstructions());
+        if ($payment->getMethod() === Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE) {
+            $payment->setAdditionalInformation(
+                'instructions',
+                $payment->getMethodInstance()->getConfigData('instructions')
+            );
         }
     }
 }

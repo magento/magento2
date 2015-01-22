@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Bundle\Test\Constraint;
@@ -8,28 +9,35 @@ namespace Magento\Bundle\Test\Constraint;
 use Magento\Catalog\Test\Constraint\AssertProductPage;
 
 /**
- * Class AssertBundleProductPage
+ * Check displayed product price on product page(front-end).
  */
 class AssertBundleProductPage extends AssertProductPage
 {
     /**
-     * Verify displayed product price on product page(front-end) equals passed from fixture
+     * Verify displayed product price on product page(front-end) equals passed from fixture.
      *
      * @return string|null
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function verifyPrice()
     {
         $priceData = $this->product->getDataFieldConfig('price')['source']->getPreset();
+        $priceView = $this->product->getPriceView();
         $priceBlock = $this->productView->getPriceBlock();
-        $priceLow = ($this->product->getPriceView() == 'Price Range')
-            ? $priceBlock->getPriceFrom()
-            : $priceBlock->getRegularPrice();
+
+        if ($this->product->hasData('special_price') || $this->product->hasData('group_price')) {
+            $priceLow = $priceBlock->getFinalPrice();
+        } else {
+            $priceLow = ($priceView == 'Price Range') ? $priceBlock->getPriceFrom() : $priceBlock->getRegularPrice();
+        }
+
         $errors = [];
 
         if ($priceData['price_from'] != $priceLow) {
             $errors[] = 'Bundle price "From" on product view page is not correct.';
         }
-        if ($this->product->getPriceView() == 'Price Range' && $priceData['price_to'] != $priceBlock->getPriceTo()) {
+        if ($priceView == 'Price Range' && $priceData['price_to'] != $priceBlock->getPriceTo()) {
             $errors[] = 'Bundle price "To" on product view page is not correct.';
         }
 

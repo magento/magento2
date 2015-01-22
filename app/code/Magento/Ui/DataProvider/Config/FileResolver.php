@@ -2,7 +2,8 @@
 /**
  * Hierarchy config file resolver
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Ui\DataProvider\Config;
 
@@ -45,7 +46,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     {
         $iterator = $this->iteratorFactory->create(
             $this->directoryRead,
-            $this->directoryRead->search('/*/*/etc/data_source/*')
+            $this->directoryRead->search('/*/*/etc/data_source/' . $filename)
         );
         return $iterator;
     }

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments;
@@ -50,7 +51,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     public function getIds()
     {
         $result = [];
-        $shipmentIds = $this->_rootElement->find($this->shipmentId)->getElements();
+        $shipmentIds = $this->_rootElement->getElements($this->shipmentId);
         foreach ($shipmentIds as $shipmentId) {
             $result[] = trim($shipmentId->getText());
         }

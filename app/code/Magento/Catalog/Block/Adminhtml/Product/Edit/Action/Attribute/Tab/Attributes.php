@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -139,7 +140,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
 HTML;
         if ($elementId === 'weight') {
             $html .= <<<HTML
-<script type="text/javascript">require(["jquery"],function($) {
+<script>require(["jquery"],function($) {
     $('#weight_and_type_switcher, label[for=weight_and_type_switcher]').hide();
 });</script>
 HTML;

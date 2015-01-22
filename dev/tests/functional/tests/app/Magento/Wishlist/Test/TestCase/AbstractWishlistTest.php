@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\TestCase;
@@ -9,9 +10,9 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Wishlist\Test\Page\WishlistIndex;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\ObjectManager;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Class AbstractWishlistTest

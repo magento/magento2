@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\TestCase\ProductAttribute;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Mtf\ObjectManager;
-use Mtf\TestCase\Scenario;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Test Creation for CreateProductAttributeEntity
@@ -20,11 +21,16 @@ use Mtf\TestCase\Scenario;
  * 5. Save Product Attribute.
  * 6. Perform appropriate assertions.
  *
- * @group Product_Attributes_(CS)
+ * @group Product_Attributes_(MX)
  * @ZephyrId MAGETWO-24767
  */
 class CreateProductAttributeEntityTest extends Scenario
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * CatalogProductAttribute object.
      *
