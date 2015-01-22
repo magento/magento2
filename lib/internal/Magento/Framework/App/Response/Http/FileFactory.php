@@ -113,7 +113,7 @@ class FileFactory
                 if (!empty($content['rm'])) {
                     $dir->delete($file);
                 }
-                self::exitphp(0);
+                $this->callExit();
             } else {
                 $this->_response->clearBody();
                 $this->_response->setBody($content);
@@ -124,16 +124,9 @@ class FileFactory
 
     /**
      * Call exit
-     *
-     * @param $code
-     * @throws TestingPhpExitException
      */
-    static function exitphp($code)
+    protected function callExit()
     {
-        if (defined('UNIT_TESTING')) {
-            throw new \Magento\Framework\App\Response\Http\TestingPhpExitException();
-        } else {
-            exit($code);
-        }
+        exit(0);
     }
 }
