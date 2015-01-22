@@ -10,7 +10,7 @@ use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Flow:

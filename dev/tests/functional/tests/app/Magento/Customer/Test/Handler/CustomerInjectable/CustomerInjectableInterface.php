@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Handler\CustomerInjectable;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface CustomerInjectableInterface

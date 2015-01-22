@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Block\Product\View;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\BrowserInterface;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Assert that displayed tier price on product page equals passed from fixture.

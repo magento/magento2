@@ -6,7 +6,7 @@
 
 namespace Magento\Downloadable\Test\Block\Catalog\Product\View;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Samples

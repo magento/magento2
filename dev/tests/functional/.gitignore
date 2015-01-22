@@ -8,4 +8,4 @@
 !/config/isolation.yml.dist
 !/config/server.yml.dist
 phpunit.xml
-/lib/Mtf/Util/Generate/testcase.xml
+/lib/Magento/Mtf/Util/Generate/testcase.xml

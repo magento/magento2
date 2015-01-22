@@ -8,7 +8,7 @@ namespace Magento\Shipping\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Shipping\Test\Page\Adminhtml\ShipmentIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertShipmentInShipmentsGrid

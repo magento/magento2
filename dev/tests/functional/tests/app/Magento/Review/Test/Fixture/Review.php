@@ -6,7 +6,7 @@
 
 namespace Magento\Review\Test\Fixture;
 
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Product review fixture.

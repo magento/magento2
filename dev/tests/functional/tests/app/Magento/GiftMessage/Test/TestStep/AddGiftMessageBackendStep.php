@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\TestStep;
 
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class AddGiftMessageBackendStep

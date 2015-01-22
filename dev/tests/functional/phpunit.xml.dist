@@ -19,14 +19,14 @@
     </testsuites>
 
     <listeners>
-        <listener class="Mtf\System\Browser\Listener" />
-        <listener class="Mtf\System\Isolation\Listener">
+        <listener class="Magento\Mtf\System\Browser\Listener" />
+        <listener class="Magento\Mtf\System\Isolation\Listener">
             <arguments>
-                <object class="Mtf\System\Isolation\Driver\Base" />
+                <object class="Magento\Mtf\System\Isolation\Driver\Base" />
             </arguments>
         </listener>
-        <listener class="Mtf\System\Event\StateListener" />
-        <listener class="Mtf\System\JUnit"/>
+        <listener class="Magento\Mtf\System\Event\StateListener" />
+        <listener class="Magento\Mtf\System\JUnit"/>
     </listeners>
 
     <php>
