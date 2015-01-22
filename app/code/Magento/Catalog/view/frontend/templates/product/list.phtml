@@ -50,13 +50,13 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                 <?php echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
                 <div class="product-item-info">
                     <?php // Product Image ?>
-                    <a href="<?php echo $_product->getProductUrl() ?>" class="product photo product-item-photo">
+                    <a href="<?php echo $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1">
                         <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
                     </a>
                     <div class="product details product-item-details">
                         <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
                         <strong class="product name product-item-name">
-                            <a class="product-item-link" href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $_productNameStripped; ?>">
+                            <a class="product-item-link" href="<?php echo $_product->getProductUrl() ?>">
                                 <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
                             </a>
                         </strong>
@@ -67,8 +67,11 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                             <div class="product actions product-item-actions"<?php echo strpos($pos, $viewMode . '-actions') ? $position : ''; ?>>
                                 <div class="actions-primary"<?php echo strpos($pos, $viewMode . '-primary') ? $position : ''; ?>>
                                     <?php if ($_product->isSaleable()): ?>
-                                        <button type="button" title="<?php echo __('Add to Cart') ?>" class="action tocart primary"
-                                                data-post='<?php echo $this->getAddToCartPostParams($_product); ?>'>
+                                        <button type="button"
+                                                title="<?php echo $this->escapeHtml(__('Add to Cart')); ?>"
+                                                class="action tocart primary"
+                                                data-post='<?php echo $this->getAddToCartPostParams($_product); ?>'
+                                                aria-label="<?php echo $_productNameStripped; ?> <?php echo $this->escapeHtml(__('Add to Cart')); ?>">
                                             <span><?php echo __('Add to Cart') ?></span>
                                         </button>
                                     <?php else: ?>
@@ -81,17 +84,25 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                                 </div>
                                 <div data-role="add-to-links" class="actions-secondary"<?php echo strpos($pos, $viewMode . '-secondary') ? $position : ''; ?>>
                                     <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()): ?>
-                                        <a href="#" title="<?php echo __('Add to Wishlist') ?>"
+                                        <a href="#" 
+                                           class="action towishlist"
+                                           title="<?php echo $this->escapeHtml(__('Add to Wishlist')); ?>"
                                            data-post='<?php echo $this->getAddToWishlistParams($_product); ?>'
-                                           class="action towishlist" data-action="add-to-wishlist">
+                                           data-action="add-to-wishlist"
+                                           role="button"
+                                           aria-label="<?php echo $_productNameStripped; ?> <?php echo $this->escapeHtml(__('Add to Wishlist')); ?>">
                                             <span><?php echo __('Add to Wishlist') ?></span>
                                         </a>
                                     <?php endif; ?>
                                     <?php
                                     $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
                                     ?>
-                                    <a href="#" class="action tocompare" title="<?php echo __('Add to Compare') ?>"
-                                       data-post='<?php echo $compareHelper->getPostDataParams($_product); ?>'>
+                                    <a href="#" 
+                                       class="action tocompare"
+                                       title="<?php echo $this->escapeHtml(__('Add to Compare')); ?>"
+                                       data-post='<?php echo $compareHelper->getPostDataParams($_product); ?>'
+                                       role="button"
+                                       aria-label="<?php echo $_productNameStripped; ?> <?php echo $this->escapeHtml(__('Add to Compare')); ?>">
                                         <span><?php echo __('Add to Compare') ?></span>
                                     </a>
                                 </div>

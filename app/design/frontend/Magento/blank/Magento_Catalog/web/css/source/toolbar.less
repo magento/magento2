@@ -118,7 +118,6 @@
         float: left;
         display: inline-block;
         margin-right: @indent-base;
-        overflow: hidden;
         .products.wrapper ~ .toolbar & {
             display: none;
         }
@@ -134,7 +133,6 @@
             padding: 7px 10px;
             line-height: 1;
             border-right: 0;
-            .icon-text-hide();
             &:not(.active):hover {
                 background: darken(@toolbar-element-background, 7%);
                 .css(color, @text-color-muted);
@@ -147,7 +145,8 @@
             }
             .icon-font(
                 @icon-grid,
-                @_icon-font-size: @toolbar-mode-icon-font-size
+                @_icon-font-size: @toolbar-mode-icon-font-size,
+                @_icon-font-text-hide: true
             );
         }
     }

@@ -147,7 +147,6 @@
         float: left;
         display: inline-block;
         margin-right: @indent-base;
-        overflow: hidden;
         .products.wrapper ~ .toolbar & {
             display: none;
         }
@@ -167,7 +166,6 @@
             border-right: 0;
             .css(background-color, @toolbar-element-background);
             .css(box-shadow, @button-shadow);
-            .icon-text-hide();
             .modes-label + & {
                 border-radius: 3px 0 0 3px;
             }
@@ -186,7 +184,8 @@
             }
             .icon-font(
                 @icon-grid,
-                @_icon-font-size: @toolbar-mode-icon-font-size
+                @_icon-font-size: @toolbar-mode-icon-font-size,
+                @_icon-font-text-hide: true
             );
         }
     }

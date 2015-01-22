@@ -249,7 +249,6 @@
     }
     .product-item-inner {
         .products-grid & {
-            display: none;
             position: absolute;
             left: 0;
             right: -1px;
@@ -267,7 +266,6 @@
     .product-item-actions {
         display: block;
         .products-grid & {
-            visibility: hidden;
             margin: -@indent-s-base 0 @indent-s-base;
         }
         .actions-primary + .actions-secondary {
@@ -282,8 +280,11 @@
             }
         }
         .actions-primary { display: table-cell; }
-        .products-grid .product-item-info:hover & {
-            visibility: visible;
+    }
+
+    .product-item-inner {
+        .products-grid .product-item-info:not(:hover) & {
+            &:extend(.abs-visually-hidden-desktop-s all);
         }
     }
 
