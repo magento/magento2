@@ -61,7 +61,7 @@ class RouteListenerTest extends \PHPUnit_Framework_TestCase
         $mvcEvent->expects($this->any())->method('getRouter')->willReturn($this->router);
 
         $this->request->expects($this->any())->method('getContent')->willReturn([]);
-        $this->prepareOnRoute($mvcEvent, ['console'=>['router'=>['routes'=>['testAction'=>'test']]]]);
+        $this->prepareOnRoute($mvcEvent, ['console' => ['router' => ['routes' => ['testAction' => 'test']]]]);
 
         // Verify the error is set
         $mvcEvent->expects($this->once())->method('setError');
@@ -97,7 +97,7 @@ class RouteListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareOnRoute(
             $mvcEvent,
-            ['console'=>['router'=>['routes'=>['install'=>['options' => ['route' => 'testRoute']]]]]]
+            ['console' => ['router' => ['routes' => ['install' => ['options' => ['route' => 'testRoute']]]]]]
         );
 
         // Verify the error is set
