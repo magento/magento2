@@ -1,11 +1,11 @@
 <?php
 /**
- * Unit test for \Magento\Core\Model\Validator\Factory
+ * Unit test for \Magento\Framework\Validator\Factory
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Validator;
+namespace Magento\Framework\Validator;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -104,7 +104,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValidatorConfig()
     {
-        $factory = new \Magento\Core\Model\Validator\Factory(
+        $factory = new \Magento\Framework\Validator\Factory(
             $this->_objectManager,
             $this->_config,
             $this->_translateAdapter
@@ -144,7 +144,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                 $objectManager->getObject('Magento\Framework\Validator\Builder', ['constraints' => []])
             )
         );
-        $factory = new \Magento\Core\Model\Validator\Factory(
+        $factory = new \Magento\Framework\Validator\Factory(
             $this->_objectManager,
             $this->_config,
             $this->_translateAdapter
@@ -171,7 +171,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(new \Magento\Framework\Validator())
         );
-        $factory = new \Magento\Core\Model\Validator\Factory(
+        $factory = new \Magento\Framework\Validator\Factory(
             $this->_objectManager,
             $this->_config,
             $this->_translateAdapter
