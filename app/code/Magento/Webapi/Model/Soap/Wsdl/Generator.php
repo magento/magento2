@@ -136,7 +136,7 @@ class Generator
                     $outputBinding = $bindingDataPrototype;
                     $outputMessageName = $this->_createOperationOutput($wsdl, $operationName, $methodData);
                 }
-                $faultBinding = array_merge($bindingDataPrototype, ['name' => Fault::NODE_DETAIL_WRAPPER]);
+                $faultBinding = ['name' => Fault::NODE_DETAIL_WRAPPER];
 
                 $wsdl->addPortOperation(
                     $portType,
