@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="CreateAdminUserEntityTest">
+        <variation name="CreateAdminUserEntityTestVariation1">
+            <data name="user/data/username">AdminUser%isolation%</data>
+            <data name="user/data/firstname">FirstName%isolation%</data>
+            <data name="user/data/lastname">LastName%isolation%</data>
+            <data name="user/data/email">email%isolation%@example.com</data>
+            <data name="user/data/password">123123q</data>
+            <data name="user/data/password_confirmation">123123q</data>
+            <data name="user/data/is_active">Active</data>
+            <data name="user/data/role_id/dataSet">Administrators</data>
+            <data name="isDuplicated">-</data>
+            <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserSuccessLogin</data>
+            <data name="user/data/current_password">123123q</data>
+        </variation>
+        <variation name="CreateAdminUserEntityTestVariation2">
+            <data name="user/data/username">AdminUser%isolation%</data>
+            <data name="user/data/firstname">FirstName%isolation%</data>
+            <data name="user/data/lastname">LastName%isolation%</data>
+            <data name="user/data/email">email%isolation%@example.com</data>
+            <data name="user/data/password">123123q</data>
+            <data name="user/data/password_confirmation">123123q</data>
+            <data name="user/data/is_active">Inactive</data>
+            <data name="user/data/role_id/dataSet">Administrators</data>
+            <data name="isDuplicated">-</data>
+            <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserWrongCredentialsMessage</data>
+            <data name="user/data/current_password">123123q</data>
+        </variation>
+        <variation name="CreateAdminUserEntityTestVariation3">
+            <data name="user/data/username">-</data>
+            <data name="user/data/firstname">FirstName%isolation%</data>
+            <data name="user/data/lastname">LastName%isolation%</data>
+            <data name="user/data/email">email%isolation%@example.com</data>
+            <data name="user/data/password">123123q</data>
+            <data name="user/data/password_confirmation">123123q</data>
+            <data name="user/data/is_active">Active</data>
+            <data name="user/data/role_id/dataSet">Administrators</data>
+            <data name="isDuplicated">username</data>
+            <data name="constraint">assertUserDuplicateMessage</data>
+            <data name="user/data/current_password">123123q</data>
+        </variation>
+        <variation name="CreateAdminUserEntityTestVariation4">
+            <data name="user/data/username">AdminUser%isolation%</data>
+            <data name="user/data/firstname">FirstName%isolation%</data>
+            <data name="user/data/lastname">LastName%isolation%</data>
+            <data name="user/data/email">-</data>
+            <data name="user/data/password">123123q</data>
+            <data name="user/data/password_confirmation">123123q</data>
+            <data name="user/data/is_active">Active</data>
+            <data name="user/data/role_id/dataSet">Administrators</data>
+            <data name="isDuplicated">email</data>
+            <data name="constraint">assertUserDuplicateMessage</data>
+            <data name="user/data/current_password">123123q</data>
+        </variation>
+        <variation name="CreateAdminUserEntityTestVariation5">
+            <data name="user/data/username">AdminUser%isolation%</data>
+            <data name="user/data/firstname">FirstName%isolation%</data>
+            <data name="user/data/lastname">LastName%isolation%</data>
+            <data name="user/data/email">email%isolation%@example.com</data>
+            <data name="user/data/password">123123q</data>
+            <data name="user/data/password_confirmation">123123q</data>
+            <data name="user/data/is_active">Active</data>
+            <data name="user/data/role_id/dataSet">-</data>
+            <data name="isDuplicated">-</data>
+            <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserWrongCredentialsMessage</data>
+            <data name="user/data/current_password">123123q</data>
+        </variation>
+        <variation name="CreateAdminUserEntityTestVariation6">
+            <data name="user/data/username">AdminUser%isolation%</data>
+            <data name="user/data/firstname">FirstName%isolation%</data>
+            <data name="user/data/lastname">LastName%isolation%</data>
+            <data name="user/data/email">email%isolation%@example.cim</data>
+            <data name="user/data/password">123123q</data>
+            <data name="user/data/password_confirmation">123123q</data>
+            <data name="user/data/is_active">Active</data>
+            <data name="user/data/role_id/dataSet">-</data>
+            <data name="isDuplicated">-</data>
+            <data name="constraint">assertUserInvalidEmailMessage</data>
+            <data name="user/data/current_password">123123q</data>
+        </variation>
+    </testCase>
+</config>

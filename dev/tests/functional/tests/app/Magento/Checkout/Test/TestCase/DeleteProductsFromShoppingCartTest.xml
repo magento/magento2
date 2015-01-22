@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
+    <testCase name="DeleteProductsFromShoppingCartTest">
+        <variation name="DeleteProductsFromShoppingCartTestVariation1">
+            <data name="productsData">bundleProduct::bundle_dynamic_product</data>
+            <data name="constraint">assertCartIsEmpty</data>
+            <data name="issue"></data>
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation2">
+            <data name="productsData">bundleProduct::bundle_fixed_product</data>
+            <data name="constraint">assertCartIsEmpty</data>
+            <data name="issue">Bug: MAGETWO-28350</data>
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation3">
+            <data name="productsData">catalogProductSimple::with_two_custom_option</data>
+            <data name="constraint">assertCartIsEmpty</data>
+            <data name="issue"></data>
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation4">
+            <data name="productsData">catalogProductVirtual::50_dollar_product</data>
+            <data name="constraint">assertCartIsEmpty</data>
+            <data name="issue"></data>
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation5">
+            <data name="productsData">configurableProductInjectable::default</data>
+            <data name="constraint">assertCartIsEmpty</data>
+            <data name="issue"></data>
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation6">
+            <data name="productsData">downloadableProductInjectable::with_two_separately_links</data>
+            <data name="constraint">assertCartIsEmpty</data>
+            <data name="issue"></data>
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation7">
+            <data name="productsData">groupedProductInjectable::three_simple_products</data>
+            <data name="constraint">assertCartIsEmpty</data>
+            <data name="issue"></data>
+        </variation>
+        <variation name="DeleteProductsFromShoppingCartTestVariation8">
+            <data name="productsData">catalogProductSimple::with_two_custom_option, catalogProductVirtual::50_dollar_product, downloadableProductInjectable::with_two_separately_links, groupedProductInjectable::three_simple_products, configurableProductInjectable::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
+            <data name="constraint">assertCartIsEmpty</data>
+            <data name="issue">Bug: MAGETWO-28350</data>
+        </variation>
+    </testCase>
+</config>
