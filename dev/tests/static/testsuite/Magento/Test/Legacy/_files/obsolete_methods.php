@@ -2027,6 +2027,9 @@ return [
     ['getAllNonNominalItems', 'Magento\Sales\Model\Quote\Address'],
     ['getAllNominalItems', 'Magento\Sales\Model\Quote\Address'],
     ['isNominal', 'Magento\Sales\Model\Order\Item'],
-    ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
-    ['checkQuoteAmount', 'Magento\Sales\Helper\Data']
+    ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbstractItem'],
+    ['checkQuoteAmount', 'Magento\Sales\Helper\Data'],
+    ['getIsConfigurable', 'Magento\Catalog\Api\Data\EavAttributeInterface'],
+    ['getIsConfigurable', 'Magento\Catalog\Model\Category\Attribute'],
+    ['getIsConfigurable', 'Magento\Catalog\Model\Resource\Eav\Attribute'],
 ];
