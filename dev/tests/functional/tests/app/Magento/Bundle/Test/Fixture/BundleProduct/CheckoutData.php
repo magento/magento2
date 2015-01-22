@@ -74,7 +74,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 'cartItem' => [
                     'price' => 756,
                     'qty' => 2,
-                    'subtotal' => 756,
+                    'subtotal' => 1512,
                 ],
             ],
             'forUpdateMiniShoppingCart' => [
@@ -93,7 +93,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 'cartItem' => [
                     'price' => 756,
                     'qty' => 1,
-                    'subtotal' => 756,
+                    'subtotal' => 1512,
                 ],
             ],
             'with_not_required_options' => [

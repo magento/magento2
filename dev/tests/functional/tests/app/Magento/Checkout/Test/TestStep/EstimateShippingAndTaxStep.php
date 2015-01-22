@@ -8,13 +8,13 @@ namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Checkout\Test\Fixture\Cart;
-use Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Customer\Test\Fixture\AddressInjectable;
 use Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart;
 use Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart;
 use Magento\Checkout\Test\Constraint\AssertTaxInShoppingCart;
 use Magento\Checkout\Test\Constraint\AssertShippingInShoppingCart;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class EstimateShippingAndTaxStep
@@ -140,10 +140,22 @@ class EstimateShippingAndTaxStep implements TestStepInterface
         if ($this->shipping['shipping_service'] !== '-') {
             $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
         }
-        $this->fixtureFactory->createByCode('cart', ['items' => ['products' => $this->products]]);
-//            $this->assertSubtotalInShoppingCart->processAssert($this->checkoutCart, $this->cart);
-        $this->assertGrandTotalInShoppingCart->processAssert($this->checkoutCart, $this->cart);
-        $this->assertTaxInShoppingCart->processAssert($this->checkoutCart, $this->cart);
-        $this->assertShippingInShoppingCart->processAssert($this->checkoutCart, $this->cart);
+        /** @var \Magento\Checkout\Test\Fixture\Cart $cart */
+        $cart = $this->fixtureFactory->createByCode(
+            'cart',
+            ['data' => array_merge($this->cart->getData(), ['items' => ['products' => $this->products]])]
+        );
+        if($cart->hasData('tax_amount')) {
+            $this->assertTaxInShoppingCart->processAssert($this->checkoutCart, $cart);
+        }
+        if($cart->hasData('subtotal')) {
+            $this->assertSubtotalInShoppingCart->processAssert($this->checkoutCart, $cart);
+        }
+        if($cart->hasData('grand_total')) {
+            $this->assertGrandTotalInShoppingCart->processAssert($this->checkoutCart, $cart);
+        }
+        if($cart->hasData('shipping_amount')) {
+            $this->assertShippingInShoppingCart->processAssert($this->checkoutCart, $cart);
+        }
     }
 }
