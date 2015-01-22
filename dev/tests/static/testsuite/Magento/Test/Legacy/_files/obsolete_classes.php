@@ -2853,4 +2853,5 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Collector'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
+    ['Magento\Sendfriend\Model\Observer'],
 ];

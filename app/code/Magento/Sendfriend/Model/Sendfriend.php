@@ -520,17 +520,4 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
             $websiteId
         );
     }
-
-    /**
-     * Register self in global register with name send_to_friend_model
-     *
-     * @return $this
-     */
-    public function register()
-    {
-        if (!$this->_registry->registry('send_to_friend_model')) {
-            $this->_registry->register('send_to_friend_model', $this);
-        }
-        return $this;
-    }
 }
