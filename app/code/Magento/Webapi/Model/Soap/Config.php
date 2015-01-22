@@ -96,7 +96,7 @@ class Config
         $this->_classReflector = $classReflector;
         $this->cache = $cache;
         //Initialize cache
-        $this->getSoapServicesConfig();
+        $this->_soapServices = $this->_initServicesMetadata();
     }
 
     /**
