@@ -88,5 +88,16 @@ class CatalogRule extends AbstractRepository
             'simple_action' => 'By Fixed Amount',
             'discount_amount' => '10',
         ];
+
+        $this->_data['catalog_price_rule_all_groups'] = [
+            'name' => 'catalog_price_rule_all_groups_%isolation%',
+            'description' => '-50% of price, Priority = 0',
+            'is_active' => 'Active',
+            'website_ids' => ['Main Website'],
+            'customer_group_ids' => ['NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'],
+            'sort_order' => '0',
+            'simple_action' => 'By Percentage of the Original Price',
+            'discount_amount' => '50',
+        ];
     }
 }
