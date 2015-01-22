@@ -2853,4 +2853,10 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Collector'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
+    ['Magento\Search\Block\SearchData'],
+    ['Magento\Search\Block\Recommendations'],
+    ['Magento\Search\Block\SearchDataInterface'],
+    ['Magento\Search\Block\Suggestions'],
+    ['Magento\Search\Model\SearchDataProvider'],
+    ['Magento\Search\Model\SearchDataProviderInterface'],
 ];
