@@ -23,7 +23,15 @@
 }
 
 //  Rem font size
-.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) {
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, rem)) {
+    font-size: @sizeValue;
+}
+
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, em)) {
+    font-size: @sizeValue;
+}
+
+.font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, px)) {
     .to-rem(@sizeValue);
     font-size: @valueRem;
 }

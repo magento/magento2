@@ -1,0 +1,63 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+ul,
+ol,
+dl {
+    margin-top: 0;
+}
+
+ul,
+ol {
+    nav & {
+        list-style: none none;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.list {
+    padding-left: 0;
+    margin-bottom: 1rem;
+    > li {
+        margin-bottom: .5rem;
+        ul {
+            padding-top: .5rem;
+            padding-left: 1rem;
+        }
+    }
+    &-reset {
+        list-style: none;
+    }
+}
+
+//  Definition list
+.list-definition {
+    margin: 0 0 3rem;
+    padding: 0;
+    > dt {
+        clear: left;
+        float: left;
+    }
+    > dd {
+        margin-bottom: 1em;
+        margin-left: 20rem;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
+    .list-definition {
+        > dt {
+            float: none;
+        }
+        > dd {
+            margin-left: 0;
+        }
+    }
+}

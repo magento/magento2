@@ -1,0 +1,709 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Main Forms File
+//  _____________________________________________
+
+//
+//    Variables
+//--------------------------------------
+
+@field-control__border-color: @color-gray68;
+@field-control__color: @color-very-dark-gray-black;
+@field-control__bg-color: @color-white;
+@field-control-addon__color: @color-gray52;
+
+@field-scope__color: @color-dark-gray;
+@field-divider__color: @color-gray80;
+@field-label__color: @color-very-dark-gray-black;
+@field-date-icon__color: @color-brownie;
+@field-note__color: @color-very-dark-gray-black;
+
+@field-tooltip-icon__bg-color: @color-brownie;
+@field-tooltip-content__bg-color: @color-lazy-sun;
+@field-tooltip-content__border-color: @color-gray68;
+
+@field-error__color: @color-very-dark-gray2;
+@field-error__bg-color: @color-lazy-sun;
+@field-error__border-color: @color-tomato-brick;
+
+//  States
+@field-control__focus__border-color: @color-pure-blue;
+@field-control__disabled__bg-color: @color-lighter-gray;
+@field-label__required__color: @color-phoenix;
+@field-label__disabled__color: @color-gray60;
+
+//
+//    Fieldset
+//--------------------------------------
+
+.fieldset {
+   .form-fieldset();
+}
+fieldset.field [class^='fields-group-'] .field .control {
+    width: auto;
+    margin: 0 0 0 20px;
+}
+.fieldset-wrapper > .fieldset-wrapper-title,
+.fieldset > .legend {
+    position: static;
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    border-bottom: 1px solid #cac3b4;
+    margin: 0 0 18px;
+}
+.fieldset-wrapper > .fieldset-wrapper-title {
+    float: none;
+}
+
+//
+//    Form inline
+//--------------------------------------
+.form-inline {
+    .label,
+    .control {
+        margin: 0;
+        float: left;
+        width: 55%;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .label {
+        width: 45%;
+        text-align: right;
+        padding: 5px 15px 0 0;
+    }
+    .no-label {
+        .control {
+            margin-left: 20%;
+            width: 60%;
+        }
+    }
+    .field-service {
+        box-sizing: border-box;
+        float: left;
+        width: 20%;
+        padding: 7px 0 0 15px;
+        color: #999;
+        font-size: 12px;
+        letter-spacing: .05em;
+        .checkbox {
+            margin: 0;
+            vertical-align: middle;
+        }
+    }
+    .field-service[value-scope]:before {
+        content: attr(value-scope) !important;
+        white-space: nowrap;
+        display: block;
+        margin-bottom: 5px;
+    }
+    .choice {
+        position: relative;
+        z-index: 1;
+        .control {
+            position: absolute;
+            margin-top: 4px;
+            width: auto;
+            left: 45%;
+        }
+        .tooltip {
+            margin-left: 20px;
+            position: relative;
+            z-index: 1;
+            margin-top: 7px;
+        }
+    }
+    .with-tooltip:not(.choice) {
+        padding-top: 20px;
+    }
+}
+
+//
+//    Controls
+//--------------------------------------
+
+.control {
+    > input {
+        width: 100%;
+    }
+    > input[type="button"],
+    > input[type="radio"],
+    > input[type="checkbox"],
+    > input[type="file"]{
+        width: auto;
+    }
+    > input.hasDatepicker {
+        width: 160px;
+    }
+    > table {
+        width: 100%;
+    }
+    .input-file {
+        margin-top: 4px;
+    }
+    .hasDatepicker + img {
+        margin: -3px 0 0 5px;
+        vertical-align: middle;
+    }
+    .control-value {
+        display: inline-block;
+        padding: 6px 0 0;
+        vertical-align: top;
+    }
+    .control-value.special {
+        font-weight: bold;
+    }
+    .nested {
+        padding: 0;
+    }
+    *:first-child {
+        margin-bottom: 0;
+    }
+}
+
+// Field Tooltip
+.field-tooltip {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    .field-choice & {
+        margin-top: 10px
+    }
+    position: relative;
+    &:hover {
+        z-index: 99;
+    }
+    z-index: 1;
+    width:0;
+    overflow: visible;
+    &-action {
+        position: relative;
+        z-index: 2;
+        margin-left: 18px;
+        margin-top: -6px;
+        display: inline-block;
+        cursor: pointer;
+        color: @field-tooltip-icon__bg-color;
+        font-family: @icon-font-admin-name;
+        &:hover {
+            text-decoration: none;
+            color: @field-tooltip-icon__bg-color;
+        }
+        &:before {
+            content: "\e633";
+            font-size: 22px;
+        }
+        span {
+            .visually-hidden();
+        }
+    }
+    .control-text:focus + &-content,
+    &:hover &-content {
+        display: block;
+    }
+    &-content {
+        display: none;
+        position: absolute;
+        z-index: 1;
+        width: 320px;
+        background: @field-tooltip-content__bg-color;
+        padding: 15px 25px;
+        right: -66px;
+        border: 1px solid @field-tooltip-content__border-color;
+        border-radius: 1px;
+        bottom: 42px;
+        @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
+        .css(box-shadow, @_shadow);
+        &:after,
+        &:before {
+            content: "";
+            display: block;
+            .arrow(down,16px,@field-tooltip-content__border-color);
+            position: absolute;
+            right: 20px;
+            top: 100%;
+            z-index: 3;
+        }
+        &:after {
+            border-top-color: @field-tooltip-content__bg-color;
+            margin-top: -1px;
+            z-index: 4;
+        }
+    }
+}
+
+// Form Field
+.form__field {
+    .clearfix();
+
+    position: relative;
+    z-index: 1;
+    &:hover {
+        z-index: 2;
+    }
+    .control & {
+        position: static;
+    }
+    &.field-error {
+        .control [class*="control-"] {
+            border-color: @field-error__border-color;
+            &:before {
+                border-color: @field-error__border-color;
+            }
+        }
+    }
+    .mage-error {
+        border: 1px solid @field-error__border-color;
+        display: block;
+        margin: 2px 0 0;
+        padding: 6px 10px 10px;
+        background: @field-error__bg-color;
+        color: @field-error__color;
+        font-size: 12px;
+        font-weight: 500;
+        box-sizing: border-box;
+        max-width: 380px;
+    }
+    .control-addon {
+        + .mage-error {
+            .no-flexbox.no-flexboxlegacy & {
+                display: inline-block;
+                width: 100%;
+            }
+        }
+    }
+}
+
+.form__field[data-config-scope]:before {
+    content: attr(data-config-scope);
+    display: inline-block;
+    position: absolute;
+    color: @field-scope__color;
+    right: 0;
+    top:6px;
+}
+.control .form__field[data-config-scope]:nth-child(n+2):before {
+    content: "";
+}
+
+.form__field.field-disabled {
+    > .label {
+        color: @field-label__disabled__color;
+    }
+    &.field .control [class*="control-"][disabled] {
+        background-color: @field-control__disabled__bg-color;
+        opacity: .5;
+        color: @field-control__color;
+        border-color: @field-control__border-color;
+    }
+}
+
+// New styling
+.control-fields {
+    .label ~ .control {
+        width: 100%;
+    }
+}
+
+.form__field {
+    border: 0;
+    padding: 0;
+    .note {
+        color: @field-note__color;
+        padding: 0;
+        margin: 10px 0 0;
+        max-width: 380px;
+        &:before {
+            display: none;
+        }
+    }
+    &.form__field {
+        margin-bottom: 0;
+        & + & {
+            margin-top: 15px;
+        }
+        &:not(.choice) ~ .choice {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+        &.choice ~ .choice {
+            margin-top: 9px;
+        }
+        & ~ .choice:last-child {
+            margin-bottom: 8px;
+        }
+    }
+    .fieldset > & {
+        margin-bottom: 30px;
+    }
+
+    .label {
+        color: @field-label__color;
+    }
+    &:not(.choice) > .label {
+        font-size: 14px;
+        font-weight: 600;
+        width: 30%;
+        padding-right: 30px;
+        padding-top: 0;
+        line-height: 33px;
+        white-space: nowrap;
+        &:before {
+            content: ".";
+            visibility: hidden;
+            width: 0;
+            margin-left: -7px;
+            overflow: hidden;
+        }
+        span {
+            white-space: normal;
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 1.2;
+        }
+    }
+    &.required > .label {
+        &:after {
+            content: "";
+            margin-left: 0;
+        }
+        span:after {
+            content: "*";
+            color: @field-label__required__color;
+            display: inline;
+            font-weight: 500;
+            font-size: 16px;
+            margin-top: 2px;
+            position: absolute;
+            z-index: 1;
+            margin-left: 10px;
+        }
+    }
+    .control {
+        &-file {
+            margin-top: 6px;
+        }
+        &-select {
+            line-height: 33px;
+        }
+        &-select:not([multiple]),
+        &-text {
+            height: 33px;
+            max-width: 380px;
+        }
+        &-addon {
+            max-width: 380px;
+        }
+        &-textarea,
+        &-select,
+        &-text {
+            border: 1px solid @field-control__border-color;
+            border-radius: 1px;
+            padding: 0 10px;
+            color: @field-control__color;
+            background-color: @field-control__bg-color;
+            font-weight: 500;
+            font-size: 15px;
+            min-width: 11em;
+            &:focus {
+                outline: 0;
+                border-color: @field-control__focus__border-color;
+                box-shadow: none;
+            }
+        }
+        &-text {
+            line-height: auto;
+        }
+        &-textarea {
+            padding-top: 6px;
+            padding-bottom: 6px;
+            line-height: 1.18em;
+        }
+        &-select[multiple],
+        &-textarea {
+            width: 100%;
+            height: ~"calc(6 * 1.2em + 14px)";
+        }
+        &-value {
+            display: inline-block;
+            padding: 6px 10px;
+        }
+        &-fields {
+            .form__field:nth-child(n+2):not(.choice) {
+                > .label {
+                    .visually-hidden;
+                }
+            }
+        }
+        &-select {
+            padding: 0;
+            option {
+                box-sizing: border-box;
+                padding: 4px 10px;
+                display: block;
+            }
+            optgroup {
+                font-weight: 600;
+                display: block;
+                padding: 4px 10px;
+                line-height: 33px;
+                list-style: inside;
+                font-style: normal;
+            }
+        }
+    }
+    .control-range {
+        & > .form__field:nth-child(2) {
+            &:before {
+                content: "\2014";
+                content: ":";
+                display: inline-block;
+                margin-left: -25px;
+                float: left;
+                width: 20px;
+                line-height: 33px;
+                text-align: center;
+            }
+        }
+    }
+    &.choice {
+        position: relative;
+        z-index: 1;
+        padding-top: 8px;
+        padding-left: 26px;
+        padding-right: 0;
+        .label {
+            font-weight: 500;
+            padding: 0;
+            display: inline;
+            float: none;
+            line-height: 18px;
+        }
+        input {
+            position: absolute;
+            top: 8px;
+            margin-top: 3px!important;
+            &[disabled] + .label {
+                opacity: .5;
+                cursor: not-allowed;
+            }
+        }
+        .control > & {
+            max-width: 380px;
+            &:nth-child(1):nth-last-child(2),
+            &:nth-child(2):nth-last-child(1) {
+                display: inline-block;
+                & + .choice {
+                    margin-left: 41px;
+                    margin-top: 0;
+                }
+                & + .choice:before {
+                    content: "";
+                    position: absolute;
+                    display: inline-block;
+                    height: 20px;
+                    top: 8px;
+                    left: -20px;
+                    width: 1px;
+                    background: @field-divider__color;
+                }
+            }
+        }
+        .label {
+            cursor: pointer;
+        }
+        .label:before {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            border: 1px solid @field-control__border-color;
+            width: 14px;
+            height: 14px;
+            top: 10px;
+            left: 0;
+            .url('images/choice_bkg.png', 'Magento_Ui');
+            border-radius: 2px;
+            background: url("@{url}") no-repeat -100% -100%;
+        }
+        input:focus + .label:before {
+            outline: 0;
+            border-color: @field-control__focus__border-color;
+        }
+        .control {
+            &-radio + .label:before {
+                border-radius: 8px;
+            }
+            &-radio:checked + .label:before {
+                background-position: -26px -1px;
+            }
+            &-checkbox:checked + .label:before {
+                background-position: -1px -1px;
+            }
+
+        }
+        input {
+            opacity: 0;
+        }
+        .fieldset > & {
+            margin-left: 30%;
+        }
+    }
+    .control {
+        &-after,
+        &-before {
+            border: 0;
+            color: @field-control-addon__color;
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 33px;
+            display: inline-block;
+            height: 33px;
+            box-sizing: border-box;
+            padding: 0 3px;
+        }
+        .no-flexbox.no-flexboxlegacy &-before,
+        .no-flexbox.no-flexboxlegacy &-addon {
+            float: left;
+            white-space: nowrap;
+        }
+        &-addon {
+            display: inline-flex;
+            max-width: 380px;
+            width: 100%;
+            flex-flow: row nowrap;
+            position: relative;
+            z-index: 1;
+            > * {
+                position: relative;
+                z-index: 1;
+            }
+            .control-text[disabled][type],
+            .control-select[disabled][type],
+            .control-select,
+            .control-text {
+                background: transparent!important;
+                border: 0;
+                width: auto;
+                vertical-align: top;
+                order: 1;
+                flex: 1;
+                &:focus {
+                    box-shadow: none;
+                    & + label:before {
+                        outline: 0;
+                        border-color: @field-control__focus__border-color;
+                        //box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
+                    }
+                }
+                & + label {
+                    padding-left: 10px;
+                    position: static!important;
+                    z-index: 0;
+                    > * {
+                        vertical-align: top;
+                        position: relative;
+                        z-index: 2;
+                    }
+                }
+                & + label:before {
+                    box-sizing: border-box;
+                    border-radius: 1px;
+                    border: 1px solid @field-control__border-color;
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 0;
+                    background: #fff;
+                }
+                &[disabled] + label:before {
+                    opacity: .5;
+                    background: @field-control__disabled__bg-color;
+                }
+            }
+        }
+        &-after {
+            //float: right;
+            order: 3;
+            &:last-child {
+                padding-right: 10px;
+            }
+        }
+        &-before {
+            order: 0;
+        }
+
+        &-some {
+            display: flex;
+        }
+
+    }
+    [class*="control-grouped"] {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+        box-sizing: border-box;
+        & > .form__field {
+            display: table-cell;
+            width: 50%;
+            vertical-align: top;
+            > .control {
+                width: 100%;
+                float: none;
+            }
+            &:nth-child(n+2) {
+                padding-left: 20px;
+                &:not(.choice) .label {
+                    .visually-hidden();
+                }
+            }
+        }
+    }
+    [required] {
+        box-shadow: none;
+    }
+}
+
+fieldset.form__field {
+    position: relative;
+    [class*="control-grouped"],
+    .control-fields {
+        & > .form__field:first-child {
+            & > .label {
+                position: absolute;
+                left: 0;
+                top: 0;
+                opacity: 0;
+                cursor: pointer;
+                width: 30%;
+            }
+        }
+    }
+}
+
+.control-text + .ui-datepicker-trigger {
+    img {
+        display: none;
+    }
+    .button-reset();
+    .icon-font(
+        @icon-calendar,
+        @_icon-font-size: 38px,
+        @_icon-font-line-height: 33px,
+        @_icon-font-text-hide: true,
+        @_icon-font-position: after,
+        @_icon-font-color: @field-date-icon__color
+    );
+    margin-left: -40px;
+    display: inline-block;
+}

@@ -1,0 +1,29 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+@import 'utilities/_vendor-prefixes';
+@import 'utilities/_grid-framework';
+@import 'utilities/_grid';
+@import 'utilities/_animations';
+@import 'utilities/_spinner';
+
+//  Clip & hide element
+.clip() {
+    clip: rect(0, 0, 0, 0);
+    position: absolute;
+}
+
+//
+//  Effects
+//  ---------------------------------------------
+
+.effect-hover-opacity (
+    @opacity: .85,
+    @transition: opacity .2s linear) {
+    transition: @transition;
+    &:hover {
+        opacity: @opacity;
+    }
+}

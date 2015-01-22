@@ -1,0 +1,94 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+.font-face(
+    @family-name: 'Open Sans',
+    @font-path: '@{baseDir}fonts/opensans/light/opensans-300',
+    @font-weight: @font-weight-light,
+    @font-style: normal
+);
+
+.font-face(
+    @family-name: 'Open Sans',
+    @font-path: '@{baseDir}fonts/opensans/regular/opensans-400',
+    @font-weight: @font-weight-regular,
+    @font-style: normal
+);
+
+.font-face(
+    @family-name: 'Open Sans',
+    @font-path: '@{baseDir}fonts/opensans/semibold/opensans-600',
+    @font-weight: @font-weight-semibold,
+    @font-style: normal
+);
+
+.font-face(
+    @family-name: 'Open Sans',
+    @font-path: '@{baseDir}fonts/opensans/bold/opensans-700',
+    @font-weight: @font-weight-bold,
+    @font-style: normal
+);
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    .typography(
+        @_font-size: @font-size-base,
+        @_color: @color-base,
+        @_font-family: @font-family-base,
+        @_font-weight: @font-weight-base,
+        @_line-height: @line-height-base,
+        @_font-style: @font-style-base
+    );
+}
+
+//
+//  Headings
+//  ---------------------------------------------
+
+h1 {
+    color: @color-dark-brownie;
+    font-size: 2.8rem;
+    font-weight: @font-weight-regular;
+    margin: 0 0 2rem;
+}
+
+h2 {
+    color: @color-dark-brownie;
+    font-size: 2rem;
+    font-weight: @font-weight-regular;
+    margin: 0 0 2rem;
+}
+
+h3 {
+    color: @color-dark-brownie;
+    font-size: 1.7rem;
+    font-weight: @font-weight-semibold;
+    margin: 0 0 2rem;
+}
+
+h4,
+h5,
+h6 {
+    font-weight: @font-weight-semibold;
+    margin-top: 0;
+}
+
+//  Text
+p {
+    margin: 0 0 1em;
+}
+
+//  Links
+a {
+    color: @color-link;
+    text-decoration: none;
+    &:hover {
+        color: @color-link-hover;
+        text-decoration: underline;
+    }
+}

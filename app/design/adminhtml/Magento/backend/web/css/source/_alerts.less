@@ -1,0 +1,214 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+//  Colors
+@alert__bg-color: @color-lazy-sunny;
+@alert__color: @color-gray20;
+
+//  Sizes
+@alert__font-size: 1.9rem;
+
+//  States
+@alert-icon__info__color: @color-pure-blue;
+@alert-icon__error__color: @color-phoenix;
+@alert-icon__success__color: @color-green-apple;
+
+//
+//  Messages (Global)
+//  ---------------------------------------------
+
+.messages {
+    margin: 20px 0;
+    > .message:last-child {
+        margin-bottom: 0;
+    }
+    &.license {  // license message in view\adminhtml\checker\reminder.phtml
+        font-size: 20px;
+        line-height: 1.2;
+        margin: 20px auto;
+        max-width: 1300px;
+        min-width: 960px;
+        padding: 0 20px;
+    }
+}
+
+.message {
+    position: relative;
+    background: @alert__bg-color;
+    color: @alert__color;
+    padding: 1.8rem 4rem 1.8rem 1.9rem;
+    margin-bottom: 3.5rem;
+    text-shadow: none;
+
+    &:before {
+        position: absolute;
+        left: 1.9rem;
+        top: 50%;
+        margin-top: -1.3rem;
+        background: none;
+        text-shadow: none;
+        width: auto;
+        height: auto;
+        border: 0;
+        font-family: @icon-font-admin-name;
+        font-size: @alert__font-size;
+        font-style: normal;
+        font-weight: normal;
+        line-height: inherit;
+        speak: none;
+        -webkit-font-smoothing: antialiased;
+
+    }
+    &-info,
+    &.info {
+        padding-left: 5rem;
+        &:before {
+            content: "\e61a";
+            color: @alert-icon__info__color;
+        }
+    }
+    &-error,
+    &.error {
+        padding-left: 5rem;
+        &:before {
+            content: '\e623';
+            color: @alert-icon__error__color;
+        }
+    }
+    &.success {
+        padding-left: 5rem;
+        &:before {
+            content: '\e62d';
+            color: @alert-icon__success__color;
+        }
+    }
+}
+
+.messages-inbox {
+    float: right;
+}
+
+.messages-inbox .critical {
+    color: @color-phoenix-down;
+}
+
+//
+//  System Messages
+//  ---------------------------------------------
+
+.message-system {
+    padding: 0;
+    &:before {
+        display: none;
+    }
+    .message-inner {
+        position: relative;
+        min-width: 960px;
+        max-width: 1300px;
+        margin: 0 auto;
+        &:before {
+            background: none;
+            border: 0;
+            content: '\e006'; /* notification icon */
+            color: #6e685e;
+            font-family: 'MUI-Icons';
+            font-style: normal;
+            font-weight: normal;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            height: auto;
+            left: 8px;
+            margin-top: -10px;
+            position: absolute;
+            text-shadow: none;
+            top: 50%;
+            width: auto;
+            font-size: 16px;
+        }
+    }
+    .message-content {
+        padding: 10px 26px 10px 32px;
+    }
+}
+
+//
+//  No-javaScript-Enabled message
+//  ---------------------------------------------
+
+.message-noscript {
+    background: #ff9;
+    padding: 0;
+    border: 0;
+    box-shadow: 0 1px 2px #46433d;
+    z-index: 994;
+    &:before {
+        content: '';
+    }
+    .message-content {
+        margin: 0 auto;
+        max-width: 1300px;
+        min-width: 960px;
+        padding: 3px 0;
+        position: relative;
+        text-align: center;
+        &:before {
+            position: relative;
+            background: none;
+            text-shadow: none;
+            width: auto;
+            height: auto;
+            vertical-align: middle;
+            border: 0;
+            font-family: 'MUI-Icons';
+            font-style: normal;
+            font-weight: normal;
+            font-size: 32px;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            content: '\e006'; /* notification icon */
+            color: #6e685e;
+        }
+    }
+}
+
+.message-demo-mode {
+    background: #d75f07;
+    border: 0;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    box-shadow: 0 1px 2px #46433d;
+    z-index: 993;
+    &:before {
+        content: '';
+    }
+    .message-content {
+        margin: 0 auto;
+        max-width: 1300px;
+        min-width: 960px;
+        position: relative;
+        text-align: center;
+        &:before {
+            position: relative;
+            background: none;
+            text-shadow: none;
+            width: auto;
+            height: auto;
+            vertical-align: middle;
+            border: 0;
+            font-family: 'MUI-Icons';
+            font-style: normal;
+            speak: none;
+            font-weight: normal;
+            -webkit-font-smoothing: antialiased;
+            font-size: 16px;
+            content: '\e006'; /* notification icon */
+        }
+    }
+}
