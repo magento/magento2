@@ -46,16 +46,34 @@ class BundleSaveOptions
 
         /* @var \Magento\Framework\Api\AttributeValue $bundleProductOptionsAttrValue */
         $bundleProductOptionsAttrValue = $product->getCustomAttribute('bundle_product_options');
+        //if bundle_product_options does not exist, skip the bundle option processing
         if (is_null($bundleProductOptionsAttrValue) || !is_array($bundleProductOptionsAttrValue->getValue())) {
-            $bundleProductOptions = [];
+            return $result;
         } else {
             $bundleProductOptions = $bundleProductOptionsAttrValue->getValue();
         }
 
-        if (is_array($bundleProductOptions)) {
-            foreach ($bundleProductOptions as $option) {
-                $this->optionRepository->save($result, $option);
+        /** @var \Magento\Bundle\Api\Data\OptionInterface[] $bundleProductOptions */
+        $existingOptions = $this->optionRepository->getList($product->getSku());
+        $existingOptionsMap = [];
+        foreach ($existingOptions as $existingOption) {
+            $existingOptionsMap[$existingOption->getOptionId()] = $existingOption;
+        }
+        $updatedOptionIds = [];
+        foreach ($bundleProductOptions as $bundleOption) {
+            $optionId = $bundleOption->getOptionId();
+            if ($optionId) {
+                $updatedOptionIds[] = $optionId;
             }
+        }
+        $optionIdsToDelete = array_diff(array_keys($existingOptionsMap), $updatedOptionIds);
+        //Handle new and existing options
+        foreach ($bundleProductOptions as $option) {
+            $this->optionRepository->save($result, $option);
+        }
+        //Delete options that are not in the list
+        foreach ($optionIdsToDelete as $optionId) {
+            $this->optionRepository->delete($existingOptionsMap[$optionId]);
         }
         return $result;
     }

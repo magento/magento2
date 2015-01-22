@@ -64,9 +64,9 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     /**
      * {@inheritdoc}
      */
-    public function getChildren($productId)
+    public function getChildren($productSku, $optionId = null)
     {
-        $product = $this->productRepository->get($productId);
+        $product = $this->productRepository->get($productSku);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new \Magento\Webapi\Exception(
                 'Only implemented for bundle product',
@@ -76,6 +76,9 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
         $childrenList = [];
         foreach ($this->getOptions($product) as $option) {
+            if (!is_null($optionId) && $option->getOptionId() != $optionId) {
+                continue;
+            }
             /** @var \Magento\Catalog\Model\Product $selection */
             foreach ($option->getSelections() as $selection) {
                 $childrenList[] = $this->buildLink($selection, $product);
@@ -97,6 +100,97 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     /**
      * {@inheritdoc}
      */
+    public function saveChild(
+        \Magento\Catalog\Api\Data\ProductInterface $product,
+        \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
+    ) {
+        if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+            throw new InputException('Product with specified sku: "%1" is not a bundle product', [$product->getSku()]);
+        }
+
+        /** @var \Magento\Catalog\Model\Product $linkProductModel */
+        $linkProductModel = $this->productRepository->get($linkedProduct->getSku());
+        if ($linkProductModel->isComposite()) {
+            throw new InputException('Bundle product could not contain another composite product');
+        }
+
+        if (!$linkedProduct->getId()) {
+            throw new InputException('Id field of product link is required');
+        }
+
+        /** @var \Magento\Bundle\Model\Selection $selectionModel */
+        $selectionModel = $this->bundleSelection->create();
+        $selectionModel->load($linkedProduct->getId());
+        if (!$selectionModel->getId()) {
+            throw new InputException('Can not find product link with id "%1"', [$linkedProduct->getId()]);
+        }
+
+        $selectionModel = $this->mapProductLinkToSelectionModel(
+            $selectionModel,
+            $linkedProduct,
+            $linkProductModel->getId(),
+            $product->getId()
+        );
+
+        try {
+            $selectionModel->save();
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException('Could not save child: "%1"', [$e->getMessage()], $e);
+        }
+
+        return $selectionModel->getId();
+    }
+
+    /**
+     * @param \Magento\Bundle\Model\Selection $selectionModel
+     * @param \Magento\Bundle\Api\Data\LinkInterface $productLink
+     * @param string $linkedProductId
+     * @param string $parentProductId
+     * @return \Magento\Bundle\Model\Selection
+     */
+    protected function mapProductLinkToSelectionModel(
+        \Magento\Bundle\Model\Selection $selectionModel,
+        \Magento\Bundle\Api\Data\LinkInterface $productLink,
+        $linkedProductId = null,
+        $parentProductId = null
+    ) {
+        if (!is_null($linkedProductId)) {
+            $selectionModel->setProductId($linkedProductId);
+        }
+        if (!is_null($parentProductId)) {
+            $selectionModel->setParentProductId($parentProductId);
+        }
+        if (!is_null($productLink->getId())) {
+            $selectionModel->setSelectionId($productLink->getId());
+        }
+        if (!is_null($productLink->getOptionId())) {
+            $selectionModel->setOptionId($productLink->getOptionId());
+        }
+        if (!is_null($productLink->getPosition())) {
+            $selectionModel->setPosition($productLink->getPosition());
+        }
+        if (!is_null($productLink->getQty())) {
+            $selectionModel->setSelectionQty($productLink->getQty());
+        }
+        if (!is_null($productLink->getPriceType())) {
+            $selectionModel->setSelectionPriceType($productLink->getPriceType());
+        }
+        if (!is_null($productLink->getPrice())) {
+            $selectionModel->setSelectionPriceValue($productLink->getPrice());
+        }
+        if (!is_null($productLink->getCanChangeQuantity())) {
+            $selectionModel->setSelectionCanChangeQty($productLink->getCanChangeQuantity());
+        }
+        if (!is_null($productLink->getIsDefault())) {
+            $selectionModel->setIsDefault($productLink->getIsDefault());
+        }
+
+        return $selectionModel;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addChild(
         \Magento\Catalog\Api\Data\ProductInterface $product,
         $optionId,
@@ -106,18 +200,15 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             throw new InputException('Product with specified sku: "%1" is not a bundle product', [$product->getSku()]);
         }
 
-        $options = $this->optionCollection->create();
-        $options->setProductIdFilter($product->getId())->joinValues($this->storeManager->getStore()->getId());
-        $isNewOption = true;
-        /** @var \Magento\Bundle\Model\Option $option */
-        foreach ($options as $option) {
-            if ($option->getOptionId() == $optionId) {
-                $isNewOption = false;
-                break;
-            }
+        if ($linkedProduct->getId()) {
+            throw new InputException('Id field should not be set for new product link');
         }
 
-        if ($isNewOption) {
+        $options = $this->optionCollection->create();
+        $options->setIdFilter($optionId);
+        $existingOption = $options->getFirstItem();
+
+        if (!$existingOption->getId()) {
             throw new InputException(
                 'Product with specified sku: "%1" does not contain option: "%2"',
                 [$product->getSku(), $optionId]
@@ -145,16 +236,13 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         }
 
         $selectionModel = $this->bundleSelection->create();
-        $selectionModel->setOptionId($optionId)
-            ->setPosition($linkedProduct->getPosition())
-            ->setSelectionQty($linkedProduct->getQty())
-            ->setSelectionPriceType($linkedProduct->getPriceType())
-            ->setSelectionPriceValue($linkedProduct->getPrice())
-            ->setSelectionCanChangeQty($linkedProduct->getCanChangeQuantity())
-            ->setProductId($linkProductModel->getId())
-            ->setParentProductId($product->getId())
-            ->setIsDefault($linkedProduct->getIsDefault())
-            ->setWebsiteId($this->storeManager->getStore()->getWebsiteId());
+        $selectionModel = $this->mapProductLinkToSelectionModel(
+            $selectionModel,
+            $linkedProduct,
+            $linkProductModel->getId(),
+            $product->getId()
+        );
+        $selectionModel->setOptionId($optionId);
 
         try {
             $selectionModel->save();
@@ -222,6 +310,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         }
 
         return $this->linkBuilder->populateWithArray($selection->getData())
+            ->setId($selection->getSelectionId())
             ->setIsDefault($selection->getIsDefault())
             ->setQty($selection->getSelectionQty())
             ->setIsDefined($selection->getSelectionCanChangeQty())
@@ -232,7 +321,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return \Magento\Bundle\Api\Data\OptionTypeInterface[]
+     * @return \Magento\Bundle\Api\Data\OptionInterface[]
      */
     private function getOptions(\Magento\Catalog\Api\Data\ProductInterface $product)
     {

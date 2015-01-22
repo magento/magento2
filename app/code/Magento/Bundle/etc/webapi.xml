@@ -13,7 +13,7 @@
             <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
-    <route url="/V1/bundle-products/:productId/children" method="GET">
+    <route url="/V1/bundle-products/:productSku/children" method="GET">
         <service class="Magento\Bundle\Api\ProductLinkManagementInterface" method="getChildren"/>
         <resources>
             <resource ref="Magento_Catalog::products"/>

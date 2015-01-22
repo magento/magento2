@@ -46,6 +46,7 @@ class LinksList
             $selectionPrice = $product->getPriceType() ? $selection->getSelectionPriceValue() : null;
 
             $productLinks[] = $this->linkBuilder->populateWithArray($selection->getData())
+                ->setId($selection->getSelectionId())
                 ->setIsDefault($selection->getIsDefault())
                 ->setQty($selection->getSelectionQty())
                 ->setIsDefined($selection->getSelectionCanChangeQty())

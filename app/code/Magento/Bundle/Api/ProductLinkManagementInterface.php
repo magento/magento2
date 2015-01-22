@@ -11,12 +11,13 @@ interface ProductLinkManagementInterface
     /**
      * Get all children for Bundle product
      *
-     * @param string $productId
+     * @param string $productSku
+     * @param int|null $optionId
      * @return \Magento\Bundle\Api\Data\LinkInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Webapi\Exception
      */
-    public function getChildren($productId);
+    public function getChildren($productSku, $optionId = null);
 
     /**
      * Add child product to specified Bundle option by product sku
@@ -30,6 +31,19 @@ interface ProductLinkManagementInterface
      * @return int
      */
     public function addChildByProductSku($productSku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct);
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param Data\LinkInterface $linkedProduct
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @return int
+     */
+    public function saveChild(
+        \Magento\Catalog\Api\Data\ProductInterface $product,
+        \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
+    );
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product

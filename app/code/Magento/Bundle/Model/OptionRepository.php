@@ -153,10 +153,12 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $option->setStoreId($this->storeManager->getStore()->getId());
         $option->setParentId($product->getId());
 
-        if (!$option->getOptionId()) {
+        $optionId = $option->getOptionId();
+        if (!$optionId) {
             $option->setDefaultTitle($option->getTitle());
             $linksToAdd = is_array($option->getProductLinks()) ? $option->getProductLinks() : [];
         } else {
+            $existingLinks = $this->linkManagement->getChildren($product->getSku(), $optionId);
             $optionCollection = $this->type->getOptionsCollection($product);
             $optionCollection->setIdFilter($option->getOptionId());
 
@@ -169,19 +171,31 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
             $option->setData(array_merge($existingOption->getData(), $option->getData()));
 
-            /** @var \Magento\Bundle\Api\Data\LinkInterface[] $existingLinks */
-            $existingLinks = is_array($existingOption->getProductLinks()) ? $existingOption->getProductLinks() : [];
-
-            /** @var \Magento\Bundle\Api\Data\LinkInterface[] $newProductLinks */
-            $newProductLinks = is_array($option->getProductLinks()) ? $option->getProductLinks() : [];
-
-            /** @var \Magento\Bundle\Api\Data\LinkInterface[] $linksToDelete */
-            $linksToDelete = array_udiff($existingLinks, $newProductLinks, [$this, 'compareLinks']);
-            foreach ($linksToDelete as $link) {
-                $this->linkManagement->removeChild($product->getSku(), $option->getOptionId(), $link->getSku());
+            $linksToAdd = [];
+            $linksToUpdate = [];
+            $linksToDelete = [];
+            if (is_array($option->getProductLinks())) {
+                $productLinks = $option->getProductLinks();
+                foreach ($productLinks as $productLink) {
+                    if (!$productLink->getId()) {
+                        $linksToAdd[] = $productLink;
+                    } else {
+                        $linksToUpdate[] = $productLink;
+                    }
+                }
+                /** @var \Magento\Bundle\Api\Data\LinkInterface[] $linksToDelete */
+                $linksToDelete = array_udiff($existingLinks, $productLinks, [$this, 'compareLinks']);
             }
-            /** @var \Magento\Bundle\Api\Data\LinkInterface[] $linksToAdd */
-            $linksToAdd = array_udiff($newProductLinks, $existingLinks, [$this, 'compareLinks']);
+            foreach ($linksToUpdate as $linkedProduct) {
+                $this->linkManagement->saveChild($product, $linkedProduct);
+            }
+            foreach ($linksToDelete as $linkedProduct) {
+                $this->linkManagement->removeChild(
+                    $product->getSku(),
+                    $option->getOptionId(),
+                    $linkedProduct->getSku()
+                );
+            }
         }
 
         try {
@@ -223,7 +237,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Bundle\Api\Data\LinkInterface $firstLink,
         \Magento\Bundle\Api\Data\LinkInterface $secondLink
     ) {
-        if ($firstLink->getSku() == $secondLink->getSku()) {
+        if ($firstLink->getId() == $secondLink->getId()) {
             return 0;
         } else {
             return 1;

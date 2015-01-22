@@ -44,9 +44,13 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
         $this->assertArrayHasKey('option_id', $result);
         $expected['product_links'][0]['option_id'] = $result['option_id'];
         unset($result['option_id']);
+        $this->assertNotNull($result['product_links'][0]['id']);
+        unset($result['product_links'][0]['id']);
 
         ksort($expected);
         ksort($result);
+        ksort($expected['product_links'][0]);
+        ksort($result['product_links'][0]);
         $this->assertEquals($expected, $result);
     }
 
@@ -82,9 +86,13 @@ class ProductOptionRepositoryTest extends \Magento\TestFramework\TestCase\Webapi
         $this->assertArrayHasKey('option_id', $result[0]);
         $expected[0]['product_links'][0]['option_id'] = $result[0]['option_id'];
         unset($result[0]['option_id']);
+        $this->assertNotNull($result[0]['product_links'][0]['id']);
+        unset($result[0]['product_links'][0]['id']);
 
         ksort($expected[0]);
         ksort($result[0]);
+        ksort($expected[0]['product_links'][0]);
+        ksort($result[0]['product_links'][0]);
         $this->assertEquals($expected, $result);
     }
 

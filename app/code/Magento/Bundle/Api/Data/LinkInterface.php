@@ -10,6 +10,13 @@ namespace Magento\Bundle\Api\Data;
 interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
+     * Get the identifier
+     *
+     * @return string|null
+     */
+    public function getId();
+
+    /**
      * Get linked product sku
      *
      * @return string|null

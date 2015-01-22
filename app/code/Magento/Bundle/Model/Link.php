@@ -12,6 +12,14 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      */
+    public function getId()
+    {
+        return $this->getData('id');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSku()
     {
         return $this->getData('sku');

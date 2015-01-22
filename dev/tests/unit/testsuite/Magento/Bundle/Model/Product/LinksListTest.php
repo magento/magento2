@@ -45,6 +45,7 @@ class LinksListTest extends \PHPUnit_Framework_TestCase
                 'setIsDefined',
                 'setPrice',
                 'setPriceType',
+                'setId',
                 'create',
                 '__wakeup'
             ],
@@ -61,6 +62,7 @@ class LinksListTest extends \PHPUnit_Framework_TestCase
                 'getIsDefault',
                 'getSelectionQty',
                 'getSelectionCanChangeQty',
+                'getSelectionId',
                 '__wakeup'
             ],
             [],
@@ -86,6 +88,7 @@ class LinksListTest extends \PHPUnit_Framework_TestCase
     public function testLinksList()
     {
         $optionId = 665;
+        $selectionId = 1345;
         $this->productTypeMock->expects($this->once())
             ->method('getSelectionsCollection')
             ->with([$optionId], $this->productMock)
@@ -96,6 +99,7 @@ class LinksListTest extends \PHPUnit_Framework_TestCase
             ->willReturn('selection_price_type');
         $this->selectionMock->expects($this->once())->method('getSelectionPriceValue')->willReturn(12);
         $this->selectionMock->expects($this->once())->method('getData')->willReturn(['some data']);
+        $this->selectionMock->expects($this->once())->method('getSelectionId')->willReturn($selectionId);
         $this->selectionMock->expects($this->once())->method('getIsDefault')->willReturn(true);
         $this->selectionMock->expects($this->once())->method('getSelectionQty')->willReturn(66);
         $this->selectionMock->expects($this->once())->method('getSelectionCanChangeQty')->willReturn(22);
@@ -106,6 +110,7 @@ class LinksListTest extends \PHPUnit_Framework_TestCase
         $this->linkBuilderMock->expects($this->once())->method('setQty')->with(66)->willReturnSelf();
         $this->linkBuilderMock->expects($this->once())->method('setIsDefined')->with(22)->willReturnSelf();
         $this->linkBuilderMock->expects($this->once())->method('setPrice')->with(12)->willReturnSelf();
+        $this->linkBuilderMock->expects($this->once())->method('setId')->with($selectionId)->willReturnSelf();
         $this->linkBuilderMock->expects($this->once())
             ->method('setPriceType')->with('selection_price_type')->willReturnSelf();
         $this->linkBuilderMock->expects($this->once())->method('create')->willReturnSelf();
