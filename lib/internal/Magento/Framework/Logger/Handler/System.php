@@ -27,12 +27,12 @@ class System extends Base
     protected $exceptionHandler;
 
     /**
-     * @param Exception $exceptionHandler
      * @param DriverInterface $filesystem
+     * @param Exception $exceptionHandler
      */
     public function __construct(
-        Exception $exceptionHandler,
-        DriverInterface $filesystem
+        DriverInterface $filesystem,
+        Exception $exceptionHandler
     ) {
         $this->exceptionHandler = $exceptionHandler;
         parent::__construct($filesystem);
