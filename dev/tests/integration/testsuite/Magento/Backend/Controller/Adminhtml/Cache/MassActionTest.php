@@ -31,6 +31,7 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('Test was skipped by MAGETWO-32880');
         }
+        parent::setUp();
     }
 
     protected function tearDown()
