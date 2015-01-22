@@ -30,13 +30,13 @@ class WriteFactory
      * Create a readable directory
      *
      * @param string $path
-     * @param string $protocol
+     * @param string $driverCode
      * @param int $createPermissions
      * @return \Magento\Framework\Filesystem\Directory\Write
      */
-    public function create($path, $protocol = DriverPool::FILE, $createPermissions = null)
+    public function create($path, $driverCode = DriverPool::FILE, $createPermissions = null)
     {
-        $driver = $this->driverPool->getDriver($protocol);
+        $driver = $this->driverPool->getDriver($driverCode);
         $factory = new \Magento\Framework\Filesystem\File\WriteFactory($this->driverPool);
         return new Write($factory, $driver, $path, $createPermissions);
     }
