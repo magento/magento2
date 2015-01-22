@@ -144,6 +144,9 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             }
         }
 
+        // Enable interlace
+        imageinterlace($this->_imageHandler, true);
+
         // Set image quality value
         switch ($this->_fileType) {
             case IMAGETYPE_PNG:

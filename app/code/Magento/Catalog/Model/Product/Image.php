@@ -32,7 +32,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @var int
      */
-    protected $_quality = 85;
+    protected $_quality = 80;
 
     /**
      * @var bool
