@@ -5,10 +5,10 @@
  */
 namespace Magento\OfflinePayments\Model;
 
-class BanktransferTest extends \PHPUnit_Framework_TestCase
+class PurchaseorderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\OfflinePayments\Model\Banktransfer
+     * @var \Magento\OfflinePayments\Model\Purchaseorder
      */
     protected $_object;
 
@@ -22,9 +22,15 @@ class BanktransferTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
+        $this->_scopeConfig = $this->getMock(
+            'Magento\Framework\App\Config\ScopeConfigInterface',
+            ['getValue', 'isSetFlag'],
+            [],
+            '',
+            false
+        );
         $this->_object = $objectManagerHelper->getObject(
-            'Magento\OfflinePayments\Model\Banktransfer',
+            'Magento\OfflinePayments\Model\Purchaseorder',
             [
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,
@@ -33,8 +39,14 @@ class BanktransferTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetInfoBlockType()
+    public function testAssignData()
     {
-        $this->assertEquals('Magento\Payment\Block\Info\Instructions', $this->_object->getInfoBlockType());
+        $data = new \Magento\Framework\Object([
+            'po_number' => '12345'
+        ]);
+
+        $instance = $this->getMock('Magento\Payment\Model\Info', [], [], '', false);
+        $this->_object->setData('info_instance', $instance);
+        $this->_object->assignData($data);
     }
 }
