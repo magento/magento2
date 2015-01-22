@@ -21,6 +21,11 @@ class Config extends \Magento\Framework\Object
     const WYSIWYG_STATUS_CONFIG_PATH = 'cms/wysiwyg/enabled';
 
     /**
+     *
+     */
+    const WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID = 'Magento_Cms::images/wysiwyg_skin_image.png';
+
+    /**
      * Wysiwyg status hidden
      */
     const WYSIWYG_HIDDEN = 'hidden';
@@ -80,6 +85,11 @@ class Config extends \Magento\Framework\Object
     protected $_backendUrl;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\AuthorizationInterface $authorization
@@ -87,6 +97,7 @@ class Config extends \Magento\Framework\Object
      * @param \Magento\Core\Model\Variable\Config $variableConfig
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $windowSize
      * @param array $data
      */
@@ -98,6 +109,7 @@ class Config extends \Magento\Framework\Object
         \Magento\Core\Model\Variable\Config $variableConfig,
         \Magento\Widget\Model\Widget\Config $widgetConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $windowSize = [],
         array $data = []
     ) {
@@ -109,6 +121,7 @@ class Config extends \Magento\Framework\Object
         $this->_variableConfig = $variableConfig;
         $this->_widgetConfig = $widgetConfig;
         $this->_windowSize = $windowSize;
+        $this->_storeManager = $storeManager;
         parent::__construct($data);
     }
 
@@ -184,13 +197,15 @@ class Config extends \Magento\Framework\Object
     }
 
     /**
-     * Return URL for skin images placeholder
+     * Return path for skin images placeholder
      *
      * @return string
      */
-    public function getSkinImagePlaceholderUrl()
+    public function getSkinImagePlaceholderPath()
     {
-        return $this->_assetRepo->getUrl('Magento_Cms::images/wysiwyg_skin_image.png');
+        $staticPath = $this->_storeManager->getStore()->getBaseStaticDir();
+        $placeholderPath = $this->_assetRepo->createAsset(self::WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID)->getPath();
+        return $staticPath . '/' . $placeholderPath;
     }
 
     /**

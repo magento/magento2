@@ -19,14 +19,14 @@
     </testsuites>
 
     <listeners>
-        <listener class="Mtf\System\Browser\Listener" />
-        <listener class="Mtf\System\Isolation\Listener">
+        <listener class="Magento\Mtf\System\Browser\Listener" />
+        <listener class="Magento\Mtf\System\Isolation\Listener">
             <arguments>
-                <object class="Mtf\System\Isolation\Driver\Base" />
+                <object class="Magento\Mtf\System\Isolation\Driver\Base" />
             </arguments>
         </listener>
-        <listener class="Mtf\System\Event\StateListener" />
-        <listener class="Mtf\System\JUnit"/>
+        <listener class="Magento\Mtf\System\Event\StateListener" />
+        <listener class="Magento\Mtf\System\JUnit"/>
     </listeners>
 
     <php>
@@ -36,7 +36,9 @@
         <env name="server_config_path" value="config/server.yml.dist" />
         <env name="isolation_config_path" value="config/isolation.yml.dist" />
         <env name="handlers_config_path" value="config/handler.yml.dist" />
-        <env name="configuration:Mtf/TestSuite/InjectableTests" value="basic" />
+        <env name="install_config_path" value="config/install_data.yml.dist" />
+        <env name="testsuite_rule" value="basic" />
+        <env name="testsuite_rule_path" value="Mtf/TestSuite/InjectableTests" />
         <env name="log_directory" value="var/log" />
         <env name="events_preset" value="base" />
         <env name="module_whitelist" value="Magento_Install" />

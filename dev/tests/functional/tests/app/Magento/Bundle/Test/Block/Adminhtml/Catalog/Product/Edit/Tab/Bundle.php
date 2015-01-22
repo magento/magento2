@@ -7,8 +7,9 @@
 namespace Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Element;
 
 /**
  * Class Bundle
@@ -55,10 +56,10 @@ class Bundle extends Tab
      * Fill bundle options
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         if (!isset($fields['bundle_selections'])) {
             return $this;
@@ -80,10 +81,10 @@ class Bundle extends Tab
      * Get data to fields on downloadable tab
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, Element $element = null)
+    public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
         $newFields = [];
         if (!isset($fields['bundle_selections'])) {

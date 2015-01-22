@@ -6,9 +6,9 @@
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab;
 
+use Magento\Mtf\Factory\Factory;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element;
-use Mtf\Factory\Factory;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Conditions
@@ -28,10 +28,10 @@ class Conditions extends Tab
      * Fill condition options
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return void
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
 

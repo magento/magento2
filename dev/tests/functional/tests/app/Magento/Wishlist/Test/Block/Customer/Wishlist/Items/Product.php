@@ -6,8 +6,8 @@
 
 namespace Magento\Wishlist\Test\Block\Customer\Wishlist\Items;
 
-use Mtf\Block\Form;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Product
@@ -114,8 +114,8 @@ class Product extends Form
         if ($viewDetails->isVisible()) {
             $this->_rootElement->find($this->footer, Locator::SELECTOR_XPATH)->click();
             $viewDetails->click();
-            $labels = $this->_rootElement->find($this->optionLabel)->getElements();
-            $values = $this->_rootElement->find($this->optionValue)->getElements();
+            $labels = $this->_rootElement->getElements($this->optionLabel);
+            $values = $this->_rootElement->getElements($this->optionValue);
             $data = [];
             foreach ($labels as $key => $label) {
                 if (!$label->isVisible()) {

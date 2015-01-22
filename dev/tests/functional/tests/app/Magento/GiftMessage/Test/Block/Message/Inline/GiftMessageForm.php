@@ -6,7 +6,7 @@
 
 namespace Magento\GiftMessage\Test\Block\Message\Inline;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class GiftMessageForm

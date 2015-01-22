@@ -9,8 +9,8 @@ namespace Magento\Bundle\Test\Constraint;
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertBundlePriceType
@@ -37,7 +37,7 @@ class AssertBundlePriceType extends AbstractConstraint
      * @param CatalogProductView $catalogProductView
      * @param BundleProduct $product
      * @param CheckoutCart $checkoutCartView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param BundleProduct $originalProduct [optional]
      * @return void
      */
@@ -45,7 +45,7 @@ class AssertBundlePriceType extends AbstractConstraint
         CatalogProductView $catalogProductView,
         BundleProduct $product,
         CheckoutCart $checkoutCartView,
-        Browser $browser,
+        BrowserInterface $browser,
         BundleProduct $originalProduct = null
     ) {
         $checkoutCartView->open()->getCartBlock()->clearShoppingCart();

@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\TestCase;
 
-use Mtf\Factory\Factory;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Class EditConfigurableTest
@@ -14,6 +14,10 @@ use Mtf\Factory\Factory;
  */
 class EditConfigurableTest extends CreateConfigurableTest
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Edit configurable product and add new options to attribute
      *

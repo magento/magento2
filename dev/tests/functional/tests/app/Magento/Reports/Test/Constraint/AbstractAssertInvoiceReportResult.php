@@ -8,8 +8,8 @@ namespace Magento\Reports\Test\Constraint;
 
 use Magento\Reports\Test\Page\Adminhtml\SalesInvoiceReport;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\ObjectManager;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Class AbstractAssertInvoiceReportResult

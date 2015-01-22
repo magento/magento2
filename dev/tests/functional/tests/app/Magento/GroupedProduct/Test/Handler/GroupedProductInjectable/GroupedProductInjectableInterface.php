@@ -6,7 +6,7 @@
 
 namespace Magento\GroupedProduct\Test\Handler\GroupedProductInjectable;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface GroupedProductInjectableInterface

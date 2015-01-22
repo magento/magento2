@@ -11,8 +11,21 @@
  */
 namespace Magento\Newsletter\Helper;
 
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data
 {
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $_frontendUrlBuilder;
+
+    /**
+     * @param \Magento\Framework\UrlInterface $frontendUrlBuilder
+     */
+    public function __construct(\Magento\Framework\UrlInterface $frontendUrlBuilder)
+    {
+        $this->_frontendUrlBuilder = $frontendUrlBuilder;
+    }
+
     /**
      * Retrieve subsription confirmation url
      *
@@ -21,7 +34,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConfirmationUrl($subscriber)
     {
-        return $this->_urlBuilder->setScope(
+        return $this->_frontendUrlBuilder->setScope(
             $subscriber->getStoreId()
         )->getUrl(
             'newsletter/subscriber/confirm',
@@ -37,7 +50,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getUnsubscribeUrl($subscriber)
     {
-        return $this->_urlBuilder->setScope(
+        return $this->_frontendUrlBuilder->setScope(
             $subscriber->getStoreId()
         )->getUrl(
             'newsletter/subscriber/unsubscribe',

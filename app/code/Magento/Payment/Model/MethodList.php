@@ -33,10 +33,10 @@ class MethodList
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Payment\Model\MethodInterface[]
      */
-    public function getAvailableMethods(\Magento\Sales\Model\Quote $quote = null)
+    public function getAvailableMethods(\Magento\Quote\Model\Quote $quote = null)
     {
         $store = $quote ? $quote->getStoreId() : null;
         $methods = [];
@@ -54,10 +54,10 @@ class MethodList
      * Check payment method model
      *
      * @param \Magento\Payment\Model\MethodInterface $method
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @return bool
      */
-    protected function _canUseMethod($method, \Magento\Sales\Model\Quote $quote)
+    protected function _canUseMethod($method, \Magento\Quote\Model\Quote $quote)
     {
         return $this->methodSpecificationFactory->create(
             [

@@ -58,7 +58,7 @@ $numColumns = sizeof($this->getColumns());
                 </label>
                 <?php echo $this->getRefreshButtonHtml() ?>
             </div>
-            <script type="text/javascript">
+            <script>
 require([
     "jquery",
     "mage/calendar"
@@ -91,7 +91,7 @@ require([
     </div>
 </div>
 <?php if ($this->canDisplayContainer()): ?>
-    <script type="text/javascript">
+    <script>
 require([
     "jquery",
     "validation",

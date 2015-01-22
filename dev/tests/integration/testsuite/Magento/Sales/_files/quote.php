@@ -36,7 +36,7 @@ $product->load(1);
 
 $addressData = include __DIR__ . '/address_data.php';
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Sales\Model\Quote\Address',
+    'Magento\Quote\Model\Quote\Address',
     ['data' => $addressData]
 );
 $billingAddress->setAddressType('billing');
@@ -44,8 +44,8 @@ $billingAddress->setAddressType('billing');
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 
-/** @var \Magento\Sales\Model\Quote $quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+/** @var \Magento\Quote\Model\Quote $quote */
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
 $quote->setCustomerIsGuest(
     true
 )->setStoreId(

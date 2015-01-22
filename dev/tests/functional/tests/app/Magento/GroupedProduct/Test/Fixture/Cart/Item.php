@@ -7,7 +7,7 @@
 namespace Magento\GroupedProduct\Test\Fixture\Cart;
 
 use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Item

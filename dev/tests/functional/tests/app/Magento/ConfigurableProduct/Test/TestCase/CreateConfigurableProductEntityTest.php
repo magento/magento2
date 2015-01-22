@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Test\TestCase;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Coverage for CreateConfigurableProductEntity
@@ -38,6 +38,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateConfigurableProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Product page with a grid
      *
