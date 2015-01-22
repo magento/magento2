@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Handler\ConfigurableProductInjectable;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface ConfigurableProductInjectableInterface

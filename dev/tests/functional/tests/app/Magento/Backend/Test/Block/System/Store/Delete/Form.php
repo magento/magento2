@@ -6,8 +6,8 @@
 
 namespace Magento\Backend\Test\Block\System\Store\Delete;
 
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Block\Form as AbstractForm;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Block\Form as AbstractForm;
 
 /**
  * Class Form

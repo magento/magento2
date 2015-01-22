@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails;
 
-use Mtf\Client\Locator;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class ProductOnlineSwitcher

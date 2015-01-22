@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Repository;
 
 use Magento\Catalog\Test\Fixture;
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class Product Repository

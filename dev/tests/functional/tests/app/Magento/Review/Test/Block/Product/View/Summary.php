@@ -7,8 +7,8 @@
 
 namespace Magento\Review\Test\Block\Product\View;
 
-use Mtf\Block\Block;
-use Mtf\Client\ElementInterface;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Reviews frontend block.

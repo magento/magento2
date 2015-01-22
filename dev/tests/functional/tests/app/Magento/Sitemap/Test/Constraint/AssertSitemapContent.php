@@ -11,7 +11,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Cms\Test\Fixture\CmsPage;
 use Magento\Sitemap\Test\Fixture\Sitemap;
 use Magento\Sitemap\Test\Page\Adminhtml\SitemapIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertSitemapContent

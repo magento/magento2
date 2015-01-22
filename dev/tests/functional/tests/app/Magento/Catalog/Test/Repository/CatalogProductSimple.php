@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Data for creation Catalog Product Simple.

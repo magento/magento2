@@ -12,8 +12,8 @@ use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Wishlist\Test\Page\WishlistIndex;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AssertProductsIsAbsentInWishlist

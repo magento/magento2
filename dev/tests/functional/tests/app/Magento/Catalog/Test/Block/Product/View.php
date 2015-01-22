@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\Block\Product;
 
 use Magento\Catalog\Test\Block\AbstractConfigureBlock;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Mtf\Client\Locator;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Product view block on the product page.

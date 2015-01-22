@@ -6,10 +6,10 @@
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Factory\Factory;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Abstract class Grid

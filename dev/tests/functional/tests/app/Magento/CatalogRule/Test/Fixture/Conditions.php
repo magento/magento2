@@ -8,8 +8,8 @@ namespace Magento\CatalogRule\Test\Fixture;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Conditions

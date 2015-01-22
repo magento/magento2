@@ -6,7 +6,7 @@
 
 namespace Magento\ImportExport\Test\Block\Adminhtml\Export\Edit;
 
-use Mtf\Block\Form as AbstractForm;
+use Magento\Mtf\Block\Form as AbstractForm;
 
 /**
  * Class Form
