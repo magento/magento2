@@ -6,7 +6,7 @@
 
 namespace Magento\UrlRewrite\Test\Handler\UrlRewrite;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface UrlRewriteInterface

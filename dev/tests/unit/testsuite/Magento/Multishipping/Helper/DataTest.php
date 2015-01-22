@@ -34,7 +34,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * Quote mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote
      */
     protected $quoteMock;
 
@@ -50,7 +50,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
-        $this->quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->helper = $objectManager->getObject(
@@ -88,7 +88,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
      * @param int $itemsSummaryQty
      * @param int $itemVirtualQty
      * @param int $maximumQty
-     * @param bool $hasNominalItems
      * @dataProvider isMultishippingCheckoutAvailableDataProvider
      */
     public function testIsMultishippingCheckoutAvailable(
@@ -99,8 +98,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $validateMinimumAmount,
         $itemsSummaryQty,
         $itemVirtualQty,
-        $maximumQty,
-        $hasNominalItems
+        $maximumQty
     ) {
         $this->scopeConfigMock->expects(
             $this->once()
@@ -159,7 +157,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($maximumQty)
         );
-        $this->quoteMock->expects($this->any())->method('hasNominalItems')->will($this->returnValue($hasNominalItems));
 
         $this->assertEquals($result, $this->helper->isMultishippingCheckoutAvailable());
     }
@@ -172,15 +169,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function isMultishippingCheckoutAvailableDataProvider()
     {
         return [
-            [true, false, true, null, null, null, null, null, null],
-            [false, false, false, null, null, null, null, null, null],
-            [false, true, true, true, null, null, null, null, null],
-            [false, true, true, false, false, null, null, null, null],
-            [true, true, true, false, true, 2, 1, 3, null],
-            [false, true, true, false, true, 1, 2, null, null],
-            [false, true, true, false, true, 2, 1, 1, null],
-            [true, true, true, false, true, 2, 1, 3, false],
-            [false, true, true, false, true, 2, 1, 3, true]
+            [true, false, true, null, null, null, null, null],
+            [false, false, false, null, null, null, null, null],
+            [false, true, true, true, null, null, null, null],
+            [false, true, true, false, false, null, null, null],
+            [true, true, true, false, true, 2, 1, 3],
+            [false, true, true, false, true, 1, 2, null],
+            [false, true, true, false, true, 2, 1, 1],
         ];
     }
 }

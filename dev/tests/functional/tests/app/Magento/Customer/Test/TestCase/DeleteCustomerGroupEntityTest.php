@@ -9,7 +9,7 @@ namespace Magento\Customer\Test\TestCase;
 use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupNew;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for DeleteCustomerGroupEntity
@@ -30,6 +30,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteCustomerGroupEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Page CustomerGroupIndex
      *

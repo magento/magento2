@@ -7,7 +7,7 @@
 namespace Magento\Install\Test\Constraint;
 
 use Magento\Install\Test\Page\Install;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Check that PHP Version, PHP Extensions and File Permission are ok.

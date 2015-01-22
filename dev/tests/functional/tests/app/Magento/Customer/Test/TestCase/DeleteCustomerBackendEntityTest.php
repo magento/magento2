@@ -9,7 +9,7 @@ namespace Magento\Customer\Test\TestCase;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test creation for DeleteCustomerBackendEntity
@@ -30,6 +30,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteCustomerBackendEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * @var CustomerIndex
      */

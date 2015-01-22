@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Test\Constraint;
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchEdit;
 use Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertSearchTermForm

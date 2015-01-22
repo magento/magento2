@@ -23,7 +23,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
     protected $totals;
 
     /**
-     * @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteMock;
 
@@ -37,7 +37,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->quoteMock = $this->getMock(
-            '\Magento\Sales\Model\Quote', ['getCustomerNoteNotify'], [], '', false
+            '\Magento\Quote\Model\Quote', ['getCustomerNoteNotify'], [], '', false
         );
         $this->sessionQuoteMock = $this->getMock(
             '\Magento\Backend\Model\Session\Quote', [], [], '', false

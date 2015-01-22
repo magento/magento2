@@ -8,8 +8,8 @@ namespace Magento\Reports\Test\TestCase;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Reports\Test\Page\Adminhtml\SearchIndex;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Flow:
@@ -27,6 +27,11 @@ use Mtf\TestCase\Injectable;
  */
 class SearchTermsReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Index page.
      *

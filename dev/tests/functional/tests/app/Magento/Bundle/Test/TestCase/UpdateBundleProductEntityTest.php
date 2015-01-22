@@ -9,7 +9,7 @@ namespace Magento\Bundle\Test\TestCase;
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Update BundleProductEntity
@@ -34,6 +34,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateBundleProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Page product on backend
      *

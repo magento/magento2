@@ -9,7 +9,7 @@ namespace Magento\Reports\Test\TestCase;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Reports\Test\Page\Adminhtml\CustomerAccounts;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Flow:
@@ -29,6 +29,11 @@ use Mtf\TestCase\Injectable;
  */
 class NewAccountsReportEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Customer Accounts pages.
      *

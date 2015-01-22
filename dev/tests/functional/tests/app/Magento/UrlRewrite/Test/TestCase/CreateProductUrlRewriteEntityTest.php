@@ -10,7 +10,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteEdit;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Product URL Rewrites Entity
@@ -30,11 +30,17 @@ use Mtf\TestCase\Injectable;
  * 7. Fill data according to dataSet
  * 8. Perform all assertions
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites_(PS)
  * @ZephyrId MAGETWO-25150
  */
 class CreateProductUrlRewriteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Url rewrite index page
      *
@@ -63,7 +69,7 @@ class CreateProductUrlRewriteEntityTest extends Injectable
     }
 
     /**
-     * Create product URL Rewrite
+     * Create product URL Rewrite.
      *
      * @param CatalogProductSimple $product
      * @param UrlRewrite $urlRewrite
@@ -79,7 +85,10 @@ class CreateProductUrlRewriteEntityTest extends Injectable
         $this->urlRewriteIndex->getPageActionsBlock()->addNew();
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getProductGridBlock()->searchAndOpen($filter);
-        $this->urlRewriteEdit->getTreeBlock()->selectCategory($product->getCategoryIds());
+        $category = $product->hasData('category_ids')
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
+            : null;
+        $this->urlRewriteEdit->getTreeBlock()->selectCategory($category);
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getPageMainActions()->save();
     }

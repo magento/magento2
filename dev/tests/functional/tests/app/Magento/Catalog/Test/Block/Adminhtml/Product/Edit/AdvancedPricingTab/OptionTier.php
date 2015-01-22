@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\AdvancedPricingTab;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options\AbstractOptions;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class OptionTier
@@ -26,10 +26,10 @@ class OptionTier extends AbstractOptions
      * Fill product form 'Tier price'
      *
      * @param array $fields
-     * @param Element $element
+     * @param SimpleElement $element
      * @return $this
      */
-    public function fillOptions(array $fields, Element $element = null)
+    public function fillOptions(array $fields, SimpleElement $element = null)
     {
         $this->_rootElement->find($this->buttonFormLocator)->click();
         return parent::fillOptions($fields, $element);

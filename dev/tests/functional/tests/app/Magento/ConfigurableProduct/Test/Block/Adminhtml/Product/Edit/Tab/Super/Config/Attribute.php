@@ -6,10 +6,10 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
+use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Form;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute\AttributeSelector;
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
 
 /**
  * Attribute block in Variation section.
@@ -253,11 +253,11 @@ class Attribute extends Form
     /**
      * Check is visible option
      *
-     * @param Element $attributeBlock
+     * @param SimpleElement $attributeBlock
      * @param int $number
      * @return bool
      */
-    protected function isVisibleOption(Element $attributeBlock, $number)
+    protected function isVisibleOption(SimpleElement $attributeBlock, $number)
     {
         return $attributeBlock->find(
             sprintf($this->optionContainerByNumber, $number),
@@ -303,7 +303,7 @@ class Attribute extends Form
         $optionMapping = $this->dataMapping();
 
         $count = 1;
-        /** @var Element $attributeBlock */
+        /** @var SimpleElement $attributeBlock */
         $attributeBlock = $this->_rootElement->find(sprintf($this->attributeBlock, $count), Locator::SELECTOR_XPATH);
         while ($attributeBlock->isVisible()) {
             $this->showAttributeContent($attributeBlock);
@@ -312,9 +312,9 @@ class Attribute extends Form
                 'label' => $attributeBlock->find($this->attributeLabel)->getValue(),
                 'options' => [],
             ];
-            $options = $attributeBlock->find($this->optionContainer, Locator::SELECTOR_XPATH)->getElements();
+            $options = $attributeBlock->getElements($this->optionContainer, Locator::SELECTOR_XPATH);
             foreach ($options as $optionKey => $option) {
-                /** @var Element $option */
+                /** @var SimpleElement $option */
                 if ($option->isVisible()) {
                     $attribute['options'][$optionKey] = $this->_getData($optionMapping, $option);
                     $attribute['options'][$optionKey] += $this->getOptionalFields($option);
@@ -335,10 +335,10 @@ class Attribute extends Form
     /**
      * Show attribute content
      *
-     * @param Element $attribute
+     * @param SimpleElement $attribute
      * @return void
      */
-    protected function showAttributeContent(Element $attribute)
+    protected function showAttributeContent(SimpleElement $attribute)
     {
         if (!$attribute->find($this->attributeContent)->isVisible()) {
             $this->_rootElement->find($this->configContent)->click();
@@ -371,11 +371,11 @@ class Attribute extends Form
     /**
      * Get optional fields
      *
-     * @param Element $context
+     * @param SimpleElement $context
      * @param array $fields
      * @return array
      */
-    protected function getOptionalFields(Element $context, array $fields = [])
+    protected function getOptionalFields(SimpleElement $context, array $fields = [])
     {
         $data = [];
 
@@ -383,6 +383,7 @@ class Attribute extends Form
         foreach ($fields as $name => $params) {
             $data[$name] = $context->find($params['selector'], $params['strategy'])->getText();
         }
+
         return $data;
     }
 }

@@ -7,7 +7,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .breadcrumbs {
     .mixin-breadcrumbs();
@@ -18,7 +18,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-m) {
     .breadcrumbs {
         display: none;
     }

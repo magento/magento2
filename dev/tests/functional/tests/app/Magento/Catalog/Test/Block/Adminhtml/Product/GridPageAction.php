@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
 use Magento\Backend\Test\Block\GridPageActions as ParentGridPageActions;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class GridPageAction

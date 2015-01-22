@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
 use Magento\Backend\Test\Block\FormPageActions as ParentFormPageActions;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class FormAction

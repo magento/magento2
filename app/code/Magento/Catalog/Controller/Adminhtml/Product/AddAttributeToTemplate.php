@@ -55,8 +55,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
 
             $attribute->setAttributeSetId($attributeSet->getId())->loadEntityAttributeIdBySet();
 
-            $attribute->setEntityTypeId($attributeSet->getEntityTypeId())
-                ->setAttributeSetId($request->getParam('template_id'))
+            $attribute->setAttributeSetId($request->getParam('template_id'))
                 ->setAttributeGroupId($attributeGroup->getId())
                 ->setSortOrder('0')
                 ->save();

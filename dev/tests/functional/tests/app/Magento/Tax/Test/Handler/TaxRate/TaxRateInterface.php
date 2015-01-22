@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Handler\TaxRate;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface TaxRateInterface

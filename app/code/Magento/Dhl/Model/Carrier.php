@@ -8,8 +8,8 @@ namespace Magento\Dhl\Model;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Sales\Model\Order\Shipment;
-use Magento\Sales\Model\Quote\Address\RateRequest;
-use Magento\Sales\Model\Quote\Address\RateResult\Error;
+use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\Result;
 
@@ -184,11 +184,11 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
-     * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory
      * @param \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory
      * @param \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory
@@ -210,11 +210,11 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
-        \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory,
         \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory,
         \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory,
@@ -1070,7 +1070,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             foreach ($this->_rates as $rate) {
                 $method = $rate['service'];
                 $data = $rate['data'];
-                /* @var $rate \Magento\Sales\Model\Quote\Address\RateResult\Method */
+                /* @var $rate \Magento\Quote\Model\Quote\Address\RateResult\Method */
                 $rate = $this->_rateMethodFactory->create();
                 $rate->setCarrier(self::CODE);
                 $rate->setCarrierTitle($this->getConfigData('title'));

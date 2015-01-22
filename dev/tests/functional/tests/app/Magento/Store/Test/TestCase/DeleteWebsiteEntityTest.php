@@ -11,7 +11,7 @@ use Magento\Backend\Test\Page\Adminhtml\EditWebsite;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backup\Test\Page\Adminhtml\BackupIndex;
 use Magento\Store\Test\Fixture\Website;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Delete Website (Store Management)
@@ -36,6 +36,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteWebsiteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Page StoreIndex
      *

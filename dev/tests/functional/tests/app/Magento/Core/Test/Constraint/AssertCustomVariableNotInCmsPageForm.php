@@ -8,7 +8,7 @@ namespace Magento\Core\Test\Constraint;
 
 use Magento\Cms\Test\Page\Adminhtml\CmsNew;
 use Magento\Core\Test\Fixture\SystemVariable;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertCustomVariableNotInCmsPageForm

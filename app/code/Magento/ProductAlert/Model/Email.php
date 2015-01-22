@@ -92,7 +92,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
     protected $customerRepository;
 
     /**
-     * @var \Magento\Core\Model\App\Emulation
+     * @var \Magento\Store\Model\App\Emulation
      */
     protected $_appEmulation;
 
@@ -114,7 +114,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Helper\View $customerHelper
-     * @param \Magento\Core\Model\App\Emulation $appEmulation
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -128,7 +128,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Helper\View $customerHelper,
-        \Magento\Core\Model\App\Emulation $appEmulation,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -299,7 +299,11 @@ class Email extends \Magento\Framework\Model\AbstractModel
             return false;
         }
 
-        $store = $this->_website->getDefaultStore();
+        if ($this->_customer->getStoreId() > 0) {
+            $store = $this->_storeManager->getStore($this->_customer->getStoreId());
+        } else {
+            $store = $this->_website->getDefaultStore();
+        }
         $storeId = $store->getId();
 
         if ($this->_type == 'price' && !$this->_scopeConfig->getValue(
