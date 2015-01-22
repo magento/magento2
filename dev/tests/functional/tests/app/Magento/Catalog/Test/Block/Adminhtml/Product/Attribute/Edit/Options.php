@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit;
 
-use Mtf\ObjectManager;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Options\Option;
 
 /**

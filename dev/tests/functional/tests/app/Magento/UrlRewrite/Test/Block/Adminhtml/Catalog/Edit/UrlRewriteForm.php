@@ -7,9 +7,9 @@
 namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit;
 
 use Magento\Backend\Test\Block\Widget\Form;
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Client\Element;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class UrlRewriteForm

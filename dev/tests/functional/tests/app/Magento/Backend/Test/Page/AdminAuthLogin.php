@@ -5,9 +5,9 @@
  */
 namespace Magento\Backend\Test\Page;
 
-use Mtf\Client\Locator;
-use Mtf\Factory\Factory;
-use Mtf\Page\Page;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Page\Page;
 
 /**
  * Class AdminAuthLogin

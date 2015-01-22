@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\TestStep;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class CreateProductsStep

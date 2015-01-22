@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Fixture;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Crosssell;
-use Mtf\Factory\Factory;
+use Magento\Mtf\Factory\Factory;
 
 class CrosssellProducts extends AssignProducts
 {

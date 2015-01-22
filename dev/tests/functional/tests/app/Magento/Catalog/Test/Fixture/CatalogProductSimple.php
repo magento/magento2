@@ -6,12 +6,12 @@
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\System\Config;
-use Mtf\Handler\HandlerFactory;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\InjectableFixture;
-use Mtf\Repository\RepositoryFactory;
-use Mtf\System\Event\EventManagerInterface;
+use Magento\Mtf\System\Config;
+use Magento\Mtf\Handler\HandlerFactory;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Repository\RepositoryFactory;
+use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
  * Class CatalogProductSimple

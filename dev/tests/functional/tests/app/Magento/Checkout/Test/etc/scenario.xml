@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<scenarios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Config/etc/scenario.xsd">
+<scenarios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Config/etc/scenario.xsd">
     <scenario name="OnePageCheckoutTest" module="Magento_Checkout">
         <methods>
             <method name="test">

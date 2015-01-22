@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Test\Fixture;
 
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class GlobalSearch
