@@ -9,7 +9,7 @@ namespace Magento\Store\Test\TestCase;
 use Magento\Backend\Test\Page\Adminhtml\NewGroupIndex;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Store\Test\Fixture\StoreGroup;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Create New StoreGroup (Store Management)

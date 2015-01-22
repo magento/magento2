@@ -8,8 +8,8 @@ namespace Magento\Bundle\Test\Handler\BundleProduct;
 
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\System\Config;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\System\Config;
 
 /**
  * Create new bundle product via curl.

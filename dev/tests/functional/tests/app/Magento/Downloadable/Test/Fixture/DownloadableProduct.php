@@ -6,7 +6,7 @@
 namespace Magento\Downloadable\Test\Fixture;
 
 use Magento\Catalog\Test\Fixture\Product;
-use Mtf\Factory\Factory;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Class DownloadableProduct

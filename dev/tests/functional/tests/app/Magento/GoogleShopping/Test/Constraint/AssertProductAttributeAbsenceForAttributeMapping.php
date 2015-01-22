@@ -9,8 +9,8 @@ namespace Magento\GoogleShopping\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\GoogleShopping\Test\Page\Adminhtml\GoogleShoppingTypesIndex;
 use Magento\GoogleShopping\Test\Page\Adminhtml\GoogleShoppingTypesNew;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Class AssertProductAttributeAbsenceForAttributeMapping

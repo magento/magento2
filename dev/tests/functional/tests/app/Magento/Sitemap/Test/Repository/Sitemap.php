@@ -6,7 +6,7 @@
 
 namespace Magento\Sitemap\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class Sitemap

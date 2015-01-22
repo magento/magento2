@@ -6,7 +6,7 @@
 
 namespace Magento\Newsletter\Test\Block\Adminhtml\Template;
 
-use Mtf\Client\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Grid

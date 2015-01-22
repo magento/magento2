@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Options
