@@ -114,6 +114,8 @@ class Save extends \Magento\Backend\App\Action
             $this->_objectManager->get('Magento\Backend\Model\Session')->setCommentText($data['comment_text']);
         }
 
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         try {
             $invoiceData = $this->getRequest()->getParam('invoice', []);
             $invoiceItems = isset($invoiceData['items']) ? $invoiceData['items'] : [];
@@ -210,15 +212,13 @@ class Save extends \Magento\Backend\App\Action
                 }
             }
             $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
+            return $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t save the invoice.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('sales/*/new', ['order_id' => $orderId]);
-        return $resultRedirect;
+        return $resultRedirect->setPath('sales/*/new', ['order_id' => $orderId]);
     }
 }
