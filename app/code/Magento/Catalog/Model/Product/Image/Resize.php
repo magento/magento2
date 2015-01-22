@@ -116,7 +116,8 @@ class Resize
         $result = [];
         foreach ($data as $item) {
             if (!isset($item['type'])
-                || (!isset($item['width']) && !isset($item['height']))) {
+                || !isset($item['width'])
+                || !isset($item['height'])) {
                 continue;
             }
             $newItem = [
