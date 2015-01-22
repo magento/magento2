@@ -11,7 +11,7 @@ use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureInterface;
 
@@ -60,7 +60,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
     /**
      * Browser
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -79,7 +79,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface|FixtureInterface[] $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param Category|null $category
      */
     public function processAssert(
@@ -88,7 +88,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
         $product,
-        Browser $browser,
+        BrowserInterface $browser,
         Category $category = null
     ) {
         $this->browser = $browser;

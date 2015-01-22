@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Constraint;
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -27,14 +27,14 @@ class AssertCategoryIsNotIncludeInMenu extends AbstractConstraint
      *
      * @param CmsIndex $cmsIndex
      * @param Category $category
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogCategoryView $categoryView
      * @return void
      */
     public function processAssert(
         CmsIndex $cmsIndex,
         Category $category,
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogCategoryView $categoryView
     ) {
         $cmsIndex->open();

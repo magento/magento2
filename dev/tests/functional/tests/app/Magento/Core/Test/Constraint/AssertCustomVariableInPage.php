@@ -9,7 +9,7 @@ namespace Magento\Core\Test\Constraint;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Core\Test\Fixture\SystemVariable;
 use Magento\Store\Test\Fixture\Store;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\FixtureFactory;
 
@@ -30,7 +30,7 @@ class AssertCustomVariableInPage extends AbstractConstraint
      * @param CmsIndex $cmsIndex
      * @param SystemVariable $variable
      * @param FixtureFactory $fixtureFactory
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param Store $storeOrigin
      * @param SystemVariable $customVariableOrigin
      * @return void
@@ -40,7 +40,7 @@ class AssertCustomVariableInPage extends AbstractConstraint
         CmsIndex $cmsIndex,
         SystemVariable $variable,
         FixtureFactory $fixtureFactory,
-        Browser $browser,
+        BrowserInterface $browser,
         Store $storeOrigin = null,
         SystemVariable $customVariableOrigin = null
     ) {

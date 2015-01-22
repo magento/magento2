@@ -7,7 +7,7 @@
 namespace Magento\GiftMessage\Test\Block\Message\Order\Items;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 
 /**
  * Gift message block for order's items on order view page.
