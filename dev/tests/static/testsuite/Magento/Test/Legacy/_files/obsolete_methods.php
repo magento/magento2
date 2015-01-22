@@ -2027,5 +2027,6 @@ return [
     ['getAllNonNominalItems', 'Magento\Sales\Model\Quote\Address'],
     ['getAllNominalItems', 'Magento\Sales\Model\Quote\Address'],
     ['isNominal', 'Magento\Sales\Model\Order\Item'],
-    ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem']
+    ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
+    ['_getImageHelper', 'Magento\Catalog\Model\Product'],
 ];

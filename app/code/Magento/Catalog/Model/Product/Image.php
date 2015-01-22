@@ -28,9 +28,11 @@ class Image extends \Magento\Framework\Model\AbstractModel
     protected $_height;
 
     /**
+     * Default quality value (for JPEG images only).
+     *
      * @var int
      */
-    protected $_quality = 90;
+    protected $_quality = 85;
 
     /**
      * @var bool

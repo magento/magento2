@@ -411,6 +411,34 @@ class Image extends AbstractHelper
     }
 
     /**
+     * @return $this
+     */
+    public function save()
+    {
+        $model = $this->_getModel();
+
+        if ($this->getImageFile()) {
+            $model->setBaseFile($this->getImageFile());
+        } else {
+            $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+        }
+
+        if ($model->isCached()) {
+            return $this;
+        }
+
+        if ($this->_scheduleResize) {
+            $model->resize();
+        }
+        if ($this->getWatermark()) {
+            $model->setWatermark($this->getWatermark());
+        }
+
+        $model->saveFile();
+        return $this;
+    }
+
+    /**
      * @return string
      */
     protected function getDefaultPlaceholderUrl()
