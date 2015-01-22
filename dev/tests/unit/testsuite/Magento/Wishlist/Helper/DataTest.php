@@ -28,6 +28,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $url;
 
     /**
+     * @var string
+     */
+    protected $configureUrl;
+
+    /**
      * Set up mock objects for tested class
      *
      * @return void
@@ -36,6 +41,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->url = 'http://magento.com/wishlist/index/index/wishlist_id/1/?___store=default';
         $encoded = 'encodedUrl';
+
+        $this->configureUrl = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
 
         $urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', [], [], '', false);
         $urlEncoder->expects($this->any())
@@ -57,10 +64,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($store));
 
         $urlBuilder = $this->getMock('Magento\Framework\UrlInterface\Proxy', ['getUrl'], [], '', false);
-        $urlBuilder->expects($this->any())
-            ->method('getUrl')
-            ->with('*/*/*', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
-            ->will($this->returnValue($this->url));
+        if ($this->getName() == 'testGetConfigureUrl') {
+            $urlBuilder->expects($this->once())
+                ->method('getUrl')
+                ->with('wishlist/index/configure', ['id' => 4, 'product_id' => 30])
+                ->will($this->returnValue($this->configureUrl));
+        } else {
+            $urlBuilder->expects($this->any())
+                ->method('getUrl')
+                ->with('*/*/*', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
+                ->will($this->returnValue($this->url));
+        }
 
         $context = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $context->expects($this->once())
@@ -102,6 +116,27 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetAddToCartUrl()
     {
         $this->assertEquals($this->url, $this->wishlistHelper->getAddToCartUrl('%item%'));
+    }
+
+    public function testGetConfigureUrl()
+    {
+        $wishlistItem = $this->getMock(
+            'Magento\Wishlist\Model\Item',
+            ['getWishlistItemId', 'getProductId'],
+            [],
+            '',
+            false
+        );
+        $wishlistItem
+            ->expects($this->once())
+            ->method('getWishlistItemId')
+            ->will($this->returnValue(4));
+        $wishlistItem
+            ->expects($this->once())
+            ->method('getProductId')
+            ->will($this->returnValue(30));
+
+        $this->assertEquals($this->configureUrl,  $this->wishlistHelper->getConfigureUrl($wishlistItem));
     }
 
     public function testGetWishlist()
