@@ -17,7 +17,7 @@ use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\TestCase\Injectable;
 
 /**
@@ -83,7 +83,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     /**
      * Browser
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -142,7 +142,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
      * @param CmsIndex $cmsIndex
      * @param CustomerAccountLogin $customerAccountLogin
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param RatingIndex $ratingIndex
      * @param RatingEdit $ratingEdit
      * @param ReviewEdit $reviewEdit
@@ -154,7 +154,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
         CmsIndex $cmsIndex,
         CustomerAccountLogin $customerAccountLogin,
         CatalogProductView $catalogProductView,
-        Browser $browser,
+        BrowserInterface $browser,
         RatingIndex $ratingIndex,
         RatingEdit $ratingEdit,
         ReviewEdit $reviewEdit

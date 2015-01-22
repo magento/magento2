@@ -27,7 +27,7 @@ class Form extends AbstractForm
      *
      * @return Items
      */
-    protected function getItemsBlock()
+    public function getItemsBlock()
     {
         return $this->blockFactory->create(
             'Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Form\Items',
