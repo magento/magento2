@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Block\Cart;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class AbstractCartItem

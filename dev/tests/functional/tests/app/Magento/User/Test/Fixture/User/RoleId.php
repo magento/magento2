@@ -7,8 +7,8 @@
 namespace Magento\User\Test\Fixture\User;
 
 use Magento\User\Test\Fixture\AdminUserRole;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class RoleId

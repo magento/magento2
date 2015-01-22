@@ -6,8 +6,8 @@
 
 namespace Magento\Reports\Test\Block\Adminhtml\Customer;
 
-use Mtf\Client\Locator;
-use Mtf\ObjectManager;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Class AccountsGrid

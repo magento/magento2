@@ -6,7 +6,7 @@
 
 namespace Magento\Review\Test\Handler\Rating;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface RatingInterface

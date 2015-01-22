@@ -5,7 +5,7 @@
  */
 namespace Magento\Backend\Test\Block;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Menu

@@ -6,9 +6,9 @@
 
 namespace Magento\Customer\Test\Block\Form;
 
-use Mtf\Block\Form;
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 
 /**

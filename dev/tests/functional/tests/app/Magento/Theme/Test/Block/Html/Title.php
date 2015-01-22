@@ -6,7 +6,7 @@
 
 namespace Magento\Theme\Test\Block\Html;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Page title block

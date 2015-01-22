@@ -7,8 +7,8 @@
 namespace Magento\ConfigurableProduct\Test\TestCase;
 
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Mtf\Factory\Factory;
-use Mtf\TestCase\Functional;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\TestCase\Functional;
 
 /**
  * Class CreateConfigurableTest

@@ -6,9 +6,9 @@
 
 namespace Magento\Reports\Test\TestCase;
 
-use Mtf\TestCase\Injectable;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Client\BrowserInterface;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Client\BrowserInterface;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 

@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Category;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class ProductPagination
@@ -26,7 +26,7 @@ class ProductPagination extends Block
     /**
      * Getting the active element to go to the next page
      *
-     * @return \Mtf\Client\Element|null
+     * @return \Magento\Mtf\Client\Element|null
      */
     public function getNextPage()
     {

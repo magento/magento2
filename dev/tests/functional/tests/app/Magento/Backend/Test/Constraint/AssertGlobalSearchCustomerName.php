@@ -8,7 +8,7 @@ namespace Magento\Backend\Test\Constraint;
 
 use Magento\Backend\Test\Fixture\GlobalSearch;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertGlobalSearchCustomerName

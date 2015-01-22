@@ -6,8 +6,8 @@
 
 namespace Magento\Reports\Test\Block\Adminhtml;
 
-use Mtf\Block\Form;
-use Mtf\ObjectManager;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Abstract Class Filter

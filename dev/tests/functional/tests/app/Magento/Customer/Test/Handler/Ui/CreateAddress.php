@@ -6,13 +6,13 @@
 
 namespace Magento\Customer\Test\Handler\Ui;
 
-use Mtf\Factory\Factory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * UI handler for creating customer address.
  */
-class CreateAddress extends \Mtf\Handler\Ui
+class CreateAddress extends \Magento\Mtf\Handler\Ui
 {
     /**
      * Execute handler

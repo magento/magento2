@@ -8,8 +8,8 @@ namespace Magento\Bundle\Test\Constraint;
 
 use Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\BrowserInterface;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertTierPriceOnBundleProductPage

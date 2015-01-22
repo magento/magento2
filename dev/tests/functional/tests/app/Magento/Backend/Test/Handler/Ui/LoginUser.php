@@ -6,9 +6,9 @@
 
 namespace Magento\Backend\Test\Handler\Ui;
 
-use Mtf\Factory\Factory;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Handler\Ui;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Handler\Ui;
 
 /**
  * Class LoginUser

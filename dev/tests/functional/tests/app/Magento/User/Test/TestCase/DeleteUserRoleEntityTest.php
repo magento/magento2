@@ -12,8 +12,8 @@ use Magento\User\Test\Fixture\AdminUserRole;
 use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
 use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for DeleteUserRoleEntity
