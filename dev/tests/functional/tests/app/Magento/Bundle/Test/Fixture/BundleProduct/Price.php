@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Test\Fixture\BundleProduct;
 
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Price

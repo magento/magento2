@@ -8,7 +8,7 @@ namespace Magento\UrlRewrite\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertUrlRewriteUpdatedProductInGrid

@@ -9,7 +9,7 @@ namespace Magento\GiftMessage\Test\Constraint;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Sales\Test\Page\Adminhtml\OrderView;
-use Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertGiftMessageInBackendOrder

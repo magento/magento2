@@ -6,8 +6,8 @@
 
 namespace Magento\Reports\Test\Block\Adminhtml\Customer\Totals;
 
-use Mtf\Client\Locator;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Grid

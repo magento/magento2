@@ -8,7 +8,7 @@ namespace Magento\GroupedProduct\Test\Constraint;
 
 use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
 use Magento\Wishlist\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertGroupedProductInCustomerWishlistOnBackendGrid

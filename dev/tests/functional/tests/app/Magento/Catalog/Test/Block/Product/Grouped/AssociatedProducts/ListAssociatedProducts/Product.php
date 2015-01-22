@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Product

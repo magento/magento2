@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertProductCompareSuccessAddMessage

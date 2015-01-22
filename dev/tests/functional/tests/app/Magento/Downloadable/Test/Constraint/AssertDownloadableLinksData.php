@@ -8,8 +8,8 @@ namespace Magento\Downloadable\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
-use Mtf\Client\BrowserInterface;
-use Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertDownloadableLinksData

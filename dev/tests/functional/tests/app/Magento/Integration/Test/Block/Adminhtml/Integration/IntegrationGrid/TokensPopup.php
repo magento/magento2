@@ -6,7 +6,7 @@
 
 namespace Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class TokensPopup

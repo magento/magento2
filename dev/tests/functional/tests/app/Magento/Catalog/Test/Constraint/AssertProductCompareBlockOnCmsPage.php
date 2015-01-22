@@ -7,9 +7,9 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\BrowserInterface;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Class AssertProductCompareBlockOnCmsPage
