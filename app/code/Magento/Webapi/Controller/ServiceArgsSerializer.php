@@ -319,7 +319,7 @@ class ServiceArgsSerializer
             $isDefaultValueAvailable = $paramReflection->isDefaultValueAvailable();
             $params[] = [
                 'name' => $paramReflection->getName(),
-                'type' => $this->getParamType($paramReflection),
+                'type' => $this->typeProcessor->getParamType($paramReflection),
                 'isDefaultValueAvailable' => $isDefaultValueAvailable,
                 'defaultValue' => $isDefaultValueAvailable ? $paramReflection->getDefaultValue() : null
             ];
