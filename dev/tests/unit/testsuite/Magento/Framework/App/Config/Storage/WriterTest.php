@@ -44,6 +44,16 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         $this->model->delete('path');
     }
 
+    public function testDeleteOptions()
+    {
+        $scope = 'scope';
+        $scopeId = '1';
+        $this->resource->expects($this->once())
+            ->method('deleteConfig')
+            ->with('path', $scope, $scopeId);
+        $this->model->delete('path', $scope, $scopeId);
+    }
+
     public function testSave()
     {
         $this->resource->expects($this->once())

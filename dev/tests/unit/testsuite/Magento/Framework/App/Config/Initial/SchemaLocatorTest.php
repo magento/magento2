@@ -26,16 +26,10 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_moduleReaderMock = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
-        $this->_moduleReaderMock->expects(
-            $this->once()
-        )->method(
-            'getModuleDir'
-        )->with(
-            'etc',
-            'moduleName'
-        )->will(
-            $this->returnValue('schema_dir')
-        );
+        $this->_moduleReaderMock->expects($this->once())
+            ->method('getModuleDir')
+            ->with('etc', 'moduleName')
+            ->will($this->returnValue('schema_dir'));
         $this->_model = $this->objectManager->getObject(
             'Magento\Framework\App\Config\Initial\SchemaLocator',
             [

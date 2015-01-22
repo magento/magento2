@@ -5,43 +5,12 @@
  */
 namespace Magento\Framework\App\Config;
 
-class DataFactoryTest extends \PHPUnit_Framework_TestCase
+class DataFactoryTest extends \Magento\Test\AbstractFactoryTestCase
 {
-    /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * @var \Magento\Framework\App\Config\DataFactory
-     */
-    protected $model;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $objectManagerMock;
-
     protected function setUp()
     {
-        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->model = $this->objectManager->getObject(
-            'Magento\Framework\App\Config\DataFactory',
-            ['objectManager' => $this->objectManagerMock]
-        );
-    }
-
-    public function testCreate()
-    {
-        $instanceMock = $this->getMockBuilder('Magento\Framework\App\Config\Data')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($instanceMock));
-        $this->assertSame($instanceMock, $this->model->create());
+        $this->instanceClassName = 'Magento\Framework\App\Config\Data';
+        $this->factoryClassName = 'Magento\Framework\App\Config\DataFactory';
+        parent::setUp();
     }
 }
