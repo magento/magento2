@@ -279,7 +279,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function getCcExpYear()
     {
-        return $this->getData('cc_exp_year');
+        $expirationYear = $this->getData('cc_exp_year') ?: null;
+        return $expirationYear;
     }
 
     /**
