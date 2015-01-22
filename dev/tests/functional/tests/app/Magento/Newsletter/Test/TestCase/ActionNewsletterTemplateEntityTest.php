@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Test\TestCase;
 
 use Magento\Newsletter\Test\Fixture\Template;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Action for Newsletter Template (Preview and Queue)

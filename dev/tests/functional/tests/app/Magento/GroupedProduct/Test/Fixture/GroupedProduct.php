@@ -7,8 +7,8 @@
 namespace Magento\GroupedProduct\Test\Fixture;
 
 use Magento\Catalog\Test\Fixture\Product;
-use Mtf\Factory\Factory;
-use Mtf\System\Config;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\System\Config;
 
 /**
  * Class GroupedProduct

@@ -7,8 +7,8 @@
 namespace Magento\Customer\Test\Block\Account;
 
 use Magento\Customer\Test\Fixture\AddressInjectable;
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class AddressesAdditional
