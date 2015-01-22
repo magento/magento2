@@ -8,6 +8,8 @@ namespace Magento\Framework\App;
 
 class AreaTest extends \PHPUnit_Framework_TestCase
 {
+    const SCOPE_ID = '1';
+
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
      */
@@ -96,7 +98,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $scopeMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue('1'));
+            ->will($this->returnValue(self::SCOPE_ID));
         $this->scopeResolverMock->expects($this->any())
             ->method('getScope')
             ->will($this->returnValue($scopeMock));
@@ -219,7 +221,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
             ->method('getThemeByRequest');
         $this->designMock->expects($this->once())
             ->method('loadChange')
-            ->with('1')
+            ->with(self::SCOPE_ID)
             ->willReturnSelf();
         $designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')
             ->disableOriginalConstructor()
@@ -257,7 +259,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($designMock));
         $this->designMock->expects($this->exactly($callNum2))
             ->method('loadChange')
-            ->with('1')
+            ->with(self::SCOPE_ID)
             ->willReturnSelf();
         $this->designMock->expects($this->exactly($callNum2))
             ->method('changeDesign')
@@ -294,7 +296,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($designMock));
         $this->designMock->expects($this->once())
             ->method('loadChange')
-            ->with('1')
+            ->with(self::SCOPE_ID)
             ->willReturnSelf();
         $this->designMock->expects($this->once())
             ->method('changeDesign')
