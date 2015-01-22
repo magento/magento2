@@ -11,27 +11,26 @@ use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class CustomerForm
- * Form for creation of the customer
+ * Form for creation of the customer.
  */
 class CustomerForm extends FormTabs
 {
     /**
-     * Load spinner
+     * Magento form loader.
      *
      * @var string
      */
-    protected $spinner = '[data-role="spinner"]';
+    protected $loader = '[data-role="spinner"]';
 
     /**
-     * Customer form to load
+     * Customer form to load.
      *
      * @var string
      */
     protected $activeFormTab = '.entry-edit.form-inline [data-bind="visible: active"]:not([style="display: none;"])';
 
     /**
-     * Fill Customer forms on tabs by customer, addresses data
+     * Fill Customer forms on tabs by customer, addresses data.
      *
      * @param FixtureInterface $customer
      * @param FixtureInterface|FixtureInterface[]|null $address
@@ -53,7 +52,7 @@ class CustomerForm extends FormTabs
     }
 
     /**
-     * Update Customer forms on tabs by customer, addresses data
+     * Update Customer forms on tabs by customer, addresses data.
      *
      * @param FixtureInterface $customer
      * @param FixtureInterface|FixtureInterface[]|null $address
@@ -84,8 +83,8 @@ class CustomerForm extends FormTabs
     public function getDataCustomer(FixtureInterface $customer, $address = null)
     {
         $this->waitForm();
-        $data = ['customer' => $customer->hasData() ? parent::getData($customer) : parent::getData()];
 
+        $data = ['customer' => $customer->hasData() ? parent::getData($customer) : parent::getData()];
         if (null !== $address) {
             $this->openTab('addresses');
             $data['addresses'] = $this->getTabElement('addresses')->getDataAddresses($address);
@@ -102,7 +101,7 @@ class CustomerForm extends FormTabs
      */
     protected function waitForm()
     {
-        $this->waitForElementNotVisible($this->spinner);
+        $this->waitForElementNotVisible($this->loader);
         $this->waitForElementVisible($this->activeFormTab);
     }
 }
