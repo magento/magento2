@@ -107,7 +107,7 @@ class BackendDecorator implements CurlInterface
         if ($this->formKey) {
             $params['form_key'] = $this->formKey;
         } else {
-            throw new \Exception('Form key is absent! Response: ' . $this->response);
+            throw new \Exception(sprintf('Form key is absent! Url: "%s" Response: "%s"', $url, $this->response));
         }
         $this->transport->write($method, $url, $httpVer, $headers, http_build_query($params));
     }
