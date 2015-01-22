@@ -9,6 +9,7 @@ use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\Framework\App\DeploymentConfig\DbConfig;
 use Magento\Framework\App\DeploymentConfig\EncryptConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
 
 class InstallerTest extends \PHPUnit_Framework_TestCase
 {
@@ -287,9 +288,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValueMap([
-                [DirectoryList::VAR_DIR, $varDir],
-                [DirectoryList::STATIC_VIEW, $staticDir],
-                [DirectoryList::CONFIG, $configDir],
+                [DirectoryList::VAR_DIR, DriverPool::FILE, $varDir, ],
+                [DirectoryList::STATIC_VIEW, DriverPool::FILE, $staticDir],
+                [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
             ]));
         $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
         $this->logger
