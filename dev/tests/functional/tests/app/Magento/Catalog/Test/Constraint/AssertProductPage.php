@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractAssertForm;
 use Mtf\Fixture\FixtureInterface;
 
@@ -45,13 +45,16 @@ class AssertProductPage extends AbstractAssertForm
      * 5. Description
      * 6. Short Description
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
      * @return void
      */
-    public function processAssert(Browser $browser, CatalogProductView $catalogProductView, FixtureInterface $product)
-    {
+    public function processAssert(
+        BrowserInterface $browser,
+        CatalogProductView $catalogProductView,
+        FixtureInterface $product
+    ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         $this->product = $product;

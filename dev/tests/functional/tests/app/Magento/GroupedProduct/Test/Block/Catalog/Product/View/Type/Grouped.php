@@ -10,7 +10,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
 

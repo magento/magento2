@@ -7,7 +7,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $registry = $objectManager->get('Magento\Framework\Registry');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
-$quote = $objectManager->create('Magento\Sales\Model\Quote');
+$quote = $objectManager->create('Magento\Quote\Model\Quote');
 $quote->load('test_order_item_with_items', 'reserved_order_id');
 $product = $objectManager->create('Magento\Catalog\Model\Product');
 foreach ($quote->getAllItems() as $item) {

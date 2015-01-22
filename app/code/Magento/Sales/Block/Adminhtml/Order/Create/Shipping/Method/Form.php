@@ -67,7 +67,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Retrieve quote shipping address model
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return \Magento\Quote\Model\Quote\Address
      */
     public function getAddress()
     {
@@ -130,7 +130,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Retrieve rate of active shipping method
      *
-     * @return \Magento\Sales\Model\Quote\Address\Rate|false
+     * @return \Magento\Quote\Model\Quote\Address\Rate|false
      */
     public function getActiveMethodRate()
     {
