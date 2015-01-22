@@ -18,6 +18,7 @@ class Index extends \Magento\Checkout\Controller\Cart
      */
     public function execute()
     {
+        $this->_eventManager->dispatch('collect_totals_failed_items');
         if ($this->cart->getQuote()->getItemsCount()) {
             $this->cart->init();
             $this->cart->save();

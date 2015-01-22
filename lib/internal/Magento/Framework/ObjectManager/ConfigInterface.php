@@ -72,4 +72,11 @@ interface ConfigInterface
      * @return void
      */
     public function extend(array $configuration);
+
+    /**
+     * Returns list on preferences
+     *
+     * @return array
+     */
+    public function getPreferences();
 }
