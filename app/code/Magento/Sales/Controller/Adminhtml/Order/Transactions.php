@@ -12,17 +12,12 @@ class Transactions extends \Magento\Sales\Controller\Adminhtml\Order
     /**
      * Order transactions grid ajax action
      *
-     * @return \Magento\Framework\View\Result\Layout|\Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
-        $order = $this->_initOrder();
-        if ($order) {
-            $resultLayout = $this->resultLayoutFactory->create();
-            return $resultLayout;
-        }
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath('sales/*/');
-        return $resultRedirect;
+        $this->_initOrder();
+        $resultLayout = $this->resultLayoutFactory->create();
+        return $resultLayout;
     }
 }
