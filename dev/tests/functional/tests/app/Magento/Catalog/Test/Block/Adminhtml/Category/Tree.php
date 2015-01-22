@@ -7,11 +7,12 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Category;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
+use Mtf\Client\Element\TreeElement;
 
 /**
  * Class Tree
@@ -98,15 +99,11 @@ class Tree extends Block
      */
     public function selectCategory(FixtureInterface $category, $fullPath = true)
     {
-        if ($category instanceof InjectableFixture) {
-            $parentPath = $this->prepareFullCategoryPath($category);
-            if (!$fullPath) {
-                array_pop($parentPath);
-            }
-            $path = implode('/', $parentPath);
-        } else {
-            $path = $category->getCategoryPath();
+        $parentPath = $this->prepareFullCategoryPath($category);
+        if (!$fullPath) {
+            array_pop($parentPath);
         }
+        $path = implode('/', $parentPath);
 
         $this->expandAllCategories();
         $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree')->setValue($path);
@@ -116,10 +113,10 @@ class Tree extends Block
     /**
      * Prepare category path
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return array
      */
-    protected function prepareFullCategoryPath(CatalogCategory $category)
+    protected function prepareFullCategoryPath(Category $category)
     {
         $path = [];
         $parentCategory = $category->hasData('parent_id')
@@ -156,13 +153,15 @@ class Tree extends Block
     /**
      * Check category in category tree
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return bool
      */
-    public function isCategoryVisible(CatalogCategory $category)
+    public function isCategoryVisible(Category $category)
     {
         $categoryPath = $this->prepareFullCategoryPath($category);
-        $structure = $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree')->getStructure();
+        /** @var TreeElement $treeElement */
+        $treeElement = $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree');
+        $structure = $treeElement->getStructure();
         $result = false;
         $element = array_shift($categoryPath);
         foreach ($structure as $item) {

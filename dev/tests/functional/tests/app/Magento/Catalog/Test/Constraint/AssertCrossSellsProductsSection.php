@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Mtf\Fixture\InjectableFixture;
 
@@ -26,7 +26,7 @@ class AssertCrossSellsProductsSection extends AbstractConstraint
     /**
      * Assert that product is displayed in cross-sell section
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CheckoutCart $checkoutCart
      * @param CatalogProductSimple $product
      * @param CatalogProductView $catalogProductView
@@ -34,7 +34,7 @@ class AssertCrossSellsProductsSection extends AbstractConstraint
      * @return void
      */
     public function processAssert(
-        Browser $browser,
+        BrowserInterface $browser,
         CheckoutCart $checkoutCart,
         CatalogProductSimple $product,
         CatalogProductView $catalogProductView,

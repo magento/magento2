@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\Browser;
+use Mtf\Client\BrowserInterface;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -27,11 +27,11 @@ class AssertCategoryIsNotActive extends AbstractConstraint
      * Assert that the category cannot be accessed from the navigation bar in the frontend
      *
      * @param CmsIndex $cmsIndex
-     * @param CatalogCategory $category
-     * @param Browser $browser
+     * @param Category $category
+     * @param BrowserInterface $browser
      * @return void
      */
-    public function processAssert(CmsIndex $cmsIndex, CatalogCategory $category, Browser $browser)
+    public function processAssert(CmsIndex $cmsIndex, Category $category, BrowserInterface $browser)
     {
         $cmsIndex->open();
         \PHPUnit_Framework_Assert::assertFalse(
