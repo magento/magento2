@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Theme Observer model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
 {
@@ -47,11 +48,6 @@ class Observer
     private $pageAssets;
 
     /**
-     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
-     */
-    protected $config;
-
-    /**
      * @var \Magento\Framework\View\Asset\Repository
      */
     protected $assetRepo;
@@ -75,7 +71,6 @@ class Observer
      * @param \Magento\Framework\Event\ManagerInterface $eventDispatcher
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\View\Asset\GroupedCollection $assets
-     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param Theme\Registration $registration
      * @param \Psr\Log\LoggerInterface $logger
@@ -87,7 +82,6 @@ class Observer
         \Magento\Framework\Event\ManagerInterface $eventDispatcher,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\View\Asset\GroupedCollection $assets,
-        \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Theme\Model\Theme\Registration $registration,
         \Psr\Log\LoggerInterface $logger
