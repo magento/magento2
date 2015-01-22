@@ -7,7 +7,7 @@
 
 namespace Magento\Customer\Test\Page;
 
-use Mtf\Page\Page;
+use Magento\Mtf\Page\Page;
 
 /**
  * Class CustomerAccountLogout

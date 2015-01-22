@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options;
 
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Backend\Test\Block\Widget\Tab;
 
 /**

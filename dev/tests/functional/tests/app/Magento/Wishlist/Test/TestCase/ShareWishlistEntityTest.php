@@ -15,8 +15,8 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Wishlist\Test\Page\WishlistShare;
-use Mtf\Client\BrowserInterface;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for ShareWishlistEntity

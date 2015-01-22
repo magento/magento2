@@ -6,7 +6,7 @@
 
 namespace Magento\Sitemap\Test\Handler\Sitemap;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface SitemapInterface

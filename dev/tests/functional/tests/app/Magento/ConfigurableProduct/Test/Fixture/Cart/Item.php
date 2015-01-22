@@ -7,7 +7,7 @@
 namespace Magento\ConfigurableProduct\Test\Fixture\Cart;
 
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Item
