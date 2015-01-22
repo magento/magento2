@@ -8,8 +8,8 @@ namespace Magento\CatalogSearch\Test\Constraint;
 
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertSearchSynonymNotOnFrontend
@@ -26,10 +26,10 @@ class AssertSearchSynonymNotOnFrontend extends AbstractConstraint
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogSearchQuery $searchTerm
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
-    public function processAssert(CmsIndex $cmsIndex, Browser $browser, CatalogSearchQuery $searchTerm)
+    public function processAssert(CmsIndex $cmsIndex, BrowserInterface $browser, CatalogSearchQuery $searchTerm)
     {
         $cmsIndex->open()->getSearchBlock()->search($searchTerm->getSynonymFor());
         \PHPUnit_Framework_Assert::assertNotEquals(

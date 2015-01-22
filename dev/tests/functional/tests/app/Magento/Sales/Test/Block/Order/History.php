@@ -6,9 +6,9 @@
 
 namespace Magento\Sales\Test\Block\Order;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class History
@@ -73,7 +73,7 @@ class History extends Block
      * Get item order block
      *
      * @param string $id
-     * @return Element
+     * @return SimpleElement
      */
     protected function searchOrderById($id)
     {

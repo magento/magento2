@@ -8,8 +8,8 @@ namespace Magento\Bundle\Test\Constraint;
 
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertBundleItemsOnProductPage
@@ -26,13 +26,13 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
      *
      * @param CatalogProductView $catalogProductView
      * @param BundleProduct $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         BundleProduct $product,
-        Browser $browser
+        BrowserInterface $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 

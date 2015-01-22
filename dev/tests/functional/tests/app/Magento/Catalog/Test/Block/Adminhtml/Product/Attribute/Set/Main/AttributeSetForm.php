@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main;
 
-use Mtf\Block\Form as AbstractForm;
+use Magento\Mtf\Block\Form as AbstractForm;
 
 /**
  * Class Form

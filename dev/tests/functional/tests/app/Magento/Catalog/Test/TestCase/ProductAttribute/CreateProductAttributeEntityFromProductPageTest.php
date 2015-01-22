@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\TestCase\ProductAttribute;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\ObjectManager;
-use Mtf\TestCase\Scenario;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Test Flow:
@@ -34,6 +34,11 @@ use Mtf\TestCase\Scenario;
  */
 class CreateProductAttributeEntityFromProductPageTest extends Scenario
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * CatalogProductAttribute fixture.
      *

@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Test\TestCase;
 
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
@@ -24,6 +24,12 @@ use Mtf\TestCase\Injectable;
  */
 class SearchEntityResultsTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * CMS index page.
      *

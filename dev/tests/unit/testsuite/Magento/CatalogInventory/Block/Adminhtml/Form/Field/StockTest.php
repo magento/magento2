@@ -65,7 +65,13 @@ class StockTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_factoryTextMock = $this->getMock('Magento\Framework\Data\Form\Element\TextFactory', ['create']);
+        $this->_factoryTextMock = $this->getMock(
+            'Magento\Framework\Data\Form\Element\TextFactory',
+            [],
+            [],
+            '',
+            false
+        );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_block = $objectManagerHelper->getObject(

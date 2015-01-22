@@ -155,7 +155,7 @@
         <p><?php echo $this->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?></p>
     </div>
     <div class="order-coupons" id="order-coupons"><?php echo $this->getChildHtml();?></div>
-    <script type="text/javascript">
+    <script>
 require([
     'Magento_Sales/order/create/form'
 ], function(){
@@ -165,7 +165,7 @@ require([
 </div>
 
 <?php if ($this->isGiftMessagesAvailable()) : ?>
-<script type="text/javascript">
+<script>
 require([
     "prototype",
     "Magento_Sales/order/giftoptions_tooltip"

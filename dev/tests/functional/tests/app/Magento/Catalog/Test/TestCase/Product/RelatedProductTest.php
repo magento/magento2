@@ -8,8 +8,8 @@ namespace Magento\Catalog\Test\TestCase\Product;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Related;
 use Magento\Catalog\Test\Fixture\Product;
-use Mtf\Factory\Factory;
-use Mtf\TestCase\Functional;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\TestCase\Functional;
 
 /**
  * Class RelatedProductTest
@@ -17,6 +17,10 @@ use Mtf\TestCase\Functional;
  */
 class RelatedProductTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Login into backend area before test
      *

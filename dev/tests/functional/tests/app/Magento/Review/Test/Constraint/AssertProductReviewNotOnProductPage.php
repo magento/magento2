@@ -8,9 +8,9 @@ namespace Magento\Review\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Review\Test\Fixture\ReviewInjectable;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Review\Test\Fixture\Review;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductReviewNotOnProductPage
@@ -26,14 +26,14 @@ class AssertProductReviewNotOnProductPage extends AbstractConstraint
      * Assert that product review Not available on product page
      *
      * @param CatalogProductView $catalogProductView
-     * @param ReviewInjectable $reviewInitial
-     * @param Browser $browser
+     * @param Review $reviewInitial
+     * @param BrowserInterface $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        ReviewInjectable $reviewInitial,
-        Browser $browser
+        Review $reviewInitial,
+        BrowserInterface $browser
     ) {
         /** @var CatalogProductSimple $product */
         $product = $reviewInitial->getDataFieldConfig('entity_id')['source']->getEntity();

@@ -6,10 +6,10 @@
 
 namespace Magento\Catalog\Test\TestCase\Category;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for CreateCategoryEntity
@@ -27,6 +27,12 @@ use Mtf\TestCase\Injectable;
  */
 class CreateCategoryEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Catalog category index page
      *
@@ -57,11 +63,11 @@ class CreateCategoryEntityTest extends Injectable
     /**
      * Create category
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @param string $addCategory
      * @return void
      */
-    public function test(CatalogCategory $category, $addCategory)
+    public function test(Category $category, $addCategory)
     {
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($category, false);

@@ -8,7 +8,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Crosssell\Grid as CrosssellGrid;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Crosssell
@@ -33,10 +33,10 @@ class Crosssell extends AbstractRelated
     /**
      * Return cross sell products grid
      *
-     * @param Element|null $element [optional]
+     * @param SimpleElement|null $element [optional]
      * @return CrosssellGrid
      */
-    protected function getRelatedGrid(Element $element = null)
+    protected function getRelatedGrid(SimpleElement $element = null)
     {
         $element = $element ? $element : $this->_rootElement;
         return $this->blockFactory->create(

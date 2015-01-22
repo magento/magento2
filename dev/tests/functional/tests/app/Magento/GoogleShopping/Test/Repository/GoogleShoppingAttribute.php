@@ -6,7 +6,7 @@
 
 namespace Magento\GoogleShopping\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class GoogleShoppingAttribute

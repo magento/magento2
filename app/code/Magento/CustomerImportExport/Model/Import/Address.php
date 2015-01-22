@@ -493,7 +493,6 @@ class Address extends AbstractCustomer
         // entity table data
         $entityRow = [
             'entity_id' => $addressId,
-            'entity_type_id' => $this->getEntityTypeId(),
             'parent_id' => $customerId,
             'created_at' => $this->dateTime->now(),
             'updated_at' => $this->dateTime->now(),
@@ -563,7 +562,6 @@ class Address extends AbstractCustomer
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = [
                         'entity_id' => $addressId,
-                        'entity_type_id' => $this->getEntityTypeId(),
                         'attribute_id' => $attributeId,
                         'value' => $value,
                     ];
@@ -584,7 +582,6 @@ class Address extends AbstractCustomer
     {
         /** @var $entity \Magento\Customer\Model\Customer */
         $entity = $this->_customerFactory->create();
-        $entityTypeId = $entity->getEntityTypeId();
 
         foreach ($defaults as $tableName => $data) {
             $tableData = [];
@@ -592,7 +589,6 @@ class Address extends AbstractCustomer
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = [
                         'entity_id' => $customerId,
-                        'entity_type_id' => $entityTypeId,
                         'attribute_id' => $attributeId,
                         'value' => $value,
                     ];

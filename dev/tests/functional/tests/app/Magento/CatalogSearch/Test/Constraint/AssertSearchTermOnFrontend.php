@@ -9,8 +9,8 @@ namespace Magento\CatalogSearch\Test\Constraint;
 use Magento\Catalog\Test\Block\Search;
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertSearchTermOnFrontend
@@ -38,10 +38,10 @@ class AssertSearchTermOnFrontend extends AbstractConstraint
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogSearchQuery $searchTerm
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
-    public function processAssert(CmsIndex $cmsIndex, CatalogSearchQuery $searchTerm, Browser $browser)
+    public function processAssert(CmsIndex $cmsIndex, CatalogSearchQuery $searchTerm, BrowserInterface $browser)
     {
         $errors = [];
         $this->searchBlock = $cmsIndex->open()->getSearchBlock();
