@@ -7,7 +7,7 @@
 namespace Magento\User\Test\Constraint;
 
 use Magento\User\Test\Page\Adminhtml\UserIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertUserSuccessDeleteMessage

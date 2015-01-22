@@ -8,7 +8,7 @@ namespace Magento\Bundle\Test\Constraint;
 
 use Magento\Catalog\Test\Block\Product\View;
 use Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertGroupedPriceOnBundleProductPage

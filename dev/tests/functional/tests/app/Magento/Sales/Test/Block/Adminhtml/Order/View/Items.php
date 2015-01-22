@@ -8,8 +8,8 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\View;
 
 use Magento\Catalog\Test\Fixture\Product;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Items

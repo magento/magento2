@@ -6,7 +6,7 @@
 
 namespace Magento\Tax\Test\Block\Adminhtml\Rate\Edit;
 
-use Mtf\Block\Form as ParentForm;
+use Magento\Mtf\Block\Form as ParentForm;
 
 /**
  * Class Form

@@ -7,8 +7,8 @@
 namespace Magento\GroupedProduct\Test\TestCase;
 
 use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
-use Mtf\Factory\Factory;
-use Mtf\TestCase\Functional;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\TestCase\Functional;
 
 /**
  * Class CreateGroupedTest

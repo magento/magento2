@@ -6,7 +6,7 @@
 
 namespace Magento\Shipping\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class Method Repository
