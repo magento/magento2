@@ -7,7 +7,7 @@
 
 namespace Magento\Downloadable\Test\Block\Adminhtml\Product\Composite;
 
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Configure

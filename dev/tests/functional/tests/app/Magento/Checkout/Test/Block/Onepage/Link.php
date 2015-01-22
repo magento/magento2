@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Block\Onepage;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Link

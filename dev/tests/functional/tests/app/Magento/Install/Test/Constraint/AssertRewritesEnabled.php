@@ -7,8 +7,8 @@
 namespace Magento\Install\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
 use Magento\Catalog\Test\Fixture\Category;
 
 /**

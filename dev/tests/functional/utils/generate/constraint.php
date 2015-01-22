@@ -5,5 +5,5 @@
  */
 require_once dirname(__DIR__) . '/' . 'bootstrap.php';
 
-$objectManager->create('Mtf\Util\Generate\Constraint')->launch();
-\Mtf\Util\Generate\GenerateResult::displayResults();
+$objectManager->create('Magento\Mtf\Util\Generate\Constraint')->launch();
+\Magento\Mtf\Util\Generate\GenerateResult::displayResults();

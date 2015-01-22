@@ -6,8 +6,8 @@
 
 namespace Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped\AssociatedProducts;
 
-use Mtf\Block\Form;
-use Mtf\Client\Locator;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class ListAssociatedProducts

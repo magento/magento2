@@ -6,7 +6,7 @@
 
 namespace Magento\Store\Test\Handler\StoreGroup;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface StoreGroupInterface

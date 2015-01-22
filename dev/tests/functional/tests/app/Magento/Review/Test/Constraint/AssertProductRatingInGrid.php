@@ -8,7 +8,7 @@ namespace Magento\Review\Test\Constraint;
 
 use Magento\Review\Test\Fixture\Rating;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductRatingInGrid

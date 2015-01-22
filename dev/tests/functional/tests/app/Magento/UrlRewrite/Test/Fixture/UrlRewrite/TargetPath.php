@@ -6,8 +6,8 @@
 
 namespace Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class TargetPath

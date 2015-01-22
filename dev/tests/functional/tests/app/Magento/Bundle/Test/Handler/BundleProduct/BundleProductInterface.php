@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Test\Handler\BundleProduct;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface BundleProductInterface

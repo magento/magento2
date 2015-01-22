@@ -6,7 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\TestCase;
 
-use Mtf\Factory\Factory;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Class EditConfigurableTest

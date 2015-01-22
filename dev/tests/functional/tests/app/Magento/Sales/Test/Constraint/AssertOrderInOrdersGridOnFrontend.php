@@ -10,8 +10,8 @@ use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\OrderHistory;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\ObjectManager;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Class AssertOrderInOrdersGridOnFrontend

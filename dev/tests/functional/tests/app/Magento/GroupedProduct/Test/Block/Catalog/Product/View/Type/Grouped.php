@@ -9,10 +9,10 @@ namespace Magento\GroupedProduct\Test\Block\Catalog\Product\View\Type;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\GroupedProduct\Test\Fixture\GroupedProduct;
 use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class Grouped
