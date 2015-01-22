@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\Factory\Factory;
+use Magento\Mtf\Factory\Factory;
 
 class VirtualProduct extends Product
 {

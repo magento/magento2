@@ -6,11 +6,11 @@
 
 namespace Magento\Catalog\Test\Block\Product;
 
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
 
 /**
  * Product additional information block on the product page.

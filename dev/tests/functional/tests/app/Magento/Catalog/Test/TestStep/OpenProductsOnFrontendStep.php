@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\TestStep;
 
-use Mtf\Client\BrowserInterface;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Open products on frontend via url.

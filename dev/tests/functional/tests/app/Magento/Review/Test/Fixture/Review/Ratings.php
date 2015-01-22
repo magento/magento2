@@ -6,8 +6,8 @@
 
 namespace Magento\Review\Test\Fixture\Review;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Review\Test\Fixture\Rating;
 
 /**

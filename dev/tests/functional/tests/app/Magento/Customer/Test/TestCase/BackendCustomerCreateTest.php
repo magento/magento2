@@ -6,8 +6,8 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Mtf\Factory\Factory;
-use Mtf\TestCase\Functional;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\TestCase\Functional;
 
 class BackendCustomerCreateTest extends Functional
 {

@@ -9,10 +9,10 @@ namespace Magento\Customer\Test\Fixture;
 /**
  * Address of registered customer
  */
-class AddressBook extends \Mtf\Fixture\DataFixture
+class AddressBook extends \Magento\Mtf\Fixture\DataFixture
 {
     /**
-     * @var \Mtf\Fixture\DataFixture
+     * @var \Magento\Mtf\Fixture\DataFixture
      */
     protected $_addressFixture;
 
@@ -26,9 +26,9 @@ class AddressBook extends \Mtf\Fixture\DataFixture
     /**
      * Set address fixture
      *
-     * @param \Mtf\Fixture\DataFixture $address
+     * @param \Magento\Mtf\Fixture\DataFixture $address
      */
-    public function setAddress(\Mtf\Fixture\DataFixture $address)
+    public function setAddress(\Magento\Mtf\Fixture\DataFixture $address)
     {
         $this->_addressFixture = $address;
     }

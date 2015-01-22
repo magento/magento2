@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Test\Handler;
 
-use Mtf\Handler\Curl;
+use Magento\Mtf\Handler\Curl;
 
 /**
  * Class Conditions

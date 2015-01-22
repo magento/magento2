@@ -7,8 +7,8 @@
 namespace Magento\Wishlist\Test\TestStep;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\BrowserInterface;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class AddProductsToWishlistStep

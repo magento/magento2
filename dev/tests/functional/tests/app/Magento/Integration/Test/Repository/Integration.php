@@ -6,7 +6,7 @@
 
 namespace Magento\Integration\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class Integration Repository

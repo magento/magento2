@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Test\Handler\DownloadableProductInjectable;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface DownloadableProductInjectableInterface

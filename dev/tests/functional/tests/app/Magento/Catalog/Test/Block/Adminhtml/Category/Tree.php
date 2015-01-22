@@ -8,11 +8,11 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Category;
 
 use Magento\Catalog\Test\Fixture\Category;
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
-use Mtf\Client\Element\TreeElement;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\Element\TreeElement;
 
 /**
  * Class Tree
