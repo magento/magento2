@@ -1,11 +1,9 @@
 <?php
 /**
- *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception;
-
-use Magento\Framework\ObjectManager\Config\Config as ObjectManagerConfig;
 
 /**
  * Class GeneralTest
@@ -13,6 +11,17 @@ use Magento\Framework\ObjectManager\Config\Config as ObjectManagerConfig;
  */
 abstract class AbstractPlugin extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_configReader;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $_objectManager;
+
     public function setUpInterceptionConfig($pluginConfig)
     {
         $config = new \Magento\Framework\Interception\ObjectManager\Config\Developer();
