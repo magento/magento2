@@ -34,7 +34,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->will($this->returnValue('testProductName'));
 
-        $this->item = $this->getMock('Magento\Wishlist\Model\Item',['getProduct'], [], '', false);
+        $this->item = $this->getMock('Magento\Wishlist\Model\Item', ['getProduct'], [], '', false);
         $this->item
             ->expects($this->atLeastOnce())
             ->method('getProduct')

@@ -136,7 +136,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getProductId')
             ->will($this->returnValue(30));
 
-        $this->assertEquals($this->configureUrl,  $this->wishlistHelper->getConfigureUrl($wishlistItem));
+        $this->assertEquals($this->configureUrl, $this->wishlistHelper->getConfigureUrl($wishlistItem));
     }
 
     public function testGetWishlist()
