@@ -539,14 +539,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     /**
      * {@inheritdoc}
      */
-    public function getIsConfigurable()
-    {
-        return $this->getData(self::IS_CONFIGURABLE);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getIsSearchable()
     {
         return $this->getData(self::IS_SEARCHABLE);

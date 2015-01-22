@@ -254,7 +254,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             [
                 'getIsGlobal',
                 'getIsVisible',
-                'getIsConfigurable',
                 'usesSource',
                 'getIsUserDefined',
                 '__wakeup',
@@ -269,9 +268,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
         $attribute->expects($this->once())
             ->method('getIsVisible')
-            ->will($this->returnValue(1));
-        $attribute->expects($this->once())
-            ->method('getIsConfigurable')
             ->will($this->returnValue(1));
         $attribute->expects($this->once())
             ->method('usesSource')

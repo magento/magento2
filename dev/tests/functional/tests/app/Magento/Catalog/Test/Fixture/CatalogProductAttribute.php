@@ -322,15 +322,6 @@ class CatalogProductAttribute extends InjectableFixture
         'input' => '',
     ];
 
-    protected $is_configurable = [
-        'attribute_code' => 'is_configurable',
-        'backend_type' => 'smallint',
-        'is_required' => '',
-        'default_value' => '',
-        'input' => '',
-        'group' => 'advanced-properties',
-    ];
-
     protected $search_weight = [
         'attribute_code' => 'search_weight',
         'backend_type' => 'smallint',
@@ -561,11 +552,6 @@ class CatalogProductAttribute extends InjectableFixture
     public function getIsUsedForPromoRules()
     {
         return $this->getData('is_used_for_promo_rules');
-    }
-
-    public function getIsConfigurable()
-    {
-        return $this->getData('is_configurable');
     }
 
     public function getSearchWeight()
