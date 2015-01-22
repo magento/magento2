@@ -7,7 +7,7 @@
 namespace Magento\User\Test\Block\Adminhtml\Role\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Role

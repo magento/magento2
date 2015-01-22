@@ -7,7 +7,7 @@
 namespace Magento\CatalogRule\Test\Constraint;
 
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertCatalogPriceRuleSuccessSaveMessage
