@@ -142,7 +142,8 @@ module.exports = function (grunt) {
             legacy: {
                 options: {
                     type: 'yui-js',
-                    tempPath: 'var/cache/'
+                    tempPath: 'var/cache/',
+                    options: ['--nomunge=true']
                 },
                 files: {
                     '<%= config.path.uglify.legacy %>': [
