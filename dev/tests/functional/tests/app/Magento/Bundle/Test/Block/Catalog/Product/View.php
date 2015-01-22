@@ -8,7 +8,7 @@ namespace Magento\Bundle\Test\Block\Catalog\Product;
 
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Bundle;
 use Magento\Bundle\Test\Fixture\BundleProduct;
-use Mtf\Client\Element\Locator;
+use Mtf\Client\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
 
@@ -70,7 +70,6 @@ class View extends \Magento\Catalog\Test\Block\Product\View
         $selector = $this->newsletterFormSelector;
         $this->browser->waitUntil(
             function () use ($browser, $selector) {
-                $this->reinitRootElement();
                 $element = $browser->find($selector);
                 return $element->isVisible() ? true : null;
             }

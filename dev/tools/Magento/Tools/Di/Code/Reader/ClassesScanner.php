@@ -41,7 +41,7 @@ class ClassesScanner
         }
         $classes = [];
         $recursiveIterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($realPath),
+            new \RecursiveDirectoryIterator($realPath, \FilesystemIterator::FOLLOW_SYMLINKS),
             \RecursiveIteratorIterator::SELF_FIRST
         );
         /** @var $fileItem \SplFileInfo */
