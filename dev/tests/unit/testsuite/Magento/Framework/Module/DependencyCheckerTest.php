@@ -12,21 +12,51 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     private $checker;
 
+    /**
+     * @var \Magento\Framework\Module\PackageInfo|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $packageInfoMock;
+
     public function setUp()
     {
-        $graph = new DependencyGraph(
-            ['A', 'B', 'C', 'D', 'E'],
-            [['A', 'B'], ['B', 'D'], ['B', 'E'], ['C', 'E'], ['D', 'A']]
-        );
-        $mapperMock = $this->getMock('Magento\Framework\Module\Mapper');
-        $factoryMock = $this->getMock('Magento\Framework\Module\DependencyGraphFactory', [], [], '', false);
-        $factoryMock->expects($this->once())->method('create')->will($this->returnValue($graph));
-        $this->checker = new DependencyChecker($factoryMock, $mapperMock);
-        $this->checker->setModulesData(['A' => '{}', 'B' => '{}', 'C' => '{}', 'D' => '{}', 'E' => '{}']);
+        $this->packageInfoMock = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
+        $this->packageInfoMock
+            ->expects($this->any())
+            ->method('getAllModuleNames')
+            ->will($this->returnValue(['A', 'B', 'C', 'D', 'E']));
+        $requireMap = [
+            ['A', ['vendor/module-B']],
+            ['B', ['vendor/module-D', 'vendor/module-E']],
+            ['C', ['vendor/module-E']],
+            ['D', ['vendor/module-A']],
+            ['E', []],
+        ];
+        $this->packageInfoMock
+            ->expects($this->any())
+            ->method('getRequire')
+            ->will($this->returnValueMap($requireMap));
+
+        $moduleNameMap = [
+            ['vendor/module-A', 'A'],
+            ['vendor/module-B', 'B'],
+            ['vendor/module-C', 'C'],
+            ['vendor/module-D', 'D'],
+            ['vendor/module-E', 'E'],
+        ];
+        $this->packageInfoMock
+            ->expects($this->any())
+            ->method('getModuleName')
+            ->will($this->returnValueMap($moduleNameMap));
+
+        $this->checker = new DependencyChecker($this->packageInfoMock);
     }
     public function testCheckDependenciesWhenDisableModules()
     {
-        $this->checker->setEnabledModules(['A', 'B', 'C', 'D', 'E']);
+        $this->packageInfoMock
+            ->expects($this->any())
+            ->method('getEnabledModules')
+            ->will($this->returnValue(['A', 'B', 'C', 'D', 'E']));
+
         $actual = $this->checker->checkDependenciesWhenDisableModules(['B', 'D']);
         $expected = ['B' => ['A' => ['A', 'B']], 'D' => ['A' => ['A', 'B', 'D']]];
         $this->assertEquals($expected, $actual);
@@ -34,11 +64,14 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckDependenciesWhenEnableModules()
     {
-        $this->checker->setEnabledModules(['C']);
+        $this->packageInfoMock
+            ->expects($this->any())
+            ->method('getEnabledModules')
+            ->will($this->returnValue(['C']));
         $actual = $this->checker->checkDependenciesWhenEnableModules(['B', 'D']);
         $expected = [
-            'B' => ['A' => ['B', 'D', 'A(disabled)'], 'E' => ['B', 'E(disabled)']],
-            'D' => ['A' => ['D', 'A(disabled)'], 'E' => ['D', 'A(disabled)', 'B', 'E(disabled)']],
+            'B' => ['A' => ['B', 'D', 'A'], 'E' => ['B', 'E']],
+            'D' => ['A' => ['D', 'A'], 'E' => ['D', 'A', 'B', 'E']],
         ];
         $this->assertEquals($expected, $actual);
     }

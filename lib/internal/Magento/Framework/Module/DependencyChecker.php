@@ -5,23 +5,24 @@
  */
 namespace Magento\Framework\Module;
 
+use Magento\Framework\Data\Graph;
 use Magento\Framework\Filesystem;
 
-class DependencyChecker extends Checker
+class DependencyChecker
 {
     /**
-     * @var DependencyGraphFactory
+     * Composer package info
+     *
+     * @var PackageInfo
      */
-    protected $factory;
+    private $packageInfo;
 
     /**
-     * @param DependencyGraphFactory $factory
-     * @param Mapper $mapper
+     * @param PackageInfo $packageInfo
      */
-    public function __construct(DependencyGraphFactory $factory, Mapper $mapper)
+    public function __construct(PackageInfo $packageInfo)
     {
-        parent::__construct($mapper);
-        $this->factory = $factory;
+        $this->packageInfo = $packageInfo;
     }
 
     /**
@@ -33,21 +34,8 @@ class DependencyChecker extends Checker
     public function checkDependenciesWhenDisableModules($moduleNames)
     {
         // assume disable succeeds: currently enabled modules - to-be-disabled modules
-        $this->enabledModules = array_diff($this->enabledModules, $moduleNames);
-        $dependenciesMissingAll = [];
-        $graph = $this->factory->create($this->mapper, $this->modulesData);
-        foreach ($moduleNames as $moduleName) {
-            $dependenciesMissing = [];
-            $graph->traverseGraph($moduleName, DependencyGraph::INVERSE);
-            foreach (array_keys($this->modulesData) as $module) {
-                $dependencyChain = $graph->getChain($module);
-                if (!empty($dependencyChain) && $this->checkIfEnabled($module)) {
-                    $dependenciesMissing[$module] = array_reverse($dependencyChain);
-                }
-            }
-            $dependenciesMissingAll[$moduleName] = $dependenciesMissing;
-        }
-        return $dependenciesMissingAll;
+        $enabledModules = array_diff($this->packageInfo->getEnabledModules(), $moduleNames);
+        return $this->checkDependencyGraph(false, $moduleNames, $enabledModules);
     }
 
     /**
@@ -59,21 +47,33 @@ class DependencyChecker extends Checker
     public function checkDependenciesWhenEnableModules($moduleNames)
     {
         // assume enable succeeds: union of currently enabled modules and to-be-enabled modules
-        $this->enabledModules = array_unique(array_merge($this->enabledModules, $moduleNames));
+        $enabledModules = array_unique(array_merge($this->packageInfo->getEnabledModules(), $moduleNames));
+        return $this->checkDependencyGraph(true, $moduleNames, $enabledModules);
+    }
+
+    /**
+     * Check the dependency graph
+     *
+     * @param bool $isEnable
+     * @param string[] $moduleNames list of modules to be enabled/disabled
+     * @param string[] $enabledModules list of enabled modules assuming enable/disable succeeds
+     * @return array
+     */
+    private function checkDependencyGraph($isEnable, $moduleNames, $enabledModules)
+    {
         $dependenciesMissingAll = [];
-        $graph = $this->factory->create($this->mapper, $this->modulesData);
+        $graph = $this->createGraph($this->packageInfo);
+        $graphMode = $isEnable ? Graph::DIRECTIONAL : Graph::INVERSE;
         foreach ($moduleNames as $moduleName) {
             $dependenciesMissing = [];
-            $graph->traverseGraph($moduleName);
-            foreach (array_keys($this->modulesData) as $module) {
-                $dependencyChain = $graph->getChain($module);
-                if (!empty($dependencyChain) && !$this->checkIfEnabled($module)) {
-                    foreach ($dependencyChain as $key => $node) {
-                        if (!$this->checkIfEnabled($node)) {
-                            $dependencyChain[$key] = $dependencyChain[$key] . '(disabled)';
-                        }
+            $paths = $graph->findPathsToReachableNodes($moduleName, $graphMode);
+            foreach ($this->packageInfo->getAllModuleNames() as $module) {
+                if (isset($paths[$module])) {
+                    if ($isEnable && !in_array($module, $enabledModules)) {
+                        $dependenciesMissing[$module] = $paths[$module];
+                    } else if (!$isEnable && in_array($module, $enabledModules)) {
+                        $dependenciesMissing[$module] = array_reverse($paths[$module]);
                     }
-                    $dependenciesMissing[$module] = $dependencyChain;
                 }
             }
             $dependenciesMissingAll[$moduleName] = $dependenciesMissing;
@@ -81,15 +81,29 @@ class DependencyChecker extends Checker
         return $dependenciesMissingAll;
     }
 
-
     /**
-     * Check if module is enabled
+     * Create the dependency graph
      *
-     * @param string $moduleName
-     * @return bool
+     * @param PackageInfo $packageInfo
+     * @return Graph
      */
-    protected function checkIfEnabled($moduleName)
+    private function createGraph(PackageInfo $packageInfo)
     {
-        return array_search($moduleName, $this->enabledModules) !== false;
+        $nodes = [];
+        $dependencies = [];
+
+        // build the graph data
+        foreach ($packageInfo->getAllModuleNames() as $moduleName) {
+            $nodes[] = $moduleName;
+            foreach ($packageInfo->getRequire($moduleName) as $dependPackageName) {
+                $depend = $packageInfo->getModuleName($dependPackageName);
+                if ($depend) {
+                    $dependencies[] = [$moduleName, $depend];
+                }
+            }
+        }
+        $nodes = array_unique($nodes);
+
+        return new Graph($nodes, $dependencies);
     }
 }

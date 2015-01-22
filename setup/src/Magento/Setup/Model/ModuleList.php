@@ -66,8 +66,7 @@ class ModuleList implements \Magento\Framework\Module\ModuleListInterface
     public function getNames()
     {
         $data = $this->getAll();
-        $result = array_keys($data);
-        return $result;
+        return array_keys($data);
     }
 
     /**
@@ -75,6 +74,7 @@ class ModuleList implements \Magento\Framework\Module\ModuleListInterface
      */
     public function has($name)
     {
-        return array_search($name, $this->getNames()) !== false;
+        $this->getAll();
+        return isset($this->data[$name]);
     }
 }

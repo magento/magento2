@@ -7,19 +7,22 @@ namespace Magento\Framework\Module;
 
 use Magento\Framework\Filesystem;
 
-class ConflictChecker extends Checker
+class ConflictChecker
 {
     /**
-     * Key to conflicting packages array in composer.json files
+     * Composer package info
+     *
+     * @var PackageInfo
      */
-    const KEY_CONFLICT = 'conflict';
+    private $packageInfo;
 
     /**
-     * Filesystem
-     *
-     * @var Filesystem
+     * @param PackageInfo $packageInfo
      */
-    protected $filesystem;
+    public function __construct(PackageInfo $packageInfo)
+    {
+        $this->packageInfo = $packageInfo;
+    }
 
     /**
      * Check if enabling module will conflict any modules
@@ -30,11 +33,11 @@ class ConflictChecker extends Checker
     public function checkConflictsWhenEnableModules($moduleNames)
     {
         // union of currently enabled modules and to-be-enabled modules
-        $this->enabledModules = array_unique(array_merge($this->enabledModules, $moduleNames));
+        $enabledModules = array_unique(array_merge($this->packageInfo->getEnabledModules(), $moduleNames));
         $conflictsAll = [];
         foreach ($moduleNames as $moduleName) {
             $conflicts = [];
-            foreach ($this->enabledModules as $enabledModule) {
+            foreach ($enabledModules as $enabledModule) {
                 if ($this->checkIfConflict($enabledModule, $moduleName)) {
                     $conflicts[] = $enabledModule;
                 }
@@ -52,28 +55,15 @@ class ConflictChecker extends Checker
      */
     private function checkIfConflict($enabledModule, $moduleName)
     {
-        $jsonDecoder = new \Magento\Framework\Json\Decoder();
-
-        $data1 = $jsonDecoder->decode($this->modulesData[$enabledModule]);
-        $data2 = $jsonDecoder->decode($this->modulesData[$moduleName]);
-
-        if (isset($data1[self::KEY_CONFLICT])) {
-            foreach (array_keys($data1[self::KEY_CONFLICT]) as $packageName) {
-                $module = $this->mapper->packageNameToModuleFullName($packageName);
-                if ($module == $moduleName) {
-                    return true;
-                }
-            }
+        if (array_search($this->packageInfo->getPackageName($enabledModule),
+                $this->packageInfo->getConflict($moduleName)) !== false) {
+            return true;
+        }
+        if (array_search($this->packageInfo->getPackageName($moduleName),
+                $this->packageInfo->getConflict($enabledModule)) !== false) {
+            return true;
         }
 
-        if (isset($data2[self::KEY_CONFLICT])) {
-            foreach (array_keys($data2[self::KEY_CONFLICT]) as $packageName) {
-                $module = $this->mapper->packageNameToModuleFullName($packageName);
-                if ($module == $enabledModule) {
-                    return true;
-                }
-            }
-        }
         return false;
     }
 }

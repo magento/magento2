@@ -9,26 +9,31 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider checkConflictWhenEnableModuleDataProvider
-     * @param array $mapperReturnMap
-     * @param array $data
-     * @param array $enabledData
+     * @param array $nameReturnMap
+     * @param array $conflictReturnMap
+     * @param array $enabledModules
      * @param string $moduleName
+     * @param array $expected
      */
     public function testCheckConflictsWhenEnableModules(
-        $mapperReturnMap,
-        $data,
-        $enabledData,
+        $nameReturnMap,
+        $conflictReturnMap,
+        $enabledModules,
         $moduleName,
-        $conflictingModules
+        $expected
     ) {
-        $mapperMock = $this->getMock('Magento\Framework\Module\Mapper', [], [], '', false);
-        $mapperMock->expects($this->any())
-            ->method('packageNameToModuleFullName')
-            ->will($this->returnValueMap($mapperReturnMap));
-        $conflictChecker = new ConflictChecker($mapperMock);
-        $conflictChecker->setModulesData($data);
-        $conflictChecker->setEnabledModules($enabledData);
-        $this->assertEquals($conflictingModules, $conflictChecker->checkConflictsWhenEnableModules($moduleName));
+        $packageInfoMock = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
+        $packageInfoMock->expects($this->any())
+            ->method('getPackageName')
+            ->will($this->returnValueMap($nameReturnMap));
+        $packageInfoMock->expects($this->any())
+            ->method('getEnabledModules')
+            ->will($this->returnValue($enabledModules));
+        $packageInfoMock->expects($this->any())
+            ->method('getConflict')
+            ->will($this->returnValueMap($conflictReturnMap));
+        $conflictChecker = new ConflictChecker($packageInfoMock);
+        $this->assertEquals($expected, $conflictChecker->checkConflictsWhenEnableModules($moduleName));
     }
 
     /**
@@ -38,57 +43,57 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                [['vendor/module-A', 'Vendor_A'], ['vendor/module-B', 'Vendor_B']],
-                ['Vendor_A' => '{"conflict":{"vendor/module-B":0.1}}', 'Vendor_B' => '{}'],
+                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B']],
+                [['Vendor_A', ['vendor/module-B']], ['Vendor_B', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => ['Vendor_A']]
             ],
             [
-                [['vendor/module-A', 'Vendor_A'], ['vendor/module-B', 'Vendor_B']],
-                ['Vendor_A' => '{"conflict":{"vendor/module-B":0.1}}', 'Vendor_B' => '{}'],
+                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B']],
+                [['Vendor_A', ['vendor/module-B']], ['Vendor_B', []]],
                 [],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['vendor/module-A', 'Vendor_A'], ['vendor/module-B', 'Vendor_B']],
-                ['Vendor_B' => '{"conflict":{"vendor/module-A":0.1}}', 'Vendor_A' => '{}'],
+                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B']],
+                [['Vendor_B', ['vendor/module-A']], ['Vendor_A', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => ['Vendor_A']]
             ],
             [
-                [['vendor/module-A', 'Vendor_A'], ['vendor/module-B', 'Vendor_B']],
-                ['Vendor_B' => '{"conflict":{"vendor/module-A":0.1}}', 'Vendor_A' => '{}'],
+                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B']],
+                [['Vendor_B', ['vendor/module-A']], ['Vendor_A', []]],
                 [],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['vendor/module-A', 'Vendor_A'], ['vendor/module-B', 'Vendor_B']],
-                ['Vendor_A' => '{}', 'Vendor_B' => '{}'],
+                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B']],
+                [['Vendor_A', []], ['Vendor_B', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['vendor/module-A', 'Vendor_A'], ['vendor/module-B', 'Vendor_B'], ['vendor/module-C', 'Vendor_C']],
-                ['Vendor_A' => '{}', 'Vendor_B' => '{}', 'Vendor_C' => '{}'],
+                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B'], ['Vendor_C', 'vendor/module-C']],
+                [['Vendor_A', []], ['Vendor_B', []], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => [], 'Vendor_C' => []]
             ],
             [
-                [['vendor/module-A', 'Vendor_A'], ['vendor/module-B', 'Vendor_B'], ['vendor/module-C', 'Vendor_C']],
-                ['Vendor_A' => '{"conflict":{"vendor/module-C":0.1}}', 'Vendor_B' => '{}', 'Vendor_C' => '{}'],
+                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B'], ['Vendor_C', 'vendor/module-C']],
+                [['Vendor_A', ['vendor/module-C']], ['Vendor_B', []], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => [], 'Vendor_C' => ['Vendor_A']]
             ],
             [
-                [['vendor/module-A', 'Vendor_A'], ['vendor/module-B', 'Vendor_B'], ['vendor/module-C', 'Vendor_C']],
-                ['Vendor_A' => '{}', 'Vendor_B' => '{"conflict":{"vendor/module-C":0.1}}', 'Vendor_C' => '{}'],
+                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B'], ['Vendor_C', 'vendor/module-C']],
+                [['Vendor_A', []], ['Vendor_B', ['vendor/module-C']], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => ['Vendor_C'], 'Vendor_C' => ['Vendor_B']]

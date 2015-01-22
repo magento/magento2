@@ -57,13 +57,6 @@ class Status
     private $conflictChecker;
 
     /**
-     * Module Directory Reader
-     *
-     * @var Dir\Reader
-     */
-    private $reader;
-
-    /**
      * Constructor
      *
      * @param ModuleList\Loader $loader
@@ -76,7 +69,6 @@ class Status
     public function __construct(
         ModuleList\Loader $loader,
         ModuleList $list,
-        Dir\Reader $reader,
         Writer $writer,
         Cleanup $cleanup,
         ConflictChecker $conflictChecker,
@@ -84,7 +76,6 @@ class Status
     ) {
         $this->loader = $loader;
         $this->list = $list;
-        $this->reader = $reader;
         $this->writer = $writer;
         $this->cleanup = $cleanup;
         $this->conflictChecker = $conflictChecker;
@@ -100,47 +91,30 @@ class Status
      */
     public function checkConstraints($isEnable, $modules)
     {
-        $enabledModules = $this->list->getNames();
-        // array keys: module name in module.xml; array values: raw content from composer.json
-        // this raw data is used to create a dependency graph and also a package name-module name mapping
-        $rawData = array_combine(array_keys($this->loader->load()), $this->reader->getComposerJsonFiles()->toArray());
         $errorMessages = [];
-
-        $this->dependencyChecker->setModulesData($rawData);
-        $this->dependencyChecker->setEnabledModules($enabledModules);
         if ($isEnable) {
-            $this->conflictChecker->setModulesData($rawData);
-            $this->conflictChecker->setEnabledModules($enabledModules);
-
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules($modules);
             $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules($modules);
-
-            foreach ($errorModulesDependency as $moduleName => $missingDependencies) {
-                if (!empty($missingDependencies)) {
-                    $errorMessages[] = "Cannot enable $moduleName, depending on inactive modules:";
-                    foreach ($missingDependencies as $errorModule => $path) {
-                        $errorMessages [] = "\t$errorModule: " . implode('->', $path);
-                    }
-                }
-            }
-            foreach ($errorModulesConflict as $moduleName => $conflictingModules) {
-                if (!empty($conflictingModules)) {
-                    $errorMessages[] = "Cannot enable $moduleName, conflicting active modules:";
-                    foreach ($conflictingModules as $conflictingModule) {
-                        $errorMessages [] = "\t$conflictingModule";
-                    }
-                }
-            }
         } else {
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenDisableModules($modules);
+            $errorModulesConflict = [];
+        }
 
-            foreach ($errorModulesDependency as $moduleName => $missingDependencies) {
-                if (!empty($missingDependencies)) {
-                    $errorMessages[] = "Cannot disable $moduleName, active modules depending on it:";
-                    foreach ($missingDependencies as $errorModule => $path) {
-                        $errorMessages [] = "\t$errorModule: " . implode('->', $path);
-                    }
+        foreach ($errorModulesDependency as $moduleName => $missingDependencies) {
+            if (!empty($missingDependencies)) {
+                $errorMessages[] = $isEnable ?
+                    "Cannot enable $moduleName, depending on disabled modules:" :
+                    "Cannot disable $moduleName, modules depending on it:";
+                foreach ($missingDependencies as $errorModule => $path) {
+                    $errorMessages [] = "$errorModule: " . implode('->', $path);
                 }
+            }
+        }
+
+        foreach ($errorModulesConflict as $moduleName => $conflictingModules) {
+            if (!empty($conflictingModules)) {
+                $errorMessages[] = "Cannot enable $moduleName, conflicting modules:";
+                $errorMessages[] = implode(',', $conflictingModules);
             }
         }
 
