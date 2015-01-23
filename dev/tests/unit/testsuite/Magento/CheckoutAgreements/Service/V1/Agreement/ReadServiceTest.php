@@ -5,7 +5,7 @@
  */
 namespace Magento\CheckoutAgreements\Service\V1\Agreement;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class ReadServiceTest extends \PHPUnit_Framework_TestCase
@@ -58,7 +58,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->service = new ReadService(
             $this->factoryMock,

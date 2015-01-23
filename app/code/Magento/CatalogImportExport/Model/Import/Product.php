@@ -438,7 +438,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_productFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -518,7 +518,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Product\Type\Factory $productTypeFactory
      * @param \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory
      * @param Proxy\ProductFactory $proxyProdFactory
@@ -554,7 +554,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\CatalogImportExport\Model\Import\Product\Type\Factory $productTypeFactory,
         \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory,
         \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory,

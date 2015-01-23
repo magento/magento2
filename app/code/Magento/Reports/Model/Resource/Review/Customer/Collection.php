@@ -25,7 +25,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
@@ -38,7 +38,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null

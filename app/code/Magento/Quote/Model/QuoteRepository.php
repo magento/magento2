@@ -8,7 +8,7 @@ namespace Magento\Quote\Model;
 use \Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 class QuoteRepository
 {
@@ -28,17 +28,17 @@ class QuoteRepository
     protected $quoteFactory;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * @param QuoteFactory $quoteFactory
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         QuoteFactory $quoteFactory,
-        StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;

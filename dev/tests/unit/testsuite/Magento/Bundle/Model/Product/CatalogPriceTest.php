@@ -39,7 +39,7 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Framework\Store\StoreManagerInterface');
         $this->commonPriceMock = $this->getMock(
             'Magento\Catalog\Model\Product\CatalogPrice',
             [],

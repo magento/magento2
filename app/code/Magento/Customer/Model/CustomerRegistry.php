@@ -9,7 +9,7 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 /**
  * Registry for \Magento\Customer\Model\Customer
@@ -44,7 +44,7 @@ class CustomerRegistry
     private $customerSecureRegistryById = [];
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     private $storeManager;
 
@@ -53,12 +53,12 @@ class CustomerRegistry
      *
      * @param CustomerFactory $customerFactory
      * @param CustomerSecureFactory $customerSecureFactory
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      */
     public function __construct(
         CustomerFactory $customerFactory,
         CustomerSecureFactory $customerSecureFactory,
-        StoreManagerInterface $storeManager
+        \Magento\Framework\Store\StoreManagerInterface $storeManager
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;

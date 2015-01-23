@@ -1132,7 +1132,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         $storeId = $this->getQuote()->getStoreId();
         $validateEnabled = $this->_scopeConfig->isSetFlag(
             'sales/minimum_order/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if (!$validateEnabled) {
@@ -1145,12 +1145,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
         $amount = $this->_scopeConfig->getValue(
             'sales/minimum_order/amount',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $taxInclude = $this->_scopeConfig->getValue(
             'sales/minimum_order/tax_including',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;

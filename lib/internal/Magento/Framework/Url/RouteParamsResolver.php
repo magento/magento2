@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\Model\Url;
+namespace Magento\Framework\Url;
 
 class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\Framework\Url\RouteParamsResolverInterface
 {
@@ -21,7 +21,7 @@ class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -33,14 +33,14 @@ class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\
     /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
         array $data = []
     ) {
@@ -115,7 +115,7 @@ class RouteParamsResolver extends \Magento\Framework\Object implements \Magento\
             $store = $this->getScope() ?: $this->_storeManager->getStore();
             if (!$this->_scopeConfig->getValue(
                 \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this->getScope()
             ) && !$this->_storeManager->hasSingleStore()
             ) {

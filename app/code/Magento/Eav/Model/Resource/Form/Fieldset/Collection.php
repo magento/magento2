@@ -18,7 +18,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Model\Resource\Db\AbstractDb;
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
@@ -39,7 +39,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param AbstractDb $resource
      */

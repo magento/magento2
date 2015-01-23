@@ -715,7 +715,7 @@ abstract class AbstractMethod extends \Magento\Framework\Object implements Metho
             $storeId = $this->getStore();
         }
         $path = 'payment/' . $this->getCode() . '/' . $field;
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
+        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId);
     }
 
     /**

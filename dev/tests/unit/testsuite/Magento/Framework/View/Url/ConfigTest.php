@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\View\Url;
+namespace Magento\Framework\View\Url;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\View\Url\Config
+     * @var \Magento\Framework\View\Url\Config
      */
     protected $_model;
 
@@ -22,7 +22,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->_scopeConfig = $this->getMockBuilder(
             'Magento\Framework\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
-        $this->_model = new \Magento\Core\Model\View\Url\Config($this->_scopeConfig);
+        $this->_model = new \Magento\Framework\View\Url\Config($this->_scopeConfig);
     }
 
     /**

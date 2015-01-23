@@ -7,6 +7,7 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Store\ScopeInterface;
 
 /**
  * Store model
@@ -310,7 +311,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -334,7 +335,7 @@ class Store extends AbstractModel implements
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -720,7 +721,7 @@ class Store extends AbstractModel implements
         if ($this->_isFrontSecure === null) {
             $this->_isFrontSecure = $this->_config->isSetFlag(
                 self::XML_PATH_SECURE_IN_FRONTEND,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this->getId()
             );
         }
@@ -748,7 +749,7 @@ class Store extends AbstractModel implements
 
         $secureBaseUrl = $this->_config->getValue(
             self::XML_PATH_SECURE_BASE_URL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         if (!$secureBaseUrl) {
@@ -1124,7 +1125,7 @@ class Store extends AbstractModel implements
      */
     public function beforeDelete()
     {
-        $this->_configDataResource->clearScopeData(\Magento\Store\Model\ScopeInterface::SCOPE_STORES, $this->getId());
+        $this->_configDataResource->clearScopeData(\Magento\Framework\Store\ScopeInterface::SCOPE_STORES, $this->getId());
 
         return parent::beforeDelete();
     }
@@ -1180,7 +1181,7 @@ class Store extends AbstractModel implements
         if (null === $this->_frontendName) {
             $storeGroupName = (string)$this->_config->getValue(
                 'general/store_information/name',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
                 $this
             );
             $this->_frontendName = !empty($storeGroupName) ? $storeGroupName : $this->getGroup()->getName();

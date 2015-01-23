@@ -12,7 +12,7 @@
 namespace Magento\Backup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 class Observer
 {

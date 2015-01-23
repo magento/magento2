@@ -41,7 +41,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->quoteFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteFactory', ['create'], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\Store\StoreManagerInterface');
         $this->quoteMock = $this->getMock(
             '\Magento\Quote\Model\Quote',
             ['load', 'loadByCustomer', 'getIsActive', 'getId', '__wakeup', 'setSharedStoreIds', 'save', 'delete',

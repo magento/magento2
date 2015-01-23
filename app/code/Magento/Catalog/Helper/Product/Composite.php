@@ -10,7 +10,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Helper\Product;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Registry;
@@ -38,7 +38,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_catalogProduct = null;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -59,7 +59,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param Product $catalogProduct
      * @param Registry $coreRegistry
      * @param ViewInterface $view

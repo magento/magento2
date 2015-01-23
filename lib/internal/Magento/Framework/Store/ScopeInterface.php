@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Model;
+namespace Magento\Framework\Store;
 
 interface ScopeInterface
 {

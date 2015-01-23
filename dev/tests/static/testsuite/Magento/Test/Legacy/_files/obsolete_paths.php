@@ -221,6 +221,8 @@ return [
     ['/lib/Magento/Object', '/lib/Magento/Framework/Object'],
     ['/dev/tests/unit/testsuite/Magento/Object', '/dev/tests/unit/testsuite/Magento/Framework/Object'],
     ['/dev/tests/integration/testsuite/Magento/Object', '/dev/tests/integration/testsuite/Magento/Framework/Object'],
+    ['/dev/tests/unit/testsuite/Magento/Core/Model/View/Url', '/dev/tests/unit/testsuite/Magento/Framework/View/Url'],
+    ['/app/code/Magento/Core/Model/View/Url', '/lib/internal/Magento/Framework/View/Url'],
     ['/downloader'],
     ['/app/code/Magento/Core/Model/Design/Backend', '/app/code/Magento/Theme/Model/Design/Backend'],
     [

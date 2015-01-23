@@ -139,7 +139,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         )->setValue(
             \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
             $themeId,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         );
 
         /** @var $layout \Magento\Framework\View\LayoutInterface */

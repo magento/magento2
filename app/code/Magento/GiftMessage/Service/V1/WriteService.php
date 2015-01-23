@@ -25,7 +25,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Store manager interface.
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -47,13 +47,13 @@ class WriteService implements WriteServiceInterface
      * Constructs a gift message write service data object.
      *
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager.
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager Store manager.
      * @param \Magento\GiftMessage\Model\GiftMessageManager $giftMessageManager Gift message manager.
      * @param \Magento\GiftMessage\Helper\Message $helper Message helper.
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         \Magento\GiftMessage\Model\GiftMessageManager $giftMessageManager,
         \Magento\GiftMessage\Helper\Message $helper
     ) {

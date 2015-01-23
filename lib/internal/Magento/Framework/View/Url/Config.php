@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\View\Url;
+namespace Magento\Framework\View\Url;
 
 class Config implements \Magento\Framework\View\Url\ConfigInterface
 {
@@ -30,6 +30,6 @@ class Config implements \Magento\Framework\View\Url\ConfigInterface
      */
     public function getValue($path)
     {
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue($path, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
     }
 }

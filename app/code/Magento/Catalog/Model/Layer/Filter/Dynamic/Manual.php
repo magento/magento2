@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Resource\Layer\Filter\Price;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Search\Dynamic\Algorithm;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 
 class Manual implements AlgorithmInterface
 {

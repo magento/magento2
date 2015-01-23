@@ -8,14 +8,14 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
 class Confirmation extends \Magento\Customer\Controller\Account
 {
-    /** @var StoreManagerInterface */
+    /** @var \Magento\Framework\Store\StoreManagerInterface */
     protected $storeManager;
 
     /** @var AccountManagementInterface  */
@@ -27,7 +27,7 @@ class Confirmation extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
      * @param UrlFactory $urlFactory
      */

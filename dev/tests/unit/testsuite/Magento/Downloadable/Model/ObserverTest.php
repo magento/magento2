@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Model;
 
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Store\ScopeInterface;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class ObserverTest extends \PHPUnit_Framework_TestCase
@@ -211,7 +211,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfig->expects($this->exactly(1))
             ->method('isSetFlag')
-            ->with(Observer::XML_PATH_DISABLE_GUEST_CHECKOUT, ScopeInterface::SCOPE_STORE, $this->storeMock)
+            ->with(
+                Observer::XML_PATH_DISABLE_GUEST_CHECKOUT,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                $this->storeMock
+            )
             ->willReturn(true);
 
         $this->observerMock->expects($this->exactly(3))
@@ -254,7 +258,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfig->expects($this->exactly(1))
             ->method('isSetFlag')
-            ->with(Observer::XML_PATH_DISABLE_GUEST_CHECKOUT, ScopeInterface::SCOPE_STORE, $this->storeMock)
+            ->with(
+                Observer::XML_PATH_DISABLE_GUEST_CHECKOUT,
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE,
+                $this->storeMock
+            )
             ->willReturn(false);
 
         $this->observerMock->expects($this->exactly(2))

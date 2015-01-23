@@ -5,7 +5,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Url;
+namespace Magento\Framework\Url;
 
 class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
 {
@@ -50,7 +50,7 @@ class SecurityInfo implements \Magento\Framework\Url\SecurityInfoInterface
     {
         if (!$this->_scopeConfig->getValue(
             \Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
         )
         ) {
             return false;

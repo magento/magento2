@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Url;
+namespace Magento\Framework\Url;
 
 class ScopeResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,9 +20,9 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
+        $this->_storeManagerMock = $this->getMockBuilder('Magento\Framework\Store\StoreManagerInterface')->getMock();
         $this->_object = $objectManager->getObject(
-            'Magento\Core\Model\Url\ScopeResolver',
+            'Magento\Framework\Url\ScopeResolver',
             ['storeManager' => $this->_storeManagerMock]
         );
     }

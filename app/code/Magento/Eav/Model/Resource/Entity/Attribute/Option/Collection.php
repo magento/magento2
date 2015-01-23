@@ -25,7 +25,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_coreResource;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\Store\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -35,7 +35,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Resource $coreResource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Store\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -45,7 +45,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Resource $coreResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Store\StoreManagerInterface $storeManager,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
