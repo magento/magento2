@@ -604,10 +604,10 @@ class Multishipping extends \Magento\Framework\Object
         if ($address->getAddressType() == 'billing') {
             $order->setIsVirtual(1);
         } else {
-            $order->setShippingAddress($this->quoteAddressToOrderAddress->addressToOrderAddress($address));
+            $order->setShippingAddress($this->quoteAddressToOrderAddress->convert($address));
         }
 
-        $order->setPayment($this->quotePaymentToOrderPayment->paymentToOrderPayment($quote->getPayment()));
+        $order->setPayment($this->quotePaymentToOrderPayment->convert($quote->getPayment()));
         if ($this->priceCurrency->round($address->getGrandTotal()) == 0) {
             $order->getPayment()->setMethod('free');
         }
@@ -622,7 +622,7 @@ class Multishipping extends \Magento\Framework\Object
             )->setProductOptions(
                 $_quoteItem->getProduct()->getTypeInstance()->getOrderOptions($_quoteItem->getProduct())
             );
-            $orderItem = $this->quoteItemToOrderItem->itemToOrderItem($item);
+            $orderItem = $this->quoteItemToOrderItem->convert($_quoteItem);
             if ($item->getParentItem()) {
                 $orderItem->setParentItem($order->getItemByQuoteItemId($item->getParentItem()->getId()));
             }

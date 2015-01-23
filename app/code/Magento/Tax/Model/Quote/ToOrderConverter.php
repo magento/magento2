@@ -22,7 +22,7 @@ class ToOrderConverter
      * @param array $additional
      * @return array
      */
-    public function beforeConvert(QuoteAddressToOrder $subject, QuoteAddress $address, $additional)
+    public function beforeConvert(QuoteAddressToOrder $subject, QuoteAddress $address, $additional = [])
     {
         $this->quoteAddress = $address;
         return [$address, $additional];
