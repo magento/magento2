@@ -21,7 +21,9 @@
     </step>
     <step name="createProducts" module="Magento_Catalog" next="createCustomer"/>
     <step name="createCustomer" module="Magento_Customer" next="openSalesOrders">
-      <item name="customer/dataSet" value="johndoe_with_addresses"/>
+      <item name="customer">
+        <item name="dataSet" value="johndoe_with_addresses"/>
+      </item>
     </step>
     <step name="openSalesOrders" module="Magento_Sales" next="createNewOrder"/>
     <step name="createNewOrder" module="Magento_Sales" next="selectCustomerOrder"/>
