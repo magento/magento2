@@ -2225,7 +2225,7 @@ return [
     ['Magento\Core\Model\Resource\Website\Collection', 'Magento\Store\Model\Resource\Website\Collection'],
     ['Magento\Core\Model\Resource\Website\Grid\Collection', 'Magento\Store\Model\Resource\Website\Grid\Collection'],
     ['Magento\Core\Model\ScopeInterface', 'Magento\Framework\Store\ScopeInterface'],
-    ['Magento\Store\Model\Store\ScopeInterface', 'Magento\Framework\Store\ScopeInterface'],
+    ['Magento\Store\Model\ScopeInterface', 'Magento\Framework\Store\ScopeInterface'],
     ['Magento\Core\Model\Store', 'Magento\Store\Model\Store'],
     ['Magento\Store\Model\Exception', 'Magento\Framework\Model\Exception, Magento\Framework\App\InitException'],
     ['Magento\Core\Model\Store\Group', 'Magento\Store\Model\Group'],
