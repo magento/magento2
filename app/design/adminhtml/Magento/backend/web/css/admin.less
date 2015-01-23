@@ -1406,10 +1406,6 @@ address {
     background-image: url(../images/fam_application_form_delete.png);
 }
 
-.x-tree-node {
-    overflow: auto;
-}
-
 /*
     Styles for "js" tooltip with positionings
 -------------------------------------- */
@@ -2813,6 +2809,12 @@ address {
 .x-tree ul {
     margin: 0;
     padding: 0;
+}
+
+.tree-wrapper {
+    width: 100%;
+    overflow: auto;
+    float: left; // Fixed Chrome scroll issue
 }
 
 .page-actions.fixed .page-actions-inner:before {

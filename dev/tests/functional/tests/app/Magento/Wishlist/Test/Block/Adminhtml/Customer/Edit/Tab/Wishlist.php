@@ -6,9 +6,9 @@
 
 namespace Magento\Wishlist\Test\Block\Adminhtml\Customer\Edit\Tab;
 
+use Mtf\Client\Element;
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Wishlist\Test\Block\Adminhtml\Customer\Edit\Tab\Wishlist\Grid;
-use Mtf\Client\Element;
 
 /**
  * Class Wishlist

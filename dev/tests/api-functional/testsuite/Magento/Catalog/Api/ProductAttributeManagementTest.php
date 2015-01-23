@@ -148,7 +148,8 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
                 'operation' => self::SERVICE_NAME . 'Unassign',
             ],
         ];
-        $this->assertTrue($this->_webApiCall(
+        $this->assertTrue(
+            $this->_webApiCall(
                 $serviceInfo,
                 [
                     'attributeSetId' => $payload['attributeSetId'],

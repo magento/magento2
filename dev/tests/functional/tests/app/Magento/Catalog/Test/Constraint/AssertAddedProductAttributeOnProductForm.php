@@ -63,16 +63,6 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
     }
 
     /**
-     * Text of Product Attribute is present on the Product form.
-     *
-     * @return string
-     */
-    public function toString()
-    {
-        return 'Product Attribute is present on Product form.';
-    }
-
-    /**
      * Create Product With AttributeSet.
      *
      * @param CatalogProductAttribute $attribute
@@ -87,7 +77,16 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
             'Magento\Catalog\Test\TestStep\AddAttributeToProductTemplateStep',
             ['attribute' => $attribute, 'productTemplate' => $productTemplate]
         )->run();
-        ObjectManager::getInstance()->create('Magento\Catalog\Test\TestStep\SaveProductTemplateStep')->run();
         return $product['product'];
+    }
+
+    /**
+     * Text of Product Attribute is present on the Product form.
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return 'Product Attribute is present on Product form.';
     }
 }
