@@ -10,6 +10,9 @@ class Dirs
     /**
      * @param string[]|string $dirname
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function rm($dirname)
     {
@@ -91,6 +94,7 @@ class Dirs
      * @param string $dest
      * @return void
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public static function copyFileStrict($source, $dest)
     {

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Translation\Model\Js;
 
 class DataProvider implements DataProviderInterface
@@ -12,6 +14,7 @@ class DataProvider implements DataProviderInterface
      * Get translation data
      *
      * @return string[]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getData()
     {

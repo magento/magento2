@@ -158,6 +158,8 @@ class Url extends \Magento\Framework\Object
      * @param \Magento\Catalog\Model\Product $product
      * @param array $params
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getUrl(\Magento\Catalog\Model\Product $product, $params = [])
     {

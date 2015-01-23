@@ -13,6 +13,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\NewAttribute\Product
 
 use Magento\Backend\Block\Widget\Form;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**

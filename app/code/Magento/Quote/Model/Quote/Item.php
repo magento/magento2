@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Model\Quote;
 
 /**
@@ -97,6 +100,7 @@ namespace Magento\Quote\Model\Quote;
  * @method null|bool getHasConfigurationUnavailableError()
  * @method \Magento\Quote\Model\Quote\Item setHasConfigurationUnavailableError(bool $value)
  * @method \Magento\Quote\Model\Quote\Item unsHasConfigurationUnavailableError()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
 {

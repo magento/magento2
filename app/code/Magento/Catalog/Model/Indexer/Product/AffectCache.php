@@ -29,6 +29,7 @@ class AffectCache
      * @param \Magento\Indexer\Model\ActionInterface $subject
      * @param array $ids
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExecute(\Magento\Indexer\Model\ActionInterface $subject, $ids)
     {

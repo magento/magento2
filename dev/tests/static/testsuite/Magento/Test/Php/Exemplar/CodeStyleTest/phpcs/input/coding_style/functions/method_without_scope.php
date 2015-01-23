@@ -3,6 +3,8 @@
  * Doc block for this file
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Doc block for this class
  */

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Framework\Message\MessageInterface;

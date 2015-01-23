@@ -37,6 +37,7 @@ class Cc extends \Magento\Payment\Block\Form
      * Retrieve availables credit card types
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getCcAvailableTypes()
     {
