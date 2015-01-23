@@ -491,9 +491,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                 ' AND product_name_table.store_id=' .
                 $storeId .
                 ' AND product_name_table.attribute_id=' .
-                $attribute->getId() .
-                ' AND product_name_table.entity_type_id=' .
-                $entityTypeId,
+                $attribute->getId(),
                 []
             );
 
