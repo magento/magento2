@@ -43,49 +43,49 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                [['Vendor_A', ['Vendor_B']], ['Vendor_B', []]],
+                [['Vendor_A', true, ['Vendor_B']], ['Vendor_B', true, []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => ['Vendor_A']]
             ],
             [
-                [['Vendor_A', ['Vendor_B']], ['Vendor_B', []]],
+                [['Vendor_A', true, ['Vendor_B']], ['Vendor_B', true, []]],
                 [],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['Vendor_B', ['Vendor_A']], ['Vendor_A', []]],
+                [['Vendor_B', true, ['Vendor_A']], ['Vendor_A', true, []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => ['Vendor_A']]
             ],
             [
-                [['Vendor_B', ['Vendor_A']], ['Vendor_A', []]],
+                [['Vendor_B', true, ['Vendor_A']], ['Vendor_A', true, []]],
                 [],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['Vendor_A', []], ['Vendor_B', []]],
+                [['Vendor_A', true, []], ['Vendor_B', true, []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['Vendor_A', []], ['Vendor_B', []], ['Vendor_C', []]],
+                [['Vendor_A', true, []], ['Vendor_B', true, []], ['Vendor_C', true, []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => [], 'Vendor_C' => []]
             ],
             [
-                [['Vendor_A', ['Vendor_C']], ['Vendor_B', []], ['Vendor_C', []]],
+                [['Vendor_A', true, ['Vendor_C']], ['Vendor_B', true, []], ['Vendor_C', true, []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => [], 'Vendor_C' => ['Vendor_A']]
             ],
             [
-                [['Vendor_A', []], ['Vendor_B', ['Vendor_C']], ['Vendor_C', []]],
+                [['Vendor_A', true, []], ['Vendor_B', true, ['Vendor_C']], ['Vendor_C', true, []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => ['Vendor_C'], 'Vendor_C' => ['Vendor_B']]

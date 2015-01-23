@@ -36,11 +36,11 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $this->packageInfoMock = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
         $requireMap = [
-            ['A', ['B']],
-            ['B', ['D', 'E']],
-            ['C', ['E']],
-            ['D', ['A']],
-            ['E', []],
+            ['A', true, ['B']],
+            ['B', true, ['D', 'E']],
+            ['C', true, ['E']],
+            ['D', true, ['A']],
+            ['E', true, []],
         ];
         $this->packageInfoMock
             ->expects($this->any())
