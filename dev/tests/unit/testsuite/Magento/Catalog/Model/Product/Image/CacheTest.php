@@ -45,6 +45,11 @@ class CacheTest extends \PHPUnit_Framework_TestCase
      */
     protected $imageHelper;
 
+    /**
+     * @var \Magento\Framework\Data\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mediaGalleryCollection;
+
     protected function setUp()
     {
         $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
@@ -63,6 +68,10 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->imageHelper = $this->getMockBuilder('Magento\Catalog\Helper\Image')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mediaGalleryCollection = $this->getMockBuilder('Magento\Framework\Data\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -86,9 +95,16 @@ class CacheTest extends \PHPUnit_Framework_TestCase
                 'data' => ['file' => $imageFile]
             ]
         );
-        $this->product->expects($this->once())
+        $this->mediaGalleryCollection->expects($this->once())
+            ->method('count')
+            ->willReturn(1);
+        $this->mediaGalleryCollection->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$imageItem]));
+
+        $this->product->expects($this->any())
             ->method('getMediaGalleryImages')
-            ->willReturn([$imageItem]);
+            ->willReturn($this->mediaGalleryCollection);
 
         $this->config->expects($this->once())
             ->method('getVars')

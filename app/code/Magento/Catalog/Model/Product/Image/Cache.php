@@ -151,6 +151,10 @@ class Cache
      */
     public function generate(Product $product)
     {
+        $galleryImages = $product->getMediaGalleryImages();
+        if (!$galleryImages->count()) {
+            return $this;
+        }
         foreach ($product->getMediaGalleryImages() as $image) {
             foreach ($this->getData()as $params) {
                 $this->imageHelper->init($product, $params['type'], $image->getFile())
