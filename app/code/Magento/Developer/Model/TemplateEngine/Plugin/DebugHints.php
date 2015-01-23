@@ -8,7 +8,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\Model\TemplateEngine\Plugin;
+namespace Magento\Developer\Model\TemplateEngine\Plugin;
 
 class DebugHints
 {
@@ -67,7 +67,7 @@ class DebugHints
         if ($this->_scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE) && $this->_coreData->isDevAllowed()) {
             $showBlockHints = $this->_scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             return $this->_objectManager->create(
-                'Magento\Core\Model\TemplateEngine\Decorator\DebugHints',
+                'Magento\Developer\Model\TemplateEngine\Decorator\DebugHints',
                 ['subject' => $invocationResult, 'showBlockHints' => $showBlockHints]
             );
         }

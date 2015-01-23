@@ -8,7 +8,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\Model\TemplateEngine\Decorator;
+namespace Magento\Developer\Model\TemplateEngine\Decorator;
 
 class DebugHints implements \Magento\Framework\View\TemplateEngineInterface
 {

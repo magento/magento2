@@ -2869,6 +2869,10 @@ return [
     ['Magento\Catalog\Block\Product\Send'],
     ['Magento\Catalog\Helper\Product\Options'],
     ['Magento\Cms\Model\Resource\Page\Service'],
+    [
+        'Magento\Core\Model\TemplateEngine\Decorator\DebugHints',
+        'Magento\Developer\Model\TemplateEngine\Decorator\DebugHints'
+    ],
     ['Magento\Directory\Helper\Url'],
     ['Magento\GiftMessage\Helper\Url'],
     ['Magento\Rss\Helper\Data'],
@@ -2890,4 +2894,8 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
     ['Magento\Core\Model\Validator\Factory', 'Magento\Framework\Validator\Factory'],
+    [
+        'Magento\Core\Model\TemplateEngine\Plugin\DebugHints',
+        'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints'
+    ],
 ];
