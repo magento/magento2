@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Bundle\Model;
 
 use Magento\TestFramework\Helper\ObjectManager;

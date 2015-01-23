@@ -28,6 +28,7 @@ class ImageLink extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

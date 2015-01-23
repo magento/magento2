@@ -339,6 +339,9 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($optionId, $this->model->save($productMock, $optionMock));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testSaveExistingOption()
     {
         $productId = 1;
@@ -346,7 +349,6 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeId = 2;
         $optionId = 5;
         $existingOptionId = 5;
-        $existingOptionTitle = 'option_title';
         $existingLinkToUpdateId = '23';
         $existingLinkToDeleteId = '24';
         $productSkuToDelete = 'simple2';

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Config centinel model
  */
@@ -117,6 +119,7 @@ class Config
      * Return flag - is centinel mode test
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsTestMode()
     {
@@ -138,6 +141,7 @@ class Config
      * Define if debugging is enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDebugFlag()
     {

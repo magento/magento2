@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $installer \Magento\Reports\Model\Resource\Setup */
 $installer = $this;
 /*

@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Design extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**

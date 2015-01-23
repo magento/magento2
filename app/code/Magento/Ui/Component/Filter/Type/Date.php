@@ -19,6 +19,7 @@ use Magento\Ui\DataProvider\Manager;
 
 /**
  * Class Date
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Date extends FilterAbstract
 {
@@ -56,6 +57,7 @@ class Date extends FilterAbstract
      * @param FilterPool $filterPool
      * @param ResolverInterface $localeResolver
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         TemplateContext $context,

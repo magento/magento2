@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter;
  * Sales Adminhtml report filter form
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
 {

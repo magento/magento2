@@ -9,6 +9,9 @@
  */
 namespace Magento\Backend\Block\System\Config;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class FormStub extends \Magento\Backend\Block\System\Config\Form
 {
     /**

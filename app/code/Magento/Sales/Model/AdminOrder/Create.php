@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\AdminOrder;
 
 use Magento\Customer\Api\AddressMetadataInterface;
@@ -11,6 +14,9 @@ use Magento\Quote\Model\Quote\Item;
 
 /**
  * Order create model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Create extends \Magento\Framework\Object implements \Magento\Checkout\Model\Cart\CartInterface
 {
@@ -229,6 +235,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -300,6 +307,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * Return is validate data in import flag
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsValidate()
     {
@@ -434,6 +442,8 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param \Magento\Sales\Model\Order $order
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function initFromOrder(\Magento\Sales\Model\Order $order)
     {
@@ -715,6 +725,8 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param int $qty
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function moveQuoteItem($item, $moveTo, $qty)
     {
@@ -840,6 +852,9 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param array $data
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function applySidebarData($data)
     {
@@ -1553,6 +1568,8 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      *
      * @param   array $data
      * @return  $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function importPostData($data)
     {
@@ -1653,6 +1670,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * Set customer data to quote.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function _prepareCustomer()
     {
@@ -1715,6 +1733,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param \Magento\Quote\Model\Quote\Address $quoteCustomerAddress
      * @return void
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _prepareCustomerAddress($customer, $quoteCustomerAddress)
     {
@@ -1840,6 +1859,8 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _validate()
     {

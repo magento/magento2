@@ -12,6 +12,7 @@ use Magento\Framework\App\ResponseInterface;
  * Default implementation of application action controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Action extends AbstractAction
 {

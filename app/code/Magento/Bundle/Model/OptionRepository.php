@@ -10,6 +10,9 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Webapi\Exception;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInterface
 {
     /**
@@ -145,6 +148,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -232,6 +236,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param \Magento\Bundle\Api\Data\LinkInterface $firstLink
      * @param \Magento\Bundle\Api\Data\LinkInterface $secondLink
      * @return int
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function compareLinks(
         \Magento\Bundle\Api\Data\LinkInterface $firstLink,

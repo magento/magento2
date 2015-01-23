@@ -16,6 +16,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  *
  * @method int getParentId() getParentId()
  * @method \Magento\Customer\Model\Address setParentId() setParentId(int $parentId)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Address extends \Magento\Customer\Model\Address\AbstractAddress
 {
@@ -54,6 +55,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
