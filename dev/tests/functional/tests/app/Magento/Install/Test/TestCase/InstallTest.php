@@ -16,6 +16,7 @@ use Magento\Mtf\TestCase\Injectable;
 use Magento\Mtf\Config\GlobalConfig;
 use Magento\Install\Test\Constraint\AssertAgreementTextPresent;
 use Magento\Install\Test\Constraint\AssertSuccessfulReadinessCheck;
+use Magento\Mtf\ObjectManagerFactory;
 
 /**
  * PLEASE ADD NECESSARY INFO BEFORE RUNNING TEST TO
@@ -63,11 +64,11 @@ class InstallTest extends Injectable
     /**
      * Uninstall Magento before test.
      *
-     * @param Config $config
      * @return array
      */
-    public function __prepare(Config $config)
+    public function __prepare()
     {
+        $config = ObjectManagerFactory::getObjectManager()->get('Magento\Mtf\Config\GlobalConfig');
         // Prepare config data
         $configData['dbHost'] = $config->get('install/host');
         $configData['dbUser'] = $config->get('install/user');
