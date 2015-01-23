@@ -263,21 +263,6 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Magento\Framework\Exception\InputException
      */
-    public function testAddChildWithId()
-    {
-        $productLink = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
-        $productLink->expects($this->any())->method('getId')->will($this->returnValue(1));
-
-        $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $productMock->expects($this->once())->method('getTypeId')->will($this->returnValue(
-            \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
-        ));
-        $this->model->addChild($productMock, 1, $productLink);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testAddChildNonExistingOption()
     {
         $productLink = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
@@ -607,7 +592,6 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
                 'load',
                 'setProductId',
                 'setParentProductId',
-                'setSelectionId',
                 'setOptionId',
                 'setPosition',
                 'setSelectionQty',
@@ -625,7 +609,6 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $selection->expects($this->any())->method('getId')->will($this->returnValue($id));
         $selection->expects($this->once())->method('setProductId')->with($linkProductId);
         $selection->expects($this->once())->method('setParentProductId')->with($parentProductId);
-        $selection->expects($this->once())->method('setSelectionId')->with($id);
         $selection->expects($this->once())->method('setOptionId')->with($optionId);
         $selection->expects($this->once())->method('setPosition')->with($position);
         $selection->expects($this->once())->method('setSelectionQty')->with($qty);
