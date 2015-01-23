@@ -83,7 +83,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         $usage = InitParamListener::getConsoleUsage();
 
         // usage statement should be an array and have a blank line followed by a line containing the parameter
-        $this->assertTrue(is_array($usage), 'usage should be an array');
+        $this->assertArrayHasKey(0, $usage);
         $this->assertGreaterThanOrEqual(2, count($usage));
 
         // First element should be a blank line
