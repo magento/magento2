@@ -109,11 +109,12 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
 
     public function getDataProvider()
     {
+        $mockClassName = 'Mock_Action_Class';
         $actionClass = $this->getMockClass(
             'Magento\Framework\App\ActionInterface',
             ['dispatch', 'getResponse'],
             [],
-            'Magento_Module_Controller_Area_Namespace_Index'
+            $mockClassName
         );
 
         return [
@@ -122,7 +123,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 'Area',
                 'Namespace',
                 'Index',
-                ['magento\module\controller\area\namespace\index' => 'Magento_Module_Controller_Area_Namespace_Index'],
+                ['magento\module\controller\area\namespace\index' => $mockClassName],
                 $actionClass
             ],
             [
@@ -130,7 +131,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 '',
                 'Namespace',
                 'Index',
-                ['magento\module\controller\namespace\index' => 'Magento_Module_Controller_Area_Namespace_Index'],
+                ['magento\module\controller\namespace\index' => $mockClassName],
                 $actionClass
             ],
             [
@@ -138,7 +139,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 'Area',
                 'Namespace',
                 'Catch',
-                ['magento\module\controller\area\namespace\catchaction' => 'Magento_Module_Controller_Area_Namespace_Index'],
+                ['magento\module\controller\area\namespace\catchaction' => $mockClassName],
                 $actionClass
             ],
             [
@@ -146,7 +147,7 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
                 'Area',
                 'Namespace',
                 'Index',
-                ['magento\module\controller\area\namespace\index' => 'Magento_Module_Controller_Area_Namespace_Index2'],
+                ['magento\module\controller\area\namespace\index' => 'Not_Exist_Class'],
                 null
             ],
             [
