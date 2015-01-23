@@ -84,6 +84,7 @@ class Observer
     /**
      * @param mixed $schedule
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function scheduledUpdateCurrencyRates($schedule)
     {

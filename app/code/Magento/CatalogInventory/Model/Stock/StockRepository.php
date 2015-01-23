@@ -18,6 +18,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class StockRepository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockRepository implements StockRepositoryInterface
 {

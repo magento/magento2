@@ -16,6 +16,8 @@ class ArgumentsReader
      * @param bool $groupByPosition
      * @param bool $inherited
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getConstructorArguments(\ReflectionClass $class, $groupByPosition = false, $inherited = false)
     {

@@ -31,6 +31,7 @@ namespace Magento\Newsletter\Model;
  * @method string getQueueFinishAt()
  * @method \Magento\Newsletter\Model\Queue setQueueFinishAt(string $value)
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Queue extends \Magento\Email\Model\AbstractTemplate
 {
@@ -124,6 +125,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
      * @param \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -196,6 +198,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      *
      * @param int $count
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function sendPerSubscriber($count = 20)
     {
@@ -320,6 +323,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      * Getter for save stores flag.
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getSaveStoresFlag()
     {

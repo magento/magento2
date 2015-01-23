@@ -85,6 +85,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $eventObserver;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->stockStatus = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\Status')

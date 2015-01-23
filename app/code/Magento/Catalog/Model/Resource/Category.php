@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Model\Resource;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Category extends AbstractResource
 {
     /**
@@ -326,6 +329,8 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _saveCategoryProducts($category)
     {

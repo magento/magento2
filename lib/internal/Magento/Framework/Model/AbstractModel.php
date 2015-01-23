@@ -11,6 +11,7 @@ namespace Magento\Framework\Model;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractModel extends \Magento\Framework\Object
 {

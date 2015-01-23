@@ -3,6 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 namespace Magento\Theme\Model\Resource;
 
 use Magento\Framework\Stdlib\DateTime;

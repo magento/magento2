@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 require 'simple_product.php';
 
 /** @var \Magento\Quote\Model\Quote $quote */

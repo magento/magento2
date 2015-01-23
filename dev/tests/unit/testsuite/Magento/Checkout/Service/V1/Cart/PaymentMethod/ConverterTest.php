@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Service\V1\Cart\PaymentMethod;
 
 use Magento\Checkout\Service\V1\Data\Cart\PaymentMethod;

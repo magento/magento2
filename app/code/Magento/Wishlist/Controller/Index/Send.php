@@ -11,6 +11,9 @@ use Magento\Framework\App\Action\NotFoundException;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Wishlist\Controller\IndexInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Send extends Action\Action implements IndexInterface
 {
     /**
@@ -83,6 +86,9 @@ class Send extends Action\Action implements IndexInterface
      *
      * @return ResponseInterface|void
      * @throws NotFoundException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {

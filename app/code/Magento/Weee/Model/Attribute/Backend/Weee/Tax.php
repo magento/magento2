@@ -92,6 +92,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      *
      * @param   \Magento\Catalog\Model\Product $object
      * @return  $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function afterLoad($object)
     {

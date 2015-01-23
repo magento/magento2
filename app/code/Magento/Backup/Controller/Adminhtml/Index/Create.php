@@ -15,6 +15,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
      * Create backup action
      *
      * @return void|\Magento\Backend\App\Action
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

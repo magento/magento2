@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /* @var $installer \Magento\Setup\Module\SetupModule */
 $installer = $this;
 
