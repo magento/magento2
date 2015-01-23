@@ -8,6 +8,9 @@ namespace Magento\Quote\Model;
 
 use \Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class QuoteManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -520,7 +523,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn($baseOrder);
         $this->quoteAddressToOrderAddress->expects($this->at(0))
             ->method('convert')
-            ->with($shippingAddress,
+            ->with(
+                $shippingAddress,
                 [
                     'address_type' => 'shipping',
                     'email' => 'customer@example.com'
@@ -529,7 +533,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn($convertedShippingAddress);
         $this->quoteAddressToOrderAddress->expects($this->at(1))
             ->method('convert')
-            ->with($billingAddress,
+            ->with(
+                $billingAddress,
                 [
                     'address_type' => 'billing',
                     'email' => 'customer@example.com'

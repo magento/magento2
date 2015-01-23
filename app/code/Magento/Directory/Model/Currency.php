@@ -158,6 +158,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param   string $id
      * @param   string $field
      * @return  $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load($id, $field = null)
     {

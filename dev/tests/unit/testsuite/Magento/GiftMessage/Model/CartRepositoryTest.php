@@ -75,7 +75,8 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->messageMock = $this->getMock('Magento\GiftMessage\Model\Message', [], [], '', false);
         $this->quoteItemMock = $this->getMock(
             '\Magento\Quote\Model\Quote\Item',
@@ -85,7 +86,8 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->quoteMock = $this->getMock(
             '\Magento\Quote\Model\Quote',
             [
@@ -97,7 +99,8 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->giftMessageManagerMock =
             $this->getMock('Magento\GiftMessage\Model\GiftMessageManager', [], [], '', false);

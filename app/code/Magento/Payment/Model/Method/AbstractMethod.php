@@ -19,6 +19,7 @@ use Magento\Quote\Api\Data\PaymentMethodInterface;
  * @method AbstractMethod setStore()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
     MethodInterface,

@@ -20,6 +20,8 @@ use Magento\Framework\Exception\StateException;
 
 /**
  * Class QuoteManagement
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 {
@@ -102,6 +104,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param QuoteRepository $quoteRepository
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         EventManager $eventManager,

@@ -46,6 +46,7 @@ interface AgreementInterface
      * Returns the agreement status.
      *
      * @return bool Agreement status.
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsActive();
 
@@ -54,6 +55,7 @@ interface AgreementInterface
      *
      * @return bool * true - HTML.
      * * false - plain text.
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsHtml();
 }

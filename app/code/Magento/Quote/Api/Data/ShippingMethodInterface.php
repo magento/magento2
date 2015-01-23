@@ -88,6 +88,7 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
      * Returns the value of the availability flag for the current shipping method.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getAvailable();
 }

@@ -21,6 +21,7 @@ class ToOrderConverter
      * @param QuoteAddress $address
      * @param array $additional
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeConvert(QuoteAddressToOrder $subject, QuoteAddress $address, $additional = [])
     {
@@ -32,6 +33,7 @@ class ToOrderConverter
      * @param QuoteAddressToOrder $subject
      * @param OrderInterface $order
      * @return OrderInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterConvert(QuoteAddressToOrder $subject, OrderInterface $order)
     {
