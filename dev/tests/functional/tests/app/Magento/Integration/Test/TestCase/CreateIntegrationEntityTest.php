@@ -9,7 +9,7 @@ namespace Magento\Integration\Test\TestCase;
 use Magento\Integration\Test\Fixture\Integration;
 use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
 use Magento\Integration\Test\Page\Adminhtml\IntegrationNew;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Create Integration Entity
@@ -28,6 +28,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateIntegrationEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Integration grid page
      *

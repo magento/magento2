@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\TestStep;
 
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class OpenSalesOrdersStep

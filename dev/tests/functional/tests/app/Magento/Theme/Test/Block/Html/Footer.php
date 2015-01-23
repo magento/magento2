@@ -7,9 +7,9 @@
 
 namespace Magento\Theme\Test\Block\Html;
 
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 use Magento\Store\Test\Fixture\Store;
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
 
 /**
  * Footer block
@@ -56,7 +56,7 @@ class Footer extends Block
      * Click on link by name
      *
      * @param string $linkName
-     * @return \Mtf\Client\Element
+     * @return void
      * @throws \Exception
      */
     public function clickLink($linkName)

@@ -7,7 +7,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .downloadable.samples {
     margin-bottom: @indent-base;
@@ -72,7 +72,7 @@
 //
 // Product view Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .page-product-downloadable {
         .product-add-form {
             &:extend(.clearer all);

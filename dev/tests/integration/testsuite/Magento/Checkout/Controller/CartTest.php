@@ -176,23 +176,23 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/cart/updatePost');
 
         /** Check results */
-        /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->_objectManager->create('Magento\Sales\Model\Quote');
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->_objectManager->create('Magento\Quote\Model\Quote');
         $quote->load($checkoutSession->getQuote()->getId());
         $quoteItem = $this->_getQuoteItemIdByProductId($quote, 1);
         $this->assertEquals($updatedQuantity, $quoteItem->getQty(), "Invalid quote item quantity");
     }
 
     /**
-     * Gets \Magento\Sales\Model\Quote\Item from \Magento\Sales\Model\Quote by product id
+     * Gets \Magento\Quote\Model\Quote\Item from \Magento\Quote\Model\Quote by product id
      *
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Quote\Model\Quote $quote
      * @param $productId
-     * @return \Magento\Sales\Model\Quote\Item|null
+     * @return \Magento\Quote\Model\Quote\Item|null
      */
     private function _getQuoteItemIdByProductId($quote, $productId)
     {
-        /** @var $quoteItems \Magento\Sales\Model\Quote\Item[] */
+        /** @var $quoteItems \Magento\Quote\Model\Quote\Item[] */
         $quoteItems = $quote->getAllItems();
         foreach ($quoteItems as $quoteItem) {
             if ($productId == $quoteItem->getProductId()) {

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php if ($this->hasMethods()): ?>
 <div id="order-billing_method_form">
@@ -28,7 +31,7 @@
     <?php endforeach; ?>
     </dl>
 </div>
-<script type="text/javascript">
+<script>
     require(["Magento_Sales/order/create/form"], function(){
         order.setPaymentMethod('<?php echo $this->getSelectedMethodCode() ?>')
     });

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /** @var $this \Magento\Backend\Block\Widget\Form\Container */
  ?>
 <?php echo $this->getFormInitScripts() ?>
@@ -15,7 +18,7 @@
         <p class="form-buttons"><?php echo $this->getButtonsHtml('footer') ?></p>
     </div>
 <?php endif; ?>
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'mage/backend/form',

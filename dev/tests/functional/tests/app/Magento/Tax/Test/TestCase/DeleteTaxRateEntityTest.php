@@ -9,7 +9,7 @@ namespace Magento\Tax\Test\TestCase;
 use Magento\Tax\Test\Fixture\TaxRate;
 use Magento\Tax\Test\Page\Adminhtml\TaxRateIndex;
 use Magento\Tax\Test\Page\Adminhtml\TaxRateNew;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Flow:
@@ -29,6 +29,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteTaxRateEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Tax Rate grid page.
      *

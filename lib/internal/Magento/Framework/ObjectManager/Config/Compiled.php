@@ -145,4 +145,14 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
     {
         return $this->virtualTypes;
     }
+
+    /**
+     * Returns list on preferences
+     *
+     * @return array
+     */
+    public function getPreferences()
+    {
+        return $this->preferences;
+    }
 }

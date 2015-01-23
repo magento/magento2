@@ -18,6 +18,9 @@ class SourceArgumentsReader
      * @param \ReflectionClass $class
      * @param bool $inherited
      * @return array List of constructor argument types.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getConstructorArgumentTypes(\ReflectionClass $class, $inherited = false)
     {
@@ -115,6 +118,7 @@ class SourceArgumentsReader
      *
      * @param array $file
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getImportedNamespaces(array $file)
     {

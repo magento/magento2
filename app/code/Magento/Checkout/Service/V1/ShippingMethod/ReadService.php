@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Service\V1\ShippingMethod;
 
 use Magento\Checkout\Service\V1\Data\Cart\ShippingMethod;
@@ -11,7 +13,7 @@ use Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder;
 use Magento\Checkout\Service\V1\Data\Cart\ShippingMethodConverter;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\StateException;
-use Magento\Sales\Model\QuoteRepository;
+use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Shipping method read service.
@@ -66,10 +68,10 @@ class ReadService implements ReadServiceInterface
      */
     public function getMethod($cartId)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
 
-        /** @var \Magento\Sales\Model\Quote\Address $shippingAddress */
+        /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
             throw new StateException('Shipping address not set.');
@@ -124,7 +126,7 @@ class ReadService implements ReadServiceInterface
     {
         $output = [];
 
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
 
         // no methods applicable for empty carts or carts with virtual products

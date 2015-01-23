@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /** @var $this \Magento\Backend\Block\Widget\Button\SplitButton */
@@ -40,7 +43,7 @@ $_helper = $this->helper('Magento\Core\Helper\Data');
     <?php endif; ?>
 </div>
 
-<script type="text/javascript">
+<script>
 require(['jquery'], function($){
         $('.actions-split')
             .on('click.splitDefault', '.action-default', function() {

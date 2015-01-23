@@ -9,7 +9,7 @@ namespace Magento\UrlRewrite\Test\TestCase;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteEdit;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Delete Category URL Rewrites Entity
@@ -26,11 +26,16 @@ use Mtf\TestCase\Injectable;
  * 4. Delete URL Rewrite
  * 5. Perform all assertions
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites_(PS)
  * @ZephyrId MAGETWO-25086
  */
 class DeleteCategoryUrlRewriteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Url rewrite index page
      *

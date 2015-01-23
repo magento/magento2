@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <p class="switcher"><label for="store_switcher"><?php echo __('View Statistics For:') ?></label>
 <?php echo $this->getHintHtml() ?>
@@ -31,7 +34,7 @@
     <?php endforeach; ?>
 </select>
 </p>
-<script type="text/javascript">
+<script>
     function switchStore(obj){
         if (obj.options[obj.selectedIndex].getAttribute('website') == 'true') {
             var selectionType = 'website';

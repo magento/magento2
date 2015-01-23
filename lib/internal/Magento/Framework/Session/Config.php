@@ -110,6 +110,7 @@ class Config implements ConfigInterface
      * @param DeploymentConfig $deploymentConfig
      * @param string $scopeType
      * @param string $lifetimePath
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         \Magento\Framework\ValidatorFactory $validatorFactory,
@@ -407,6 +408,7 @@ class Config implements ConfigInterface
      * Get session.cookie_secure
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCookieSecure()
     {
@@ -429,6 +431,7 @@ class Config implements ConfigInterface
      * Get session.cookie_httponly
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCookieHttpOnly()
     {
@@ -451,6 +454,7 @@ class Config implements ConfigInterface
      * Get session.use_cookies
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseCookies()
     {

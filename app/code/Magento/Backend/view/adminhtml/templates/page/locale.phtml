@@ -3,13 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="locale-switcher-field field">
     <label class="label" for="locale-switcher"><span><?php echo __('Interface Locale'); ?></span></label>
     <div class="control">
         <?php echo $this->getLocaleSelect(); ?>
     </div>
-    <script type="text/javascript">
+    <script>
         function setInterfaceLanguage(event) {
             var elem = Event.element(event);
             if (elem) {

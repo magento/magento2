@@ -51,3 +51,17 @@ Model3
 \Magento\TestModule2\Service\V1\Entity\ItemBuilder
 \Magento\TestModule4\Service\V1\Entity\DataObjectResponse
 \Magento\TestModule4\Service\V1\Entity\DataObjectRequest
+\Magento\Mtf\ObjectManager\Config\Mapper\Dom
+\Magento\Mtf\Data\Argument\Interpreter\Constant
+\Magento\Mtf\Data\Argument\Interpreter\Boolean
+\Magento\Mtf\Data\Argument\Interpreter\String
+\Magento\Mtf\Data\Argument\Interpreter\Number
+\Magento\Mtf\Data\Argument\Interpreter\NullType
+\Magento\Mtf\Data\Argument\Interpreter\Object
+\Magento\Mtf\Data\Argument\Interpreter\Argument
+\Magento\Mtf\Data\Argument\Interpreter\ArrayType
+\Magento\Mtf\Data\Argument\InterpreterInterface
+\Magento\Mtf\Util\Generate\GenerateResult
+\Magento\Mtf\Util\Generate\Repository\Resource
+\Magento\Mtf\Client\Element
+\Magento\Mtf\TestSuite\AppState

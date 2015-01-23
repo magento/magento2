@@ -5,6 +5,9 @@
  */
 namespace Magento\Tools\Di\Compiler\Config;
 
+use Magento\Framework\App\Area;
+use Magento\Tools\Di\Definition\Collection;
+
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,6 +57,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->argumentsResolver = $this->getMock('Magento\Tools\Di\Compiler\ArgumentsResolver', [], [], '', false);
+        $this->argumentsResolverFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->argumentsResolver);
         $this->classReaderDecorator = $this->getMock(
             'Magento\Tools\Di\Code\Reader\ClassReaderDecorator',
             [],
@@ -72,71 +78,182 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGenerateCachePerScopeExtends()
+    public function testGenerateCachePerScopeGlobal()
     {
-        $definitionsCollection = $this->getMock('Magento\Tools\Di\Definition\Collection', [], [], '', false);
-        $this->diContainerConfig->expects($this->once())
-            ->method('extend')
-            ->with([]);
-        $this->configLoader->expects($this->once())
-            ->method('load')
-            ->with('areaCode')
-            ->willReturn([]);
-
-        $this->argumentsResolverFactory->expects($this->once())
-            ->method('create')
-            ->with($this->diContainerConfig)
-            ->willReturn($this->argumentsResolver);
-        $definitionsCollection->expects($this->exactly(2))
-            ->method('getInstancesNamesList')
-            ->willReturn(['instanceType1'], ['instanceType2']);
-        $definitionsCollection->expects($this->once())
-            ->method('getInstanceArguments')
-            ->willReturnMap([
-                ['instanceType1', null],
-                ['instanceType2', ['arg1', 'arg2']],
-            ]);
-        $this->typeReader->expects($this->exactly(3))
-            ->method('isConcrete')
-            ->willReturnMap([
-                ['instanceType1', true],
-                ['instanceType2', false],
-                ['originalType1', true],
-                ['originalType2', false],
-            ]);
-        $this->argumentsResolver->expects($this->exactly(2))
-            ->method('getResolvedConstructorArguments')
-            ->willReturnMap([
-                ['instanceType1', 'resolvedConstructor1'],
-                ['instanceVirtualType1', 'resolvedConstructor2'],
-            ]);
-        $this->diContainerConfig->expects($this->exactly(2))
+        $definitionCollection = $this->getDefinitionsCollection();
+        $this->diContainerConfig->expects($this->any())
             ->method('getVirtualTypes')
-            ->willReturn(['instanceVirtualType1' => 1, 'instanceVirtualType2' => 2]);
-        $this->diContainerConfig->expects($this->exactly(4))
+            ->willReturn($this->getVirtualTypes());
+        $this->diContainerConfig->expects($this->any())
+            ->method('getPreferences')
+            ->willReturn($this->getPreferences());
+
+        $getResolvedConstructorArgumentsMap = $this->getResolvedVirtualConstructorArgumentsMap(
+            $definitionCollection,
+            $this->getVirtualTypes()
+        );
+
+        $this->diContainerConfig->expects($this->any())
             ->method('getInstanceType')
-            ->willReturnMap([
-                ['instanceVirtualType1', 'originalType1'],
-                ['instanceVirtualType2', 'originalType2'],
-            ]);
-        $definitionsCollection->expects($this->exactly(2))
-            ->method('hasInstance')
-            ->willReturn('');
-        $this->classReaderDecorator->expects($this->once())
-            ->method('getConstructor')
-            ->willReturn('constructor');
-        $this->diContainerConfig->expects($this->once())
+            ->willReturnMap($this->getInstanceTypeMap($this->getVirtualTypes()));
+
+        $this->diContainerConfig->expects($this->any())
             ->method('isShared')
-            ->willReturnMap([
-                ['instanceType1', true],
-                ['instanceType2', false],
-            ]);
-        $this->diContainerConfig->expects($this->once())
+            ->willReturnMap($this->getExpectedNonShared());
+
+        $this->diContainerConfig->expects($this->any())
             ->method('getPreference')
-            ->willReturnMap([
-                ['instanceType1', 'instanceType1ss'],
-                ['instanceType2', 'instanceType2'],
-            ]);
-        $this->model->generateCachePerScope($definitionsCollection, 'areaCode');
+            ->willReturnMap($this->getPreferencesMap());
+
+        $isConcreteMap = [];
+        foreach ($definitionCollection->getInstancesNamesList() as $instanceType) {
+            $isConcreteMap[] = [$instanceType, strpos($instanceType, 'Interface') === false];
+
+            $getResolvedConstructorArgumentsMap[] = [
+                $instanceType,
+                $definitionCollection->getInstanceArguments($instanceType),
+                $this->getResolvedArguments(
+                    $definitionCollection->getInstanceArguments($instanceType)
+                )
+            ];
+        }
+
+        $this->typeReader->expects($this->any())
+            ->method('isConcrete')
+            ->willReturnMap($isConcreteMap);
+        $this->argumentsResolver->expects($this->any())
+            ->method('getResolvedConstructorArguments')
+            ->willReturnMap($getResolvedConstructorArgumentsMap);
+
+        $this->assertEquals(
+            $this->getExpectedGlobalConfig(),
+            $this->model->generateCachePerScope($definitionCollection, Area::AREA_GLOBAL)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    private function getExpectedGlobalConfig()
+    {
+        return [
+            'arguments' => [
+                'ConcreteType1' => serialize(['resolved_argument1', 'resolved_argument2']),
+                'ConcreteType2' => serialize(['resolved_argument1', 'resolved_argument2']),
+                'virtualType1' => serialize(['resolved_argument1', 'resolved_argument2'])
+            ],
+            'nonShared' => [
+                'ConcreteType2' => true,
+                'ThirdPartyInterface' => true
+            ],
+            'preferences' => $this->getPreferences(),
+            'instanceTypes' => $this->getVirtualTypes(),
+        ];
+    }
+
+    /**
+     * @return Collection
+     */
+    private function getDefinitionsCollection()
+    {
+        $definitionCollection = new Collection();
+        $definitionCollection->addDefinition('ConcreteType1', ['argument1', 'argument2']);
+        $definitionCollection->addDefinition('ConcreteType2', ['argument1', 'argument2']);
+        $definitionCollection->addDefinition('Interface1', [null]);
+
+        return $definitionCollection;
+    }
+
+    /**
+     * @return array
+     */
+    private function getVirtualTypes()
+    {
+        return ['virtualType1' => 'ConcreteType1'];
+    }
+
+    /**
+     * @return array
+     */
+    private function getExpectedNonShared()
+    {
+        return [
+            ['ConcreteType1', true],
+            ['ConcreteType2', false],
+            ['Interface1', true],
+            ['ThirdPartyInterface', false]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getPreferences()
+    {
+        return [
+            'Interface1' => 'ConcreteType1',
+            'ThirdPartyInterface' => 'ConcreteType2'
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getPreferencesMap()
+    {
+        return [
+            ['ConcreteType1', 'ConcreteType1'],
+            ['ConcreteType2', 'ConcreteType2'],
+            ['Interface1', 'ConcreteType1'],
+            ['ThirdPartyInterface', 'ConcreteType2']
+        ];
+    }
+
+    /**
+     * @param array $arguments
+     * @return array|null
+     */
+    private function getResolvedArguments($arguments)
+    {
+        return empty($arguments) ? null : array_map(
+            function ($argument) {
+                return 'resolved_' . $argument;
+            },
+            $arguments
+        );
+    }
+
+    /**
+     * @param array $virtualTypes
+     * @return array
+     */
+    private function getInstanceTypeMap($virtualTypes)
+    {
+        $getInstanceTypeMap = [];
+        foreach ($virtualTypes as $virtualType => $concreteType) {
+            $getInstanceTypeMap[] = [$virtualType, $concreteType];
+        }
+
+        return $getInstanceTypeMap;
+    }
+
+    /**
+     * @param Collection $definitionCollection
+     * @param array $virtualTypes
+     * @return array
+     */
+    private function getResolvedVirtualConstructorArgumentsMap(Collection $definitionCollection, array $virtualTypes)
+    {
+        $getResolvedConstructorArgumentsMap = [];
+        foreach ($virtualTypes as $virtualType => $concreteType) {
+            $getResolvedConstructorArgumentsMap[] = [
+                $virtualType,
+                $definitionCollection->getInstanceArguments($concreteType),
+                $this->getResolvedArguments(
+                    $definitionCollection->getInstanceArguments($concreteType)
+                )
+            ];
+        }
+        return $getResolvedConstructorArgumentsMap;
     }
 }

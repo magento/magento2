@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 /** @var $this \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content\Uploader */
 ?>
 
@@ -21,7 +24,7 @@
             <div class="clear"></div>
         </div>
     </script>
-    <script type="text/javascript">
+    <script>
 require(["jquery","jquery/file-uploader","jquery/template"], function($){
     $(function () {
             $('#<?php echo $this->getHtmlId() ?> .fileupload').fileupload({

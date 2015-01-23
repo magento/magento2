@@ -5,6 +5,9 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Customer extends AbstractCustomer
 {
     /**
@@ -128,6 +131,7 @@ class Customer extends AbstractCustomer
      * @param \Magento\Customer\Model\Resource\Attribute\CollectionFactory $attrCollectionFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
@@ -234,7 +238,6 @@ class Customer extends AbstractCustomer
                 foreach ($attributeData as $attributeId => $value) {
                     $tableData[] = [
                         'entity_id' => $customerId,
-                        'entity_type_id' => $this->getEntityTypeId(),
                         'attribute_id' => $attributeId,
                         'value' => $value,
                     ];
@@ -277,6 +280,8 @@ class Customer extends AbstractCustomer
      *
      * @param array $rowData
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareDataForUpdate(array $rowData)
     {
@@ -312,8 +317,6 @@ class Customer extends AbstractCustomer
             // create
             $entityId = $this->_getNextEntityId();
             $entityRow['entity_id'] = $entityId;
-            $entityRow['entity_type_id'] = $this->getEntityTypeId();
-            $entityRow['attribute_set_id'] = 0;
             $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
             $entityRow['email'] = $emailInLowercase;
             $entityRow['is_active'] = 1;
@@ -366,6 +369,7 @@ class Customer extends AbstractCustomer
      * Import data rows
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _importData()
     {
@@ -433,6 +437,8 @@ class Customer extends AbstractCustomer
      * @param array $rowData
      * @param int $rowNumber
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _validateRowForUpdate(array $rowData, $rowNumber)
     {

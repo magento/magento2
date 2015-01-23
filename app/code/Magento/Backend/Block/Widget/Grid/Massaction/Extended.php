@@ -8,7 +8,7 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction;
 /**
  * Grid widget massaction block
  *
- * @method \Magento\Sales\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
+ * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
  * @author      Magento Core Team <core@magentocommerce.com>
  * @deprecated support Magento 1.x grid massaction implementation
@@ -306,6 +306,7 @@ class Extended extends \Magento\Backend\Block\Widget
      * Retrieve select all functionality flag check
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseSelectAll()
     {

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 
 <?php
@@ -10,7 +13,7 @@
  * @see \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable
  */
 ?>
-<script type="text/javascript">
+<script>
 require([
     'jquery',
     'Magento_Ui/js/lib/registry/registry',
@@ -214,7 +217,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     <div id="custom-advice-container"></div>
 </div>
 <?php if ($this->isReadonly()): ?>
-<script type="text/javascript">
+<script>
 require(['prototype'], function(){
 
 $(<?= $this->getContentTabId(); ?>).select('input', 'select', 'textarea', 'button').each(function (item){

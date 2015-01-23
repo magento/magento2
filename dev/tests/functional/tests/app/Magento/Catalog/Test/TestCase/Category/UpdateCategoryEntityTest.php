@@ -6,10 +6,10 @@
 
 namespace Magento\Catalog\Test\TestCase\Category;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for UpdateCategoryEntity
@@ -31,6 +31,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateCategoryEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog category index page
      *
@@ -48,13 +53,13 @@ class UpdateCategoryEntityTest extends Injectable
     /**
      * Inject page end prepare default category
      *
-     * @param CatalogCategory $initialCategory
+     * @param Category $initialCategory
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param CatalogCategoryEdit $catalogCategoryEdit
      * @return array
      */
     public function __inject(
-        CatalogCategory $initialCategory,
+        Category $initialCategory,
         CatalogCategoryIndex $catalogCategoryIndex,
         CatalogCategoryEdit $catalogCategoryEdit
     ) {
@@ -67,11 +72,11 @@ class UpdateCategoryEntityTest extends Injectable
     /**
      * Test for update category
      *
-     * @param CatalogCategory $category
-     * @param CatalogCategory $initialCategory
+     * @param Category $category
+     * @param Category $initialCategory
      * @return void
      */
-    public function test(CatalogCategory $category, CatalogCategory $initialCategory)
+    public function test(Category $category, Category $initialCategory)
     {
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);

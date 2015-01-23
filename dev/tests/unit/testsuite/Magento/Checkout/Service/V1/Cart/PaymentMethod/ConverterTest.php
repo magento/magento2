@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Service\V1\Cart\PaymentMethod;
 
 use Magento\Checkout\Service\V1\Data\Cart\PaymentMethod;
@@ -46,7 +48,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertQuotePaymentObjectToPaymentDataObject()
     {
-        $paymentMock = $this->getMock('\Magento\Sales\Model\Quote\Payment',
+        $paymentMock = $this->getMock('\Magento\Quote\Model\Quote\Payment',
             [
                 'getMethod', 'getPoNumber', 'getCcOwner', 'getCcNumber',
                 'getCcType', 'getCcExpYear', 'getCcExpMonth', 'getAdditionalData', '__wakeup'

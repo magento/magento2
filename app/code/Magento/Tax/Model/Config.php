@@ -13,6 +13,9 @@ namespace Magento\Tax\Model;
 
 use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ */
 class Config
 {
     // tax notifications
@@ -263,6 +266,7 @@ class Config
      * Get flag what we need use shipping price exclude tax
      *
      * @return bool $flag
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getNeedUseShippingExcludeTax()
     {
@@ -270,7 +274,7 @@ class Config
     }
 
     /**
-     * Get defined tax calculation agorithm
+     * Get defined tax calculation algorithm
      *
      * @param   null|string|bool|int|Store $store
      * @return  string
@@ -784,6 +788,7 @@ class Config
      *
      * @param null|string|bool|int|Store $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getInfoUrl($store = null)
     {
@@ -800,6 +805,7 @@ class Config
      *
      * @param null|int|string|Store $store
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function needPriceConversion($store = null)
     {

@@ -56,6 +56,9 @@ class Creditmemo extends AbstractItems
      * Draw item line
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function draw()
     {

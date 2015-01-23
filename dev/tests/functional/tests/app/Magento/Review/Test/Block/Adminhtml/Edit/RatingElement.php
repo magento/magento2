@@ -6,14 +6,14 @@
 
 namespace Magento\Review\Test\Block\Adminhtml\Edit;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class RatingElement
  * Rating typified element
  */
-class RatingElement extends Element
+class RatingElement extends SimpleElement
 {
     /**
      * Rating selector
@@ -53,10 +53,10 @@ class RatingElement extends Element
     /**
      * Get rating vote
      *
-     * @param Element $rating
+     * @param SimpleElement $rating
      * @return int
      */
-    protected function getRatingVote(Element $rating)
+    protected function getRatingVote(SimpleElement $rating)
     {
         $ratingVote = 5;
         $ratingVoteElement = $rating->find(sprintf($this->checkedRating, $ratingVote));

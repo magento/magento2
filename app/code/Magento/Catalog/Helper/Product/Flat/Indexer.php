@@ -8,6 +8,8 @@ namespace Magento\Catalog\Helper\Product\Flat;
 /**
  * Catalog Product Flat Indexer Helper
  *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -130,6 +132,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * @param bool $addFilterableAttrs
      * @param bool $addChildData
      * @param array $flatAttributeGroups
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,

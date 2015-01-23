@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /** @var $this \Magento\Reports\Block\Adminhtml\Grid */
@@ -58,7 +61,7 @@ $numColumns = sizeof($this->getColumns());
                 </label>
                 <?php echo $this->getRefreshButtonHtml() ?>
             </div>
-            <script type="text/javascript">
+            <script>
 require([
     "jquery",
     "mage/calendar"
@@ -91,7 +94,7 @@ require([
     </div>
 </div>
 <?php if ($this->canDisplayContainer()): ?>
-    <script type="text/javascript">
+    <script>
 require([
     "jquery",
     "validation",

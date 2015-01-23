@@ -71,6 +71,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * Default entites and attributes
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getDefaultEntities()
     {
@@ -561,7 +562,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
                         'type' => 'decimal',
                         'label' => 'Group Price',
                         'input' => 'text',
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Groupprice',
+                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice',
                         'required' => false,
                         'sort_order' => 2,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,

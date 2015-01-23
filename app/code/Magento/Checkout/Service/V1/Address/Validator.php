@@ -11,7 +11,7 @@ class Validator
     /**
      * Address factory.
      *
-     * @var \Magento\Sales\Model\Quote\AddressFactory
+     * @var \Magento\Quote\Model\Quote\AddressFactory
      */
     protected $quoteAddressFactory;
 
@@ -25,11 +25,11 @@ class Validator
     /**
      * Constructs a quote shipping address validator service object.
      *
-     * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory Address factory.
+     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory Address factory.
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory Customer factory.
      */
     public function __construct(
-        \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory,
+        \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory
     ) {
         $this->quoteAddressFactory = $quoteAddressFactory;

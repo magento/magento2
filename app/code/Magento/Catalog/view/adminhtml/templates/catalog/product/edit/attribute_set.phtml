@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
  /* @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet */
 ?>
 <script id="product-template-selector-template" type="text/x-jquery-tmpl">
@@ -20,7 +23,7 @@
 </button>
 {{/if}}
 </script>
-<script type="text/javascript">
+<script>
     require(["jquery","mage/mage","mage/backend/suggest"],function ($) {
         var $suggest = $('#product-template-suggest');
         $suggest.closest('.dropdown-menu').siblings('[data-toggle=dropdown]').on('click.toggleDropdown', function () {

@@ -7,7 +7,7 @@
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .product.data.items {
     .data-accordion();
@@ -53,7 +53,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
     .product.data.items {
         .data-tabs();
         border-bottom: 0;

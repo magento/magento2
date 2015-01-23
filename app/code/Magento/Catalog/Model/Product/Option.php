@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface;
@@ -22,6 +25,7 @@ use Magento\Framework\Model\Exception;
  * @method \Magento\Catalog\Model\Product\Option setProductId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Data\ProductCustomOptionInterface
 {
@@ -104,6 +108,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -313,6 +318,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      * Save options.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function saveOptions()
     {
@@ -626,6 +632,7 @@ class Option extends AbstractExtensibleModel implements \Magento\Catalog\Api\Dat
      * Get is require
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsRequire()
     {

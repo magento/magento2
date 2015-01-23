@@ -10,10 +10,11 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Sales\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Adminhtml sales order create items grid block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
@@ -82,6 +83,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param StockRegistryInterface $stockRegistry
      * @param StockStateInterface $stockState
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -303,7 +305,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Retrieve quote address
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return \Magento\Quote\Model\Quote\Address
      */
     public function getQuoteAddress()
     {
@@ -447,6 +449,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get flag for rights to move items to customer storage
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getMoveToCustomerStorage()
     {

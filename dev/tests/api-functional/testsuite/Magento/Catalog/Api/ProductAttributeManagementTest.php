@@ -4,6 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -148,7 +151,8 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
                 'operation' => self::SERVICE_NAME . 'Unassign',
             ],
         ];
-        $this->assertTrue($this->_webApiCall(
+        $this->assertTrue(
+            $this->_webApiCall(
                 $serviceInfo,
                 [
                     'attributeSetId' => $payload['attributeSetId'],

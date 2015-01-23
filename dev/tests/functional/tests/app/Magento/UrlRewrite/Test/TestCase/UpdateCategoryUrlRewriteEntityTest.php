@@ -6,12 +6,12 @@
 
 namespace Magento\UrlRewrite\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteEdit;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for UpdateCategoryUrlRewritesEntity
@@ -30,11 +30,16 @@ use Mtf\TestCase\Injectable;
  * 5. Click 'Save' button.
  * 6. Perform all asserts.
  *
- * @group URL_Rewrites_(MX)
+ * @group URL_Rewrites_(PS)
  * @ZephyrId MAGETWO-24838
  */
 class UpdateCategoryUrlRewriteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Url rewrite index page
      *
@@ -55,14 +60,14 @@ class UpdateCategoryUrlRewriteEntityTest extends Injectable
      * @param UrlRewriteIndex $urlRewriteIndex
      * @param UrlRewriteEdit $urlRewriteEdit
      * @param FixtureFactory $fixtureFactory
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return array
      */
     public function __inject(
         UrlRewriteIndex $urlRewriteIndex,
         UrlRewriteEdit $urlRewriteEdit,
         FixtureFactory $fixtureFactory,
-        CatalogCategory $category
+        Category $category
     ) {
         $this->urlRewriteIndex = $urlRewriteIndex;
         $this->urlRewriteEdit = $urlRewriteEdit;

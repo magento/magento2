@@ -11,6 +11,9 @@ use Magento\Store\Model\Website;
 use Magento\Tax\Model\Calculation;
 use Magento\Customer\Api\AccountManagementInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Tax extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -96,6 +99,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -192,11 +196,13 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @param Product $product
-     * @param null|false|\Magento\Sales\Model\Quote\Address $shipping
-     * @param null|false|\Magento\Sales\Model\Quote\Address $billing
+     * @param null|false|\Magento\Quote\Model\Quote\Address $shipping
+     * @param null|false|\Magento\Quote\Model\Quote\Address $billing
      * @param Website $website
      * @param bool $calculateTax
      * @return \Magento\Framework\Object[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getProductWeeeAttributes(
         $product,

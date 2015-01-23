@@ -32,7 +32,7 @@ class DeniedIframe extends \Magento\Backend\Controller\Adminhtml\Auth
      */
     protected function _getDeniedIframe()
     {
-        return '<script type="text/javascript">parent.window.location = \''
+        return '<script>parent.window.location = \''
             . $this->_helper->getHomePageUrl() . '\';</script>';
     }
 

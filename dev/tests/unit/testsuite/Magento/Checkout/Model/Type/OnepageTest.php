@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Model\Type;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -54,7 +56,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     protected $customerFactoryMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $quoteFactoryMock;
+    protected $quoteManagementMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $orderFactoryMock;
@@ -86,7 +88,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerRepositoryMock;
 
-    /** @var \Magento\Sales\Model\QuoteRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Model\QuoteRepository|\PHPUnit_Framework_MockObject_MockObject */
     protected $quoteRepositoryMock;
 
     /**
@@ -97,6 +99,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
     protected $extensibleDataObjectConverterMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->addressRepositoryMock = $this->getMockForAbstractClass(
@@ -137,7 +142,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->addressFactoryMock = $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false);
         $this->formFactoryMock = $this->getMock('Magento\Customer\Model\Metadata\FormFactory', [], [], '', false);
         $this->customerFactoryMock = $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false);
-        $this->quoteFactoryMock = $this->getMock('Magento\Sales\Model\Service\QuoteFactory', [], [], '', false);
+        $this->quoteManagementMock = $this->getMock('Magento\Quote\Model\QuoteManagement', [], [], '', false);
         $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
         $this->copyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
@@ -185,7 +190,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->quoteRepositoryMock = $this->getMock(
-            'Magento\Sales\Model\QuoteRepository',
+            'Magento\Quote\Model\QuoteRepository',
             [],
             [],
             '',
@@ -215,7 +220,6 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
                 'customrAddrFactory' => $this->addressFactoryMock,
                 'customerFormFactory' => $this->customerFormFactoryMock,
                 'customerFactory' => $this->customerFactoryMock,
-                'serviceQuoteFactory' => $this->quoteFactoryMock,
                 'orderFactory' => $this->orderFactoryMock,
                 'objectCopyService' => $this->copyMock,
                 'messageManager' => $this->messageManagerMock,
@@ -229,7 +233,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
                 'orderSenderMock' => $orderSenderMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
-                'quoteRepository' => $this->quoteRepositoryMock
+                'quoteRepository' => $this->quoteRepositoryMock,
+                'quoteManagement' => $this->quoteManagementMock
             ]
         );
     }
@@ -243,8 +248,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
     public function testSetQuote()
     {
-        /** @var \Magento\Sales\Model\Quote $quoteMock */
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        /** @var \Magento\Quote\Model\Quote $quoteMock */
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $this->onepage->setQuote($quoteMock);
         $this->assertEquals($quoteMock, $this->onepage->getQuote());
     }
@@ -260,9 +265,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        /** @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
+        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
         $quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             [
                 'isMultipleShippingAddresses',
                 'removeAllAddresses',
@@ -323,8 +328,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     public function testGetCheckoutMethod($isLoggedIn, $quoteCheckoutMethod, $isAllowedGuestCheckout, $expected)
     {
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue($isLoggedIn));
-        /** @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->any())->method('setCheckoutMethod')->with($expected);
 
         $quoteMock->expects($this->any())
@@ -354,9 +359,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     public function testSaveCheckoutMethod()
     {
         $this->assertEquals(['error' => -1, 'message' => 'Invalid data'], $this->onepage->saveCheckoutMethod(null));
-        /** @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
+        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
         $quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             ['setCheckoutMethod', '__wakeup'],
             [],
             '',
@@ -379,6 +384,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testSaveBilling(
         $data,
@@ -425,9 +432,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('isEmailAvailable')
             ->will($this->returnValue($isEmailAvailable));
-        /** @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
+        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
         $quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
+            'Magento\Quote\Model\Quote',
             [
                 'getData',
                 'getCustomerId',
@@ -456,14 +463,15 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             ['__toArray']
         );
         $shippingAddressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             [
                 'setSameAsBilling',
                 'save',
                 'collectTotals',
                 'addData',
                 'setShippingMethod',
-                'setCollectShippingRates'
+                'setCollectShippingRates',
+                '__wakeup'
             ],
             [],
             '',
@@ -504,7 +512,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue($isVirtual));
 
         $addressMock = $this->getMock(
-            'Magento\Sales\Model\Quote\Address',
+            'Magento\Quote\Model\Quote\Address',
             [
                 'setSaveInAddressBook',
                 'getData',

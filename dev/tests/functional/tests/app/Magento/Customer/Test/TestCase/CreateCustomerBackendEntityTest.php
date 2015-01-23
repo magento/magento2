@@ -10,7 +10,7 @@ use Magento\Customer\Test\Fixture\AddressInjectable;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Coverage for CreateCustomerBackendEntityTest
@@ -27,6 +27,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateCustomerBackendEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * @var CustomerInjectable
      */

@@ -7,6 +7,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 /**
  * Class SaveTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,6 +80,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * Set up
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -208,6 +210,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * @return void
      *
      * @dataProvider dataProviderExecute
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecute($categoryId, $storeId, $activeTabId, $parentId)
     {
