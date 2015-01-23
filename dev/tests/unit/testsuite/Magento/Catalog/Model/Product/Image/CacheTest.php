@@ -96,9 +96,6 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->mediaGalleryCollection->expects($this->once())
-            ->method('count')
-            ->willReturn(1);
-        $this->mediaGalleryCollection->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$imageItem]));
 

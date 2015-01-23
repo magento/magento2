@@ -247,10 +247,9 @@ class Image extends AbstractHelper
      *
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
-     * @param string[] $position
      * @return $this
      */
-    public function keepFrame($flag, $position = ['center', 'middle'])
+    public function keepFrame($flag)
     {
         $this->_getModel()->setKeepFrame($flag);
         return $this;
@@ -265,10 +264,9 @@ class Image extends AbstractHelper
      *
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
-     * @param int $alphaOpacity
      * @return $this
      */
-    public function keepTransparency($flag, $alphaOpacity = null)
+    public function keepTransparency($flag)
     {
         $this->_getModel()->setKeepTransparency($flag);
         return $this;

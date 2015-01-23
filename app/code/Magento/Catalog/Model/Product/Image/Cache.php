@@ -83,7 +83,7 @@ class Cache
         if (empty($vars)) {
             return [];
         }
-        $filtered = array_filter(array_keys($vars), function($key) {
+        $filtered = array_filter(array_keys($vars), function ($key) {
             return stripos($key, ':') !== false;
         });
         return array_intersect_key($vars, array_flip($filtered));
@@ -152,14 +152,13 @@ class Cache
     public function generate(Product $product)
     {
         $galleryImages = $product->getMediaGalleryImages();
-        if (!$galleryImages->count()) {
-            return $this;
-        }
-        foreach ($product->getMediaGalleryImages() as $image) {
-            foreach ($this->getData()as $params) {
-                $this->imageHelper->init($product, $params['type'], $image->getFile())
-                    ->resize($params['width'], $params['height'])
-                    ->save();
+        if ($galleryImages) {
+            foreach ($galleryImages as $image) {
+                foreach ($this->getData() as $params) {
+                    $this->imageHelper->init($product, $params['type'], $image->getFile())
+                        ->resize($params['width'], $params['height'])
+                        ->save();
+                }
             }
         }
         return $this;
