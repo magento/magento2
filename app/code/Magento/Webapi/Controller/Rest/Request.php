@@ -164,24 +164,24 @@ class Request extends \Magento\Webapi\Controller\Request
      */
     public function getRequestData()
     {
-        $requestBody = [];
+        $requestBodyParams = [];
         $params = $this->getParams();
 
         $httpMethod = $this->getHttpMethod();
         if ($httpMethod == RestConfig::HTTP_METHOD_POST ||
             $httpMethod == RestConfig::HTTP_METHOD_PUT
         ) {
-            $requestBody = $this->getBodyParams();
+            $requestBodyParams = $this->getBodyParams();
         }
 
         /*
          * Valid only for updates using PUT when passing id value both in URL and body
          */
         if ($httpMethod == RestConfig::HTTP_METHOD_PUT && !empty($params)) {
-            $requestBody = $this->overrideRequestBodyIdWithPathParam($params);
+            $requestBodyParams = $this->overrideRequestBodyIdWithPathParam($params);
         }
 
-        return array_merge($requestBody, $params);
+        return array_merge($requestBodyParams, $params);
     }
 
     /**
