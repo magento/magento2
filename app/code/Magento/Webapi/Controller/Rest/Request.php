@@ -103,7 +103,7 @@ class Request extends \Magento\Webapi\Controller\Request
         foreach ($qualityToTypes as $typeList) {
             $orderedTypes += $typeList;
         }
-        return empty($orderedTypes) ? self::DEFAULT_ACCEPT : array_keys($orderedTypes);
+        return empty($orderedTypes) ? [self::DEFAULT_ACCEPT] : array_keys($orderedTypes);
     }
 
     /**
