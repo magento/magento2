@@ -8,8 +8,8 @@
 //  _____________________________________________
 
 //
-//    Variables
-//--------------------------------------
+//  Variables
+//  ---------------------------------------------
 
 @field-control__border-color: @color-gray68;
 @field-control__color: @color-very-dark-gray-black;
@@ -37,47 +37,48 @@
 @field-label__disabled__color: @color-gray60;
 
 //
-//    Fieldset
-//--------------------------------------
+//  Fieldset
+//  ---------------------------------------------
 
 .fieldset {
-   .form-fieldset();
+    .form-fieldset();
 }
 fieldset.field [class^='fields-group-'] .field .control {
-    width: auto;
     margin: 0 0 0 20px;
+    width: auto;
 }
 .fieldset-wrapper > .fieldset-wrapper-title,
 .fieldset > .legend {
-    position: static;
-    float: left;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0;
     border-bottom: 1px solid #cac3b4;
+    box-sizing: border-box;
+    float: left;
     margin: 0 0 18px;
+    padding: 0;
+    position: static;
+    width: 100%;
 }
 .fieldset-wrapper > .fieldset-wrapper-title {
     float: none;
 }
 
 //
-//    Form inline
-//--------------------------------------
+//  Form inline
+//  ---------------------------------------------
+
 .form-inline {
     .label,
     .control {
-        margin: 0;
-        float: left;
-        width: 55%;
-        -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
-        box-sizing: border-box;
+           -moz-box-sizing: border-box;
+                box-sizing: border-box;
+        float: left;
+        margin: 0;
+        width: 55%;
     }
     .label {
-        width: 45%;
-        text-align: right;
         padding: 5px 15px 0 0;
+        text-align: right;
+        width: 45%;
     }
     .no-label {
         .control {
@@ -87,12 +88,12 @@ fieldset.field [class^='fields-group-'] .field .control {
     }
     .field-service {
         box-sizing: border-box;
-        float: left;
-        width: 20%;
-        padding: 7px 0 0 15px;
         color: #999;
+        float: left;
         font-size: 12px;
         letter-spacing: .05em;
+        padding: 7px 0 0 15px;
+        width: 20%;
         .checkbox {
             margin: 0;
             vertical-align: middle;
@@ -100,24 +101,24 @@ fieldset.field [class^='fields-group-'] .field .control {
     }
     .field-service[value-scope]:before {
         content: attr(value-scope) !important;
-        white-space: nowrap;
         display: block;
         margin-bottom: 5px;
+        white-space: nowrap;
     }
     .choice {
         position: relative;
         z-index: 1;
         .control {
-            position: absolute;
-            margin-top: 4px;
-            width: auto;
             left: 45%;
+            margin-top: 4px;
+            position: absolute;
+            width: auto;
         }
         .tooltip {
             margin-left: 20px;
+            margin-top: 7px;
             position: relative;
             z-index: 1;
-            margin-top: 7px;
         }
     }
     .with-tooltip:not(.choice) {
@@ -126,10 +127,13 @@ fieldset.field [class^='fields-group-'] .field .control {
 }
 
 //
-//    Controls
-//--------------------------------------
+//  Controls
+//  ---------------------------------------------
 
 .control {
+    *:first-child {
+        margin-bottom: 0;
+    }
     > input {
         width: 100%;
     }
@@ -163,41 +167,38 @@ fieldset.field [class^='fields-group-'] .field .control {
     .nested {
         padding: 0;
     }
-    *:first-child {
-        margin-bottom: 0;
-    }
 }
 
-// Field Tooltip
+//  Field Tooltip
 .field-tooltip {
     display: inline-block;
-    vertical-align: top;
     margin-top: 5px;
-    .field-choice & {
-        margin-top: 10px
-    }
+    overflow: visible;
     position: relative;
+    vertical-align: top;
+    width: 0;
+    z-index: 1;
+    .field-choice & {
+        margin-top: 10px;
+    }
     &:hover {
         z-index: 99;
     }
-    z-index: 1;
-    width:0;
-    overflow: visible;
     &-action {
-        position: relative;
-        z-index: 2;
+        color: @field-tooltip-icon__bg-color;
+        cursor: pointer;
+        display: inline-block;
+        font-family: @icon-font-admin-name;
         margin-left: 18px;
         margin-top: -6px;
-        display: inline-block;
-        cursor: pointer;
-        color: @field-tooltip-icon__bg-color;
-        font-family: @icon-font-admin-name;
+        position: relative;
+        z-index: 2;
         &:hover {
-            text-decoration: none;
             color: @field-tooltip-icon__bg-color;
+            text-decoration: none;
         }
         &:before {
-            content: "\e633";
+            content: '\e633';
             font-size: 22px;
         }
         span {
@@ -209,23 +210,23 @@ fieldset.field [class^='fields-group-'] .field .control {
         display: block;
     }
     &-content {
-        display: none;
-        position: absolute;
-        z-index: 1;
-        width: 320px;
+        @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
+        .css(box-shadow, @_shadow);
         background: @field-tooltip-content__bg-color;
-        padding: 15px 25px;
-        right: -66px;
         border: 1px solid @field-tooltip-content__border-color;
         border-radius: 1px;
         bottom: 42px;
-        @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
-        .css(box-shadow, @_shadow);
+        display: none;
+        padding: 15px 25px;
+        position: absolute;
+        right: -66px;
+        width: 320px;
+        z-index: 1;
         &:after,
         &:before {
-            content: "";
-            display: block;
             .arrow(down,16px,@field-tooltip-content__border-color);
+            content: '';
+            display: block;
             position: absolute;
             right: 20px;
             top: 100%;
@@ -239,10 +240,9 @@ fieldset.field [class^='fields-group-'] .field .control {
     }
 }
 
-// Form Field
+//  Form Field
 .form__field {
     .clearfix();
-
     position: relative;
     z-index: 1;
     &:hover {
@@ -252,7 +252,7 @@ fieldset.field [class^='fields-group-'] .field .control {
         position: static;
     }
     &.field-error {
-        .control [class*="control-"] {
+        .control [class*='control-'] {
             border-color: @field-error__border-color;
             &:before {
                 border-color: @field-error__border-color;
@@ -260,16 +260,16 @@ fieldset.field [class^='fields-group-'] .field .control {
         }
     }
     .mage-error {
-        border: 1px solid @field-error__border-color;
-        display: block;
-        margin: 2px 0 0;
-        padding: 6px 10px 10px;
         background: @field-error__bg-color;
+        border: 1px solid @field-error__border-color;
+        box-sizing: border-box;
         color: @field-error__color;
+        display: block;
         font-size: 12px;
         font-weight: 500;
-        box-sizing: border-box;
+        margin: 2px 0 0;
         max-width: 380px;
+        padding: 6px 10px 10px;
     }
     .control-addon {
         + .mage-error {
@@ -282,30 +282,30 @@ fieldset.field [class^='fields-group-'] .field .control {
 }
 
 .form__field[data-config-scope]:before {
+    color: @field-scope__color;
     content: attr(data-config-scope);
     display: inline-block;
     position: absolute;
-    color: @field-scope__color;
     right: 0;
-    top:6px;
+    top: 6px;
 }
 .control .form__field[data-config-scope]:nth-child(n+2):before {
-    content: "";
+    content: '';
 }
 
 .form__field.field-disabled {
     > .label {
         color: @field-label__disabled__color;
     }
-    &.field .control [class*="control-"][disabled] {
+    &.field .control [class*='control-'][disabled] {
         background-color: @field-control__disabled__bg-color;
-        opacity: .5;
-        color: @field-control__color;
         border-color: @field-control__border-color;
+        color: @field-control__color;
+        opacity: .5;
     }
 }
 
-// New styling
+//  New styling
 .control-fields {
     .label ~ .control {
         width: 100%;
@@ -317,9 +317,9 @@ fieldset.field [class^='fields-group-'] .field .control {
     padding: 0;
     .note {
         color: @field-note__color;
-        padding: 0;
         margin: 10px 0 0;
         max-width: 380px;
+        padding: 0;
         &:before {
             display: none;
         }
@@ -350,40 +350,40 @@ fieldset.field [class^='fields-group-'] .field .control {
     &:not(.choice) > .label {
         font-size: 14px;
         font-weight: 600;
-        width: 30%;
+        line-height: 33px;
         padding-right: 30px;
         padding-top: 0;
-        line-height: 33px;
         white-space: nowrap;
+        width: 30%;
         &:before {
-            content: ".";
-            visibility: hidden;
-            width: 0;
+            content: '.';
             margin-left: -7px;
             overflow: hidden;
+            visibility: hidden;
+            width: 0;
         }
         span {
-            white-space: normal;
             display: inline-block;
-            vertical-align: middle;
             line-height: 1.2;
+            vertical-align: middle;
+            white-space: normal;
         }
     }
     &.required > .label {
-        &:after {
-            content: "";
-            margin-left: 0;
-        }
         span:after {
-            content: "*";
             color: @field-label__required__color;
+            content: '*';
             display: inline;
-            font-weight: 500;
             font-size: 16px;
+            font-weight: 500;
+            margin-left: 10px;
             margin-top: 2px;
             position: absolute;
             z-index: 1;
-            margin-left: 10px;
+        }
+        &:after {
+            content: '';
+            margin-left: 0;
         }
     }
     .control {
@@ -404,32 +404,32 @@ fieldset.field [class^='fields-group-'] .field .control {
         &-textarea,
         &-select,
         &-text {
+            background-color: @field-control__bg-color;
             border: 1px solid @field-control__border-color;
             border-radius: 1px;
-            padding: 0 10px;
             color: @field-control__color;
-            background-color: @field-control__bg-color;
-            font-weight: 500;
             font-size: 15px;
+            font-weight: 500;
             min-width: 11em;
+            padding: 0 10px;
             &:focus {
-                outline: 0;
                 border-color: @field-control__focus__border-color;
                 box-shadow: none;
+                outline: 0;
             }
         }
         &-text {
             line-height: auto;
         }
         &-textarea {
-            padding-top: 6px;
-            padding-bottom: 6px;
             line-height: 1.18em;
+            padding-bottom: 6px;
+            padding-top: 6px;
         }
         &-select[multiple],
         &-textarea {
-            width: 100%;
             height: ~"calc(6 * 1.2em + 14px)";
+            width: 100%;
         }
         &-value {
             display: inline-block;
@@ -446,53 +446,53 @@ fieldset.field [class^='fields-group-'] .field .control {
             padding: 0;
             option {
                 box-sizing: border-box;
-                padding: 4px 10px;
                 display: block;
+                padding: 4px 10px;
             }
             optgroup {
-                font-weight: 600;
                 display: block;
-                padding: 4px 10px;
+                font-style: normal;
+                font-weight: 600;
                 line-height: 33px;
                 list-style: inside;
-                font-style: normal;
+                padding: 4px 10px;
             }
         }
     }
     .control-range {
         & > .form__field:nth-child(2) {
             &:before {
-                content: "\2014";
-                content: ":";
+                content: ':';
+                content: '\2014';
                 display: inline-block;
-                margin-left: -25px;
                 float: left;
-                width: 20px;
                 line-height: 33px;
+                margin-left: -25px;
                 text-align: center;
+                width: 20px;
             }
         }
     }
     &.choice {
-        position: relative;
-        z-index: 1;
-        padding-top: 8px;
         padding-left: 26px;
         padding-right: 0;
+        padding-top: 8px;
+        position: relative;
+        z-index: 1;
         .label {
-            font-weight: 500;
-            padding: 0;
             display: inline;
             float: none;
+            font-weight: 500;
             line-height: 18px;
+            padding: 0;
         }
         input {
+            margin-top: 3px !important;
             position: absolute;
             top: 8px;
-            margin-top: 3px!important;
             &[disabled] + .label {
-                opacity: .5;
                 cursor: not-allowed;
+                opacity: .5;
             }
         }
         .control > & {
@@ -505,14 +505,14 @@ fieldset.field [class^='fields-group-'] .field .control {
                     margin-top: 0;
                 }
                 & + .choice:before {
-                    content: "";
-                    position: absolute;
+                    background: @field-divider__color;
+                    content: '';
                     display: inline-block;
                     height: 20px;
-                    top: 8px;
                     left: -20px;
+                    position: absolute;
+                    top: 8px;
                     width: 1px;
-                    background: @field-divider__color;
                 }
             }
         }
@@ -520,21 +520,21 @@ fieldset.field [class^='fields-group-'] .field .control {
             cursor: pointer;
         }
         .label:before {
-            content: "";
-            position: absolute;
-            z-index: 1;
-            border: 1px solid @field-control__border-color;
-            width: 14px;
-            height: 14px;
-            top: 10px;
-            left: 0;
             .url('images/choice_bkg.png', 'Magento_Ui');
+            background: url('@{url}') no-repeat -100% -100%;
+            border: 1px solid @field-control__border-color;
             border-radius: 2px;
-            background: url("@{url}") no-repeat -100% -100%;
+            content: '';
+            height: 14px;
+            left: 0;
+            position: absolute;
+            top: 10px;
+            width: 14px;
+            z-index: 1;
         }
         input:focus + .label:before {
-            outline: 0;
             border-color: @field-control__focus__border-color;
+            outline: 0;
         }
         .control {
             &-radio + .label:before {
@@ -546,7 +546,6 @@ fieldset.field [class^='fields-group-'] .field .control {
             &-checkbox:checked + .label:before {
                 background-position: -1px -1px;
             }
-
         }
         input {
             opacity: 0;
@@ -559,13 +558,13 @@ fieldset.field [class^='fields-group-'] .field .control {
         &-after,
         &-before {
             border: 0;
-            color: @field-control-addon__color;
-            font-weight: 300;
-            font-size: 15px;
-            line-height: 33px;
-            display: inline-block;
-            height: 33px;
             box-sizing: border-box;
+            color: @field-control-addon__color;
+            display: inline-block;
+            font-size: 15px;
+            font-weight: 300;
+            height: 33px;
+            line-height: 33px;
             padding: 0 3px;
         }
         .no-flexbox.no-flexboxlegacy &-before,
@@ -575,10 +574,10 @@ fieldset.field [class^='fields-group-'] .field .control {
         }
         &-addon {
             display: inline-flex;
-            max-width: 380px;
-            width: 100%;
             flex-flow: row nowrap;
+            max-width: 380px;
             position: relative;
+            width: 100%;
             z-index: 1;
             > * {
                 position: relative;
@@ -590,16 +589,15 @@ fieldset.field [class^='fields-group-'] .field .control {
             .control-text {
                 background: transparent!important;
                 border: 0;
-                width: auto;
-                vertical-align: top;
-                order: 1;
                 flex: 1;
+                order: 1;
+                vertical-align: top;
+                width: auto;
                 &:focus {
                     box-shadow: none;
                     & + label:before {
-                        outline: 0;
                         border-color: @field-control__focus__border-color;
-                        //box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
+                        outline: 0;
                     }
                 }
                 & + label {
@@ -607,33 +605,32 @@ fieldset.field [class^='fields-group-'] .field .control {
                     position: static!important;
                     z-index: 0;
                     > * {
-                        vertical-align: top;
                         position: relative;
+                        vertical-align: top;
                         z-index: 2;
                     }
                 }
                 & + label:before {
-                    box-sizing: border-box;
-                    border-radius: 1px;
+                    background: @color-white;
                     border: 1px solid @field-control__border-color;
-                    content: "";
+                    border-radius: 1px;
+                    box-sizing: border-box;
+                    content: '';
                     display: block;
+                    height: 100%;
+                    left: 0;
                     position: absolute;
                     top: 0;
-                    left: 0;
                     width: 100%;
-                    height: 100%;
                     z-index: 0;
-                    background: #fff;
                 }
                 &[disabled] + label:before {
-                    opacity: .5;
                     background: @field-control__disabled__bg-color;
+                    opacity: .5;
                 }
             }
         }
         &-after {
-            //float: right;
             order: 3;
             &:last-child {
                 padding-right: 10px;
@@ -646,20 +643,19 @@ fieldset.field [class^='fields-group-'] .field .control {
         &-some {
             display: flex;
         }
-
     }
-    [class*="control-grouped"] {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
+    [class*='control-grouped'] {
         box-sizing: border-box;
+        display: table;
+        table-layout: fixed;
+        width: 100%;
         & > .form__field {
             display: table-cell;
-            width: 50%;
             vertical-align: top;
+            width: 50%;
             > .control {
-                width: 100%;
                 float: none;
+                width: 100%;
             }
             &:nth-child(n+2) {
                 padding-left: 20px;
@@ -676,15 +672,15 @@ fieldset.field [class^='fields-group-'] .field .control {
 
 fieldset.form__field {
     position: relative;
-    [class*="control-grouped"],
+    [class*='control-grouped'],
     .control-fields {
         & > .form__field:first-child {
             & > .label {
-                position: absolute;
-                left: 0;
-                top: 0;
-                opacity: 0;
                 cursor: pointer;
+                left: 0;
+                opacity: 0;
+                position: absolute;
+                top: 0;
                 width: 30%;
             }
         }
@@ -692,18 +688,18 @@ fieldset.form__field {
 }
 
 .control-text + .ui-datepicker-trigger {
+    .button-reset();
+    display: inline-block;
+    margin-left: -40px;
+    .icon-font(
+    @icon-calendar,
+    @_icon-font-size: 38px,
+    @_icon-font-line-height: 33px,
+    @_icon-font-text-hide: true,
+    @_icon-font-position: after,
+    @_icon-font-color: @field-date-icon__color
+    );
     img {
         display: none;
     }
-    .button-reset();
-    .icon-font(
-        @icon-calendar,
-        @_icon-font-size: 38px,
-        @_icon-font-line-height: 33px,
-        @_icon-font-text-hide: true,
-        @_icon-font-position: after,
-        @_icon-font-color: @field-date-icon__color
-    );
-    margin-left: -40px;
-    display: inline-block;
 }

@@ -28,7 +28,8 @@
     > .message:last-child {
         margin-bottom: 0;
     }
-    &.license {  // license message in view\adminhtml\checker\reminder.phtml
+    &.license {
+        //  License message in view\adminhtml\checker\reminder.phtml
         font-size: 20px;
         line-height: 1.2;
         margin: 20px auto;
@@ -39,53 +40,52 @@
 }
 
 .message {
-    position: relative;
     background: @alert__bg-color;
     color: @alert__color;
-    padding: 1.8rem 4rem 1.8rem 1.9rem;
     margin-bottom: 3.5rem;
+    padding: 1.8rem 4rem 1.8rem 1.9rem;
+    position: relative;
     text-shadow: none;
 
     &:before {
-        position: absolute;
-        left: 1.9rem;
-        top: 50%;
-        margin-top: -1.3rem;
         background: none;
-        text-shadow: none;
-        width: auto;
-        height: auto;
         border: 0;
         font-family: @icon-font-admin-name;
         font-size: @alert__font-size;
         font-style: normal;
         font-weight: normal;
-        line-height: inherit;
-        speak: none;
         -webkit-font-smoothing: antialiased;
-
+        height: auto;
+        left: 1.9rem;
+        line-height: inherit;
+        margin-top: -1.3rem;
+        position: absolute;
+        speak: none;
+        text-shadow: none;
+        top: 50%;
+        width: auto;
     }
     &-info,
     &.info {
         padding-left: 5rem;
         &:before {
-            content: "\e61a";
             color: @alert-icon__info__color;
+            content: '\e61a';
         }
     }
     &-error,
     &.error {
         padding-left: 5rem;
         &:before {
-            content: '\e623';
             color: @alert-icon__error__color;
+            content: '\e623';
         }
     }
     &.success {
         padding-left: 5rem;
         &:before {
-            content: '\e62d';
             color: @alert-icon__success__color;
+            content: '\e62d';
         }
     }
 }
@@ -108,28 +108,28 @@
         display: none;
     }
     .message-inner {
-        position: relative;
-        min-width: 960px;
-        max-width: 1300px;
         margin: 0 auto;
+        max-width: 1300px;
+        min-width: 960px;
+        position: relative;
         &:before {
             background: none;
             border: 0;
-            content: '\e006'; /* notification icon */
             color: #6e685e;
+            content: '\e006'; //  Notification icon
             font-family: 'MUI-Icons';
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
             font-style: normal;
             font-weight: normal;
-            speak: none;
-            -webkit-font-smoothing: antialiased;
             height: auto;
             left: 8px;
             margin-top: -10px;
             position: absolute;
+            speak: none;
             text-shadow: none;
             top: 50%;
             width: auto;
-            font-size: 16px;
         }
     }
     .message-content {
@@ -143,9 +143,9 @@
 
 .message-noscript {
     background: #ff9;
-    padding: 0;
     border: 0;
     box-shadow: 0 1px 2px #46433d;
+    padding: 0;
     z-index: 994;
     &:before {
         content: '';
@@ -158,21 +158,21 @@
         position: relative;
         text-align: center;
         &:before {
-            position: relative;
             background: none;
-            text-shadow: none;
-            width: auto;
-            height: auto;
-            vertical-align: middle;
             border: 0;
+            color: #6e685e;
+            content: '\e006'; //  Notification icon
             font-family: 'MUI-Icons';
+            font-size: 32px;
+            -webkit-font-smoothing: antialiased;
             font-style: normal;
             font-weight: normal;
-            font-size: 32px;
+            height: auto;
+            position: relative;
             speak: none;
-            -webkit-font-smoothing: antialiased;
-            content: '\e006'; /* notification icon */
-            color: #6e685e;
+            text-shadow: none;
+            vertical-align: middle;
+            width: auto;
         }
     }
 }
@@ -180,10 +180,10 @@
 .message-demo-mode {
     background: #d75f07;
     border: 0;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
     box-shadow: 0 1px 2px #46433d;
+    color: @color-white;
+    padding: 5px 0;
+    text-align: center;
     z-index: 993;
     &:before {
         content: '';
@@ -195,20 +195,20 @@
         position: relative;
         text-align: center;
         &:before {
-            position: relative;
             background: none;
-            text-shadow: none;
-            width: auto;
-            height: auto;
-            vertical-align: middle;
             border: 0;
+            content: '\e006'; //  Notification icon
             font-family: 'MUI-Icons';
-            font-style: normal;
-            speak: none;
-            font-weight: normal;
-            -webkit-font-smoothing: antialiased;
             font-size: 16px;
-            content: '\e006'; /* notification icon */
+            -webkit-font-smoothing: antialiased;
+            font-style: normal;
+            font-weight: normal;
+            height: auto;
+            position: relative;
+            speak: none;
+            text-shadow: none;
+            vertical-align: middle;
+            width: auto;
         }
     }
 }

@@ -76,8 +76,8 @@
 }
 
 .action-large {
-    padding: @button-base__large__padding-vertical @button-base__large__padding-horizontal;
     font-size: @button-base__large__font-size;
+    padding: @button-base__large__padding-vertical @button-base__large__padding-horizontal;
 }
 
 //
@@ -111,7 +111,7 @@
 .action-primary {
     background-color: @button-primary__bg-color;
     color: @button-primary__color;
-    text-shadow: 1px 1px 1px rgba(0,0,0,.3);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
     &:hover,
     &:focus,
     &:active {
@@ -152,13 +152,13 @@
 //  ---------------------------------------------
 
 .action-reset {
-    background-color: rgba(0,0,0,0);
-    border-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
     color: @color-gray20;
     &:hover,
     &:focus,
     &:active {
-        background-color: rgba(0,0,0,0);
+        background-color: rgba(0, 0, 0, 0);
     }
 }
 
@@ -184,21 +184,21 @@
 
 .actions-split {
     .dropdown-split(
-        @_toggle-selector: ~".action-toggle",
-        @_button-selector: ~".action-default",
-        @_options-selector :  ~".dropdown-menu",
-        @_dropdown-split-button-border-radius-fix: true,
-        @_dropdown-split-list-min-width: 175px,
-        @_icon-font-size: 40px,
-        @_icon-font-line-height: 14px,
-        @_icon-font-vertical-align: middle
+    @_toggle-selector: ~".action-toggle",
+    @_button-selector: ~".action-default",
+    @_options-selector :  ~".dropdown-menu",
+    @_dropdown-split-button-border-radius-fix: true,
+    @_dropdown-split-list-min-width: 175px,
+    @_icon-font-size: 40px,
+    @_icon-font-line-height: 14px,
+    @_icon-font-vertical-align: middle
     );
     vertical-align: middle;
     button {
         margin-left: 0;
         &.action-toggle {
-            padding: @button-base__padding-vertical 0;
             border-left: 1px solid #c34706;
+            padding: @button-base__padding-vertical 0;
         }
         &.action-large {
             &.action-toggle {
