@@ -54,6 +54,7 @@ class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param array $data
      * @param int $typeId
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function saveProductLinks($product, $data, $typeId)
     {

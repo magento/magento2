@@ -10,6 +10,7 @@ use Magento\Framework\Model\Exception as ModelException;
 
 /**
  * Abstract resource model class
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractResource
 {
@@ -356,6 +357,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Zend_Db_Select
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -369,6 +371,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -508,6 +511,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function unserializeFields(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -593,6 +597,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws ModelException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _checkUnique(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -655,6 +660,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -666,6 +672,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -677,6 +684,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -688,6 +696,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -699,6 +708,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -710,6 +720,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _serializeFields(\Magento\Framework\Model\AbstractModel $object)
     {

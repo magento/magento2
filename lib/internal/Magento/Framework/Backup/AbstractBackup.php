@@ -216,6 +216,7 @@ abstract class AbstractBackup implements BackupInterface
      * Check whether last operation completed successfully
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsSuccess()
     {

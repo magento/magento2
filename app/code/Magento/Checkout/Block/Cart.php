@@ -67,6 +67,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * prepare cart items URLs
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function prepareItemUrls()
     {
@@ -164,6 +165,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsVirtual()
     {

@@ -46,6 +46,7 @@ class InvalidateCache
      *
      * @param \Magento\Indexer\Model\Processor $subject
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterUpdateMview(\Magento\Indexer\Model\Processor $subject)
     {

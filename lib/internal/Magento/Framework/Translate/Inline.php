@@ -5,6 +5,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Translate;
 
 class Inline implements \Magento\Framework\Translate\InlineInterface
@@ -166,6 +169,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      *
      * @param mixed|string|null $tagName
      * @return null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAdditionalHtmlAttribute($tagName = null)
     {

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
@@ -33,6 +36,7 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/order.php
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testOrderCommentAdd()
     {

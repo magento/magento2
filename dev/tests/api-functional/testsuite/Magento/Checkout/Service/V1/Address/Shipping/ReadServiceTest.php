@@ -94,6 +94,7 @@ class ReadServiceTest extends WebapiAbstract
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function getServiceInfo()
     {

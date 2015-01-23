@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * One page checkout processing model
  */
@@ -20,6 +22,11 @@ use Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Onepage
 {
     /**
@@ -192,6 +199,8 @@ class Onepage
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     *
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -298,6 +307,7 @@ class Onepage
      * Initialize quote state to be valid for one page checkout
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function initCheckout()
     {
@@ -372,6 +382,9 @@ class Onepage
      * @param   array $data
      * @param   int $customerAddressId
      * @return  array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function saveBilling($data, $customerAddressId)
     {
@@ -623,6 +636,8 @@ class Onepage
      * @param   array $data
      * @param   int $customerAddressId
      * @return  array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveShipping($data, $customerAddressId)
     {
@@ -843,6 +858,7 @@ class Onepage
      * Prepare quote for customer order submit
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _prepareCustomerQuote()
     {

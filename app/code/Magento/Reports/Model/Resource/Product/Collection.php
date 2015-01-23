@@ -11,6 +11,9 @@
  */
 namespace Magento\Reports\Model\Resource\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     const SELECT_COUNT_SQL_TYPE_CART = 1;

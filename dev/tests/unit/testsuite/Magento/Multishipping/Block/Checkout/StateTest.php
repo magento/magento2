@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Multishipping\Block\Checkout;
 
 class StateTest extends \PHPUnit_Framework_TestCase

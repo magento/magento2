@@ -12,6 +12,9 @@ use Magento\Tax\Api\Data\TaxRateInterface;
 use Magento\Tax\Model\TaxRuleFixtureFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -507,6 +510,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDbIsolation enabled
      * @dataProvider searchTaxRatesDataProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetList($filters, $filterGroup, $expectedRateCodes)
     {

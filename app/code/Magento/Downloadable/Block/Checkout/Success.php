@@ -56,6 +56,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      * Return true if order(s) has one or more downloadable products
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getOrderHasDownloadable()
     {

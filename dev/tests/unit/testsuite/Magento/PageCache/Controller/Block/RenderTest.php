@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\PageCache\Controller\Block;
 
 class RenderTest extends \PHPUnit_Framework_TestCase

@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * @method string getPath()
  * @method string getName()
  * @method string getTime()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Backup extends \Magento\Framework\Object implements \Magento\Framework\Backup\Db\BackupInterface
 {

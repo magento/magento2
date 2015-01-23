@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product;
  * Collection Advanced
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
@@ -122,6 +123,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _renderFiltersBefore()
     {

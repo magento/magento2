@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Reports summary collection
  *
@@ -84,6 +86,7 @@ class AbstractCollection extends \Magento\Framework\Data\Collection
      *
      * @param int $period
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setDatePeriod($period)
     {
@@ -95,6 +98,7 @@ class AbstractCollection extends \Magento\Framework\Data\Collection
      *
      * @param int $storeId
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setStoreFilter($storeId)
     {

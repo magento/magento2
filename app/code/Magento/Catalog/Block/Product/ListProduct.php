@@ -15,6 +15,7 @@ use Magento\Framework\View\Block\IdentityInterface;
 
 /**
  * Product list
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ListProduct extends AbstractProduct implements IdentityInterface
 {
