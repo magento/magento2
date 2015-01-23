@@ -292,7 +292,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConfigureUrl($item)
     {
-        return $this->_getUrl('wishlist/index/configure', ['id' => $item->getWishlistItemId(), 'product_id' => $item->getProductId()]);
+        return $this->_getUrl(
+            'wishlist/index/configure',
+            [
+                'id' => $item->getWishlistItemId(),
+                'product_id' => $item->getProductId()
+            ]
+        );
     }
 
     /**
