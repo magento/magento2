@@ -29,6 +29,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
      * Saving edited user information
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

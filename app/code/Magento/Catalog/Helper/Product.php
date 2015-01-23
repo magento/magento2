@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
 
 /**
  * Catalog category helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Core\Helper\Url
 {
@@ -110,6 +111,7 @@ class Product extends \Magento\Core\Helper\Url
      * @param array $reindexPriceIndexerData
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -246,6 +248,7 @@ class Product extends \Magento\Core\Helper\Url
      *
      * @param ModelProduct|\Magento\Framework\Object $product
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getThumbnailUrl($product)
     {
@@ -284,6 +287,7 @@ class Product extends \Magento\Core\Helper\Url
      * @param ModelProduct|int $product
      * @param string $where
      * @return boolean
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canShow($product, $where = 'catalog')
     {
@@ -385,6 +389,8 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Framework\Object $params
      *
      * @return false|ModelProduct
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function initProduct($productId, $controller, $params = null)
     {
@@ -538,6 +544,7 @@ class Product extends \Magento\Core\Helper\Url
      * Get flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getSkipSaleableCheck()
     {

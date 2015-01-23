@@ -11,6 +11,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\Price
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,6 +51,9 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Catalog\Model\Layer\State|MockObject */
     private $state;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')

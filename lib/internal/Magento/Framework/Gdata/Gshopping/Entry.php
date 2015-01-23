@@ -78,6 +78,7 @@ class Entry extends \Zend_Gdata_Entry
      *
      * @param \DOMNode $child The \DOMNode to process
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function takeChildFromDOM($child)
     {
@@ -223,6 +224,7 @@ class Entry extends \Zend_Gdata_Entry
      *
      * @param string $name The name of the Content attribute to look for
      * @return string[] $matches Array of Attribute
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getContentAttributesByName($name)
     {

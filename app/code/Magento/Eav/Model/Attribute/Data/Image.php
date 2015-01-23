@@ -18,6 +18,8 @@ class Image extends \Magento\Eav\Model\Attribute\Data\File
      *
      * @param array $value
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _validateByRules($value)
     {

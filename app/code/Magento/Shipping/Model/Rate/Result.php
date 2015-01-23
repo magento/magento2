@@ -182,6 +182,7 @@ class Result
      * Sort rates by price from min to max
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function sortRatesByPrice()
     {

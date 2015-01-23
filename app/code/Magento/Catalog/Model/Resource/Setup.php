@@ -71,6 +71,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * Default entites and attributes
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getDefaultEntities()
     {

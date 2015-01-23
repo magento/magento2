@@ -9,6 +9,9 @@ use Magento\Framework\DB\Select;
 
 /**
  * Entity/Attribute/Model - collection abstract
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
 {
@@ -125,6 +128,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param mixed $connection
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
@@ -621,6 +625,8 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
      * @param null $storeId
      * @return $this
      * @throws \Magento\Eav\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function joinAttribute($alias, $attribute, $bind, $filter = null, $joinType = 'inner', $storeId = null)
     {
@@ -771,6 +777,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
      * @param string $joinType
      * @return $this
      * @throws \Magento\Eav\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function joinTable($table, $bind, $fields = null, $cond = null, $joinType = 'inner')
     {
@@ -1098,6 +1105,9 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
      * @param bool $logQuery
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function _loadAttributes($printQuery = false, $logQuery = false)
     {
@@ -1192,6 +1202,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
      * @param string $table
      * @param string $type
      * @return Select
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _addLoadAttributesSelectValues($select, $table, $type)
     {
@@ -1288,6 +1299,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
      * @param   string $joinType inner|left
      * @return $this
      * @throws \Magento\Eav\Exception
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addAttributeJoin($attributeCode, $joinType = 'inner')
     {

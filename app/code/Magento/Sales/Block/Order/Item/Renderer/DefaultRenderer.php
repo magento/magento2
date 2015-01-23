@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Block\Order\Item\Renderer;
 
 use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
@@ -123,6 +126,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      *          )
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFormatedOptionValue($optionValue)
     {

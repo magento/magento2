@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 /**
@@ -1169,6 +1172,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array &$parentCount
      * @param array &$childCount
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _collectOptionTypeData(
         array $rowData,
@@ -1438,6 +1442,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param int $optionTypeId
      * @param bool $defaultStore
      * @return array|false
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getSpecificTypeData(array $rowData, $optionTypeId, $defaultStore = true)
     {

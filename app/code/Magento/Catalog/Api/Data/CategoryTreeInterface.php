@@ -32,6 +32,7 @@ interface CategoryTreeInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Check whether category is active
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsActive();
 

@@ -51,6 +51,8 @@ class Update extends Action\Action implements IndexInterface
      *
      * @return ResponseInterface|void
      * @throws NotFoundException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

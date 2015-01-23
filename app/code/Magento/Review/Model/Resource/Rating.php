@@ -159,6 +159,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Review\Model\Rating $object
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {

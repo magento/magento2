@@ -56,6 +56,8 @@ class ArrayUtils
      * @param string $prefix
      * @param bool $forceSetAll
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function decorateArray($array, $prefix = 'decorated_', $forceSetAll = false)
     {
