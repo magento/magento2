@@ -10,7 +10,7 @@
     <preference for="Magento\Mtf\Util\Generate\Repository\CollectionProviderInterface" type="Magento\Mtf\Util\Generate\Repository\CollectionProvider" />
     <virtualType name="Magento\Mtf\Config\SchemaLocator\Config" type="Magento\Mtf\Config\SchemaLocator">
         <arguments>
-            <argument name="schemaPath" xsi:type="string">config/config.xsd</argument>
+            <argument name="schemaPath" xsi:type="string">etc/global/config.xsd</argument>
         </arguments>
     </virtualType>
 </config>
