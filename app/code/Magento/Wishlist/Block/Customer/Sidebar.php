@@ -57,6 +57,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\
      *
      * @deprecated after 1.6.2.0
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanDisplayWishlist()
     {

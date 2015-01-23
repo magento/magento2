@@ -18,6 +18,7 @@ class Validator
      * @param RequestInterface $request
      * @param \Magento\Framework\Object $response
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validate(Product $product, RequestInterface $request, \Magento\Framework\Object $response)
     {

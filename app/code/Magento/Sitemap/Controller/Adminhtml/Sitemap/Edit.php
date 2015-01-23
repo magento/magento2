@@ -29,6 +29,7 @@ class Edit extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      * Edit sitemap
      *
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

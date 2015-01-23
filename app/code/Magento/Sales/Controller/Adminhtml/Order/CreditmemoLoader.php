@@ -79,6 +79,7 @@ class CreditmemoLoader extends Object
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
@@ -173,6 +174,7 @@ class CreditmemoLoader extends Object
      * Initialize creditmemo model instance
      *
      * @return \Magento\Sales\Model\Order\Creditmemo|false
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function load()
     {

@@ -62,6 +62,7 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
      * {@inheritdoc}
      * @throws \LogicException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function call($serviceInfo, $arguments = [], $storeCode = null)
     {

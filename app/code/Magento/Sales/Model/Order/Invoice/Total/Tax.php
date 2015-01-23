@@ -12,6 +12,7 @@ class Tax extends AbstractTotal
      *
      * @param \Magento\Sales\Model\Order\Invoice $invoice
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {

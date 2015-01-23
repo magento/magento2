@@ -4,6 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Tools;
 
 class JsList extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Tools

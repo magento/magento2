@@ -9,6 +9,7 @@ namespace Magento\Backend\Block\Dashboard\Tab\Products;
  * Adminhtml dashboard most viewed products grid
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Viewed extends \Magento\Backend\Block\Dashboard\Grid
 {

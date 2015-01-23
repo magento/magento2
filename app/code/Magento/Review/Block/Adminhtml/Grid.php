@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Adminhtml reviews grid
  *
@@ -153,6 +155,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare grid columns
      *
      * @return \Magento\Backend\Block\Widget\Grid
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
     {

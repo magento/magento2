@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Customer\Api\Data\AddressDataBuilder as CustomerAddressBuilder;
@@ -20,6 +23,7 @@ use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 
 /**
  * Tax totals calculation model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CommonTaxCollector extends AbstractTotal
 {
@@ -709,6 +713,8 @@ class CommonTaxCollector extends AbstractTotal
      * @param float $baseAmount
      * @param float $rate
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _saveAppliedTaxes(
         QuoteAddress $address,
