@@ -8,11 +8,6 @@ namespace Magento\Framework\Module;
 class PackageInfoTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Module\ModuleList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $moduleList;
-
-    /**
      * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $loader;
@@ -29,11 +24,9 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
         $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
         $this->reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
-        $this->moduleList->expects($this->any())->method('getNames')->will($this->returnValue(['A', 'B', 'C']));
-        $this->loader->expects($this->any())
+        $this->loader->expects($this->once())
             ->method('load')
             ->will($this->returnValue(['A' => [], 'B' => [], 'C' => [], 'D' => [], 'E' => []]));
 
@@ -45,33 +38,14 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             'E' => '{"name":"e"}',
         ];
         $fileIteratorMock = $this->getMock('Magento\Framework\Config\FileIterator', [], [], '', false);
-        $fileIteratorMock->expects($this->any())
+        $fileIteratorMock->expects($this->once())
             ->method('toArray')
             ->will($this->returnValue($composerData));
-        $this->reader->expects($this->any())
+        $this->reader->expects($this->once())
             ->method('getComposerJsonFiles')
             ->will($this->returnValue($fileIteratorMock));
 
-        $this->packageInfo = new PackageInfo($this->moduleList, $this->loader, $this->reader);
-    }
-
-    public function testGetAllModuleNames()
-    {
-        $this->assertEquals(['A', 'B', 'C', 'D', 'E'], $this->packageInfo->getAllModuleNames());
-    }
-
-    public function testGetEnabledModules()
-    {
-        $this->assertEquals(['A', 'B', 'C'], $this->packageInfo->getEnabledModules());
-    }
-
-    public function testGetPackageName()
-    {
-        $this->assertEquals('a', $this->packageInfo->getPackageName('A'));
-        $this->assertEquals('b', $this->packageInfo->getPackageName('B'));
-        $this->assertEquals('c', $this->packageInfo->getPackageName('C'));
-        $this->assertEquals('d', $this->packageInfo->getPackageName('D'));
-        $this->assertEquals('e', $this->packageInfo->getPackageName('E'));
+        $this->packageInfo = new PackageInfo($this->loader, $this->reader);
     }
 
     public function testGetModuleName()
@@ -83,21 +57,39 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('E', $this->packageInfo->getModuleName('e'));
     }
 
-    public function testGetRequire()
+    public function testGetRequireReturnModuleName()
     {
-        $this->assertEquals(['b'], $this->packageInfo->getRequire('A'));
-        $this->assertEquals(['d'], $this->packageInfo->getRequire('B'));
-        $this->assertEquals(['e'], $this->packageInfo->getRequire('C'));
+        $this->assertEquals(['B'], $this->packageInfo->getRequire('A'));
+        $this->assertEquals(['D'], $this->packageInfo->getRequire('B'));
+        $this->assertEquals(['E'], $this->packageInfo->getRequire('C'));
         $this->assertEquals([], $this->packageInfo->getRequire('D'));
         $this->assertEquals([], $this->packageInfo->getRequire('E'));
     }
 
-    public function testGetConflict()
+    public function testGetConflictReturnModuleName()
     {
-        $this->assertEquals(['c'], $this->packageInfo->getConflict('A'));
+        $this->assertEquals(['C'], $this->packageInfo->getConflict('A'));
         $this->assertEquals([], $this->packageInfo->getConflict('B'));
         $this->assertEquals([], $this->packageInfo->getConflict('C'));
-        $this->assertEquals(['c'], $this->packageInfo->getConflict('D'));
+        $this->assertEquals(['C'], $this->packageInfo->getConflict('D'));
         $this->assertEquals([], $this->packageInfo->getConflict('E'));
+    }
+
+    public function testGetRequireReturnPackageName()
+    {
+        $this->assertEquals(['b'], $this->packageInfo->getRequire('A', false));
+        $this->assertEquals(['d'], $this->packageInfo->getRequire('B', false));
+        $this->assertEquals(['e'], $this->packageInfo->getRequire('C', false));
+        $this->assertEquals([], $this->packageInfo->getRequire('D', false));
+        $this->assertEquals([], $this->packageInfo->getRequire('E', false));
+    }
+
+    public function testGetConflictReturnPackageName()
+    {
+        $this->assertEquals(['c'], $this->packageInfo->getConflict('A', false));
+        $this->assertEquals([], $this->packageInfo->getConflict('B', false));
+        $this->assertEquals([], $this->packageInfo->getConflict('C', false));
+        $this->assertEquals(['c'], $this->packageInfo->getConflict('D', false));
+        $this->assertEquals([], $this->packageInfo->getConflict('E', false));
     }
 }

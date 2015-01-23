@@ -13,7 +13,6 @@ use Magento\Setup\Model\DeploymentConfigMapper;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\Lists;
-use Magento\Setup\Model\StatusFactory;
 use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Zend\Console\Request as ConsoleRequest;
@@ -121,13 +120,6 @@ class ConsoleController extends AbstractActionController
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
-
-    /**
-     * Status factory
-     *
-     * @var StatusFactory
-     */
-    private $statusFactory;
 
     /**
      * Gets router configuration to be used in module definition
@@ -301,22 +293,19 @@ class ConsoleController extends AbstractActionController
      * @param InstallerFactory $installerFactory
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerFactory $objectManagerFactory
-     * @param StatusFactory $statusFactory
      */
     public function __construct(
         ConsoleLogger $consoleLogger,
         Lists $options,
         InstallerFactory $installerFactory,
         MaintenanceMode $maintenanceMode,
-        ObjectManagerFactory $objectManagerFactory,
-        StatusFactory $statusFactory
+        ObjectManagerFactory $objectManagerFactory
     ) {
         $this->log = $consoleLogger;
         $this->options = $options;
         $this->installer = $installerFactory->create($consoleLogger);
         $this->maintenanceMode = $maintenanceMode;
         $this->objectManagerFactory = $objectManagerFactory;
-        $this->statusFactory = $statusFactory;
     }
 
     /**
@@ -488,7 +477,7 @@ class ConsoleController extends AbstractActionController
         $request = $this->getRequest();
         $isEnable = $request->getParam(0) == self::CMD_MODULE_ENABLE;
         $modules = explode(',', $request->getParam('modules'));
-        $status = $this->statusFactory->create();
+        $status = $this->getObjectManager()->create('Magento\Framework\Module\Status');
         if (!$request->getParam('force')) {
             $constraints = $status->checkConstraints($isEnable, $modules);
             if ($constraints) {

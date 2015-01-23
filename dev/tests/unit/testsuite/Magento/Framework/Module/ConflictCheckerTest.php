@@ -9,30 +9,30 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider checkConflictWhenEnableModuleDataProvider
-     * @param array $nameReturnMap
      * @param array $conflictReturnMap
      * @param array $enabledModules
      * @param string $moduleName
      * @param array $expected
      */
     public function testCheckConflictsWhenEnableModules(
-        $nameReturnMap,
         $conflictReturnMap,
         $enabledModules,
         $moduleName,
         $expected
     ) {
+        $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
         $packageInfoMock = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
-        $packageInfoMock->expects($this->any())
-            ->method('getPackageName')
-            ->will($this->returnValueMap($nameReturnMap));
-        $packageInfoMock->expects($this->any())
-            ->method('getEnabledModules')
+        $moduleListMock->expects($this->any())
+            ->method('getNames')
             ->will($this->returnValue($enabledModules));
         $packageInfoMock->expects($this->any())
             ->method('getConflict')
             ->will($this->returnValueMap($conflictReturnMap));
-        $conflictChecker = new ConflictChecker($packageInfoMock);
+        $packageInfoFactoryMock = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
+        $packageInfoFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($packageInfoMock));
+        $conflictChecker = new ConflictChecker($moduleListMock, $packageInfoFactoryMock);
         $this->assertEquals($expected, $conflictChecker->checkConflictsWhenEnableModules($moduleName));
     }
 
@@ -43,57 +43,49 @@ class ConflictCheckerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B']],
-                [['Vendor_A', ['vendor/module-B']], ['Vendor_B', []]],
+                [['Vendor_A', ['Vendor_B']], ['Vendor_B', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => ['Vendor_A']]
             ],
             [
-                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B']],
-                [['Vendor_A', ['vendor/module-B']], ['Vendor_B', []]],
+                [['Vendor_A', ['Vendor_B']], ['Vendor_B', []]],
                 [],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B']],
-                [['Vendor_B', ['vendor/module-A']], ['Vendor_A', []]],
+                [['Vendor_B', ['Vendor_A']], ['Vendor_A', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => ['Vendor_A']]
             ],
             [
-                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B']],
-                [['Vendor_B', ['vendor/module-A']], ['Vendor_A', []]],
+                [['Vendor_B', ['Vendor_A']], ['Vendor_A', []]],
                 [],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B']],
                 [['Vendor_A', []], ['Vendor_B', []]],
                 ['Vendor_A'],
                 ['Vendor_B'],
                 ['Vendor_B' => []]
             ],
             [
-                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B'], ['Vendor_C', 'vendor/module-C']],
                 [['Vendor_A', []], ['Vendor_B', []], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => [], 'Vendor_C' => []]
             ],
             [
-                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B'], ['Vendor_C', 'vendor/module-C']],
-                [['Vendor_A', ['vendor/module-C']], ['Vendor_B', []], ['Vendor_C', []]],
+                [['Vendor_A', ['Vendor_C']], ['Vendor_B', []], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => [], 'Vendor_C' => ['Vendor_A']]
             ],
             [
-                [['Vendor_A', 'vendor/module-A'], ['Vendor_B', 'vendor/module-B'], ['Vendor_C', 'vendor/module-C']],
-                [['Vendor_A', []], ['Vendor_B', ['vendor/module-C']], ['Vendor_C', []]],
+                [['Vendor_A', []], ['Vendor_B', ['Vendor_C']], ['Vendor_C', []]],
                 ['Vendor_A'],
                 ['Vendor_B', 'Vendor_C'],
                 ['Vendor_B' => ['Vendor_C'], 'Vendor_C' => ['Vendor_B']]

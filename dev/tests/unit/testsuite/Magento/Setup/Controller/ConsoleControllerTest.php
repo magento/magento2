@@ -50,11 +50,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\StatusFactory
-     */
-    private $statusFactory;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
@@ -77,8 +72,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->parameters= $this->getMock('\Zend\Stdlib\Parameters', [], [], '', false);
         $this->request->expects($this->any())->method('getParams')->willReturn($this->parameters);
 
-        $this->statusFactory = $this->getMock('Magento\Setup\Model\StatusFactory', [], [], '', false);
-
         $this->mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
         $this->mvcEvent->expects($this->once())->method('setRequest')->with($this->request)->willReturn(
             $this->mvcEvent
@@ -98,7 +91,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
             $installerFactory,
             $this->maintenanceMode,
             $objectManagerFactory,
-            $this->statusFactory
+            $objectManagerFactory
         );
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $response);
@@ -328,7 +321,7 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->at(2))->method('getParam')->with('force')->willReturn($isForce);
         $status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
         $reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
-        $this->statusFactory->expects($this->once())
+        $this->objectManager->expects($this->once())
             ->method('create')
             ->will($this->returnValue($status));
         return $status;

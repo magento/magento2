@@ -5,10 +5,18 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\Filesystem;
-
+/**
+ * Checks for conflicts between modules
+ */
 class ConflictChecker
 {
+    /**
+     * Enabled module list
+     *
+     * @var ModuleList
+     */
+    private $list;
+
     /**
      * Composer package info
      *
@@ -17,11 +25,15 @@ class ConflictChecker
     private $packageInfo;
 
     /**
-     * @param PackageInfo $packageInfo
+     * Constructor
+     *
+     * @param ModuleList $list
+     * @param PackageInfoFactory $packageInfoFactory
      */
-    public function __construct(PackageInfo $packageInfo)
+    public function __construct(ModuleList $list, PackageInfoFactory $packageInfoFactory)
     {
-        $this->packageInfo = $packageInfo;
+        $this->list = $list;
+        $this->packageInfo = $packageInfoFactory->create();
     }
 
     /**
@@ -33,7 +45,7 @@ class ConflictChecker
     public function checkConflictsWhenEnableModules($moduleNames)
     {
         // union of currently enabled modules and to-be-enabled modules
-        $enabledModules = array_unique(array_merge($this->packageInfo->getEnabledModules(), $moduleNames));
+        $enabledModules = array_unique(array_merge($this->list->getNames(), $moduleNames));
         $conflictsAll = [];
         foreach ($moduleNames as $moduleName) {
             $conflicts = [];
@@ -50,17 +62,16 @@ class ConflictChecker
     /**
      * Check if module is conflicted
      *
+     * @param string $enabledModule
      * @param string $moduleName
      * @return bool
      */
     private function checkIfConflict($enabledModule, $moduleName)
     {
-        if (array_search($this->packageInfo->getPackageName($enabledModule),
-                $this->packageInfo->getConflict($moduleName)) !== false) {
+        if (array_search($enabledModule, $this->packageInfo->getConflict($moduleName)) !== false) {
             return true;
         }
-        if (array_search($this->packageInfo->getPackageName($moduleName),
-                $this->packageInfo->getConflict($enabledModule)) !== false) {
+        if (array_search($moduleName, $this->packageInfo->getConflict($enabledModule)) !== false) {
             return true;
         }
 

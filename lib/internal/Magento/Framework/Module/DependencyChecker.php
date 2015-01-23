@@ -6,10 +6,26 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\Data\Graph;
-use Magento\Framework\Filesystem;
 
+/**
+ * Checks for dependencies between modules
+ */
 class DependencyChecker
 {
+    /**
+     * Enabled module list
+     *
+     * @var ModuleList
+     */
+    private $list;
+
+    /**
+     * All module loader
+     *
+     * @var ModuleList\Loader
+     */
+    private $loader;
+
     /**
      * Composer package info
      *
@@ -18,11 +34,17 @@ class DependencyChecker
     private $packageInfo;
 
     /**
-     * @param PackageInfo $packageInfo
+     * Constructor
+     *
+     * @param ModuleList $list
+     * @param ModuleList\Loader $loader
+     * @param PackageInfoFactory $packageInfoFactory
      */
-    public function __construct(PackageInfo $packageInfo)
+    public function __construct(ModuleList $list, ModuleList\Loader $loader, PackageInfoFactory $packageInfoFactory)
     {
-        $this->packageInfo = $packageInfo;
+        $this->list = $list;
+        $this->loader = $loader;
+        $this->packageInfo = $packageInfoFactory->create();
     }
 
     /**
@@ -34,7 +56,7 @@ class DependencyChecker
     public function checkDependenciesWhenDisableModules($moduleNames)
     {
         // assume disable succeeds: currently enabled modules - to-be-disabled modules
-        $enabledModules = array_diff($this->packageInfo->getEnabledModules(), $moduleNames);
+        $enabledModules = array_diff($this->list->getNames(), $moduleNames);
         return $this->checkDependencyGraph(false, $moduleNames, $enabledModules);
     }
 
@@ -47,7 +69,7 @@ class DependencyChecker
     public function checkDependenciesWhenEnableModules($moduleNames)
     {
         // assume enable succeeds: union of currently enabled modules and to-be-enabled modules
-        $enabledModules = array_unique(array_merge($this->packageInfo->getEnabledModules(), $moduleNames));
+        $enabledModules = array_unique(array_merge($this->list->getNames(), $moduleNames));
         return $this->checkDependencyGraph(true, $moduleNames, $enabledModules);
     }
 
@@ -67,7 +89,7 @@ class DependencyChecker
         foreach ($moduleNames as $moduleName) {
             $dependenciesMissing = [];
             $paths = $graph->findPathsToReachableNodes($moduleName, $graphMode);
-            foreach ($this->packageInfo->getAllModuleNames() as $module) {
+            foreach (array_keys($this->loader->load()) as $module) {
                 if (isset($paths[$module])) {
                     if ($isEnable && !in_array($module, $enabledModules)) {
                         $dependenciesMissing[$module] = $paths[$module];
@@ -93,12 +115,11 @@ class DependencyChecker
         $dependencies = [];
 
         // build the graph data
-        foreach ($packageInfo->getAllModuleNames() as $moduleName) {
+        foreach (array_keys($this->loader->load()) as $moduleName) {
             $nodes[] = $moduleName;
-            foreach ($packageInfo->getRequire($moduleName) as $dependPackageName) {
-                $depend = $packageInfo->getModuleName($dependPackageName);
-                if ($depend) {
-                    $dependencies[] = [$moduleName, $depend];
+            foreach ($packageInfo->getRequire($moduleName) as $dependModuleName) {
+                if ($dependModuleName) {
+                    $dependencies[] = [$moduleName, $dependModuleName];
                 }
             }
         }

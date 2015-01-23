@@ -85,14 +85,14 @@ class Status
     /**
      * Whether it is allowed to enable or disable specified modules
      *
-     * @param bool $isEnable
+     * @param bool $isEnabled
      * @param string[] $modules
      * @return string[]
      */
-    public function checkConstraints($isEnable, $modules)
+    public function checkConstraints($isEnabled, $modules)
     {
         $errorMessages = [];
-        if ($isEnable) {
+        if ($isEnabled) {
             $errorModulesDependency = $this->dependencyChecker->checkDependenciesWhenEnableModules($modules);
             $errorModulesConflict = $this->conflictChecker->checkConflictsWhenEnableModules($modules);
         } else {
@@ -102,7 +102,7 @@ class Status
 
         foreach ($errorModulesDependency as $moduleName => $missingDependencies) {
             if (!empty($missingDependencies)) {
-                $errorMessages[] = $isEnable ?
+                $errorMessages[] = $isEnabled ?
                     "Cannot enable $moduleName, depending on disabled modules:" :
                     "Cannot disable $moduleName, modules depending on it:";
                 foreach ($missingDependencies as $errorModule => $path) {
@@ -114,7 +114,7 @@ class Status
         foreach ($errorModulesConflict as $moduleName => $conflictingModules) {
             if (!empty($conflictingModules)) {
                 $errorMessages[] = "Cannot enable $moduleName, conflicting modules:";
-                $errorMessages[] = implode(',', $conflictingModules);
+                $errorMessages[] = implode(', ', $conflictingModules);
             }
         }
 
