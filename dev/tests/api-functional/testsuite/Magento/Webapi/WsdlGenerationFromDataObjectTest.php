@@ -27,15 +27,12 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $this->_markTestAsSoapOnly("WSDL generation tests are intended to be executed for SOAP adapter only.");
         $this->_storeCode = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
             ->getStore()->getCode();
-        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?services%3DtestModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
+        $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2";
         parent::setUp();
     }
 
     public function testMultiServiceWsdl()
     {
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->markTestIncomplete('MAGETWO-31016: incompatible with ZF 1.12.9');
-        }
         $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV1,testModule5AllSoapAndRestV2';
         $wsdlContent = $this->_convertXmlToString($this->_getWsdlContent($wsdlUrl));
 
@@ -417,28 +414,24 @@ SECOND_BINDING;
         );
         $operationDeclaration = <<< OPERATION_DECLARATION
 <operation name="testModule5AllSoapAndRestV1Item">
-    <soap:operation soapAction="testModule5AllSoapAndRestV1Item"/>
+    <soap12:operation soapAction="testModule5AllSoapAndRestV1Item"/>
     <input>
         <soap12:body use="literal"/>
     </input>
     <output>
         <soap12:body use="literal"/>
     </output>
-    <fault name="GenericFault">
-        <soap12:fault use="literal" name="GenericFault"/>
-    </fault>
+    <fault name="GenericFault"/>
 </operation>
 <operation name="testModule5AllSoapAndRestV1Items">
-    <soap:operation soapAction="testModule5AllSoapAndRestV1Items"/>
+    <soap12:operation soapAction="testModule5AllSoapAndRestV1Items"/>
     <input>
         <soap12:body use="literal"/>
     </input>
     <output>
         <soap12:body use="literal"/>
     </output>
-    <fault name="GenericFault">
-        <soap12:fault use="literal" name="GenericFault"/>
-    </fault>
+    <fault name="GenericFault"/>
 </operation>
 OPERATION_DECLARATION;
         $this->assertContains(
@@ -459,7 +452,7 @@ OPERATION_DECLARATION;
         $firstServiceDeclaration = <<< FIRST_SERVICE_DECLARATION
 <service name="testModule5AllSoapAndRestV1Service">
     <port name="testModule5AllSoapAndRestV1Port" binding="tns:testModule5AllSoapAndRestV1Binding">
-        <soap:address location="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2"/>
+        <soap12:address location="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2"/>
     </port>
 </service>
 FIRST_SERVICE_DECLARATION;
@@ -474,7 +467,7 @@ FIRST_SERVICE_DECLARATION;
         $secondServiceDeclaration = <<< SECOND_SERVICE_DECLARATION
 <service name="testModule5AllSoapAndRestV2Service">
     <port name="testModule5AllSoapAndRestV2Port" binding="tns:testModule5AllSoapAndRestV2Binding">
-        <soap:address location="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2"/>
+        <soap12:address location="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2"/>
     </port>
 </service>
 SECOND_SERVICE_DECLARATION;
@@ -555,9 +548,7 @@ FAULT_IN_PORT_TYPE;
     protected function _checkFaultsBindingSection($wsdlContent)
     {
         $faultsInBinding = <<< FAULT_IN_BINDING
-<fault name="GenericFault">
-    <soap12:fault use="literal" name="GenericFault"/>
-</fault>
+<fault name="GenericFault"/>
 FAULT_IN_BINDING;
         $this->assertContains(
             $this->_convertXmlToString($faultsInBinding),
@@ -665,7 +656,7 @@ PARAM_COMPLEX_TYPE;
         <xsd:element name="message" minOccurs="1" maxOccurs="1" type="xsd:string">
             <xsd:annotation>
                 <xsd:documentation></xsd:documentation>
-                <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services%3DtestModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2">
+                <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2">
                     <inf:maxLength/>
                 </xsd:appinfo>
             </xsd:annotation>
@@ -673,7 +664,7 @@ PARAM_COMPLEX_TYPE;
         <xsd:element name="parameters" type="tns:ArrayOfGenericFaultParameter" minOccurs="0">
             <xsd:annotation>
                 <xsd:documentation>Message parameters.</xsd:documentation>
-                <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services%3DtestModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2">
+                <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2">
                     <inf:natureOfType>array</inf:natureOfType>
                 </xsd:appinfo>
             </xsd:annotation>
@@ -714,13 +705,13 @@ PARAMETERS_COMPLEX_TYPE;
 <xsd:complexType name="ArrayOfWrappedError">
     <xsd:annotation>
         <xsd:documentation>An array of WrappedError items.</xsd:documentation>
-        <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services%3DtestModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2"/>
+        <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2"/>
     </xsd:annotation>
     <xsd:sequence>
         <xsd:element name="item" minOccurs="0" maxOccurs="unbounded" type="tns:WrappedError">
             <xsd:annotation>
                 <xsd:documentation>An item of ArrayOfWrappedError.</xsd:documentation>
-                <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services%3DtestModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2"/>
+                <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2"/>
             </xsd:annotation>
         </xsd:element>
     </xsd:sequence>
