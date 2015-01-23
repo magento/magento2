@@ -80,10 +80,9 @@ interface WriteInterface extends ReadInterface
      *
      * @param string $path
      * @param string $mode
-     * @param string|null $protocol
      * @return \Magento\Framework\Filesystem\File\WriteInterface
      */
-    public function openFile($path, $mode = 'w', $protocol = null);
+    public function openFile($path, $mode = 'w');
 
     /**
      * Open file in given path

@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Block\Account\Dashboard;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Info

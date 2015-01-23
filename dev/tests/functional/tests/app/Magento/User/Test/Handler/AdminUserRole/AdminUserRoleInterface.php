@@ -6,7 +6,7 @@
 
 namespace Magento\User\Test\Handler\AdminUserRole;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface AdminUserRoleInterface

@@ -7,7 +7,8 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
 
 /**
  * Class AdvancedPropertiesTab
@@ -33,10 +34,10 @@ class Advanced extends Tab
      * Fill 'Advanced Attribute Properties' tab
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         if (!$this->_rootElement->find($this->propertiesTabActive)->isVisible()) {
             $this->_rootElement->find($this->propertiesTab)->click();

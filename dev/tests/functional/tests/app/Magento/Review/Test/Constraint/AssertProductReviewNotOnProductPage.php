@@ -9,8 +9,8 @@ namespace Magento\Review\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Review\Test\Fixture\Review;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductReviewNotOnProductPage
@@ -27,13 +27,13 @@ class AssertProductReviewNotOnProductPage extends AbstractConstraint
      *
      * @param CatalogProductView $catalogProductView
      * @param Review $reviewInitial
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         Review $reviewInitial,
-        Browser $browser
+        BrowserInterface $browser
     ) {
         /** @var CatalogProductSimple $product */
         $product = $reviewInitial->getDataFieldConfig('entity_id')['source']->getEntity();

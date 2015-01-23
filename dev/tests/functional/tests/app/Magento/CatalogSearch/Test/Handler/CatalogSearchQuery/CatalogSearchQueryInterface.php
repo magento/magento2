@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogSearch\Test\Handler\CatalogSearchQuery;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface CatalogSearchQueryInterface

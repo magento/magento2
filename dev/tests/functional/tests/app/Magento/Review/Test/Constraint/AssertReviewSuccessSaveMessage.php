@@ -7,7 +7,7 @@
 namespace Magento\Review\Test\Constraint;
 
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertReviewSuccessSaveMessage

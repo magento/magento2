@@ -5,9 +5,9 @@
  */
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-use Mtf\Block\Form;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class SampleRow
@@ -48,10 +48,10 @@ class Samples extends Form
      * Get Downloadable sample item block
      *
      * @param int $index
-     * @param Element $element
+     * @param SimpleElement $element
      * @return SampleRow
      */
-    public function getRowBlock($index, Element $element = null)
+    public function getRowBlock($index, SimpleElement $element = null)
     {
         $element = $element ?: $this->_rootElement;
         return $this->blockFactory->create(
@@ -64,10 +64,10 @@ class Samples extends Form
      * Fill samples block
      *
      * @param array|null $fields
-     * @param Element $element
+     * @param SimpleElement $element
      * @return void
      */
-    public function fillSamples(array $fields = null, Element $element = null)
+    public function fillSamples(array $fields = null, SimpleElement $element = null)
     {
         $element = $element ?: $this->_rootElement;
         if (!$element->find($this->samplesTitle, Locator::SELECTOR_XPATH)->isVisible()) {
@@ -85,10 +85,10 @@ class Samples extends Form
      * Get data samples block
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataSamples(array $fields = null, Element $element = null)
+    public function getDataSamples(array $fields = null, SimpleElement $element = null)
     {
         $element = $element ?: $this->_rootElement;
         if (!$element->find($this->samplesTitle, Locator::SELECTOR_XPATH)->isVisible()) {

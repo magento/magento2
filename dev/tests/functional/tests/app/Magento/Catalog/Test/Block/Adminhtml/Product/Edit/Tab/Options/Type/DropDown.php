@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options\AbstractOptions;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Form "Option dropdown" on tab product "Custom options".
@@ -32,13 +32,14 @@ class DropDown extends AbstractOptions
      * Fill the form.
      *
      * @param array $fields
-     * @param Element $element
+     * @param SimpleElement $element
      * @return $this
      */
-    public function fillOptions(array $fields, Element $element = null)
+    public function fillOptions(array $fields, SimpleElement $element = null)
     {
         $this->_rootElement->find($this->optionTitle)->click();
         $this->_rootElement->find($this->buttonAddLocator)->click();
+
         return parent::fillOptions($fields, $element);
     }
 }

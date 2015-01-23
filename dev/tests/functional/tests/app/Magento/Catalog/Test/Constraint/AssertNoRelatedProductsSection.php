@@ -8,9 +8,9 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AssertNoRelatedProductsSection
@@ -25,14 +25,14 @@ class AssertNoRelatedProductsSection extends AbstractConstraint
     /**
      * Assert that product is not displayed in related products section
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductSimple $product
      * @param InjectableFixture[] $relatedProducts
      * @param CatalogProductView $catalogProductView
      * @return void
      */
     public function processAssert(
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductSimple $product,
         array $relatedProducts,
         CatalogProductView $catalogProductView

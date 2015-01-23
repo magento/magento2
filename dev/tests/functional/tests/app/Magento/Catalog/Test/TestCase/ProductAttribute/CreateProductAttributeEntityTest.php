@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Test\TestCase\ProductAttribute;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Mtf\ObjectManager;
-use Mtf\TestCase\Scenario;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Test Creation for CreateProductAttributeEntity

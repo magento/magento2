@@ -8,7 +8,7 @@ namespace Magento\TaxImportExport\Model\Rate;
 class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Tax\Model\Rate\CsvImportHandler
+     * @var \Magento\TaxImportExport\Model\Rate\CsvImportHandler
      */
     protected $_importHandler;
 
