@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\Plugin;
+namespace Magento\Catalog\Model\Plugin\ProductRepository;
 
 class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,11 +50,10 @@ class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
         $this->subjectMock = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Api\Data\ProductInterface', [], [], '', false);
         $productMock = $this->productMock;
-        $saveOption = $this->saveOption;
-        $this->closureMock = function () use ($productMock, $saveOption) {
+        $this->closureMock = function () use ($productMock) {
             return $productMock;
         };
-        $this->rollbackClosureMock = function () use ($productMock, $saveOption) {
+        $this->rollbackClosureMock = function () use ($productMock) {
             throw new \Exception(self::ERROR_MSG);
         };
 
@@ -104,7 +103,12 @@ class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 
-        $this->model->aroundDelete($this->subjectMock, $this->rollbackClosureMock, $this->productMock, $this->saveOption);
+        $this->model->aroundDelete(
+            $this->subjectMock,
+            $this->rollbackClosureMock,
+            $this->productMock,
+            $this->saveOption
+        );
     }
 
     public function testAroundDeleteByIdCommit()
@@ -127,6 +131,11 @@ class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 
-        $this->model->aroundDelete($this->subjectMock, $this->rollbackClosureMock, $this->productMock, $this->saveOption);
+        $this->model->aroundDelete(
+            $this->subjectMock,
+            $this->rollbackClosureMock,
+            $this->productMock,
+            $this->saveOption
+        );
     }
 }

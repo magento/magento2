@@ -156,18 +156,11 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     protected function mapProductLinkToSelectionModel(
         \Magento\Bundle\Model\Selection $selectionModel,
         \Magento\Bundle\Api\Data\LinkInterface $productLink,
-        $linkedProductId = null,
-        $parentProductId = null
+        $linkedProductId,
+        $parentProductId
     ) {
-        if (!is_null($linkedProductId)) {
-            $selectionModel->setProductId($linkedProductId);
-        }
-        if (!is_null($parentProductId)) {
-            $selectionModel->setParentProductId($parentProductId);
-        }
-        if (!is_null($productLink->getId())) {
-            $selectionModel->setSelectionId($productLink->getId());
-        }
+        $selectionModel->setProductId($linkedProductId);
+        $selectionModel->setParentProductId($parentProductId);
         if (!is_null($productLink->getOptionId())) {
             $selectionModel->setOptionId($productLink->getOptionId());
         }
@@ -203,10 +196,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     ) {
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException('Product with specified sku: "%1" is not a bundle product', [$product->getSku()]);
-        }
-
-        if ($linkedProduct->getId()) {
-            throw new InputException('Id field should not be set for new product link');
         }
 
         $options = $this->optionCollection->create();

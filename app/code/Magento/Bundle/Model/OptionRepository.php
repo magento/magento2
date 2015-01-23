@@ -148,7 +148,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -158,11 +157,13 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $option->setParentId($product->getId());
 
         $optionId = $option->getOptionId();
+        $linksToAdd = [];
         if (!$optionId) {
             $option->setDefaultTitle($option->getTitle());
-            $linksToAdd = is_array($option->getProductLinks()) ? $option->getProductLinks() : [];
+            if (is_array($option->getProductLinks())) {
+                $linksToAdd = $option->getProductLinks();
+            }
         } else {
-            $existingLinks = $this->linkManagement->getChildren($product->getSku(), $optionId);
             $optionCollection = $this->type->getOptionsCollection($product);
             $optionCollection->setIdFilter($option->getOptionId());
 
@@ -174,32 +175,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             }
 
             $option->setData(array_merge($existingOption->getData(), $option->getData()));
-
-            $linksToAdd = [];
-            $linksToUpdate = [];
-            $linksToDelete = [];
-            if (is_array($option->getProductLinks())) {
-                $productLinks = $option->getProductLinks();
-                foreach ($productLinks as $productLink) {
-                    if (!$productLink->getId()) {
-                        $linksToAdd[] = $productLink;
-                    } else {
-                        $linksToUpdate[] = $productLink;
-                    }
-                }
-                /** @var \Magento\Bundle\Api\Data\LinkInterface[] $linksToDelete */
-                $linksToDelete = array_udiff($existingLinks, $productLinks, [$this, 'compareLinks']);
-            }
-            foreach ($linksToUpdate as $linkedProduct) {
-                $this->linkManagement->saveChild($product, $linkedProduct);
-            }
-            foreach ($linksToDelete as $linkedProduct) {
-                $this->linkManagement->removeChild(
-                    $product->getSku(),
-                    $option->getOptionId(),
-                    $linkedProduct->getSku()
-                );
-            }
+            $this->updateOptionSelection($product, $option);
         }
 
         try {
@@ -214,6 +190,49 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         }
 
         return $option->getOptionId();
+    }
+
+    /**
+     * Update option selections
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param \Magento\Bundle\Api\Data\OptionInterface $option
+     */
+    protected function updateOptionSelection(
+        \Magento\Catalog\Api\Data\ProductInterface $product,
+        \Magento\Bundle\Api\Data\OptionInterface $option
+    ) {
+        $optionId = $option->getOptionId();
+        $existingLinks = $this->linkManagement->getChildren($product->getSku(), $optionId);
+        $linksToAdd = [];
+        $linksToUpdate = [];
+        $linksToDelete = [];
+        if (is_array($option->getProductLinks())) {
+            $productLinks = $option->getProductLinks();
+            foreach ($productLinks as $productLink) {
+                if (!$productLink->getId()) {
+                    $linksToAdd[] = $productLink;
+                } else {
+                    $linksToUpdate[] = $productLink;
+                }
+            }
+            /** @var \Magento\Bundle\Api\Data\LinkInterface[] $linksToDelete */
+            $linksToDelete = array_udiff($existingLinks, $linksToUpdate, [$this, 'compareLinks']);
+        }
+        foreach ($linksToUpdate as $linkedProduct) {
+            $this->linkManagement->saveChild($product, $linkedProduct);
+        }
+        foreach ($linksToDelete as $linkedProduct) {
+            $this->linkManagement->removeChild(
+                $product->getSku(),
+                $option->getOptionId(),
+                $linkedProduct->getSku()
+            );
+        }
+        foreach ($linksToAdd as $linkedProduct) {
+            $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
+        }
+        return;
     }
 
     /**

@@ -510,7 +510,8 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $optionMock->expects($this->once())->method('setStoreId')->with($storeId)->willReturnSelf();
         $optionMock->expects($this->once())->method('setParentId')->with($productId)->willReturnSelf();
-        $optionMock->method('getOptionId')->will($this->onConsecutiveCalls(null, $optionId, $optionId, $optionId));
+        $optionMock->method('getOptionId')
+            ->will($this->onConsecutiveCalls(null, $optionId, $optionId, $optionId, $optionId));
 
         $productLink1 = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
         $productLink2 = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
