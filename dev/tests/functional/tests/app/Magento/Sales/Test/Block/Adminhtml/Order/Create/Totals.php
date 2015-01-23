@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Totals

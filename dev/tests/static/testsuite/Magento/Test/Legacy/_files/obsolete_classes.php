@@ -1302,6 +1302,7 @@ return [
     ['Magento\Core\Controller\Varien\DispatchableInterface'],
     ['Magento\Core\Controller\Varien\Front', 'Magento\Framework\App\FrontController'],
     ['Magento\Core\Controller\FrontInterface', 'Magento\Framework\App\FrontControllerInterface'],
+    ['Magento\Core\Model\App\Emulation', 'Magento\Store\Model\App\Emulation'],
     ['Magento\Core\Model\App\Handler'],
     ['Magento\Core\Model\App\Proxy'],
     ['Magento\Core\Model\Event\Config\SchemaLocator', 'Magento\Framework\Event\Config\SchemaLocator'],
@@ -2855,4 +2856,5 @@ return [
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Collector'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
     ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
+    ['Magento\Core\Model\Validator\Factory', 'Magento\Framework\Validator\Factory'],
 ];

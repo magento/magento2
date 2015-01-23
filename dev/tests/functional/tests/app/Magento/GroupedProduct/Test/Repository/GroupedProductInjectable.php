@@ -6,7 +6,7 @@
 
 namespace Magento\GroupedProduct\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
  * Class GroupedProductInjectable

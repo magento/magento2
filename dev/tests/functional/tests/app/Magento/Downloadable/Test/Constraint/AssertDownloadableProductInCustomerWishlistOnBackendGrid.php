@@ -8,7 +8,7 @@ namespace Magento\Downloadable\Test\Constraint;
 
 use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
 use Magento\Wishlist\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertDownloadableProductInCustomerWishlistOnBackendGrid

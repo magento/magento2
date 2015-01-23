@@ -10,9 +10,9 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Wishlist\Test\Page\WishlistIndex;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\ObjectManager;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Class AbstractWishlistTest

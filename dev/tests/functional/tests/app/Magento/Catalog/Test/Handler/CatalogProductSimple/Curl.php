@@ -6,12 +6,12 @@
 
 namespace Magento\Catalog\Test\Handler\CatalogProductSimple;
 
-use Mtf\System\Config;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Util\Protocol\CurlInterface;
-use Mtf\Util\Protocol\CurlTransport;
-use Mtf\Handler\Curl as AbstractCurl;
-use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\Mtf\System\Config;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Util\Protocol\CurlInterface;
+use Magento\Mtf\Util\Protocol\CurlTransport;
+use Magento\Mtf\Handler\Curl as AbstractCurl;
+use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
  * Create new simple product via curl.

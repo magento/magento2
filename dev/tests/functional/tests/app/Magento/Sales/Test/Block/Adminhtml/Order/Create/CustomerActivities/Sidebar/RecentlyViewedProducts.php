@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
 
 use Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities\Sidebar;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class RecentlyViewedProducts
@@ -30,8 +30,7 @@ class RecentlyViewedProducts extends Sidebar
     public function getProducts()
     {
         $products = [];
-        $productNames = $this->_rootElement->find($this->recentlyViewedProducts, Locator::SELECTOR_XPATH)
-            ->getElements();
+        $productNames = $this->_rootElement->getElements($this->recentlyViewedProducts, Locator::SELECTOR_XPATH);
         foreach ($productNames as $productName) {
             $products[] = $productName->getText();
         }

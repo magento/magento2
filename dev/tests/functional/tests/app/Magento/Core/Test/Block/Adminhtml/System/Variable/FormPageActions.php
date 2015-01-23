@@ -7,7 +7,7 @@
 namespace Magento\Core\Test\Block\Adminhtml\System\Variable;
 
 use Magento\Backend\Test\Block\FormPageActions as AbstractFormPageActions;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class FormPageActions
@@ -41,7 +41,7 @@ class FormPageActions extends AbstractFormPageActions
      *
      * @param string $storeName
      * @throws \Exception
-     * @return void|bool
+     * @return null|bool
      */
     public function selectStoreView($storeName)
     {
@@ -57,6 +57,8 @@ class FormPageActions extends AbstractFormPageActions
         } else {
             throw new \Exception('Store View with name \'' . $storeName . '\' is not visible!');
         }
-        $this->_rootElement->acceptAlert();
+        $this->browser->acceptAlert();
+
+        return null;
     }
 }

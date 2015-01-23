@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Fixture\Cart;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Item

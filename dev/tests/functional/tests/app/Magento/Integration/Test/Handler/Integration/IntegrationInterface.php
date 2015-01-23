@@ -6,7 +6,7 @@
 
 namespace Magento\Integration\Test\Handler\Integration;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface IntegrationInterface

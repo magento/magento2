@@ -9,9 +9,9 @@ namespace Magento\Review\Test\Constraint;
 use Magento\Backend\Test\Page\Adminhtml\AdminCache;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Review\Test\Fixture\Review;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Assert that product review available on product page.
@@ -28,7 +28,7 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
      * @param CatalogProductView $catalogProductView
      * @param Review $review
      * @param FixtureInterface $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param AdminCache $cachePage
      * @return void
      */
@@ -36,7 +36,7 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
         CatalogProductView $catalogProductView,
         Review $review,
         FixtureInterface $product,
-        Browser $browser,
+        BrowserInterface $browser,
         AdminCache $cachePage
     ) {
         $errors = [];

@@ -72,8 +72,8 @@ class LibraryTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     [
-                        [DirectoryList::LIB_WEB, $this->libraryDirectoryMock],
-                        [DirectoryList::THEMES, $this->themesDirectoryMock],
+                        [DirectoryList::LIB_WEB, Filesystem\DriverPool::FILE, $this->libraryDirectoryMock],
+                        [DirectoryList::THEMES, Filesystem\DriverPool::FILE, $this->themesDirectoryMock],
                     ]
                 )
             );

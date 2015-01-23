@@ -313,4 +313,14 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     {
         return $this->_virtualTypes;
     }
+
+    /**
+     * Returns list on preferences
+     *
+     * @return array
+     */
+    public function getPreferences()
+    {
+        return $this->_preferences;
+    }
 }

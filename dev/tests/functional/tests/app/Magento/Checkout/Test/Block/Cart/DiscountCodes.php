@@ -6,8 +6,8 @@
 
 namespace Magento\Checkout\Test\Block\Cart;
 
-use Mtf\Block\Form;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class DiscountCodes
