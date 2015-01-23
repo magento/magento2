@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backup\Model\Resource;
 
 class Helper extends \Magento\Framework\DB\Helper
@@ -120,6 +123,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param string $tableName
      * @param bool $withForeignKeys
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getTableCreateSql($tableName, $withForeignKeys = false)
     {

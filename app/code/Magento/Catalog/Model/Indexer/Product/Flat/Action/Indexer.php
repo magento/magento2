@@ -41,6 +41,8 @@ class Indexer
      * @param int $productId
      * @param string $valueFieldSuffix
      * @return \Magento\Catalog\Model\Indexer\Product\Flat
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function write($storeId, $productId, $valueFieldSuffix = '')
     {

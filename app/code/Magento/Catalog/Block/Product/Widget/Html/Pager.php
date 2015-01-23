@@ -152,6 +152,7 @@ class Pager extends \Magento\Theme\Block\Html\Pager
      * Return number of last page
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getLastPageNum()
     {

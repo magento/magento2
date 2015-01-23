@@ -19,6 +19,8 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
      * @param \Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\Gdata\Gshopping\Entry $entry
      * @return \Magento\Framework\Gdata\Gshopping\Entry
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function convertAttribute($product, $entry)
     {

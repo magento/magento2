@@ -9,6 +9,9 @@ namespace Magento\Catalog\Model\Layer\Filter;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /** @var  \Magento\Catalog\Model\Resource\Layer\Filter\Attribute|MockObject */
@@ -46,6 +49,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder|MockObject */
     private $itemDataBuilder;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         /** @var \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory */

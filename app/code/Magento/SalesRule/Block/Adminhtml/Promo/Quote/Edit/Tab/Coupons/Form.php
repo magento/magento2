@@ -41,6 +41,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare coupon codes generation parameters form
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

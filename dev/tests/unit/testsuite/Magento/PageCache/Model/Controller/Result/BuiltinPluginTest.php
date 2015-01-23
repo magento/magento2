@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\PageCache\Model\Controller\Result;
 
 class BuiltinPluginTest extends \PHPUnit_Framework_TestCase

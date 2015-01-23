@@ -266,6 +266,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param string $state
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function getStatusByState($state)
     {

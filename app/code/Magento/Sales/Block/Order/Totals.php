@@ -285,6 +285,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      *
      * @param   array $order
      * @return  $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function applySortOrder($order)
     {
