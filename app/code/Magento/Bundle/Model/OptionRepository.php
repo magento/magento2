@@ -197,6 +197,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param \Magento\Bundle\Api\Data\OptionInterface $option
+     * @return $this
      */
     protected function updateOptionSelection(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -232,7 +233,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         foreach ($linksToAdd as $linkedProduct) {
             $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
         }
-        return;
+        return $this;
     }
 
     /**
