@@ -101,10 +101,10 @@ class FetchRatesTest extends \Magento\Backend\Utility\Controller
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerMap = array(
-            array('Magento\Directory\Model\Currency\Import\Factory', $importServiceFactoryMock),
-            array('Magento\Backend\Model\Session', $backendSessionMock)
-        );
+        $objectManagerMap = [
+            ['Magento\Directory\Model\Currency\Import\Factory', $importServiceFactoryMock],
+            ['Magento\Backend\Model\Session', $backendSessionMock]
+        ];
 
         $objectManagerMock->method('get')
             ->will($this->returnValueMap($objectManagerMap));

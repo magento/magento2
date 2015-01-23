@@ -84,12 +84,15 @@ class SimpleDataObjectConverter
      * @param bool $removeItemNode Remove Item node from arrays if true
      * @return array
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convertStdObjectToArray($input, $removeItemNode = false)
     {
         if (!is_object($input) && !is_array($input)) {
             throw new \InvalidArgumentException("Input argument must be an array or object");
         }
+        // @codingStandardsIgnoreStart
         if ($removeItemNode && (isset($input->item) || isset($input->Map))) {
             $node = isset($input->item) ? $input->item : $input->Map;
             /**
@@ -99,6 +102,7 @@ class SimpleDataObjectConverter
              */
             $input = is_object($node) ? [$node] : $node;
         }
+        // @codingStandardsIgnoreEnd
         $result = [];
         foreach ((array)$input as $key => $value) {
             if (is_object($value) || is_array($value)) {
