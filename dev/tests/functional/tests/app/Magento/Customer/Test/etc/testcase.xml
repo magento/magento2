@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/TestCase/etc/testcase.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Config/etc/test_scenario.xsd">
   <scenario name="CreateOrderFromCustomerPageTest" firstStep="createCustomer">
-    <step name="createCustomer" next="openCustomerOnBackend"/>
-    <step name="openCustomerOnBackend" next="createOrderFromCustomerAccount"/>
-    <step name="createOrderFromCustomerAccount" next="createProducts"/>
-    <step name="createProducts" next="addProducts"/>
-    <step name="addProducts" next="updateProductsData"/>
-    <step name="updateProductsData" next="fillBillingAddress"/>
-    <step name="fillBillingAddress" next="selectPaymentMethodForOrder"/>
-    <step name="selectPaymentMethodForOrder" next="selectShippingMethodForOrder"/>
-    <step name="selectShippingMethodForOrder" next="submitOrder"/>
-    <step name="submitOrder"/>
+    <step name="createCustomer" module="Magento_Customer" next="openCustomerOnBackend"/>
+    <step name="openCustomerOnBackend" module="Magento_Customer" next="createOrderFromCustomerAccount"/>
+    <step name="createOrderFromCustomerAccount" module="Magento_Customer" next="createProducts"/>
+    <step name="createProducts" module="Magento_Catalog" next="addProducts"/>
+    <step name="addProducts" module="Magento_Sales" next="updateProductsData"/>
+    <step name="updateProductsData" module="Magento_Sales" next="fillBillingAddress"/>
+    <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder"/>
+    <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder"/>
+    <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder"/>
+    <step name="submitOrder" module="Magento_Sales"/>
   </scenario>
 </config>
