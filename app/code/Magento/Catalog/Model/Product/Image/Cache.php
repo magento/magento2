@@ -11,7 +11,7 @@ use Magento\Core\Model\Resource\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
 
-class Resize
+class Cache
 {
     /**
      * @var ConfigInterface
@@ -144,12 +144,12 @@ class Resize
     }
 
     /**
-     * Resize product images
+     * Resize product images and save results to image cache
      *
      * @param Product $product
      * @return $this
      */
-    public function resize(Product $product)
+    public function generate(Product $product)
     {
         foreach ($product->getMediaGalleryImages() as $image) {
             foreach ($this->getData()as $params) {

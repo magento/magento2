@@ -102,14 +102,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $categoryRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image\Resize|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Image\Cache|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $imageResize;
+    protected $imageCache;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image\ResizeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Image\CacheFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $imageResizeFactory;
+    protected $imageCacheFactory;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -215,10 +215,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
         $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
 
-        $this->imageResize = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\Resize')
+        $this->imageCache = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\Cache')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->imageResizeFactory = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\ResizeFactory')
+        $this->imageCacheFactory = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\CacheFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -239,7 +239,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'stockItemBuilder' => $this->stockItemBuilderMock,
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'categoryRepository' => $this->categoryRepository,
-                'imageResizeFactory' => $this->imageResizeFactory,
+                'imageCacheFactory' => $this->imageCacheFactory,
                 'data' => ['id' => 1]
             ]
         );
@@ -484,12 +484,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
-        $this->imageResize->expects($this->once())
-            ->method('resize')
+        $this->imageCache->expects($this->once())
+            ->method('generate')
             ->with($this->model);
-        $this->imageResizeFactory->expects($this->once())
+        $this->imageCacheFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->imageResize);
+            ->willReturn($this->imageCache);
 
         $this->model->setIsDuplicate(false);
         $this->configureSaveTest();
@@ -504,12 +504,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAndDuplicate()
     {
-        $this->imageResize->expects($this->once())
-            ->method('resize')
+        $this->imageCache->expects($this->once())
+            ->method('generate')
             ->with($this->model);
-        $this->imageResizeFactory->expects($this->once())
+        $this->imageCacheFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->imageResize);
+            ->willReturn($this->imageCache);
 
         $this->model->setIsDuplicate(true);
         $this->configureSaveTest();

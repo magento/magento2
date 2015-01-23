@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Product\Image;
 use Magento\Framework\App\Area;
 use Magento\TestFramework\Helper\ObjectManager;
 
-class ResizeTest extends \PHPUnit_Framework_TestCase
+class CacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
@@ -16,7 +16,7 @@ class ResizeTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image\Resize
+     * @var \Magento\Catalog\Model\Product\Image\Cache
      */
     protected $model;
 
@@ -68,7 +68,7 @@ class ResizeTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
-            'Magento\Catalog\Model\Product\Image\Resize',
+            'Magento\Catalog\Model\Product\Image\Cache',
             [
                 'viewConfig' => $this->viewConfig,
                 'themeCollection' => $this->themeCollection,
@@ -77,7 +77,7 @@ class ResizeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testResize()
+    public function testGenerate()
     {
         $imageFile = 'image.jpg';
         $imageItem = $this->objectManager->getObject(
@@ -125,7 +125,7 @@ class ResizeTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->will($this->returnSelf());
 
-        $this->model->resize($this->product);
+        $this->model->generate($this->product);
     }
 
     /**

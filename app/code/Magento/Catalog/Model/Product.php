@@ -230,9 +230,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
-     * @var Product\Image\ResizeFactory
+     * @var Product\Image\CacheFactory
      */
-    protected $imageResizeFactory;
+    protected $imageCacheFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -260,7 +260,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param Product\Image\ResizeFactory $imageResizeFactory
+     * @param Product\Image\CacheFactory $imageCacheFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -291,7 +291,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         CategoryRepositoryInterface $categoryRepository,
-        Product\Image\ResizeFactory $imageResizeFactory,
+        Product\Image\CacheFactory $imageCacheFactory,
         array $data = []
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -312,7 +312,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         $this->categoryRepository = $categoryRepository;
-        $this->imageResizeFactory = $imageResizeFactory;
+        $this->imageCacheFactory = $imageCacheFactory;
         parent::__construct(
             $context,
             $registry,
@@ -765,10 +765,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_getResource()->addCommitCallback([$this, 'reindex']);
         $this->reloadPriceInfo();
 
-        // Resize images for catalog product
-        /** @var Product\Image\Resize $imageResize */
-        $imageResize = $this->imageResizeFactory->create();
-        $imageResize->resize($this);
+        // Resize images for catalog product and save results to image cache
+        /** @var Product\Image\Cache $imageCache */
+        $imageCache = $this->imageCacheFactory->create();
+        $imageCache->generate($this);
 
         return $result;
     }
