@@ -51,6 +51,15 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test CSS minification
+     *
+     * @param string $requestedUri
+     * @param string $requestedFilePath
+     * @param string $testFile
+     * @param callable $assertionCallback
+     * @throws \Magento\Framework\Exception
+     */
     protected function _testCssMinification($requestedUri, $requestedFilePath, $testFile, $assertionCallback)
     {
         /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject $appState */
@@ -170,5 +179,69 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
                 $this->assertContains('semi-minified file', $content);
             }
         );
+    }
+
+    /**
+     * @magentoConfigFixture current_store dev/css/minify_files 1
+     */
+    public function testDeploymentWithMinifierEnabled()
+    {
+        $initDirectories = Bootstrap::getInstance()
+            ->getAppInitParams()[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+
+        $designPath = $initDirectories['design']['path'];
+
+        $staticPath = $initDirectories['static']['path'];
+
+        $fileToBePublished = $staticPath . '/frontend/Magento/blank/en_US/css/styles.css';
+        $destFile = $designPath . '/frontend/Magento/blank/web/css/styles.css';
+        $fileToTestPublishing = dirname(__DIR__) . '/_files/static/css/styles.css';
+
+        if (!is_readable(dirname($destFile))) {
+            mkdir(dirname($destFile), 777, true);
+        }
+
+        copy($fileToTestPublishing, $destFile);
+
+        $omFactory = $this->getMock('\Magento\Framework\App\ObjectManagerFactory', ['create'], [], '', false);
+        $omFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->objectManager));
+
+        $logger = $this->objectManager->create(
+            'Magento\Tools\View\Deployer\Log',
+            ['verbosity' => \Magento\Tools\View\Deployer\Log::SILENT]
+        );
+
+        $filesUtil = $this->getMock('\Magento\Framework\Test\Utility\Files', [], [], '', false);
+        $filesUtil->expects($this->any())
+            ->method('getStaticLibraryFiles')
+            ->will($this->returnValue([]));
+
+        $filesUtil->expects($this->any())
+            ->method('getStaticPreProcessingFiles')
+            ->will($this->returnValue(
+                [
+                    ['frontend', 'Magento/blank', '', '', 'css/styles.css', $destFile]
+                ]
+            ));
+
+        /** @var \Magento\Tools\View\Deployer $deployer */
+        $deployer = $this->objectManager->create(
+            'Magento\Tools\View\Deployer',
+            ['filesUtil' => $filesUtil, 'logger' => $logger, 'isDryRun' => false]
+        );
+
+        $deployer->deploy($omFactory, ['en_US']);
+
+        $this->assertFileExists($fileToBePublished);
+        $this->assertEquals(
+            file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
+            file_get_contents($fileToBePublished),
+            'Minified file is not equal or minification did not work for deployed CSS'
+        );
+
+        unlink($destFile);
+        unlink($fileToBePublished);
     }
 }
