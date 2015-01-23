@@ -14,6 +14,9 @@ use Magento\Tax\Api\Data\TaxDetailsItemInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\Calculation;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class AbstractCalculator
 {
     /**#@+

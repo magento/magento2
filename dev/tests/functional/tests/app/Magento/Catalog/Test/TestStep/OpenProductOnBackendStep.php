@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Test\TestStep;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Mtf\Fixture\InjectableFixture;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Open product on backend.

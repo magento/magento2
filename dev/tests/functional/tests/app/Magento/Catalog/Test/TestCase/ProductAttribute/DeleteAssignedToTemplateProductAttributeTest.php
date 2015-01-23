@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\TestCase\ProductAttribute;
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Delete Attribute Set (Product Template)
@@ -31,6 +31,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteAssignedToTemplateProductAttributeTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Catalog Product Attribute index page
      *

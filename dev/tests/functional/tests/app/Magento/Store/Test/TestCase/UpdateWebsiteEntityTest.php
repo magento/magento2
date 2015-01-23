@@ -9,8 +9,8 @@ namespace Magento\Store\Test\TestCase;
 use Magento\Backend\Test\Page\Adminhtml\EditWebsite;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Store\Test\Fixture\Website;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Update Website (Store Management)
@@ -33,6 +33,11 @@ use Mtf\TestCase\Injectable;
  */
 class UpdateWebsiteEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Page StoreIndex
      *

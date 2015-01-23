@@ -8,6 +8,9 @@ namespace Magento\Framework\Search\Request;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Request\Query\Filter;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Mapper
 {
     /**
@@ -96,6 +99,7 @@ class Mapper
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws StateException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function mapQuery($queryName)
     {

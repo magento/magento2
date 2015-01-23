@@ -130,4 +130,7 @@
     <assertWrongPassConfirmationMessage module="Magento_Customer">
         <severity>low</severity>
     </assertWrongPassConfirmationMessage>
+    <assertCustomerRedirectToDashboard  module="Magento_Customer">
+        <severeness>low</severeness>
+    </assertCustomerRedirectToDashboard>
 </constraint>

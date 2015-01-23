@@ -10,7 +10,7 @@ use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Store\Test\Fixture\StoreGroup;
 use Magento\Store\Test\Fixture\Website;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class StoreGrid

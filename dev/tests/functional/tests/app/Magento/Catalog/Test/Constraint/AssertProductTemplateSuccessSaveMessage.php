@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductTemplateSuccessSaveMessage

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Newsletter\Block\Adminhtml\Queue\Edit;
 
 /**
@@ -57,6 +60,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * or from  newsletter queue grid by edit option.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogRule\Test\Handler\CatalogRule;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface CatalogRuleInterface

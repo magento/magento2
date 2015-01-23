@@ -28,11 +28,19 @@
     <rule ref="rulesets/unusedcode.xml" />
 
     <!-- Code design rules -->
-    <rule ref="rulesets/design.xml" />
+    <rule ref="rulesets/design.xml/ExitExpression" />
+    <rule ref="rulesets/design.xml/EvalExpression" />
+    <rule ref="rulesets/design.xml/GotoStatement" />
+    <rule ref="rulesets/design.xml/NumberOfChildren" />
+    <rule ref="rulesets/design.xml/DepthOfInheritance">
+        <properties>
+            <property name="minimum" value="8" />
+        </properties>
+    </rule>
+    <rule ref="rulesets/design.xml/CouplingBetweenObjects" />
 
     <!-- Naming Rules -->
     <rule ref="rulesets/naming.xml/ShortMethodName" />
-    <rule ref="rulesets/naming.xml/ConstructorWithNameAsEnclosingClass" />
     <rule ref="rulesets/naming.xml/ConstantNamingConventions" />
     <rule ref="rulesets/naming.xml/BooleanGetMethodName" />
 </ruleset>

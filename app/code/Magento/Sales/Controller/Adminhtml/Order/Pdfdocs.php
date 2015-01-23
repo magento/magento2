@@ -15,6 +15,7 @@ class Pdfdocs extends \Magento\Sales\Controller\Adminhtml\Order
      * Print all documents for selected orders
      *
      * @return ResponseInterface|void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

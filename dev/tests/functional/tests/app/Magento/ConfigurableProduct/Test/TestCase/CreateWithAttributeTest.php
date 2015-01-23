@@ -9,8 +9,8 @@ namespace Magento\ConfigurableProduct\Test\TestCase;
 use Magento\Catalog\Test\Fixture\Product;
 use Magento\Catalog\Test\Fixture\ProductAttribute;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
-use Mtf\Factory\Factory;
-use Mtf\TestCase\Functional;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\TestCase\Functional;
 
 /**
  * Class CreateWithAttributeTest
@@ -18,6 +18,11 @@ use Mtf\TestCase\Functional;
  */
 class CreateWithAttributeTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    const STABLE = 'no';
+    /* end tags */
+
     /**
      * Creating configurable product with creating new category and new attribute (required fields only)
      *

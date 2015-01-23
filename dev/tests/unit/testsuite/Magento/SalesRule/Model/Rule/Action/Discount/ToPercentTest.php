@@ -209,7 +209,7 @@ class ToPercentTest extends \PHPUnit_Framework_TestCase
                     'amount' => 98,
                     'baseAmount' => 59.5,
                     'originalAmount' => 119,
-                    'baseOriginalAmount' => 108.5,
+                    'baseOriginalAmount' => 80.5,
                 ],
             ]
         ];

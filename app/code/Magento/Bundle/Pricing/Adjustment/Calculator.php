@@ -20,6 +20,7 @@ use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Bundle price calculator
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Calculator implements BundleCalculatorInterface
 {
@@ -79,6 +80,7 @@ class Calculator implements BundleCalculatorInterface
      * @param null|string $exclude
      * @param null|array $context
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null, $context = [])
     {
@@ -172,6 +174,8 @@ class Calculator implements BundleCalculatorInterface
      * @param bool $searchMin
      * @param bool $useRegularPrice
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getSelectionAmounts(Product $bundleProduct, $searchMin, $useRegularPrice = false)
     {
@@ -295,6 +299,7 @@ class Calculator implements BundleCalculatorInterface
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
      * @param null|string $exclude
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function calculateDynamicBundleAmount($basePriceValue, $bundleProduct, $selectionPriceList, $exclude)
     {
@@ -314,7 +319,7 @@ class Calculator implements BundleCalculatorInterface
 
         /** @var  Store $store */
         $store = $bundleProduct->getStore();
-        $roundingMethod = $this->taxHelper->getCalculationAgorithm($store);
+        $roundingMethod = $this->taxHelper->getCalculationAlgorithm($store);
         foreach ($amountList as $amountInfo) {
             /** @var \Magento\Framework\Pricing\Amount\AmountInterface $itemAmount */
             $itemAmount = $amountInfo['amount'];
@@ -382,6 +387,7 @@ class Calculator implements BundleCalculatorInterface
      * @param \Magento\Bundle\Pricing\Price\BundleSelectionPrice[] $selectionPriceList
      * @param bool $searchMin
      * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processOptions($option, $selectionPriceList, $searchMin = true)
     {

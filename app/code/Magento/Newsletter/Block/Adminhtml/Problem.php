@@ -40,6 +40,7 @@ class Problem extends \Magento\Backend\Block\Template
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _construct()
     {
@@ -101,6 +102,7 @@ class Problem extends \Magento\Backend\Block\Template
      * Return true if the size is greater than 0
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShowButtons()
     {

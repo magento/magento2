@@ -5,6 +5,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 return [
     ['__get', 'Magento\Framework\Object'],
     ['__set', 'Magento\Framework\Object'],
@@ -2035,5 +2038,6 @@ return [
     ['getResource', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getResourceCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
     ['getResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
-    ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface']
+    ['getAdvancedResultCollection', 'Magento\CatalogSearch\Model\Resource\EngineInterface'],
+    ['getEntityTypeId', 'Magento\Customer\Model\Customer'],
 ];

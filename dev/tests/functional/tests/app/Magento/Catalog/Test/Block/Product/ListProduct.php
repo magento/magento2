@@ -6,10 +6,10 @@
 
 namespace Magento\Catalog\Test\Block\Product;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Factory\Factory;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Product list.
@@ -135,7 +135,7 @@ class ListProduct extends Block
      * This method returns the element representing the product details for the named product.
      *
      * @param string $productName String containing the name of the product
-     * @return Element
+     * @return SimpleElement
      */
     protected function getProductDetailsElement($productName)
     {
@@ -149,7 +149,7 @@ class ListProduct extends Block
      * This method returns the element on the page associated with the product name.
      *
      * @param string $productName String containing the name of the product
-     * @return Element
+     * @return SimpleElement
      */
     protected function getProductNameElement($productName)
     {

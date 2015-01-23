@@ -54,6 +54,9 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
      * Get Element Html
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getElementHtml()
     {

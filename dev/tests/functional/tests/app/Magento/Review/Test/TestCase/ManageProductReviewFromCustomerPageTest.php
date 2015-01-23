@@ -13,12 +13,12 @@ use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
-use Mtf\Client\Browser;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for ManageProductReviewFromCustomerPage
@@ -47,6 +47,11 @@ use Mtf\TestCase\Injectable;
  */
 class ManageProductReviewFromCustomerPageTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Customer index page
      *
@@ -78,7 +83,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     /**
      * Browser
      *
-     * @var Browser
+     * @var BrowserInterface
      */
     protected $browser;
 
@@ -106,7 +111,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     /**
      * Review fixture
      *
-     * @var ReviewInjectable
+     * @var Review
      */
     protected $reviewInitial;
 
@@ -137,7 +142,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
      * @param CmsIndex $cmsIndex
      * @param CustomerAccountLogin $customerAccountLogin
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param RatingIndex $ratingIndex
      * @param RatingEdit $ratingEdit
      * @param ReviewEdit $reviewEdit
@@ -149,7 +154,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
         CmsIndex $cmsIndex,
         CustomerAccountLogin $customerAccountLogin,
         CatalogProductView $catalogProductView,
-        Browser $browser,
+        BrowserInterface $browser,
         RatingIndex $ratingIndex,
         RatingEdit $ratingEdit,
         ReviewEdit $reviewEdit
@@ -168,14 +173,14 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     /**
      * Run manage product review test
      *
-     * @param ReviewInjectable $reviewInitial
-     * @param ReviewInjectable $review
+     * @param Review $reviewInitial
+     * @param Review $review
      * @param CustomerInjectable $customer
      * @return array
      */
     public function test(
-        ReviewInjectable $reviewInitial,
-        ReviewInjectable $review,
+        Review $reviewInitial,
+        Review $review,
         CustomerInjectable $customer
     ) {
         // Preconditions
@@ -226,7 +231,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     public function tearDown()
     {
         $this->ratingIndex->open();
-        if ($this->reviewInitial instanceof ReviewInjectable) {
+        if ($this->reviewInitial instanceof Review) {
             foreach ($this->reviewInitial->getRatings() as $rating) {
                 $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $rating['title']]);
                 $this->ratingEdit->getPageActions()->delete();

@@ -7,7 +7,7 @@
 namespace Magento\Customer\Test\Constraint;
 
 use Magento\Customer\Test\Page\CustomerAccountEdit;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertChangePasswordFailMessage

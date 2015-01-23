@@ -7,7 +7,7 @@
 namespace Magento\Newsletter\Test\Constraint;
 
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertNewsletterSuccessCreateMessage

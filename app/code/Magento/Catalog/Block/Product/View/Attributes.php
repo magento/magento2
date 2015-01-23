@@ -67,6 +67,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
      *
      * @param array $excludeAttr
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAdditionalData(array $excludeAttr = [])
     {

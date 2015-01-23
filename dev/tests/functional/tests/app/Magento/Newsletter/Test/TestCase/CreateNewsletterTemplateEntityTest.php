@@ -9,7 +9,7 @@ namespace Magento\Newsletter\Test\TestCase;
 use Magento\Newsletter\Test\Fixture\Template;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateIndex;
 use Magento\Newsletter\Test\Page\Adminhtml\TemplateNewIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Create Newsletter Template
@@ -27,6 +27,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateNewsletterTemplateEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Page for create newsletter template
      *

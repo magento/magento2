@@ -9,7 +9,7 @@ namespace Magento\CatalogSearch\Test\TestCase;
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchEdit;
 use Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for CreateSearchTermEntity
@@ -32,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateSearchTermEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Search term page
      *

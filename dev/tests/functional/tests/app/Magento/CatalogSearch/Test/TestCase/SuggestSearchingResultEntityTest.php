@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Test\TestCase;
 
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\Cms\Test\Page\CmsIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Cover Suggest Searching Result (SearchEntity)
@@ -30,6 +30,11 @@ use Mtf\TestCase\Injectable;
  */
 class SuggestSearchingResultEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Run suggest searching result test
      *

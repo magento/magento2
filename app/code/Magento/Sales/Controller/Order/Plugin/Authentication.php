@@ -38,6 +38,7 @@ class Authentication
      * @param \Magento\Framework\App\ActionInterface $subject
      * @param RequestInterface $request
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDispatch(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
     {

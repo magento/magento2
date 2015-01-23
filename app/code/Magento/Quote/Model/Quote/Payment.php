@@ -42,6 +42,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method \Magento\Quote\Model\Quote\Payment setCcSsIssue(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Payment extends \Magento\Payment\Model\Info
 {
@@ -78,6 +79,7 @@ class Payment extends \Magento\Payment\Model\Info
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

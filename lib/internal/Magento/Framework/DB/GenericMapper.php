@@ -87,6 +87,7 @@ class GenericMapper extends AbstractMapper
      * @param array $fields
      * @throws \Zend_Db_Select_Exception
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function mapFields(array $fields)
     {

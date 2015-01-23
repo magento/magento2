@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -35,7 +38,7 @@ class ProductMediaAttributeManagementTest extends WebapiAbstract
         $mediaAttributes = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertNotEmpty($mediaAttributes);
-        $attribute = $this->getAttributeByCode($mediaAttributes,  'funny_image');
+        $attribute = $this->getAttributeByCode($mediaAttributes, 'funny_image');
         $this->assertNotNull($attribute);
         $this->assertEquals('Funny image', $attribute['default_frontend_label']);
         $this->assertEquals(1, $attribute['is_user_defined']);

@@ -8,7 +8,7 @@ namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class SelectCheckoutMethodStep

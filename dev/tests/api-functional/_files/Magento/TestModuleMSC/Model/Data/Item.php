@@ -3,12 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\TestModuleMSC\Model\Data;
 
 use Magento\TestModuleMSC\Api\Data\ItemInterface;
 
-class Item extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements ItemInterface
+class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements ItemInterface
 {
     /**
      * @return int

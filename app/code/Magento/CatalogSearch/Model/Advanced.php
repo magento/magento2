@@ -41,6 +41,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\CatalogSearch\Model\Advanced setUpdatedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Advanced extends \Magento\Framework\Model\AbstractModel
 {
@@ -120,6 +121,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param ResourceProvider $resourceProvider
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -155,6 +157,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param   array $values
      * @return  $this
      * @throws Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addFilters($values)
     {
@@ -283,6 +287,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param   EntityAttribute $attribute
      * @param   mixed $value
      * @return  $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addSearchCriteria($attribute, $value)
     {
