@@ -18,7 +18,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
     /** @var  InitParamListener */
     private $listener;
 
-    /** @var  PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $callbackHandler;
 
     protected function setUp()
@@ -138,7 +138,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException LogicException
+     * @expectedException \LogicException
      * @expectedExceptionMessage Magento root directory is not specified.
      */
     public function testCreateDirectoryListException()
@@ -245,7 +245,10 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
     {
         $testPath = 'test/path/';
 
-        /** @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject $directoryList */
+        /**
+         * @var \Magento\Framework\App\Filesystem\DirectoryList|
+         * \PHPUnit_Framework_MockObject_MockObject $directoryList
+         */
         $directoryList = $this->getMockBuilder('Magento\Framework\App\Filesystem\DirectoryList')
             ->disableOriginalConstructor()->getMock();
         $directoryList->expects($this->any())->method('getPath')->willReturn($testPath);

@@ -17,22 +17,23 @@ class RouteListenerTest extends \PHPUnit_Framework_TestCase
     /** @var RouteListener */
     private $routeListener;
 
-    /** @var PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $request;
 
-    /** @var PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $router;
 
     protected function setUp()
     {
         $this->routeListener = new RouteListener();
         $this->request = $this->getMockBuilder('Zend\Console\Request')->disableOriginalConstructor()->getMock();
-        $this->router = $this->getMockBuilder('Zend\Mvc\Router\RouteInterface')->disableOriginalConstructor()->getMock();
+        $this->router = $this->getMockBuilder('Zend\Mvc\Router\RouteInterface')
+            ->disableOriginalConstructor()->getMock();
     }
 
     public function testOnRouteHttpRequest()
     {
-        /** @var \Zend\Mvc\MvcEvent|PHPUnit_Framework_MockObject_MockObject $mvcEvent */
+        /** @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
         $mvcEvent = $this->getMockBuilder('Zend\Mvc\MvcEvent')->disableOriginalConstructor()->getMock();
         $httpRequest = $this->getMockBuilder('Zend\Http\Request')->getMock();
         $mvcEvent->expects($this->any())->method('getRequest')->willReturn($httpRequest);
@@ -113,7 +114,7 @@ class RouteListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testAttach()
     {
-        /** @var \Zend\EventManager\EventManagerInterface|PHPUnit_Framework_MockObject_MockObject $eventManager */
+        /** @var \Zend\EventManager\EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject $eventManager */
         $eventManager = $this->getMockBuilder('Zend\EventManager\EventManagerInterface')->getMock();
         $eventManager->expects($this->once())
             ->method('attach')
@@ -128,7 +129,7 @@ class RouteListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Create a mock MVC event with a console mock console request.
      *
-     * @return PHPUnit_Framework_MockObject_MockObject|MvcEvent
+     * @return \PHPUnit_Framework_MockObject_MockObject|MvcEvent
      */
     private function prepareEvent()
     {
@@ -141,7 +142,7 @@ class RouteListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Add a mock application, service manager and console adapter.
      *
-     * @param PHPUnit_Framework_MockObject_MockObject $mvcEvent
+     * @param \PHPUnit_Framework_MockObject_MockObject $mvcEvent
      * @param $configArray
      */
     private function prepareOnRoute($mvcEvent, $configArray)
@@ -150,7 +151,9 @@ class RouteListenerTest extends \PHPUnit_Framework_TestCase
         $serviceManager = $this->getMockBuilder('Zend\ServiceManager\ServiceLocatorInterface')->getMock();
         $console = $this->getMockBuilder('Zend\Console\Adapter\AdapterInterface')->getMock();
 
-        $serviceManager->method('get')->will($this->returnValueMap([['Config', $configArray], ['console', $console]]));
+        $serviceManager
+            ->expects($this->any())
+            ->method('get')->will($this->returnValueMap([['Config', $configArray], ['console', $console]]));
 
         $application->expects($this->any())->method('getServiceManager')->willReturn($serviceManager);
         $mvcEvent->expects($this->any())->method('getApplication')->willReturn($application);
