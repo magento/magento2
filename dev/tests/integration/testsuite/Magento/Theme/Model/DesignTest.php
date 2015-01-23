@@ -26,7 +26,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Core/_files/design_change.php
+     * @magentoDataFixture Magento/Theme/_files/design_change.php
      */
     public function testChangeDesign()
     {
@@ -93,7 +93,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Core/_files/design_change.php
+     * @magentoDataFixture Magento/Theme/_files/design_change.php
      * @magentoConfigFixture current_store general/locale/timezone UTC
      */
     public function testLoadChangeCache()
@@ -142,7 +142,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Core/_files/design_change_timezone.php
+     * @magentoDataFixture Magento/Theme/_files/design_change_timezone.php
      * @dataProvider loadChangeTimezoneDataProvider
      */
     public function testLoadChangeTimezone($storeCode, $storeTimezone, $storeUtcOffset)

@@ -63,7 +63,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Core/Model/_files/design/themes.php
+     * @magentoDataFixture Magento/Theme/Model/_files/design/themes.php
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */

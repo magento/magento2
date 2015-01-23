@@ -9,7 +9,7 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * @magentoDataFixture Magento/Core/Model/_files/design/themes.php
+ * @magentoDataFixture Magento/Theme/Model/_files/design/themes.php
  */
 class DesignTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,7 +70,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             [
                 Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
                     DirectoryList::THEMES => [
-                        'path' => realpath(__DIR__ . '/../../../Core/Model/_files/design'),
+                        'path' => realpath(__DIR__ . '/../../../Theme/Model/_files/design'),
                     ],
                 ],
             ]

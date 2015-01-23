@@ -26,7 +26,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $viewFileSystem->expects($this->any())
             ->method('getLocaleFileName')
             ->will(
-                $this->returnValue(dirname(__DIR__) . '/Core/Model/_files/design/frontend/Test/default/i18n/en_US.csv')
+                $this->returnValue(dirname(__DIR__) . '/Theme/Model/_files/design/frontend/Test/default/i18n/en_US.csv')
             );
 
         /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
