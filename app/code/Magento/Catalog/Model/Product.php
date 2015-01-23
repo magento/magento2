@@ -766,6 +766,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->reloadPriceInfo();
 
         // Resize images for catalog product
+        /** @var Product\Image\Resize $imageResize */
         $imageResize = $this->imageResizeFactory->create();
         $imageResize->resize($this);
 

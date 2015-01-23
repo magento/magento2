@@ -52,7 +52,7 @@ class ResizeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->viewConfig = $this->getMockBuilder('Magento\Framework\View\ConfigInterface')
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->config = $this->getMockBuilder('Magento\Framework\Config\View')
             ->disableOriginalConstructor()

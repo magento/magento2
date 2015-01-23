@@ -102,6 +102,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $categoryRepository;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Image\Resize|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imageResize;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Image\ResizeFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imageResizeFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
@@ -205,6 +215,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
         $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
 
+        $this->imageResize = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\Resize')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->imageResizeFactory = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\ResizeFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
@@ -221,6 +239,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'stockItemBuilder' => $this->stockItemBuilderMock,
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'categoryRepository' => $this->categoryRepository,
+                'imageResizeFactory' => $this->imageResizeFactory,
                 'data' => ['id' => 1]
             ]
         );
@@ -465,6 +484,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
+        $this->imageResize->expects($this->once())
+            ->method('resize')
+            ->with($this->model);
+        $this->imageResizeFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->imageResize);
+
         $this->model->setIsDuplicate(false);
         $this->configureSaveTest();
         $this->optionInstanceMock->expects($this->any())->method('setProduct')->will($this->returnSelf());
@@ -478,6 +504,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAndDuplicate()
     {
+        $this->imageResize->expects($this->once())
+            ->method('resize')
+            ->with($this->model);
+        $this->imageResizeFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->imageResize);
+
         $this->model->setIsDuplicate(true);
         $this->configureSaveTest();
         $this->model->beforeSave();
