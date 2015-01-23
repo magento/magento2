@@ -58,7 +58,7 @@
         <label for="<?php echo $_code ?>_cc_cid" class="label"><span><?php echo __('Card Verification Number') ?></span></label>
         <div class="control">
             <input type="number" title="<?php echo __('Card Verification Number') ?>" class="input-text cvv" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" data-validate='{"required-number":true, "validate-cc-cvn":"#<?php echo $_code ?>_cc_type"}' />
-            <?php $_content = '<img src=\"' . $this->getViewFileUrl('Magento_Checkout::cvv.gif') . '\" alt=\"' . __('Card Verification Number Visual Reference') . '\" title=\"' . __('Card Verification Number Visual Reference') . '\" />'; ?>
+            <?php $_content = '<img src=\"' . $this->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' . __('Card Verification Number Visual Reference') . '\" title=\"' . __('Card Verification Number Visual Reference') . '\" />'; ?>
             <div class="note">
                 <a href="#" class="action cvv" title="<?php echo __('What is this?') ?>" data-mage-init='{"tooltip": {"content": "<?php echo $_content ?>"}}'><span><?php echo __('What is this?') ?></span></a>
             </div>

@@ -202,7 +202,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
                     $format = $this->_localeDate->getDateFormat(
                         \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
                     );
-                    $element->setImage($this->getViewFileUrl('images/grid-cal.gif'));
+                    $element->setImage($this->getViewFileUrl('images/grid-cal.png'));
                     $element->setDateFormat($format);
                 }
             }

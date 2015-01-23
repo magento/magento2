@@ -76,7 +76,7 @@
     </widget>
 
     <widget id="catalog_product_link" class="Magento\Catalog\Block\Product\Widget\Link" module="Magento_Catalog" is_email_compatible="true"
-            placeholder_image="Magento_Catalog::images/product_widget_link.gif" translate="label description">
+            placeholder_image="Magento_Catalog::images/product_widget_link.png" translate="label description">
         <label>Catalog Product Link</label>
         <description>Link to a Specified Product</description>
         <parameter name="id_path" type="block" visible="true" required="true" sort_order="10" translate="label">
@@ -108,7 +108,7 @@
     </widget>
 
     <widget id="catalog_category_link" class="Magento\Catalog\Block\Category\Widget\Link" module="Magento_Catalog" is_email_compatible="true"
-            placeholder_image="Magento_Catalog::images/category_widget_link.gif" translate="label description">
+            placeholder_image="Magento_Catalog::images/category_widget_link.png" translate="label description">
         <label>Catalog Category Link</label>
         <description>Link to a Specified Category</description>
         <parameter name="id_path" type="block" visible="true" required="true" sort_order="10" translate="label">
