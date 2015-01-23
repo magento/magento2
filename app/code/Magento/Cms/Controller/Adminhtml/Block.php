@@ -30,6 +30,26 @@ class Block extends \Magento\Backend\App\Action
     }
 
     /**
+     * Init page
+     *
+     * @param \Magento\Backend\Model\View\Result\Page $resultPage
+     * @return \Magento\Backend\Model\View\Result\Page
+     */
+    protected function _initPage($resultPage)
+    {
+        $resultPage->setActiveMenu(
+            'Magento_Cms::cms_block'
+        )->addBreadcrumb(
+            __('CMS'),
+            __('CMS')
+        )->addBreadcrumb(
+            __('Static Blocks'),
+            __('Static Blocks')
+        );
+        return $resultPage;
+    }
+
+    /**
      * Init actions
      *
      * @return $this

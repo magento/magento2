@@ -30,7 +30,7 @@ class Delete extends \Magento\Cms\Controller\Adminhtml\Block
     /**
      * Delete action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
