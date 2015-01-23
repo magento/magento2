@@ -13,15 +13,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 class MinifierTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Request path for test minifier
-     */
-    const REQUEST_PATH = '/frontend/Magento/blank/en_US/css/styles.css';
-
-    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
-
 
     protected function setUp()
     {
@@ -125,7 +119,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     public function testCssMinification()
     {
         $this->_testCssMinification(
-            self::REQUEST_PATH,
+            '/frontend/Magento/blank/en_US/css/styles.css',
             '/frontend/Magento/blank/web/css/styles.css',
             dirname(__DIR__) . '/_files/static/css/styles.css',
             function ($path) {
@@ -144,7 +138,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     public function testCssMinificationOff()
     {
         $this->_testCssMinification(
-            self::REQUEST_PATH,
+            '/frontend/Magento/blank/en_US/css/styles.css',
             '/frontend/Magento/blank/web/css/styles.css',
             dirname(__DIR__) . '/_files/static/css/styles.css',
             function ($path) {
@@ -166,9 +160,9 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     public function testCssMinificationForMinifiedFiles()
     {
         $this->_testCssMinification(
-            '/frontend/Magento/blank/en_US/css/styles.min.css',
-            '/frontend/Magento/blank/web/css/styles.min.css',
-            dirname(__DIR__) . '/_files/static/css/styles.min.css',
+            '/frontend/Magento/blank/en_US/css/preminified-styles.min.css',
+            '/frontend/Magento/blank/web/css/preminified-styles.min.css',
+            dirname(__DIR__) . '/_files/static/css/preminified-styles.min.css',
             function ($path) {
                 $content = file_get_contents($path);
                 $this->assertNotEmpty($content);
