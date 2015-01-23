@@ -38,11 +38,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     public function yearValueDataProvider()
     {
-        return array(
-            array(null, null),
-            array(0, null),
-            array('0', null),
-            array(1939, 1939),
-        );
+        return [
+            [null, null],
+            [0, null],
+            ['0', null],
+            [1939, 1939],
+        ];
     }
 }
