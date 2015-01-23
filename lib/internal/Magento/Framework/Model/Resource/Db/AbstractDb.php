@@ -118,10 +118,14 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * Class constructor
      *
      * @param \Magento\Framework\App\Resource $resource
+     * @param string|null $resourcePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(\Magento\Framework\App\Resource $resource, $resourcePrefix = null)
     {
         $this->_resources = $resource;
+        if (!is_null($resourcePrefix)) {
+            $this->_resourcePrefix = $resourcePrefix;
+        }
         parent::__construct();
     }
 
@@ -259,7 +263,8 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
         }
 
         if (!isset($this->_tables[$cacheName])) {
-            $this->_tables[$cacheName] = $this->_resources->getTableName($tableName);
+            $connectionName = $this->_resourcePrefix . '_read';
+            $this->_tables[$cacheName] = $this->_resources->getTableName($tableName, $connectionName);
         }
         return $this->_tables[$cacheName];
     }

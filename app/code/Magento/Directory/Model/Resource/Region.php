@@ -26,10 +26,14 @@ class Region extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param string|null $resourcePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\Locale\ResolverInterface $localeResolver)
-    {
-        parent::__construct($resource);
+    public function __construct(
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        $resourcePrefix = null
+    ) {
+        parent::__construct($resource, $resourcePrefix);
         $this->_localeResolver = $localeResolver;
     }
 

@@ -40,16 +40,18 @@ class Rules extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\CacheInterface $aclCache
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Acl\Builder $aclBuilder,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\Framework\Acl\CacheInterface $aclCache
+        \Magento\Framework\Acl\CacheInterface $aclCache,
+        $resourcePrefix = null
     ) {
         $this->_aclBuilder = $aclBuilder;
-        parent::__construct($resource);
+        parent::__construct($resource, $resourcePrefix);
         $this->_rootResource = $rootResource;
         $this->_aclCache = $aclCache;
         $this->_logger = $logger;

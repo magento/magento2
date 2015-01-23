@@ -24,13 +24,15 @@ abstract class AbstractIndex extends \Magento\Framework\Model\Resource\Db\Abstra
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Reports\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource);
+        parent::__construct($resource, $resourcePrefix);
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
     }

@@ -32,17 +32,19 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
-        LockValidatorInterface $lockValidator
+        LockValidatorInterface $lockValidator,
+        $resourcePrefix = null
     ) {
         $this->attrLockValidator = $lockValidator;
         $this->_eavConfig = $eavConfig;
-        parent::__construct($resource, $storeManager, $eavEntityType);
+        parent::__construct($resource, $storeManager, $eavEntityType, $resourcePrefix);
     }
 
     /**

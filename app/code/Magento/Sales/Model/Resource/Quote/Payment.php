@@ -20,15 +20,6 @@ class Payment extends AbstractDb
     protected $_serializableFields = ['additional_information' => [null, []]];
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     */
-    public function __construct(
-        \Magento\Framework\App\Resource $resource
-    ) {
-        parent::__construct($resource);
-    }
-
-    /**
      * Main table and field initialization
      *
      * @return void

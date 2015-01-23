@@ -39,14 +39,16 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
      * @param InvoiceGrid $gridAggregator
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         Resource $resource,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
-        InvoiceGrid $gridAggregator
+        InvoiceGrid $gridAggregator,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator, $resourcePrefix);
     }
 
     /**

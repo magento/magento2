@@ -43,14 +43,16 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
      * @param CreditmemoGrid $gridAggregator
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         AppResource $resource,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
-        CreditmemoGrid $gridAggregator
+        CreditmemoGrid $gridAggregator,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator, $resourcePrefix);
     }
 
     /**

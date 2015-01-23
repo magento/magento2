@@ -46,15 +46,17 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\SalesRule\Model\Resource\Coupon $resourceCoupon
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Stdlib\String $string,
-        \Magento\SalesRule\Model\Resource\Coupon $resourceCoupon
+        \Magento\SalesRule\Model\Resource\Coupon $resourceCoupon,
+        $resourcePrefix = null
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
-        parent::__construct($resource);
+        parent::__construct($resource, $resourcePrefix);
     }
 
     /**

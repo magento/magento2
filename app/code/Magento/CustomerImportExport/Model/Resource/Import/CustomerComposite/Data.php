@@ -28,14 +28,16 @@ class Data extends \Magento\ImportExport\Model\Resource\Import\Data
      *
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Core\Helper\Data $coreHelper
+     * @param string|null $resourcePrefix
      * @param array $arguments
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Core\Helper\Data $coreHelper,
+        $resourcePrefix = null,
         array $arguments = []
     ) {
-        parent::__construct($resource, $coreHelper, $arguments);
+        parent::__construct($resource, $coreHelper, $arguments, $resourcePrefix);
 
         if (isset($arguments['entity_type'])) {
             $this->_entityType = $arguments['entity_type'];

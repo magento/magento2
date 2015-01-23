@@ -38,6 +38,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Review\Helper\Data $ratingData
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\Resource\Review\Summary $reviewSummary
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
@@ -45,13 +46,14 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Review\Helper\Data $ratingData,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Review\Model\Resource\Review\Summary $reviewSummary
+        \Magento\Review\Model\Resource\Review\Summary $reviewSummary,
+        $resourcePrefix = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_storeManager = $storeManager;
         $this->_logger = $logger;
         $this->_reviewSummary = $reviewSummary;
-        parent::__construct($resource);
+        parent::__construct($resource, $resourcePrefix);
     }
 
     /**

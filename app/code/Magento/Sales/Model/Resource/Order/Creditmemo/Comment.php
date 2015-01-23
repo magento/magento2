@@ -35,16 +35,18 @@ class Comment extends Entity implements CreditmemoCommentResourceInterface
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param \Magento\Sales\Model\Order\Creditmemo\Comment\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\Sales\Model\Increment $salesIncrement,
         \Magento\Sales\Model\Order\Creditmemo\Comment\Validator $validator,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
+        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null,
+        $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator, $resourcePrefix);
     }
 
     /**

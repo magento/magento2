@@ -20,12 +20,14 @@ class Quote extends AbstractDb
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $config
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Eav\Model\Config $config
+        \Magento\Eav\Model\Config $config,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource);
+        parent::__construct($resource, $resourcePrefix);
         $this->_config = $config;
     }
 

@@ -18,10 +18,14 @@ class Database extends \Magento\Core\Model\Resource\File\Storage\AbstractStorage
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\DB\Helper $resourceHelper
+     * @param string|null $resourcePrefix
      */
-    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\DB\Helper $resourceHelper)
-    {
-        parent::__construct($resource);
+    public function __construct(
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\DB\Helper $resourceHelper,
+        $resourcePrefix = null
+    ) {
+        parent::__construct($resource, $resourcePrefix);
         $this->_resourceHelper = $resourceHelper;
     }
 

@@ -28,15 +28,17 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param Customer\CollectionFactory $customersFactory
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
+        \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory,
+        $resourcePrefix = null
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_customersFactory = $customersFactory;
-        parent::__construct($resource);
+        parent::__construct($resource, $resourcePrefix);
     }
 
     /**
