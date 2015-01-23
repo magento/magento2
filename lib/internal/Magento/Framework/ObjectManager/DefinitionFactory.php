@@ -6,6 +6,9 @@
  * See COPYING.txt for license details.
  *
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\ObjectManager;
 
 use Magento\Framework\Api\Code\Generator\DataBuilder as DataBuilderGenerator;

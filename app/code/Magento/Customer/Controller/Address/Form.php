@@ -11,11 +11,11 @@ class Form extends \Magento\Customer\Controller\Address
     /**
      * Address book form
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getLayout()->initMessages();
         $navigationBlock = $resultPage->getLayout()->getBlock('customer_account_navigation');

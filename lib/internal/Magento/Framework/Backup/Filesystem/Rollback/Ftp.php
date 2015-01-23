@@ -158,6 +158,7 @@ class Ftp extends AbstractRollback
      * @param string $tmpDir
      * @return void
      * @throws \Magento\Framework\Exception
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _uploadBackupToFtp($tmpDir)
     {

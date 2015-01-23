@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -15,6 +18,7 @@ use Magento\Framework\HTTP\Adapter\FileTransferFactory;
  *
  * @method string getBehavior() getBehavior()
  * @method \Magento\ImportExport\Model\Import setEntity() setEntity(string $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Import extends \Magento\ImportExport\Model\AbstractModel
 {
@@ -124,6 +128,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param Source\Import\Behavior\Factory $behaviorFactory
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,

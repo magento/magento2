@@ -67,6 +67,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      *
      * @throws \RuntimeException
      * @return string|false
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getHref()
     {

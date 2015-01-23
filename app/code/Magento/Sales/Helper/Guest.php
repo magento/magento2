@@ -10,6 +10,7 @@ use Magento\Framework\App as App;
 
 /**
  * Sales module base helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Guest extends \Magento\Core\Helper\Data
 {

@@ -50,12 +50,12 @@ class Address extends \Magento\Framework\App\Action\Action
     protected $_dataProcessor;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     * @var \Magento\Framework\Controller\Result\Redirect
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     * @var \Magento\Framework\Controller\Result\ForwardFactory
      */
     protected $resultForwardFactory;
 
@@ -73,8 +73,8 @@ class Address extends \Magento\Framework\App\Action\Action
      * @param \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder
      * @param \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -87,8 +87,8 @@ class Address extends \Magento\Framework\App\Action\Action
         \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder,
         \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->_customerSession = $customerSession;

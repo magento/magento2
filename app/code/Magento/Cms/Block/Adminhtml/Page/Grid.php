@@ -176,6 +176,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Framework\Data\Collection $collection
      * @param \Magento\Framework\Object $column
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _filterStoreCondition($collection, \Magento\Framework\Object $column)
     {

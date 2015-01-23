@@ -70,6 +70,8 @@ class Parser
     /**
      * @param bool $currentNode
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _xmlToArray($currentNode = false)
     {

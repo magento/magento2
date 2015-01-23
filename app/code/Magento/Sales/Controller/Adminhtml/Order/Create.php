@@ -14,6 +14,7 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
  * Adminhtml sales orders creation process controller
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Create extends \Magento\Backend\App\Action
 {
@@ -147,6 +148,9 @@ class Create extends \Magento\Backend\App\Action
      *
      * @param string $action
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _processActionData($action = null)
     {

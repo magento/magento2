@@ -14,6 +14,7 @@ use Magento\Review\Model\Review;
  * Review controller
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Framework\App\Action\Action
 {
@@ -107,6 +108,7 @@ class Product extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Session\Generic $reviewSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

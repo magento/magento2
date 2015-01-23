@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Helper\Address;

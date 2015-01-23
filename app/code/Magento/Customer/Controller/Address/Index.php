@@ -28,8 +28,8 @@ class Index extends \Magento\Customer\Controller\Address
      * @param \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -42,8 +42,8 @@ class Index extends \Magento\Customer\Controller\Address
         \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder,
         \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         CustomerRepositoryInterface $customerRepository
     ) {
@@ -72,7 +72,7 @@ class Index extends \Magento\Customer\Controller\Address
     {
         $addresses = $this->customerRepository->getById($this->_getSession()->getCustomerId())->getAddresses();
         if (count($addresses)) {
-            /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+            /** @var \Magento\Framework\View\Result\Page $resultPage */
             $resultPage = $this->resultPageFactory->create();
             $resultPage->getLayout()->initMessages();
             $block = $resultPage->getLayout()->getBlock('address_book');

@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
  * Checkout default helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -207,6 +208,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $message
      * @param string $checkoutType
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function sendPaymentFailedEmail($checkout, $message, $checkoutType = 'onepage')
     {

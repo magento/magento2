@@ -64,7 +64,7 @@ class FormPost extends \Magento\Customer\Controller\Address
     /**
      * Process address form save
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {

@@ -11,11 +11,11 @@ class Edit extends \Magento\Customer\Controller\Address
     /**
      * Customer address edit action
      *
-     * @return \Magento\Backend\Model\View\Result\Forward
+     * @return \Magento\Framework\Controller\Result\Forward
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+        /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
         return $resultForward->forward('form');
     }
