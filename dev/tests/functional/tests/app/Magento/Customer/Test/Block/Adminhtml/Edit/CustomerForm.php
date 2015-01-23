@@ -7,6 +7,7 @@
 namespace Magento\Customer\Test\Block\Adminhtml\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
+use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 
@@ -28,6 +29,34 @@ class CustomerForm extends FormTabs
      * @var string
      */
     protected $activeFormTab = '.entry-edit.form-inline [data-bind="visible: active"]:not([style="display: none;"])';
+
+    /**
+     * Field label on customer form.
+     *
+     * @var string
+     */
+    protected  $fieldLabel = './/*[contains(@class, "form__field")]/*[contains(@class,"label")]';
+
+    /**
+     * Field with absent label on customer form.
+     *
+     * @var string
+     */
+    protected  $fieldLabelAbsent = './/*[contains(@class, "form__field") and not(./*[contains(@class,"label")]/*)]';
+
+    /**
+     * Wrapper for field on customer form.
+     *
+     * @var string
+     */
+    protected $fieldWrapperControl = './/*[contains(@class, "form__field")]/*[contains(@class,"control")]';
+
+    /**
+     * Wrapper with absent field on customer form.
+     *
+     * @var string
+     */
+    protected $fieldWrapperControlAbsent = './/*[contains(@class, "form__field") and not(./input or ./*[contains(@class,"control")]/*)]';
 
     /**
      * Fill Customer forms on tabs by customer, addresses data.
@@ -103,5 +132,12 @@ class CustomerForm extends FormTabs
     {
         $this->waitForElementNotVisible($this->loader);
         $this->waitForElementVisible($this->activeFormTab);
+
+        $this->waitForElementVisible($this->fieldLabel, Locator::SELECTOR_XPATH);
+        $this->waitForElementNotVisible($this->fieldLabelAbsent, Locator::SELECTOR_XPATH);
+        $this->waitForElementVisible($this->fieldWrapperControl, Locator::SELECTOR_XPATH);
+        $this->waitForElementNotVisible($this->fieldWrapperControlAbsent, Locator::SELECTOR_XPATH);
+
+        usleep(500000);
     }
 }
