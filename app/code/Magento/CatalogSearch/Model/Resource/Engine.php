@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
-use Magento\CatalogSearch\Model\Resource\Product\CollectionFactory;
 use Magento\Framework\Model\Resource\Db\AbstractDb;
 
 /**
@@ -23,13 +22,6 @@ class Engine extends AbstractDb implements EngineInterface
      * @var \Magento\Catalog\Model\Product\Visibility
      */
     protected $_catalogProductVisibility;
-
-    /**
-     * Product Collection Factory
-     *
-     * @var \Magento\CatalogSearch\Model\Resource\Product\CollectionFactory
-     */
-    protected $productCollectionFactory;
 
     /**
      * Array of product collection factory names
@@ -56,7 +48,6 @@ class Engine extends AbstractDb implements EngineInterface
      * Construct
      *
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\CatalogSearch\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\CatalogSearch\Model\Resource\Advanced $searchResource
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
@@ -64,13 +55,11 @@ class Engine extends AbstractDb implements EngineInterface
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\CatalogSearch\Model\Resource\Advanced $searchResource,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
         \Magento\Search\Model\Resource\Helper $resourceHelper
     ) {
-        $this->productCollectionFactory = $productCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_searchResource = $searchResource;
         $this->_catalogSearchData = $catalogSearchData;
