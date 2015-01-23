@@ -23,7 +23,7 @@ class RouteListenerTest extends \PHPUnit_Framework_TestCase
     /** @var PHPUnit_Framework_MockObject_MockObject */
     private $router;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->routeListener = new RouteListener();
         $this->request = $this->getMockBuilder('Zend\Console\Request')->disableOriginalConstructor()->getMock();
@@ -154,6 +154,5 @@ class RouteListenerTest extends \PHPUnit_Framework_TestCase
 
         $application->expects($this->any())->method('getServiceManager')->willReturn($serviceManager);
         $mvcEvent->expects($this->any())->method('getApplication')->willReturn($application);
-
     }
 }

@@ -21,7 +21,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
     /** @var  PHPUnit_Framework_MockObject_MockObject */
     private $callbackHandler;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->listener = new InitParamListener();
     }
@@ -82,7 +82,8 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
     {
         $usage = InitParamListener::getConsoleUsage();
 
-        // usage statement should have a blank line followed by a line containing the parameter
+        // usage statement should be an array and have a blank line followed by a line containing the parameter
+        $this->assertTrue(is_array($usage), 'usage should be an array');
         $this->assertGreaterThanOrEqual(2, count($usage));
 
         // First element should be a blank line
@@ -156,7 +157,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         $mvcApplication->expects($this->any())->method('getRequest')->willReturn($request);
         $serviceLocator->expects($this->once())->method('get')->with('Application')
             ->willReturn($mvcApplication);
-        $this->listener->createService($serviceLocator);
+        $this->assertEquals([], $this->listener->createService($serviceLocator));
     }
 
     /**
@@ -276,6 +277,4 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         $eventManager->expects($this->once())->method('getSharedManager')->willReturn($sharedManager);
         return $eventManager;
     }
-
-
 }
