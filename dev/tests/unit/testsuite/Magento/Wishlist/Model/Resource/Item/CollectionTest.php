@@ -34,6 +34,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
  AND product_name_table.attribute_id=12
  WHERE (INSTR(product_name_table.value, 'TestProductName'))";
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
