@@ -104,11 +104,6 @@ AddType application/xml xml
 
     Header set X-Frame-Options SAMEORIGIN
 
-    <FilesMatch ".(html)$">
-        Header append Cache-Control no-cache
-        Header append Vary: Accept-Encoding
-    </FilesMatch>
-
     <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|htm)$>
         Header append Cache-Control public
     </FilesMatch>
@@ -220,10 +215,9 @@ AddType application/xml xml
     ExpiresActive On
 
     # Data
-    <FilesMatch \.(html|xhtml|shtml|phtml|php|txt|zip|gz|gzip|bz2|csv|xml)$>
+    <FilesMatch \.(zip|gz|gzip|bz2|csv|xml)$>
         ExpiresDefault "access plus 0 seconds"
     </FilesMatch>
-    ExpiresByType text/html "access plus 0 seconds"
     ExpiresByType text/xml "access plus 0 seconds"
     ExpiresByType text/csv "access plus 0 seconds"
     ExpiresByType application/json "access plus 0 seconds"
