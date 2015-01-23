@@ -1,39 +1,37 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/TestCase/etc/testcase.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Config/etc/test_scenario.xsd">
   <scenario name="CheckoutWithGiftMessagesTest" firstStep="setupConfiguration">
-    <step name="setupConfiguration" next="createProducts">
+    <step name="setupConfiguration" module="Magento_Core" next="createProducts">
       <item name="configData" value="cashondelivery, enableGiftMessages"/>
     </step>
-    <step name="createProducts" next="createCustomer"/>
-    <step name="createCustomer" next="loginCustomerOnFrontend"/>
-    <step name="loginCustomerOnFrontend" next="addProductsToTheCart"/>
-    <step name="addProductsToTheCart" next="proceedToCheckout"/>
-    <step name="proceedToCheckout" next="fillBillingInformation"/>
-    <step name="fillBillingInformation" next="fillShippingMethod"/>
-    <step name="addGiftMessage" next="fillShippingMethod"/>
-    <step name="fillShippingMethod" next="selectPaymentMethod"/>
-    <step name="selectPaymentMethod" next="placeOrder"/>
-    <step name="placeOrder"/>
+    <step name="createProducts" module="Magento_Catalog" next="createCustomer"/>
+    <step name="createCustomer" module="Magento_Customer" next="loginCustomerOnFrontend"/>
+    <step name="loginCustomerOnFrontend" module="Magento_Customer" next="addProductsToTheCart"/>
+    <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout"/>
+    <step name="proceedToCheckout" module="Magento_Checkout" next="fillBillingInformation"/>
+    <step name="fillBillingInformation" module="Magento_Checkout" next="fillShippingMethod"/>
+    <step name="addGiftMessage" module="Magento_GiftMessage" next="fillShippingMethod"/>
+    <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod"/>
+    <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrder"/>
+    <step name="placeOrder" module="Magento_Checkout"/>
   </scenario>
   <scenario name="CreateGiftMessageOnBackendTest" firstStep="setupConfiguration">
-    <step name="setupConfiguration" next="createProducts">
+    <step name="setupConfiguration" module="Magento_Core" next="createProducts">
       <item name="configData" value="cashondelivery, enableGiftMessages"/>
     </step>
-    <step name="createProducts" next="createCustomer"/>
-    <step name="createCustomer" next="openSalesOrders">
-      <item name="customer">
-        <item name="dataSet" value="johndoe_with_addresses"/>
-      </item>
+    <step name="createProducts" module="Magento_Catalog" next="createCustomer"/>
+    <step name="createCustomer" module="Magento_Customer" next="openSalesOrders">
+      <item name="customer/dataSet" value="johndoe_with_addresses"/>
     </step>
-    <step name="openSalesOrders" next="createNewOrder"/>
-    <step name="createNewOrder" next="selectCustomerOrder"/>
-    <step name="selectCustomerOrder" next="selectStore"/>
-    <step name="selectStore" next="addProducts"/>
-    <step name="addProducts" next="addGiftMessageBackend"/>
-    <step name="addGiftMessageBackend" next="fillBillingAddress"/>
-    <step name="fillBillingAddress" next="selectPaymentMethodForOrder"/>
-    <step name="selectPaymentMethodForOrder" next="selectShippingMethodForOrder"/>
-    <step name="selectShippingMethodForOrder" next="submitOrder"/>
-    <step name="submitOrder"/>
+    <step name="openSalesOrders" module="Magento_Sales" next="createNewOrder"/>
+    <step name="createNewOrder" module="Magento_Sales" next="selectCustomerOrder"/>
+    <step name="selectCustomerOrder" module="Magento_Sales" next="selectStore"/>
+    <step name="selectStore" module="Magento_Sales" next="addProducts"/>
+    <step name="addProducts" module="Magento_Sales" next="addGiftMessageBackend"/>
+    <step name="addGiftMessageBackend" module="Magento_GiftMessage" next="fillBillingAddress"/>
+    <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder"/>
+    <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder"/>
+    <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder"/>
+    <step name="submitOrder" module="Magento_Sales"/>
   </scenario>
 </config>

@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/TestCase/etc/testcase.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Config/etc/test_scenario.xsd">
   <scenario name="OnePageCheckoutTest" firstStep="setupConfiguration">
-    <step name="setupConfiguration" next="createProducts"/>
-    <step name="createProducts" next="addProductsToTheCart"/>
-    <step name="addProductsToTheCart" next="proceedToCheckout"/>
-    <step name="proceedToCheckout" next="selectCheckoutMethod"/>
-    <step name="createCustomer" next="selectCheckoutMethod"/>
-    <step name="selectCheckoutMethod" next="fillBillingInformation"/>
-    <step name="fillBillingInformation" next="fillShippingMethod"/>
-    <step name="fillShippingMethod" next="selectPaymentMethod"/>
-    <step name="selectPaymentMethod" next="placeOrder"/>
-    <step name="placeOrder"/>
+    <step name="setupConfiguration" module="Magento_Core" next="createProducts"/>
+    <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart"/>
+    <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout"/>
+    <step name="proceedToCheckout" module="Magento_Checkout" next="selectCheckoutMethod"/>
+    <step name="createCustomer" module="Magento_Customer" next="selectCheckoutMethod"/>
+    <step name="selectCheckoutMethod" module="Magento_Checkout" next="fillBillingInformation"/>
+    <step name="fillBillingInformation" module="Magento_Checkout" next="fillShippingMethod"/>
+    <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod"/>
+    <step name="selectPaymentMethod" module="Magento_Checkout" next="placeOrder"/>
+    <step name="placeOrder" module="Magento_Checkout"/>
   </scenario>
 </config>
