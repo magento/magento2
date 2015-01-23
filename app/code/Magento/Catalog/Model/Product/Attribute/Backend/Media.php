@@ -14,6 +14,10 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Model\Exception;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
@@ -164,6 +168,8 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * @param \Magento\Framework\Object $object
      * @return $this|void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function beforeSave($object)
     {
@@ -254,6 +260,8 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * @param \Magento\Framework\Object $object
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function afterSave($object)
     {
@@ -347,6 +355,8 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param boolean $exclude mark image as disabled in product page view
      * @return string
      * @throws Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addImage(
         \Magento\Catalog\Model\Product $product,

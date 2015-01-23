@@ -38,6 +38,7 @@ abstract class AbstractFormElement extends AbstractView implements ElementInterf
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsReadonly()
     {

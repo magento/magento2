@@ -4,6 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sendfriend\Controller\Product;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -37,6 +40,7 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
      * Send Email Post Action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

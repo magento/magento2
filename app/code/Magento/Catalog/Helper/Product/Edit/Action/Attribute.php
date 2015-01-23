@@ -11,6 +11,7 @@ namespace Magento\Catalog\Helper\Product\Edit\Action;
 
 /**
  * Class Attribute
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Backend\Helper\Data
 {
@@ -67,6 +68,7 @@ class Attribute extends \Magento\Backend\Helper\Data
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,

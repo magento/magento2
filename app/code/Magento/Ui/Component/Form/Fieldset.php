@@ -29,6 +29,7 @@ class Fieldset extends AbstractView
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsCollapsible()
     {

@@ -107,6 +107,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function customerLogin(\Magento\Framework\Event\Observer $observer)
     {
@@ -130,6 +131,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function customerLogout(\Magento\Framework\Event\Observer $observer)
     {
@@ -182,6 +184,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function catalogProductCompareRemoveProduct(\Magento\Framework\Event\Observer $observer)
     {
@@ -197,6 +200,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function catalogProductCompareClear(\Magento\Framework\Event\Observer $observer)
     {

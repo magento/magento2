@@ -7,6 +7,7 @@ namespace Magento\Quote\Model\Quote\Address\Total;
 
 /**
  * Sales Quote Address Total  abstract model
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractTotal
 {
@@ -231,6 +232,7 @@ abstract class AbstractTotal
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsItemRowTotalCompoundable(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
@@ -247,6 +249,7 @@ abstract class AbstractTotal
      * @param   array $config
      * @param   store $store
      * @return  array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processConfigArray($config, $store)
     {

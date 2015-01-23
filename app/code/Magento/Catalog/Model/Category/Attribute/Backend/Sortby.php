@@ -35,6 +35,8 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Framework\Object $object
      * @return bool
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validate($object)
     {

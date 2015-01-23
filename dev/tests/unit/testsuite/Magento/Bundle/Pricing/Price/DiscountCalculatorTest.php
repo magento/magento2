@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;

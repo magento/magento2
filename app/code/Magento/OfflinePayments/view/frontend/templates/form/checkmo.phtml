@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php if ($this->getMethod()->getMailingAddress() || $this->getMethod()->getPayableTo()): ?>
     <dl class="items check payable" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">

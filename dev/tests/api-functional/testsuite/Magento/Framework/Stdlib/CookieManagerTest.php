@@ -152,6 +152,7 @@ class CookieManagerTest extends \Magento\TestFramework\TestCase\WebapiAbstract
      * @param string $cookieName
      * @param array $cookies
      * @return $cookie|null
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function findCookie($cookieName, $cookies)
     {
