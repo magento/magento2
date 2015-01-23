@@ -8,7 +8,7 @@ namespace Magento\Framework\Data\Collection;
 /**
  * Model object factory
  */
-class Factory
+class ModelFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

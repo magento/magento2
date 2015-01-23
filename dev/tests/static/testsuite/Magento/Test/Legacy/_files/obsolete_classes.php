@@ -2837,7 +2837,7 @@ return [
     ['Magento\GiftMessage\Helper\Url'],
     ['Magento\Rss\Helper\Data'],
     ['Magento\Core\Model\EntityFactory', 'Magento\Framework\Data\Collection\EntityFactory'],
-    ['Magento\Core\Model\Factory', 'Magento\Framework\Data\Collection\Factory'],
+    ['Magento\Core\Model\Factory', 'Magento\Framework\Data\Collection\ModelFactory'],
     ['Magento\Sales\Model\ConverterInterface'],
     ['Magento\Paypal\Block\System\Config\Fieldset\Location'],
     ['Magento\Paypal\Block\Payflow\Advanced\Review'],
