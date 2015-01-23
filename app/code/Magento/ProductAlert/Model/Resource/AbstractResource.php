@@ -63,6 +63,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      * @param int $customerId
      * @param int $websiteId
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function deleteCustomer(\Magento\Framework\Model\AbstractModel $object, $customerId, $websiteId = null)
     {

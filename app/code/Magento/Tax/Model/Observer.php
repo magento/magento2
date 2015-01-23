@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Tax Event Observer
  */
@@ -117,6 +119,9 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function salesEventOrderAfterSave(\Magento\Framework\Event\Observer $observer)
     {
@@ -254,6 +259,7 @@ class Observer
      *
      * @param \Magento\Cron\Model\Schedule $schedule
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aggregateSalesReportTaxData($schedule)
     {

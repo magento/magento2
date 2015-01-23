@@ -3,12 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Resource;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Catalog entity abstract model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {
@@ -525,6 +529,9 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param int|string|array $attribute atrribute's ids or codes
      * @param int|\Magento\Store\Model\Store $store
      * @return bool|string|array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getAttributeRawValue($entityId, $attribute, $store)
     {

@@ -73,6 +73,7 @@ class Session
     /**
      * @param Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function synchronizePersistentOnLogin(Observer $observer)
     {

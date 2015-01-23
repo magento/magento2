@@ -34,6 +34,8 @@ class Fieldset extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param FormFieldset|AbstractModel $object
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _afterSave(AbstractModel $object)
     {

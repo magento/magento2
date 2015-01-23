@@ -39,6 +39,7 @@ class ClearExpiredCronJob
      *
      * @param \Magento\Cron\Model\Schedule $schedule
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(\Magento\Cron\Model\Schedule $schedule)
     {

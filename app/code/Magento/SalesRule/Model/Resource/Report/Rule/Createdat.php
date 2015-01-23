@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\SalesRule\Model\Resource\Report\Rule;
 
 /**
@@ -42,6 +45,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
      * @param mixed $from
      * @param mixed $to
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {

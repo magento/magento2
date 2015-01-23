@@ -136,6 +136,7 @@ class RequestGenerator
      * Generate advanced search request
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function generateAdvancedSearchRequest()
     {

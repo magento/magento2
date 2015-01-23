@@ -363,6 +363,8 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param int $storeId
      * @param string $path
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getCategories($categoryIds, $storeId = null, $path = null)
     {

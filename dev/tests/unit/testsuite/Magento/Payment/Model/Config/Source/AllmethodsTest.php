@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Payment\Model\Config\Source;
 
 class AllmethodsTest extends \PHPUnit_Framework_TestCase

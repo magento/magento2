@@ -9,6 +9,9 @@
  */
 namespace Magento\Sales\Model\Convert;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Order extends \Magento\Framework\Object
 {
     /**

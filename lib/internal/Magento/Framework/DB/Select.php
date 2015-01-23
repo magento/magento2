@@ -184,6 +184,8 @@ class Select extends \Zend_Db_Select
      * Reset unused LEFT JOIN(s)
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function resetJoinLeft()
     {

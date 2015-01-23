@@ -106,6 +106,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      * Prepare Layout Content
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _prepareLayout()
     {
