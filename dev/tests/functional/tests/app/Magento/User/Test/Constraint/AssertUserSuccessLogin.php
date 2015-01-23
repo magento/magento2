@@ -9,7 +9,7 @@ namespace Magento\User\Test\Constraint;
 use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\User\Test\Fixture\User;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertUserSuccessLogin

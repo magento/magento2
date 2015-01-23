@@ -14,6 +14,8 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * Custom options download action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {

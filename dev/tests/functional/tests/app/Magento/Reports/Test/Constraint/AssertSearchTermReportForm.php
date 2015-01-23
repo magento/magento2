@@ -8,7 +8,7 @@ namespace Magento\Reports\Test\Constraint;
 
 use Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchEdit;
 use Magento\Reports\Test\Page\Adminhtml\SearchIndex;
-use Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertSearchTermReportForm

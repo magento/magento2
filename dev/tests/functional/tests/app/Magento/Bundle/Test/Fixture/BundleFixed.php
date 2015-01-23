@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Test\Fixture;
 
-use Mtf\Factory\Factory;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Class BundleFixed

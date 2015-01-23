@@ -9,11 +9,11 @@ namespace Magento\ConfigurableProduct\Test\Block\Product\View;
 use Magento\Catalog\Test\Block\Product\View\CustomOptions;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
-use Mtf\Client\Element;
-use Mtf\Client\Locator;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class ConfigurableOptions

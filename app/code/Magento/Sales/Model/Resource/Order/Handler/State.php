@@ -18,6 +18,8 @@ class State
      *
      * @param Order $order
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function check(Order $order)
     {

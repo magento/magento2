@@ -7,6 +7,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 return [
     ['ADMIN_STORE_ID', 'Magento\Framework\AppInterface'],
     ['BACKORDERS_BELOW'],

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Layer\Search;
 
 class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase

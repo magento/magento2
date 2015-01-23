@@ -17,6 +17,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param mixed $source
      * @return array
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convert($source)
     {

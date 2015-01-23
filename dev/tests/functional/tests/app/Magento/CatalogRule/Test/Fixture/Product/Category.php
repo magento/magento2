@@ -6,8 +6,8 @@
 
 namespace Magento\CatalogRule\Test\Fixture\Product;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Category
@@ -18,7 +18,7 @@ use Mtf\Fixture\FixtureInterface;
 class Category implements FixtureInterface
 {
     /**
-     * @var \Mtf\Fixture\FixtureFactory
+     * @var \Magento\Mtf\Fixture\FixtureFactory
      */
     protected $fixtureFactory;
 

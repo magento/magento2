@@ -7,7 +7,7 @@
 namespace Magento\Reports\Test\Block\Adminhtml\Shopcart\Product;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Mtf\Client\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Grid

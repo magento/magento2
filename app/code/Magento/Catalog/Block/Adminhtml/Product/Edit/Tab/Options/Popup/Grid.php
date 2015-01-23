@@ -13,6 +13,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Popup;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
 {
     /**

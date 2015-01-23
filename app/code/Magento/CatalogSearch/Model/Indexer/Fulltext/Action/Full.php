@@ -7,6 +7,10 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Full
 {
     /**
@@ -155,6 +159,7 @@ class Full
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
      * @param PriceCurrencyInterface $priceCurrency
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
@@ -259,6 +264,8 @@ class Full
      * @param int $storeId Store View Id
      * @param int|array $productIds Product Entity Id
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function rebuildStoreIndex($storeId, $productIds = null)
     {
@@ -637,6 +644,8 @@ class Full
      * @param array $productData
      * @param int $storeId
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function prepareProductIndex($indexData, $productData, $storeId)
     {

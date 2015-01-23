@@ -6,8 +6,8 @@
 
 namespace Magento\Install\Test\Block;
 
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Landing block.

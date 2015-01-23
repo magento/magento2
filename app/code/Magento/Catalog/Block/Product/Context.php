@@ -7,6 +7,7 @@ namespace Magento\Catalog\Block\Product;
 
 /**
  * Abstract product block context
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Context extends \Magento\Framework\View\Element\Template\Context
 {

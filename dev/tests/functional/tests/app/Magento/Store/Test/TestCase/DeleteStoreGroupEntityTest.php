@@ -11,7 +11,7 @@ use Magento\Backend\Test\Page\Adminhtml\EditGroup;
 use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
 use Magento\Backup\Test\Page\Adminhtml\BackupIndex;
 use Magento\Store\Test\Fixture\StoreGroup;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Delete StoreGroup (Store Management)

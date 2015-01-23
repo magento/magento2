@@ -109,6 +109,7 @@ abstract class AbstractAdapter
      *
      * @param array $headerColumns
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setHeaderCols(array $headerColumns)
     {
