@@ -7,6 +7,9 @@ namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Event\Observer as EventObserver;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Observer
 {
     /**
@@ -90,6 +93,7 @@ class Observer
     /**
      * @param EventObserver $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function salesOrderAfterPlace($observer)
     {

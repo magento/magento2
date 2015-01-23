@@ -41,6 +41,7 @@ interface ProductAttributeMediaGalleryEntryInterface
      * Check if gallery entry is hidden from product page
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsDisabled();
 

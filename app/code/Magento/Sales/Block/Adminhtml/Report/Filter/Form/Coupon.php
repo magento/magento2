@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
  * Sales Adminhtml report filter form for coupons report
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 {

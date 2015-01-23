@@ -36,6 +36,9 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
      *
      * @param  \Magento\Sales\Model\Order\Invoice $invoice
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {

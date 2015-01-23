@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Persistent\Model\Observer;
 
 class RemovePersistentCookieTest extends \PHPUnit_Framework_TestCase

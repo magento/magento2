@@ -27,6 +27,7 @@ class Options extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      *
      * @param \Magento\Framework\Object $row
      * @return string|void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function render(\Magento\Framework\Object $row)
     {

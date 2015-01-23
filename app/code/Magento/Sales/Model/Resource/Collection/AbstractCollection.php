@@ -163,6 +163,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
      * @return $this
      *
      * @todo implement join functionality if necessary
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function joinAttribute($alias, $attribute, $bind, $filter = null, $joinType = 'inner', $storeId = null)
     {

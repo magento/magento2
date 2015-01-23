@@ -10,6 +10,9 @@ use Magento\Framework\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Wishlist\Controller\IndexInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Cart extends Action\Action implements IndexInterface
 {
     /**
@@ -92,6 +95,8 @@ class Cart extends Action\Action implements IndexInterface
      * to product view page with message about needed defined required options
      *
      * @return ResponseInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
