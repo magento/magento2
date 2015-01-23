@@ -104,7 +104,10 @@ AddType application/xml xml
 
     Header set X-Frame-Options SAMEORIGIN
 
-    Header append Cache-Control no-cache
+    <FilesMatch ".(html)$">
+        Header append Cache-Control no-cache
+        Header append Vary: Accept-Encoding
+    </FilesMatch>
 
     <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|htm)$>
         Header append Cache-Control public
@@ -112,10 +115,6 @@ AddType application/xml xml
 
     <FilesMatch .*\.(zip|gz|gzip|bz2|csv|xml)$>
         Header append Cache-Control no-store
-    </FilesMatch>
-
-    <FilesMatch ".(html)$">
-        Header append Vary: Accept-Encoding
     </FilesMatch>
 
 </IfModule>
