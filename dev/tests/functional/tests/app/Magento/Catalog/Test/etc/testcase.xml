@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Config/etc/test_scenario.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
   <scenario name="CreateProductAttributeEntityFromProductPageTest" firstStep="openProductOnBackend">
     <step name="openProductOnBackend" module="Magento_Catalog" next="addNewAttributeFromProductPage"/>
     <step name="addNewAttributeFromProductPage" module="Magento_Catalog" next="fillAttributeFormOnProductPage">
