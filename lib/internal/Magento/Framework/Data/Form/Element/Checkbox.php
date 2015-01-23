@@ -52,6 +52,7 @@ class Checkbox extends AbstractElement
 
     /**
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getElementHtml()
     {
@@ -79,6 +80,7 @@ class Checkbox extends AbstractElement
      * Return check status of checkbox
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsChecked()
     {

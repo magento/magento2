@@ -56,6 +56,8 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
     /**
      * @param AbstractElement $element
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function render(AbstractElement $element)
     {

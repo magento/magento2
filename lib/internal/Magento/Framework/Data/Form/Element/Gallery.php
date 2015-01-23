@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Category form input image element
  *
@@ -33,6 +35,8 @@ class Gallery extends AbstractElement
 
     /**
      * @return string
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getElementHtml()
     {

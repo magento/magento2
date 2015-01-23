@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\Grid\Child;
 
 class CollectionUpdaterTest extends \PHPUnit_Framework_TestCase

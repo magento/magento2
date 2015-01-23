@@ -134,6 +134,8 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param \Magento\Framework\Object $parameter
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addField($parameter)
     {

@@ -144,6 +144,7 @@ class State extends \Magento\Framework\Object
      *
      * @param string $step
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCompleteStep($step)
     {

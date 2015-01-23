@@ -57,6 +57,9 @@ class QuantityValidator
      *
      * @return void
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validate(\Magento\Framework\Event\Observer $observer)
     {

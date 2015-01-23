@@ -45,6 +45,9 @@ class Zip
      *
      * @param  string $zipRange
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public static function zipRangeToZipPattern($zipRange)
     {

@@ -9,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
  * Sales Adminhtml report filter form order
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Order extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 {
@@ -16,6 +17,7 @@ class Order extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
      * Preparing form
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _prepareForm()
     {
