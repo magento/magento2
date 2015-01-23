@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Weee\Pricing;
 
 use Magento\Framework\Pricing\Object\SaleableInterface;

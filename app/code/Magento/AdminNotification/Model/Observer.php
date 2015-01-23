@@ -39,6 +39,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function preDispatch(\Magento\Framework\Event\Observer $observer)
     {

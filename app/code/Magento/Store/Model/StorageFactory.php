@@ -7,6 +7,9 @@ namespace Magento\Store\Model;
 
 use Magento\Framework\Profiler;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StorageFactory
 {
     /**

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Webapi;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -220,6 +222,7 @@ RESPONSE_TYPE;
      * Ensure that complex type generated from Data Object is correct.
      *
      * @param string $wsdlContent
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _checkReferencedTypeDeclaration($wsdlContent)
     {
@@ -585,6 +588,7 @@ GENERIC_FAULT_IN_MESSAGES;
 
     /**
      * @param string $wsdlContent
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _checkFaultsComplexTypeSection($wsdlContent)
     {

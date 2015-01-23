@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Model\Menu;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Config
 {
     const CACHE_ID = 'backend_menu_config';

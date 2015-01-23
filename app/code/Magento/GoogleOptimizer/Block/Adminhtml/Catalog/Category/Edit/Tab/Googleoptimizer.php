@@ -7,6 +7,9 @@
  */
 namespace Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Category\Edit\Tab;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Googleoptimizer extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**

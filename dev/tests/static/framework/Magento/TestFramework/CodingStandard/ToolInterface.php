@@ -19,13 +19,10 @@ interface ToolInterface
     public function canRun();
 
     /**
-     * Run tool for files cpecified
+     * Run tool for files specified
      *
      * @param array $whiteList Files/directories to be inspected
-     * @param array $blackList Files/directories to be excluded from the inspection
-     * @param array $extensions Array of alphanumeric strings, for example: 'php', 'xml', 'phtml', 'css'...
-     *
      * @return int
      */
-    public function run(array $whiteList, array $blackList = [], array $extensions = []);
+    public function run(array $whiteList);
 }

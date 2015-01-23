@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\GiftMessage\Model;
 
 class GiftMessageManagerTest extends \PHPUnit_Framework_TestCase

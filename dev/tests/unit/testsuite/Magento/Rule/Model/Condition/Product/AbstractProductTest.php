@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Rule\Model\Condition\Product;
 
 use ReflectionMethod;
@@ -284,6 +286,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedValueSelectOptions
      * @param array $expectedValueOption
      * @dataProvider prepareValueOptionsDataProvider
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testPrepareValueOptions(
         $setData,
@@ -364,6 +367,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function prepareValueOptionsDataProvider()
     {

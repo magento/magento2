@@ -71,6 +71,7 @@ class ServiceVersionV1Test extends \Magento\Webapi\Routing\BaseService
 
     /**
      *  Test get item with any type
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testItemAnyType()
     {

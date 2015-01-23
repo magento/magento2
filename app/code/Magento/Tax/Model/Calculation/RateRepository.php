@@ -18,6 +18,9 @@ use Magento\Tax\Api\Data\TaxRateInterface as TaxRateDataObject;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 {
     const MESSAGE_TAX_RATE_ID_IS_NOT_ALLOWED = 'id is not expected for this request.';

@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
 
 class PublisherTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,8 +57,8 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValueMap([
-                [DirectoryList::ROOT, $this->rootDirWrite],
-                [DirectoryList::STATIC_VIEW, $this->staticDirWrite],
+                [DirectoryList::ROOT, DriverPool::FILE, $this->rootDirWrite],
+                [DirectoryList::STATIC_VIEW, DriverPool::FILE, $this->staticDirWrite],
             ]));
     }
 

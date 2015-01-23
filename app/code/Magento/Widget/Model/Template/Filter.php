@@ -7,6 +7,7 @@ namespace Magento\Widget\Model\Template;
 
 /**
  * Template Filter Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter extends \Magento\Cms\Model\Template\Filter
 {
@@ -34,6 +35,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
      * @param \Magento\Widget\Model\Resource\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Stdlib\String $string,

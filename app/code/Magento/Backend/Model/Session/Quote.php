@@ -22,6 +22,7 @@ use Magento\Customer\Api\GroupManagementInterface;
  * @method int getCurrencyId()
  * @method Quote setOrderId($orderId)
  * @method int getOrderId()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Quote extends \Magento\Framework\Session\SessionManager
 {
@@ -87,6 +88,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GroupManagementInterface $groupManagement
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,

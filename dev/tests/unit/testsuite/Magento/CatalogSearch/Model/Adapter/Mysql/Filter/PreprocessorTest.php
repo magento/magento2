@@ -10,6 +10,9 @@ use Magento\Framework\DB\Select;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PreprocessorTest extends \PHPUnit_Framework_TestCase
 {
     /**

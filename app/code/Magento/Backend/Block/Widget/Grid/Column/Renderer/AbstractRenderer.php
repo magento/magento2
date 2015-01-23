@@ -10,6 +10,7 @@ use Magento\Framework\Object;
 
 /**
  * Backend grid item abstract renderer
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock implements RendererInterface
 {
