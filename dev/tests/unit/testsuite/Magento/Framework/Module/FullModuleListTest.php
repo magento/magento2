@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Module;
 
-class ModuleListTest extends \PHPUnit_Framework_TestCase
+class FullModuleListTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ModuleList
@@ -21,7 +21,7 @@ class ModuleListTest extends \PHPUnit_Framework_TestCase
             'Vendor_C' => ['data' => 'c'],
         ];
         $loaderMock->expects($this->once())->method('load')->will($this->returnValue($modules));
-        $this->moduleList = new ModuleList($loaderMock);
+        $this->moduleList = new FullModuleList($loaderMock);
     }
 
     public function testGetAll()

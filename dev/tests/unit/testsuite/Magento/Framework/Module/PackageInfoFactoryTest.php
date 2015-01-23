@@ -9,12 +9,12 @@ class PackageInfoFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
-        $moduleList = $this->getMock('Magento\Setup\Model\ModuleList', [], [], '', false);
+        $fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
         $packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
         $returnValueMap = [
-            ['Magento\Setup\Model\ModuleList', [], $moduleList],
-            ['Magento\Framework\Module\Dir\Reader', ['moduleList' => $moduleList], $reader],
+            ['Magento\Framework\Module\FullModuleList', [], $fullModuleList],
+            ['Magento\Framework\Module\Dir\Reader', ['moduleList' => $fullModuleList], $reader],
             ['Magento\Framework\Module\PackageInfo', ['reader' => $reader], $packageInfo],
         ];
         $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');

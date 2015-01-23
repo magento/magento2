@@ -3,21 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Model;
-
-use Magento\Framework\Module\ModuleList\Loader;
+namespace Magento\Framework\Module;
 
 /**
  * A list of modules in the Magento application
  *
  * Represents all modules, regardless of enabled or not
  */
-class ModuleList implements \Magento\Framework\Module\ModuleListInterface
+class FullModuleList implements ModuleListInterface
 {
     /**
      * Loader of module information from source code
      *
-     * @var Loader
+     * @var ModuleList\Loader
      */
     private $loader;
 
@@ -31,9 +29,9 @@ class ModuleList implements \Magento\Framework\Module\ModuleListInterface
     /**
      * Constructor
      *
-     * @param Loader $loader
+     * @param ModuleList\Loader $loader
      */
-    public function __construct(Loader $loader)
+    public function __construct(ModuleList\Loader $loader)
     {
         $this->loader = $loader;
     }

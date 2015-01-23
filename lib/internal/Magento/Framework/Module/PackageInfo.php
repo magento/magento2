@@ -69,7 +69,10 @@ class PackageInfo
              * array keys: module name in module.xml; array values: raw content from composer.json
              * this raw data is used to create a dependency graph and also a package name-module name mapping
              */
-            $rawData = array_combine(array_keys($this->loader->load()), $this->reader->getComposerJsonFiles()->toArray());
+            $rawData = array_combine(
+                array_keys($this->loader->load()),
+                $this->reader->getComposerJsonFiles()->toArray()
+            );
             foreach ($rawData as $moduleName => $jsonData) {
                 $jsonData = \Zend_Json::decode($jsonData);
                 $this->packageModuleMap[$jsonData['name']] = $moduleName;

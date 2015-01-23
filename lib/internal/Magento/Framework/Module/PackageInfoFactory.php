@@ -34,8 +34,11 @@ class PackageInfoFactory
      */
     public function create()
     {
-        $moduleList = $this->objectManager->create('Magento\Setup\Model\ModuleList');
-        $reader = $this->objectManager->create('Magento\Framework\Module\Dir\Reader', ['moduleList' => $moduleList]);
+        $fullModuleList = $this->objectManager->create('Magento\Framework\Module\FullModuleList');
+        $reader = $this->objectManager->create(
+            'Magento\Framework\Module\Dir\Reader',
+            ['moduleList' => $fullModuleList]
+        );
         return $this->objectManager->create('Magento\Framework\Module\PackageInfo', ['reader' => $reader]);
     }
 }
