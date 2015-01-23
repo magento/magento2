@@ -255,6 +255,7 @@ class Configuration implements StockConfigurationInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getEnableQtyIncrements($store = null)
     {
@@ -313,6 +314,7 @@ class Configuration implements StockConfigurationInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanBackInStock($store = null)
     {

@@ -258,6 +258,7 @@ class CustomerMetadataTest extends WebapiAbstract
      * @param array $expectedResult
      * @param array $actualResult
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function checkValidationRules($expectedResult, $actualResult)
     {

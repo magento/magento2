@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -109,6 +112,10 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method Quote setIsPersistent(bool $value)
  * @method Quote setSharedStoreIds(array $values)
  * @method Quote setWebsite($value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\CartInterface
 {
@@ -358,6 +365,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -1188,6 +1196,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @param bool $useCache
      * @return  \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getItemsCollection($useCache = true)
     {
@@ -1397,6 +1406,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param null|string $processMode
      * @return \Magento\Quote\Model\Quote\Item|string
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function addProduct(
         \Magento\Catalog\Model\Product $product,
@@ -1484,6 +1495,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Catalog\Model\Product $product
      * @param int $qty
      * @return \Magento\Quote\Model\Quote\Item
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _addCatalogProduct(\Magento\Catalog\Model\Product $product, $qty = 1)
     {
@@ -1538,6 +1550,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @throws \Magento\Framework\Model\Exception
      *
      * @see \Magento\Catalog\Helper\Product::addParamsToBuyRequest()
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function updateItem($itemId, $buyRequest, $params = null)
     {
@@ -1714,6 +1727,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * @param string $paymentId
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getPaymentById($paymentId)
     {
@@ -2046,6 +2060,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param string $type An internal error type ('error', 'qty', etc.), passed then to adding messages routine
      * @param array $params
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function removeErrorInfosByParams($type, $params)
     {
@@ -2136,6 +2151,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * @param bool $multishipping
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateMinimumAmount($multishipping = false)
     {
@@ -2227,6 +2244,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Check quote for virtual product only
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsVirtual()
     {

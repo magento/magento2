@@ -43,6 +43,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method float getDiscountTaxCompensation()
  * @method float getRowTotal()
  * @method float getPriceInclTax()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface

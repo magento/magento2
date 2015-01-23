@@ -19,6 +19,8 @@ class Totals
      * @param string $from
      * @param string $to
      * @return \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function countTotals($grid, $from, $to)
     {

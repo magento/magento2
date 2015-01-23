@@ -200,6 +200,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
     /**
      * @param string $cartId
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function getSelectedMethodServiceInfo($cartId)
     {

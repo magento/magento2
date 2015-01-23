@@ -108,6 +108,10 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method \Magento\SalesRule\Model\Rule[] getCartFixedRules()
  * @method int[] getAppliedRuleIds()
  * @method Address setBaseShippingInclTax(float $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     \Magento\Quote\Api\Data\AddressInterface
@@ -265,6 +269,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -563,6 +568,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * Get all available address items
      *
      * @return \Magento\Quote\Model\Quote\Address\Item[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getAllItems()
     {
@@ -951,6 +958,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function requestShippingRates(\Magento\Quote\Model\Quote\Item\AbstractItem $item = null)
     {
@@ -1178,6 +1187,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param float $value
      * @param bool $alreadyExclTax
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setShippingAmount($value, $alreadyExclTax = false)
     {
@@ -1190,6 +1200,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param float $value
      * @param bool $alreadyExclTax
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setBaseShippingAmount($value, $alreadyExclTax = false)
     {

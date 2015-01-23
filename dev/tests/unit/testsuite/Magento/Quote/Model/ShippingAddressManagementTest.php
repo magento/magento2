@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Model;
 
 class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase

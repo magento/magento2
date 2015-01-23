@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Layer\Category;
 
 class CollectionFilterTest extends \PHPUnit_Framework_TestCase

@@ -55,6 +55,7 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {

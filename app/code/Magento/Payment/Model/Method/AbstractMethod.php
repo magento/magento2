@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Payment\Model\Method;
 
 use Magento\Payment\Model\Checks\PaymentMethodChecksInterface;
@@ -14,6 +17,8 @@ use Magento\Quote\Api\Data\PaymentMethodInterface;
 /**
  * Payment method abstract model
  * @method AbstractMethod setStore()
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibleModel implements
     MethodInterface,
@@ -325,6 +330,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @param   \Magento\Framework\Object $payment
      * @return  bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canVoid(\Magento\Framework\Object $payment)
     {
@@ -378,6 +384,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Payment\Model\Info $payment
      * @param string $transactionId
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\Info $payment, $transactionId)
     {
@@ -439,6 +446,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @param string $currencyCode
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canUseForCurrency($currencyCode)
     {
@@ -527,6 +535,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function order(\Magento\Framework\Object $payment, $amount)
     {
@@ -544,6 +553,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function authorize(\Magento\Framework\Object $payment, $amount)
     {
@@ -561,6 +571,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function capture(\Magento\Framework\Object $payment, $amount)
     {
@@ -608,6 +619,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function refund(\Magento\Framework\Object $payment, $amount)
     {
@@ -635,6 +647,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Framework\Object $payment
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cancel(\Magento\Framework\Object $payment)
     {
@@ -661,6 +674,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      *
      * @param \Magento\Payment\Model\Info $payment
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canReviewPayment(\Magento\Payment\Model\Info $payment)
     {
@@ -781,6 +795,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param object $stateObject
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function initialize($paymentAction, $stateObject)
     {
@@ -815,6 +830,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * Define if debugging is enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDebugFlag()
     {

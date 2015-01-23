@@ -10,6 +10,8 @@ class Save extends \Magento\User\Controller\Adminhtml\User
 {
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

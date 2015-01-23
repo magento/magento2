@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Product\Attribute;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase

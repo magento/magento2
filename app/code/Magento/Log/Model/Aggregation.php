@@ -75,6 +75,7 @@ class Aggregation extends \Magento\Framework\Model\AbstractModel
      *
      * @param  string $lastDate
      * @return null|void
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function _removeEmpty($lastDate)
     {
@@ -186,6 +187,7 @@ class Aggregation extends \Magento\Framework\Model\AbstractModel
      * @param int|string $in
      * @param null $offset
      * @return bool|string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function _date($in, $offset = null)
     {
@@ -202,6 +204,7 @@ class Aggregation extends \Magento\Framework\Model\AbstractModel
      * @param int|string $in
      * @param null $offset
      * @return int
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function _timestamp($in, $offset = null)
     {

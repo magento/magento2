@@ -20,6 +20,9 @@ use Magento\Tax\Model\Calculation\AbstractCalculator;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TaxCalculation implements TaxCalculationInterface
 {
     /**

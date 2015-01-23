@@ -79,6 +79,7 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
      * Returns the value of the availability flag for the current shipping method.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getAvailable()
     {

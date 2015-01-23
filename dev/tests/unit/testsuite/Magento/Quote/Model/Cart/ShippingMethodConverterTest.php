@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Model\Cart;
 
 class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase

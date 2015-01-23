@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\GoogleShopping\Model;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
