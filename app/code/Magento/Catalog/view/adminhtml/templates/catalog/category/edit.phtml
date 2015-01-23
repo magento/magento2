@@ -89,6 +89,7 @@ require([
                         $('.page-actions').floatingHeader({
                             'title': '.category-edit-title'
                         });
+                        $('body').trigger('contentUpdated');
                         try {
                             if (refreshTree) {
                                 window.refreshTreeArea();
