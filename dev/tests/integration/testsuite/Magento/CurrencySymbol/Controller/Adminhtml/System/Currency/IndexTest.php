@@ -9,7 +9,6 @@ class IndexTest extends \Magento\Backend\Utility\Controller
 {
     /**
      * Test index action
-     *
      */
     public function testIndexAction()
     {

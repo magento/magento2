@@ -13,7 +13,6 @@ class IndexTest extends \Magento\Backend\Utility\Controller
      * @magentoConfigFixture               currency/options/allow  EUR, USD
      * @magentoDataFixture Magento/CurrencySymbol/_files/currency_symbol.php
      * @magentoDbIsolation enabled
-     *
      */
     public function testIndexAction()
     {
