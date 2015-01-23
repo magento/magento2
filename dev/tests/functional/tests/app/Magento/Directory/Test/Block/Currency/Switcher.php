@@ -7,8 +7,8 @@
 namespace Magento\Directory\Test\Block\Currency;
 
 use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Switcher Currency Symbol.
@@ -53,7 +53,6 @@ class Switcher extends Block
             $currencyLink = $this->_rootElement
                 ->find(sprintf($this->currencyLinkLocator, $currencyCode), Locator::SELECTOR_XPATH);
             $currencyLink->click();
-            $this->reinitRootElement();
             $this->waitForElementVisible($this->language . $currencyCode);
         }
     }

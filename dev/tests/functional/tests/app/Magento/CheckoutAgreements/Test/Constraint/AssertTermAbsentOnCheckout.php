@@ -10,10 +10,10 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\ObjectManager;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Class AssertTermAbsentOnCheckout
@@ -31,7 +31,7 @@ class AssertTermAbsentOnCheckout extends AbstractConstraint
      * @param FixtureFactory $fixtureFactory
      * @param ObjectManager $objectManager
      * @param string $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $checkoutCart
      * @param CheckoutOnepage $checkoutOnepage
@@ -46,7 +46,7 @@ class AssertTermAbsentOnCheckout extends AbstractConstraint
         FixtureFactory $fixtureFactory,
         ObjectManager $objectManager,
         $product,
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductView $catalogProductView,
         CheckoutCart $checkoutCart,
         CheckoutOnepage $checkoutOnepage,

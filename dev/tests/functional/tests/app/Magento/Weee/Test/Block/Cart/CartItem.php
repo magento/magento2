@@ -6,7 +6,7 @@
 
 namespace Magento\Weee\Test\Block\Cart;
 
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Product item fpt block on cart page

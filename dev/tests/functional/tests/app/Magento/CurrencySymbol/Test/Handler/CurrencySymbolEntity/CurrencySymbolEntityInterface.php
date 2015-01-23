@@ -6,7 +6,7 @@
 
 namespace Magento\CurrencySymbol\Test\Handler\CurrencySymbolEntity;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface CurrencySymbolEntityInterface

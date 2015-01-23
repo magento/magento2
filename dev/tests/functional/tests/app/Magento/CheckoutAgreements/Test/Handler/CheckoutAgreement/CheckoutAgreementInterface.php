@@ -6,7 +6,7 @@
 
 namespace Magento\CheckoutAgreements\Test\Handler\CheckoutAgreement;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface CheckoutAgreementInterface

@@ -10,8 +10,8 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Check that after applying changes, currency symbol changed on Product Details Page.
@@ -26,7 +26,7 @@ class AssertCurrencySymbolOnProductPage extends AbstractConstraint
      * Assert that after applying changes, currency symbol changed on Product Details Page.
      *
      * @param CatalogProductSimple $product
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CmsIndex $cmsIndex
      * @param CatalogProductView $catalogProductView
      * @param CurrencySymbolEntity $currencySymbol
@@ -34,7 +34,7 @@ class AssertCurrencySymbolOnProductPage extends AbstractConstraint
      */
     public function processAssert(
         CatalogProductSimple $product,
-        Browser $browser,
+        BrowserInterface $browser,
         CmsIndex $cmsIndex,
         CatalogProductView $catalogProductView,
         CurrencySymbolEntity $currencySymbol

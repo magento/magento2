@@ -6,7 +6,7 @@
  */
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
          class="Magento\Review\Test\Fixture\Review">
     <module>Magento_Review</module>
     <type>composite</type>
@@ -15,8 +15,8 @@
         <entity name="review_detail" />
     </entities>
     <collection>Magento\Review\Model\Resource\Review\Collection</collection>
-    <repository_class>Magento\Review\Test\Repository\ReviewInjectable</repository_class>
-    <handler_interface>Magento\Review\Test\Handler\ReviewInjectable\ReviewInjectableInterface</handler_interface>
+    <repository_class>Magento\Review\Test\Repository\Review</repository_class>
+    <handler_interface>Magento\Review\Test\Handler\Review\ReviewInterface</handler_interface>
     <dataset name="default">
         <field name="status_id" xsi:type="string">Approved</field>
         <field name="select_stores" xsi:type="array">

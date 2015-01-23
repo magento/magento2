@@ -6,8 +6,8 @@
 
 namespace Magento\CurrencySymbol\Test\TestCase;
 
-use Mtf\TestCase\Injectable;
-use Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;
 use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;

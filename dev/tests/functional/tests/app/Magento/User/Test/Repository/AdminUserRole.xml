@@ -6,7 +6,7 @@
  */
 -->
 <repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+            xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\User\Test\Repository\AdminUserRole">
         <dataset name="default">
             <field name="rolename" xsi:type="string">RoleName%isolation%</field>

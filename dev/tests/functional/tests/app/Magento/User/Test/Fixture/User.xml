@@ -6,7 +6,7 @@
  */
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
          class="Magento\User\Test\Fixture\User">
     <module>Magento_User</module>
     <type>flat</type>
@@ -22,6 +22,7 @@
         <field name="password" xsi:type="string">123123q</field>
         <field name="password_confirmation" xsi:type="string">123123q</field>
         <field name="is_active" xsi:type="string">Active</field>
+        <field name="current_password" xsi:type="string">%current_password%</field>
     </dataset>
     <fields>
         <field name="user_id">
@@ -157,6 +158,7 @@
             <attribute_code>current_password</attribute_code>
             <backend_type>virtual</backend_type>
             <group>user-info</group>
+            <source>Magento\User\Test\Fixture\User\CurrentPassword</source>
         </field>
     </fields>
 </fixture>

@@ -8,7 +8,7 @@ namespace Magento\CheckoutAgreements\Test\Constraint;
 
 use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertTermInGrid

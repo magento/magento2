@@ -6,7 +6,7 @@
 
 namespace Magento\CheckoutAgreements\Test\Block\Adminhtml\Block\Agreement\Edit;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class AgreementsForm

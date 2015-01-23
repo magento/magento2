@@ -6,7 +6,7 @@
  */
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
           class="Magento\Catalog\Test\Fixture\CatalogProductSimple">
     <module>Magento_Catalog</module>
     <type>eav</type>
@@ -43,7 +43,7 @@
         <item name="input_prefix" xsi:type="string">product</item>
     </data_config>
     <fields>
-        <field name="field">
+        <field name="category_ids">
             <attribute_code>category_ids</attribute_code>
             <backend_type>static</backend_type>
             <is_required>0</is_required>

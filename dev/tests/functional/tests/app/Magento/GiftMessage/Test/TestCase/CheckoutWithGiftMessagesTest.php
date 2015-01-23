@@ -6,7 +6,7 @@
 
 namespace Magento\GiftMessage\Test\TestCase;
 
-use Mtf\TestCase\Scenario;
+use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Test Flow:

@@ -6,7 +6,7 @@
  */
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
          class="Magento\Install\Test\Fixture\Install">
     <module>Magento_Install</module>
     <type>virtual</type>

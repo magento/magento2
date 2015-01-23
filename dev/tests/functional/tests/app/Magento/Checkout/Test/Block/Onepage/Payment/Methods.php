@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Block\Onepage\Payment;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class Methods
@@ -70,7 +70,7 @@ class Methods extends Form
         if ($paymentSelector->isVisible()) {
             $paymentSelector->click();
         } else {
-            $paymentCount = count($this->_rootElement->find($this->paymentMethodLabels)->getElements());
+            $paymentCount = count($this->_rootElement->getElements($this->paymentMethodLabels));
             $paymentSelector = $this->_rootElement->find(sprintf($this->paymentMethodLabel, $payment['method']));
             if ($paymentCount !== 1 && !$paymentSelector->isVisible()) {
                 throw new \Exception('Such payment method is absent.');

@@ -6,7 +6,7 @@
  */
 -->
 <fixture xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Fixture/etc/fixture.xsd"
+         xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Fixture/etc/fixture.xsd"
          class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
     <module>Magento_UrlRewrite</module>
     <type>virtual</type>

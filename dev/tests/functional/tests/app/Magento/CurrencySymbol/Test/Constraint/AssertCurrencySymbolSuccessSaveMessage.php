@@ -7,7 +7,7 @@
 namespace Magento\CurrencySymbol\Test\Constraint;
 
 use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertCurrencySymbolSuccessSaveMessage

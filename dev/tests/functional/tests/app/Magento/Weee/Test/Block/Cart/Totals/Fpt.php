@@ -6,8 +6,8 @@
 
 namespace Magento\Weee\Test\Block\Cart\Totals;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Cart totals fpt block

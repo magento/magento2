@@ -6,8 +6,8 @@
 
 namespace Magento\Core\Test\TestStep;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class SetupConfigurationStep

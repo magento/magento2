@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Core\Test\Repository\ConfigData">
         <dataset name="store_information">
             <field path="general/store_information/name" scope="general" scope_id="1" label="" xsi:type="string">Store 1</field>

@@ -6,8 +6,8 @@
 
 namespace Magento\User\Test\Fixture\User;
 
-use Mtf\ObjectManager;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\User\Test\Fixture\AdminUserRole;
 
 /**
@@ -37,9 +37,9 @@ class CurrentPassword implements FixtureInterface
     public function __construct(array $params, $data = '')
     {
         $this->params = $params;
-        /** @var \Mtf\System\Config $systemConfig */
+        /** @var \Magento\Mtf\System\Config $systemConfig */
         if ($data == '%current_password%') {
-            $systemConfig = ObjectManager::getInstance()->create('Mtf\System\Config');
+            $systemConfig = ObjectManager::getInstance()->create('Magento\Mtf\System\Config');
             $data = $systemConfig->getConfigParam('application/backend_user_credentials/password');
         }
         $this->data = $data;

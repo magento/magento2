@@ -6,10 +6,10 @@
 
 namespace Magento\Checkout\Test\Block\Onepage;
 
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Checkout\Test\Fixture\Checkout;
-use Mtf\Block\Form;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
 
 /**
  * Class Shipping
@@ -36,10 +36,10 @@ class Shipping extends Form
      * Fill form data. Unset 'email' field as it absent in current form
      *
      * @param array $fields
-     * @param Element $element
+     * @param SimpleElement $element
      * @return void
      */
-    protected function _fill(array $fields, Element $element = null)
+    protected function _fill(array $fields, SimpleElement $element = null)
     {
         unset($fields['email']);
         parent::_fill($fields, $element);

@@ -166,11 +166,11 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                         ],
                         [
                             'title' => 'attribute_key_10',
-                            'value' => '12/12/2014',
+                            'value' => '12/12/2015',
                         ],
                         [
                             'title' => 'attribute_key_11',
-                            'value' => '12/12/2014/12/30/AM',
+                            'value' => '12/12/2015/12/30/AM',
                         ],
                         [
                             'title' => 'attribute_key_12',
@@ -257,11 +257,11 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                         ],
                         [
                             'title' => 'attribute_key_7',
-                            'value' => '12/12/2014',
+                            'value' => '12/12/2015',
                         ],
                         [
                             'title' => 'attribute_key_8',
-                            'value' => '12/12/2014/12/30/AM',
+                            'value' => '12/12/2015/12/30/AM',
                         ],
                         [
                             'title' => 'attribute_key_9',

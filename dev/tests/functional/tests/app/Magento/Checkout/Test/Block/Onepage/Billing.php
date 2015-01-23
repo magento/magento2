@@ -8,8 +8,7 @@ namespace Magento\Checkout\Test\Block\Onepage;
 
 use Magento\Customer\Test\Fixture\AddressInjectable;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
-use Mtf\Block\Form;
-use Mtf\Client\Element;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class Billing
@@ -60,6 +59,7 @@ class Billing extends Form
         if ($isShippingAddress) {
             $this->_rootElement->find($this->useForShipping)->click();
         }
+        $this->waitForElementNotVisible($this->waitElement);
     }
 
     /**

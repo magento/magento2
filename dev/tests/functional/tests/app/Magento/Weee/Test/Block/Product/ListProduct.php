@@ -6,7 +6,7 @@
 
 namespace Magento\Weee\Test\Block\Product;
 
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Product list

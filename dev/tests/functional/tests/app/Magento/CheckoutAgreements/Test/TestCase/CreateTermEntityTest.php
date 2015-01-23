@@ -9,8 +9,8 @@ namespace Magento\CheckoutAgreements\Test\TestCase;
 use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementIndex;
 use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementNew;
-use Mtf\ObjectManager;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test creation for CreateTermEntity.

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Repository/etc/repository.xsd">
+<repository xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <storage class="Magento\Core\Test\Repository\ConfigData">
         <dataset name="display_out_of_stock">
             <field path="cataloginventory/options/show_out_of_stock" scope="cataloginventory" scope_id="1" label="Yes" xsi:type="string">1</field>

@@ -9,7 +9,7 @@ namespace Magento\Wishlist\Test\TestCase;
 use Magento\Checkout\Test\Constraint\AssertAddedProductToCartSuccessMessage;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Test Flow:

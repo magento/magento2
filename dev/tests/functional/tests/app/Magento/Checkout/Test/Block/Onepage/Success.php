@@ -7,8 +7,8 @@
 namespace Magento\Checkout\Test\Block\Onepage;
 
 use Magento\Checkout\Test\Fixture\Checkout;
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Success
@@ -68,5 +68,15 @@ class Success extends Block
         $orderString = $this->_rootElement->find($this->orderIdGuest, Locator::SELECTOR_XPATH)->getText();
         preg_match('/[\d]+/', $orderString, $orderId);
         return end($orderId);
+    }
+
+    /**
+     * Click order id link
+     *
+     * @return void
+     */
+    public function openOrder()
+    {
+        $this->_rootElement->find($this->orderId, Locator::SELECTOR_CSS)->click();
     }
 }
