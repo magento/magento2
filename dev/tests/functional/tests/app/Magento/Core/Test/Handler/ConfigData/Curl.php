@@ -97,6 +97,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
      */
     protected function getUrl($section)
     {
-        return $_ENV['app_backend_url'] . 'admin/system_config/save/section/' . $section;
+        return $this->_configuration->getParameter('application/appBackendUrl') .
+        'admin/system_config/save/section/' . $section;
     }
 }
