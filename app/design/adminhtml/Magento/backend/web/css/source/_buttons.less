@@ -33,6 +33,7 @@
 @button-base__large__padding-horizontal: 1.45em;
 
 @button-base__hover__bg-color: darken(@button-base__bg-color, 3%);
+@button-base__hover__box-shadow: 0 0 0 1px @color-dodger-blue;
 @button-base__active__bg-color: darken(@button-base__bg-color, 5%);
 
 @button-primary__hover__bg-color: @color-phoenix-brown;
@@ -61,6 +62,7 @@
     vertical-align: middle;
     &:hover {
         background-color: @button-base__hover__bg-color;
+        .css(box-shadow, @button-base__hover__box-shadow);
         color: @button-base__color;
         text-decoration: none;
     }
@@ -95,7 +97,6 @@
     font-family: @font-family-base;
     font-size: 1.4rem;
     &:hover,
-    &:focus,
     &:active {
         background-color: transparent;
         border-color: transparent;
@@ -113,7 +114,6 @@
     color: @button-primary__color;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
     &:hover,
-    &:focus,
     &:active {
         background-color: @button-primary__hover__bg-color;
         border-color: @button-primary__hover__border-color;
@@ -137,7 +137,6 @@
     color: @button-secondary__color;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
     &:hover,
-    &:focus,
     &:active {
         background-color: @button-secondary__hover__bg-color;
         color: @button-secondary__color;
@@ -156,7 +155,6 @@
     border-color: rgba(0, 0, 0, 0);
     color: @color-gray20;
     &:hover,
-    &:focus,
     &:active {
         background-color: rgba(0, 0, 0, 0);
     }
@@ -171,7 +169,6 @@
     border-color: @button-tertiary__border-color;
     color: @button-tertiary__color;
     &:hover,
-    &:focus,
     &:active {
         background-color: @button-tertiary__hover_bg-color;
         border-color: @button-tertiary__hover__border-color;
@@ -184,15 +181,20 @@
 
 .actions-split {
     .dropdown-split(
-    @_toggle-selector: ~".action-toggle",
-    @_button-selector: ~".action-default",
-    @_options-selector :  ~".dropdown-menu",
-    @_dropdown-split-button-border-radius-fix: true,
-    @_dropdown-split-list-min-width: 175px,
-    @_icon-font-size: 40px,
-    @_icon-font-line-height: 14px,
-    @_icon-font-vertical-align: middle
+        @_toggle-selector: ~".action-toggle",
+        @_button-selector: ~".action-default",
+        @_options-selector :  ~".dropdown-menu",
+        @_dropdown-split-button-border-radius-fix: true,
+        @_dropdown-split-list-min-width: 175px,
+        @_icon-font-size: 40px,
+        @_icon-font-line-height: 14px,
+        @_icon-font-vertical-align: middle
     );
+    &:hover {
+        &:not(.disabled) {
+            .css(box-shadow, @button-base__hover__box-shadow);
+        }
+    }
     vertical-align: middle;
     button {
         margin-left: 0;
@@ -204,6 +206,9 @@
             &.action-toggle {
                 padding: @button-base__large__padding-vertical 0;
             }
+        }
+        &:hover {
+            box-shadow: none;
         }
     }
 }

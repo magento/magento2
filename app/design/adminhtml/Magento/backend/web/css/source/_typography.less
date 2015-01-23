@@ -51,23 +51,38 @@ body {
 //  ---------------------------------------------
 
 h1 {
-    color: @color-dark-brownie;
-    font-size: 2.8rem;
-    font-weight: @font-weight-regular;
+    .typography(
+        @_font-size: 2.8rem,
+        @_color: @color-dark-brownie,
+        @_font-weight: @font-weight-regular,
+        @_line-height: 3.4rem,
+        @_font-family: false,
+        @_font-style: false
+    );
     margin: 0 0 2rem;
 }
 
 h2 {
-    color: @color-dark-brownie;
-    font-size: 2rem;
-    font-weight: @font-weight-regular;
+    .typography(
+        @_font-size: 2rem,
+        @_color: @color-dark-brownie,
+        @_font-weight: @font-weight-regular,
+        @_line-height: 2.5rem,
+        @_font-family: false,
+        @_font-style: false
+    );
     margin: 0 0 2rem;
 }
 
 h3 {
-    color: @color-dark-brownie;
-    font-size: 1.7rem;
-    font-weight: @font-weight-semibold;
+    .typography(
+        @_font-size: 1.7rem,
+        @_color: @color-dark-brownie,
+        @_font-weight: @font-weight-semibold,
+        @_line-height: 2.2rem,
+        @_font-family: false,
+        @_font-style: false
+    );
     margin: 0 0 2rem;
 }
 
@@ -80,7 +95,7 @@ h6 {
 
 //  Text
 p {
-    margin: 0 0 1em;
+    margin: 0 0 1.5em;
 }
 
 //  Links
