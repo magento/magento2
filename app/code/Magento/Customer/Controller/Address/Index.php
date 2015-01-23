@@ -72,7 +72,7 @@ class Index extends \Magento\Customer\Controller\Address
     {
         $addresses = $this->customerRepository->getById($this->_getSession()->getCustomerId())->getAddresses();
         if (count($addresses)) {
-            /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+            /** @var \Magento\Framework\View\Result\Page $resultPage */
             $resultPage = $this->resultPageFactory->create();
             $resultPage->getLayout()->initMessages();
             $block = $resultPage->getLayout()->getBlock('address_book');
