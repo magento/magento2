@@ -8,7 +8,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\Model\Validator;
+namespace Magento\Framework\Validator;
 
 class Factory
 {
