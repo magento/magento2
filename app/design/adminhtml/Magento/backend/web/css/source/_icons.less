@@ -3,7 +3,22 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  _____________________________________________
+
+//
+//  Icons
+//  ---------------------------------------------
+
+@icon-info: '\e61a';
+@icon-error: '\e632';
+@icon-check-mage: '\e62d';
+
+//
 //  Admin Theme Icons
+//  ---------------------------------------------
+
 .font-face(
     @family-name: @icon-font-admin-name,
     @font-path: @icon-font-admin-path,
@@ -11,7 +26,10 @@
     @font-style: normal
 );
 
+//
 //  Blank Theme Icons
+//  ---------------------------------------------
+
 .font-face(
     @family-name: @icon-font-blank-name,
     @font-path: @icon-font-blank-path,
@@ -19,7 +37,10 @@
     @font-style: normal
 );
 
+//
 //  MUI Icons
+//  ---------------------------------------------
+
 .font-face(
     @family-name: @icon-font-mui-name,
     @font-path: @icon-font-mui-path,
@@ -47,7 +68,7 @@
 }
 
 .icon-info:before {
-    content: '\e61a';
+    content: @icon-info;
 }
 
 .icon-lock:before {
@@ -123,7 +144,7 @@
 }
 
 .icon-check-mage:before {
-    content: '\e62d';
+    content: @icon-check-mage;
 }
 
 .icon-clock:before {
@@ -143,7 +164,7 @@
 }
 
 .icon-error:before {
-    content: '\e632';
+    content: @icon-error;
 }
 
 .icon-help:before {

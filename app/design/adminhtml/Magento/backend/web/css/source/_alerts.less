@@ -28,15 +28,6 @@
     > .message:last-child {
         margin-bottom: 0;
     }
-    &.license {
-        //  License message in view\adminhtml\checker\reminder.phtml
-        font-size: 20px;
-        line-height: 1.2;
-        margin: 20px auto;
-        max-width: 1300px;
-        min-width: 960px;
-        padding: 0 20px;
-    }
 }
 
 .message {
@@ -52,9 +43,8 @@
         border: 0;
         font-family: @icon-font-admin-name;
         font-size: @alert__font-size;
-        font-style: normal;
-        font-weight: normal;
-        -webkit-font-smoothing: antialiased;
+        font-style: @font-style-regular;
+        font-weight: @font-weight-regular;
         height: auto;
         left: 1.9rem;
         line-height: inherit;
@@ -70,7 +60,7 @@
         padding-left: 5rem;
         &:before {
             color: @alert-icon__info__color;
-            content: '\e61a';
+            content: @icon-info;
         }
     }
     &-error,
@@ -78,137 +68,14 @@
         padding-left: 5rem;
         &:before {
             color: @alert-icon__error__color;
-            content: '\e623';
+            content: @icon-error;
         }
     }
     &.success {
         padding-left: 5rem;
         &:before {
             color: @alert-icon__success__color;
-            content: '\e62d';
-        }
-    }
-}
-
-.messages-inbox {
-    float: right;
-}
-
-.messages-inbox .critical {
-    color: @color-phoenix-down;
-}
-
-//
-//  System Messages
-//  ---------------------------------------------
-
-.message-system {
-    padding: 0;
-    &:before {
-        display: none;
-    }
-    .message-inner {
-        margin: 0 auto;
-        max-width: 1300px;
-        min-width: 960px;
-        position: relative;
-        &:before {
-            background: none;
-            border: 0;
-            color: #6e685e;
-            content: '\e006'; //  Notification icon
-            font-family: 'MUI-Icons';
-            font-size: 16px;
-            -webkit-font-smoothing: antialiased;
-            font-style: normal;
-            font-weight: normal;
-            height: auto;
-            left: 8px;
-            margin-top: -10px;
-            position: absolute;
-            speak: none;
-            text-shadow: none;
-            top: 50%;
-            width: auto;
-        }
-    }
-    .message-content {
-        padding: 10px 26px 10px 32px;
-    }
-}
-
-//
-//  No-javaScript-Enabled message
-//  ---------------------------------------------
-
-.message-noscript {
-    background: #ff9;
-    border: 0;
-    box-shadow: 0 1px 2px #46433d;
-    padding: 0;
-    z-index: 994;
-    &:before {
-        content: '';
-    }
-    .message-content {
-        margin: 0 auto;
-        max-width: 1300px;
-        min-width: 960px;
-        padding: 3px 0;
-        position: relative;
-        text-align: center;
-        &:before {
-            background: none;
-            border: 0;
-            color: #6e685e;
-            content: '\e006'; //  Notification icon
-            font-family: 'MUI-Icons';
-            font-size: 32px;
-            -webkit-font-smoothing: antialiased;
-            font-style: normal;
-            font-weight: normal;
-            height: auto;
-            position: relative;
-            speak: none;
-            text-shadow: none;
-            vertical-align: middle;
-            width: auto;
-        }
-    }
-}
-
-.message-demo-mode {
-    background: #d75f07;
-    border: 0;
-    box-shadow: 0 1px 2px #46433d;
-    color: @color-white;
-    padding: 5px 0;
-    text-align: center;
-    z-index: 993;
-    &:before {
-        content: '';
-    }
-    .message-content {
-        margin: 0 auto;
-        max-width: 1300px;
-        min-width: 960px;
-        position: relative;
-        text-align: center;
-        &:before {
-            background: none;
-            border: 0;
-            content: '\e006'; //  Notification icon
-            font-family: 'MUI-Icons';
-            font-size: 16px;
-            -webkit-font-smoothing: antialiased;
-            font-style: normal;
-            font-weight: normal;
-            height: auto;
-            position: relative;
-            speak: none;
-            text-shadow: none;
-            vertical-align: middle;
-            width: auto;
+            content: @icon-check-mage;
         }
     }
 }

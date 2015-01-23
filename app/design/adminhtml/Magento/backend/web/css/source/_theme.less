@@ -7,7 +7,6 @@
 //  Colors
 //  ---------------------------------------------
 
-@color-brownie: #514943;
 @color-light-brownie: #676056;
 @color-dark-gray: #808080;
 @color-very-dark-gray: #666;
@@ -39,30 +38,35 @@
 @color-pure-blue: #007bdb;
 @color-dodger-blue: #008bdb;
 @color-green-apple: #79a22e;
+@color-brownie: #514943;
 @color-dark-brown: #4a3f39;
 @color-dark-brownie: #41362f;
 @color-very-dark-gray-black: #303030;
 @color-very-dark-gray-black2: #35302c;
 @color-very-dark-grayish-orange: #373330;
-@color-phoenix-down: #e04f00;
 @color-phoenix: #eb5202;
-@color-phoenix-almost-rise: #ef672f;
-@color-phoenix-rise: #f65405;
 @color-phoenix-brown: #b84002;
 @color-phoenix-brownie: #ae3d01;
 @color-tomato-brick: #e22626;
-@color-strawberry-milkshake: #ee7d7d;
-
-//  Nesting colors
-@color-prime: @color-phoenix;
-@color-tertiary: @color-brownie;
-@color-success: @color-green-apple;
-@color-warning: @color-phoenix-almost-rise;
-@color-failed: @color-tomato-brick;
 
 //
 //  Typography
 //  ---------------------------------------------
+
+//  Font
+@color-base: @color-gray19;
+@font-family-base: 'Open Sans', @font-family-sans-serif;
+@font-family-console: 'Courier New', Courier, monospace;
+@font-size-base: 1.4rem;
+@font-size-small: @font-size-base * .85;
+@font-style-regular: normal;
+@font-weight-light: 300;
+@font-weight-regular: 400;
+@font-weight-semibold: 600;
+@font-weight-bold: 700;
+@line-height-base: 1.4;
+@color-link: @color-pure-blue;
+@color-link-hover: @color-pure-blue;
 
 //  Focus
 @color-focus: @color-dodger-blue;
@@ -71,48 +75,19 @@
 //  Disabled
 @opacity-disabled: .7;
 
-//  Font
-@color-base: @color-gray19;
-@font-family-base: 'Open Sans', @font-family-sans-serif;
-@font-family-console: 'Courier New', Courier, monospace;
-@font-size-base: 1.4rem;
-@font-size-small: @font-size-base * .85;
-@font-weight-light: 300;
-@font-weight-regular: 400;
-@font-weight-semibold: 600;
-@font-weight-bold: 700;
-@color-link: @color-pure-blue;
-@color-link-hover: @color-pure-blue;
-
-//  Font Icons
+//  Admin Font Icons
 @icon-font-admin-name: 'UX-Icons';
 @icon-font-admin-path: '@{baseDir}fonts/@{icon-font-admin-name}/@{icon-font-admin-name}';
 
 //  Legacy Font Icons
 @icon-font-blank-name: 'icons-blank-theme';
 @icon-font-blank-path: '@{baseDir}fonts/Blank-Theme-Icons/Blank-Theme-Icons';
-
 @icon-font-mui-name: 'MUI-Icons';
 @icon-font-mui-path: '@{baseDir}fonts/@{icon-font-mui-name}/@{icon-font-mui-name}';
 
-@line-height-base: 1.4;
-@indent-bottom-paragraph: 1em;
-
-//
-//  Structure
-//  ---------------------------------------------
-
-@width-container: 100rem;
-@indent-container: 2rem;
 
 //
 //  Validation
 //  ---------------------------------------------
 
 @validation-color: @color-tomato-brick;
-@validation-color-rgba: rgba(226, 38, 38, .6);
-@validation-bg: #f9d4d4;
-@validation-border: 1px dashed @validation-color;
-@validation-color-light: #f9d4d4; //  For asterisk on <th> elements of grid tables
-
-// Data-table
