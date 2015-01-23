@@ -7,10 +7,10 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options\Search\Grid;
-use Mtf\ObjectManager;
-use Mtf\Client\Locator;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Options

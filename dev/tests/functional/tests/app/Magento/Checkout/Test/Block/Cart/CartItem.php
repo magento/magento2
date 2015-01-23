@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Block\Cart;
 
-use Mtf\Client\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class CartItem

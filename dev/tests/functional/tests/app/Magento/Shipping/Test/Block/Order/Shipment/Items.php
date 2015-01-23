@@ -6,7 +6,7 @@
 
 namespace Magento\Shipping\Test\Block\Order\Shipment;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Items

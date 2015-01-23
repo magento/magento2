@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Handler\CatalogProductVirtual;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface CatalogProductVirtualInterface

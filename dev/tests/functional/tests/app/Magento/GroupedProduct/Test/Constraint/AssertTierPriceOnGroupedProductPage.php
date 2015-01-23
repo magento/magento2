@@ -9,7 +9,7 @@ namespace Magento\GroupedProduct\Test\Constraint;
 use Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
-use Mtf\Client\BrowserInterface;
+use Magento\Mtf\Client\BrowserInterface;
 
 /**
  * Class AssertTierPriceOnGroupedProductPage

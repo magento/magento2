@@ -6,8 +6,8 @@
 
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo;
 
-use Mtf\Client\Locator;
-use Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Backend\Test\Block\Widget\Grid;
 
 /**

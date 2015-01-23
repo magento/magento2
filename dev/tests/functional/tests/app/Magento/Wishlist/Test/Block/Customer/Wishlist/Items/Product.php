@@ -6,8 +6,8 @@
 
 namespace Magento\Wishlist\Test\Block\Customer\Wishlist\Items;
 
-use Mtf\Block\Form;
-use Mtf\Client\Locator;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Product

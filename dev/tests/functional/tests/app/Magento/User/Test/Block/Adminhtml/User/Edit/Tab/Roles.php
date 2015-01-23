@@ -7,7 +7,7 @@
 namespace Magento\User\Test\Block\Adminhtml\User\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Grid;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Element;
 
 /**
  * Class Roles
