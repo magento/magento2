@@ -6,7 +6,7 @@
 
 namespace Magento\Core\Test\Fixture;
 
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class SystemVariable

@@ -6,8 +6,8 @@
 
 namespace Magento\Newsletter\Test\Block\Adminhtml\Template;
 
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Newsletter template preview.

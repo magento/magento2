@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Test\Block;
 
-use Mtf\Client\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class FormPageActions

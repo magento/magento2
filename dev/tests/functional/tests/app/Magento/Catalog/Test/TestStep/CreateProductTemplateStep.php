@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\TestStep;
 
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Create product attribute template using handler.

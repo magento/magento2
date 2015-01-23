@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Fixture;
 
-use Mtf\Factory\Factory;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Customer in Backend

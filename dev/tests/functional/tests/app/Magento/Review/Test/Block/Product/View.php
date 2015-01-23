@@ -7,7 +7,7 @@
 
 namespace Magento\Review\Test\Block\Product;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class View

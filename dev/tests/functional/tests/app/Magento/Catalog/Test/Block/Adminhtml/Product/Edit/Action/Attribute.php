@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action;
 
 use Magento\Backend\Test\Block\Widget\Form;
-use Mtf\Client\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Product attribute massaction edit page.

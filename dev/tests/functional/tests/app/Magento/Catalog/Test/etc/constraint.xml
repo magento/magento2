@@ -10,7 +10,7 @@
         <severity>high</severity>
         <require>
             <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductInGrid>
     <assertProductSaveMessage module="Magento_Catalog">
@@ -23,14 +23,14 @@
         <severity>low</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductOutOfStock>
     <assertProductInStock module="Magento_Catalog">
         <severity>low</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductInStock>
     <assertProductVisibleInCategory module="Magento_Catalog">
@@ -39,7 +39,7 @@
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <category class="Magento\Catalog\Test\Fixture\Category" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductVisibleInCategory>
     <assertProductNotVisibleInCategory module="Magento_Catalog">
@@ -48,7 +48,7 @@
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <category class="Magento\Catalog\Test\Fixture\Category" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductNotVisibleInCategory>
     <assertProductSearchableBySku module="Magento_Catalog">
@@ -56,7 +56,7 @@
         <require>
             <catalogSearchResult class="Magento\CatalogSearch\Test\Page\CatalogsearchResult" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductSearchableBySku>
     <assertProductInCategory module="Magento_Catalog">
@@ -64,7 +64,7 @@
         <require>
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
             <category class="Magento\Catalog\Test\Fixture\Category" />
         </require>
     </assertProductInCategory>
@@ -72,7 +72,7 @@
         <severity>low</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
             <checkoutCart class="Magento\Checkout\Test\Page\CheckoutCart" />
         </require>
     </assertProductInCart>
@@ -80,42 +80,42 @@
         <severity>middle</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductPage>
     <assertProductGroupedPriceOnProductPage module="Magento_Catalog">
         <severity>low</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductGroupedPriceOnProductPage>
     <assertProductSpecialPriceOnProductPage module="Magento_Catalog">
         <severity>low</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductSpecialPriceOnProductPage>
     <assertProductTierPriceOnProductPage module="Magento_Catalog">
         <severity>low</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductTierPriceOnProductPage>
     <assertProductCustomOptionsOnProductPage module="Magento_Catalog">
         <severity>low</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductCustomOptionsOnProductPage>
     <assertProductForm module="Magento_Catalog">
         <severity>low</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductForm>
     <assertAddToCartButtonAbsent module="Magento_Catalog">
@@ -129,7 +129,7 @@
         <require>
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
             <category class="Magento\Catalog\Test\Fixture\Category" />
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
             <catalogSearchResult class="Magento\CatalogSearch\Test\Page\CatalogsearchResult" />
@@ -139,14 +139,14 @@
         <severity>low</severity>
         <require>
             <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductSkuAutoGenerated>
     <assertProductGroupedPriceOnProductPage module="Magento_Catalog">
         <severity>low</severity>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView"  />
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductGroupedPriceOnProductPage>
     <assertProductAttributeSaveMessage module="Magento_Catalog">
@@ -171,7 +171,7 @@
             <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
             <productSetEdit class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetEdit" />
             <productSet class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex" />
-            <fixtureFactory class="Mtf\Fixture\FixtureFactory" />
+            <fixtureFactory class="Magento\Mtf\Fixture\FixtureFactory" />
         </require>
     </assertAddedProductAttributeOnProductForm>
     <assertProductAttributeIsRequired module="Magento_Catalog">
@@ -289,7 +289,7 @@
     <assertCategoryAbsenceOnFrontend module="Magento_Catalog">
         <severity>low</severity>
         <require>
-            <browser class="Mtf\Client\Browser" />
+            <browser class="Magento\Mtf\Client\Browser" />
             <categoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <category class="Magento\Catalog\Test\Fixture\Category" />
         </require>
@@ -326,7 +326,7 @@
     <assertProductTemplateOnProductForm module="Magento_Catalog">
         <severity>high</severity>
         <require>
-            <fixtureFactory class="Mtf\Fixture\FixtureFactory" />
+            <fixtureFactory class="Magento\Mtf\Fixture\FixtureFactory" />
             <attributeSet class="Magento\Catalog\Test\Fixture\CatalogAttributeSet" />
             <productEdit class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit" />
             <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
@@ -394,7 +394,7 @@
     <assertProductDuplicatedInGrid module="Magento_Catalog">
         <severity>low</severity>
         <require>
-            <product class="Mtf\Fixture\FixtureInterface" />
+            <product class="Magento\Mtf\Fixture\FixtureInterface" />
             <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
         </require>
     </assertProductDuplicatedInGrid>
