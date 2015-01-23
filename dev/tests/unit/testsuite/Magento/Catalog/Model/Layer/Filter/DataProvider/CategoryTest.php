@@ -34,6 +34,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      */
     private $target;
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     protected function setUp()
     {
         /** @var \Magento\Framework\Registry $var */

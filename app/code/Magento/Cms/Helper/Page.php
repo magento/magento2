@@ -93,6 +93,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -140,6 +141,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int $pageId
      * @param bool $renderLayout
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _renderPage(Action $action, $pageId = null, $renderLayout = true)
     {

@@ -19,6 +19,7 @@ class DateFieldsOrder extends Field
     /**
      * @param AbstractElement $element
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getElementHtml(AbstractElement $element)
     {

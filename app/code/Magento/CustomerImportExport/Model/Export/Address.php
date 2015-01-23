@@ -5,6 +5,9 @@
  */
 namespace Magento\CustomerImportExport\Model\Export;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
 {
     /**#@+
@@ -109,6 +112,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      * @param \Magento\CustomerImportExport\Model\Export\CustomerFactory $eavCustomerFactory
      * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,

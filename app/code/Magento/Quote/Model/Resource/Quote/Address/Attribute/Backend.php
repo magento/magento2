@@ -17,6 +17,7 @@ class Backend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
      *
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function collectTotals(\Magento\Quote\Model\Quote\Address $address)
     {

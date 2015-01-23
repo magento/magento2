@@ -15,6 +15,7 @@ use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
 
 /**
  * Cart read service object.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReadService implements ReadServiceInterface
 {

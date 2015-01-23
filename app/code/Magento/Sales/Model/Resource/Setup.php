@@ -159,6 +159,8 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * @param string $code
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getAttributeColumnDefinition($code, $data)
     {

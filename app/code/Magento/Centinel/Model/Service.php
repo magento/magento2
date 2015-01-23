@@ -142,6 +142,7 @@ class Service extends \Magento\Framework\Object
      * @param float $amount
      * @param string $currencyCode
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _generateChecksum(
         $paymentMethodCode,

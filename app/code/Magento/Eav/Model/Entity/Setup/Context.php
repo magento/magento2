@@ -25,6 +25,7 @@ class Context extends \Magento\Framework\Module\Setup\Context
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Filesystem $filesystem
      * @param PropertyMapperInterface $attributeMapper
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,

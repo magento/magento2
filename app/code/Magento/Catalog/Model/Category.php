@@ -27,6 +27,10 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @method Category setUrlPath(string $urlPath)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category extends \Magento\Catalog\Model\AbstractModel implements
     \Magento\Framework\Object\IdentityInterface,
@@ -190,6 +194,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -257,6 +262,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Get flat resource model flag
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseFlatResource()
     {
@@ -408,6 +414,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $noDesignAttributes
      * @return array
      * @todo Use with Flat Resource
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getAttributes($noDesignAttributes = false)
     {
@@ -1093,6 +1100,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsActive()
     {

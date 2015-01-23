@@ -81,6 +81,7 @@ class Rule extends \Magento\Backend\App\Action
      *
      * @param array $postData
      * @return \Magento\Tax\Api\Data\TaxRuleInterface
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function populateTaxRule($postData)
     {

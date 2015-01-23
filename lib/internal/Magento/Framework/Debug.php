@@ -61,6 +61,8 @@ class Debug
      * @param bool $html        output in HTML format
      * @param bool $withArgs    add short arguments of methods
      * @return string|bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public static function trace(array $trace, $return = false, $html = true, $withArgs = true)
     {
@@ -141,6 +143,7 @@ class Debug
      *
      * @param mixed $arg
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected static function _formatCalledArgument($arg)
     {

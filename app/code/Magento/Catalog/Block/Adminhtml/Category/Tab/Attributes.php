@@ -38,6 +38,8 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form before rendering HTML
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareForm()
     {

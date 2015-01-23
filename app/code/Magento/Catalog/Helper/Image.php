@@ -248,6 +248,7 @@ class Image extends AbstractHelper
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function keepFrame($flag)
     {
@@ -265,6 +266,7 @@ class Image extends AbstractHelper
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function keepTransparency($flag)
     {

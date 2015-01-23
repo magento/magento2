@@ -7,6 +7,7 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
 
 /**
  * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DirectiveTest extends \PHPUnit_Framework_TestCase
 {
