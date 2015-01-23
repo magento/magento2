@@ -27,6 +27,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getInstance()->getObjectManager();
         $this->objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+        Bootstrap::getInstance()->reinitialize();
     }
 
     /**
@@ -56,10 +57,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @magentoConfigFixture current_store dev/css/minify_files 1
-     */
-    public function testCssMinification()
+    protected function _testCssMinification($requestedUri, $requestedFilePath, $testFile, $assertionCallback)
     {
         /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject $appState */
         $appState = $this->getMock('\Magento\Framework\App\State', ['getMode'], [], '', false);
@@ -69,8 +67,8 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\App\Request\Http $request */
         $request = $this->objectManager->get('Magento\Framework\App\Request\Http');
-        $request->setRequestUri(self::REQUEST_PATH);
-        $request->setParam('resource', self::REQUEST_PATH);
+        $request->setRequestUri($requestedUri);
+        $request->setParam('resource', $requestedUri);
 
         $response = $this->getMockForAbstractClass(
             'Magento\Framework\App\Response\FileInterface',
@@ -87,13 +85,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             'setFilePath'
         )->will(
             $this->returnCallback(
-                function ($path) {
-                    $this->assertEquals(
-                        file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
-                        file_get_contents($path),
-                        'Minified files are not equal or minification did not work for requested CSS'
-                    );
-                }
+                $assertionCallback
             )
         );
 
@@ -114,16 +106,75 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         );
         $initParams = Bootstrap::getInstance()->getAppInitParams();
         $designPath = $initParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]['design']['path'];
-        $destFile = $designPath . '/frontend/Magento/blank/web/css/styles.css';
+        $destFile = $designPath . $requestedFilePath;
 
         if (!is_readable(dirname($destFile))) {
             mkdir(dirname($destFile), 777, true);
         }
-        
-        copy(dirname(__DIR__) . '/_files/static/css/styles.css', $destFile);
+
+        copy($testFile, $destFile);
 
         $staticResourceApp->launch();
 
         unlink($destFile);
+    }
+
+    /**
+     * @magentoConfigFixture current_store dev/css/minify_files 1
+     */
+    public function testCssMinification()
+    {
+        $this->_testCssMinification(
+            self::REQUEST_PATH,
+            '/frontend/Magento/blank/web/css/styles.css',
+            dirname(__DIR__) . '/_files/static/css/styles.css',
+            function ($path) {
+                $this->assertEquals(
+                    file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
+                    file_get_contents($path),
+                    'Minified files are not equal or minification did not work for requested CSS'
+                );
+            }
+        );
+    }
+
+    /**
+     * @magentoConfigFixture current_store dev/css/minify_files 0
+     */
+    public function testCssMinificationOff()
+    {
+        $this->_testCssMinification(
+            self::REQUEST_PATH,
+            '/frontend/Magento/blank/web/css/styles.css',
+            dirname(__DIR__) . '/_files/static/css/styles.css',
+            function ($path) {
+                $content = file_get_contents($path);
+                $this->assertNotEmpty($content);
+                $this->assertContains('Magento/backend', $content);
+                $this->assertNotEquals(
+                    file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
+                    $content,
+                    'CSS is minified when minification turned off'
+                );
+            }
+        );
+    }
+
+    /**
+     * @magentoConfigFixture current_store dev/css/minify_files 1
+     */
+    public function testCssMinificationForMinifiedFiles()
+    {
+        $this->_testCssMinification(
+            '/frontend/Magento/blank/en_US/css/styles.min.css',
+            '/frontend/Magento/blank/web/css/styles.min.css',
+            dirname(__DIR__) . '/_files/static/css/styles.min.css',
+            function ($path) {
+                $content = file_get_contents($path);
+                $this->assertNotEmpty($content);
+                $this->assertContains('Magento/backend', $content);
+                $this->assertContains('semi-minified file', $content);
+            }
+        );
     }
 }
