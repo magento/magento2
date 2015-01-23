@@ -5,39 +5,41 @@
  * See COPYING.txt for license details.
  */
  -->
-<variations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
-    <variation>
-        <data name="customer/data/firstname">Jany %isolation%</data>
-        <data name="customer/data/lastname">Doe %isolation%</data>
-        <data name="customer/data/email">janydoe%isolation%@example.com</data>
-        <data name="address/data/firstname">Jany %isolation%</data>
-        <data name="address/data/lastname">Doe %isolation%</data>
-        <data name="address/data/company">Company %isolation%</data>
-        <data name="address/data/street">Some street %isolation%</data>
-        <data name="address/data/city">City %isolation%</data>
-        <data name="address/data/country_id">United States</data>
-        <data name="address/data/region_id">Colorado</data>
-        <data name="address/data/region">-</data>
-        <data name="address/data/telephone">555-888-111-999</data>
-        <data name="address/data/fax">161-999-8888</data>
-        <data name="address/data/postcode">12345</data>
-        <data name="constraint">assertCustomerAddressSuccessSaveMessage, assertCustomerDefaultAddresses</data>
-    </variation>
-    <variation>
-        <data name="customer/data/firstname">Jonny %isolation%</data>
-        <data name="customer/data/lastname">Doe %isolation%</data>
-        <data name="customer/data/email">jonny%isolation%@example.com</data>
-        <data name="address/data/firstname">John %isolation%</data>
-        <data name="address/data/lastname">Doe %isolation%</data>
-        <data name="address/data/company">Company %isolation%</data>
-        <data name="address/data/street">Some street %isolation%</data>
-        <data name="address/data/city">City %isolation%</data>
-        <data name="address/data/country_id">United Kingdom</data>
-        <data name="address/data/region_id">-</data>
-        <data name="address/data/region">Region %isolation%</data>
-        <data name="address/data/telephone">0123456789-02134567</data>
-        <data name="address/data/fax">5555-874-99634</data>
-        <data name="address/data/postcode">12345</data>
-        <data name="constraint">assertCustomerAddressSuccessSaveMessage, assertCustomerDefaultAddresses</data>
-    </variation>
-</variations>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../etc/global/variations.xsd">
+    <testCase name="UpdateCustomerFrontendEntity">
+        <variation name="UpdateCustomerFrontendEntityVariation1">
+            <data name="customer/data/firstname">Jany %isolation%</data>
+            <data name="customer/data/lastname">Doe %isolation%</data>
+            <data name="customer/data/email">janydoe%isolation%@example.com</data>
+            <data name="address/data/firstname">Jany %isolation%</data>
+            <data name="address/data/lastname">Doe %isolation%</data>
+            <data name="address/data/company">Company %isolation%</data>
+            <data name="address/data/street">Some street %isolation%</data>
+            <data name="address/data/city">City %isolation%</data>
+            <data name="address/data/country_id">United States</data>
+            <data name="address/data/region_id">Colorado</data>
+            <data name="address/data/region">-</data>
+            <data name="address/data/telephone">555-888-111-999</data>
+            <data name="address/data/fax">161-999-8888</data>
+            <data name="address/data/postcode">12345</data>
+            <data name="constraint">assertCustomerAddressSuccessSaveMessage, assertCustomerDefaultAddresses</data>
+        </variation>
+        <variation name="UpdateCustomerFrontendEntityVariation2">
+            <data name="customer/data/firstname">Jonny %isolation%</data>
+            <data name="customer/data/lastname">Doe %isolation%</data>
+            <data name="customer/data/email">jonny%isolation%@example.com</data>
+            <data name="address/data/firstname">John %isolation%</data>
+            <data name="address/data/lastname">Doe %isolation%</data>
+            <data name="address/data/company">Company %isolation%</data>
+            <data name="address/data/street">Some street %isolation%</data>
+            <data name="address/data/city">City %isolation%</data>
+            <data name="address/data/country_id">United Kingdom</data>
+            <data name="address/data/region_id">-</data>
+            <data name="address/data/region">Region %isolation%</data>
+            <data name="address/data/telephone">0123456789-02134567</data>
+            <data name="address/data/fax">5555-874-99634</data>
+            <data name="address/data/postcode">12345</data>
+            <data name="constraint">assertCustomerAddressSuccessSaveMessage, assertCustomerDefaultAddresses</data>
+        </variation>
+    </testCase>
+</config>
