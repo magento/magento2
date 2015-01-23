@@ -15,6 +15,7 @@ use Magento\Framework\Object;
 /**
  * Class AbstractMapper
  * @package Magento\Framework\DB
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractMapper implements MapperInterface
 {

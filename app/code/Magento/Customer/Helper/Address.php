@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Customer address helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Address extends \Magento\Framework\App\Helper\AbstractHelper
 {

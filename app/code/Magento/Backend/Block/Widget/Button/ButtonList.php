@@ -35,6 +35,7 @@ class ButtonList
      * @param integer $sortOrder
      * @param string|null $region That button should be displayed in ('toolbar', 'header', 'footer', null)
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function add($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {

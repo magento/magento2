@@ -4,6 +4,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Newsletter\Controller\Adminhtml\Queue;
 
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
@@ -13,6 +16,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
      *
      * @throws \Magento\Framework\Model\Exception
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

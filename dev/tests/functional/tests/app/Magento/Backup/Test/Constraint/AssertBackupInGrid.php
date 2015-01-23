@@ -7,7 +7,7 @@
 namespace Magento\Backup\Test\Constraint;
 
 use Magento\Backup\Test\Page\Adminhtml\BackupIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertBackupInGrid

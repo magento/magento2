@@ -6,10 +6,10 @@
 
 namespace Magento\Review\Test\Constraint;
 
-use Mtf\Client\Browser;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\Browser;
+use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that add and view review links are present on product page.

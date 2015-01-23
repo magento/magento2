@@ -6,14 +6,14 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit;
 
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Options\Option;
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\ObjectManager;
 
 /**
  * Options element.
  */
-class Options extends Element
+class Options extends SimpleElement
 {
     /**
      * 'Add Option' button.
@@ -52,7 +52,7 @@ class Options extends Element
     public function getValue()
     {
         $data = [];
-        $options = $this->find($this->option)->getElements();
+        $options = $this->getElements($this->option);
         foreach ($options as $option) {
             $data[] = $this->getFormInstance($option)->getData();
         }
@@ -62,10 +62,10 @@ class Options extends Element
     /**
      * Get options form.
      *
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return Option
      */
-    protected function getFormInstance(Element $element = null)
+    protected function getFormInstance(SimpleElement $element = null)
     {
         return ObjectManager::getInstance()->create(
             'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Options\Option',

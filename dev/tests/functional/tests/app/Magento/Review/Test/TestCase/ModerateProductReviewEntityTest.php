@@ -9,7 +9,7 @@ namespace Magento\Review\Test\TestCase;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Moderate ProductReview Entity

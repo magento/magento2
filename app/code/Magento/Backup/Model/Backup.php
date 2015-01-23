@@ -6,6 +6,7 @@
 namespace Magento\Backup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Backup file item model
@@ -13,6 +14,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @method string getPath()
  * @method string getName()
  * @method string getTime()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Backup extends \Magento\Framework\Object implements \Magento\Framework\Backup\Db\BackupInterface
 {
@@ -292,11 +294,10 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
 
         try {
             /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $varDirectory */
-            $varDirectory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+            $varDirectory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR, DriverPool::ZLIB);
             $this->_stream = $varDirectory->openFile(
                 $this->_getFilePath(),
-                $mode,
-                \Magento\Framework\Filesystem\DriverPool::ZLIB
+                $mode
             );
         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
             throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(

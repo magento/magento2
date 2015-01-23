@@ -122,6 +122,7 @@ class Observer
     /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processAddToCart($observer)
     {
@@ -177,6 +178,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function customerLogin(\Magento\Framework\Event\Observer $observer)
     {
@@ -190,6 +192,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function customerLogout(\Magento\Framework\Event\Observer $observer)
     {

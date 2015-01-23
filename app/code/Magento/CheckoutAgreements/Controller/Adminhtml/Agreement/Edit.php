@@ -10,6 +10,7 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
 {
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

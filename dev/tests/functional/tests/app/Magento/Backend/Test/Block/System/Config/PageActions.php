@@ -10,7 +10,7 @@ namespace Magento\Backend\Test\Block\System\Config;
 
 use Magento\Backend\Test\Block\FormPageActions as AbstractPageActions;
 use Magento\Store\Test\Fixture\Store;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class PageActions
@@ -35,7 +35,7 @@ class PageActions extends AbstractPageActions
     {
         $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselectstore')
             ->setValue($websiteScope);
-        $this->_rootElement->acceptAlert();
+        $this->browser->acceptAlert();
 
         return $this;
     }

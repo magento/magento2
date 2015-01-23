@@ -7,7 +7,7 @@
 namespace Magento\Shipping\Test\Constraint;
 
 use Magento\Sales\Test\Page\Adminhtml\OrderView;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertShipmentSuccessCreateMessage

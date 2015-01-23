@@ -6,7 +6,7 @@
 
 namespace Magento\Shipping\Test\Block\Adminhtml\Order\Tracking;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class Item

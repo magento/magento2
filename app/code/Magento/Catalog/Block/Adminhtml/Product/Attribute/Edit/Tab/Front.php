@@ -44,6 +44,7 @@ class Front extends Generic
     /**
      * {@inheritdoc}
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

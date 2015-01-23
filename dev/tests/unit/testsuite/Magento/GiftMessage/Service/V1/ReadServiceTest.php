@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\GiftMessage\Service\V1;
 
 class ReadServiceTest extends \PHPUnit_Framework_TestCase

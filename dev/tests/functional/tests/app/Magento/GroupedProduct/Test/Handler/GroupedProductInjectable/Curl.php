@@ -7,7 +7,7 @@
 namespace Magento\GroupedProduct\Test\Handler\GroupedProductInjectable;
 
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as AbstractCurl;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Curl

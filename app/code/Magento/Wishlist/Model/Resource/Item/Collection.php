@@ -7,6 +7,8 @@ namespace Magento\Wishlist\Model\Resource\Item;
 
 /**
  * Wishlist item collection
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {

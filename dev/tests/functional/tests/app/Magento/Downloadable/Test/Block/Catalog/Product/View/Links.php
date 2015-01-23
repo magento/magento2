@@ -6,8 +6,8 @@
 
 namespace Magento\Downloadable\Test\Block\Catalog\Product\View;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class Links
@@ -110,7 +110,7 @@ class Links extends Block
     {
         $linksData = [];
 
-        $choiceLinks = $this->_rootElement->find($this->choiceLink, Locator::SELECTOR_XPATH)->getElements();
+        $choiceLinks = $this->_rootElement->getElements($this->choiceLink, Locator::SELECTOR_XPATH);
         foreach ($choiceLinks as $choiceLink) {
             $link = $choiceLink->find($this->linkForChoice);
             $sample = $choiceLink->find($this->sampleLinkForChoice);

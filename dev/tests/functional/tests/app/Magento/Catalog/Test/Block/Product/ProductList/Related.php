@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Test\Block\Product\ProductList;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Related
@@ -73,7 +73,7 @@ class Related extends Block
      * Get related product element
      *
      * @param string $productName
-     * @return Element
+     * @return SimpleElement
      */
     private function getProductElement($productName)
     {

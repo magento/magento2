@@ -6,8 +6,8 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Product details tab.
@@ -32,10 +32,10 @@ class ProductDetails extends \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\
      * Fill data to fields on tab.
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
 

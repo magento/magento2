@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 
 /**
  * Catalog product gallery attribute
@@ -176,6 +178,7 @@ class Gallery extends AbstractElement
      *
      * @param Attribute|string $attribute
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getAttributeReadonly($attribute)
     {

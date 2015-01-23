@@ -6,7 +6,7 @@
 
 namespace Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class Selection
