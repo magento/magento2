@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model;
+namespace Magento\Framework\Data\Collection;
 
 /**
  * Model object factory
  */
-class Factory
+class ModelFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

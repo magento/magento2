@@ -28,7 +28,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -43,7 +43,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,

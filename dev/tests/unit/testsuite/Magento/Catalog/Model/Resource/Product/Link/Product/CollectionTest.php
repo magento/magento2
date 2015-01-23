@@ -20,7 +20,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Core\Model\EntityFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $entityFactoryMock;
 
     /** @var \Magento\Logger|\PHPUnit_Framework_MockObject_MockObject */
@@ -76,7 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->entityFactoryMock = $this->getMock('Magento\Core\Model\EntityFactory', [], [], '', false);
+        $this->entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->fetchStrategyMock = $this->getMock('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
         $this->managerInterfaceMock = $this->getMock('Magento\Framework\Event\ManagerInterface');

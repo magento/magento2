@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Resource\Sale;
 
-use Magento\Core\Model\EntityFactory;
+use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\Store\StoreManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Event\ManagerInterface;
