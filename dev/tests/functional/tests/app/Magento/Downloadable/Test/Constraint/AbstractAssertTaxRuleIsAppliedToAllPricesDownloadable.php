@@ -11,8 +11,8 @@ use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Tax\Test\Constraint\AbstractAssertTaxRuleIsAppliedToAllPrices;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Checks that product prices excl tax on category, product and cart pages are equal to specified in dataset.

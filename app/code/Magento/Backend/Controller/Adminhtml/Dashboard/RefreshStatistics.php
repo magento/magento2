@@ -7,6 +7,9 @@ namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
 class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
 {
+    /**
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
     public function execute()
     {
         try {
@@ -19,6 +22,6 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
             $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->_redirect('*/*');
+        return $this->resultRedirectFactory->create()->setPath('*/*');
     }
 }

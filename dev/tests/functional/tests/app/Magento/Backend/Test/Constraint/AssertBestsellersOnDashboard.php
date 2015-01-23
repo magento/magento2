@@ -24,7 +24,7 @@
 
 namespace Magento\Backend\Test\Constraint;
 
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 

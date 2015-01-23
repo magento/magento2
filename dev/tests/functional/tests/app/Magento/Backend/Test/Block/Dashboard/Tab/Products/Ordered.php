@@ -5,7 +5,7 @@
 
 namespace Magento\Backend\Test\Block\Dashboard\Tab\Products;
 
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Grid;
 
 /**

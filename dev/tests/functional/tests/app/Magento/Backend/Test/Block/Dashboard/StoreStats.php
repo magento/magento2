@@ -4,7 +4,7 @@
  */
 namespace Magento\Backend\Test\Block\Dashboard;
 
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\FormTabs;
 
 class StoreStats extends FormTabs

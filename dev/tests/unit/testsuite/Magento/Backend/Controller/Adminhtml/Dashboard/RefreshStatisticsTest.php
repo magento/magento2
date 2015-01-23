@@ -9,70 +9,122 @@ namespace Magento\Backend\Controller\Adminhtml\Dashboard;
  */
 class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
 {
-    public function testExecute()
-    {
-        $path = '*/*';
+    /**
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirect;
 
+    /**
+     * @var  \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $request;
+
+    /**
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $response;
+
+    /**
+     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $messageManager;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Report\Order|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $order;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics
+     */
+    protected $refreshStatisticsController;
+
+    /**
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $context;
+
+    public function setUp()
+    {
         $reportTypes = [
             'sales' => 'Magento\Sales\Model\Resource\Report\Order'
         ];
 
-        $request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $response = $this->getMock(
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+
+        $this->resultRedirectFactory = $this->getMock(
+            'Magento\Backend\Model\View\Result\RedirectFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->resultRedirect = $this->getMock('Magento\Backend\Model\View\Result\Redirect', [], [], '', false);
+
+        $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->response = $this->getMock(
             'Magento\Framework\App\ResponseInterface',
             ['setRedirect', 'sendResponse'],
             [],
             '',
             false
         );
-        $response->expects($this->once())->method('setRedirect')->with($path);
 
-        $messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
-        $messageManager->expects($this->once())->method('addSuccess')->with(__('We updated lifetime statistic.'));
+        $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
 
-        $adminSession = $this->getMock('Magento\Backend\Model\Auth\Session', ['setIsUrlNotice'], [], '', false);
-        $adminSession->expects($this->atLeastOnce())->method('setIsUrlNotice')->with(true);
+        $this->order = $this->getMock('Magento\Sales\Model\Resource\Report\Order', [], [], '', false);
 
-        $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
-        $actionFlag->expects($this->atLeastOnce())
-            ->method('get')
-            ->with('', 'check_url_settings')
-            ->will($this->returnValue(true));
+        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
 
-        $date = $this->getMock('Magento\Framework\Stdlib\DateTime\Filter\Date', [], [], '', false);
+        $this->context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
+        $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
+        $this->context->expects($this->once())->method('getResponse')->willReturn($this->response);
+        $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
+        $this->context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
 
-        $order = $this->getMock('Magento\Sales\Model\Resource\Report\Order', [], [], '', false);
-
-        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $objectManager->expects($this->any())->method('create')->with('Magento\Sales\Model\Resource\Report\Order')
-            ->will($this->returnValue($order));
-        $objectManager->expects($this->once())
-            ->method('get')
-            ->with('Magento\Backend\Model\Auth\Session')
-            ->will($this->returnValue($adminSession));
-
-        $helper = $this->getMock('\Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
-        $helper->expects($this->atLeastOnce())->method('getUrl')->with($path)->will($this->returnValue($path));
-
-        $context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($request));
-        $context->expects($this->once())->method('getResponse')->will($this->returnValue($response));
-        $context->expects($this->once())->method('getMessageManager')->will($this->returnValue($messageManager));
-        $context->expects($this->once())->method('getActionFlag')->will($this->returnValue($actionFlag));
-        $context->expects($this->any())->method('getObjectManager')->will($this->returnValue($objectManager));
-        $context->expects($this->atLeastOnce())->method('getHelper')->will($this->returnValue($helper));
-
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var \Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics $refreshStatisticsController */
-        $refreshStatisticsController = $objectManagerHelper->getObject(
+        $this->refreshStatisticsController = $objectManagerHelper->getObject(
             'Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics',
             [
-                'context' => $context,
-                'dateFilter' => $date,
+                'context' => $this->context,
+                'resultRedirectFactory' => $this->resultRedirectFactory,
                 'reportTypes' => $reportTypes
             ]
         );
+    }
 
-        $refreshStatisticsController->execute();
+    public function testExecute()
+    {
+        $path = '*/*';
+
+        $this->resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
+
+        $this->messageManager->expects($this->once())
+            ->method('addSuccess')
+            ->with(__('We updated lifetime statistic.'));
+
+        $this->objectManager->expects($this->any())
+            ->method('create')
+            ->with('Magento\Sales\Model\Resource\Report\Order')
+            ->willReturn($this->order);
+
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with($path)
+            ->willReturnSelf();
+
+        $this->assertInstanceOf(
+            'Magento\Backend\Model\View\Result\Redirect',
+            $this->refreshStatisticsController->execute()
+        );
     }
 }
