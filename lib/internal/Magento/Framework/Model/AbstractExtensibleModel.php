@@ -6,9 +6,10 @@
 
 namespace Magento\Framework\Model;
 
-use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\MetadataServiceInterface;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\AttributeValueFactory;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 /**
@@ -26,9 +27,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     protected $metadataService;
 
     /**
-     * @var AttributeDataBuilder
+     * @var AttributeValueFactory
      */
-    protected $customAttributeBuilder;
+    protected $customAttributeFactory;
 
     /**
      * @var string[]
@@ -39,7 +40,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -48,13 +49,13 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
-        $this->customAttributeBuilder = $customAttributeBuilder;
+        $this->customAttributeFactory = $customAttributeFactory;
         $data = $this->filterCustomAttributes($data);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         if (isset($data['id'])) {
@@ -80,10 +81,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
         );
         foreach ($data[self::CUSTOM_ATTRIBUTES] as $code => $value) {
             if (!($value instanceof \Magento\Framework\Api\AttributeInterface)) {
-                $data[self::CUSTOM_ATTRIBUTES][$code] = $this->customAttributeBuilder
+                $data[self::CUSTOM_ATTRIBUTES][$code] = $this->customAttributeFactory->create()
                     ->setAttributeCode($code)
-                    ->setValue($value)
-                    ->create();
+                    ->setValue($value);
             }
         }
         return $data;
@@ -113,6 +113,40 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
         return isset($this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode])
             ? $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]
             : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomAttributes(array $attributes)
+    {
+        $customAttributesCodes = $this->getCustomAttributesCodes();
+        foreach ($attributes as $attribute) {
+            if (!$attribute instanceof AttributeValue) {
+                throw new \LogicException('Custom Attribute array elements can only be type of AttributeValue');
+            }
+            $attributeCode = $attribute->getAttributeCode();
+            if (in_array($attributeCode, $customAttributesCodes)) {
+                $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] = $attribute;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomAttribute($attributeCode, $attributeValue)
+    {
+        $customAttributesCodes = $this->getCustomAttributesCodes();
+        /* If key corresponds to custom attribute code, populate custom attributes */
+        if (in_array($attributeCode, $customAttributesCodes)) {
+            $attribute = $this->customAttributeFactory->create();
+            $attribute->setAttributeCode($attributeCode)
+                ->setValue($attributeValue);
+            $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] = $attribute;
+        }
+        return $this;
     }
 
     /**

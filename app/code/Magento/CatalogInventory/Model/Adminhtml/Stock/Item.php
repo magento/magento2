@@ -9,7 +9,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface as StockConfigurati
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface as StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\MetadataServiceInterface;
 
 /**
@@ -26,7 +26,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockConfigurationInterface $stockConfiguration
@@ -42,7 +42,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         StockConfigurationInterface $stockConfiguration,
@@ -57,7 +57,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $customerSession,
             $storeManager,
             $stockConfiguration,

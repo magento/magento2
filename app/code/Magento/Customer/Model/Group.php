@@ -6,7 +6,7 @@
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\Data\GroupDataBuilder;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Customer group model
@@ -70,7 +70,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\StoresConfig $storesConfig
      * @param GroupDataBuilder $groupBuilder
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
@@ -84,7 +84,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\StoresConfig $storesConfig,
         GroupDataBuilder $groupBuilder,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
@@ -101,7 +101,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
             $context,
             $registry,
             $metadataService,
-            $customAttributeBuilder,
+            $customAttributeFactory,
             $resource,
             $resourceCollection,
             $data
