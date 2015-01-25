@@ -5,6 +5,7 @@
 namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Logger;
 
 /**
  * @file        Abstract.php
@@ -152,9 +153,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected $directoryWrite;
 
-    /**
-     * @var \Magento\Framework\Logger
-     */
+    /** @var Logger */
     protected $logger;
 
     /**
@@ -261,9 +260,11 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
+     * @param Logger $logger
      */
-    public function __construct(\Magento\Framework\Filesystem $filesystem, array $data = [])
+    public function __construct(\Magento\Framework\Filesystem $filesystem, array $data = [], Logger $logger)
     {
+        $this->logger = $logger;
         $this->_filesystem = $filesystem;
         $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
     }
@@ -675,7 +676,7 @@ abstract class AbstractAdapter implements AdapterInterface
             try {
                 $this->directoryWrite->create($this->directoryWrite->getRelativePath($destination));
             } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
-                $this->logger->addStreamLog(\Magento\Framework\Logger::LOGGER_SYSTEM);
+                $this->addStreamLog(\Magento\Framework\Logger::LOGGER_SYSTEM);
                 $this->logger->log($e->getMessage());
                 throw new \Exception('Unable to write file into directory ' . $destination . '. Access forbidden.');
             }
