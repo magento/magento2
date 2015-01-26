@@ -78,26 +78,41 @@ class Intercepted extends InterceptedParent implements InterceptedInterface
         return '<K>' . $param1 . '</K>';
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     */
     public function V($param1)
     {
         return '<V>' . $param1 . '</V>';
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     */
     public function W($param1)
     {
         return '<W>' . $param1 . '</W>';
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     */
     public function X($param1)
     {
         return '<X>' . $param1 . '</X>';
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     */
     public function Y($param1)
     {
         return '<Y>' . $param1 . '</Y>';
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     */
     public function Z($param1)
     {
         return '<Z>' . $param1 . '</Z>';
