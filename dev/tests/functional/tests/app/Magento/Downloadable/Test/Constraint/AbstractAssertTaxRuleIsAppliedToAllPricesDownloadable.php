@@ -38,6 +38,8 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable extends Abs
      * @param CheckoutCart $checkoutCart
      * @param FixtureFactory $fixtureFactory
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processAssert(
         InjectableFixture $product,
