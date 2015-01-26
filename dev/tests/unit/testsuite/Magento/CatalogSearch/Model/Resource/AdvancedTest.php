@@ -44,8 +44,10 @@ class AdvancedTest extends PHPUnit_Framework_TestCase
         $attributeMock->expects($this->once())->method('getIndexType')->willReturn($indexType);
         $attributeMock->expects($this->any())->method('getAttributeId')->willReturn(1);
 
-        $this->assertEquals($expected,
-            $this->model->addIndexableAttributeModifiedFilter($collectionMock, $attributeMock, $value));
+        $this->assertEquals(
+            $expected,
+            $this->model->addIndexableAttributeModifiedFilter($collectionMock, $attributeMock, $value)
+        );
     }
 
     public function indexableAttributeDataProvider()

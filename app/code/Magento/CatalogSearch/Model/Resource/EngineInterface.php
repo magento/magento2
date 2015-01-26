@@ -47,7 +47,7 @@ interface EngineInterface
     public function allowAdvancedIndex();
 
     /**
-     * Proepare attribute value to store in index
+     * Prepare attribute value to store in index
      *
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @param mixed $value

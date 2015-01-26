@@ -336,7 +336,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
         $linkMock->expects($this->once())->method('setProductWebsiteIds')->will($this->returnSelf());
         $linkMock->expects($this->once())->method('save')->will($this->returnSelf());
 
-        $this->assertEquals($linkId,$this->service->save($productSku, $linkContentMock, $linkId));
+        $this->assertEquals($linkId, $this->service->save($productSku, $linkContentMock, $linkId));
     }
 
     /**
