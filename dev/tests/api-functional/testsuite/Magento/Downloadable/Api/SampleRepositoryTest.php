@@ -363,7 +363,8 @@ class SampleRepositoryTest extends WebapiAbstract
     public function testUpdate()
     {
         $sampleId = $this->getTargetSample($this->getTargetProduct())->getId();
-        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
+        $this->updateServiceInfo['rest']['resourcePath']
+            = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => false,
             'sampleId' => $sampleId,
@@ -388,7 +389,8 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $originalSample = $this->getTargetSample($this->getTargetProduct());
         $sampleId = $originalSample->getId();
-        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
+        $this->updateServiceInfo['rest']['resourcePath']
+            = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => true,
             'sampleId' => $sampleId,
@@ -436,7 +438,8 @@ class SampleRepositoryTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfThereIsNoDownloadableSampleWithGivenId()
     {
         $sampleId = 9999;
-        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
+        $this->updateServiceInfo['rest']['resourcePath']
+            = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => true,
             'sampleId' => 9999,
@@ -459,7 +462,8 @@ class SampleRepositoryTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $sampleId = $this->getTargetSample($this->getTargetProduct())->getId();
-        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
+        $this->updateServiceInfo['rest']['resourcePath']
+            = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => false,
             'sampleId' => $sampleId,
