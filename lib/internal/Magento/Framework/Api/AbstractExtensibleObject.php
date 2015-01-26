@@ -22,13 +22,14 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      * @var AttributeValueFactory
      */
     protected $attributeValueFactory;
+
     /**
      * Initialize internal storage
      *
-     * @param array $data
      * @param AttributeValueFactory $attributeValueFactory
+     * @param array $data
      */
-    public function __construct(array $data, AttributeValueFactory $attributeValueFactory)
+    public function __construct(AttributeValueFactory $attributeValueFactory, $data = [])
     {
         $this->attributeValueFactory = $attributeValueFactory;
         parent::__construct($data);
@@ -99,5 +100,16 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
             $this->_data[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY][$attributeCode] = $attribute;
         }
         return $this;
+    }
+
+    /**
+     * Return associated metadata service interface
+     *
+     * @return string|null
+     */
+    public function getMetadataServiceInterface()
+    {
+        //Return null by default
+        return null;
     }
 }

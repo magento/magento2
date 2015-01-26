@@ -157,7 +157,7 @@ class Builder implements BuilderInterface
             $dataObjectType = $this->_getDataObjectType();
             $dataObject = $this->objectFactory->create(
                 $dataObjectType,
-                ['data' => $this->data, 'attributeValueFactory' => $this->attributeValueFactory]
+                ['attributeValueFactory' => $this->attributeValueFactory, 'data' => $this->data]
             );
         } else {
             $dataObjectType = $this->_getDataObjectType();
@@ -273,7 +273,9 @@ class Builder implements BuilderInterface
             );
         }
 
-        if (is_subclass_of($sourceClassPreference, '\Magento\Framework\Api\AbstractSimpleObject')) {
+        if (is_subclass_of($dataType, '\Magento\Framework\Api\AbstractExtensibleObject')) {
+            return self::TYPE_EXTENSIBLE_DATA_OBJECT;
+        } elseif (is_subclass_of($sourceClassPreference, '\Magento\Framework\Api\AbstractSimpleObject')) {
             return self::TYPE_DATA_OBJECT;
         } elseif (is_subclass_of($sourceClassPreference, '\Magento\Framework\Model\AbstractExtensibleModel')) {
             return self::TYPE_DATA_MODEL;

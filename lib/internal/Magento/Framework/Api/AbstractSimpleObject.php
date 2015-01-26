@@ -21,7 +21,7 @@ abstract class AbstractSimpleObject
      *
      * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
         $this->_data = $data;
     }
