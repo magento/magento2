@@ -5,10 +5,12 @@
  */
 namespace Magento\Downloadable\Model\Sample;
 
+use Magento\Downloadable\Api\Data\SampleContentInterface;
+
 /**
  * @codeCoverageIgnore
  */
-class Content extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Downloadable\Api\Data\SampleContentInterface
+class Content extends \Magento\Framework\Model\AbstractExtensibleModel implements SampleContentInterface
 {
     const TITLE = 'title';
     const SORT_ORDER = 'sort_order';

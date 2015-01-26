@@ -5,6 +5,7 @@
  */
 namespace Magento\Downloadable\Model;
 
+use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Downloadable\Model\Resource\Link as Resource;
@@ -18,7 +19,7 @@ use Magento\Downloadable\Model\Resource\Link as Resource;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, \Magento\Downloadable\Api\Data\LinkInterface
+class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, LinkInterface
 {
     const XML_PATH_LINKS_TITLE = 'catalog/downloadable/links_title';
 

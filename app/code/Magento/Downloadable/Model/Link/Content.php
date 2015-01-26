@@ -5,10 +5,12 @@
  */
 namespace Magento\Downloadable\Model\Link;
 
+use Magento\Downloadable\Api\Data\LinkContentInterface;
+
 /**
  * @codeCoverageIgnore
  */
-class Content extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Downloadable\Api\Data\LinkContentInterface
+class Content extends \Magento\Framework\Model\AbstractExtensibleModel implements LinkContentInterface
 {
     const TITLE = 'title';
     const PRICE = 'price';

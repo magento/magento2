@@ -5,6 +5,8 @@
  */
 namespace Magento\Downloadable\Model;
 
+use Magento\Downloadable\Api\Data\SampleInterface;
+
 /**
  * Downloadable sample model
  *
@@ -14,7 +16,7 @@ namespace Magento\Downloadable\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, \Magento\Downloadable\Api\Data\SampleInterface
+class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements ComponentInterface, SampleInterface
 {
     const XML_PATH_SAMPLES_TITLE = 'catalog/downloadable/samples_title';
 

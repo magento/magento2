@@ -5,10 +5,12 @@
  */
 namespace Magento\Downloadable\Model\File;
 
+use Magento\Downloadable\Api\Data\File\ContentInterface;
+
 /**
  * @codeCoverageIgnore
  */
-class Content extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Downloadable\Api\Data\File\ContentInterface
+class Content extends \Magento\Framework\Model\AbstractExtensibleModel implements ContentInterface
 {
     const DATA = 'file_data';
     const NAME = 'name';

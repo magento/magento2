@@ -14,7 +14,6 @@ use Magento\Webapi\Model\Rest\Config as RestConfig;
 class LinkRepositoryTest extends WebapiAbstract
 {
     /**
-
      * @var array
      */
     protected $createServiceInfo;
@@ -86,6 +85,7 @@ class LinkRepositoryTest extends WebapiAbstract
         if ($isScopeGlobal) {
             $product->setStoreId(0);
         }
+
         return $product;
     }
 
@@ -102,12 +102,13 @@ class LinkRepositoryTest extends WebapiAbstract
         if (!is_null($linkId)) {
             return isset($links[$linkId]) ? $links[$linkId] : null;
         }
+
         // return first link
         return reset($links);
     }
 
     /**
-     *  @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
     public function testCreateUploadsProvidedFileContent()
     {
@@ -153,7 +154,7 @@ class LinkRepositoryTest extends WebapiAbstract
     }
 
     /**
-     *  @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
     public function testCreateSavesPriceAndTitleInStoreViewScope()
     {
@@ -191,7 +192,7 @@ class LinkRepositoryTest extends WebapiAbstract
     }
 
     /**
-     *  @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
     public function testCreateSavesProvidedUrls()
     {
@@ -576,8 +577,7 @@ class LinkRepositoryTest extends WebapiAbstract
     public function testUpdate()
     {
         $linkId = $this->getTargetLink($this->getTargetProduct())->getId();
-        $this->updateServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
+        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => false,
             'linkId' => $linkId,
@@ -607,8 +607,7 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $originalLink = $this->getTargetLink($this->getTargetProduct());
         $linkId = $originalLink->getId();
-        $this->updateServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
+        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => true,
             'linkId' => $linkId,
@@ -666,8 +665,7 @@ class LinkRepositoryTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfThereIsNoDownloadableLinkWithGivenId()
     {
         $linkId = 9999;
-        $this->updateServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
+        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => true,
             'linkId' => 9999,
@@ -693,8 +691,7 @@ class LinkRepositoryTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfLinkPriceIsInvalid($linkPrice)
     {
         $linkId = $this->getTargetLink($this->getTargetProduct())->getId();
-        $this->updateServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
+        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => false,
             'linkId' => $linkId,
@@ -720,8 +717,7 @@ class LinkRepositoryTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $linkId = $this->getTargetLink($this->getTargetProduct())->getId();
-        $this->updateServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
+        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => false,
             'linkId' => $linkId,
@@ -746,8 +742,7 @@ class LinkRepositoryTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfNumberOfDownloadsIsInvalid($numberOfDownloads)
     {
         $linkId = $this->getTargetLink($this->getTargetProduct())->getId();
-        $this->updateServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
+        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/{$linkId}";
         $requestData = [
             'isGlobalScopeContent' => false,
             'linkId' => $linkId,

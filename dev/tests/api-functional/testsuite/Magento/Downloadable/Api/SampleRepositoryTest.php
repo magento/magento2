@@ -69,8 +69,7 @@ class SampleRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $this->testImagePath = __DIR__
-            . str_replace('/', DIRECTORY_SEPARATOR, '/_files/test_image.jpg');
+        $this->testImagePath = __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/_files/test_image.jpg');
     }
 
     /**
@@ -85,6 +84,7 @@ class SampleRepositoryTest extends WebapiAbstract
         if ($isScopeGlobal) {
             $product->setStoreId(0);
         }
+
         return $product;
     }
 
@@ -100,20 +100,22 @@ class SampleRepositoryTest extends WebapiAbstract
         /** @var $samples \Magento\Downloadable\Model\Resource\Sample\Collection */
         $samples = $product->getTypeInstance()->getSamples($product);
         if (!is_null($sampleId)) {
-            /* @var $sample \Magento\Downloadable\Model\Sample  */
+            /* @var $sample \Magento\Downloadable\Model\Sample */
             foreach ($samples as $sample) {
                 if ($sample->getId() == $sampleId) {
                     return $sample;
                 }
             }
+
             return null;
         }
+
         // return first sample
         return $samples->getFirstItem();
     }
 
     /**
-     *  @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
     public function testCreateUploadsProvidedFileContent()
     {
@@ -144,7 +146,7 @@ class SampleRepositoryTest extends WebapiAbstract
     }
 
     /**
-     *  @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
     public function testCreateSavesTitleInStoreViewScope()
     {
@@ -171,7 +173,7 @@ class SampleRepositoryTest extends WebapiAbstract
     }
 
     /**
-     *  @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
     public function testCreateSavesProvidedUrls()
     {
@@ -321,8 +323,7 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     public function testCreateThrowsExceptionIfTargetProductTypeIsNotDownloadable()
     {
-        $this->createServiceInfo['rest']['resourcePath']
-            = '/V1/products/simple/downloadable-links/samples';
+        $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/simple/downloadable-links/samples';
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'simple',
@@ -342,8 +343,7 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $this->createServiceInfo['rest']['resourcePath']
-            = '/V1/products/wrong-sku/downloadable-links/samples';
+        $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/samples';
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'wrong-sku',
@@ -363,8 +363,7 @@ class SampleRepositoryTest extends WebapiAbstract
     public function testUpdate()
     {
         $sampleId = $this->getTargetSample($this->getTargetProduct())->getId();
-        $this->updateServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
+        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => false,
             'sampleId' => $sampleId,
@@ -389,8 +388,7 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $originalSample = $this->getTargetSample($this->getTargetProduct());
         $sampleId = $originalSample->getId();
-        $this->updateServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
+        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => true,
             'sampleId' => $sampleId,
@@ -438,8 +436,7 @@ class SampleRepositoryTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfThereIsNoDownloadableSampleWithGivenId()
     {
         $sampleId = 9999;
-        $this->updateServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
+        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => true,
             'sampleId' => 9999,
@@ -462,8 +459,7 @@ class SampleRepositoryTest extends WebapiAbstract
     public function testUpdateThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
         $sampleId = $this->getTargetSample($this->getTargetProduct())->getId();
-        $this->updateServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
+        $this->updateServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => false,
             'sampleId' => $sampleId,
@@ -499,8 +495,7 @@ class SampleRepositoryTest extends WebapiAbstract
     public function testDeleteThrowsExceptionIfThereIsNoDownloadableSampleWithGivenId()
     {
         $sampleId = 9999;
-        $this->deleteServiceInfo['rest']['resourcePath']
-            = "/V1/products/downloadable-links/samples/{$sampleId}";
+        $this->deleteServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'sampleId' => $sampleId,
         ];
