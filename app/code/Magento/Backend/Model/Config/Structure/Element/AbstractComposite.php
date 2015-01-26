@@ -21,8 +21,7 @@ abstract class AbstractComposite extends \Magento\Backend\Model\Config\Structure
     public function __construct(
         \Magento\Framework\Store\StoreManagerInterface $storeManager,
         Iterator $childrenIterator
-    )
-    {
+    ) {
         parent::__construct($storeManager);
         $this->_childrenIterator = $childrenIterator;
     }
