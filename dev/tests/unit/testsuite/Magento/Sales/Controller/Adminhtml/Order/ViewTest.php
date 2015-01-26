@@ -7,6 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 /**
  * @covers \Magento\Sales\Controller\Adminhtml\Order\View
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
