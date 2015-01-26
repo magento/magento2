@@ -7,6 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 /**
  * @covers \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\PrintAction
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PrintActionTest extends \PHPUnit_Framework_TestCase
 {

@@ -7,6 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 /**
  * Class ViewTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
@@ -100,6 +101,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultForwardMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $titleMock = $this->getMockBuilder('Magento\Framework\App\Action\Title')

@@ -13,6 +13,7 @@ use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
  * Class EmailTest
  *
  * @package Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailTest extends \PHPUnit_Framework_TestCase
 {
@@ -85,7 +86,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
-        $this->response = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false );
+        $this->response = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $this->messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);

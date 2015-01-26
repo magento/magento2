@@ -104,6 +104,10 @@ class Save extends \Magento\Backend\App\Action
      * We can save only new invoice. Existing invoices are not editable
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {

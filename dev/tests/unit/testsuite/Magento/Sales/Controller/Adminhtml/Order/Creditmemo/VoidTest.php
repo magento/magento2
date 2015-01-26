@@ -7,6 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 /**
  * Class VoidTest
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class VoidTest extends \PHPUnit_Framework_TestCase
 {

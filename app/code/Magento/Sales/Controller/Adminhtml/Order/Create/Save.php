@@ -11,6 +11,8 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
      * Saving quote and create order
      *
      * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

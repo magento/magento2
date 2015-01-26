@@ -10,6 +10,7 @@ use Magento\TestFramework\Helper\ObjectManager;
 /**
  * Class NewActionTest
  * @package Magento\Sales\Controller\Adminhtml\Order\Invoice
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class NewActionTest extends \PHPUnit_Framework_TestCase
 {

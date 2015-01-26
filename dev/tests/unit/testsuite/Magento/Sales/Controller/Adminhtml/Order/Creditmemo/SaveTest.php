@@ -8,6 +8,9 @@
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveTest extends \PHPUnit_Framework_TestCase
 {
     /**

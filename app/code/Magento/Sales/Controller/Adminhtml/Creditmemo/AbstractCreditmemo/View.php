@@ -40,7 +40,7 @@ class View extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultForward = $this->resultForwardFactory->create();
-        if ($creditmemoId = $this->getRequest()->getParam('creditmemo_id')) {
+        if ($this->getRequest()->getParam('creditmemo_id')) {
             $resultForward->setController('order_creditmemo');
             $resultForward->setParams(['come_from' => 'sales_creditmemo']);
             $resultForward->forward('view');

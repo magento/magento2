@@ -45,7 +45,7 @@ abstract class View extends \Magento\Backend\App\Action
     {
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
-        if ($shipmentId = $this->getRequest()->getParam('shipment_id')) {
+        if ($this->getRequest()->getParam('shipment_id')) {
             $resultForward->setController('order_shipment')
                 ->setModule('admin')
                 ->setParams(['come_from' => 'shipment'])

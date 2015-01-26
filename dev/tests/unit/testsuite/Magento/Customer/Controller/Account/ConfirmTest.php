@@ -14,6 +14,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ConfirmTest extends \PHPUnit_Framework_TestCase
 {
