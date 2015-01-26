@@ -49,7 +49,9 @@ class Flag extends Model\AbstractModel
     public function beforeSave()
     {
         if (is_null($this->_flagCode)) {
-            throw new \Magento\Framework\Model\Exception(__('Please define flag code.'));
+            throw new \Magento\Framework\Model\Exception(
+                (string)new \Magento\Framework\Phrase('Please define flag code.')
+            );
         }
 
         $this->setFlagCode($this->_flagCode);
@@ -94,7 +96,7 @@ class Flag extends Model\AbstractModel
     public function loadSelf()
     {
         if (is_null($this->_flagCode)) {
-            throw new \Magento\Framework\Model\Exception(__('Please define flag code.'));
+            throw new \Magento\Framework\Model\Exception((string)new \Magento\Framework\Phrase('Please define flag code.'));
         }
 
         return $this->load($this->_flagCode, 'flag_code');

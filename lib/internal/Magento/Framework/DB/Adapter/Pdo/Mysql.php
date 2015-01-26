@@ -3720,7 +3720,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function createTrigger(\Magento\Framework\DB\Ddl\Trigger $trigger)
     {
         if (!$trigger->getStatements()) {
-            throw new \Zend_Db_Exception(sprintf(__('Trigger %s has not statements available'), $trigger->getName()));
+            throw new \Zend_Db_Exception(
+                sprintf(
+                    (string)new \Magento\Framework\Phrase('Trigger %s has not statements available'),
+                    $trigger->getName()
+                )
+            );
         }
 
         $statements = implode("\n", $trigger->getStatements());
@@ -3748,7 +3753,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function dropTrigger($triggerName, $schemaName = null)
     {
         if (empty($triggerName)) {
-            throw new \InvalidArgumentException(__('Trigger name is not defined'));
+            throw new \InvalidArgumentException((string)new \Magento\Framework\Phrase('Trigger name is not defined'));
         }
 
         $triggerName = ($schemaName ? $schemaName . '.' : '') . $triggerName;

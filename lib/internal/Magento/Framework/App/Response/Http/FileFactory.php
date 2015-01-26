@@ -101,7 +101,7 @@ class FileFactory
         if (!is_null($content)) {
             if ($isFile) {
                 if (!$dir->isFile($file)) {
-                    throw new \Exception(__('File not found'));
+                    throw new \Exception((string)new \Magento\Framework\Phrase('File not found'));
                 }
                 $this->_response->sendHeaders();
                 $stream = $dir->openFile($file, 'r');

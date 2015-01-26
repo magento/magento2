@@ -60,7 +60,7 @@ class ErrorMessage
      */
     public function getMessage()
     {
-        return __($this->message, $this->params);
+        return (string)new \Magento\Framework\Phrase($this->message, $this->params);
     }
 
     /**
