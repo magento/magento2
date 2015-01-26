@@ -323,22 +323,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
                 []
             );
 
-            $this->customerRepositoryMock->expects($this->once())
-                ->method('getById')
-                ->with($customerId)
-                ->willReturn($customerMock);
-
-            $this->customerViewHelperMock->expects($this->once())
-                ->method('getCustomerName')
-                ->with($customerMock)
-                ->willReturn($customerName);
-
-            $this->escaperMock->expects($this->at(0))
-                ->method('escapeHtml')
-                ->with($customerName)
-                ->willReturn($customerName);
-
-            $this->assertEquals('<span><a  >(Not you?)</a></span>', $this->additional->toHtml());
+            $this->assertEquals('<span><a  >Not you?</a></span>', $this->additional->toHtml());
         } else {
             $this->assertEquals('', $this->additional->toHtml());
         }
