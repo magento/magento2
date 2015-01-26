@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Tax\Helper;
 
 use Magento\Framework\Object as MagentoObject;
@@ -122,6 +125,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      *
      * @param $inputArray
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Api\Data\OrderTaxDetailsInterface
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function mapOrderTaxItemDetail($inputArray)
     {

@@ -51,6 +51,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Is load default (admin) store
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getLoadDefault()
     {

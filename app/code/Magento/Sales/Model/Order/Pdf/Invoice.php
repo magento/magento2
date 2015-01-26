@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Pdf;
 
 /**
  * Sales Order Invoice PDF model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Invoice extends AbstractPdf
 {

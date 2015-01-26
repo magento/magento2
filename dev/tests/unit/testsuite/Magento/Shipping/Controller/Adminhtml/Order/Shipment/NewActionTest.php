@@ -86,6 +86,9 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageTitleMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);

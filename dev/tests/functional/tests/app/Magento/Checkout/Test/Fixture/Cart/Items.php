@@ -6,8 +6,8 @@
 
 namespace Magento\Checkout\Test\Fixture\Cart;
 
-use Mtf\Fixture\FixtureInterface;
-use Mtf\ObjectManager;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\ObjectManager;
 
 /**
  * Class Item

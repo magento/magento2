@@ -6,5 +6,5 @@
 require_once dirname(__DIR__) . '/' . 'bootstrap.php';
 
 $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-$objectManager->create('Mtf\Util\Generate\Repository')->launch();
-\Mtf\Util\Generate\GenerateResult::displayResults();
+$objectManager->create('Magento\Mtf\Util\Generate\Repository')->launch();
+\Magento\Mtf\Util\Generate\GenerateResult::displayResults();

@@ -9,6 +9,10 @@ namespace Magento\Core\App\Router;
 
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Base implements \Magento\Framework\App\RouterInterface
 {
     /**
@@ -117,6 +121,8 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param string $routerId
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\App\Router\ActionList $actionList,
@@ -254,6 +260,8 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param array $params
      * @return \Magento\Framework\App\Action\Action|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function matchAction(\Magento\Framework\App\RequestInterface $request, array $params)
     {
@@ -345,6 +353,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\RequestInterface $request
      * @param string $path
      * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function _checkShouldBeSecure(\Magento\Framework\App\RequestInterface $request, $path = '')
     {

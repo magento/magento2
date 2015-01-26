@@ -7,7 +7,7 @@
 namespace Magento\Integration\Test\Constraint;
 
 use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertIntegrationTokensPopup

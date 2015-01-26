@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -33,7 +32,7 @@ class Collection
      *
      * @return void
      */
-    public function initialize($definitions)
+    public function initialize(array $definitions)
     {
         $this->definitions = $definitions;
     }
@@ -54,7 +53,7 @@ class Collection
      * Add new definition for instance
      *
      * @param string $instance
-     * @param array $arguments
+     * @param array|null $arguments
      *
      * @return void
      */
@@ -67,7 +66,7 @@ class Collection
      * Returns instance arguments
      *
      * @param string $instanceName
-     * @return null
+     * @return null|array
      */
     public function getInstanceArguments($instanceName)
     {

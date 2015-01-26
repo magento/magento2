@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Api\Data\AddressInterface;

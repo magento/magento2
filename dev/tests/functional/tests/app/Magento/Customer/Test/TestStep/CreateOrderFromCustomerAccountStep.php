@@ -7,7 +7,7 @@
 namespace Magento\Customer\Test\TestStep;
 
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class CreateOrderFromCustomerAccountStep

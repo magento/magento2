@@ -131,6 +131,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param int $time
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _cleanCustomers($time)
     {

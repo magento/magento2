@@ -33,6 +33,7 @@ class Item extends \Magento\Framework\Object
      * Get is empty indicator
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsEmpty()
     {
