@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Eav\Plugin\Model\Resource\Entity;
 
 use Magento\TestFramework\Helper\ObjectManager;

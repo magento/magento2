@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;

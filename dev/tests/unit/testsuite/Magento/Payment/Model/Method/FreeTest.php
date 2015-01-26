@@ -18,17 +18,25 @@ class FreeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentData  = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->currencyPrice = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
 
+        $context = $this->getMock('\Magento\Framework\Model\Context', ['getEventDispatcher'], [], '', false);
+        $eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
+        $context->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
+
+        $registry = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
+        $metadataService = $this->getMock('\Magento\Framework\Api\MetadataServiceInterface');
+        $customAttributeBuilder = $this->getMock('\Magento\Framework\Api\AttributeDataBuilder', [], [], '', false);
+
         $this->methodFree = new \Magento\Payment\Model\Method\Free(
-            $eventManager,
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeBuilder,
             $paymentData,
             $this->scopeConfig,
-            $logger,
             $this->currencyPrice
         );
     }

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Wishlist\Helper;
 
 class RssTest extends \PHPUnit_Framework_TestCase

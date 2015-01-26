@@ -7,6 +7,9 @@ namespace Magento\Shipping\Model\Order\Pdf;
 
 use Magento\Shipping\Helper\Carrier;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 {
     /**
@@ -142,6 +145,10 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      *
      * @param  \Zend_Pdf_Page $page
      * @return \Magento\Shipping\Model\Order\Pdf\Packaging
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _drawPackageBlock(\Zend_Pdf_Page $page)
     {

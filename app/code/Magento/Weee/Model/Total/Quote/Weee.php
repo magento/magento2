@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Weee\Model\Total\Quote;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -126,6 +129,8 @@ class Weee extends AbstractTotal
      * @param   \Magento\Quote\Model\Quote\Address $address
      * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  void|$this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _process(\Magento\Quote\Model\Quote\Address $address, $item)
     {
@@ -311,6 +316,7 @@ class Weee extends AbstractTotal
      *
      * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote\Address $address)
     {

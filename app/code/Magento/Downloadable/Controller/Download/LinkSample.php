@@ -15,6 +15,7 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
      * Download link's sample action
      *
      * @return ResponseInterface
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {

@@ -10,6 +10,7 @@ use Magento\TestFramework\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class LayerTest extends \PHPUnit_Framework_TestCase
 {
