@@ -95,7 +95,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Review\Model\Resource\Rating\Option $ratingOptions
-     * * @param string|null $resourcePrefix
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,

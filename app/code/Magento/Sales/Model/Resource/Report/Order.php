@@ -42,7 +42,8 @@ class Order extends AbstractReport
         \Magento\Sales\Model\Resource\Report\Order\UpdatedatFactory $updateDatFactory,
         $resourcePrefix = null
     ) {
-        parent::__construct($resource,
+        parent::__construct(
+            $resource,
             $logger,
             $localeDate,
             $reportsFlagFactory,

@@ -317,6 +317,7 @@ class Source extends AbstractEav
      *
      * @param string|null $table
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getIdxTable($table = null)
     {

@@ -111,6 +111,7 @@ class Engine extends AbstractDb implements EngineInterface
      * @param array $index
      * @param string $entity 'product'|'cms'
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function saveEntityIndex($entityId, $storeId, $index, $entity = 'product')
     {
@@ -130,6 +131,7 @@ class Engine extends AbstractDb implements EngineInterface
      * @param array $entityIndexes
      * @param string $entity 'product'|'cms'
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function saveEntityIndexes($storeId, $entityIndexes, $entity = 'product')
     {
@@ -213,6 +215,7 @@ class Engine extends AbstractDb implements EngineInterface
      * @param int $entityId
      * @param string $entity 'product'|'cms'
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cleanIndex($storeId = null, $entityId = null, $entity = 'product')
     {

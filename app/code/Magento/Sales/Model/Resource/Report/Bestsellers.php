@@ -47,6 +47,7 @@ class Bestsellers extends AbstractReport
      * @param \Magento\Sales\Model\Resource\Helper $salesResourceHelper
      * @param array $ignoredProductTypes
      * @param string|null $resourcePrefix
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,

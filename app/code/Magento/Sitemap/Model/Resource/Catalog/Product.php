@@ -93,6 +93,7 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Eav\Model\ConfigFactory $eavConfigFactory
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param string|null $resourcePrefix
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
