@@ -50,6 +50,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     public function getValueDataProvider()
     {
         $testTimestamp = strtotime('2014-05-18 12:08:16');
+
         return [
             [
                 [
@@ -57,14 +58,14 @@ class DateTest extends \PHPUnit_Framework_TestCase
                     'time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
                     'value' => $testTimestamp,
                 ],
-                date('n/j/y g:i A', $testTimestamp),
+                date('n/j/y g:i a', $testTimestamp),
             ],
             [
                 [
                     'time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
                     'value' => $testTimestamp,
                 ],
-                date('g:i A', $testTimestamp)
+                date('g:i a', $testTimestamp)
             ],
             [
                 [
