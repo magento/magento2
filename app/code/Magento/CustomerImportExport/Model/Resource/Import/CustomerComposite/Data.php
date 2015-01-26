@@ -37,7 +37,7 @@ class Data extends \Magento\ImportExport\Model\Resource\Import\Data
         $resourcePrefix = null,
         array $arguments = []
     ) {
-        parent::__construct($resource, $coreHelper, $arguments, $resourcePrefix);
+        parent::__construct($resource, $coreHelper, $resourcePrefix, $arguments);
 
         if (isset($arguments['entity_type'])) {
             $this->_entityType = $arguments['entity_type'];

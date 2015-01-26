@@ -50,7 +50,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     ) {
         $this->_validator = $validator;
         $this->gridPool = $gridPool;
-        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator, $resourcePrefix);
+        parent::__construct($resource, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }
 
     /**

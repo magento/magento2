@@ -46,7 +46,7 @@ class Comment extends Entity implements CreditmemoCommentResourceInterface
         $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator, $resourcePrefix);
+        parent::__construct($resource, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }
 
     /**
