@@ -303,16 +303,22 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $buyRequest = new \Magento\Framework\Object();
         $expectedMsg = "Please specify the quantity of product(s).";
 
-        $this->assertEquals($expectedMsg,
-            $this->_model->prepareForCartAdvanced($buyRequest, $this->product));
+        $this->assertEquals(
+            $expectedMsg,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
+        );
 
         $buyRequest->setSuperGroup([]);
-        $this->assertEquals($expectedMsg,
-            $this->_model->prepareForCartAdvanced($buyRequest, $this->product));
+        $this->assertEquals(
+            $expectedMsg,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
+        );
 
         $buyRequest->setSuperGroup(1);
-        $this->assertEquals($expectedMsg,
-            $this->_model->prepareForCartAdvanced($buyRequest, $this->product));
+        $this->assertEquals(
+            $expectedMsg,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
+        );
     }
 
     public function testPrepareForCartAdvancedNoProductsStrictTrue()
@@ -326,8 +332,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
         $this->product->expects($this->once())->method('getData')->will($this->returnValue($associatedProducts));
 
-        $this->assertEquals($expectedMsg,
-            $this->_model->prepareForCartAdvanced($buyRequest, $this->product));
+        $this->assertEquals(
+            $expectedMsg,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
+        );
     }
 
     public function testPrepareForCartAdvancedNoProductsStrictFalse()
@@ -340,8 +348,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
         $this->product->expects($this->once())->method('getData')->will($this->returnValue($associatedProducts));
 
-        $this->assertEquals([0 => $this->product],
-            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE));
+        $this->assertEquals(
+            [0 => $this->product],
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
+        );
     }
 
     public function testPrepareForCartAdvancedWithProductsStrictFalseStringResult()
@@ -369,8 +379,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
         $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
 
-        $this->assertEquals($associatedPrepareResult,
-            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE));
+        $this->assertEquals(
+            $associatedPrepareResult,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
+        );
     }
 
     public function testPrepareForCartAdvancedWithProductsStrictFalseEmptyArrayResult()
@@ -399,8 +411,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
         $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
 
-        $this->assertEquals($expectedMsg,
-            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE));
+        $this->assertEquals(
+            $expectedMsg,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
+        );
     }
 
     public function testPrepareForCartAdvancedWithProductsStrictFalse()
@@ -428,8 +442,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
         $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
 
-        $this->assertEquals([$this->product],
-            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE));
+        $this->assertEquals(
+            [$this->product],
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product, Grouped::PROCESS_MODE_LITE)
+        );
     }
 
     public function testPrepareForCartAdvancedWithProductsStrictTrue()
@@ -457,7 +473,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
         $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
 
-        $this->assertEquals($associatedPrepareResult,
-            $this->_model->prepareForCartAdvanced($buyRequest, $this->product));
+        $this->assertEquals(
+            $associatedPrepareResult,
+            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
+        );
     }
 }
