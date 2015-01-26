@@ -276,7 +276,6 @@ define([
 
     domReady(function () {
         $('body')
-            .pageCache()
             .msgBox()
             .formKey();
     });
