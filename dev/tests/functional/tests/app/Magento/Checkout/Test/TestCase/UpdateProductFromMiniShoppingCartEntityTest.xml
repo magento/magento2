@@ -12,21 +12,18 @@
             <data name="originalProduct">catalogProductSimple::with_two_custom_option</data>
             <data name="checkoutData/preset">forUpdateMiniShoppingCart</data>
             <data name="constraint">assertProductQtyInMiniShoppingCart, assertProductQtyInShoppingCart</data>
-            <data name="issue"></data>
         </variation>
         <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation2">
             <data name="description">Update Configurable and verify previous product was updated to new one in shopping cart and mini shopping cart</data>
             <data name="originalProduct">configurableProductInjectable::default</data>
             <data name="checkoutData/preset">forUpdateMiniShoppingCart</data>
             <data name="constraint">assertCartItemsOptions, assertProductQtyInMiniShoppingCart, assertProductQtyInShoppingCart, assertProductOptionsAbsentInShoppingCart</data>
-            <data name="issue"></data>
         </variation>
         <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation3">
             <data name="description">Update Bundle and verify  previous product was updated to new one in shopping cart and mini shopping cart</data>
             <data name="originalProduct">bundleProduct::bundle_fixed_product</data>
             <data name="checkoutData/preset">forUpdateMiniShoppingCart</data>
             <data name="constraint">assertCartItemsOptions, assertProductQtyInMiniShoppingCart, assertProductQtyInShoppingCart, assertProductOptionsAbsentInShoppingCart</data>
-            <data name="issue"></data>
         </variation>
         <variation name="UpdateProductFromMiniShoppingCartEntityTestVariation4">
             <data name="description">Update Downloadable and check previous link was updated to new one in shopping cart and mini shopping cart</data>

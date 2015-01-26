@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../etc/global/variations.xsd">
     <testCase name="DeleteAdminUserEntityTest">
         <variation name="DeleteAdminUserEntityTestVariation1">
-            <data name="isDefaultUser">0</data>
             <data name="constraint">assertImpossibleDeleteYourOwnAccount, assertUserInGrid</data>
         </variation>
         <variation name="DeleteAdminUserEntityTestVariation2">

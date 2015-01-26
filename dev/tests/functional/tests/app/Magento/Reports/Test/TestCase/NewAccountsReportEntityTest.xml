@@ -33,7 +33,6 @@
         </variation>
         <variation name="NewAccountsReportEntityTestVariation4">
             <data name="customer/dataSet">default</data>
-            <data name="total">0</data>
             <data name="customersReport/report_from">m/d/Y 12:00 a+1 day</data>
             <data name="customersReport/report_to">m/d/Y 12:00 a+1 day</data>
             <data name="customersReport/report_period">Day</data>

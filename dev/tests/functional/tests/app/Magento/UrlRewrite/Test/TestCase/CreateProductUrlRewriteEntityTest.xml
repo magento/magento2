@@ -27,7 +27,6 @@
             <data name="urlRewrite/data/redirect_type">No</data>
             <data name="urlRewrite/data/description">description_%isolation%</data>
             <data name="constraint">assertUrlRewriteSaveMessage</data>
-            <data name="tag"></data>
         </variation>
         <variation name="CreateProductUrlRewriteEntityTestVariation3">
             <data name="description">Create Product URL Rewrites with Temporary redirect</data>
@@ -38,7 +37,6 @@
             <data name="urlRewrite/data/redirect_type">Temporary (302)</data>
             <data name="urlRewrite/data/description">description_%isolation%</data>
             <data name="constraint">assertUrlRewriteSaveMessage, assertUrlRewriteProductRedirect</data>
-            <data name="tag"></data>
         </variation>
         <variation name="CreateProductUrlRewriteEntityTestVariation4">
             <data name="description">Create Product URL Rewrites with Permanent redirect</data>
@@ -49,7 +47,6 @@
             <data name="urlRewrite/data/redirect_type">Permanent (301)</data>
             <data name="urlRewrite/data/description">description_%isolation%</data>
             <data name="constraint">assertUrlRewriteSaveMessage, assertUrlRewriteProductRedirect</data>
-            <data name="tag"></data>
         </variation>
     </testCase>
 </config>

@@ -9,18 +9,12 @@
     <testCase name="UpdateIntegrationEntityTest">
         <variation name="UpdateIntegrationEntityTestVariation1">
             <data name="integration/data/name">Integration_%isolation%</data>
-            <data name="integration/data/email">-</data>
             <data name="integration/data/endpoint">https://endpoint.com</data>
             <data name="integration/data/identity_link_url">https://testlink.com</data>
-            <data name="integration/data/resource_access">-</data>
-            <data name="integration/data/resources">-</data>
             <data name="constraint">assertIntegrationSuccessSaveMessage, assertIntegrationForm, assertIntegrationInGrid</data>
         </variation>
         <variation name="UpdateIntegrationEntityTestVariation2">
             <data name="integration/data/name">Integration_%isolation%</data>
-            <data name="integration/data/email">-</data>
-            <data name="integration/data/endpoint">-</data>
-            <data name="integration/data/identity_link_url">-</data>
             <data name="integration/data/resource_access">Custom</data>
             <data name="integration/data/resources">Sales</data>
             <data name="constraint">assertIntegrationSuccessSaveMessage, assertIntegrationForm, assertIntegrationInGrid</data>

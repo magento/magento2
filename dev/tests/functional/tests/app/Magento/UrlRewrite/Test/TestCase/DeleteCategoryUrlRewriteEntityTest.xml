@@ -10,7 +10,6 @@
         <variation name="DeleteCategoryUrlRewriteEntityTestVariation1">
             <data name="urlRewrite/data/target_path/entity">catalog/category/view/id/%category::default%</data>
             <data name="urlRewrite/data/redirect_type">No</data>
-            <data name="urlRewrite/data/request_path">-</data>
             <data name="constraint">assertUrlRewriteDeletedMessage, assertPageByUrlRewriteIsNotFound</data>
         </variation>
         <variation name="DeleteCategoryUrlRewriteEntityTestVariation2">

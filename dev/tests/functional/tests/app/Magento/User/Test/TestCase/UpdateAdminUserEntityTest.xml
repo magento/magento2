@@ -15,36 +15,18 @@
             <data name="user/data/email">NewEmail%isolation%@example.com</data>
             <data name="user/data/password">123123qa</data>
             <data name="user/data/password_confirmation">123123qa</data>
-            <data name="user/data/is_active">-</data>
-            <data name="user/data/role_id/dataSet">-</data>
-            <data name="loginAsDefaultAdmin">0</data>
             <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserSuccessLogin</data>
             <data name="user/data/current_password">123123q</data>
         </variation>
         <variation name="UpdateAdminUserEntityTestVariation2">
             <data name="initialUser/dataSet">custom_admin_with_default_role</data>
-            <data name="user/data/username">-</data>
-            <data name="user/data/firstname">-</data>
-            <data name="user/data/lastname">-</data>
-            <data name="user/data/email">-</data>
-            <data name="user/data/password">-</data>
-            <data name="user/data/password_confirmation">-</data>
-            <data name="user/data/is_active">-</data>
             <data name="user/data/role_id/dataSet">role_sales</data>
-            <data name="loginAsDefaultAdmin">0</data>
             <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserSuccessLogin, assertUserRoleSalesRestrictedAccess</data>
             <data name="user/data/current_password">123123q</data>
         </variation>
         <variation name="UpdateAdminUserEntityTestVariation3">
             <data name="initialUser/dataSet">custom_admin_with_default_role</data>
-            <data name="user/data/username">-</data>
-            <data name="user/data/firstname">-</data>
-            <data name="user/data/lastname">-</data>
-            <data name="user/data/email">-</data>
-            <data name="user/data/password">-</data>
-            <data name="user/data/password_confirmation">-</data>
             <data name="user/data/is_active">Inactive</data>
-            <data name="user/data/role_id/dataSet">-</data>
             <data name="loginAsDefaultAdmin">1</data>
             <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserWrongCredentialsMessage</data>
             <data name="user/data/current_password">123123q</data>

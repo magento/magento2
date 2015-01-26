@@ -9,7 +9,6 @@
     <testCase name="ApplySeveralCatalogPriceRuleEntityTest">
         <variation name="ApplySeveralCatalogPriceRuleEntityTestVariation1">
             <data name="catalogRulesOriginal/priority_0">catalog_price_rule_priority_0</data>
-            <data name="catalogRulesOriginal/priority_1">-</data>
             <data name="catalogRulesOriginal/priority_2">catalog_price_rule_priority_2</data>
             <data name="price/sub_total">100</data>
             <data name="price/grand_total">40</data>

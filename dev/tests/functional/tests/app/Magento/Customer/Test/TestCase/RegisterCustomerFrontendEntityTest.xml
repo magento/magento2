@@ -16,7 +16,6 @@
             <data name="customer/data/password">123123q</data>
             <data name="customer/data/password_confirmation">123123q</data>
             <data name="constraint">assertCustomerSuccessRegisterMessage, assertCustomerInGrid</data>
-            <data name="tag"></data>
         </variation>
         <variation name="RegisterCustomerFrontendEntityTestVariation2">
             <data name="description">Register new customer with subscribing</data>
@@ -27,7 +26,6 @@
             <data name="customer/data/password">123123q</data>
             <data name="customer/data/password_confirmation">123123q</data>
             <data name="constraint">assertCustomerSuccessRegisterMessage, assertCustomerInGrid, assertCustomerForm, assertCustomerIsSubscribedToNewsletter</data>
-            <data name="tag"></data>
         </variation>
         <variation name="RegisterCustomerFrontendEntityTestVariation3">
             <data name="description">MAGETWO-12394: Register Customer</data>

@@ -10,7 +10,6 @@
         <variation name="ProductsInCartReportEntityVariation1">
             <data name="product/dataSet">default</data>
             <data name="carts">1</data>
-            <data name="isGuest">0</data>
             <data name="constraint">assertProductInCartResult</data>
         </variation>
         <variation name="ProductsInCartReportEntityVariation2">

@@ -16,7 +16,6 @@
             <data name="user/data/password_confirmation">123123q</data>
             <data name="user/data/is_active">Active</data>
             <data name="user/data/role_id/dataSet">Administrators</data>
-            <data name="isDuplicated">-</data>
             <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserSuccessLogin</data>
             <data name="user/data/current_password">123123q</data>
         </variation>
@@ -29,12 +28,10 @@
             <data name="user/data/password_confirmation">123123q</data>
             <data name="user/data/is_active">Inactive</data>
             <data name="user/data/role_id/dataSet">Administrators</data>
-            <data name="isDuplicated">-</data>
             <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserWrongCredentialsMessage</data>
             <data name="user/data/current_password">123123q</data>
         </variation>
         <variation name="CreateAdminUserEntityTestVariation3">
-            <data name="user/data/username">-</data>
             <data name="user/data/firstname">FirstName%isolation%</data>
             <data name="user/data/lastname">LastName%isolation%</data>
             <data name="user/data/email">email%isolation%@example.com</data>
@@ -50,7 +47,6 @@
             <data name="user/data/username">AdminUser%isolation%</data>
             <data name="user/data/firstname">FirstName%isolation%</data>
             <data name="user/data/lastname">LastName%isolation%</data>
-            <data name="user/data/email">-</data>
             <data name="user/data/password">123123q</data>
             <data name="user/data/password_confirmation">123123q</data>
             <data name="user/data/is_active">Active</data>
@@ -67,8 +63,6 @@
             <data name="user/data/password">123123q</data>
             <data name="user/data/password_confirmation">123123q</data>
             <data name="user/data/is_active">Active</data>
-            <data name="user/data/role_id/dataSet">-</data>
-            <data name="isDuplicated">-</data>
             <data name="constraint">assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserWrongCredentialsMessage</data>
             <data name="user/data/current_password">123123q</data>
         </variation>
@@ -80,8 +74,6 @@
             <data name="user/data/password">123123q</data>
             <data name="user/data/password_confirmation">123123q</data>
             <data name="user/data/is_active">Active</data>
-            <data name="user/data/role_id/dataSet">-</data>
-            <data name="isDuplicated">-</data>
             <data name="constraint">assertUserInvalidEmailMessage</data>
             <data name="user/data/current_password">123123q</data>
         </variation>

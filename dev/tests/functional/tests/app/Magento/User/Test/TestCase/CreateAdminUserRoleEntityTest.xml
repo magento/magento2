@@ -16,7 +16,6 @@
         <variation name="CreateAdminUserRoleEntityTestVariation2">
             <data name="role/data/rolename">AdminRole%isolation%</data>
             <data name="role/data/resource_access">All</data>
-            <data name="role/data/roles_resources">-</data>
             <data name="constraint">assertRoleSuccessSaveMessage, assertRoleInGrid</data>
         </variation>
     </testCase>
