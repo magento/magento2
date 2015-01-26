@@ -338,7 +338,7 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
                 ->with($customerName)
                 ->willReturn($customerName);
 
-            $this->assertEquals('<span><a  >(Not customer-name?)</a></span>', $this->additional->toHtml());
+            $this->assertEquals('<span><a  >(Not you?)</a></span>', $this->additional->toHtml());
         } else {
             $this->assertEquals('', $this->additional->toHtml());
         }
