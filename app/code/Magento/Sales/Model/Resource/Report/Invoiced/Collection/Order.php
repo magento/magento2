@@ -94,6 +94,9 @@ class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractColl
         return parent::_initSelect();
     }
 
+    /**
+     * @return $this
+     */
     protected function _beforeLoad()
     {
         $this->getSelect()->columns($this->_getSelectedColumns());
