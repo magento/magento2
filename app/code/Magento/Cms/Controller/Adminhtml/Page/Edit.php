@@ -60,6 +60,7 @@ class Edit extends \Magento\Backend\App\Action
      * Edit CMS page
      *
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

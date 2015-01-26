@@ -13,6 +13,7 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @param string|null $coreRoute
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($coreRoute = null)
     {

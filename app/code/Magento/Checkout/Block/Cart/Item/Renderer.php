@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Block\Cart\Item;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -16,6 +19,7 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
  *
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setProductName(string)
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Renderer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
 {

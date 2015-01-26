@@ -12,6 +12,7 @@ use Magento\Framework\Model\Exception;
  * Catalog product option file type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
@@ -179,6 +180,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
      * @throws Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateUserValue($values)
     {

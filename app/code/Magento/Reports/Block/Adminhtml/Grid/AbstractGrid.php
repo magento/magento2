@@ -186,6 +186,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this|\Magento\Backend\Block\Widget\Grid
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareCollection()
     {
@@ -393,6 +395,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection $collection
      * @param \Magento\Framework\Object $filterData
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _addCustomFilter($collection, $filterData)
     {

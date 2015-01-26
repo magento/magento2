@@ -187,6 +187,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * Get note notification
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getNoteNotify()
     {

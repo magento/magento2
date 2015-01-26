@@ -3,8 +3,11 @@
  * Doc block for this file
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Doc block for this class
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class Magento_Test_Php_Exemplar_CodeStyleTest_phpcs_input_coding_style_classes_normal_class
 {

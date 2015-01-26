@@ -115,6 +115,7 @@ class Parameter
      * @return bool
      *
      * @see setIsBlob
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsBlob()
     {

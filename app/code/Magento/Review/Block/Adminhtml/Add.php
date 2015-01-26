@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Review\Block\Adminhtml;
 
 /**
@@ -37,8 +40,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
         ';
 
         $this->_formInitScripts[] = '
-            //<![CDATA[
-            require(["extjs/ext-tree-checkbox"], function(){
+            require(["jquery","prototype"], function(jQuery){
             window.review = function() {
                 return {
                     productInfoUrl : null,
@@ -54,7 +56,16 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
                     },
 
                     loadProductData : function() {
-                        var con = new Ext.lib.Ajax.request(\'POST\', review.productInfoUrl, {success:review.reqSuccess,failure:review.reqFailure}, {form_key:FORM_KEY});
+                        jQuery.ajax({
+                            type: "POST",
+                            url: review.productInfoUrl,
+                            data: {
+                                form_key: FORM_KEY
+                            },
+                            showLoader: true,
+                            success: review.reqSuccess,
+                            error: review.reqFailure
+                        });
                     },
 
                     showForm : function() {
@@ -81,8 +92,7 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
             '", {parameters:params, evalScripts: true,  onComplete:function(){ $(\'save_button\').disabled = false; } });
                     },
 
-                    reqSuccess :function(o) {
-                        var response = Ext.util.JSON.decode(o.responseText);
+                    reqSuccess :function(response) {
                         if( response.error ) {
                             alert(response.message);
                         } else if( response.id ){

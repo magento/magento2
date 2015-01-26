@@ -9,6 +9,7 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Customer entity resource model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
 {
@@ -40,6 +41,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
@@ -182,6 +184,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param \Magento\Customer\Model\Customer $customer
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveAddresses(\Magento\Customer\Model\Customer $customer)
     {

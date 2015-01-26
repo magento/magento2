@@ -13,6 +13,7 @@ use Magento\Framework\Object;
 
 /**
  * Shopping cart model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cart extends Object implements CartInterface
 {
@@ -102,6 +103,7 @@ class Cart extends Object implements CartInterface
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param ProductRepositoryInterface $productRepository
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -330,6 +332,7 @@ class Cart extends Object implements CartInterface
      * @param \Magento\Framework\Object|int|array $requestInfo
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addProduct($productInfo, $requestInfo = null)
     {
@@ -473,6 +476,8 @@ class Cart extends Object implements CartInterface
      * @param  array $data
      * @return $this
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function updateItems($data)
     {
@@ -657,6 +662,7 @@ class Cart extends Object implements CartInterface
      * @throws \Magento\Framework\Model\Exception
      *
      * @see \Magento\Quote\Model\Quote::updateItem()
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function updateItem($itemId, $requestInfo = null, $updatingParams = null)
     {

@@ -13,6 +13,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Search\Dynamic\Algorithm;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Auto implements AlgorithmInterface
 {
     const MIN_RANGE_POWER = 10;
