@@ -34,7 +34,7 @@ class ImmutablePathAssetTest extends AbstractAssetTestCase
         $this->_asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
         $this->_adapter->expects($this->once())->method('minify')->with('content')->will($this->returnValue('mini'));
         $this->_staticViewDir->expects($this->once())->method('writeFile')->with($this->anything(), 'mini');
-        $this->assertEquals('test/library.js', $this->_model->getFilePath());
-        $this->assertEquals('http://example.com/test/library.js', $this->_model->getUrl());
+        $this->assertEquals('test/admin.js', $this->_model->getFilePath());
+        $this->assertEquals('http://example.com/test/admin.js', $this->_model->getUrl());
     }
 }
