@@ -1,0 +1,47 @@
+<?php
+/**
+ *
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Version\Controller\Index;
+
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ProductMetadataInterface;
+
+/**
+ * Magento Version controller
+ */
+class Index extends Action
+{
+    const PRODUCT_NAME = "Magento";
+
+    /**
+     * @var ProductMetadataInterface
+     */
+    protected $_productMetadata;
+
+    /**
+     * @param Context $context
+     * @param ProductMetadataInterface $productMetadata
+     */
+    public function __construct(Context $context, ProductMetadataInterface $productMetadata) {
+        $this->_productMetadata = $productMetadata;
+        parent::__construct($context);
+    }
+
+    /**
+     * Get product version and edition
+     *
+     * @return void
+     */
+    public function execute()
+    {
+        $this->getResponse()->setBody(
+            self::PRODUCT_NAME . '/' .
+            $this->_productMetadata->getVersion() . ' (' .
+            $this->_productMetadata->getEdition() . ')'
+        );
+    }
+}
