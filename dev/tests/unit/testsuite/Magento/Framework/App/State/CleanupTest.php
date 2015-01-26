@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\State;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\View\Asset\Source;
 
 class CleanupTest extends \PHPUnit_Framework_TestCase
@@ -78,8 +79,8 @@ class CleanupTest extends \PHPUnit_Framework_TestCase
         $static = $this->getDirectoryCleanMock();
         $var = $this->getDirectoryCleanMock(Source::TMP_MATERIALIZATION_DIR);
         $this->filesystem->expects($this->exactly(2))->method('getDirectoryWrite')->will($this->returnValueMap([
-            [DirectoryList::STATIC_VIEW, $static],
-            [DirectoryList::VAR_DIR, $var],
+            [DirectoryList::STATIC_VIEW, DriverPool::FILE, $static],
+            [DirectoryList::VAR_DIR, DriverPool::FILE,  $var],
         ]));
         $this->object->clearMaterializedViewFiles();
     }
