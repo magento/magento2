@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Contact\Controller;
 
 class IndexTest extends \PHPUnit_Framework_TestCase

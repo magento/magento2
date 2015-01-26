@@ -338,6 +338,7 @@ abstract class AbstractAction extends \Magento\Framework\Object implements Actio
     /**
      * @param string $format
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function asString($format = '')
     {

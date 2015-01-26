@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Review\Block\Adminhtml\Edit;
 
 class FormTest extends \PHPUnit_Framework_TestCase

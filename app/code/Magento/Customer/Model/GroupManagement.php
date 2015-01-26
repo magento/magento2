@@ -17,6 +17,9 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Api\Data\GroupDataBuilder;
 use Magento\Customer\Model\GroupFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
 {
     const XML_PATH_DEFAULT_ID = 'customer/create_account/default_group';

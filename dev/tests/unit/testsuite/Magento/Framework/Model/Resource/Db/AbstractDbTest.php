@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Model\Resource\Db;
 
 class AbstractDbTest extends \PHPUnit_Framework_TestCase

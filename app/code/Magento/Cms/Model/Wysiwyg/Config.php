@@ -100,6 +100,7 @@ class Config extends \Magento\Framework\Object
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $windowSize
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Model\UrlInterface $backendUrl,

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
 class CustomergroupTest extends \PHPUnit_Framework_TestCase

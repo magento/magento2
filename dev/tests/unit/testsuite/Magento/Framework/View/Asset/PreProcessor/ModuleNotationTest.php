@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\View\Asset\PreProcessor;
 
 class ModuleNotationTest extends \PHPUnit_Framework_TestCase

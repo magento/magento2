@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Helper\Product;
 
 use Magento\Framework\View\Result\Page as ResultPage;
@@ -102,6 +104,8 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\Product $product
      * @param null|\Magento\Framework\Object $params
      * @return \Magento\Catalog\Helper\Product\View
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function initProductLayout(ResultPage $resultPage, $product, $params = null)
     {

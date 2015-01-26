@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Indexer\Product\Price;
 /**
  * Abstract action reindex class
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction
 {
@@ -444,6 +445,7 @@ abstract class AbstractAction
      *
      * @param array $changedIds
      * @return array Affected ids
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _reindexRows($changedIds = [])
     {

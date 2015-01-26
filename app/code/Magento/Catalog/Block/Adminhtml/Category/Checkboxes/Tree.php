@@ -78,6 +78,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\Tree
      * @param array|Node $node
      * @param int $level
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getNodeJson($node, $level = 1)
     {

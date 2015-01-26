@@ -7,6 +7,9 @@
  */
 namespace Magento\Eav\Model\Entity;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
@@ -768,6 +771,7 @@ class Setup extends \Magento\Framework\Module\DataSetup
      * @param array $option
      * @return void
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addAttributeOption($option)
     {
@@ -1217,6 +1221,8 @@ class Setup extends \Magento\Framework\Module\DataSetup
      *
      * @param array $entities
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function installEntities($entities = null)
     {

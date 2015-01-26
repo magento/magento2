@@ -44,6 +44,7 @@ class NavigationMode extends \Magento\Framework\Url
      * @param string $scopeType
      * @param \Magento\DesignEditor\Helper\Data $helper
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
