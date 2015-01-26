@@ -18,12 +18,27 @@ class Edit extends \Magento\Backend\App\Action
     protected $_coreRegistry = null;
 
     /**
-     * @param Action\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @var \Magento\Framework\View\Result\PageFactory
      */
-    public function __construct(Action\Context $context, \Magento\Framework\Registry $registry)
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory)
     {
-        $this->_coreRegistry = $registry;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -38,28 +53,23 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * Init actions
      *
-     * @return $this
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     protected function _initAction()
     {
         // load layout, set active menu and breadcrumbs
-        $this->_view->loadLayout();
-        $this->_setActiveMenu(
-            'Magento_Cms::cms_page'
-        )->_addBreadcrumb(
-            __('CMS'),
-            __('CMS')
-        )->_addBreadcrumb(
-            __('Manage Pages'),
-            __('Manage Pages')
-        );
-        return $this;
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Cms::cms_page')
+            ->addBreadcrumb(__('CMS'), __('CMS'))
+            ->addBreadcrumb(__('Manage Pages'), __('Manage Pages'));
+        return $resultPage;
     }
 
     /**
      * Edit CMS page
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -72,8 +82,10 @@ class Edit extends \Magento\Backend\App\Action
             $model->load($id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This page no longer exists.'));
-                $this->_redirect('*/*/');
-                return;
+                /** \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+                $resultRedirect = $this->resultRedirectFactory->create();
+
+                return $resultRedirect->setPath('*/*/');
             }
         }
 
@@ -87,13 +99,16 @@ class Edit extends \Magento\Backend\App\Action
         $this->_coreRegistry->register('cms_page', $model);
 
         // 5. Build edit form
-        $this->_initAction()->_addBreadcrumb(
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->_initAction();
+        $resultPage->addBreadcrumb(
             $id ? __('Edit Page') : __('New Page'),
             $id ? __('Edit Page') : __('New Page')
         );
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Pages'));
-        $this->_view->getPage()->getConfig()->getTitle()
+        $resultPage->getConfig()->getTitle()->prepend(__('Pages'));
+        $resultPage->getConfig()->getTitle()
             ->prepend($model->getId() ? $model->getTitle() : __('New Page'));
-        $this->_view->renderLayout();
+
+        return $resultPage;
     }
 }

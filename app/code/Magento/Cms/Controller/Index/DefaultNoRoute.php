@@ -11,15 +11,30 @@ namespace Magento\Cms\Controller\Index;
 class DefaultNoRoute extends \Magento\Framework\App\Action\Action
 {
     /**
-     *
-     * @return void
+     * @var \Magento\Framework\View\Result\LayoutFactory
+     */
+    protected $resultLayoutFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\LayoutFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+    ) {
+        $this->resultLayoutFactory = $resultLayoutFactory;
+        parent::__construct($context);
+    }
+
+    /**
+     * @return \Magento\Framework\View\Result\LayoutFactory
      */
     public function execute()
     {
-        $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
-        $this->getResponse()->setHeader('Status', '404 File not found');
-
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
+        $resultLayout = $this->resultLayoutFactory->create();
+        $resultLayout->setHeader('HTTP/1.1', '404 Not Found');
+        $resultLayout->setHeader('Status', '404 File not found');
+        return $resultLayout;
     }
 }
