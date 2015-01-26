@@ -124,6 +124,9 @@ class FileFactory
 
     /**
      * Call exit
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function callExit()
     {

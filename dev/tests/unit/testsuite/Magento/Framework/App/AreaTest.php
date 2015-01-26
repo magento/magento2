@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\App;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AreaTest extends \PHPUnit_Framework_TestCase
 {
     const SCOPE_ID = '1';

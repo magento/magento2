@@ -53,7 +53,7 @@ class ProcessorFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Magento\Framework\App\Config\Data\ProcessorFactory::get
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Magento\Framework\App\Config\Data\WrongBackendModel is not instance of \Magento\Framework\App\Config\Data\ProcessorInterface
+     * @expectedExceptionMessageRegExp /\w+\\WrongBackendModel is not instance of \w+\\ProcessorInterface/
      */
     public function testGetModelWithWrongInterface()
     {
