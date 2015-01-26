@@ -2,7 +2,8 @@
 /**
  * Product Media Attribute
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api\Data;
 
@@ -40,6 +41,7 @@ interface ProductAttributeMediaGalleryEntryInterface
      * Check if gallery entry is hidden from product page
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsDisabled();
 

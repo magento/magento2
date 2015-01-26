@@ -1,17 +1,19 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Customer\Api\Data\AddressDataBuilder as CustomerAddressBuilder;
 use Magento\Customer\Api\Data\RegionDataBuilder as CustomerAddressRegionBuilder;
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\Calculation;
 
 /**
  * Tax totals calculation model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Tax extends CommonTaxCollector
 {
@@ -229,6 +231,7 @@ class Tax extends CommonTaxCollector
      * @param Address $address
      * @param array $itemsByType
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function processExtraTaxables(Address $address, Array $itemsByType)
     {
@@ -280,6 +283,7 @@ class Tax extends CommonTaxCollector
      *
      * @param   Address $address
      * @return  $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function fetch(Address $address)
     {

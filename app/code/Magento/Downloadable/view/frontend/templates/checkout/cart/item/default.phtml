@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 $_item = $this->getItem();
@@ -67,7 +71,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                 <span class="msrp notice"><?php echo __('See price before order confirmation.'); ?></span>
                 <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
                 <a id="<?php echo $helpLinkId ?>" href="#" class="action help map"><?php echo __("What's this?"); ?></a>
-                <script type="text/javascript">
+                <script>
                     require(['prototype'], function () {
                         Catalog.Map.addHelpLink($('<?php echo $helpLinkId ?>'), "<?php echo __("What's this?") ?>");
                     });

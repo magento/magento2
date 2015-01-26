@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -156,6 +157,7 @@ class Data extends \Magento\Core\Helper\Data
      * Check if set `Clear on Logout` in config settings
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getClearOnLogout()
     {
@@ -190,6 +192,7 @@ class Data extends \Magento\Core\Helper\Data
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canProcess($observer)
     {

@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -26,6 +30,7 @@ use Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory;
  * @method \Magento\Wishlist\Model\Item setAddedAt(string $value)
  * @method string getDescription()
  * @method \Magento\Wishlist\Model\Item setDescription(string $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractModel implements ItemInterface
 {
@@ -131,6 +136,7 @@ class Item extends AbstractModel implements ItemInterface
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

@@ -1,12 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\Factory\Factory;
-use Mtf\Fixture\DataFixture;
-use Mtf\System\Config;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\DataFixture;
+use Magento\Mtf\ObjectManager;
+use Magento\Mtf\System\Config;
 
 class Product extends DataFixture
 {
@@ -57,8 +59,8 @@ class Product extends DataFixture
         if (isset($placeholders['categories'])) {
             $this->categories = $placeholders['categories'];
         } else {
-            $this->_placeholders['category::getCategoryName'] = [$this, 'categoryProvider'];
-            $this->_placeholders['category::getCategoryId'] = [$this, 'categoryProvider'];
+            $this->_placeholders['category::getName'] = [$this, 'categoryProvider'];
+            $this->_placeholders['category::getId'] = [$this, 'categoryProvider'];
         }
     }
 
@@ -178,8 +180,10 @@ class Product extends DataFixture
     protected function getCategory($key)
     {
         if (!isset($this->categories[$key])) {
-            $category = Factory::getFixtureFactory()->getMagentoCatalogCategory();
-            $category->switchData('subcategory');
+            $category = ObjectManager::getInstance()->create(
+                '\Magento\Catalog\Test\Fixture\Category',
+                ['dataSet' => 'default_subcategory']
+            );
             $category->persist();
             $this->categories[$key] = $category;
         }
@@ -206,7 +210,7 @@ class Product extends DataFixture
         $categoryIds = [];
         /** @var Category $category */
         foreach ($this->categories as $category) {
-            $categoryIds[] = $category->getCategoryId();
+            $categoryIds[] = $category->getId();
         }
         return $categoryIds;
     }

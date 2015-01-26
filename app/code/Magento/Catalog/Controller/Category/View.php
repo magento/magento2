@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Category;
 
@@ -10,6 +11,9 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Result\PageFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class View extends \Magento\Framework\App\Action\Action
 {
     /**
@@ -134,6 +138,8 @@ class View extends \Magento\Framework\App\Action\Action
      * Category view action
      *
      * @return \Magento\Framework\View\Result\Page
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

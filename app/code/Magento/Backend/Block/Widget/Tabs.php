@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
 
@@ -8,6 +9,7 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 
 /**
  * Tabs block
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Tabs extends \Magento\Backend\Block\Widget
 {
@@ -105,6 +107,7 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @param   array|\Magento\Framework\Object|string $tab
      * @return  $this
      * @throws  \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addTab($tabId, $tab)
     {
@@ -301,6 +304,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     /**
      * @param \Magento\Framework\Object|TabInterface $tab
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getTabIsHidden($tab)
     {
@@ -389,6 +393,7 @@ class Tabs extends \Magento\Backend\Block\Widget
      * @param string $tabOneId
      * @param string $tabTwoId
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function bindShadowTabs($tabOneId, $tabTwoId)
     {

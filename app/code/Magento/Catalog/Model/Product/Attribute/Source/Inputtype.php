@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Product attribute source input types
@@ -38,6 +41,7 @@ class Inputtype extends \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputt
      * Get product input types as option array
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function toOptionArray()
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
 
@@ -30,6 +31,10 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method Customer setPasswordHash($string)
  * @method string getPasswordHash()
  * @method string getConfirmation()
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
 {
@@ -218,6 +223,7 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -990,6 +996,8 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
      * (i.e. its change is requested)
      *
      * @return bool|string[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validate()
     {
@@ -1214,21 +1222,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     public function getEntityType()
     {
         return $this->_getResource()->getEntityType();
-    }
-
-    /**
-     * Return Entity Type ID
-     *
-     * @return int
-     */
-    public function getEntityTypeId()
-    {
-        $entityTypeId = $this->getData('entity_type_id');
-        if (!$entityTypeId) {
-            $entityTypeId = $this->getEntityType()->getId();
-            $this->setData('entity_type_id', $entityTypeId);
-        }
-        return $entityTypeId;
     }
 
     /**

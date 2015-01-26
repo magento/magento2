@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -61,7 +62,7 @@ class Observer
     public function salesQuoteSaveAfter($observer)
     {
         $quote = $observer->getEvent()->getQuote();
-        /* @var $quote \Magento\Sales\Model\Quote */
+        /* @var $quote \Magento\Quote\Model\Quote */
         if ($quote->getIsCheckoutCart()) {
             $this->_checkoutSession->getQuoteId($quote->getId());
         }

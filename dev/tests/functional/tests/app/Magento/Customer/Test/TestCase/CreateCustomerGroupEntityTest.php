@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\TestCase;
@@ -8,7 +9,7 @@ namespace Magento\Customer\Test\TestCase;
 use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupNew;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for CreateCustomerGroupEntity
@@ -21,11 +22,16 @@ use Mtf\TestCase\Injectable;
  * 5.Click "Save Customer Group" button.
  * 6.Perform all assertions.
  *
- * @group Customer_Groups_(MX)
+ * @group Customer_Groups_(CS)
  * @ZephyrId MAGETWO-23422
  */
 class CreateCustomerGroupEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Customer group index
      *

@@ -1,11 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\GiftMessage\Helper;
 
 /**
  * Gift Message helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Message extends \Magento\Core\Helper\Data
 {
@@ -70,6 +75,7 @@ class Message extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\Escaper $escaper
      * @param array $skipMessageCheck
      * @param bool $dbCompatibleMode
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -135,6 +141,7 @@ class Message extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\Object $entity
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool|string|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isMessagesAvailable($type, \Magento\Framework\Object $entity, $store = null)
     {
@@ -143,7 +150,7 @@ class Message extends \Magento\Core\Helper\Data
             if (!is_array($items) || empty($items)) {
                 return $this->_scopeConfig->getValue(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
             }
-            if ($entity instanceof \Magento\Sales\Model\Quote) {
+            if ($entity instanceof \Magento\Quote\Model\Quote) {
                 $_type = $entity->getIsMultiShipping() ? 'address_item' : 'item';
             } else {
                 $_type = 'order_item';
@@ -287,6 +294,7 @@ class Message extends \Magento\Core\Helper\Data
      * @param array $quote
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getAvailableForQuoteItems($quote, $store = null)
     {
@@ -304,6 +312,7 @@ class Message extends \Magento\Core\Helper\Data
      * @param array $items
      * @param \Magento\Store\Model\Store|int|null $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getAvailableForAddressItems($items, $store = null)
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
@@ -117,6 +118,7 @@ abstract class AbstractAction
      * @param array $tablesList
      * @param int|string $storeId
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _cleanOnFailure(array $tablesList, $storeId)
     {
@@ -182,6 +184,7 @@ abstract class AbstractAction
      * @param int $storeId
      * @param int|array $productIds Update child product(s) only
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _updateRelationProducts($storeId, $productIds = null)
     {

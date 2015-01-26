@@ -1,12 +1,13 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 //
 //    Common
 //--------------------------------------
 
-.responsive-common() {
+& when (@media-common = true) {
 
 .table-downloadable-products {
     .product-name {
@@ -78,7 +79,7 @@
     }
     .field.choice {
         box-sizing: border-box;
-        border-bottom: 1px solid #ebebeb;
+        border-bottom: 1px solid @color-gray92;
         padding-bottom: @indent-s-base;
         margin-bottom: @indent-s-base;
         &:extend(.clearer all);
@@ -122,7 +123,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-max-m(@break) when (@break = @screen-s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen-s) {
     .page-product-downloadable .product-options-wrapper {
         margin-bottom: @indent-m-base;
     }
@@ -138,7 +139,7 @@
         }
     }
     .page-product-downloadable .product-info-price ~ *:last-child:after {
-        border-bottom: 1px #c1c1c1 solid;
+        border-bottom: 1px @color-gray-light5 solid;
         content: '';
         display: block;
         height: 0;
@@ -151,7 +152,7 @@
 //
 // Product view Desktop
 //--------------------------------------
-.responsive-min-l(@break) when (@break = @screen-m) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen-m) {
 .page-product-downloadable {
         .product-add-form {
             &:extend(.clearer all);

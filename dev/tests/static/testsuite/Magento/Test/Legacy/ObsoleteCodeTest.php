@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -129,7 +130,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $this->_testObsoleteConstants($content);
                 $this->_testObsoletePropertySkipCalculate($content);
             },
-            \Magento\TestFramework\Utility\ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files.txt')
+            \Magento\TestFramework\Utility\ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files*')
         );
     }
 

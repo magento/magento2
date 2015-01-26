@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogInventory\Model;
 
 use Magento\Catalog\Model\Product\Type as ProductType;
@@ -74,6 +78,7 @@ class StockIndex implements StockIndexInterface
      * @param int $productId
      * @param int $websiteId
      * @return true
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function rebuild($productId = null, $websiteId = null)
     {
@@ -126,6 +131,7 @@ class StockIndex implements StockIndexInterface
      * @param int $qty
      * @param int $status
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processChildren(
         $productId,

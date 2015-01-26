@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Review\Test\Constraint;
 
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertProductReviewNotInGrid
@@ -41,16 +42,16 @@ class AssertProductReviewNotInGrid extends AbstractConstraint
      * Asserts Product Review not available in grid
      *
      * @param ReviewIndex $reviewIndex
-     * @param ReviewInjectable $review
+     * @param Review $review
      * @param string $gridStatus
-     * @param ReviewInjectable $reviewInitial
+     * @param Review $reviewInitial
      * @return void
      */
     public function processAssert(
         ReviewIndex $reviewIndex,
-        ReviewInjectable $review,
+        Review $review,
         $gridStatus = '',
-        ReviewInjectable $reviewInitial = null
+        Review $reviewInitial = null
     ) {
         $product = $reviewInitial === null
             ? $review->getDataFieldConfig('entity_id')['source']->getEntity()
@@ -69,11 +70,11 @@ class AssertProductReviewNotInGrid extends AbstractConstraint
      * Prepare filter for assert
      *
      * @param FixtureInterface $product
-     * @param ReviewInjectable $review
+     * @param Review $review
      * @param string $gridStatus
      * @return array
      */
-    public function prepareFilter(FixtureInterface $product, ReviewInjectable $review, $gridStatus)
+    public function prepareFilter(FixtureInterface $product, Review $review, $gridStatus)
     {
         $filter = [];
         foreach ($this->filter as $key => $item) {

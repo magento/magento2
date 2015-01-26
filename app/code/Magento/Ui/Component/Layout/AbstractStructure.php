@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Layout;
 
@@ -19,6 +20,7 @@ use Magento\Ui\DataProvider\Metadata;
 
 /**
  * Class AbstractStructure
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractStructure extends AbstractView
 {
@@ -88,6 +90,7 @@ class AbstractStructure extends AbstractView
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function prepare()
     {
@@ -203,6 +206,7 @@ class AbstractStructure extends AbstractView
     /**
      * @param array $dataSourceConfig
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function processDataSource(array $dataSourceConfig)
     {
@@ -441,6 +445,7 @@ class AbstractStructure extends AbstractView
      * @param string $dataScope
      * @param array $element
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function addElementToCollection(array & $collection, $elementName, $dataScope, array $element)
     {
@@ -539,6 +544,7 @@ class AbstractStructure extends AbstractView
      * @param array $one
      * @param array $two
      * @return int
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function sortChildren(array $one, array $two)
     {

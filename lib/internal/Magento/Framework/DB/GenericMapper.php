@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB;
 
@@ -86,6 +87,7 @@ class GenericMapper extends AbstractMapper
      * @param array $fields
      * @throws \Zend_Db_Select_Exception
      * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function mapFields(array $fields)
     {

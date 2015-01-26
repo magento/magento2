@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Service\V1\Data;
 
@@ -108,8 +109,8 @@ class CartMapperTest extends \PHPUnit_Framework_TestCase
         $methods = ['getId', 'getStoreId', 'getCreatedAt','getUpdatedAt', 'getConvertedAt', 'getIsActive',
             'getIsVirtual', 'getItemsCount', 'getItemsQty', 'getCheckoutMethod', 'getReservedOrderId', 'getOrigOrderId',
             'getAllItems', '__wakeUp', ];
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', $methods, [], '', false);
-        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', $methods, [], '', false);
+        $itemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$itemMock]));
         $expected = [
             Cart::ID => 12,

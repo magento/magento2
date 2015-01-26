@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart\Item;
 
@@ -86,8 +87,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         );
         $product->expects($this->any())->method('getName')->will($this->returnValue('Parent Product'));
 
-        /** @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
+        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
 
         $this->_renderer->setItem($item);

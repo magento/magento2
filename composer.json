@@ -2,13 +2,13 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.42.0-beta2",
+    "version": "0.42.0-beta4",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.4.11|~5.5.0",
+        "php": "~5.4.11|~5.5.0|~5.6.0",
         "zendframework/zend-stdlib": "2.3.1",
         "zendframework/zend-code": "2.3.1",
         "zendframework/zend-server": "2.3.1",
@@ -48,7 +48,8 @@
         "ext-curl": "*",
         "ext-iconv": "*",
         "sjparkinson/static-review": "~4.1",
-        "fabpot/php-cs-fixer": "~1.2"
+        "fabpot/php-cs-fixer": "~1.2",
+        "lusitanian/oauth": "~0.3"
     },
     "replace": {
         "magento/module-admin-notification": "self.version",
@@ -105,6 +106,7 @@
         "magento/module-payment": "self.version",
         "magento/module-persistent": "self.version",
         "magento/module-product-alert": "self.version",
+        "magento/module-quote": "self.version",
         "magento/module-reports": "self.version",
         "magento/module-require-js": "self.version",
         "magento/module-review": "self.version",
@@ -141,9 +143,7 @@
         "magento/language-pt_br": "self.version",
         "magento/language-zh_cn": "self.version",
         "magento/framework": "self.version",
-        "magento/project-setup": "0.1.0",
         "oyejorge/less.php": "1.7.0",
-        "symfony/yaml": "2.3.x-dev",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "components/handlebars.js": "1.3.0",
         "colinmollenhour/cache-backend-redis": "dev-master#193d377b7fb2e88595578b282fa01a62d1185abc",

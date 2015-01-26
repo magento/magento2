@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
 
@@ -33,7 +34,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\Model\Context'),
                 $objectManager->get('Magento\Framework\View\DesignInterface'),
                 $objectManager->get('Magento\Framework\Registry'),
-                $objectManager->get('Magento\Core\Model\App\Emulation'),
+                $objectManager->get('Magento\Store\Model\App\Emulation'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
                 $objectManager->create('Magento\Framework\Filesystem'),
                 $objectManager->create('Magento\Framework\View\Asset\Repository'),

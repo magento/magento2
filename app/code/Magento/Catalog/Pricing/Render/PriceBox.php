@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Pricing\Render;
 
@@ -38,6 +39,7 @@ class PriceBox extends PriceBoxRender
      * @param Data $coreDataHelper
      * @param Random $mathRandom
      * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -83,6 +85,7 @@ class PriceBox extends PriceBoxRender
      *
      * @param Product $product
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanDisplayQty(Product $product)
     {

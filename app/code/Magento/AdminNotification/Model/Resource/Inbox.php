@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Model\Resource;
 
@@ -57,6 +58,7 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\AdminNotification\Model\Inbox $object
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getNoticeStatus(\Magento\AdminNotification\Model\Inbox $object)
     {
@@ -86,6 +88,7 @@ class Inbox extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\AdminNotification\Model\Inbox $object
      * @param array $data
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function parse(\Magento\AdminNotification\Model\Inbox $object, array $data)
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Utility;
 
@@ -43,21 +44,21 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([], Files::init()->readLists(__DIR__ . '/_files/no_good.txt'));
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The glob() pattern 'bar/unknown' didn't return any result.
-     */
     public function testReadListsCorruptedDir()
     {
-        Files::init()->readLists(__DIR__ . '/_files/list_corrupted_dir.txt');
+        $result = Files::init()->readLists(__DIR__ . '/_files/list_corrupted_dir.txt');
+
+        foreach ($result as $path) {
+            $this->assertNotContains('bar/unknown', $path);
+        }
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The glob() pattern 'unknown.txt' didn't return any result.
-     */
     public function testReadListsCorruptedFile()
     {
-        Files::init()->readLists(__DIR__ . '/_files/list_corrupted_file.txt');
+        $result = Files::init()->readLists(__DIR__ . '/_files/list_corrupted_file.txt');
+
+        foreach ($result as $path) {
+            $this->assertNotContains('unknown.txt', $path);
+        }
     }
 }

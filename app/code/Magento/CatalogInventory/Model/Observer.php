@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogInventory\Model;
@@ -11,10 +12,11 @@ use Magento\CatalogInventory\Api\StockManagementInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Sales\Model\Quote\Item as QuoteItem;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
 
 /**
  * Catalog inventory module observer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
 {
@@ -332,7 +334,7 @@ class Observer
      */
     public function subtractQuoteInventory(EventObserver $observer)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $observer->getEvent()->getQuote();
 
         // Maybe we've already processed this quote in some event during order placement

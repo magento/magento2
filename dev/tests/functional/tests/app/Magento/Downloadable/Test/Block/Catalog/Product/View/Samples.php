@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Downloadable\Test\Block\Catalog\Product\View;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Samples
@@ -45,7 +46,7 @@ class Samples extends Block
      */
     public function getLinks()
     {
-        $links = $this->_rootElement->find($this->linkTitle)->getElements();
+        $links = $this->_rootElement->getElements($this->linkTitle);
         $linksData = [];
 
         foreach ($links as $link) {

@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Helper;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\Object;
-use Magento\Sales\Model\Quote\Item;
+use Magento\Quote\Model\Quote\Item;
 
 class CartTest extends \PHPUnit_Framework_TestCase
 {
@@ -99,7 +103,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testGetRemoveUrl()
     {
         $quoteItemId = 1;
-        $quoteItemMock = $this->getMock('\Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $quoteItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
         $quoteItemMock->expects($this->any())->method('getId')->will($this->returnValue($quoteItemId));
         $currentUrl = 'http://www.example.com/';
         $this->urlBuilderMock->expects($this->any())->method('getCurrentUrl')->will($this->returnValue($currentUrl));
@@ -119,7 +123,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function testGetQuote()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $this->assertEquals($quoteMock, $this->helper->getQuote());
     }
@@ -148,7 +152,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testGetIsVirtualQuote()
     {
         $isVirtual = true;
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue($isVirtual));
         $this->assertEquals($isVirtual, $this->helper->getIsVirtualQuote());
@@ -200,6 +204,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedPostData
      *
      * @dataProvider deletePostJsonDataProvider
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetDeletePostJson($id, $url, $isAjax, $expectedPostData)
     {
@@ -218,7 +223,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('getUrlEncoder')
             ->willReturn($this->urlEncoder);
 
-        $item = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $request = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
         $context->expects($this->once())
             ->method('getRequest')

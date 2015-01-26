@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -119,7 +120,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         if (!$this->_depends) {
             return '';
         }
-        return '<script type="text/javascript">
+        return '<script>
             require(["mage/adminhtml/form"], function(){
         new FormElementDependenceController(' .
             $this->_getDependsJson() .

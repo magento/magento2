@@ -2,7 +2,8 @@
 /**
  * Store loader
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\Storage;
 
@@ -13,6 +14,10 @@ use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory as WebsiteFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Db implements \Magento\Store\Model\StoreManagerInterface
 {
     /**
@@ -132,6 +137,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      * @param State $appState
      * @param bool $isSingleStoreAllowed
      * @param null $currentStore
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         StoreFactory $storeFactory,
@@ -178,6 +184,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      * Init store, group and website collections
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _initStores()
     {
@@ -282,6 +289,8 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      * @param null|string|bool|int|Store $storeId
      * @return Store
      * @throws \Magento\Framework\App\InitException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getStore($storeId = null)
     {
@@ -432,6 +441,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      * @param bool $withDefault
      * @param bool $codeKey
      * @return Group[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getGroups($withDefault = false, $codeKey = false)
     {

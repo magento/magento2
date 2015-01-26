@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /** @var \Magento\Checkout\Block\Onepage\Payment $_paymentBlock */
 $_paymentBlock = $this->getLayout()->getBlock('checkout.onepage.payment');
@@ -22,7 +25,7 @@ $_paymentBlock = $this->getLayout()->getBlock('checkout.onepage.payment');
         </li>
     <?php endforeach ?>
     </ol>
-    <script type="text/javascript">
+    <script>
 require([
     "jquery",
     "mage/mage"

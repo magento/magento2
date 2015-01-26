@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Session;
 
@@ -21,13 +22,14 @@ use Magento\Customer\Api\GroupManagementInterface;
  * @method int getCurrencyId()
  * @method Quote setOrderId($orderId)
  * @method int getOrderId()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Quote extends \Magento\Framework\Session\SessionManager
 {
     /**
      * Quote model object
      *
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Quote\Model\Quote
      */
     protected $_quote;
 
@@ -58,7 +60,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
     /**
      * Sales quote repository
      *
-     * @var \Magento\Sales\Model\QuoteRepository
+     * @var \Magento\Quote\Model\QuoteRepository
      */
     protected $quoteRepository;
 
@@ -82,10 +84,11 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param GroupManagementInterface $groupManagement
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -97,7 +100,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         CustomerRepositoryInterface $customerRepository,
-        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         GroupManagementInterface $groupManagement
@@ -126,7 +129,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
     /**
      * Retrieve quote model object
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {

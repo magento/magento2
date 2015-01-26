@@ -2,7 +2,8 @@
 /**
  * Magento session manager
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
 
@@ -342,6 +343,7 @@ class SessionManager implements SessionManagerInterface
      *
      * @param string $urlHost can be host or url
      * @return string {session_id_key}={session_id_encrypted}
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getSessionIdForHost($urlHost)
     {

@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\UrlRewrite\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertUrlRewriteCustomSearchRedirect
@@ -25,14 +26,14 @@ class AssertUrlRewriteCustomSearchRedirect extends AbstractConstraint
      *
      * @param UrlRewrite $initialRewrite
      * @param UrlRewrite $urlRewrite
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogCategoryView $categoryView
      * @return void
      */
     public function processAssert(
         UrlRewrite $initialRewrite,
         UrlRewrite $urlRewrite,
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogCategoryView $categoryView
     ) {
         $urlRequestPath = $urlRewrite->hasData('request_path')

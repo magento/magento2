@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -80,7 +81,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 [
                     'label' => __('Used Currently For'),
                     'container_id' => 'used_currently_for',
-                    'after_element_html' => '<script type="text/javascript">' .
+                    'after_element_html' => '<script>' .
                     (!$this->getEmailTemplate()->getSystemConfigPathsWhereUsedCurrently() ? '$(\'' .
                     'used_currently_for' .
                     '\').hide(); ' : '') .
@@ -96,7 +97,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 [
                     'label' => __('Used as Default For'),
                     'container_id' => 'used_default_for',
-                    'after_element_html' => '<script type="text/javascript">' .
+                    'after_element_html' => '<script>' .
                     (!(bool)$this->getEmailTemplate()->getOrigTemplateCode() ? '$(\'' .
                     'used_default_for' .
                     '\').hide(); ' : '') .

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\UrlRewrite\Block\Cms\Page;
 
@@ -8,6 +9,7 @@ namespace Magento\UrlRewrite\Block\Cms\Page;
  * CMS pages grid for URL rewrites
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Cms\Block\Adminhtml\Page\Grid
 {

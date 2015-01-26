@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -8,6 +9,9 @@
  */
 namespace Magento\Sales\Model\Convert;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Order extends \Magento\Framework\Object
 {
     /**
@@ -16,26 +20,6 @@ class Order extends \Magento\Framework\Object
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
-
-    /**
-     * @var \Magento\Sales\Model\QuoteFactory
-     */
-    protected $_quoteFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Quote\AddressFactory
-     */
-    protected $_quoteAddressFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Quote\PaymentFactory
-     */
-    protected $_quotePaymentFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Quote\ItemFactory
-     */
-    protected $_quoteItemFactory;
 
     /**
      * @var \Magento\Sales\Model\Order\Invoice
@@ -69,10 +53,6 @@ class Order extends \Magento\Framework\Object
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
-     * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory
-     * @param \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory
-     * @param \Magento\Sales\Model\Quote\ItemFactory $quoteItemFactory
      * @param \Magento\Sales\Model\Order\InvoiceFactory $orderInvoiceFactory
      * @param \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory
      * @param \Magento\Sales\Model\Order\ShipmentFactory $orderShipmentFactory
@@ -86,10 +66,6 @@ class Order extends \Magento\Framework\Object
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory,
-        \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory,
-        \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory,
-        \Magento\Sales\Model\Quote\ItemFactory $quoteItemFactory,
         \Magento\Sales\Model\Order\InvoiceFactory $orderInvoiceFactory,
         \Magento\Sales\Model\Order\Invoice\ItemFactory $invoiceItemFactory,
         \Magento\Sales\Model\Order\ShipmentFactory $orderShipmentFactory,
@@ -100,10 +76,6 @@ class Order extends \Magento\Framework\Object
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
-        $this->_quoteFactory = $quoteFactory;
-        $this->_quoteAddressFactory = $quoteAddressFactory;
-        $this->_quotePaymentFactory = $quotePaymentFactory;
-        $this->_quoteItemFactory = $quoteItemFactory;
         $this->_orderInvoiceFactory = $orderInvoiceFactory;
         $this->_invoiceItemFactory = $invoiceItemFactory;
         $this->_orderShipmentFactory = $orderShipmentFactory;
@@ -112,119 +84,6 @@ class Order extends \Magento\Framework\Object
         $this->_creditmemoItemFactory = $creditmemoItemFactory;
         $this->_objectCopyService = $objectCopyService;
         parent::__construct($data);
-    }
-
-    /**
-     * Converting order object to quote object
-     *
-     * @param \Magento\Sales\Model\Order $order
-     * @param null|\Magento\Sales\Model\Quote $quote
-     * @return \Magento\Sales\Model\Quote
-     */
-    public function toQuote(\Magento\Sales\Model\Order $order, $quote = null)
-    {
-        if (!$quote instanceof \Magento\Sales\Model\Quote) {
-            $quote = $this->_quoteFactory->create();
-        }
-
-        $quote->setStoreId($order->getStoreId())->setOrderId($order->getId());
-
-        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order', 'to_quote', $order, $quote);
-
-        $this->_eventManager->dispatch('sales_convert_order_to_quote', ['order' => $order, 'quote' => $quote]);
-        return $quote;
-    }
-
-    /**
-     * Convert order to shipping address
-     *
-     * @param   \Magento\Sales\Model\Order $order
-     * @return  \Magento\Sales\Model\Quote\Address
-     */
-    public function toQuoteShippingAddress(\Magento\Sales\Model\Order $order)
-    {
-        $address = $this->addressToQuoteAddress($order->getShippingAddress());
-
-        $this->_objectCopyService->copyFieldsetToTarget('sales_convert_order', 'to_quote_address', $order, $address);
-        return $address;
-    }
-
-    /**
-     * Convert order address to quote address
-     *
-     * @param   \Magento\Sales\Model\Order\Address $address
-     * @return  \Magento\Sales\Model\Quote\Address
-     */
-    public function addressToQuoteAddress(\Magento\Sales\Model\Order\Address $address)
-    {
-        $quoteAddress = $this->_quoteAddressFactory->create()->setStoreId(
-            $address->getStoreId()
-        )->setAddressType(
-            $address->getAddressType()
-        )->setCustomerId(
-            $address->getCustomerId()
-        )->setCustomerAddressId(
-            $address->getCustomerAddressId()
-        );
-
-        $this->_objectCopyService->copyFieldsetToTarget(
-            'sales_convert_order_address',
-            'to_quote_address',
-            $address,
-            $quoteAddress
-        );
-        return $quoteAddress;
-    }
-
-    /**
-     * Convert order payment to quote payment
-     *
-     * @param \Magento\Sales\Model\Order\Payment $payment
-     * @param null|\Magento\Sales\Model\Quote\Payment $quotePayment
-     * @return \Magento\Sales\Model\Quote\Payment
-     */
-    public function paymentToQuotePayment(\Magento\Sales\Model\Order\Payment $payment, $quotePayment = null)
-    {
-        if (!$quotePayment instanceof \Magento\Sales\Model\Quote\Payment) {
-            $quotePayment = $this->_quotePaymentFactory->create();
-        }
-
-        $quotePayment->setStoreId($payment->getStoreId())->setCustomerPaymentId($payment->getCustomerPaymentId());
-
-        $this->_objectCopyService->copyFieldsetToTarget(
-            'sales_convert_order_payment',
-            'to_quote_payment',
-            $payment,
-            $quotePayment
-        );
-        return $quotePayment;
-    }
-
-    /**
-     * Retrieve
-     *
-     * @param \Magento\Sales\Model\Order\Item $item
-     * @return \Magento\Sales\Model\Quote\Item
-     */
-    public function itemToQuoteItem(\Magento\Sales\Model\Order\Item $item)
-    {
-        $quoteItem = $this->_quoteItemFactory->create()->setStoreId(
-            $item->getOrder()->getStoreId()
-        )->setQuoteItemId(
-            $item->getId()
-        )->setProductId(
-            $item->getProductId()
-        )->setParentProductId(
-            $item->getParentProductId()
-        );
-
-        $this->_objectCopyService->copyFieldsetToTarget(
-            'sales_convert_order_item',
-            'to_quote_item',
-            $item,
-            $quoteItem
-        );
-        return $quoteItem;
     }
 
     /**

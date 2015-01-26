@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model\Session;
 
@@ -10,18 +11,29 @@ namespace Magento\Checkout\Model\Session;
 class SuccessValidator
 {
     /**
-     * Is valid session?
-     *
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     */
+    public function __construct(
+        \Magento\Checkout\Model\Session $checkoutSession
+    ) {
+        $this->checkoutSession = $checkoutSession;
+    }
+
+    /**
      * @return bool
      */
-    public function isValid(\Magento\Checkout\Model\Session $checkoutSession)
+    public function isValid()
     {
-        if (!$checkoutSession->getLastSuccessQuoteId()) {
+        if (!$this->checkoutSession->getLastSuccessQuoteId()) {
             return false;
         }
 
-        if (!$checkoutSession->getLastQuoteId() || !$checkoutSession->getLastOrderId()) {
+        if (!$this->checkoutSession->getLastQuoteId() || !$this->checkoutSession->getLastOrderId()) {
             return false;
         }
         return true;

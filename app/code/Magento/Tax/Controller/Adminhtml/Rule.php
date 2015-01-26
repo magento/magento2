@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -80,6 +81,7 @@ class Rule extends \Magento\Backend\App\Action
      *
      * @param array $postData
      * @return \Magento\Tax\Api\Data\TaxRuleInterface
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function populateTaxRule($postData)
     {

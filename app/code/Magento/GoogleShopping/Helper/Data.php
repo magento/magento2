@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\GoogleShopping\Helper;
 
@@ -85,6 +86,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $message \Exception message to parse
      * @param null|\Magento\Catalog\Model\Product $product
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function parseGdataExceptionMessage($message, $product = null)
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -10,6 +11,9 @@ namespace Magento\Cron\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Observer
 {
     /**#@+
@@ -117,6 +121,9 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function dispatch($observer)
     {

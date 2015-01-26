@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Model\Product\Type;
@@ -156,6 +157,7 @@ class Price
      * @param Product $childProduct
      * @param float $childProductQty
      * @return float
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getChildFinalPrice($product, $productQty, $childProduct, $childProductQty)
     {
@@ -242,6 +244,8 @@ class Price
      * @param   Product $product
      * @return  float|array
      * @deprecated (MAGETWO-31465)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getTierPrice($qty, $product)
     {
@@ -409,6 +413,7 @@ class Price
      * @param float $finalPrice
      * @return float
      * @deprecated (MAGETWO-31469)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _applyOptionsPrice($product, $qty, $finalPrice)
     {

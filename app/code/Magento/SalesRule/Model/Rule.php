@@ -1,10 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
 
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Shopping Cart Rule data model
@@ -62,6 +63,7 @@ use Magento\Sales\Model\Quote\Address;
  * @method \Magento\SalesRule\Model\Rule setCouponCode(string $value)
  * @method int getRuleId()
  * @method \Magento\SalesRule\Model\Rule setRuleId(int $ruleId)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
@@ -184,6 +186,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -435,6 +438,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param int $saveAttemptCount Number of attempts to save newly created coupon
      * @return \Magento\SalesRule\Model\Coupon|null
      * @throws \Exception|\Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function acquireCoupon($saveNewlyCreated = true, $saveAttemptCount = 10)
     {
@@ -524,6 +529,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      *
      * @param Address $address
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsValidForAddress($address)
     {

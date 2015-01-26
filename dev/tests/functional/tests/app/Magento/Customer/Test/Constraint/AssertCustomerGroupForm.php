@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Constraint;
@@ -8,7 +9,7 @@ namespace Magento\Customer\Test\Constraint;
 use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupNew;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertCustomerGroupForm

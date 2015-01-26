@@ -1,26 +1,28 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Plugin;
 
 class QuoteItemProductOption
 {
     /**
-     * @param \Magento\Sales\Model\Convert\Quote $subject
+     * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $subject
      * @param callable $proceed
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     *
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param array $additional
      * @return \Magento\Sales\Model\Order\Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundItemToOrderItem(
-        \Magento\Sales\Model\Convert\Quote $subject,
+    public function aroundConvert(
+        \Magento\Quote\Model\Quote\Item\ToOrderItem $subject,
         \Closure $proceed,
-        \Magento\Sales\Model\Quote\Item\AbstractItem $item
+        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
+        $additional
     ) {
         /** @var $orderItem \Magento\Sales\Model\Order\Item */
-        $orderItem = $proceed($item);
+        $orderItem = $proceed($item, $additional);
 
         if (is_array($item->getOptions())) {
             foreach ($item->getOptions() as $itemOption) {

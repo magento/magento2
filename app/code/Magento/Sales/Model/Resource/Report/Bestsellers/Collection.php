@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\Resource\Report\Bestsellers;
 
 /**
@@ -216,6 +220,9 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      * but before adding unions and calculating totals
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _beforeLoad()
     {

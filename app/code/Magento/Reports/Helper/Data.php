@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Reports data helper
@@ -41,6 +44,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $to
      * @param string $period
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getIntervals($from, $to, $period = self::REPORT_PERIOD_TYPE_DAY)
     {

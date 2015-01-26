@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="attribute-set">
     <div class="edit-attribute-set attribute-set-col">
         <?php echo $this->getSetFormHtml() ?>
-        <script type="text/javascript">
+        <script>
 require([
     "jquery",
     "mage/mage"
@@ -34,7 +38,7 @@ require([
             <span class="title"><?php echo __('Unassigned Attributes') ?></span>
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
-            <script type="text/javascript">
+            <script>
 require(['jquery'], function(jQuery){
 
             //<![CDATA[

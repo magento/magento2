@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Indexer\Model\Processor;
@@ -45,6 +46,7 @@ class InvalidateCache
      *
      * @param \Magento\Indexer\Model\Processor $subject
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterUpdateMview(\Magento\Indexer\Model\Processor $subject)
     {

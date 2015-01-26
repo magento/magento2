@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
 
@@ -15,6 +16,9 @@ use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataProvider implements DataProviderInterface
 {
     /**

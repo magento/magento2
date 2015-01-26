@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Category;
 
@@ -120,6 +121,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      * @param mixed|null $parentNodeCategory
      * @param int $recursionLevel
      * @return Node|array|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
     {

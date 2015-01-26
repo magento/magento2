@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\TestStep;
 
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Set default attribute value.

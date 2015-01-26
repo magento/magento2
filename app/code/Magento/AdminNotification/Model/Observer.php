@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Model;
 
@@ -38,6 +39,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function preDispatch(\Magento\Framework\Event\Observer $observer)
     {

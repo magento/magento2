@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\Constraint;
@@ -8,8 +9,8 @@ namespace Magento\Wishlist\Test\Constraint;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AssertProductIsPresentInCustomerBackendWishlist

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model\Event;
 
@@ -106,6 +107,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function customerLogin(\Magento\Framework\Event\Observer $observer)
     {
@@ -129,6 +131,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function customerLogout(\Magento\Framework\Event\Observer $observer)
     {
@@ -181,6 +184,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function catalogProductCompareRemoveProduct(\Magento\Framework\Event\Observer $observer)
     {
@@ -196,6 +200,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function catalogProductCompareClear(\Magento\Framework\Event\Observer $observer)
     {
@@ -215,9 +220,13 @@ class Observer
     public function catalogProductCompareAddProduct(\Magento\Framework\Event\Observer $observer)
     {
         $productId = $observer->getEvent()->getProduct()->getId();
-
-        $this->_productCompFactory->create()->setProductId($productId)->save()->calculate();
-
+        $viewData = ['product_id' => $productId];
+        if ($this->_customerSession->isLoggedIn()) {
+            $viewData['customer_id'] = $this->_customerSession->getCustomerId();
+        } else {
+            $viewData['visitor_id'] = $this->_customerVisitor->getId();
+        }
+        $this->_productCompFactory->create()->setData($viewData)->save()->calculate();
         return $this->_event(\Magento\Reports\Model\Event::EVENT_PRODUCT_COMPARE, $productId);
     }
 

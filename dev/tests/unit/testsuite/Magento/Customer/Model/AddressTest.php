@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model;
@@ -29,6 +30,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Model\CustomerFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerFactory;
+
+    /**
+     * @var \Magento\Customer\Model\Resource\Address | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resource;
+
 
     public function setUp()
     {
@@ -110,6 +117,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($resultValue, $this->address->getAttributes());
     }
 
+    public function testRegionId()
+    {
+        $this->address->setRegionId(1);
+        $this->assertEquals(1, $this->address->getRegionId());
+    }
+
     public function testGetEntityTypeId()
     {
         $mockEntityType = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
@@ -124,11 +137,5 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($mockEntityType));
 
         $this->assertEquals(self::ORIG_CUSTOMER_ID, $this->address->getEntityTypeId());
-    }
-
-    public function testRegionId()
-    {
-        $this->address->setRegionId(1);
-        $this->assertEquals(1, $this->address->getRegionId());
     }
 }

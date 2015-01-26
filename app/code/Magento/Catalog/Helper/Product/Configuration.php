@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper\Product;
 
@@ -144,6 +145,8 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *  - 'cutReplacer': replacer for cut off value part when option value exceeds maxLength
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getFormattedOptionValue($optionValue, $params = null)
     {

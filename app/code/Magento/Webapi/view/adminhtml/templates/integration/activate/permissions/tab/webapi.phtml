@@ -2,10 +2,14 @@
 /**
  * API permissions tab template for integration activation dialog.
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  *
  * @var \Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi $this
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <fieldset class="fieldset form-inline entry-edit">
     <?php if ($this->isTreeEmpty()): ?>
@@ -19,7 +23,7 @@
     <?php endif ?>
 </fieldset>
 <?php if (!$this->isTreeEmpty()): ?>
-    <script type="text/javascript">
+    <script>
 require(["jquery", "Magento_User/js/roles-tree"], function($){
 
     $.widget('mage.rolesTree', $.mage.rolesTree, {

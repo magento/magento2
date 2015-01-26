@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Framework\Model\Exception;
@@ -10,6 +14,7 @@ use Magento\Framework\Model\Exception;
  * Catalog product option default type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultType extends \Magento\Framework\Object
 {
@@ -133,7 +138,7 @@ class DefaultType extends \Magento\Framework\Object
         }
 
         // Back compatibility with quote specific keys to set configuration item options
-        if ($this->_getData('quote_item_option') instanceof \Magento\Sales\Model\Quote\Item\Option) {
+        if ($this->_getData('quote_item_option') instanceof \Magento\Quote\Model\Quote\Item\Option) {
             return $this->_getData('quote_item_option');
         }
 
@@ -156,7 +161,7 @@ class DefaultType extends \Magento\Framework\Object
         }
 
         // Back compatibility with quote specific keys to set configuration item
-        if ($this->_getData('quote_item') instanceof \Magento\Sales\Model\Quote\Item) {
+        if ($this->_getData('quote_item') instanceof \Magento\Quote\Model\Quote\Item) {
             return $this->_getData('quote_item');
         }
 
@@ -215,6 +220,7 @@ class DefaultType extends \Magento\Framework\Object
      * Check skip required option validation
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getSkipCheckRequiredOption()
     {
@@ -297,6 +303,7 @@ class DefaultType extends \Magento\Framework\Object
      * @param string $optionValue
      * @param array $productOptionValues Values for product option
      * @return string|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {
@@ -320,6 +327,7 @@ class DefaultType extends \Magento\Framework\Object
      * @param string $optionValue Prepared for cart option value
      * @param float $basePrice For percent price type
      * @return float
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getOptionPrice($optionValue, $basePrice)
     {
@@ -334,6 +342,7 @@ class DefaultType extends \Magento\Framework\Object
      * @param string $optionValue Prepared for cart option value
      * @param string $skuDelimiter Delimiter for Sku parts
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getOptionSku($optionValue, $skuDelimiter)
     {

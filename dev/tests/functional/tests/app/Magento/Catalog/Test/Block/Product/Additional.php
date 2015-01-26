@@ -1,14 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Product;
 
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
 
 /**
  * Product additional information block on the product page.
@@ -32,18 +34,19 @@ class Additional extends Block
     /**
      * Get product attributes.
      *
-     * @return Element[]
+     * @return SimpleElement[]
      */
     protected function getProductAttributes()
     {
         $data = [];
-        $elements = $this->_rootElement->find($this->attributeSelector, Locator::SELECTOR_XPATH)->getElements();
+        $elements = $this->_rootElement->getElements($this->attributeSelector, Locator::SELECTOR_XPATH);
         foreach ($elements as $element) {
             $data[$element->getText()] = $this->_rootElement->find(
                 $this->attributeSelector . $this->attributeValueSelector,
                 Locator::SELECTOR_XPATH
             );
         }
+
         return $data;
     }
 
@@ -66,11 +69,11 @@ class Additional extends Block
     /**
      * Find <tag1><tag2><tagN> ... </tagN></tag2></tag1> tag structure in element.
      *
-     * @param Element $element
+     * @param SimpleElement $element
      * @param string $selector
-     * @return Element
+     * @return SimpleElement
      */
-    protected function checkHtmlTagStructure(Element $element, $selector)
+    protected function checkHtmlTagStructure(SimpleElement $element, $selector)
     {
         return $element->find($selector);
     }
@@ -104,6 +107,7 @@ class Additional extends Block
         for ($index = 0; $index < $middleElement; $index++) {
             $selector .= $htmlData[$index]['tag'] . " ";
         }
+
         return trim($selector);
     }
 }

@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Quote;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Model\Quote\Address;
-use Magento\Sales\Model\Quote\Item\AbstractItem;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 
-class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
+class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
      * Discount calculation object
@@ -58,6 +59,7 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      *
      * @param Address $address
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function collect(Address $address)
     {
@@ -83,7 +85,7 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
         $address->setDiscountDescription([]);
 
         $items = $this->_calculator->sortItemsByPriority($items);
-        /** @var \Magento\Sales\Model\Quote\Item $item */
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($items as $item) {
             if ($item->getNoDiscount() || !$this->_calculator->canApplyDiscount($item)) {
                 $item->setDiscountAmount(0);

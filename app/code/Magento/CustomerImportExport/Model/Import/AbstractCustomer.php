@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
@@ -8,6 +9,7 @@ use Magento\CustomerImportExport\Model\Resource\Import\Customer\Storage;
 
 /**
  * Import entity abstract customer model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entity\AbstractEav
 {
@@ -78,6 +80,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,

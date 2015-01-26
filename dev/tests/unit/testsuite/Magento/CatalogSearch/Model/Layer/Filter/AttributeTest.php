@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Model\Layer\Filter;
@@ -8,6 +9,9 @@ namespace Magento\CatalogSearch\Model\Layer\Filter;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -229,6 +233,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedFilterItems, $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetItemsWithoutApply()
     {
         $attributeCode = 'attributeCode';

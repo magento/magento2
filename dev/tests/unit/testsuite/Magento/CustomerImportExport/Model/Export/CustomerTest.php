@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CustomerImportExport\Model\Export;
 
@@ -107,7 +108,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         foreach ($this->_attributes as $attributeData) {
             $arguments = $objectManagerHelper->getConstructArguments(
                 'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-                ['eavTypeFactory' => $this->getMock('Magento\Eav\Model\Entity\TypeFactory')]
+                ['eavTypeFactory' => $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false)]
             );
             $arguments['data'] = $attributeData;
             $attribute = $this->getMockForAbstractClass(

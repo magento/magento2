@@ -1,14 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Service\V1\ShippingMethod;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Sales\Model\QuoteRepository;
+use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Shipping method write service object.
@@ -18,7 +22,7 @@ class WriteService implements WriteServiceInterface
     /**
      * Address factory.
      *
-     * @var \Magento\Sales\Model\Quote\AddressFactory
+     * @var \Magento\Quote\Model\Quote\AddressFactory
      */
     protected $addressFactory;
 
@@ -32,11 +36,11 @@ class WriteService implements WriteServiceInterface
     /**
      * Constructs a shipping method write service object.
      *
-     * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory Address factory.
+     * @param \Magento\Quote\Model\Quote\AddressFactory $addressFactory Address factory.
      * @param QuoteRepository $quoteRepository Quote repository.
      */
     public function __construct(
-        \Magento\Sales\Model\Quote\AddressFactory $addressFactory,
+        \Magento\Quote\Model\Quote\AddressFactory $addressFactory,
         QuoteRepository $quoteRepository
     ) {
         $this->addressFactory = $addressFactory;
@@ -57,7 +61,7 @@ class WriteService implements WriteServiceInterface
      */
     public function setMethod($cartId, $carrierCode, $methodCode)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if (0 == $quote->getItemsCount()) {
             throw new InputException('Shipping method is not applicable for empty cart');

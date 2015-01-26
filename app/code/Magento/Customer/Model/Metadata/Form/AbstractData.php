@@ -2,12 +2,19 @@
 /**
  * Form Element Abstract Data Model
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Framework\Api\ArrayObjectSearch;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class AbstractData
 {
     /**
@@ -256,6 +263,8 @@ abstract class AbstractData
      *
      * @param string $value
      * @return array|true
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _validateInputRule($value)
     {
@@ -436,6 +445,7 @@ abstract class AbstractData
      * Return is AJAX Request
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsAjaxRequest()
     {

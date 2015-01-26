@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Io;
 
@@ -66,6 +67,8 @@ class Ftp extends AbstractIo
      * @param array $args
      * @return true
      * @throws IoException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function open(array $args = [])
     {
@@ -183,6 +186,7 @@ class Ftp extends AbstractIo
      *
      * @param string $dir
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function cd($dir)
     {
@@ -260,6 +264,7 @@ class Ftp extends AbstractIo
      *
      * @param string $filename
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function rm($filename)
     {
@@ -272,6 +277,7 @@ class Ftp extends AbstractIo
      * @param string $src
      * @param string $dest
      * @return bool
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function mv($src, $dest)
     {
@@ -293,6 +299,7 @@ class Ftp extends AbstractIo
     /**
      * @param null $grep ignored parameter
      * @return array
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function ls($grep = null)
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 
@@ -42,6 +43,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,

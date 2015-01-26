@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Resource\Advanced;
 
@@ -10,6 +11,7 @@ use Magento\Catalog\Model\Product;
  * Collection Advanced
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
@@ -121,6 +123,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _renderFiltersBefore()
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 
@@ -129,6 +130,8 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Object $request
      * @param array|null $rates
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getCalculationProcess($request, $rates = null)
     {
@@ -262,6 +265,9 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Object $request
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _getRates($request)
     {

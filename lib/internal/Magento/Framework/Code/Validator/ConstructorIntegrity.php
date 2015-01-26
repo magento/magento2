@@ -2,7 +2,8 @@
 /**
  * Class constructor validator. Validates call of parent construct
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Validator;
 
@@ -29,6 +30,8 @@ class ConstructorIntegrity implements ValidatorInterface
      * @param string $className
      * @return bool
      * @throws \Magento\Framework\Code\ValidationException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validate($className)
     {

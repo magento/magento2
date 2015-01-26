@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Product;
 
@@ -10,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  * Downloadable product type model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Type extends \Magento\Catalog\Model\Product\Type\Virtual
 {
@@ -72,6 +74,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Downloadable\Model\Resource\Sample\CollectionFactory $samplesFactory
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
@@ -186,6 +189,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getLinkSelectionRequired($product)
     {
@@ -228,6 +232,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save($product)
     {
@@ -373,7 +380,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     {
         parent::checkProductBuyState($product);
         $option = $product->getCustomOption('info_buyRequest');
-        if ($option instanceof \Magento\Sales\Model\Quote\Item\Option) {
+        if ($option instanceof \Magento\Quote\Model\Quote\Item\Option) {
             $buyRequest = new \Magento\Framework\Object(unserialize($option->getValue()));
             if (!$buyRequest->hasLinks()) {
                 if (!$product->getLinksPurchasedSeparately()) {
@@ -489,6 +496,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param  \Magento\Catalog\Model\Product $product
      * @param  \Magento\Framework\Object $buyRequest
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processBuyRequest($product, $buyRequest)
     {
@@ -560,6 +568,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return array|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sendfriend\Model\Resource;
 
@@ -29,6 +30,7 @@ class Sendfriend extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param int $startTime
      * @param int $websiteId
      * @return int
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getSendCount($object, $ip, $startTime, $websiteId = null)
     {

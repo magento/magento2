@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
@@ -25,7 +26,7 @@
                 <label>Consumer Settings</label>
                 <field id="expiration_period" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Expiration Period</label>
-                    <comment>Disable consumer key/secret credentials if not used within X seconds.</comment>
+                    <comment>Consumer key/secret will expire if not used within X seconds after Oauth token exchange starts.</comment>
                 </field>
                 <field id="post_maxredirects" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>OAuth consumer credentials HTTP Post maxredirects</label>

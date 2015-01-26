@@ -1,55 +1,66 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Repository;
 
-use Mtf\Repository\AbstractRepository;
+use Magento\Mtf\Repository\AbstractRepository;
 
 /**
- * Class Category Repository
- *
+ * Class CatalogCategory
+ * Data for creation Category
  */
 class Category extends AbstractRepository
 {
     /**
-     * Attribute set for mapping data into ui tabs
-     */
-    const GROUP_GENERAL_INFORMATION = 'general_information';
-    const GROUP_DISPLAY_SETTINGS = 'display_setting';
-
-    /**
-     * {inheritdoc}
+     * @constructor
+     * @param array $defaultConfig
+     * @param array $defaultData
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        $this->_data['default'] = [
-            'config' => $defaultConfig,
-            'data' => $defaultData,
+        $this->_data['default_category'] = [
+            'name' => 'Default Category',
+            'parent_id' => 1,
+            'is_active' => 'Yes',
+            'id' => 2,
         ];
-        $this->_data['anchor_category'] = $this->_getAnchorCategory();
-    }
 
-    /**
-     * Enable anchor category
-     *
-     * @return array
-     */
-    protected function _getAnchorCategory()
-    {
-        $anchor = [
-            'data' => [
-                'fields' => [
-                    'is_anchor' => [
-                        'value' => 'Yes',
-                        'input_value' => '1',
-                        'group' => static::GROUP_DISPLAY_SETTINGS,
-                        'input' => 'select',
-                    ],
-                ],
-            ],
+        $this->_data['default_subcategory'] = [
+            'name' => 'DefaultSubcategory%isolation%',
+            'url_key' => 'default-subcategory-%isolation%',
+            'parent_id' => ['dataSet' => 'default_category'],
+            'is_active' => 'Yes',
+            'include_in_menu' => 'Yes',
         ];
-        return array_replace_recursive($this->_data['default'], $anchor);
+
+        $this->_data['default_anchor_subcategory'] = [
+            'name' => 'DefaultSubcategory%isolation%',
+            'url_key' => 'default-subcategory-%isolation%',
+            'parent_id' => ['dataSet' => 'default_category'],
+            'is_active' => 'Yes',
+            'is_anchor' => 'Yes',
+            'include_in_menu' => 'Yes',
+        ];
+
+        $this->_data['root_category'] = [
+            'name' => 'RootCategory%isolation%',
+            'url_key' => 'root-category-%isolation%',
+            'parent_id' => 1,
+            'is_active' => 'Yes',
+            'include_in_menu' => 'Yes',
+        ];
+
+        $this->_data['root_subcategory'] = [
+            'name' => 'RootSubCategory%isolation%',
+            'url_key' => 'root-sub-category-%isolation%',
+            'parent_id' => ['dataSet' => 'root_category'],
+            'is_active' => 'Yes',
+            'include_in_menu' => 'Yes',
+        ];
     }
 }

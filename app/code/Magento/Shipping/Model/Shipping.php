@@ -1,12 +1,16 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Model;
 
 use Magento\Sales\Model\Order\Shipment;
-use Magento\Sales\Model\Quote\Address\RateCollectorInterface;
+use Magento\Quote\Model\Quote\Address\RateCollectorInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Shipping implements RateCollectorInterface
 {
     /**
@@ -58,7 +62,7 @@ class Shipping implements RateCollectorInterface
     protected $_rateResultFactory;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address\RateRequestFactory
+     * @var \Magento\Quote\Model\Quote\Address\RateRequestFactory
      */
     protected $_shipmentRequestFactory;
 
@@ -158,11 +162,11 @@ class Shipping implements RateCollectorInterface
     /**
      * Retrieve all methods for supplied shipping data
      *
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this
      * @todo make it ordered
      */
-    public function collectRates(\Magento\Sales\Model\Quote\Address\RateRequest $request)
+    public function collectRates(\Magento\Quote\Model\Quote\Address\RateRequest $request)
     {
         $storeId = $request->getStoreId();
         if (!$request->getOrig()) {
@@ -228,8 +232,10 @@ class Shipping implements RateCollectorInterface
      * Collect rates of given carrier
      *
      * @param string $carrierCode
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function collectCarrierRates($carrierCode, $request)
     {
@@ -240,7 +246,7 @@ class Shipping implements RateCollectorInterface
         }
         $carrier->setActiveFlag($this->_availabilityConfigField);
         $result = $carrier->checkAvailableShipCountries($request);
-        if (false !== $result && !$result instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
+        if (false !== $result && !$result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
             $result = $carrier->proccessAdditionalValidation($request);
         }
         /*
@@ -248,7 +254,7 @@ class Shipping implements RateCollectorInterface
          * if the delivery country is not within specific countries
          */
         if (false !== $result) {
-            if (!$result instanceof \Magento\Sales\Model\Quote\Address\RateResult\Error) {
+            if (!$result instanceof \Magento\Quote\Model\Quote\Address\RateResult\Error) {
                 if ($carrier->getConfigData('shipment_requesttype')) {
                     $packages = $this->composePackagesForCarrier($carrier, $request);
                     if (!empty($packages)) {
@@ -307,8 +313,10 @@ class Shipping implements RateCollectorInterface
      * Divides order into items and items into parts if it's necessary
      *
      * @param \Magento\Shipping\Model\Carrier\AbstractCarrier $carrier
-     * @param \Magento\Sales\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
      * @return array [int, float]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function composePackagesForCarrier($carrier, $request)
     {
@@ -317,7 +325,7 @@ class Shipping implements RateCollectorInterface
 
         $maxWeight = (double)$carrier->getConfigData('max_package_weight');
 
-        /** @var $item \Magento\Sales\Model\Quote\Item */
+        /** @var $item \Magento\Quote\Model\Quote\Item */
         foreach ($allItems as $item) {
             if ($item->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
                 && $item->getProduct()->getShipmentType()
@@ -454,7 +462,7 @@ class Shipping implements RateCollectorInterface
      */
     public function collectRatesByAddress(\Magento\Framework\Object $address, $limitCarrier = null)
     {
-        /** @var $request \Magento\Sales\Model\Quote\Address\RateRequest */
+        /** @var $request \Magento\Quote\Model\Quote\Address\RateRequest */
         $request = $this->_shipmentRequestFactory->create();
         $request->setAllItems($address->getAllItems());
         $request->setDestCountryId($address->getCountryId());

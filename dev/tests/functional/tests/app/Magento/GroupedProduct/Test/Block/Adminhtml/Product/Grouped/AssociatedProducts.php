@@ -1,13 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GroupedProduct\Test\Block\Adminhtml\Product\Grouped;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class AssociatedProducts
@@ -73,15 +75,15 @@ class AssociatedProducts extends Tab
      * Fill data to fields on tab
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         if (isset($fields['associated'])) {
-            $options = $this->_rootElement->find($this->deleteButton)->getElements();
+            $options = $this->_rootElement->getElements($this->deleteButton);
             if (count($options)) {
-                foreach ($options as $option) {
+                foreach (array_reverse($options) as $option) {
                     $option->click();
                 }
             }
@@ -100,10 +102,10 @@ class AssociatedProducts extends Tab
      * Get data to fields on group tab
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, Element $element = null)
+    public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
         $newFields = [];
         if (isset($fields['associated'])) {

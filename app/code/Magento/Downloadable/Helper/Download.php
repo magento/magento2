@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Downloadable\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -10,6 +14,7 @@ use Magento\Framework\Model\Exception as CoreException;
 
 /**
  * Downloadable Products Download Helper
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Download extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -293,6 +298,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param mixed $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getContentDisposition($store = null)
     {

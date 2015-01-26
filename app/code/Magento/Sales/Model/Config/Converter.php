@@ -1,10 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
- * Converts sales totals (incl. nominal, creditmemo, invoice) from \DOMDocument to array
+ * Converts sales totals (incl. creditmemo, invoice) from \DOMDocument to array
  */
 namespace Magento\Sales\Model\Config;
 
@@ -16,6 +17,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param mixed $source
      * @return array
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convert($source)
     {

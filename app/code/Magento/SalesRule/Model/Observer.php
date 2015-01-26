@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
 
 use Magento\Framework\Event\Observer as EventObserver;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Observer
 {
     /**
@@ -89,6 +93,7 @@ class Observer
     /**
      * @param EventObserver $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function salesOrderAfterPlace($observer)
     {

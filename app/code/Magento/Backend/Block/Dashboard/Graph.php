@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard;
 
@@ -185,6 +186,10 @@ class Graph extends \Magento\Backend\Block\Dashboard\AbstractDashboard
      *
      * @param bool $directUrl
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getChartUrl($directUrl = true)
     {

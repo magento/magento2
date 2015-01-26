@@ -1,12 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit;
 
-use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Client\Element;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class AdvancedPricingTab
@@ -28,10 +28,10 @@ class AdvancedPricingTab extends ProductTab
      * Fill 'Advanced price' product form on tab
      *
      * @param array $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, Element $element = null)
+    public function fillFormTab(array $fields, SimpleElement $element = null)
     {
         $context = $element ? $element : $this->_rootElement;
         foreach ($fields as $fieldName => $field) {
@@ -65,10 +65,10 @@ class AdvancedPricingTab extends ProductTab
      * Get data of tab
      *
      * @param array|null $fields
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, Element $element = null)
+    public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
         $formData = [];
         foreach ($fields as $fieldName => $field) {

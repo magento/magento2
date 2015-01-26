@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Shipping;
 
@@ -8,6 +9,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Shipping;
  * Adminhtml sales order create shipping address block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
@@ -62,6 +64,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Same as billing address flag
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsAsBilling()
     {
@@ -72,6 +75,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Saving shipping address must be turned off, when it is the same as billing
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDontSaveInAddressBook()
     {
@@ -101,7 +105,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     /**
      * Return address object
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return \Magento\Quote\Model\Quote\Address
      */
     public function getAddress()
     {
@@ -118,6 +122,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * Return true is the quote is virtual
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsDisabled()
     {

@@ -1,99 +1,129 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tools\Di\App;
 
 class CompilerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Tools\Di\App\Compiler
+     * @var Compiler
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\App\AreaList | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $areaList;
+    private $objectManagerMock;
 
     /**
-     * @var \Magento\Tools\Di\Code\Reader\ClassesScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tools\Di\App\Task\Manager | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $classesScanner;
+    private $taskManagerMock;
 
     /**
-     * @var \Magento\Tools\Di\Code\Generator\InterceptionConfigurationBuilder | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Console\Response | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $interceptionConfigurationBuilder;
-
-    /**
-     * @var \Magento\Tools\Di\Compiler\Config\Reader | \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $configReader;
-
-    /**
-     * @var \Magento\Tools\Di\Compiler\Config\Writer\Filesystem | \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $configWriter;
+    private $responseMock;
 
     protected function setUp()
     {
-        $this->areaList = $this->getMockBuilder('\Magento\Framework\App\AreaList')
+        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+            ->setMethods([])
+            ->getMock();
+        $this->taskManagerMock = $this->getMockBuilder('Magento\Tools\Di\App\Task\Manager')
             ->disableOriginalConstructor()
+            ->setMethods([])
             ->getMock();
-
-        $this->classesScanner = $this->getMockBuilder('\Magento\Tools\Di\Code\Reader\ClassesScanner')
+        $this->responseMock = $this->getMockBuilder('Magento\Framework\App\Console\Response')
             ->disableOriginalConstructor()
-            ->setMethods(['getList'])
+            ->setMethods([])
             ->getMock();
-
-        $this->interceptionConfigurationBuilder = $this->getMockBuilder(
-            '\Magento\Tools\Di\Code\Generator\InterceptionConfigurationBuilder'
-        )->disableOriginalConstructor()->getMock();
-
-        $this->configReader = $this->getMockBuilder('\Magento\Tools\Di\Compiler\Config\Reader')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->configWriter = $this->getMockBuilder('\Magento\Tools\Di\Compiler\Config\Writer\Filesystem')
-            ->setMethods(['write'])
-            ->getMock();
-
-        $this->model = new \Magento\Tools\Di\App\Compiler(
-            $this->areaList,
-            $this->classesScanner,
-            $this->interceptionConfigurationBuilder,
-            $this->configReader,
-            $this->configWriter
+        $this->model = new Compiler(
+            $this->taskManagerMock,
+            $this->objectManagerMock,
+            $this->responseMock
         );
     }
 
-    public function testLaunch()
+    public function testLaunchSuccess()
     {
-        $this->classesScanner->expects($this->exactly(3))
-            ->method('getList')
-            ->willReturn([]);
-
-        $this->configReader->expects($this->any())
-            ->method('generateCachePerScope')
-            ->willReturn([]);
-
-        $areaListResult = ['global', 'frontend', 'admin'];
-        $this->areaList->expects($this->once())
-            ->method('getCodes')
-            ->willReturn($areaListResult);
-
-        $count = count($areaListResult) + 1;
-        $this->configWriter->expects($this->exactly($count))
-            ->method('write');
-
-        $this->interceptionConfigurationBuilder->expects($this->exactly($count))
-            ->method('addAreaCode');
-
-        $this->interceptionConfigurationBuilder->expects($this->once())
-            ->method('getInterceptionConfiguration')
-            ->willReturn([]);
+        $this->objectManagerMock->expects($this->once())
+            ->method('configure')
+            ->with($this->getPreferences());
+        $index = 0;
+        foreach ($this->getOptions() as $code => $arguments) {
+            $this->taskManagerMock->expects($this->at($index))
+                ->method('addOperation')
+                ->with($code, $arguments);
+            $index++;
+        }
+        $this->taskManagerMock->expects($this->at($index))->method('process');
+        $this->responseMock->expects($this->once())
+            ->method('setCode')
+            ->with(\Magento\Framework\App\Console\Response::SUCCESS);
 
         $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->model->launch());
+    }
+
+    public function testLaunchException()
+    {
+        $this->objectManagerMock->expects($this->once())
+            ->method('configure')
+            ->with($this->getPreferences());
+        $code = key($this->getOptions());
+        $arguments = current($this->getOptions());
+        $exception = new Task\OperationException(
+            'Unrecognized operation',
+            Task\OperationException::UNAVAILABLE_OPERATION
+        );
+
+        $this->taskManagerMock->expects($this->once())
+            ->method('addOperation')
+            ->with($code, $arguments)
+            ->willThrowException($exception);
+
+        $this->taskManagerMock->expects($this->never())->method('process');
+        $this->responseMock->expects($this->once())
+            ->method('setCode')
+            ->with(\Magento\Framework\App\Console\Response::ERROR);
+
+        $this->assertInstanceOf('\Magento\Framework\App\Console\Response', $this->model->launch());
+    }
+
+    /**
+     * Returns configured preferences
+     *
+     * @return array
+     */
+    private function getPreferences()
+    {
+        return [
+            'preferences' =>
+                [
+                    'Magento\Tools\Di\Compiler\Config\WriterInterface' =>
+                        'Magento\Tools\Di\Compiler\Config\Writer\Filesystem'
+                ]
+        ];
+    }
+
+    /**
+     * Returns options
+     *
+     * @return array
+     */
+    private function getOptions()
+    {
+        return  [
+            Task\OperationFactory::AREA => [
+                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+            ],
+            Task\OperationFactory::INTERCEPTION =>
+                BP . '/var/generation',
+            Task\OperationFactory::INTERCEPTION_CACHE => [
+                BP . '/'  . 'app/code', BP . '/'  . 'lib/internal/Magento/Framework', BP . '/'  . 'var/generation'
+            ]
+        ];
     }
 }

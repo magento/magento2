@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
@@ -19,8 +20,5 @@
     </event>
     <event name="catalog_product_status_update">
         <observer name="sales_quote" instance="Magento\Sales\Model\Observer\Backend\CatalogProductQuote" method="catalogProductStatusUpdate" />
-    </event>
-    <event name="customer_save_after_data_object">
-        <observer name="customer" instance="Magento\Sales\Model\Observer\Backend\CustomerQuote" method="dispatch" />
     </event>
 </config>

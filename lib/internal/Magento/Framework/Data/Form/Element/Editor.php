@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
@@ -38,6 +42,7 @@ class Editor extends Textarea
 
     /**
      * @return string
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getElementHtml()
     {
@@ -217,6 +222,8 @@ class Editor extends Textarea
      *
      * @param bool $visible Display button or not
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getPluginButtonsHtml($visible = true)
     {
@@ -331,6 +338,7 @@ class Editor extends Textarea
      *
      * @param array $data Button params
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getButtonHtml($data)
     {

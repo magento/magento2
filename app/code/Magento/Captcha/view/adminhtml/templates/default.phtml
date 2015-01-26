@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php /* @var $captcha \Magento\Captcha\Model\DefaultModel */ ?>
 <?php /* @var $this \Magento\Captcha\Block\Captcha\DefaultCaptcha */ ?>
@@ -22,7 +26,7 @@
     <p><?php echo __('<strong>Attention</strong>: Captcha is case sensitive.') ?></p>
 </div>
 <?php endif; ?>
-<script type="text/javascript">
+<script>
 require(["prototype", "mage/captcha"], function(){
 
 //<![CDATA[

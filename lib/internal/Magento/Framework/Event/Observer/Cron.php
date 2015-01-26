@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -19,6 +20,7 @@ class Cron extends \Magento\Framework\Event\Observer
      *
      * @param \Magento\Framework\Event $event
      * @return boolean
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isValidFor(\Magento\Framework\Event $event)
     {
@@ -62,6 +64,8 @@ class Cron extends \Magento\Framework\Event\Observer
      * @param string $expr
      * @param int $num
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function matchCronExpression($expr, $num)
     {

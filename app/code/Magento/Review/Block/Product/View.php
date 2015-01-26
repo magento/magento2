@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Review\Block\Product;
 
@@ -11,6 +12,7 @@ use Magento\Review\Model\Resource\Review\Collection as ReviewCollection;
  * Product Reviews Page
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class View extends \Magento\Catalog\Block\Product\View
 {
@@ -41,6 +43,7 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,

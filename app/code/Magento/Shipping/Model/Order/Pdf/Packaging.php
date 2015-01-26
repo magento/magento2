@@ -1,11 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Model\Order\Pdf;
 
 use Magento\Shipping\Helper\Carrier;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 {
     /**
@@ -141,6 +145,10 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      *
      * @param  \Zend_Pdf_Page $page
      * @return \Magento\Shipping\Model\Order\Pdf\Packaging
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _drawPackageBlock(\Zend_Pdf_Page $page)
     {

@@ -1,12 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\OfflineShipping\Model\Quote;
 
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
-class Freeshipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
+class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
      * Discount calculation object
@@ -36,8 +37,9 @@ class Freeshipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTota
     /**
      * Collect information about free shipping for all address items
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  \Magento\OfflineShipping\Model\Quote\Freeshipping
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function collect(Address $address)
     {
@@ -90,8 +92,9 @@ class Freeshipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTota
      * Add information about free shipping for all address items to address object
      * By default we not present such information
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  \Magento\OfflineShipping\Model\Quote\Freeshipping
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(Address $address)
     {

@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Assert that all configurable attributes is absent on product page on frontend.
@@ -22,13 +23,13 @@ class AssertConfigurableAttributesBlockIsAbsentOnProductPage extends AbstractCon
     /**
      * Assert that all configurable attributes is absent on product page on frontend.
      *
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductView $catalogProductView
      * @param ConfigurableProductInjectable $product
      * @return void
      */
     public function processAssert(
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductView $catalogProductView,
         ConfigurableProductInjectable $product
     ) {

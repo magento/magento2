@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Controller\Onepage;
 
@@ -11,6 +12,8 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
      * Create order action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {
@@ -47,6 +50,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
                     \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
                     \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL,
                 ];
+                $this->getOnepage()->getQuote()->getPayment()->setQuote($this->getOnepage()->getQuote());
                 $this->getOnepage()->getQuote()->getPayment()->importData($data);
             }
 

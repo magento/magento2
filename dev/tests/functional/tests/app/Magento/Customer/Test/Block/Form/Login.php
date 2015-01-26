@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Test\Block\Form;
 
-use Mtf\Block\Form;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Login

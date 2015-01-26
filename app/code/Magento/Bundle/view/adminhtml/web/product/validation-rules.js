@@ -1,7 +1,8 @@
 /**
  * Bundle client side validation rules
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 define(["jquery","mage/backend/validation"], function($){
     $.validator.addMethod('validate-greater-zero-based-on-option', function(v, el) {

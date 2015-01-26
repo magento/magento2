@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\GoogleShopping\Test\Block\Adminhtml\Types\Edit;
 
-use Mtf\Block\Form;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Form;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class GoogleShoppingForm
@@ -33,10 +34,10 @@ class GoogleShoppingForm extends Form
      * Fill specified form data
      *
      * @param array $fields
-     * @param Element $element
+     * @param SimpleElement $element
      * @return void
      */
-    protected function _fill(array $fields, Element $element = null)
+    protected function _fill(array $fields, SimpleElement $element = null)
     {
         $context = ($element === null) ? $this->_rootElement : $element;
         foreach ($fields as $field) {
@@ -86,7 +87,7 @@ class GoogleShoppingForm extends Form
      */
     protected function getOptions()
     {
-        $elements = $this->_rootElement->find($this->attributeOptions, Locator::SELECTOR_XPATH)->getElements();
+        $elements = $this->_rootElement->getElements($this->attributeOptions, Locator::SELECTOR_XPATH);
 
         $options = [];
         foreach ($elements as $key => $element) {

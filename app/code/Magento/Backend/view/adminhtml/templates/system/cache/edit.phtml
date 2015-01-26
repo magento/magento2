@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -16,7 +20,7 @@
 <form action="<?php echo $this->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
     <?php echo $this->getBlockHtml('formkey')?>
 
-    <script type="text/javascript">
+    <script>
     function setCacheAction(id, button) {
         $(id).value = button.id;
         configForm.submit();
@@ -78,7 +82,7 @@
         </fieldset>
     </div>
 </form>
-<script type="text/javascript">
+<script>
     require(["jquery","mage/mage"],function($){
        $('#config-edit-form').mage('form').mage('validation');
     });

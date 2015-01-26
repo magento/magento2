@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Shipping\Block\Tracking;
 
 class Popup extends \Magento\Framework\View\Element\Template
@@ -85,6 +89,7 @@ class Popup extends \Magento\Framework\View\Element\Template
      * Is 'contact us' option enabled?
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getContactUsEnabled()
     {

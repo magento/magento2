@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
@@ -53,6 +54,8 @@ class Price extends AbstractFilter
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\Layer\Filter\Dynamic\AlgorithmFactory $algorithmFactory
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
@@ -106,6 +109,7 @@ class Price extends AbstractFilter
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function apply(\Magento\Framework\App\RequestInterface $request)
     {

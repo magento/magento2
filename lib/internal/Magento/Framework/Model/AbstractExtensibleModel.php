@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\Model;
@@ -15,6 +16,7 @@ use Symfony\Component\DependencyInjection\Exception\LogicException;
  *
  * This class defines basic data structure of how custom attributes are stored in an ExtensibleModel.
  * Implementations may choose to process custom attributes as their persistence requires them to.
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractExtensibleModel extends AbstractModel implements ExtensibleDataInterface
 {

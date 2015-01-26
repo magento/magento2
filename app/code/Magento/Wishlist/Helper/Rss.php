@@ -1,10 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Helper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Rss extends \Magento\Wishlist\Helper\Data
 {
     /**
@@ -34,6 +38,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Entity;
 
@@ -42,6 +43,7 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method \Magento\Catalog\Model\Entity\Attribute setIsWysiwygEnabled(int $value)
  * @method int getIsUsedForPromoRules()
  * @method \Magento\Catalog\Model\Entity\Attribute setIsUsedForPromoRules(int $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
@@ -85,6 +87,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

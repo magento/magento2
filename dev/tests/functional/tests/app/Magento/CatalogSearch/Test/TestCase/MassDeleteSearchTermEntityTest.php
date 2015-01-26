@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\TestCase;
 
 use Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery;
 use Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for MassDeleteSearchTermEntity
@@ -31,6 +32,11 @@ use Mtf\TestCase\Injectable;
  */
 class MassDeleteSearchTermEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Search term page
      *

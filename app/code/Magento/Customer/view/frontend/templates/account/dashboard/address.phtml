@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /** @var \Magento\Customer\Block\Account\Dashboard\Address $this */
 ?>
@@ -11,7 +14,7 @@
         <a class="action edit" href="<?php echo $this->getAddressBookUrl() ?>"><span><?php echo __('Manage Addresses') ?></span></a>
     </div>
     <div class="block-content">
-        <div class="box box-address-billing">
+        <div class="box box-billing-address">
             <strong class="box-title">
                 <span><?php echo __('Default Billing Address') ?></span>
             </strong>
@@ -24,7 +27,7 @@
                 <a class="action edit" href="<?php echo $this->getPrimaryBillingAddressEditUrl() ?>" data-ui-id="default-billing-edit-link"><span><?php echo __('Edit Address') ?></span></a>
             </div>
         </div>
-        <div class="box box-address-shipping">
+        <div class="box box-shipping-address">
             <strong class="box-title">
                 <span><?php echo __('Default Shipping Address') ?></span>
             </strong>

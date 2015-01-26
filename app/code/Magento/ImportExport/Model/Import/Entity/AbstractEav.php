@@ -1,11 +1,13 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
 /**
  * Import EAV entity abstract model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEntity
 {
@@ -81,6 +83,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,

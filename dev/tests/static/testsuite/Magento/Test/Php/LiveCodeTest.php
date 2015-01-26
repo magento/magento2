@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Test\Php;
 
 use Magento\Framework\Test\Utility;
@@ -9,7 +13,7 @@ use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
-use PHP_PMD_TextUI_Command;
+use PHPMD\TextUI\Command;
 use PHPUnit_Framework_TestCase;
 use Magento\Framework\Test\Utility\Files;
 
@@ -29,16 +33,6 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     protected static $pathToSource = '';
 
     /**
-     * @var array
-     */
-    protected static $whiteList = [];
-
-    /**
-     * @var array
-     */
-    protected static $blackList = [];
-
-    /**
      * Setup basics for all tests
      *
      * @return void
@@ -50,22 +44,40 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         if (!is_dir(self::$reportDir)) {
             mkdir(self::$reportDir, 0777);
         }
-        self::setupFileLists();
     }
 
     /**
-     * Helper method to setup the black and white lists
+     * Returns whitelist based on blacklist and git changed files
      *
-     * @param string $type
-     * @return void
+     * @param array $fileTypes
+     * @return array
      */
-    public static function setupFileLists($type = '')
+    public static function getWhitelist($fileTypes = ['php'])
     {
-        if ($type != '' && !preg_match('/\/$/', $type)) {
-            $type = $type . '/';
+        $directoriesToCheck = file(__DIR__ . '/_files/whitelist/common.txt', FILE_IGNORE_NEW_LINES);
+
+        $changedFiles = array_filter(
+            Utility\Files::readLists(__DIR__ . '/_files/changed_files*'),
+            function ($path) use ($directoriesToCheck) {
+                foreach ($directoriesToCheck as $directory) {
+                    if (strpos($path, BP . '/' . $directory) === 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        );
+
+        if (!empty($fileTypes)) {
+            $changedFiles = array_filter(
+                $changedFiles,
+                function ($path) use ($fileTypes) {
+                    return in_array(pathinfo($path, PATHINFO_EXTENSION), $fileTypes);
+                }
+            );
         }
-        self::$whiteList = Utility\Files::readLists(__DIR__ . '/_files/' . $type . 'whitelist/*.txt');
-        self::$blackList = Utility\Files::readLists(__DIR__ . '/_files/' . $type . 'blacklist/*.txt');
+
+        return $changedFiles;
     }
 
     /**
@@ -82,15 +94,12 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         if (!$codeSniffer->canRun()) {
             $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
-        if (version_compare($codeSniffer->version(), '1.4.7') === -1) {
+        if (version_compare($wrapper->version(), '1.4.7') === -1) {
             $this->markTestSkipped('PHP Code Sniffer Build Too Old.');
         }
-        self::setupFileLists('phpcs');
-        $result = $codeSniffer->run(self::$whiteList, self::$blackList, ['php']);
-        $this->assertFileExists(
-            $reportFile,
-            'Expected ' . $reportFile . ' to be created by phpcs run with PSR2 standard'
-        );
+
+        $result = $codeSniffer->run(self::getWhitelist());
+
         $this->assertEquals(
             0,
             $result,
@@ -111,8 +120,8 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         if (!$codeSniffer->canRun()) {
             $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
-        self::setupFileLists();
-        $result = $codeSniffer->run(self::$whiteList, self::$blackList, ['php', 'phtml']);
+        $codeSniffer->setExtensions(['php', 'phtml']);
+        $result = $codeSniffer->run(self::getWhitelist(['php', 'phtml']));
         $this->assertEquals(
             0,
             $result,
@@ -138,12 +147,11 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         if (!$codeSniffer->canRun()) {
             $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
-        self::setupFileLists('phpcs');
 
-        $severity = 0; // Change to 5 to see the warnings
+        $result = $codeSniffer->run(self::getWhitelist(['php']));
         $this->assertEquals(
             0,
-            $result = $codeSniffer->run(self::$whiteList, self::$blackList, ['php'], $severity),
+            $result,
             "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
         );
     }
@@ -151,18 +159,11 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     /**
      * Run mess detector on code
      *
-     * @param array $whiteList
      * @return void
-     * @dataProvider whiteListDataProvider
      */
-    public function testCodeMess($whiteList)
+    public function testCodeMess()
     {
-        if (count($whiteList) == 1) {
-            $formattedPath = preg_replace('~/~', '_', preg_replace('~' . self::$pathToSource . '~', '', $whiteList[0]));
-        } else {
-            $formattedPath = '_app_lib';
-        }
-        $reportFile = self::$reportDir . '/phpmd_report' . $formattedPath . '.xml';
+        $reportFile = self::$reportDir . '/phpmd_report.xml';
         $codeMessDetector = new CodeMessDetector(realpath(__DIR__ . '/_files/phpmd/ruleset.xml'), $reportFile);
 
         if (!$codeMessDetector->canRun()) {
@@ -170,40 +171,15 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals(
-            PHP_PMD_TextUI_Command::EXIT_SUCCESS,
-            $codeMessDetector->run($whiteList, self::$blackList),
+            Command::EXIT_SUCCESS,
+            $codeMessDetector->run(self::getWhitelist(['php'])),
             "PHP Code Mess has found error(s): See detailed report in {$reportFile}"
         );
 
         // delete empty reports
-        unlink($reportFile);
-    }
-
-    /**
-     * To improve the test execution performance the whitelist is split into smaller parts:
-     *  - in case of dev code (tests, tools, etc) each whitelist entry is fed separately to phpmd
-     *  - app/lib code is still being executed within a single whitelist to make sure that all design
-     *    metrics (depth of inheritance, number of children, etc.) are being calculated in a correct way.
-     * @return array
-     */
-    public function whiteListDataProvider()
-    {
-        $whiteList = [];
-        $testCodePattern = '~' . self::$pathToSource . '/dev/~';
-        $nonTestCode = [];
-
-        self::setupFileLists();
-
-        foreach (self::$whiteList as $path) {
-            if (!preg_match($testCodePattern, $path)) {
-                $nonTestCode[] = $path;
-            } else {
-                $whiteList[] = [[$path]];
-            }
+        if (file_exists($reportFile)) {
+            unlink($reportFile);
         }
-        $whiteList[] = [$nonTestCode];
-
-        return $whiteList;
     }
 
     /**
@@ -220,14 +196,15 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('PHP Copy/Paste Detector is not available.');
         }
 
-        self::setupFileLists();
         $blackList = [];
         foreach (glob(__DIR__ . '/_files/phpcpd/blacklist/*.txt') as $list) {
             $blackList = array_merge($blackList, file($list, FILE_IGNORE_NEW_LINES));
         }
 
+        $copyPasteDetector->setBlackList($blackList);
+
         $this->assertTrue(
-            $copyPasteDetector->run([], $blackList),
+            $copyPasteDetector->run([BP]),
             "PHP Copy/Paste Detector has found error(s): See detailed report in {$reportFile}"
         );
     }

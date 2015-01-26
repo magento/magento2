@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Model;
@@ -191,11 +192,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $code = 'someOption';
         $optionValue = 100;
-        $optionsOneMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $optionsOneMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getCode', '__wakeup', 'getValue'])
             ->getMock();
-        $optionsTwoMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $optionsTwoMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getValue'])
             ->getMock();
@@ -217,11 +218,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $code = 'someOption';
         $optionOneValue = 100;
         $optionTwoValue = 200;
-        $optionsOneMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $optionsOneMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getCode', '__wakeup', 'getValue'])
             ->getMock();
-        $optionsTwoMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $optionsTwoMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getValue'])
             ->getMock();
@@ -241,11 +242,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testCompareOptionsNegativeOptionsTwoHaveNotOption()
     {
         $code = 'someOption';
-        $optionsOneMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $optionsOneMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getCode', '__wakeup'])
             ->getMock();
-        $optionsTwoMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+        $optionsTwoMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup'])
             ->getMock();

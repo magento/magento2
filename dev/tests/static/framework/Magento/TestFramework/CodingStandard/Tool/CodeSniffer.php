@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -11,28 +12,35 @@ namespace Magento\TestFramework\CodingStandard\Tool;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\ToolInterface;
 
-class CodeSniffer implements ToolInterface
+class CodeSniffer implements ToolInterface, ExtensionInterface
 {
     /**
      * Ruleset directory
      *
      * @var string
      */
-    protected $rulesetDir;
+    private $rulesetDir;
 
     /**
      * Report file
      *
      * @var string
      */
-    protected $reportFile;
+    private $reportFile;
 
     /**
      * PHPCS cli tool wrapper
      *
      * @var Wrapper
      */
-    protected $wrapper;
+    private $wrapper;
+
+    /**
+     * List of extensions for tool run
+     *
+     * @var array
+     */
+    private $extensions = ['php'];
 
     /**
      * Constructor
@@ -49,6 +57,14 @@ class CodeSniffer implements ToolInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setExtensions(array $extensions)
+    {
+        $this->extensions = $extensions;
+    }
+
+    /**
      * Whether the tool can be ran on the current environment
      *
      * @return bool
@@ -59,54 +75,23 @@ class CodeSniffer implements ToolInterface
     }
 
     /**
-     * Return the version of code sniffer found
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function version()
+    public function run(array $whiteList)
     {
-        return $this->wrapper->version();
-    }
-
-    /**
-     * Run tool for files specified
-     *
-     * @param array $whiteList Files/directories to be inspected
-     * @param array $blackList Files/directories to be excluded from the inspection
-     * @param array $extensions Array of alphanumeric strings, for example: 'php', 'xml', 'phtml', 'css'...
-     * @param int $warningSeverity Severity level of warnings, default is 0
-     *
-     * @return int
-     */
-    public function run(
-        array $whiteList,
-        array $blackList = [],
-        array $extensions = [],
-        $warningSeverity = 0
-    ) {
-        $whiteList = array_map(
-            function ($item) {
-                return $item;
-            },
-            $whiteList
-        );
-
-        $blackList = array_map(
-            function ($item) {
-                return preg_quote($item);
-            },
-            $blackList
-        );
+        if (empty($whiteList)) {
+            return 0;
+        }
 
         $this->wrapper->checkRequirements();
         $settings = $this->wrapper->getDefaults();
         $settings['files'] = $whiteList;
         $settings['standard'] = [$this->rulesetDir];
-        $settings['ignored'] = $blackList;
-        $settings['extensions'] = $extensions;
+        $settings['extensions'] = $this->extensions;
         $settings['reportFile'] = $this->reportFile;
-        $settings['warningSeverity'] = $warningSeverity;
+        $settings['warningSeverity'] = 0;
         $settings['reports']['checkstyle'] = null;
+
         $this->wrapper->setValues($settings);
 
         ob_start();
@@ -114,15 +99,5 @@ class CodeSniffer implements ToolInterface
         ob_end_clean();
 
         return $result;
-    }
-
-    /**
-     * Get report file
-     *
-     * @return string
-     */
-    public function getReportFile()
-    {
-        return $this->reportFile;
     }
 }

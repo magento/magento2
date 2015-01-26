@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Helper;
 
@@ -10,6 +11,7 @@ use Magento\Wishlist\Controller\WishlistProviderInterface;
  * Wishlist Data Helper
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

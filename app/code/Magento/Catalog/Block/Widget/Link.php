@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -66,6 +67,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      *
      * @throws \RuntimeException
      * @return string|false
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getHref()
     {

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -157,6 +158,8 @@ class Url extends \Magento\Framework\Object
      * @param \Magento\Catalog\Model\Product $product
      * @param array $params
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getUrl(\Magento\Catalog\Model\Product $product, $params = [])
     {

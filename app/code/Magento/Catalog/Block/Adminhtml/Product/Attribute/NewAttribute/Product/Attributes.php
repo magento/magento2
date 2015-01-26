@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -12,6 +13,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\NewAttribute\Product
 
 use Magento\Backend\Block\Widget\Form;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 {
     /**

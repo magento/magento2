@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
@@ -408,6 +412,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
      * Helper method for testing all show*() methods.
      *
      * @param array $data Customer attribute(s)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function _setUpShowAttribute(array $data)
     {

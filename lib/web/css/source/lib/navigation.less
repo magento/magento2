@@ -1,5 +1,6 @@
 // /**
-//  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
 //  */
 
 .main-navigation(
@@ -238,11 +239,11 @@
             .ui-menu {
                 .css(font-size, @_submenu-font-size);
                 .css(font-weight, @_submenu-font-weight);
-                left: 0;
                 .css(min-width, @_submenu-min-width);
-                position: absolute;
                 padding: 0;
                 margin: 0 !important;
+                position: absolute;
+                left: 0;
                 top: 100%;
                 z-index: 1;
                 .css(background, @_submenu-bg);
@@ -264,7 +265,8 @@
                     .css(color, @_submenu-item-color);
                     .css(padding, @_submenu-item-padding);
                     .css(text-decoration, @_submenu-item-text-decoration);
-                    &:hover, &.ui-state-focus {
+                    &:hover,
+                    &.ui-state-focus {
                         .css(background, @_submenu-item-bg-hover);
                         .css(border, @_submenu-item-border-hover);
                         .css(color, @_submenu-item-color-hover);
@@ -279,7 +281,7 @@
                 }
                 .ui-menu {
                     top: 0 !important;
-                    left: 100%!important;
+                    left: 100% !important;
                 }
             }
             &.more {
@@ -320,9 +322,9 @@
     & when (iscolor(@_bg)) and (iscolor(@_border)) {
         @_outer-size: @_size + 1;
         @_outer-left: @_left - 1;
-        margin-top: -@_outer-size;
+        .css(margin-top, @_outer-size);
         > ul {
-            margin-top: @_outer-size;
+            .css(margin-top, @_outer-size);
             &:before,
             &:after {
                 content: '';
@@ -331,50 +333,50 @@
                 position: absolute;
             }
             &:before {
-                left: @_left;
-                color: @_bg;
-                z-index: 4;
+                .css(color, @_bg);
+                .css(left, @_left);
+                .css(top, -@_size*2);
                 .arrow(up, @_size, @_bg);
-                top: -@_size*2;
+                z-index: 4;
             }
             &:after {
-                left: @_outer-left;
-                color: @_border;
-                z-index: 3;
                 .arrow(up, @_outer-size, @_border);
-                top: -@_outer-size*2;
+                .css(color, @_border);
+                .css(left, @_outer-left);
+                .css(top, -@_outer-size*2);
+                z-index: 3;
             }
         }
     }
     & when (iscolor(@_bg)) and not (iscolor(@_border)) {
-        margin-top: -@_size;
+        .css(margin-top, -@_size);
         > ul {
-            margin-top: @_size;
+            .css(margin-top, @_size);
             &:before{
-                color: @_bg;
+                .css(color, @_bg);
                 content: '';
                 display: block;
                 overflow: hidden;
                 position: absolute;
-                top: -@_size*2;
-                left: @_left;
+                .css(top, -@_size*2);
+                .css(left, @_left);
                 z-index: 4;
                 .arrow(up, @_size, @_bg);
             }
         }
     }
     & when (iscolor(@_border)) and not (iscolor(@_bg)) {
-        margin-top: -@_size;
+        .css(margin-top, -@_size);
         > ul {
-            margin-top: @_size;
+            .css(margin-top, @_size);
             &:before{
-                color: @_border;
+                .css(color, @_border);
                 content: '';
                 display: block;
                 overflow: hidden;
                 position: absolute;
-                top: -@_size*2;
-                left: @_left;
+                .css(top, -@_size*2);
+                .css(left, @_left);
                 z-index: 4;
                 .arrow(up, @_size, @_border);
             }

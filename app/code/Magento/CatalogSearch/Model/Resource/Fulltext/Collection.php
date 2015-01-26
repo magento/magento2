@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
@@ -10,6 +11,7 @@ use Magento\Framework\Search\Response\QueryResponse;
 
 /**
  * Fulltext Collection
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {

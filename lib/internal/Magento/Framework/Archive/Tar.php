@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -310,6 +311,8 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      *
      * @param bool $long
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _composeHeader($long = false)
     {
@@ -379,6 +382,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * @param string $destination path to file is unpacked
      * @return string[] list of files
      * @throws \Magento\Framework\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _unpackCurrentTar($destination)
     {
@@ -514,6 +518,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      * @param string $destination
      * @param bool $skipRoot
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function pack($source, $destination, $skipRoot = false)
     {

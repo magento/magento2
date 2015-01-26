@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Resource\Entity;
 
@@ -260,6 +261,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param null $attributeGroupId
      * @param null $attributeSortOrder
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveInSetIncluding(
         AbstractModel $object,

@@ -1,15 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\Block\Customer\Wishlist;
 
 use Magento\Wishlist\Test\Block\Customer\Wishlist\Items\Product;
-use Mtf\Block\Block;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Items
@@ -55,7 +55,6 @@ class Items extends Block
     {
         while ($this->_rootElement->find($this->remove)->isVisible()) {
             $this->_rootElement->find($this->remove)->click();
-            $this->reinitRootElement();
         }
     }
 }

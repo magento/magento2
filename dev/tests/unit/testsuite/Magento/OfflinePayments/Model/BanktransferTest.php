@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\OfflinePayments\Model;
 
@@ -11,18 +12,23 @@ class BanktransferTest extends \PHPUnit_Framework_TestCase
      */
     protected $_object;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_scopeConfig;
+
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
-        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
         $this->_object = $objectManagerHelper->getObject(
             'Magento\OfflinePayments\Model\Banktransfer',
             [
                 'eventManager' => $eventManager,
                 'paymentData' => $paymentDataMock,
-                'scopeConfig' => $scopeConfig,
+                'scopeConfig' => $this->_scopeConfig,
             ]
         );
     }

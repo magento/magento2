@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Download;
 
@@ -13,12 +14,14 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * Custom options download action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
         $quoteItemOptionId = $this->getRequest()->getParam('id');
-        /** @var $option \Magento\Sales\Model\Quote\Item\Option */
-        $option = $this->_objectManager->create('Magento\Sales\Model\Quote\Item\Option')->load($quoteItemOptionId);
+        /** @var $option \Magento\Quote\Model\Quote\Item\Option */
+        $option = $this->_objectManager->create('Magento\Quote\Model\Quote\Item\Option')->load($quoteItemOptionId);
 
         if (!$option->getId()) {
             $this->_forward('noroute');

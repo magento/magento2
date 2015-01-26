@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php /** @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */ ?>
 <?php echo $this->getTemplatesHtml() ?>
@@ -74,7 +78,7 @@
 <?php if (!$this->isReadonly()): ?>
 <div><input type="hidden" name="affect_product_custom_options" value="1"/></div>
 <?php endif; ?>
-<script type="text/javascript">
+<script>
 require([
     "jquery",
     "Magento_Catalog/js/custom-options"

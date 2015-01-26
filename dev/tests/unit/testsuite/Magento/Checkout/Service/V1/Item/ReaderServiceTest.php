@@ -1,8 +1,11 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 namespace Magento\Checkout\Service\V1\Item;
 
@@ -27,7 +30,7 @@ class ReaderServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->itemMapperMock =
             $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\ItemMapper', ['extractDto'], [], '', false);
         $this->service = new ReadService($this->quoteRepositoryMock, $this->itemMapperMock);
@@ -35,11 +38,11 @@ class ReaderServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')
             ->with(33)
             ->will($this->returnValue($quoteMock));
-        $itemMock = $this->getMock('\Magento\Sales\Model\Quote\Item',
+        $itemMock = $this->getMock('\Magento\Quote\Model\Quote\Item',
             ['getSku', 'getName', 'getPrice', 'getQty', 'getProductType', '__wakeup'], [], '', false);
         $quoteMock->expects($this->any())->method('getAllItems')->will($this->returnValue([$itemMock]));
         $testData = [

@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -14,6 +15,9 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Catalog\Model\Product;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Crosssell extends Extended
 {
     /**
@@ -186,6 +190,7 @@ class Crosssell extends Extended
      * Add columns to grid
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareColumns()
     {

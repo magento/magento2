@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
 
@@ -39,6 +40,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method string getUpdatedAt()
  * @method \Magento\Search\Model\Query setUpdatedAt(string $value)
  * @method \Magento\Search\Model\Query setIsQueryTextExceeded(bool $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Query extends AbstractModel implements QueryInterface
 {

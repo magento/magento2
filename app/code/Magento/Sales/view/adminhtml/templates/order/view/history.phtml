@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div id="order_history_block">
     <?php if ($this->canAddComment()):?>
@@ -54,7 +58,7 @@
         </li>
     <?php endforeach; ?>
     </ul>
-    <script type="text/javascript">
+    <script>
 require(['prototype'], function(){
 
         if($('order_status'))$('order_status').update('<?php echo $this->getOrder()->getStatusLabel() ?>');

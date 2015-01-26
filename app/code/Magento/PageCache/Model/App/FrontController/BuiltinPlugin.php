@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Model\App\FrontController;
 
@@ -56,6 +57,7 @@ class BuiltinPlugin
      * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\Controller\ResultInterface|\Magento\Framework\App\Response\Http
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
         \Magento\Framework\App\FrontControllerInterface $subject,

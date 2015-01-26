@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Tax\Model\Calculation;
@@ -17,6 +18,9 @@ use Magento\Tax\Api\Data\TaxRateInterface as TaxRateDataObject;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 {
     const MESSAGE_TAX_RATE_ID_IS_NOT_ALLOWED = 'id is not expected for this request.';

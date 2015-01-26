@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -10,6 +11,9 @@
  */
 namespace Magento\Catalog\Model\Resource;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Category extends AbstractResource
 {
     /**
@@ -325,6 +329,8 @@ class Category extends AbstractResource
      *
      * @param \Magento\Catalog\Model\Category $category
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _saveCategoryProducts($category)
     {

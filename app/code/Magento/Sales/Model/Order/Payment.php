@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeDataBuilder;
@@ -66,6 +70,9 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * @method \Magento\Sales\Model\Order\Payment setCcNumberEnc(string $value)
  * @method \Magento\Sales\Model\Order\Payment setCcTransId(string $value)
  * @method \Magento\Sales\Model\Order\Payment setAddressStatus(string $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Payment extends Info implements OrderPaymentInterface
 {
@@ -158,6 +165,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -278,6 +286,7 @@ class Payment extends Info implements OrderPaymentInterface
      * This method is supposed to be called only when order is placed
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function place()
     {
@@ -377,7 +386,7 @@ class Payment extends Info implements OrderPaymentInterface
                 $this->_order($baseTotalDue);
                 break;
             case \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE:
-                $this->_authorize(true, $baseTotalDue);
+                $this->authorize(true, $baseTotalDue);
                 // base amount will be set inside
                 $this->setAmountAuthorized($totalDue);
                 break;
@@ -470,12 +479,9 @@ class Payment extends Info implements OrderPaymentInterface
                 $invoice->setIsPaid(true);
                 $this->_updateTotals(['base_amount_paid_online' => $amountToCapture]);
             }
-            if ($order->isNominal()) {
-                $message = $this->_prependMessage(__('An order with subscription items was registered.'));
-            } else {
-                $message = $this->_prependMessage($message);
-                $message = $this->_appendTransactionToMessage($transaction, $message);
-            }
+            $message = $this->_prependMessage($message);
+            $message = $this->_appendTransactionToMessage($transaction, $message);
+
             $order->setState($state, $status, $message);
             $this->getMethodInstance()->processInvoice($invoice, $this);
             return $this;
@@ -574,7 +580,7 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function registerAuthorizationNotification($amount)
     {
-        return $this->_isTransactionExists() ? $this : $this->_authorize(false, $amount);
+        return $this->_isTransactionExists() ? $this : $this->authorize(false, $amount);
     }
 
     /**
@@ -695,6 +701,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @return $this
      * @throws \Exception
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function refund($creditmemo)
     {
@@ -790,6 +798,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param float $amount
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerRefundNotification($amount)
     {
@@ -978,6 +987,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @param bool $isOnline
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function registerPaymentReviewAction($action, $isOnline)
     {
@@ -1128,9 +1139,10 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param bool $isOnline
      * @param float $amount
+     *
      * @return $this
      */
-    protected function _authorize($isOnline, $amount)
+    public function authorize($isOnline, $amount)
     {
         // check for authorization amount to be equal to grand total
         $this->setShouldCloseParentTransaction(false);
@@ -1154,13 +1166,14 @@ class Payment extends Info implements OrderPaymentInterface
 
         // similar logic of "payment review" order as in capturing
         if ($this->getIsTransactionPending()) {
+            $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
             $message = __(
                 'We will authorize %1 after the payment is approved at the payment gateway.',
                 $this->_formatPrice($amount)
             );
-            $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
         } else {
             if ($this->getIsFraudDetected()) {
+                $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
                 $message = __(
                     'Order is suspended as its authorizing amount %1 is suspected to be fraudulent.',
                     $this->_formatPrice($amount, $this->getCurrencyCode())
@@ -1170,33 +1183,17 @@ class Payment extends Info implements OrderPaymentInterface
             }
         }
         if ($this->getIsFraudDetected()) {
-            $state = \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW;
             $status = \Magento\Sales\Model\Order::STATUS_FRAUD;
         }
 
         // update transactions, order state and add comments
         $transaction = $this->_addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH);
-        if ($order->isNominal()) {
-            $message = $this->_prependMessage(__('An order with subscription items was registered.'));
-        } else {
-            $message = $this->_prependMessage($message);
-            $message = $this->_appendTransactionToMessage($transaction, $message);
-        }
+        $message = $this->_prependMessage($message);
+        $message = $this->_appendTransactionToMessage($transaction, $message);
+
         $order->setState($state, $status, $message);
 
         return $this;
-    }
-
-    /**
-     * Public access to _authorize method
-     *
-     * @param bool $isOnline
-     * @param float $amount
-     * @return $this
-     */
-    public function authorize($isOnline, $amount)
-    {
-        return $this->_authorize($isOnline, $amount);
     }
 
     /**
@@ -1209,6 +1206,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @param float $amount
      * @param string $gatewayCallback
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _void($isOnline, $amount = null, $gatewayCallback = 'void')
     {
@@ -1283,6 +1282,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Sales\Model\AbstractModel $salesDocument
      * @param bool $failsafe
      * @return null|\Magento\Sales\Model\Order\Payment\Transaction
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addTransaction($type, $salesDocument = null, $failsafe = false)
     {

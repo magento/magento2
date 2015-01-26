@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -184,6 +188,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
      * Generate array of parameters for every container type to create html template
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getDisplayOnContainers()
     {

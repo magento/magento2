@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Core\Model\Layout;
 
@@ -9,6 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Layout merge model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 {
@@ -168,6 +171,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
      * @param string $cacheSuffix
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\DesignInterface $design,

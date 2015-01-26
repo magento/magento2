@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\SalesRule\Model;
@@ -74,8 +75,10 @@ class Utility
      * Check if rule can be applied for specific address/quote/customer
      *
      * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Sales\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address $address
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function canProcessRule($rule, $address)
     {
@@ -151,13 +154,13 @@ class Utility
 
     /**
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param float $qty
      * @return void
      */
     public function minFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
-        \Magento\Sales\Model\Quote\Item\AbstractItem $item,
+        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
         $qty
     ) {
         $itemPrice = $this->getItemPrice($item);
@@ -177,18 +180,19 @@ class Utility
      * Process "delta" rounding
      *
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deltaRoundingFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
-        \Magento\Sales\Model\Quote\Item\AbstractItem $item
+        \Magento\Quote\Model\Quote\Item\AbstractItem $item
     ) {
         $store = $item->getQuote()->getStore();
         $discountAmount = $discountData->getAmount();
         $baseDiscountAmount = $discountData->getBaseAmount();
 
-        //TODO Seems \Magento\Sales\Model\Quote\Item\AbstractItem::getDiscountPercent() returns float value
+        //TODO Seems \Magento\Quote\Model\Quote\Item\AbstractItem::getDiscountPercent() returns float value
         //that can not be used as array index
         $percentKey = $item->getDiscountPercent();
         if ($percentKey) {
@@ -212,7 +216,7 @@ class Utility
     /**
      * Return item price
      *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
      */
     public function getItemPrice($item)
@@ -225,7 +229,7 @@ class Utility
     /**
      * Return item base price
      *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return float
      */
     public function getItemBasePrice($item)
@@ -237,7 +241,7 @@ class Utility
     /**
      * Return discount item qty
      *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param \Magento\SalesRule\Model\Rule $rule
      * @return int
      */

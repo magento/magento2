@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -13,6 +14,10 @@ namespace Magento\Rule\Model\Condition;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 abstract class AbstractCondition extends \Magento\Framework\Object implements ConditionInterface
 {
     /**
@@ -216,6 +221,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     /**
      * @param array $arr
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function loadArray($arr)
     {
@@ -407,6 +413,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
 
     /**
      * @return array|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getValueName()
     {
@@ -701,6 +708,9 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
      *
      * @param   object|array|int|string|float|bool $validatedValue product attribute value
      * @return  bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validateAttribute($validatedValue)
     {

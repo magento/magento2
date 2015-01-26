@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Compare;
 
@@ -206,6 +207,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function bindCustomerLogout(\Magento\Framework\Event\Observer $observer = null)
     {

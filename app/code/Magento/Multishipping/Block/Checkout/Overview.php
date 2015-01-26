@@ -1,11 +1,12 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Block\Checkout;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Multishipping checkout overview information
@@ -132,6 +133,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * @param Address $address
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShippingAddressRate($address)
     {
@@ -304,7 +306,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     /**
      * Retrieve quote
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Quote\Model\Quote
      */
     public function getQuote()
     {

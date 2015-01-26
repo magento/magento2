@@ -1,16 +1,17 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Fixture\CatalogProductVirtual;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for UpdateVirtualProductEntity
@@ -29,11 +30,16 @@ use Mtf\TestCase\Injectable;
  * 5. Click "Save".
  * 6. Perform asserts.
  *
- * @group Products_(CS)
+ * @group Products_(MX)
  * @ZephyrId MAGETWO-26204
  */
 class UpdateVirtualProductEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Virtual product fixture
      *
@@ -58,10 +64,10 @@ class UpdateVirtualProductEntityTest extends Injectable
     /**
      * Prepare data
      *
-     * @param CatalogCategory $category
+     * @param Category $category
      * @return array
      */
-    public function __prepare(CatalogCategory $category)
+    public function __prepare(Category $category)
     {
         $category->persist();
         return [
@@ -74,14 +80,14 @@ class UpdateVirtualProductEntityTest extends Injectable
      *
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $editProductPage
-     * @param CatalogCategory $category
+     * @param Category $category
      * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         CatalogProductIndex $productGrid,
         CatalogProductEdit $editProductPage,
-        CatalogCategory $category,
+        Category $category,
         FixtureFactory $fixtureFactory
     ) {
         $this->product = $fixtureFactory->createByCode(

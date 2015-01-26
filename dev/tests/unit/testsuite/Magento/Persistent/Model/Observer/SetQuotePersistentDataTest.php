@@ -1,7 +1,8 @@
 <?php
 /**
  *
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Persistent\Model\Observer;
@@ -52,7 +53,7 @@ class SetQuotePersistentDataTest extends \PHPUnit_Framework_TestCase
     {
         $quoteMethods = ['setIsActive', 'setIsPersistent', '__wakeUp'];
         $eventMethods = ['getQuote', '__wakeUp'];
-        $this->quoteMock = $this->getMock('Magento\Sales\Model\Quote', $quoteMethods, [], '', false);
+        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', $quoteMethods, [], '', false);
         $this->helperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
         $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
         $this->eventManagerMock = $this->getMock('\Magento\Framework\Event', $eventMethods, [], '', false);

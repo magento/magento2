@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Service\V1\Cart;
 
@@ -8,12 +9,13 @@ use Magento\Checkout\Service\V1\Data;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Exception\InputException;
-use Magento\Sales\Model\Quote;
-use Magento\Sales\Model\QuoteRepository;
-use Magento\Sales\Model\Resource\Quote\Collection as QuoteCollection;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
 
 /**
  * Cart read service object.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReadService implements ReadServiceInterface
 {

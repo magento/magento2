@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 /**
@@ -121,6 +122,7 @@ class Observer
     /**
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processAddToCart($observer)
     {
@@ -176,6 +178,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function customerLogin(\Magento\Framework\Event\Observer $observer)
     {
@@ -189,6 +192,7 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function customerLogout(\Magento\Framework\Event\Observer $observer)
     {

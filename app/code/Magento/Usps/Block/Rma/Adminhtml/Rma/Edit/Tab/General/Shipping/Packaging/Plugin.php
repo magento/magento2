@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Usps\Block\Rma\Adminhtml\Rma\Edit\Tab\General\Shipping\Packaging;
 
@@ -45,6 +46,7 @@ class Plugin
      * @param \Magento\Framework\Object $subject $subject
      * @param bool $result
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterIsGirthAllowed(\Magento\Framework\Object $subject, $result)
     {
@@ -57,6 +59,7 @@ class Plugin
      * @param \Magento\Framework\Object $subject
      * @param \Closure $proceed
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundCheckSizeAndGirthParameter(\Magento\Framework\Object $subject, \Closure $proceed)
     {

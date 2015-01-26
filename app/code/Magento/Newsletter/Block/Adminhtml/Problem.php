@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Block\Adminhtml;
 
@@ -39,6 +40,7 @@ class Problem extends \Magento\Backend\Block\Template
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _construct()
     {
@@ -100,6 +102,7 @@ class Problem extends \Magento\Backend\Block\Template
      * Return true if the size is greater than 0
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShowButtons()
     {

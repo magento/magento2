@@ -1,16 +1,18 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Framework\Model\Exception;
-use Magento\Sales\Model\Quote\Address\RateRequest;
-use Magento\Sales\Model\Quote\Address\RateResult\Error;
+use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
 
 /**
  * Abstract online shipping carrier model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCarrierOnline extends AbstractCarrier
 {
@@ -54,7 +56,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected $_rateFactory;
 
     /**
-     * @var \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory
      */
     protected $_rateMethodFactory;
 
@@ -102,11 +104,11 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
-     * @param \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
      * @param \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory
      * @param \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory
      * @param \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory
@@ -121,11 +123,11 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
-        \Magento\Sales\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
+        \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
         \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory,
         \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory,
         \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory,
@@ -246,13 +248,14 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param RateRequest $request
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAllItems(RateRequest $request)
     {
         $items = [];
         if ($request->getAllItems()) {
             foreach ($request->getAllItems() as $item) {
-                /* @var $item \Magento\Sales\Model\Quote\Item */
+                /* @var $item \Magento\Quote\Model\Quote\Item */
                 if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
                     // Don't process children here - we will process (or already have processed) them below
                     continue;
@@ -278,6 +281,8 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param RateRequest $request
      * @return $this|bool|Error
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function proccessAdditionalValidation(RateRequest $request)
     {
@@ -292,7 +297,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         $defaultErrorMsg = __('The shipping module is not available.');
         $showMethod = $this->getConfigData('showmethod');
 
-        /** @var $item \Magento\Sales\Model\Quote\Item */
+        /** @var $item \Magento\Quote\Model\Quote\Item */
         foreach ($this->getAllItems($request) as $item) {
             $product = $item->getProduct();
             if ($product && $product->getId()) {
@@ -517,6 +522,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @return bool
      *
      * @todo implement rollback logic
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function rollBack($data)
     {
@@ -565,6 +571,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param null|string $countyDest
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isGirthAllowed($countyDest = null)
     {

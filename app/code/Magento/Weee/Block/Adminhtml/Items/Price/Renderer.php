@@ -1,13 +1,14 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Block\Adminhtml\Items\Price;
 
 use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item;
-use Magento\Sales\Model\Quote\Item\AbstractItem as QuoteItem;
+use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 use Magento\Weee\Block\Item\Price\Renderer as ItemPriceRenderer;
 
 /**

@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Sales/etc/sales.xsd">
     <section name="quote">
         <group name="totals">
             <item name="discount" instance="Magento\SalesRule\Model\Quote\Discount" sort_order="400"/>
-        </group>
-        <group name="nominal_totals">
-            <item name="nominal_discount" instance="Magento\SalesRule\Model\Quote\Nominal\Discount" sort_order="550"/>
         </group>
     </section>
 </config>

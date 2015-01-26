@@ -1,14 +1,15 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Mtf\Constraint\AbstractAssertForm;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class AssertProductForm

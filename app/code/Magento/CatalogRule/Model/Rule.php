@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
 
@@ -36,6 +37,8 @@ use Magento\Catalog\Model\Product;
  * @method \Magento\CatalogRule\Model\Rule setDiscountAmount(float $value)
  * @method string getWebsiteIds()
  * @method \Magento\CatalogRule\Model\Rule setWebsiteIds(string $value)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
@@ -159,6 +162,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -340,6 +344,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param Product $product
      * @param float $price
      * @return float|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function calcProductPriceRule(Product $product, $price)
     {

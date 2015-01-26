@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 
 /**
  * Widget model for different purposes
@@ -116,6 +119,8 @@ class Widget
      *
      * @param string $type Widget type
      * @return \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getConfigAsObject($type)
     {

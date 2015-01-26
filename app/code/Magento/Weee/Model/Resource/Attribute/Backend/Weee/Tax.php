@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model\Resource\Attribute\Backend\Weee;
 
@@ -103,8 +104,6 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function insertProductData($product, $data)
     {
         $data['entity_id'] = (int)$product->getId();
-        $data['entity_type_id'] = (int)$product->getEntityTypeId();
-
         $this->_getWriteAdapter()->insert($this->getMainTable(), $data);
         return $this;
     }

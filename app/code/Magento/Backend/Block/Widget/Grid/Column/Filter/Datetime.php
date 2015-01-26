@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
@@ -129,7 +133,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             ) . '/>' . '</div></div>';
         $html .= '<input type="hidden" name="' . $this->_getHtmlName() . '[locale]"' . ' value="'
             . $this->_localeResolver->getLocaleCode() . '"/>';
-        $html .= '<script type="text/javascript">
+        $html .= '<script>
             require(["jquery", "mage/calendar"],function($){
                     $("#' . $htmlId . '_range").dateRange({
                         dateFormat: "' . $format . '",

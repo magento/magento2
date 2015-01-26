@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Tools\Di\Code\Scanner;
 
@@ -68,6 +69,43 @@ class PhpScanner implements ScannerInterface
     }
 
     /**
+     * Fetch factories from class constructor
+     *
+     * @param $file string
+     * @param $reflectionClass mixed
+     * @return array
+     */
+    protected function _fetchDataBuilders($file, $reflectionClass)
+    {
+        $absentDataBuilders = [];
+        if ($reflectionClass->hasMethod('__construct')) {
+            $constructor = $reflectionClass->getMethod('__construct');
+            $parameters = $constructor->getParameters();
+            /** @var $parameter \ReflectionParameter */
+            foreach ($parameters as $parameter) {
+                preg_match('/\[\s\<\w+?>\s([\w\\\\]+)/s', $parameter->__toString(), $matches);
+                if (isset($matches[1]) && substr($matches[1], -11) == 'DataBuilder') {
+                    $factoryClassName = $matches[1];
+                    if (class_exists($factoryClassName)) {
+                        continue;
+                    }
+                    $entityName = rtrim(substr($factoryClassName, 0, -11), '\\');
+                    if (!class_exists($entityName) && !interface_exists($entityName . 'Interface')) {
+                        $this->_log->add(
+                            Log::CONFIGURATION_ERROR,
+                            $factoryClassName,
+                            'Invalid DataBuilder for nonexistent class ' . $entityName . ' in file ' . $file
+                        );
+                        continue;
+                    }
+                    $absentDataBuilders[] = $factoryClassName;
+                }
+            }
+        }
+        return $absentDataBuilders;
+    }
+
+    /**
      * Get array of class names
      *
      * @param array $files
@@ -81,8 +119,9 @@ class PhpScanner implements ScannerInterface
             foreach ($classes as $className) {
                 $reflectionClass = new \ReflectionClass($className);
                 $absentFactories = $this->_fetchFactories($file, $reflectionClass);
+                $absentDataBuilders = $this->_fetchDataBuilders($file, $reflectionClass);
                 if (!empty($absentFactories)) {
-                    $output = array_merge($output, $absentFactories);
+                    $output = array_merge($output, $absentFactories, $absentDataBuilders);
                 }
             }
         }

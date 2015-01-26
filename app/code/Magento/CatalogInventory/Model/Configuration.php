@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
 
@@ -254,6 +255,7 @@ class Configuration implements StockConfigurationInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getEnableQtyIncrements($store = null)
     {
@@ -312,6 +314,7 @@ class Configuration implements StockConfigurationInterface
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanBackInStock($store = null)
     {

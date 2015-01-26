@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block;
 
@@ -66,11 +67,12 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * prepare cart items URLs
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function prepareItemUrls()
     {
         $products = [];
-        /* @var $item \Magento\Sales\Model\Quote\Item */
+        /* @var $item \Magento\Quote\Model\Quote\Item */
         foreach ($this->getItems() as $item) {
             $product = $item->getProduct();
             $option = $item->getOptionByCode('product_type');
@@ -163,6 +165,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsVirtual()
     {

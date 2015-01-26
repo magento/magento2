@@ -1,7 +1,11 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Helper;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -280,7 +284,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetQuote()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->_checkoutSession->expects($this->once())->method('getQuote')->will($this->returnValue($quoteMock));
         $this->assertEquals($quoteMock, $this->_helper->getQuote());
     }
@@ -288,7 +292,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testFormatPrice()
     {
         $price = 5.5;
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $storeMock = $this->getMock(
             'Magento\Store\Model\Store',
             ['formatPrice', '__wakeup'],
@@ -467,7 +471,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testIsAllowedGuestCheckoutWithoutStore()
     {
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $store = null;
         $quoteMock->expects($this->once())->method('getStoreId')->will($this->returnValue(1));
         $this->_scopeConfig->expects($this->once())
