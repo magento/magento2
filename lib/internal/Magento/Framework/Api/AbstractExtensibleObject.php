@@ -25,10 +25,10 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
     /**
      * Initialize internal storage
      *
-     * @param AttributeValueFactory $attributeValueFactory
      * @param array $data
+     * @param AttributeValueFactory $attributeValueFactory
      */
-    public function __construct(AttributeValueFactory $attributeValueFactory, array $data)
+    public function __construct(array $data, AttributeValueFactory $attributeValueFactory)
     {
         $this->attributeValueFactory = $attributeValueFactory;
         parent::__construct($data);

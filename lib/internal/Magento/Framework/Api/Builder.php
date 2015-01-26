@@ -157,7 +157,7 @@ class Builder implements BuilderInterface
             $dataObjectType = $this->_getDataObjectType();
             $dataObject = $this->objectFactory->create(
                 $dataObjectType,
-                ['attributeValueFactory' => $this->attributeValueFactory, 'data' => $this->data]
+                ['data' => $this->data, 'attributeValueFactory' => $this->attributeValueFactory]
             );
         } else {
             $dataObjectType = $this->_getDataObjectType();
