@@ -74,7 +74,7 @@ class InstallTest extends Injectable
         $configData['dbPassword'] = $config->get('install/password');
         $configData['dbName'] = $config->get('install/dbName');
         $configData['web'] = $config->get('install/baseUrl');
-        $configData['admin'] = $config->get('install/backendName');;
+        $configData['admin'] = $config->get('install/backendName');
 
         return ['configData' => $configData];
     }
