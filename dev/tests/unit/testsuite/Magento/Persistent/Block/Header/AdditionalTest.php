@@ -257,7 +257,6 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
         $cacheData = false;
         $idQueryParam = 'id-query-param';
         $sessionId = 'session-id';
-        $customerName = 'customer-name';
 
         $this->additional->setData('cache_lifetime', 789);
         $this->additional->setData('cache_key', 'cache-key');
@@ -312,17 +311,6 @@ class AdditionalTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerId);
 
         if ($customerId) {
-
-            $customerMock = $this->getMockForAbstractClass(
-                'Magento\Customer\Api\Data\CustomerInterface',
-                [],
-                '',
-                false,
-                true,
-                true,
-                []
-            );
-
             $this->assertEquals('<span><a  >Not you?</a></span>', $this->additional->toHtml());
         } else {
             $this->assertEquals('', $this->additional->toHtml());
