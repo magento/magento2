@@ -6,10 +6,10 @@
 
 namespace Magento\Review\Test\Constraint;
 
-use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
 use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
-use Mtf\Constraint\AbstractAssertForm;
+use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
  * Class AssertProductRatingOnReviewPage
@@ -25,15 +25,15 @@ class AssertProductRatingOnReviewPage extends AbstractAssertForm
      *
      * @param ReviewIndex $reviewIndex
      * @param ReviewEdit $reviewEdit
-     * @param ReviewInjectable $review
-     * @param ReviewInjectable|null $reviewInitial [optional]
+     * @param Review $review
+     * @param Review|null $reviewInitial [optional]
      * @return void
      */
     public function processAssert(
         ReviewIndex $reviewIndex,
         ReviewEdit $reviewEdit,
-        ReviewInjectable $review,
-        ReviewInjectable $reviewInitial = null
+        Review $review,
+        Review $reviewInitial = null
     ) {
         $filter = ['title' => $review->getTitle()];
 

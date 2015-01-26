@@ -9,7 +9,7 @@
 
 namespace Magento\Bundle\Test\Block\Catalog\Product\View\Type;
 
-use Mtf\Block\Form;
+use Magento\Mtf\Block\Form;
 
 /**
  * Class Option

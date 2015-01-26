@@ -6,8 +6,8 @@
 
 namespace Magento\Sales\Test\Block\Order;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Items block on order's view page
@@ -31,7 +31,7 @@ class Items extends Block
     /**
      * Check if item is visible in print order page.
      *
-     * @param \Mtf\Fixture\InjectableFixture $product
+     * @param \Magento\Mtf\Fixture\InjectableFixture $product
      * @return bool
      */
     public function isItemVisible($product)

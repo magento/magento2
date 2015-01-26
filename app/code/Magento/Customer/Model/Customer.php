@@ -1218,21 +1218,6 @@ class Customer extends \Magento\Framework\Model\AbstractExtensibleModel
     }
 
     /**
-     * Return Entity Type ID
-     *
-     * @return int
-     */
-    public function getEntityTypeId()
-    {
-        $entityTypeId = $this->getData('entity_type_id');
-        if (!$entityTypeId) {
-            $entityTypeId = $this->getEntityType()->getId();
-            $this->setData('entity_type_id', $entityTypeId);
-        }
-        return $entityTypeId;
-    }
-
-    /**
      * Get either first store ID from a set website or the provided as default
      *
      * @param int|string|null $defaultStoreId

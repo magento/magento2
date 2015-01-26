@@ -6,14 +6,14 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails;
 
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class ProductOnlineSwitcher
  * Typified element class for product status element
  */
-class ProductOnlineSwitcher extends Element
+class ProductOnlineSwitcher extends SimpleElement
 {
     /**
      * CSS locator button status of the product

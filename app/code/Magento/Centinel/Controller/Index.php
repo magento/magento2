@@ -34,7 +34,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * Return payment model
      *
-     * @return \Magento\Sales\Model\Quote\Payment
+     * @return \Magento\Quote\Model\Quote\Payment
      */
     protected function _getPayment()
     {

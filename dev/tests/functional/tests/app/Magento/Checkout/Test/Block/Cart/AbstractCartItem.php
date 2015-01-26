@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Block\Cart;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class AbstractCartItem
@@ -26,7 +26,7 @@ class AbstractCartItem extends Block
      *
      * @var string
      */
-    protected $price = './/td[@class="col price"]/*[@class="price-excluding-tax"]/span';
+    protected $price = './/td[@class="col price"]//span[@class="price"]';
 
     /**
      * Selector for unit price including tax
@@ -55,7 +55,7 @@ class AbstractCartItem extends Block
      *
      * @var string
      */
-    protected $subTotalPriceInclTax = '//td[@class="col subtotal"]//*[@class="price-including-tax"]//span[@class="price"]';
+    protected $subTotalPriceInclTax = '//td[@class="col subtotal"]//span[@class="price"]';
     // @codingStandardsIgnoreEnd
 
     /**

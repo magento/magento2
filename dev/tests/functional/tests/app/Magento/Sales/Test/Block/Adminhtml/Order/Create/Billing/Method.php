@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\Billing;
 
-use Mtf\Block\Block;
+use Magento\Mtf\Block\Block;
 
 /**
  * Class Method

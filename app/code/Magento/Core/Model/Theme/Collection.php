@@ -217,7 +217,6 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
             'area' => $pathData['area'],
             'theme_path' => $themePath,
             'code' => $themeCode,
-            'theme_version' => $themeConfig->getThemeVersion(),
             'theme_title' => $themeConfig->getThemeTitle(),
             'preview_image' => $media['preview_image'] ? $media['preview_image'] : null,
             'parent_theme_path' => $parentPath

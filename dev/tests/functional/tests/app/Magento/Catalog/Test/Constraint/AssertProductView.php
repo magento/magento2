@@ -8,13 +8,11 @@ namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductView
- *
- * @package Magento\Catalog\Test\Constraint
  */
 class AssertProductView extends AbstractConstraint
 {
@@ -24,13 +22,13 @@ class AssertProductView extends AbstractConstraint
 
     /**
      * @param CatalogProductView $catalogProductView
-     * @param Browser $browser
+     * @param BrowserInterface $browser
      * @param CatalogProductSimple $product
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        Browser $browser,
+        BrowserInterface $browser,
         CatalogProductSimple $product
     ) {
         //Open product view page

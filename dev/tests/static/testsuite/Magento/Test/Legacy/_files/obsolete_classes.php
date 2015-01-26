@@ -1302,6 +1302,7 @@ return [
     ['Magento\Core\Controller\Varien\DispatchableInterface'],
     ['Magento\Core\Controller\Varien\Front', 'Magento\Framework\App\FrontController'],
     ['Magento\Core\Controller\FrontInterface', 'Magento\Framework\App\FrontControllerInterface'],
+    ['Magento\Core\Model\App\Emulation', 'Magento\Store\Model\App\Emulation'],
     ['Magento\Core\Model\App\Handler'],
     ['Magento\Core\Model\App\Proxy'],
     ['Magento\Core\Model\Event\Config\SchemaLocator', 'Magento\Framework\Event\Config\SchemaLocator'],
@@ -1362,7 +1363,7 @@ return [
     ['Magento\Sales\Model\Resource\Order\Creditmemo\Attribute\Backend\Parent'],
     ['Magento\Sales\Model\Resource\Order\Invoice\Attribute\Backend\Parent'],
     ['Magento\Sales\Model\Resource\Order\Shipment\Attribute\Backend\Parent'],
-    ['Magento\Sales\Model\Resource\Quote\Address\Attribute\Backend\Parent'],
+    ['Magento\Quote\Model\Resource\Quote\Address\Attribute\Backend\Parent'],
     ['Magento\Core\Helper\Http'],
     ['Magento\Core\Model\ThemeInterface', 'Magento\Framework\View\Design\ThemeInterface'],
     ['Magento\Core\Model\View\DesignInterface', 'Magento\Framework\View\DesignInterface'],
@@ -1876,15 +1877,15 @@ return [
     ['CollFactory', 'CollectionFactory'], // no need to shorten anymore
     [
         'Magento\Shipping\Model\Rate\Result\AbstractResult',
-        'Magento\Sales\Model\Quote\Address\RateResult\AbstractResult'
+        'Magento\Quote\Model\Quote\Address\RateResult\AbstractResult'
     ],
-    ['Magento\Shipping\Model\Rate\Result\Error', 'Magento\Sales\Model\Quote\Address\RateResult\Error'],
-    ['Magento\Shipping\Model\Rate\Result\Method', 'Magento\Sales\Model\Quote\Address\RateResult\Method'],
+    ['Magento\Shipping\Model\Rate\Result\Error', 'Magento\Quote\Model\Quote\Address\RateResult\Error'],
+    ['Magento\Shipping\Model\Rate\Result\Method', 'Magento\Quote\Model\Quote\Address\RateResult\Method'],
     [
         'Magento\Shipping\Model\Rate\AbstractRate',
-        'Magento\Sales\Model\Quote\Address\Rate + Magento\Shipping\Model\CarrierFactory'
+        'Magento\Quote\Model\Quote\Address\Rate + Magento\Shipping\Model\CarrierFactory'
     ],
-    ['Magento\Shipping\Model\Rate\Request', 'Magento\Sales\Model\Quote\Address\RateRequest'],
+    ['Magento\Shipping\Model\Rate\Request', 'Magento\Quote\Model\Quote\Address\RateRequest'],
     ['Magento\PageCache\Block\Adminhtml\Cache\Additional'],
     ['Magento\PageCache\Model\Control\ControlInterface'],
     ['Magento\PageCache\Model\Control\Zend'],
@@ -2684,7 +2685,7 @@ return [
     ['Magento\Catalog\Block\Product'],
     ['\Magento\Sales\Model\Observer'],
     ['\Magento\Install\Block\Begin'],
-    ['\Magento\Checkout\Service\V1\QuoteLoader', '\Magento\Sales\Model\QuoteRepository'],
+    ['\Magento\Checkout\Service\V1\QuoteLoader', '\Magento\Quote\Model\QuoteRepository'],
     ['Magento\PageCache\Model\Observer'],
     ['Magento\Catalog\Model\Layer\Filter\Price\Algorithm', 'Magento\Framework\Search\Dynamic\Algorithm'],
     ['Magento\Rss\Block\Order\Info\Buttons\Rss'],
@@ -2845,4 +2846,13 @@ return [
     ['Magento\Framework\App\Cache\State\Options', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\App\Cache\State\OptionsInterface', 'Magento\Framework\App\Cache\State'],
     ['Magento\Framework\Logger', 'Psr\Log\LoggerInterface'],
+    ['Magento\Weee\Model\Total\Quote\Nominal\Weee'],
+    ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Tax'],
+    ['Magento\Tax\Model\Sales\Total\Quote\Nominal\Subtotal'],
+    ['Magento\SalesRule\Model\Quote\Nominal\Discount'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal\Collector'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping'],
+    ['Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal'],
+    ['Magento\Core\Model\Validator\Factory', 'Magento\Framework\Validator\Factory'],
 ];

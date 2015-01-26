@@ -6,10 +6,10 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
+use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Template;
 use Magento\Backend\Test\Block\Widget\Form;
-use Mtf\Client\Driver\Selenium\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Matrix
@@ -120,11 +120,11 @@ class Matrix extends Form
     /**
      * Assign product to variation matrix
      *
-     * @param Element $variationRow
+     * @param SimpleElement $variationRow
      * @param int $productId
      * @return void
      */
-    protected function assignProduct(Element $variationRow, $productId)
+    protected function assignProduct(SimpleElement $variationRow, $productId)
     {
         $variationRow->find($this->configurableAttribute)->click();
         $this->getTemplateBlock()->waitLoader();
@@ -142,10 +142,10 @@ class Matrix extends Form
     public function getVariationsData()
     {
         $data = [];
-        $variationRows = $this->_rootElement->find($this->variationRow, Locator::SELECTOR_XPATH)->getElements();
+        $variationRows = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
 
         foreach ($variationRows as $key => $variationRow) {
-            /** @var Element $variationRow */
+            /** @var SimpleElement $variationRow */
             if ($variationRow->isVisible()) {
                 $data[$key] = $this->_getData($this->dataMapping(), $variationRow);
                 $data[$key] += $this->getOptionalFields($variationRow, $this->mappingGetFields);
@@ -158,11 +158,11 @@ class Matrix extends Form
     /**
      * Get optional fields
      *
-     * @param Element $context
+     * @param SimpleElement $context
      * @param array $fields
      * @return array
      */
-    protected function getOptionalFields(Element $context, array $fields)
+    protected function getOptionalFields(SimpleElement $context, array $fields)
     {
         $data = [];
 

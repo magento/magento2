@@ -6,8 +6,8 @@
 
 namespace Magento\GiftMessage\Test\Fixture\GiftMessage;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Items

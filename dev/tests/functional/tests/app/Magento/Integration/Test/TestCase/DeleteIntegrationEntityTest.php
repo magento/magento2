@@ -8,7 +8,7 @@ namespace Magento\Integration\Test\TestCase;
 
 use Magento\Integration\Test\Fixture\Integration;
 use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for Delete Integration Entity
@@ -29,6 +29,11 @@ use Mtf\TestCase\Injectable;
  */
 class DeleteIntegrationEntityTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
+    /* end tags */
+
     /**
      * Integration grid page
      *
