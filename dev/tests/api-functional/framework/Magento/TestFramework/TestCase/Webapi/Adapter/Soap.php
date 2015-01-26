@@ -130,7 +130,10 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         /** @var \Magento\Framework\Store\StoreManagerInterface $storeManager */
         $storeCode = !is_null($storeCode)
             ? (string)$storeCode
-            : Bootstrap::getObjectManager()->get('Magento\Framework\Store\StoreManagerInterface')->getStore()->getCode();
+            : Bootstrap::getObjectManager()
+                ->get('Magento\Framework\Store\StoreManagerInterface')
+                ->getStore()
+                ->getCode();
 
         /** TESTS_BASE_URL is initialized in PHPUnit configuration */
         $wsdlUrl = rtrim(TESTS_BASE_URL, '/') . self::WSDL_BASE_PATH . '/' . $storeCode . '?wsdl=1&services=';

@@ -1125,7 +1125,10 @@ class Store extends AbstractModel implements
      */
     public function beforeDelete()
     {
-        $this->_configDataResource->clearScopeData(\Magento\Framework\Store\ScopeInterface::SCOPE_STORES, $this->getId());
+        $this->_configDataResource->clearScopeData(
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORES,
+            $this->getId()
+        );
 
         return parent::beforeDelete();
     }

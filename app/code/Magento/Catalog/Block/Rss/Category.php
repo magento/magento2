@@ -215,7 +215,10 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
      */
     public function isAllowed()
     {
-        return $this->_scopeConfig->isSetFlag('rss/catalog/category', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->isSetFlag(
+            'rss/catalog/category',
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

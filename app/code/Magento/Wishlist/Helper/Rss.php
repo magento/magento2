@@ -120,6 +120,9 @@ class Rss extends \Magento\Wishlist\Helper\Data
     public function isRssAllow()
     {
         return $this->_moduleManager->isEnabled('Magento_Rss')
-            && $this->_scopeConfig->isSetFlag('rss/wishlist/active', \Magento\Framework\Store\ScopeInterface::SCOPE_STORE);
+            && $this->_scopeConfig->isSetFlag(
+                'rss/wishlist/active',
+                \Magento\Framework\Store\ScopeInterface::SCOPE_STORE
+            );
     }
 }

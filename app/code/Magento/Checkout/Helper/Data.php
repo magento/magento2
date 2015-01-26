@@ -332,7 +332,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getEmails($configPath, $storeId)
     {
-        $data = $this->_scopeConfig->getValue($configPath, \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId);
+        $data = $this->_scopeConfig->getValue(
+            $configPath,
+            \Magento\Framework\Store\ScopeInterface::SCOPE_STORE, $storeId
+        );
         if (!empty($data)) {
             return explode(',', $data);
         }

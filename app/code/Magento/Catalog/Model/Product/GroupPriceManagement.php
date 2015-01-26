@@ -81,7 +81,8 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
         $product = $this->productRepository->get($productSku, true);
         $groupPrices = $product->getData('group_price');
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $found = false;
@@ -125,7 +126,8 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     {
         $product = $this->productRepository->get($productSku, true);
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        $value = $this->config->getValue('catalog/price/scope',\Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $this->priceModifier->removeGroupPrice($product, $customerGroupId, $websiteIdentifier);
@@ -139,7 +141,8 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     {
         $product = $this->productRepository->get($productSku, true);
         $priceKey = 'website_price';
-        if ($this->config->getValue('catalog/price/scope', \Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE) == 0) {
+        $value = $this->config->getValue('catalog/price/scope',\Magento\Framework\Store\ScopeInterface::SCOPE_WEBSITE);
+        if ($value == 0) {
             $priceKey = 'price';
         }
 
