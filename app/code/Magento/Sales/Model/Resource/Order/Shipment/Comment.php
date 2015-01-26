@@ -34,19 +34,19 @@ class Comment extends Entity implements ShipmentCommentResourceInterface
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param \Magento\Sales\Model\Order\Shipment\Comment\Validator $validator
-     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      * @param string|null $resourcePrefix
+     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\Sales\Model\Increment $salesIncrement,
         \Magento\Sales\Model\Order\Shipment\Comment\Validator $validator,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null,
-        $resourcePrefix = null
+        $resourcePrefix = null,
+        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->validator = $validator;
-        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator, $resourcePrefix);
+        parent::__construct($resource, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }
 
     /**

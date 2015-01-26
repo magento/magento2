@@ -36,8 +36,8 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridPool $gridPool
-     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      * @param string|null $resourcePrefix
+     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
@@ -45,8 +45,8 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         \Magento\Sales\Model\Increment $salesIncrement,
         \Magento\Sales\Model\Order\Address\Validator $validator,
         \Magento\Sales\Model\Resource\GridPool $gridPool,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null,
-        $resourcePrefix = null
+        $resourcePrefix = null,
+        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->_validator = $validator;
         $this->gridPool = $gridPool;
