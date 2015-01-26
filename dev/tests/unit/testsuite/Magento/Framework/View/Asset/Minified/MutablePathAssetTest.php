@@ -45,7 +45,7 @@ class MutablePathAssetTest extends AbstractAssetTestCase
      */
     private function prepareRequestedAsMinifiedMock()
     {
-        $this->_asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/library.min.js'));
+        $this->_asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/admin.min.js'));
         $this->_asset->expects($this->once())->method('getSourceFile')->will($this->returnValue('source_file'));
         $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
         $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
@@ -60,7 +60,7 @@ class MutablePathAssetTest extends AbstractAssetTestCase
         return [
             ['getUrl', 'url'],
             ['getSourceFile', 'source_file'],
-            ['getPath', 'test/library.min.js'],
+            ['getPath', 'test/admin.min.js'],
             ['getFilePath', 'file_path'],
             ['getContext', 'context'],
         ];
@@ -95,7 +95,7 @@ class MutablePathAssetTest extends AbstractAssetTestCase
         $this->_adapter->expects($this->never())->method('minify');
         $this->_staticViewDir->expects($this->exactly(2))
             ->method('readFile')
-            ->with('test/library.min.js')
+            ->with('test/admin.min.js')
             ->will($this->returnValue('content'));
         $this->assertEquals('content', $this->_model->getContent());
         $this->assertEquals('content', $this->_model->getContent());
@@ -103,23 +103,23 @@ class MutablePathAssetTest extends AbstractAssetTestCase
 
     public function testHasPreminifiedFile()
     {
-        $this->_asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/library.js'));
+        $this->_asset->expects($this->exactly(2))->method('getPath')->will($this->returnValue('test/admin.js'));
         $this->_asset->expects($this->atLeastOnce())
             ->method('getSourceFile')
-            ->will($this->returnValue('/foo/bar/test/library.js'));
+            ->will($this->returnValue('/foo/bar/test/admin.js'));
         $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
         $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
         $this->_asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));
         $this->_rootDir->expects($this->once())
             ->method('getRelativePath')
-            ->with('/foo/bar/test/library.min.js')
-            ->will($this->returnValue('test/library.min.js'));
+            ->with('/foo/bar/test/admin.min.js')
+            ->will($this->returnValue('test/admin.min.js'));
         $this->_rootDir->expects($this->once())
             ->method('isExist')
-            ->with('test/library.min.js')
+            ->with('test/admin.min.js')
             ->will($this->returnValue(true));
         $this->_adapter->expects($this->never())->method('minify');
-        $this->assertEquals('test/library.min.js', $this->_model->getPath());
+        $this->assertEquals('test/admin.min.js', $this->_model->getPath());
     }
 
     public function testMinify()
@@ -128,7 +128,7 @@ class MutablePathAssetTest extends AbstractAssetTestCase
         $this->_asset->expects($this->once())->method('getContent')->will($this->returnValue('content'));
         $this->_adapter->expects($this->once())->method('minify')->with('content')->will($this->returnValue('mini'));
         $this->_staticViewDir->expects($this->once())->method('writeFile')->with($this->anything(), 'mini');
-        $this->assertStringMatchesFormat('%s_library.min.js', $this->_model->getFilePath());
+        $this->assertStringMatchesFormat('%s_admin.min.js', $this->_model->getFilePath());
     }
 
     public function testMinificationFailed()
@@ -142,7 +142,7 @@ class MutablePathAssetTest extends AbstractAssetTestCase
         $this->_asset->expects($this->once())->method('getFilePath')->will($this->returnValue('file_path'));
         $this->_asset->expects($this->once())->method('getContext')->will($this->returnValue('context'));
         $this->_asset->expects($this->once())->method('getUrl')->will($this->returnValue('url'));
-        $this->assertEquals('test/library.js', $this->_model->getPath());
+        $this->assertEquals('test/admin.js', $this->_model->getPath());
     }
 
     public function testShouldNotMinifyCozExists()
@@ -150,7 +150,7 @@ class MutablePathAssetTest extends AbstractAssetTestCase
         $this->prepareAttemptToMinifyMock(true);
         // IS_EXISTS is assumed by default, so nothing to mock here
         $this->_adapter->expects($this->never())->method('minify');
-        $this->assertStringMatchesFormat('%s_library.min.js', $this->_model->getFilePath());
+        $this->assertStringMatchesFormat('%s_admin.min.js', $this->_model->getFilePath());
     }
 
     /**
@@ -173,16 +173,16 @@ class MutablePathAssetTest extends AbstractAssetTestCase
         $this->_rootDir->expects($this->any())
             ->method('getRelativePath')
             ->will($this->returnValueMap([
-                ['/foo/bar/test/library.min.js', 'test/library.min.js'],
-                ['/foo/bar/test/library.js', 'test/library.js'],
+                ['/foo/bar/test/admin.min.js', 'test/admin.min.js'],
+                ['/foo/bar/test/admin.js', 'test/admin.js'],
             ]));
         $this->_rootDir->expects($this->once())
             ->method('isExist')
-            ->with('test/library.min.js')
+            ->with('test/admin.min.js')
             ->will($this->returnValue(false));
         $this->_rootDir->expects($this->once())
             ->method('stat')
-            ->with('test/library.js')
+            ->with('test/admin.js')
             ->will($this->returnValue(['mtime' => $mtimeOrig]));
         $this->_staticViewDir->expects($this->once())
             ->method('stat')
@@ -198,7 +198,7 @@ class MutablePathAssetTest extends AbstractAssetTestCase
         } else {
             $this->_adapter->expects($this->never())->method('minify');
         }
-        $this->assertStringMatchesFormat('%s_library.min.js', $model->getFilePath());
+        $this->assertStringMatchesFormat('%s_admin.min.js', $model->getFilePath());
     }
 
     /**

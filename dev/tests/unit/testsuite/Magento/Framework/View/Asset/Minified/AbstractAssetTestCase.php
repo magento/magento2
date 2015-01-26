@@ -70,18 +70,18 @@ class AbstractAssetTestCase extends \PHPUnit_Framework_TestCase
 
     protected function prepareAttemptToMinifyMock($fileExists, $rootDirExpectations = true)
     {
-        $this->_asset->expects($this->atLeastOnce())->method('getPath')->will($this->returnValue('test/library.js'));
+        $this->_asset->expects($this->atLeastOnce())->method('getPath')->will($this->returnValue('test/admin.js'));
         $this->_asset->expects($this->atLeastOnce())
             ->method('getSourceFile')
-            ->will($this->returnValue('/foo/bar/test/library.js'));
+            ->will($this->returnValue('/foo/bar/test/admin.js'));
         if ($rootDirExpectations) {
             $this->_rootDir->expects($this->once())
                 ->method('getRelativePath')
-                ->with('/foo/bar/test/library.min.js')
-                ->will($this->returnValue('test/library.min.js'));
+                ->with('/foo/bar/test/admin.min.js')
+                ->will($this->returnValue('test/admin.min.js'));
             $this->_rootDir->expects($this->once())
                 ->method('isExist')
-                ->with('test/library.min.js')
+                ->with('test/admin.min.js')
                 ->will($this->returnValue(false));
         }
         $this->_baseUrl->expects($this->once())->method('getBaseUrl')->will($this->returnValue('http://example.com/'));

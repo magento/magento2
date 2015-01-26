@@ -247,7 +247,7 @@ abstract class AbstractAsset implements MergeableInterface
      */
     protected function isFileMinified($fileName)
     {
-        return (bool)preg_match('#.min.\w+$#', $fileName);
+        return (bool)preg_match('#\.min\.\w+$#', $fileName);
     }
 
     /**
