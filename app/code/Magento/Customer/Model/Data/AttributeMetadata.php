@@ -5,7 +5,6 @@
  */
 
 namespace Magento\Customer\Model\Data;
-use Magento\Customer\Api\Data\AttributeMetadataInterface;
 
 /**
  * Customer attribute metadata class.

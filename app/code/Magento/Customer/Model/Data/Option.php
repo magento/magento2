@@ -7,7 +7,6 @@
  */
 
 namespace Magento\Customer\Model\Data;
-use Magento\Customer\Api\Data\OptionInterface;
 
 /**
  * Class Option

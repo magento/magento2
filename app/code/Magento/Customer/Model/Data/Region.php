@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Data;
-use Magento\Customer\Api\Data\RegionInterface;
 
 /**
  * Data Model implementing Address Region interface
