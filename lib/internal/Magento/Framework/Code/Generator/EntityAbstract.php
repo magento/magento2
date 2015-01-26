@@ -291,7 +291,7 @@ abstract class EntityAbstract
      */
     protected function _getClassDocBlock()
     {
-        $description = ucfirst(static::ENTITY_TYPE) . ' class for \\' . $this->_getSourceClassName();
+        $description = ucfirst(static::ENTITY_TYPE) . ' class for @see \\' . $this->_getSourceClassName();
         return ['shortDescription' => $description];
     }
 

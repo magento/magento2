@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<form action="<?php echo $block->getPostActionUrl() ?>" method="post" id="review-order-form" data-mage-init='{"orderOverview": {}}' class="form multicheckout order-review">
+<form action="<?php echo $block->getPostActionUrl() ?>" method="post" id="review-order-form" data-mage-init='{"orderOverview": {}, "validation":{}}' class="form multicheckout order-review">
     <?php echo $block->getBlockHtml('formkey'); ?>
     <div class="block block-billing">
         <div class="block-title"><strong><?php echo __('Billing Information') ?></strong></div>
