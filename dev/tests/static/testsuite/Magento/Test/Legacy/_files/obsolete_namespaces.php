@@ -71,5 +71,9 @@ return [
     ['Magento\PayPalRecurringPayment'],
     ['Magento\ConfigurableProduct\Service'],
     ['Magento\Catalog\Service'],
-    ['Magento\Core\Model\TemplateEngine\Decorator', 'Magento\Developer\Model\TemplateEngine\Decorator']
+    ['Magento\Core\Model\TemplateEngine\Decorator', 'Magento\Developer\Model\TemplateEngine\Decorator'],
+    ['Magento\Catalog\Service'],
+    ['Magento\CheckoutAgreements\Service'],
+    ['Magento\Checkout\Service'],
+    ['Magento\GiftMessage\Service']
 ];

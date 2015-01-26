@@ -90,7 +90,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_localeFormat = $localeFormat;
         $this->_storeManager = $storeManager;
         $this->_directoryHelper = $directoryHelper;
@@ -152,6 +158,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param   string $id
      * @param   string $field
      * @return  $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load($id, $field = null)
     {
