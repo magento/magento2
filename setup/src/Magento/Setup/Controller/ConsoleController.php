@@ -477,23 +477,30 @@ class ConsoleController extends AbstractActionController
         $request = $this->getRequest();
         $isEnable = $request->getParam(0) == self::CMD_MODULE_ENABLE;
         $modules = explode(',', $request->getParam('modules'));
+        /** @var \Magento\Framework\Module\Status $status */
         $status = $this->getObjectManager()->create('Magento\Framework\Module\Status');
-        if (!$request->getParam('force')) {
-            $constraints = $status->checkConstraints($isEnable, $modules);
-            if ($constraints) {
-                $message = "Unable to change status of modules because of the following constraints:\n"
-                    . implode("\n", $constraints);
-                throw new \Magento\Setup\Exception($message);
+
+        $unchangedModules = $status->getUnchangedModules($isEnable, $modules);
+        $modules = array_diff($modules, $unchangedModules);
+        if (!empty($modules)) {
+            if (!$request->getParam('force')) {
+                $constraints = $status->checkConstraints($isEnable, $modules);
+                if ($constraints) {
+                    $message = "Unable to change status of modules because of the following constraints:\n"
+                        . implode("\n", $constraints);
+                    throw new \Magento\Setup\Exception($message);
+                }
             }
-        }
-        $changed = $status->setIsEnabled($isEnable, $modules);
-        if ($changed) {
+            $status->setIsEnabled($isEnable, $modules);
             if ($isEnable) {
                 $message = 'The following modules have been enabled:';
             } else {
                 $message = 'The following modules have been disabled:';
             }
-            $message .= ' ' . implode(', ', $changed);
+            $message .= ' ' . implode(', ', $modules);
+            if (!empty($unchangedModules)) {
+                $message .= "\nThe following modules have no changes: " . implode(', ', $unchangedModules);
+            }
         } else {
             $message = 'There have been no changes to any modules.';
         }

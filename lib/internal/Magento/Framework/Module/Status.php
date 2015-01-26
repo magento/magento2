@@ -125,34 +125,47 @@ class Status
      * Sets specified modules to enabled or disabled state
      *
      * Performs other necessary routines, such as cache cleanup
-     * Returns list of modules that have changed
+     *
+     * @param bool $isEnabled
+     * @param string[] $modules
+     * @return void
+     */
+    public function setIsEnabled($isEnabled, $modules)
+    {
+        $result = [];
+        foreach ($this->getAllModules($modules) as $name) {
+            $currentStatus = $this->list->has($name);
+            if (in_array($name, $modules)) {
+                $result[$name] = $isEnabled;
+            } else {
+                $result[$name] = $currentStatus;
+            }
+        }
+        $segment = new ModuleList\DeploymentConfig($result);
+        $this->writer->update($segment);
+        $this->cleanup->clearCaches();
+        $this->cleanup->clearCodeGeneratedFiles();
+    }
+
+    /**
+     * Get a list of modules that will not be changed
      *
      * @param bool $isEnabled
      * @param string[] $modules
      * @return string[]
      */
-    public function setIsEnabled($isEnabled, $modules)
+    public function getUnchangedModules($isEnabled, $modules)
     {
-        $result = [];
-        $changed = [];
+        $unchanged = [];
         foreach ($this->getAllModules($modules) as $name) {
             $currentStatus = $this->list->has($name);
             if (in_array($name, $modules)) {
-                $result[$name] = $isEnabled;
-                if ($isEnabled != $currentStatus) {
-                    $changed[] = $name;
+                if ($isEnabled == $currentStatus) {
+                    $unchanged[] = $name;
                 }
-            } else {
-                $result[$name] = $currentStatus;
             }
         }
-        if ($changed) {
-            $segment = new ModuleList\DeploymentConfig($result);
-            $this->writer->update($segment);
-            $this->cleanup->clearCaches();
-            $this->cleanup->clearCodeGeneratedFiles();
-        }
-        return $changed;
+        return $unchanged;
     }
 
     /**

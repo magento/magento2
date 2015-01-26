@@ -133,17 +133,16 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $modules = ['Module_Foo' => '', 'Module_Bar' => '', 'Module_Baz' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
-        $this->moduleList->expects($this->at(0))->method('has')->with('Module_Foo')->willReturn(true);
+        $this->moduleList->expects($this->at(0))->method('has')->with('Module_Foo')->willReturn(false);
         $this->moduleList->expects($this->at(1))->method('has')->with('Module_Bar')->willReturn(false);
-        $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn(true);
+        $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn(false);
         $constraint = new \PHPUnit_Framework_Constraint_IsInstanceOf(
             'Magento\Framework\Module\ModuleList\DeploymentConfig'
         );
         $this->writer->expects($this->once())->method('update')->with($constraint);
         $this->cleanup->expects($this->once())->method('clearCaches');
         $this->cleanup->expects($this->once())->method('clearCodeGeneratedFiles');
-        $result = $this->object->setIsEnabled(true, ['Module_Foo', 'Module_Bar']);
-        $this->assertEquals(['Module_Bar'], $result);
+        $this->object->setIsEnabled(true, ['Module_Foo', 'Module_Bar']);
     }
 
     /**
@@ -155,5 +154,16 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $modules = ['Module_Foo' => '', 'Module_Bar' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
         $this->object->setIsEnabled(true, ['Module_Baz']);
+    }
+
+    public function testGetUnchangedModules()
+    {
+        $modules = ['Module_Foo' => '', 'Module_Bar' => '', 'Module_Baz' => ''];
+        $this->loader->expects($this->once())->method('load')->willReturn($modules);
+        $this->moduleList->expects($this->at(0))->method('has')->with('Module_Foo')->willReturn(true);
+        $this->moduleList->expects($this->at(1))->method('has')->with('Module_Bar')->willReturn(true);
+        $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn(true);
+        $result = $this->object->getUnchangedModules(true, ['Module_Foo', 'Module_Bar', 'Module_Baz']);
+        $this->assertEquals(array_keys($modules), $result);
     }
 }

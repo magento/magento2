@@ -284,11 +284,14 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testModuleAction($command, $modules, $isForce, $expectedIsEnabled, $expectedModules)
     {
-        $status = $this->getModuleActionMocks($command, $modules, $isForce);
+        $status = $this->getModuleActionMocks($command, $modules, $isForce, false);
+        $status->expects($this->once())->method('getUnchangedModules')->willReturn([]);
         if (!$isForce) {
             $status->expects($this->once())->method('checkConstraints')->willReturn([]);
         }
-        $status->expects($this->once())->method('setIsEnabled')->with($expectedIsEnabled, $expectedModules);
+        $status->expects($this->once())
+            ->method('setIsEnabled')
+            ->with($expectedIsEnabled, $expectedModules);
         $this->consoleLogger->expects($this->once())->method('log');
         $this->controller->moduleAction();
     }
@@ -307,20 +310,113 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $command
+     * @param string $modules
+     * @param bool $isForce
+     * @param bool $expectedIsEnabled
+     * @param string[] $expectedModules
+     * @dataProvider moduleActionDataProvider
+     */
+    public function testModuleActionNoChanges($command, $modules, $isForce, $expectedIsEnabled, $expectedModules)
+    {
+        $status = $this->getModuleActionMocks($command, $modules, $isForce, true);
+        $status->expects($this->once())
+            ->method('getUnchangedModules')
+            ->with($expectedIsEnabled, $expectedModules)
+            ->willReturn($expectedModules);
+        $status->expects($this->never())->method('checkConstraints');
+        $status->expects($this->never())->method('setIsEnabled');
+        $this->consoleLogger->expects($this->once())->method('log');
+        $this->controller->moduleAction();
+    }
+
+    /**
+     * @param string $command
+     * @param string $modules
+     * @param bool $isForce
+     * @param bool $expectedIsEnabled
+     * @param string[] $expectedModules
+     * @param string[] $unchangedModules
+     * @dataProvider moduleActionPartialNoChangesDataProvider
+     */
+    public function testModuleActionPartialNoChanges(
+        $command,
+        $modules,
+        $isForce,
+        $expectedIsEnabled,
+        $expectedModules,
+        $unchangedModules
+    ) {
+        $status = $this->getModuleActionMocks($command, $modules, $isForce, false);
+        $status->expects($this->once())->method('getUnchangedModules')->willReturn($unchangedModules);
+        if (!$isForce) {
+            $status->expects($this->once())->method('checkConstraints')->willReturn([]);
+        }
+        $status->expects($this->once())
+            ->method('setIsEnabled')
+            ->with($expectedIsEnabled, array_diff($expectedModules, $unchangedModules));
+        $this->consoleLogger->expects($this->once())->method('log');
+        $this->controller->moduleAction();
+    }
+
+    /**
+     * @return array
+     */
+    public function moduleActionPartialNoChangesDataProvider()
+    {
+        return [
+            [
+                ConsoleController::CMD_MODULE_ENABLE,
+                'Module_Foo,Module_Bar',
+                false,
+                true,
+                ['Module_Foo', 'Module_Bar'],
+                ['Module_Foo'],
+            ],
+            [
+                ConsoleController::CMD_MODULE_ENABLE,
+                'Module_Foo,Module_Bar',
+                true,
+                true,
+                ['Module_Foo', 'Module_Bar'],
+                ['Module_Foo'],
+            ],
+            [
+                ConsoleController::CMD_MODULE_DISABLE,
+                'Module_Foo,Module_Bar',
+                false,
+                false,
+                ['Module_Foo', 'Module_Bar'],
+                ['Module_Foo'],
+            ],
+            [
+                ConsoleController::CMD_MODULE_DISABLE,
+                'Module_Foo,Module_Bar',
+                true,
+                false,
+                ['Module_Foo', 'Module_Bar'],
+                ['Module_Foo'],
+            ],
+        ];
+    }
+
+    /**
      * Prepares a set of mocks for testing module action
      *
      * @param string $command
      * @param string $modules
      * @param bool $isForce
+     * @param bool $isUnchanged
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getModuleActionMocks($command, $modules, $isForce)
+    private function getModuleActionMocks($command, $modules, $isForce, $isUnchanged)
     {
         $this->request->expects($this->at(0))->method('getParam')->with(0)->willReturn($command);
         $this->request->expects($this->at(1))->method('getParam')->with('modules')->willReturn($modules);
-        $this->request->expects($this->at(2))->method('getParam')->with('force')->willReturn($isForce);
+        if (!$isUnchanged) {
+            $this->request->expects($this->at(2))->method('getParam')->with('force')->willReturn($isForce);
+        }
         $status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
-        $reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
         $this->objectManager->expects($this->once())
             ->method('create')
             ->will($this->returnValue($status));
@@ -333,7 +429,13 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testModuleActionNotAllowed()
     {
-        $status = $this->getModuleActionMocks(ConsoleController::CMD_MODULE_ENABLE, 'Module_Foo,Module_Bar', false);
+        $status = $this->getModuleActionMocks(
+            ConsoleController::CMD_MODULE_ENABLE,
+            'Module_Foo,Module_Bar',
+            false,
+            false
+        );
+        $status->expects($this->once())->method('getUnchangedModules')->willReturn([]);
         $status->expects($this->once())
             ->method('checkConstraints')
             ->willReturn(['Circular dependency of Foo and Bar']);
