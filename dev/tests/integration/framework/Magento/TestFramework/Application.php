@@ -284,14 +284,12 @@ class Application
                 ]
             ]
         );
-        $objectManager->removeSharedInstance('Psr\Log\LoggerInterface');
-        $objectManager->addSharedInstance($logger, 'Psr\Log\LoggerInterface');
-
         Helper\Bootstrap::setObjectManager($objectManager);
 
         $objectManager->configure(
             [
                 'preferences' => [
+                    'Psr\Log\LoggerInterface' => 'Magento\TestFramework\ErrorLog\Logger',
                     'Magento\Framework\App\State' => 'Magento\TestFramework\App\State',
                     'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock',
                     'Magento\Framework\Mail\Template\TransportBuilder'
