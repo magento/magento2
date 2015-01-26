@@ -11,9 +11,21 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
+    /**
+     * Widget config parameters
+     *
+     * @var array
+     */
+    protected $hiddenParameters = [
+        'template'
+    ];
+
     /**
      * Prepare label for tab
      *
@@ -47,11 +59,21 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Returns status flag about this tab hidden or not
      *
-     * @return true
+     * @return bool
      */
     public function isHidden()
     {
-        return false;
+        $widgetConfig = $this->getWidgetInstance()->getWidgetConfigAsArray();
+
+        if (isset($widgetConfig['parameters'])) {
+            foreach ($widgetConfig['parameters'] as $key => $parameter) {
+                if ($parameter['visible'] == 1 && !in_array($key, $this->hiddenParameters)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -88,7 +110,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
      */
     protected function _addField($parameter)
     {
-        if ($parameter->getKey() != 'template') {
+        if (!in_array($parameter->getKey(), $this->hiddenParameters)) {
             return parent::_addField($parameter);
         }
         return false;

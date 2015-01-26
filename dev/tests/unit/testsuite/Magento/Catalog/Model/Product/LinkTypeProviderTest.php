@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Product;
 
 class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
@@ -36,7 +39,10 @@ class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->linkTypeBuilderMock = $this->getMock(
             'Magento\Catalog\Api\Data\ProductLinkTypeDataBuilder',
-            ['create', 'populateWithArray']
+            ['create', 'populateWithArray'],
+            [],
+            '',
+            false
         );
         $this->linkAttributeBuilderMock = $this->getMock(
             'Magento\Catalog\Api\Data\ProductLinkAttributeDataBuilder',
@@ -63,6 +69,9 @@ class LinkTypeProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testGetItems()
     {
         $expectedResult = [];

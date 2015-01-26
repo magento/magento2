@@ -2,7 +2,7 @@
     "name": "magento/module-module1",
     "description": "N/A",
     "require": {
-        "php": "~5.4.11|~5.5.0"
+        "php": "~5.4.11|~5.5.0|~5.6.0"
     },
     "type": "magento2-module",
     "version": "0.1.0-alpha103"

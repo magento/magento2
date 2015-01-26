@@ -49,7 +49,7 @@ interface SalesModelInterface
     /**
      * Return object that contains tax related fields
      *
-     * @return \Magento\Sales\Model\Order|\Magento\Sales\Model\Quote\Address
+     * @return \Magento\Sales\Model\Order|\Magento\Quote\Model\Quote\Address
      */
     public function getTaxContainer();
 }

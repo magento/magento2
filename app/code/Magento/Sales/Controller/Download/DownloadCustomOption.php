@@ -14,12 +14,14 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * Custom options download action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
         $quoteItemOptionId = $this->getRequest()->getParam('id');
-        /** @var $option \Magento\Sales\Model\Quote\Item\Option */
-        $option = $this->_objectManager->create('Magento\Sales\Model\Quote\Item\Option')->load($quoteItemOptionId);
+        /** @var $option \Magento\Quote\Model\Quote\Item\Option */
+        $option = $this->_objectManager->create('Magento\Quote\Model\Quote\Item\Option')->load($quoteItemOptionId);
 
         if (!$option->getId()) {
             $this->_forward('noroute');

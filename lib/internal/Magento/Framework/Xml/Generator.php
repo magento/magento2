@@ -68,6 +68,7 @@ class Generator
      * @param array $content
      * @return $this
      * @throws \DOMException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function arrayToXml($content)
     {

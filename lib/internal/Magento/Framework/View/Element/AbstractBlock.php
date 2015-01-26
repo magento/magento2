@@ -15,6 +15,7 @@ namespace Magento\Framework\View\Element;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractBlock extends \Magento\Framework\Object implements BlockInterface
 {

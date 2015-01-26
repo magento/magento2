@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <div class="import-export-tax-rates">
     <?php if (!$this->getIsReadonly()): ?>
@@ -19,7 +22,7 @@
         <?php if ($this->getUseContainer()): ?>
         </form>
         <?php endif; ?>
-        <script type="text/javascript">
+        <script>
 require(['jquery', "mage/mage", "js/theme"], function(jQuery){
 
     jQuery('#import-form').mage('form').mage('validation');

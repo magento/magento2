@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -12,7 +15,7 @@
 <?php $_id = 'id_' . md5(microtime()) ?>
 <?php $formId = $this->getFormId()?>
 <?php if (!empty($formId)) :?>
-<script type="text/javascript">
+<script>
     Event.observe(window, "load", function(){
         var serializeInput  = document.createElement('input');
         serializeInput.type = 'hidden';
@@ -28,7 +31,7 @@
 </script>
 <?php else :?>
 <input type="hidden" name="<?php echo $this->getInputElementName()?>"  value="" id="<?php echo $_id?>" />
-<script type="text/javascript">
+<script>
     require([
         'mage/adminhtml/grid'
     ], function(){

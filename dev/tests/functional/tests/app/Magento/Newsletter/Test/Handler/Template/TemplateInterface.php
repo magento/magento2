@@ -6,7 +6,7 @@
 
 namespace Magento\Newsletter\Test\Handler\Template;
 
-use Mtf\Handler\HandlerInterface;
+use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface TemplateInterface

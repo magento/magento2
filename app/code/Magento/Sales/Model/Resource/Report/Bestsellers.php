@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Resource\Report;
 
 /**
  * Bestsellers report resource model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bestsellers extends AbstractReport
 {
@@ -90,6 +91,7 @@ class Bestsellers extends AbstractReport
      * @param string|int|\Zend_Date|array|null $to
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function aggregate($from = null, $to = null)
     {
@@ -169,7 +171,6 @@ class Bestsellers extends AbstractReport
 
             $joinExpr = [
                 'product.entity_id = order_item.product_id',
-                $adapter->quoteInto('product.entity_type_id = ?', $this->_productResource->getTypeId()),
                 $adapter->quoteInto('product.type_id NOT IN(?)', $this->ignoredProductTypes),
             ];
 
@@ -181,14 +182,12 @@ class Bestsellers extends AbstractReport
             $joinExprProductName = [
                 'product_name.entity_id = product.entity_id',
                 'product_name.store_id = source_table.store_id',
-                $adapter->quoteInto('product_name.entity_type_id = ?', $this->_productResource->getTypeId()),
                 $adapter->quoteInto('product_name.attribute_id = ?', $attr->getAttributeId()),
             ];
             $joinExprProductName = implode(' AND ', $joinExprProductName);
             $joinProductName = [
                 'product_default_name.entity_id = product.entity_id',
                 'product_default_name.store_id = 0',
-                $adapter->quoteInto('product_default_name.entity_type_id = ?', $this->_productResource->getTypeId()),
                 $adapter->quoteInto('product_default_name.attribute_id = ?', $attr->getAttributeId()),
             ];
             $joinProductName = implode(' AND ', $joinProductName);
@@ -205,7 +204,6 @@ class Bestsellers extends AbstractReport
             $joinExprProductPrice = [
                 'product_price.entity_id = product.entity_id',
                 'product_price.store_id = source_table.store_id',
-                $adapter->quoteInto('product_price.entity_type_id = ?', $this->_productResource->getTypeId()),
                 $adapter->quoteInto('product_price.attribute_id = ?', $attr->getAttributeId()),
             ];
             $joinExprProductPrice = implode(' AND ', $joinExprProductPrice);
@@ -213,7 +211,6 @@ class Bestsellers extends AbstractReport
             $joinProductPrice = [
                 'product_default_price.entity_id = product.entity_id',
                 'product_default_price.store_id = 0',
-                $adapter->quoteInto('product_default_price.entity_type_id = ?', $this->_productResource->getTypeId()),
                 $adapter->quoteInto('product_default_price.attribute_id = ?', $attr->getAttributeId()),
             ];
             $joinProductPrice = implode(' AND ', $joinProductPrice);

@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\File;
 
 /**
@@ -137,6 +140,7 @@ class Csv
      * @param string $delimiter
      * @param string $enclosure
      * @return int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function fputcsv(&$handle, $fields = [], $delimiter = ',', $enclosure = '"')
     {

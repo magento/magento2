@@ -61,4 +61,22 @@ class Consumer extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $adapter->delete($this->getTable('oauth_token'), ['consumer_id' => $object->getId()]);
         return parent::_afterDelete($object);
     }
+
+    /**
+     * Compute time in seconds since consumer was created.
+     *
+     * @param int $consumerId - The consumer id
+     * @return int - time lapsed in seconds
+     */
+    public function getTimeInSecondsSinceCreation($consumerId)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->reset(\Zend_Db_Select::COLUMNS)
+            ->columns('CURRENT_TIMESTAMP() - created_at')
+            ->where('entity_id = ?', $consumerId);
+
+        return $adapter->fetchOne($select);
+    }
 }

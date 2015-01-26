@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\GoogleShopping\Model;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
@@ -36,8 +38,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->collectionFactory = $this->getMock('Magento\GoogleShopping\Model\Resource\Item\CollectionFactory');
-        $this->massOperationsFactory = $this->getMock('Magento\GoogleShopping\Model\MassOperationsFactory');
+        $this->collectionFactory = $this->getMock(
+            'Magento\GoogleShopping\Model\Resource\Item\CollectionFactory', [], [], '', false
+        );
+        $this->massOperationsFactory = $this->getMock(
+            'Magento\GoogleShopping\Model\MassOperationsFactory', [], [], '', false
+        );
         $this->notificationInterface = $this->getMock('Magento\Framework\Notification\NotifierInterface');
         $this->scopeConfigInterface = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->managerInterface = $this->getMock('Magento\Framework\Message\ManagerInterface');

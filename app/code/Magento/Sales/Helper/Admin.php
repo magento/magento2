@@ -116,7 +116,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
                 $type = $item->getTypeId();
             } elseif ($item instanceof \Magento\Sales\Model\Order\Item) {
                 $type = $item->getProductType();
-            } elseif ($item instanceof \Magento\Sales\Model\Quote\Item) {
+            } elseif ($item instanceof \Magento\Quote\Model\Quote\Item) {
                 $type = $item->getProductType();
             } else {
                 $type = '';

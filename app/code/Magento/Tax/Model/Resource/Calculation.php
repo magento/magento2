@@ -132,6 +132,8 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Object $request
      * @param array|null $rates
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getCalculationProcess($request, $rates = null)
     {
@@ -265,6 +267,9 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Object $request
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _getRates($request)
     {

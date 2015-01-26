@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var \Magento\Checkout\Block\Onepage\Payment $_paymentBlock */
 $_paymentBlock = $this->getLayout()->getBlock('checkout.onepage.payment');
 ?>
@@ -23,7 +25,7 @@ $_paymentBlock = $this->getLayout()->getBlock('checkout.onepage.payment');
         </li>
     <?php endforeach ?>
     </ol>
-    <script type="text/javascript">
+    <script>
 require([
     "jquery",
     "mage/mage"

@@ -10,7 +10,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
-use Mtf\TestCase\Injectable;
+use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Test Creation for CreateExistingCustomerFrontendEntity
@@ -30,6 +30,11 @@ use Mtf\TestCase\Injectable;
  */
 class CreateExistingCustomerFrontendEntity extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
      * Page CustomerAccountCreate
      *

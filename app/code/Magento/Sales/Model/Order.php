@@ -176,6 +176,10 @@ use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryColle
  * @method bool hasForcedCanCreditmemo()
  * @method bool getIsInProcess()
  * @method \Magento\Customer\Model\Customer getCustomer()
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
 {
@@ -412,6 +416,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -530,6 +535,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * Return flag for order if it can sends new email to customer.
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanSendNewEmailFlag()
     {
@@ -590,6 +596,8 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * Retrieve order cancel availability
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function canCancel()
     {
@@ -649,6 +657,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * Retrieve order invoice availability
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function canInvoice()
     {
@@ -759,6 +768,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      * Retrieve order shipment availability
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function canShip()
     {
@@ -802,6 +812,10 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
             return false;
         }
 
+        if ($this->hasInvoices()) {
+            return false;
+        }
+
         if (!$this->getPayment()->getMethodInstance()->canEdit()) {
             return false;
         }
@@ -838,6 +852,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
      *
      * @param bool $ignoreSalable
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _canReorder($ignoreSalable = false)
     {
@@ -953,6 +968,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     {
         foreach ($this->getPayments() as $payment) {
             if (!$payment->isDeleted()) {
+                $payment->setOrder($this);
                 return $payment;
             }
         }
@@ -1491,21 +1507,6 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
         return $this;
     }
 
-    /**
-     * Whether the order has nominal items only
-     *
-     * @return bool
-     */
-    public function isNominal()
-    {
-        foreach ($this->getAllVisibleItems() as $item) {
-            if ('0' == $item->getIsNominal()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     /*********************** PAYMENTS ***************************/
 
     /**
@@ -1822,6 +1823,18 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
     }
 
     /**
+     * Set order invoices collection
+     *
+     * @param InvoiceCollection $invoices
+     * @return $this
+     */
+    public function setInvoiceCollection(InvoiceCollection $invoices)
+    {
+        $this->_invoices = $invoices;
+        return $this;
+    }
+
+    /**
      * Retrieve order shipments collection
      *
      * @return ShipmentCollection|false
@@ -2000,6 +2013,7 @@ class Order extends AbstractModel implements EntityInterface, ApiOrderInterface
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsNotVirtual()
     {

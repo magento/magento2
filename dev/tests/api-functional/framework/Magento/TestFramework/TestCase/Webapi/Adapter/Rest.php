@@ -60,11 +60,14 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
 
     /**
      * {@inheritdoc}
-     * @throws \Exception
+     * @throws \LogicException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function call($serviceInfo, $arguments = [])
+    public function call($serviceInfo, $arguments = [], $storeCode = null)
     {
-        $resourcePath = '/' . $this->defaultStoreCode . $this->_getRestResourcePath($serviceInfo);
+        $storeCode = !is_null($storeCode) ? (string)$storeCode : $this->defaultStoreCode;
+        $resourcePath = '/' . $storeCode . $this->_getRestResourcePath($serviceInfo);
         $httpMethod = $this->_getRestHttpMethod($serviceInfo);
         //Get a valid token
         $accessCredentials = \Magento\TestFramework\Authentication\OauthHelper::getApiAccessCredentials();

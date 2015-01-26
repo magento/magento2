@@ -196,6 +196,7 @@ class Block extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsUniqueBlockToStores(\Magento\Framework\Model\AbstractModel $object)
     {

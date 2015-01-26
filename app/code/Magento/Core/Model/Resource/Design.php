@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Core\Model\Resource;
 
 use Magento\Framework\Stdlib\DateTime;
@@ -110,6 +113,8 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string $dateTo
      * @param int $currentId
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _checkIntersection($storeId, $dateFrom, $dateTo, $currentId)
     {

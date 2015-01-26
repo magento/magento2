@@ -85,6 +85,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $eventObserver;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->stockStatus = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\Status')
@@ -331,7 +334,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $itemsToReindex = [];
 
         $quote = $this->getMock(
-            '\Magento\Sales\Model\Quote',
+            '\Magento\Quote\Model\Quote',
             ['getInventoryProcessed', 'setInventoryProcessed', 'getAllItems', 'getStore', '__wakeup'],
             [],
             '',

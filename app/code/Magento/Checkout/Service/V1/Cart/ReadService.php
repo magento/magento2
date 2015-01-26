@@ -9,12 +9,13 @@ use Magento\Checkout\Service\V1\Data;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Exception\InputException;
-use Magento\Sales\Model\Quote;
-use Magento\Sales\Model\QuoteRepository;
-use Magento\Sales\Model\Resource\Quote\Collection as QuoteCollection;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
 
 /**
  * Cart read service object.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReadService implements ReadServiceInterface
 {

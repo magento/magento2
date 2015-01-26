@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\UrlRewrite\Block\Catalog\Edit;
 
 use Magento\TestFramework\Helper\ObjectManager;
@@ -32,7 +34,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->layout = $this->getMock('Magento\Framework\View\LayoutInterface');
         $this->formFactory = $this->getMock('Magento\Framework\Data\FormFactory', ['create'], [], '', false);
-        $this->urlRewriteFactory = $this->getMock('Magento\UrlRewrite\Model\UrlRewriteFactory', ['create']);
+        $this->urlRewriteFactory = $this->getMock(
+            'Magento\UrlRewrite\Model\UrlRewriteFactory', ['create'], [], '', false
+        );
         $this->urlRewriteFactory->expects($this->once())->method('create')
             ->willReturn($this->getMock('Magento\UrlRewrite\Model\UrlRewrite', [], [], '', false));
         $this->categoryFactory = $this->getMock('Magento\Catalog\Model\CategoryFactory', ['create'], [], '', false);

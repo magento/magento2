@@ -116,7 +116,6 @@ class CartItem extends AbstractCartItem
     {
         foreach ($this->config['associated_cart_items'] as $cartItem) {
             /** @var CheckoutCartItem $cartItem */
-            $cartItem->reinitRootElement();
             $cartItem->removeItem();
         }
     }

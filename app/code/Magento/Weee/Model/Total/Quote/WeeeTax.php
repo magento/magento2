@@ -5,7 +5,7 @@
  */
 namespace Magento\Weee\Model\Total\Quote;
 
-use Magento\Sales\Model\Quote\Address\Total\AbstractTotal;
+use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Store\Model\Store;
 use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 
@@ -14,12 +14,14 @@ class WeeeTax extends Weee
     /**
      * Collect Weee taxes amount and prepare items prices for taxation and discount
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function collect(\Magento\Sales\Model\Quote\Address $address)
+    public function collect(\Magento\Quote\Model\Quote\Address $address)
     {
-        \Magento\Sales\Model\Quote\Address\Total\AbstractTotal::collect($address);
+        \Magento\Quote\Model\Quote\Address\Total\AbstractTotal::collect($address);
         $this->_store = $address->getQuote()->getStore();
         if (!$this->weeeData->isEnabled($this->_store)) {
             return $this;
@@ -127,7 +129,7 @@ class WeeeTax extends Weee
     /**
      * Process row amount based on FPT total amount configuration setting
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address $address
      * @param   float $rowValueExclTax
      * @param   float $baseRowValueExclTax
      * @param   float $rowValueInclTax
@@ -157,10 +159,10 @@ class WeeeTax extends Weee
     /**
      * Fetch the Weee total amount for display in totals block when building the initial quote
      *
-     * @param   \Magento\Sales\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address $address
      * @return  $this
      */
-    public function fetch(\Magento\Sales\Model\Quote\Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address $address)
     {
         /** @var $items \Magento\Sales\Model\Order\Item[] */
         $items = $this->_getAddressItems($address);

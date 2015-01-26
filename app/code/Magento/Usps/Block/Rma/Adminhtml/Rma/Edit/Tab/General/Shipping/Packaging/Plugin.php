@@ -46,6 +46,7 @@ class Plugin
      * @param \Magento\Framework\Object $subject $subject
      * @param bool $result
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterIsGirthAllowed(\Magento\Framework\Object $subject, $result)
     {
@@ -58,6 +59,7 @@ class Plugin
      * @param \Magento\Framework\Object $subject
      * @param \Closure $proceed
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundCheckSizeAndGirthParameter(\Magento\Framework\Object $subject, \Closure $proceed)
     {

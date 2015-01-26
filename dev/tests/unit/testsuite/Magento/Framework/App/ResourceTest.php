@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Framework\App;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase

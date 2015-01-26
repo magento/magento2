@@ -407,11 +407,12 @@ class Translate implements \Magento\Framework\TranslateInterface
     /**
      * Retrieve cache identifier
      *
+     * @param bool $forceReload
      * @return string
      */
-    protected function getCacheId()
+    protected function getCacheId($forceReload = false)
     {
-        if ($this->_cacheId === null) {
+        if ($this->_cacheId === null || $forceReload) {
             $this->_cacheId = \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER;
             if (isset($this->_config['locale'])) {
                 $this->_cacheId .= '_' . $this->_config['locale'];
@@ -450,7 +451,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _saveCache()
     {
-        $this->_cache->save(serialize($this->getData()), $this->getCacheId(), [], false);
+        $this->_cache->save(serialize($this->getData()), $this->getCacheId(true), [], false);
         return $this;
     }
 }

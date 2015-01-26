@@ -10,6 +10,8 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {

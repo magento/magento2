@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search */
 ?>
 <div id="product-attribute-search-container" class="suggest-expandable attribute-selector">
@@ -30,7 +32,7 @@
     <div class="actions"><?php echo $this->getAttributeCreate()?></div>
 </script>
 
-<script type="text/javascript">
+<script>
     require(["jquery","mage/mage","mage/backend/suggest"], function($) {
         var $suggest = $('[data-role="product-attribute-search"][data-group="<?php echo $this->escapeHtml($this->getGroupCode()); ?>"]');
 

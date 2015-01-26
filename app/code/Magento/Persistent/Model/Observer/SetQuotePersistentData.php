@@ -64,7 +64,7 @@ class SetQuotePersistentData
             return;
         }
 
-        /** @var $quote \Magento\Sales\Model\Quote */
+        /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $observer->getEvent()->getQuote();
         if (!$quote) {
             return;

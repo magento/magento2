@@ -84,6 +84,8 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _saveValuePrices(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -232,6 +234,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveValueTitles(\Magento\Framework\Model\AbstractModel $object)
     {

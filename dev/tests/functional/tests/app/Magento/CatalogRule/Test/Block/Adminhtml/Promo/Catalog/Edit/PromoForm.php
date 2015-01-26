@@ -7,8 +7,9 @@
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
-use Mtf\Client\Element;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class PromoForm
@@ -20,11 +21,11 @@ class PromoForm extends FormTabs
      * Fill form with tabs
      *
      * @param FixtureInterface $fixture
-     * @param Element $element
+     * @param SimpleElement $element
      * @param array $replace
      * @return $this|FormTabs
      */
-    public function fill(FixtureInterface $fixture, Element $element = null, array $replace = null)
+    public function fill(FixtureInterface $fixture, SimpleElement $element = null, array $replace = null)
     {
         $tabs = $this->getFieldsByTabs($fixture);
         if ($replace) {

@@ -7,7 +7,6 @@
 namespace Magento\Tax\Test\Block\Adminhtml\Rule;
 
 use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
-use Mtf\Client\Element\Locator;
 
 /**
  * Class Grid

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Adminhtml catalog product edit action attributes update tab block
  *
@@ -13,6 +15,9 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 
+/**
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -140,7 +145,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
 HTML;
         if ($elementId === 'weight') {
             $html .= <<<HTML
-<script type="text/javascript">require(["jquery"],function($) {
+<script>require(["jquery"],function($) {
     $('#weight_and_type_switcher, label[for=weight_and_type_switcher]').hide();
 });</script>
 HTML;

@@ -3,12 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Import entity product model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
@@ -385,9 +391,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $stockConfiguration;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStateInterface
+     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface
      */
-    protected $stockState;
+    protected $stockStateProvider;
 
     /**
      * Core event manager proxy
@@ -502,7 +508,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
-     * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
+     * @param \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface $stockStateProvider
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ImportExport\Model\Import\Config $importConfig
      * @param Proxy\Product\ResourceFactory $resourceFactory
@@ -525,6 +531,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param array $data
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
@@ -537,7 +544,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\CatalogInventory\Api\StockStateInterface $stockState,
+        \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface $stockStateProvider,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ImportExport\Model\Import\Config $importConfig,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
@@ -563,7 +570,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
         $this->stockConfiguration = $stockConfiguration;
-        $this->stockState = $stockState;
+        $this->stockStateProvider = $stockStateProvider;
         $this->_catalogData = $catalogData;
         $this->_importConfig = $importConfig;
         $this->_resourceFactory = $resourceFactory;
@@ -825,6 +832,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      * @param int $rowNum
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _isProductCategoryValid(array $rowData, $rowNum)
     {
@@ -893,6 +902,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      * @param int $rowNum
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _isTierPriceValid(array $rowData, $rowNum)
     {
@@ -960,6 +970,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      * @param int $rowNum
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _isGroupPriceValid(array $rowData, $rowNum)
     {
@@ -1050,6 +1061,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Must be called after ALL products saving done.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _saveLinks()
     {
@@ -1172,7 +1186,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     foreach ($storeValues as $storeId => $storeValue) {
                         $tableData[] = [
                             'entity_id' => $productId,
-                            'entity_type_id' => $this->_entityTypeId,
                             'attribute_id' => $attributeId,
                             'store_id' => $storeId,
                             'value' => $storeValue,
@@ -1192,9 +1205,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     ) . $this->_connection->quoteInto(
                         ' AND entity_id = ?',
                         $productId
-                    ) . $this->_connection->quoteInto(
-                        ' AND entity_type_id = ?',
-                        $this->_entityTypeId
                     );
                     $this->_connection->delete($tableName, $where);
                 }
@@ -1283,6 +1293,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Gather and save information about product entities.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _saveProducts()
     {
@@ -1325,7 +1338,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         // new row
                         if (!$productLimit || $productsQty < $productLimit) {
                             $entityRowsIn[$rowSku] = [
-                                'entity_type_id' => $this->_entityTypeId,
                                 'attribute_set_id' => $this->_newSku[$rowSku]['attr_set_id'],
                                 'type_id' => $this->_newSku[$rowSku]['type_id'],
                                 'sku' => $rowSku,
@@ -1637,6 +1649,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $mediaGalleryData
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _saveMediaGallery(array $mediaGalleryData)
     {
@@ -1801,12 +1814,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 );
 
                 if ($this->stockConfiguration->isQty($this->_newSku[$rowData[self::COL_SKU]]['type_id'])) {
-                    $row['is_in_stock'] = $this->stockState->verifyStock($row['product_id'], $row['website_id']);
-                    if ($this->stockState->verifyNotification($row['product_id'], $row['website_id'])) {
+                    $stockItemDo->setData($row);
+                    $row['is_in_stock'] = $this->stockStateProvider->verifyStock($stockItemDo);
+                    if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
                         $row['low_stock_date'] = $this->_localeDate->date(null, null, null, false)
                             ->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
                     }
-                    $row['stock_status_changed_auto'] = (int) !$this->stockState->verifyStock($row['product_id'], $row['website_id']);
+                    $row['stock_status_changed_auto'] =
+                        (int) !$this->stockStateProvider->verifyStock($stockItemDo);
                 } else {
                     $row['qty'] = 0;
                 }
@@ -1919,6 +1934,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $rowData
      * @param int $rowNum
      * @return boolean
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validateRow(array $rowData, $rowNum)
     {

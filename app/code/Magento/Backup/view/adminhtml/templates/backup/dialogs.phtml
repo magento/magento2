@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <!-- TODO: refactor form styles and js -->
 <div class="fade backup-dialog" id="rollback-warning" style="display: none;">
@@ -133,7 +136,7 @@
     $backupUrl = $this->getUrl('*/*/create');
 ?>
 
-<script type="text/javascript">
+<script>
 require([
     "prototype",
     "mage/adminhtml/backup"

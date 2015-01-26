@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Service\V1\Data\Cart;
 
-use Magento\Sales\Model\Quote;
+use Magento\Quote\Model\Quote;
 
 /**
  * Totals data mapper

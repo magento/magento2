@@ -7,7 +7,7 @@
 namespace Magento\Reports\Test\Block\Adminhtml\Review\Products\Viewed;
 
 use Magento\Backend\Test\Block\Widget\Grid;
-use Mtf\Client\Element\Locator;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Class ProductGrid

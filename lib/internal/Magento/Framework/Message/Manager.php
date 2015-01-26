@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Message manager model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface
 {

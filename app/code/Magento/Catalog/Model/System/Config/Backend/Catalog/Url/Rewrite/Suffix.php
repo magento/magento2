@@ -18,6 +18,9 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Suffix extends \Magento\Framework\App\Config\Value
 {
     /** @var \Magento\UrlRewrite\Helper\UrlRewrite */
@@ -43,6 +46,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\App\Resource $appResource
      * @param \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

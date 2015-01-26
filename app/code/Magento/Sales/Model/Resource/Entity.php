@@ -10,6 +10,7 @@ use Magento\Sales\Model\EntityInterface;
 
 /**
  * Flat sales resource abstract
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class Entity extends AbstractDb
 {

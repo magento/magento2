@@ -26,6 +26,10 @@ class Link extends \Magento\Downloadable\Controller\Download
      * Download link action
      *
      * @return void|ResponseInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {

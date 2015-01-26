@@ -15,6 +15,9 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 {
     /**
@@ -101,6 +104,7 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param PriceCurrencyInterface $priceCurrency
      * @param string|null $resourcePrefix
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,

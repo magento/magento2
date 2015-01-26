@@ -3,12 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Checkout\Service\V1\PaymentMethod;
 
 use Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Builder;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Payment\Model\Checks\ZeroTotal;
-use Magento\Sales\Model\QuoteRepository;
+use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Payment method write service object.

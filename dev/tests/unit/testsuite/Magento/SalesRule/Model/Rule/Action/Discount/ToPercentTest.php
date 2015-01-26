@@ -77,7 +77,7 @@ class ToPercentTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $item = $this->getMockBuilder(
-            'Magento\Sales\Model\Quote\Item\AbstractItem'
+            'Magento\Quote\Model\Quote\Item\AbstractItem'
         )->disableOriginalConstructor()->setMethods(
             [
                 'getDiscountAmount',
@@ -209,7 +209,7 @@ class ToPercentTest extends \PHPUnit_Framework_TestCase
                     'amount' => 98,
                     'baseAmount' => 59.5,
                     'originalAmount' => 119,
-                    'baseOriginalAmount' => 108.5,
+                    'baseOriginalAmount' => 80.5,
                 ],
             ]
         ];

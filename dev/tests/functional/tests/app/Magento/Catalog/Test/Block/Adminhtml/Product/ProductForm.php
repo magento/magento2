@@ -10,14 +10,15 @@ use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab;
 use Magento\Catalog\Test\Fixture\Product;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
-use Mtf\Fixture\DataFixture;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\Element;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\DataFixture;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Product form on backend product page.
@@ -126,13 +127,13 @@ class ProductForm extends FormTabs
      * Fill the product form.
      *
      * @param FixtureInterface $product
-     * @param Element|null $element [optional]
+     * @param SimpleElement|null $element [optional]
      * @param FixtureInterface|null $category [optional]
      * @return FormTabs
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function fill(FixtureInterface $product, Element $element = null, FixtureInterface $category = null)
+    public function fill(FixtureInterface $product, SimpleElement $element = null, FixtureInterface $category = null)
     {
         $dataConfig = $product->getDataConfig();
         $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
@@ -152,9 +153,7 @@ class ProductForm extends FormTabs
                 $category = reset($categories);
             }
             if ($category) {
-                $tabs['product-details']['category_ids']['value'] = ($category instanceof InjectableFixture)
-                    ? $category->getName()
-                    : $category->getCategoryName();
+                $tabs['product-details']['category_ids']['value'] = $category->getName();
             }
 
             $this->showAdvancedSettings();
@@ -180,11 +179,10 @@ class ProductForm extends FormTabs
         $attribute = $product->getDataFieldConfig('custom_attribute')['source']->getAttribute();
         $this->openTab('product-details');
         if (!$this->checkAttributeLabel($attribute)) {
-            /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab $tab */
+            /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails $tab */
             $tab = $this->openTab($tabName);
             $tab->addNewAttribute($tabName);
             $this->fillAttributeForm($attribute);
-            $this->reinitRootElement();
         }
     }
 
@@ -192,12 +190,13 @@ class ProductForm extends FormTabs
      * Get data of the tabs.
      *
      * @param FixtureInterface|null $fixture
-     * @param Element|null $element
+     * @param SimpleElement|null $element
      * @return array
      */
-    public function getData(FixtureInterface $fixture = null, Element $element = null)
+    public function getData(FixtureInterface $fixture = null, SimpleElement $element = null)
     {
         $this->showAdvancedSettings();
+
         return parent::getData($fixture, $element);
     }
 
@@ -330,6 +329,7 @@ class ProductForm extends FormTabs
         $tabName = strtolower($tabName);
         $selector = sprintf($this->customTab, $tabName);
         $this->waitForElementVisible($selector, Locator::SELECTOR_XPATH);
+
         return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible();
     }
 
@@ -365,6 +365,7 @@ class ProductForm extends FormTabs
                 $data[$tabName] = $errors;
             }
         }
+
         return $data;
     }
 

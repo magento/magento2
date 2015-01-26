@@ -134,6 +134,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      * Check product type is composite
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsComposite()
     {
@@ -159,6 +160,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      * @param int|array $entityIds
      * @param bool $usePrimaryTable use primary or temporary index table
      * @return \Magento\Framework\DB\Select
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
@@ -281,6 +283,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      *
      * @param string $table
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getIdxTable($table = null)
     {

@@ -7,10 +7,10 @@
 
 namespace Magento\Backend\Test\Block\Widget;
 
-use Mtf\Block\Form as FormInstance;
-use Mtf\Client\Element\Locator;
-use Mtf\Factory\Factory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Block\Form as FormInstance;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Form

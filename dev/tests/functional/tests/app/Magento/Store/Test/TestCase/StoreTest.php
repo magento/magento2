@@ -8,11 +8,15 @@
 
 namespace Magento\Store\Test\TestCase;
 
-use Mtf\Factory\Factory;
-use Mtf\TestCase\Functional;
+use Magento\Mtf\Factory\Factory;
+use Magento\Mtf\TestCase\Functional;
 
 class StoreTest extends Functional
 {
+    /* tags */
+    const TEST_TYPE = 'acceptance_test';
+    /* end tags */
+
     /**
      * Login into backend area before test
      */

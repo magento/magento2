@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Categories tree block
  */
@@ -244,6 +246,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
     /**
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsWasExpanded()
     {
@@ -300,7 +303,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         foreach ($categories as $key => $category) {
             $categories[$key] = $this->_getNodeJson($category);
         }
-        return '<script type="text/javascript">' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
+        return '<script>' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
             $categories
         ) .
             ';' .
@@ -314,6 +317,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param Node|array $node
      * @param int $level
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getNodeJson($node, $level = 0)
     {

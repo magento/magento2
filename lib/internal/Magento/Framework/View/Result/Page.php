@@ -239,9 +239,10 @@ class Page extends Layout
             ]);
 
             $output = $this->getLayout()->getOutput();
-            $this->translateInline->processResponseBody($output);
             $this->assign('layoutContent', $output);
-            $response->appendBody($this->renderPage());
+            $output = $this->renderPage();
+            $this->translateInline->processResponseBody($output);
+            $response->appendBody($output);
         } else {
             parent::render($response);
         }

@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Wishlist\Model\Rss;
 
 class WishlistTest extends \PHPUnit_Framework_TestCase
