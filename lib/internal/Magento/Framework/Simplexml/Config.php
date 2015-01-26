@@ -184,6 +184,7 @@ class Config
      * Enter description here...
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCacheSaved()
     {

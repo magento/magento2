@@ -19,6 +19,7 @@ class Unitofmeasure extends \Magento\Ups\Model\Config\Source\Generic
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function toOptionArray()
     {

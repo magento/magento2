@@ -81,6 +81,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      *
      * @param \Magento\Wishlist\Model\Resource\Item\Collection $collection
      * @return \Magento\Wishlist\Block\Customer\Wishlist
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _prepareCollection($collection)
     {

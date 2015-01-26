@@ -16,6 +16,7 @@ class DefaultPath implements \Magento\Framework\App\DefaultPathInterface
 
     /**
      * @param \Magento\Backend\App\ConfigInterface $config
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(\Magento\Backend\App\ConfigInterface $config)
     {

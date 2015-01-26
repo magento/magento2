@@ -20,6 +20,8 @@ use Magento\Tax\Model\Config;
 
 /**
  * Tax Calculation Model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Calculation extends \Magento\Framework\Model\AbstractModel
 {
@@ -187,6 +189,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -470,6 +473,9 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param null|int|\Magento\Store\Model\Store $store
      * @param int $customerId
      * @return  \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getRateRequest(
         $shippingAddress = null,

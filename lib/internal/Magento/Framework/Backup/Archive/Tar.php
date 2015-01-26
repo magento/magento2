@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Extended version of \Magento\Framework\Archive\Tar that supports filtering
  *

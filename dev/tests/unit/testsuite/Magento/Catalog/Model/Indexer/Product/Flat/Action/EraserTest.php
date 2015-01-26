@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 class EraserTest extends \PHPUnit_Framework_TestCase

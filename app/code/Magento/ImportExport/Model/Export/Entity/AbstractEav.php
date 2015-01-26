@@ -14,6 +14,7 @@ use Magento\Store\Model\Store;
  * Export EAV entity abstract model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEntity
 {
@@ -103,6 +104,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
      *
      * @param AbstractCollection $collection
      * @return AbstractCollection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function filterEntityCollection(AbstractCollection $collection)
     {
