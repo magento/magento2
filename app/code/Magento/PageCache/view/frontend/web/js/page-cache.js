@@ -295,7 +295,7 @@ define([
      */
     function generateRandomString(chars, length) {
         var result = '';
-        length = length > 0 && Number.isFinite(length) ? length : 1;
+        length = length > 0 ? length : 1;
 
         while (length--) {
             result += chars[Math.round(Math.random() * (chars.length - 1))];
