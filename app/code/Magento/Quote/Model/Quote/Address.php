@@ -19,7 +19,6 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method Address setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method Address setUpdatedAt(string $value)
- * @method int getCustomerId()
  * @method Address setCustomerId(int $value)
  * @method int getSaveInAddressBook()
  * @method Address setSaveInAddressBook(int $value)
@@ -29,14 +28,12 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method Address setCustomerAddressData(\Magento\Customer\Api\Data\AddressInterface $value)
  * @method string getAddressType()
  * @method Address setAddressType(string $value)
- * @method string getEmail()
  * @method Address setEmail(string $value)
  * @method Address setPrefix(string $value)
  * @method Address setFirstname(string $value)
  * @method Address setMiddlename(string $value)
  * @method Address setLastname(string $value)
  * @method Address setSuffix(string $value)
- * @method string getCompany()
  * @method Address setCompany(string $value)
  * @method Address setCity(string $value)
  * @method Address setRegion(string $value)
@@ -44,7 +41,6 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method Address setPostcode(string $value)
  * @method Address setCountryId(string $value)
  * @method Address setTelephone(string $value)
- * @method string getFax()
  * @method Address setFax(string $value)
  * @method int getSameAsBilling()
  * @method Address setSameAsBilling(int $value)
@@ -117,7 +113,8 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Address extends \Magento\Customer\Model\Address\AbstractAddress
+class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
+    \Magento\Quote\Api\Data\AddressInterface
 {
     const RATES_FETCH = 1;
 
@@ -237,6 +234,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @var \Magento\Customer\Model\Address\Mapper
      */
     protected $addressMapper;
+
+    /**
+     * @var Address\RateRequestFactory
+     */
+    protected $_rateRequestFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -1348,4 +1350,127 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     {
         return $this->validator;
     }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnoreStart
+     */
+    public function getCountryId()
+    {
+        return $this->getData(self::KEY_COUNTRY_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStreet()
+    {
+        $street = $this->getData(self::KEY_STREET);
+        return explode("\n", $street);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCompany()
+    {
+        return $this->getData(self::KEY_COMPANY);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTelephone()
+    {
+        return $this->getData(self::KEY_TELEPHONE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFax()
+    {
+        return $this->getData(self::KEY_FAX);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPostcode()
+    {
+        return $this->getData(self::KEY_POSTCODE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCity()
+    {
+        return $this->getData(self::KEY_CITY);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFirstname()
+    {
+        return $this->getData(self::KEY_FIRSTNAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastname()
+    {
+        return $this->getData(self::KEY_LASTNAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMiddlename()
+    {
+        return $this->getData(self::KEY_MIDDLENAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrefix()
+    {
+        return $this->getData(self::KEY_PREFIX);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSuffix()
+    {
+        return $this->getData(self::KEY_SUFFIX);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVatId()
+    {
+        return $this->getData(self::KEY_VAT_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomerId()
+    {
+        return $this->getData(self::KEY_CUSTOMER_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        return $this->getData(self::KEY_EMAIL);
+    }
+    //@codeCoverageIgnoreEnd
 }
