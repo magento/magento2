@@ -60,7 +60,7 @@ class ExtensibleObjectBuilder extends AbstractSimpleObjectBuilder implements Bui
         $dataObjectType = $this->_getDataObjectType();
         $dataObject = $this->objectFactory->create(
             $dataObjectType,
-            ['attributeValueFactory' => $this->attributeValueFactory, 'data' => $this->data]
+            ['attributeValueFactory' => $this->attributeValueFactory, 'data' => $this->getData()]
         );
         $this->data = [];
         return $dataObject;

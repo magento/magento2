@@ -40,8 +40,8 @@ abstract class AbstractSimpleObject
     /**
      * Set value for the given key
      *
-     * @param $key
-     * @param $value
+     * @param string $key
+     * @param mixed $value
      * @return $this
      */
     protected function setData($key, $value)

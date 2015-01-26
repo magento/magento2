@@ -120,17 +120,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
      */
     public function setCustomAttributes(array $attributes)
     {
-        $customAttributesCodes = $this->getCustomAttributesCodes();
-        foreach ($attributes as $attribute) {
-            if (!$attribute instanceof AttributeValue) {
-                throw new \LogicException('Custom Attribute array elements can only be type of AttributeValue');
-            }
-            $attributeCode = $attribute->getAttributeCode();
-            if (in_array($attributeCode, $customAttributesCodes)) {
-                $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] = $attribute;
-            }
-        }
-        return $this;
+        return $this->setData(self::CUSTOM_ATTRIBUTES, $attributes);
     }
 
     /**

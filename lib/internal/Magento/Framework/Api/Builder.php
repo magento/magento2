@@ -102,6 +102,7 @@ class Builder implements BuilderInterface
         $this->typeProcessor = $typeProcessor;
         $this->dataBuilderFactory = $dataBuilderFactory;
         $this->objectManagerConfig = $objectManagerConfig;
+        $this->data = [];
     }
 
     /**
@@ -152,7 +153,7 @@ class Builder implements BuilderInterface
                 ['data' => $this->data]
             );
             $dataObject->setDataChanges(true);
-        } elseif($dataType == self::TYPE_EXTENSIBLE_DATA_OBJECT) {
+        } elseif ($dataType == self::TYPE_EXTENSIBLE_DATA_OBJECT) {
             $dataObjectType = $this->_getDataObjectType();
             $dataObject = $this->objectFactory->create(
                 $dataObjectType,

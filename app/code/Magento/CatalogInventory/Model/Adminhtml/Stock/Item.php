@@ -14,6 +14,7 @@ use Magento\Framework\Api\MetadataServiceInterface;
 
 /**
  * Catalog Inventory Stock Model for adminhtml area
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends \Magento\CatalogInventory\Model\Stock\Item
 {

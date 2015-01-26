@@ -43,6 +43,7 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setName(string $value)
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setHiddenTaxAmount(float $value)
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseHiddenTaxAmount(float $value)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
 {

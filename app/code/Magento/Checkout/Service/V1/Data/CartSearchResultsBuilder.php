@@ -6,7 +6,7 @@
 namespace Magento\Checkout\Service\V1\Data;
 
 use Magento\Framework\Api\AbstractSearchResultsBuilder;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Framework\Api\ObjectFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -20,21 +20,21 @@ class CartSearchResultsBuilder extends AbstractSearchResultsBuilder
      * Constructor
      *
      * @param ObjectFactory $objectFactory
-     * @param AttributeDataBuilder $valueBuilder
+     * @param AttributeValueFactory $valueFactory
      * @param MetadataServiceInterface $metadataService
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param CartBuilder $itemObjectBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
-        AttributeDataBuilder $valueBuilder,
+        AttributeValueFactory $valueFactory,
         MetadataServiceInterface $metadataService,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         CartBuilder $itemObjectBuilder
     ) {
         parent::__construct(
             $objectFactory,
-            $valueBuilder,
+            $valueFactory,
             $metadataService,
             $searchCriteriaBuilder,
             $itemObjectBuilder
