@@ -98,6 +98,8 @@ class FlatTableBuilder
      * @param int|string $storeId
      * @return void
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _createTemporaryFlatTable($storeId)
     {

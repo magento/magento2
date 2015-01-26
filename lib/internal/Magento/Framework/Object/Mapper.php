@@ -9,6 +9,10 @@
  */
 namespace Magento\Framework\Object;
 
+/**
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ */
 class Mapper
 {
     /**

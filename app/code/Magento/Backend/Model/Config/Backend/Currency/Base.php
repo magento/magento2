@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Backend Directory currency backend model
  * Allows dispatching before and after events for each controller action

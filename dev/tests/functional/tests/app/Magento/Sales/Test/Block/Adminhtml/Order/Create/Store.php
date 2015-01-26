@@ -8,9 +8,9 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create;
 
 use Magento\Store\Test\Fixture\Store as StoreFixture;
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
-use Mtf\Factory\Factory;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Factory\Factory;
 
 /**
  * Class Store

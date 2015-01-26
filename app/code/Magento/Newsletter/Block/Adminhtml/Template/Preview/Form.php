@@ -17,6 +17,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Preparing from for revision page
      *
      * @return \Magento\Backend\Block\Widget\Form
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _prepareForm()
     {

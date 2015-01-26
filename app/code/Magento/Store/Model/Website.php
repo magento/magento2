@@ -26,6 +26,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\Store\Model\Website setDefaultGroupId(int $value)
  * @method int getIsDefault()
  * @method \Magento\Store\Model\Website setIsDefault(int $value)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Website extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Framework\Object\IdentityInterface,
@@ -175,6 +177,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

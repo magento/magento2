@@ -295,6 +295,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      * Retrieve select all functionality flag check
      *
      * @return boolean
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseSelectAll()
     {

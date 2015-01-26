@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeDataBuilder;
@@ -67,6 +70,9 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * @method \Magento\Sales\Model\Order\Payment setCcNumberEnc(string $value)
  * @method \Magento\Sales\Model\Order\Payment setCcTransId(string $value)
  * @method \Magento\Sales\Model\Order\Payment setAddressStatus(string $value)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Payment extends Info implements OrderPaymentInterface
 {
@@ -159,6 +165,7 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -279,6 +286,7 @@ class Payment extends Info implements OrderPaymentInterface
      * This method is supposed to be called only when order is placed
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function place()
     {
@@ -693,6 +701,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @return $this
      * @throws \Exception
      * @throws \Magento\Framework\Model\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function refund($creditmemo)
     {
@@ -788,6 +798,7 @@ class Payment extends Info implements OrderPaymentInterface
      *
      * @param float $amount
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerRefundNotification($amount)
     {
@@ -976,6 +987,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @param bool $isOnline
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function registerPaymentReviewAction($action, $isOnline)
     {
@@ -1193,6 +1206,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @param float $amount
      * @param string $gatewayCallback
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _void($isOnline, $amount = null, $gatewayCallback = 'void')
     {
@@ -1267,6 +1282,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Sales\Model\AbstractModel $salesDocument
      * @param bool $failsafe
      * @return null|\Magento\Sales\Model\Order\Payment\Transaction
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addTransaction($type, $salesDocument = null, $failsafe = false)
     {

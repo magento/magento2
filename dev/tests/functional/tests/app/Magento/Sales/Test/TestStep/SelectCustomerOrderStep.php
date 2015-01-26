@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\TestStep;
 
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
  * Class SelectCustomerOrderStep

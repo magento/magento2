@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Reports\Model\Resource\Order;
 
 use Magento\Framework\DB\Select;
@@ -11,6 +14,7 @@ use Magento\Framework\DB\Select;
  * Reports orders collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 {
@@ -106,6 +110,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      *
      * @param string $range
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function checkIsLive($range)
     {
@@ -362,6 +367,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param string $tzFrom
      * @param string $tzTo
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getTZRangeExpressionForAttribute($range, $attribute, $tzFrom = '+00:00', $tzTo = null)
     {
@@ -384,6 +390,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param string $customEnd
      * @param bool $returnObjects
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
@@ -540,6 +547,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      *
      * @param int $isFilter
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _calculateTotalsAggregated($isFilter = 0)
     {

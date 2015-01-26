@@ -17,6 +17,7 @@ abstract class AbstractTotal extends \Magento\Sales\Model\Order\Total\AbstractTo
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {

@@ -11,7 +11,7 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
 use Magento\Review\Test\Block\Adminhtml\Product\Grid as ReviewsGrid;
 use Magento\Review\Test\Fixture\Review;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductReviewInGridOnCustomerPage

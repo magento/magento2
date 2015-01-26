@@ -10,11 +10,11 @@ use Magento\Bundle\Test\Fixture\Bundle as BundleDataFixture;
 use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option;
-use Mtf\Client\Element\SimpleElement;
-use Mtf\Block\Block;
-use Mtf\Client\Locator;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Block\Block;
+use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class Bundle

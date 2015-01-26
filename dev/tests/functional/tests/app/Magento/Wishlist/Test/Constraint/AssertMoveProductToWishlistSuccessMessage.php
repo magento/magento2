@@ -7,8 +7,8 @@
 namespace Magento\Wishlist\Test\Constraint;
 
 use Magento\Wishlist\Test\Page\WishlistIndex;
-use Mtf\Constraint\AbstractConstraint;
-use Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AssertAddProductToWishlistSuccessMessage

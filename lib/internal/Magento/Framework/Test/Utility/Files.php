@@ -1069,7 +1069,7 @@ class Files
              */
             $files = glob(self::init()->getPathToSource() . '/' . $pattern, GLOB_BRACE);
             if (empty($files)) {
-                throw new \Exception("The glob() pattern '{$pattern}' didn't return any result.");
+                continue;
             }
             $result = array_merge($result, $files);
         }

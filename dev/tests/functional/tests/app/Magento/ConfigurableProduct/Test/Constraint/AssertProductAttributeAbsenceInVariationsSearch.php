@@ -11,7 +11,7 @@ use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Conf
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductAttributeAbsenceInVariationsSearch

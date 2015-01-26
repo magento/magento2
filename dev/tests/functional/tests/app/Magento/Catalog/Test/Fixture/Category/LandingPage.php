@@ -7,8 +7,8 @@
 namespace Magento\Catalog\Test\Fixture\Category;
 
 use Magento\Cms\Test\Fixture\CmsBlock;
-use Mtf\Fixture\FixtureFactory;
-use Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Prepare landing page.

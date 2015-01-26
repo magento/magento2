@@ -39,6 +39,7 @@ class PriceBox extends PriceBoxRender
      * @param Data $coreDataHelper
      * @param Random $mathRandom
      * @param array $data
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
@@ -84,6 +85,7 @@ class PriceBox extends PriceBoxRender
      *
      * @param Product $product
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getCanDisplayQty(Product $product)
     {
