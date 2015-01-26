@@ -2032,5 +2032,6 @@ return [
     ['isNominal', 'Magento\Sales\Model\Order\Item'],
     ['getIsNominal', 'Magento\Sales\Model\Quote\Item\AbbstractItem'],
     ['checkQuoteAmount', 'Magento\Sales\Helper\Data'],
-    ['getEntityTypeId', 'Magento\Customer\Model\Customer']
+    ['getEntityTypeId', 'Magento\Customer\Model\Customer'],
+    ['_getImageHelper', 'Magento\Catalog\Model\Product'],
 ];
