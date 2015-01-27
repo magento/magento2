@@ -165,6 +165,20 @@ class AddressInjectable extends AbstractRepository
             'fax' => '444-44-444-44',
         ];
 
+        $this->_data['customer_DE'] = [
+            'firstname' => 'Jan',
+            'lastname' => 'Jansen',
+            'email' => 'JanJansen_%isolation%@example.com',
+            'company' => 'Magento %isolation%',
+            'city' => 'Berlin',
+            'street' => 'Augsburger Strabe 41',
+            'postcode' => '10789',
+            'country_id' => 'Germany',
+            'region_id' => 'Berlin',
+            'telephone' => '333-33-333-33',
+            'fax' => '333-33-333-33',
+        ];
+
         $this->_data['address_US_1'] = [
             'firstname' => 'John',
             'lastname' => 'Doe',
