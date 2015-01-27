@@ -628,7 +628,7 @@ class ConsoleController extends AbstractActionController
     }
 
     /**
-     * Get lists of modules - enabled and disabled
+     * Get formatted message containing list of enabled and disabled modules
      *
      * @return string
      */
