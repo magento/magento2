@@ -10,9 +10,7 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Shipping
  * Multishipping billing information
- *
  */
 class Billing extends Form
 {
@@ -34,7 +32,7 @@ class Billing extends Form
         $this->_rootElement->find('#p_method_' . $payment['method'], Locator::SELECTOR_CSS)->click();
         if (isset($payment['dataConfig']['payment_form_class'])) {
             $paymentFormClass = $payment['dataConfig']['payment_form_class'];
-            /** @var $formBlock \Mtf\Block\Form */
+            /** @var $formBlock \Magento\Mtf\Block\Form */
             $formBlock = $this->blockFactory->create(
                 $paymentFormClass,
                 ['element' => $this->_rootElement->find('#payment_form_' . $payment['method'], Locator::SELECTOR_CSS)]

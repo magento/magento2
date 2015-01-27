@@ -6,14 +6,10 @@
 
 namespace Magento\Multishipping\Test\Block\Checkout;
 
-use Magento\Multishipping\Test\Fixture\GuestPaypalDirect;
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 
 /**
- * Class Overview
  * Multishipping checkout overview information
- *
  */
 class Overview extends Block
 {
@@ -27,12 +23,10 @@ class Overview extends Block
     /**
      * Place order
      *
-     * @param GuestPaypalDirect $fixture
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return void
      */
-    public function placeOrder(GuestPaypalDirect $fixture = null)
+    public function placeOrder()
     {
-        $this->_rootElement->find($this->placeOrder, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->placeOrder)->click();
     }
 }

@@ -30,6 +30,8 @@ class Addresses extends Block
 
     /**
      * Add new customer address.
+     *
+     * @return void
      */
     public function addNewAddress()
     {
@@ -40,6 +42,7 @@ class Addresses extends Block
      * Select shipping addresses for products.
      *
      * @param array $bindings
+     * @return void
      */
     public function selectAddresses($bindings)
     {

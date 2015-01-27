@@ -6,14 +6,11 @@
 
 namespace Magento\Multishipping\Test\Block\Checkout;
 
-use Magento\Multishipping\Test\Fixture\GuestPaypalDirect;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Success
  * Multishipping checkout success block
- *
  */
 class Success extends Block
 {
@@ -33,6 +30,8 @@ class Success extends Block
 
     /**
      * Fill shipping address
+     *
+     * @return void
      */
     public function continueShopping()
     {
@@ -43,10 +42,10 @@ class Success extends Block
     /**
      * Get ids for placed order
      *
-     * @param GuestPaypalDirect $fixture
+     * @param int $ordersNumber
      * @return array
      */
-    public function getOrderIds(GuestPaypalDirect $fixture)
+    public function getOrderIds($ordersNumber)
     {
         $continueShopping = $this->_rootElement->find($this->continueShopping);
         $this->_rootElement->waitUntil(
@@ -55,7 +54,6 @@ class Success extends Block
             }
         );
         $orderIds = [];
-        $ordersNumber = count($fixture->getShippingMethods());
         for ($i = 1; $i <= $ordersNumber; $i++) {
             $orderIds[] = $this->_rootElement->find(
                 '//a[' . $i . '][contains(@href, "view/order_id")]',
