@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bf5c9bfea7230f2f1647df81ce568d5c",
+    "hash": "765ea6c5792e7a59ec10377e9741ca56",
     "packages": [
         {
             "name": "composer/composer",
@@ -1821,16 +1821,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.4",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "72a8c34210c0fbd8caa007fccea87a59f6f0a4d3"
+                "reference": "fecd7041b663796ef84c3c22361ec216a6a0e740"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/72a8c34210c0fbd8caa007fccea87a59f6f0a4d3",
-                "reference": "72a8c34210c0fbd8caa007fccea87a59f6f0a4d3",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/fecd7041b663796ef84c3c22361ec216a6a0e740",
+                "reference": "fecd7041b663796ef84c3c22361ec216a6a0e740",
                 "shasum": ""
             },
             "require": {
@@ -1870,7 +1870,7 @@
                 }
             ],
             "description": "A script to automatically fix Symfony Coding Standard",
-            "time": "2015-01-12 21:28:53"
+            "time": "2015-01-27 18:37:20"
         },
         {
             "name": "league/climate",
