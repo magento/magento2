@@ -44,11 +44,10 @@ class ConsoleController extends AbstractActionController
     const CMD_MODULE_DISABLE = 'module-disable';
     /**#@- */
 
-    /**#@+
+    /**
      * Help option for retrieving list of modules
      */
     const HELP_LIST_OF_MODULES = 'module-list';
-    /**#@- */
 
     /**
      * Map of controller actions exposed in CLI
@@ -547,7 +546,7 @@ class ConsoleController extends AbstractActionController
             case UserConfig::KEY_TIMEZONE:
                 return $this->arrayToString($this->options->getTimezoneList());
             case self::HELP_LIST_OF_MODULES:
-                return $this->getModuleList();
+                return $this->getModuleListMsg();
             default:
                 if (isset($usages[$type])) {
                     if ($usages[$type]) {
@@ -633,7 +632,7 @@ class ConsoleController extends AbstractActionController
      *
      * @return string
      */
-    private function getModuleList()
+    private function getModuleListMsg()
     {
         $moduleList = $this->getObjectManager()->create('Magento\Framework\Module\ModuleList');
         $result = "\nList of enabled modules:\n";
@@ -648,7 +647,7 @@ class ConsoleController extends AbstractActionController
         $fullModuleList = $this->getObjectManager()->create('Magento\Framework\Module\FullModuleList');
         $result .= "\nList of disabled modules:\n";
         $disabledModuleList = array_diff($fullModuleList->getNames(), $enabledModuleList);
-        foreach ($disabledModuleList  as $moduleName) {
+        foreach ($disabledModuleList as $moduleName) {
             $result .= "$moduleName\n";
         }
         if (count($disabledModuleList) === 0) {
