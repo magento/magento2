@@ -10,7 +10,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
-abstract class Base extends StreamHandler
+class Base extends StreamHandler
 {
     /**
      * @var string
