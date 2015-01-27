@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Quote\Model;
 
 use Magento\Quote\Model\Quote\Address;
@@ -13,6 +16,7 @@ use Magento\TestFramework\Helper\ObjectManager;
  * Test class for \Magento\Quote\Model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
@@ -523,6 +527,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testSetCustomerAddressData()
     {
         $customerId = 1;

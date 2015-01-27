@@ -59,6 +59,7 @@ class Package
      * @param string $propertyPath
      * @param string $filter pattern to filter out the properties
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function get($propertyPath, $filter = null)
     {

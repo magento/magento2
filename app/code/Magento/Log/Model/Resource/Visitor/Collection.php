@@ -173,6 +173,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Return true if online filter used
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsOnlineFilterUsed()
     {

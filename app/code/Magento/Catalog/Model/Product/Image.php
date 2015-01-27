@@ -15,6 +15,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Image extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -174,6 +179,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -381,6 +388,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @param string|null $file
      * @return float|int
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getNeedMemoryForFile($file = null)
     {
@@ -436,6 +444,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param string $file
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function setBaseFile($file)
     {
@@ -611,6 +621,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param int $height
      * @param int $opacity
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function setWatermark(
         $file,

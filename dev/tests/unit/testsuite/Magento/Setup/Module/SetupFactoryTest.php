@@ -1,6 +1,7 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Module;
@@ -50,10 +51,10 @@ class SetupFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateSetupModule()
     {
-        $setup = $this->setupFactory->createSetupModule(
+        $setupModule = $this->setupFactory->createSetupModule(
             $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface'),
             'sampleModuleName'
         );
-        $this->assertInstanceOf('Magento\Setup\Module\Setup', $setup);
+        $this->assertInstanceOf('Magento\Setup\Module\SetupModule', $setupModule);
     }
 }

@@ -92,6 +92,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Get is submit button disabled or not
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDisableSubmitButton()
     {

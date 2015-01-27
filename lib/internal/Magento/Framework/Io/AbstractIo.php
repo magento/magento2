@@ -53,6 +53,7 @@ abstract class AbstractIo implements IoInterface
     /**
      * @param string $path
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getCleanPath($path)
     {

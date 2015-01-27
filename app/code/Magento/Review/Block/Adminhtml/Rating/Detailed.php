@@ -149,6 +149,7 @@ class Detailed extends \Magento\Backend\Block\Template
      * @param Option $option
      * @param \Magento\Review\Model\Rating $rating
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isSelected($option, $rating)
     {

@@ -264,6 +264,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Get queue joined flag
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getQueueJoinedFlag()
     {

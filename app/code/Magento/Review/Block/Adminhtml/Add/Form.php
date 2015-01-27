@@ -51,6 +51,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare add review form
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

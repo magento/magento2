@@ -16,6 +16,7 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Bundle option price
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BundleSelectionPrice extends AbstractPrice
 {

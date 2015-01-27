@@ -15,6 +15,7 @@ class Sample extends \Magento\Downloadable\Controller\Download
      * Download sample action
      *
      * @return ResponseInterface
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {

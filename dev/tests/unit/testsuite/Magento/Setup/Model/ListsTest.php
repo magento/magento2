@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 X.commerce', Inc. (http://www.magentocommerce.com)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  */
 
 namespace Magento\Setup\Model;
@@ -17,7 +17,10 @@ class ListsTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->lists = new Lists($objectManager->getObject('Zend_Locale'), $objectManager->getObject('Magento\Framework\Locale\Config'));
+        $this->lists = new Lists(
+            $objectManager->getObject('Zend_Locale'),
+            $objectManager->getObject('Magento\Framework\Locale\Config')
+        );
     }
 
     public function testGetTimezoneList()

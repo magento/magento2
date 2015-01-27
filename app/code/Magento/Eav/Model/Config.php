@@ -7,6 +7,9 @@ namespace Magento\Eav\Model;
 
 use Magento\Eav\Model\Entity\Type;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Config
 {
     /**#@+
@@ -450,6 +453,8 @@ class Config
      * @param  mixed $entityType
      * @param  \Magento\Framework\Object $object
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getEntityAttributeCodes($entityType, $object = null)
     {

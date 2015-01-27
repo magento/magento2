@@ -60,6 +60,9 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function collect(\Magento\Quote\Model\Quote\Address $address)
     {

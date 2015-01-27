@@ -13,6 +13,9 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterface
 {
     /**
