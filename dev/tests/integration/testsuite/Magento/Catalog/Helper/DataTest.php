@@ -10,6 +10,9 @@ use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\TaxRuleFixtureFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
