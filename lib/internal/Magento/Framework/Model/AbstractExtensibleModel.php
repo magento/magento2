@@ -228,4 +228,16 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
         parent::setId($value);
         return $this->setData('id', $value);
     }
+
+    /**
+     * Return associated metadata service interface
+     *
+     * @return string|null
+     */
+    public function getMetadataServiceInterface()
+    {
+        //by default, return null
+        return null;
+    }
+
 }

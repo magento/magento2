@@ -2080,4 +2080,14 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
         return $dataArray;
     }
+
+    /**
+     * Return associated metadata service interface
+     *
+     * @return string|null
+     */
+    public function getMetadataServiceInterface()
+    {
+        return '\Magento\Catalog\Model\Product\Attribute\Repository';
+    }
 }

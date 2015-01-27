@@ -24,13 +24,23 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
     protected $attributeValueFactory;
 
     /**
+     * @var DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * Initialize internal storage
      *
+     * @param DataObjectHelper $dataObjectHelper
      * @param AttributeValueFactory $attributeValueFactory
      * @param array $data
      */
-    public function __construct(AttributeValueFactory $attributeValueFactory, $data = [])
-    {
+    public function __construct(
+        DataObjectHelper $dataObjectHelper,
+        AttributeValueFactory $attributeValueFactory,
+        $data = []
+    ) {
+        $this->dataObjectHelper = $dataObjectHelper;
         $this->attributeValueFactory = $attributeValueFactory;
         parent::__construct($data);
     }
@@ -68,14 +78,14 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      */
     public function setCustomAttributes(array $attributes)
     {
-        $customAttributesCodes = $this->getCustomAttributesCodes();
+        $customAttributesCodes = $this->dataObjectHelper->getCustomAttributesCodes($this);
         foreach ($attributes as $attribute) {
             if (!$attribute instanceof AttributeValue) {
                 throw new \LogicException('Custom Attribute array elements can only be type of AttributeValue');
             }
             $attributeCode = $attribute->getAttributeCode();
             if (in_array($attributeCode, $customAttributesCodes)) {
-                $this->data[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY][$attributeCode] = $attribute;
+                $this->_data[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY][$attributeCode] = $attribute;
             }
         }
         return $this;
@@ -90,7 +100,7 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
-        $customAttributesCodes = $this->getCustomAttributesCodes();
+        $customAttributesCodes = $this->dataObjectHelper->getCustomAttributesCodes($this);
         /* If key corresponds to custom attribute code, populate custom attributes */
         if (in_array($attributeCode, $customAttributesCodes)) {
             /** @var AttributeValue $attribute */

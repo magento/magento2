@@ -48,4 +48,11 @@ interface ExtensibleDataInterface
      * @throws \LogicException
      */
     public function setCustomAttributes(array $attributes);
+
+    /**
+     * Return associated metadata service interface
+     *
+     * @return string|null
+     */
+    public function getMetadataServiceInterface();
 }

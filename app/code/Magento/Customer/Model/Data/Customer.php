@@ -407,4 +407,14 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     {
         return $this->setData(self::KEY_ADDRESSES, $addresses);
     }
+
+    /**
+     * Return associated metadata service interface
+     *
+     * @return string|null
+     */
+    public function getMetadataServiceInterface()
+    {
+        return '\Magento\Customer\Api\CustomerMetadataInterface';
+    }
 }

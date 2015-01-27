@@ -389,4 +389,14 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     {
         return $this->setData(self::DEFAULT_BILLING, $isDefaultBilling);
     }
+
+    /**
+     * Return associated metadata service interface
+     *
+     * @return string|null
+     */
+    public function getMetadataServiceInterface()
+    {
+        return '\Magento\Customer\Api\AddressMetadataInterface';
+    }
 }

@@ -217,7 +217,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
                 [
                     'getLinkedProductSku', 'getProductSku', 'getLinkType',
                     '__toArray', 'getLinkedProductType', 'getPosition', 'getCustomAttribute', 'getCustomAttributes',
-                    'setCustomAttribute', 'setCustomAttributes',
+                    'setCustomAttribute', 'setCustomAttributes', 'getMetadataServiceInterface'
                 ]
             );
             $productLinkMock->expects($this->any())
