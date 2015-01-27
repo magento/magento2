@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,7 +7,7 @@ namespace Magento\Framework\Interception\Fixture\Intercepted;
 
 use Magento\Framework\Interception\Fixture\Intercepted;
 
-class Plugin
+class FirstPlugin
 {
     /**
      * @var int
@@ -20,7 +19,7 @@ class Plugin
      */
     public function aroundC(Intercepted $subject, \Closure $next, $param1)
     {
-        return '<P:C>' . $next($param1) . '</P:C>';
+        return '<F:C>' . $next($param1) . '</F:C>';
     }
 
     /**
@@ -29,7 +28,7 @@ class Plugin
     public function aroundD(Intercepted $subject, \Closure $next, $param1)
     {
         $this->_counter++;
-        return '<P:D>' . $this->_counter . ': ' . $next($param1) . '</P:D>';
+        return '<F:D>' . $this->_counter . ': ' . $next($param1) . '</F:D>';
     }
 
     /**
@@ -38,7 +37,7 @@ class Plugin
     public function aroundK(Intercepted $subject, \Closure $next, $param1)
     {
         $result = $subject->C($param1);
-        return '<P:K>' . $subject->F($result) . '</P:K>';
+        return '<F:K>' . $subject->F($result) . '</F:K>';
     }
 
     /**
@@ -46,7 +45,7 @@ class Plugin
      */
     public function beforeG(Intercepted $subject, $param1)
     {
-        return ['<P:bG>' . $param1 . '</P:bG>'];
+        return ['<F:bG>' . $param1 . '</F:bG>'];
     }
 
     /**
@@ -54,7 +53,7 @@ class Plugin
      */
     public function aroundG(Intercepted $subject, \Closure $next, $param1)
     {
-        return $next('<P:G>' . $param1 . '</P:G>');
+        return $next('<F:G>' . $param1 . '</F:G>');
     }
 
     /**
@@ -62,7 +61,7 @@ class Plugin
      */
     public function afterG(Intercepted $subject, $result)
     {
-        return '<P:aG>' . $result . '</P:aG>';
+        return '<F:aG>' . $result . '</F:aG>';
     }
 
     /**
@@ -70,7 +69,7 @@ class Plugin
      */
     public function beforeV(Intercepted $subject, $param1)
     {
-        return ['<P:bV/>'];
+        return ['<F:bV/>'];
     }
 
     /**
@@ -78,7 +77,7 @@ class Plugin
      */
     public function aroundV(Intercepted $subject, \Closure $next, $param1)
     {
-        return '<P:V>' . $param1 . '<P:V/>';
+        return '<F:V>' . $param1 . '<F:V/>';
     }
 
     /**
@@ -86,7 +85,7 @@ class Plugin
      */
     public function beforeW(Intercepted $subject, $param1)
     {
-        return ['<P:bW/>'];
+        return ['<F:bW/>'];
     }
 
     /**
@@ -94,7 +93,7 @@ class Plugin
      */
     public function aroundW(Intercepted $subject, \Closure $next, $param1)
     {
-        return '<P:W>' . $param1 . '<P:W/>';
+        return '<F:W>' . $param1 . '<F:W/>';
     }
 
     /**
@@ -102,7 +101,7 @@ class Plugin
      */
     public function afterW(Intercepted $subject, $result)
     {
-        return '<P:aW/>';
+        return '<F:aW/>';
     }
 
     /**
@@ -110,7 +109,7 @@ class Plugin
      */
     public function beforeX(Intercepted $subject, $param1)
     {
-        return ['<P:bX/>'];
+        return ['<F:bX/>'];
     }
 
     /**
@@ -118,7 +117,7 @@ class Plugin
      */
     public function aroundY(Intercepted $subject, \Closure $next, $param1)
     {
-        return '<P:Y>' . $param1 . '<P:Y/>';
+        return '<F:Y>' . $param1 . '<F:Y/>';
     }
 
     /**
@@ -126,6 +125,6 @@ class Plugin
      */
     public function afterZ(Intercepted $subject, $result)
     {
-        return '<P:aZ/>';
+        return '<F:aZ/>';
     }
 }
