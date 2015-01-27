@@ -192,7 +192,7 @@ class Redirect extends Template
             $html .= '<p>'
                 . (string)new \Magento\Framework\Phrase(
                     'Click <a href="%1">here</a> if nothing has happened',
-                    $this->getTargetURL()
+                    [$this->getTargetURL()]
                 )
                 . '</p>';
         }

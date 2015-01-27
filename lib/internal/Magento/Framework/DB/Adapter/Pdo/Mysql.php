@@ -3723,7 +3723,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             throw new \Zend_Db_Exception(
                 sprintf(
                     (string)new \Magento\Framework\Phrase('Trigger %s has not statements available'),
-                    $trigger->getName()
+                    [$trigger->getName()]
                 )
             );
         }
