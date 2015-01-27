@@ -6,11 +6,11 @@
 
 define([
     "jquery",
-    "jquery/template",
     "matchMedia",
+    "jquery/template",
     "mage/dropdowns",
     "mage/terms"
-],function($) {
+],function($, mediaCheck) {
     'use strict';
 
     $.widget('mage.navigationMenu', {
