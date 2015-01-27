@@ -40,11 +40,10 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $resultLayout = $this->resultLayoutFactory->create();
-        $resultLayout->setHeader('HTTP/1.1', '404 Not Found');
-        $resultLayout->setHeader('Status', '404 File not found');
-
+        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
+        $resultForward->setHeader('HTTP/1.1', '404 Not Found');
+        $resultForward->setHeader('Status', '404 File not found');
 
         $pageId = $this->_objectManager->get(
             'Magento\Framework\App\Config\ScopeConfigInterface',
@@ -56,7 +55,9 @@ class Index extends \Magento\Framework\App\Action\Action
         /** @var \Magento\Cms\Helper\Page $pageHelper */
         $pageHelper = $this->_objectManager->get('Magento\Cms\Helper\Page');
         if (!$pageHelper->renderPage($this, $pageId)) {
-            $resultForward->forward('defaultNoRoute', 'index');
+            $resultForward->setController('index');
+            $resultForward->forward('defaultNoRoute');
+            return $resultForward;
         }
     }
 }
