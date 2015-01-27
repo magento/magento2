@@ -170,28 +170,28 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getAssociatedTaxables')
             ->will($this->returnValue(null));
 
-        $regionBuilder = $this->getMockBuilder('Magento\Customer\Api\Data\RegionDataBuilder')
+        $regionFactory = $this->getMockBuilder('Magento\Customer\Api\Data\RegionInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['setRegionId', 'create'])
             ->getMock();
 
-        $addressBuilder = $this->getMockBuilder('Magento\Customer\Api\Data\AddressDataBuilder')
+        $addressFactory = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['getRegionBuilder', 'create'])
             ->getMock();
         $region = $this->getMockForAbstractClass('Magento\Customer\Api\Data\RegionInterface', [], '', false);
-        $regionBuilder
+        $regionFactory
             ->expects($this->any())
             ->method('setRegionId')
-            ->will($this->returnValue($regionBuilder));
-        $regionBuilder
+            ->will($this->returnValue($regionFactory));
+        $regionFactory
             ->expects($this->any())
             ->method('create')
             ->will($this->returnValue($region));
-        $addressBuilder
+        $addressFactory
             ->expects($this->any())
             ->method('getRegionBuilder')
-            ->will($this->returnValue($regionBuilder));
+            ->will($this->returnValue($regionFactory));
 
         $quoteDetails = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsInterface');
         $quoteDetailsBuilder = $this->getMock('\Magento\Tax\Api\Data\QuoteDetailsDataBuilder',
@@ -210,7 +210,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $quoteDetailsBuilder
             ->expects($this->any())
             ->method('getAddressBuilder')
-            ->will($this->returnValue($addressBuilder));
+            ->will($this->returnValue($addressFactory));
         $quoteDetailsBuilder
             ->expects($this->any())
             ->method('getTaxClassKeyBuilder')
@@ -245,7 +245,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             $quoteDetailsBuilder,
             $quoteDetailsItemDataBuilder,
             $taxClassKeyDataBuilder,
-            $addressBuilder,
+            $addressFactory,
+            $regionFactory,
             $taxData
         );
 
@@ -288,7 +289,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getBillingAddress')
             ->will($this->returnValue($address));
-        $addressBuilder
+        $addressFactory
             ->expects($this->any())
             ->method('create')
             ->will($this->returnValue($address));
@@ -493,28 +494,28 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getAssociatedTaxables')
             ->will($this->returnValue(null));
 
-        $regionBuilder = $this->getMockBuilder('Magento\Customer\Api\Data\RegionDataBuilder')
+        $regionFactory = $this->getMockBuilder('Magento\Customer\Api\Data\RegionInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['setRegionId', 'create'])
             ->getMock();
 
-        $addressBuilder = $this->getMockBuilder('Magento\Customer\Api\Data\AddressDataBuilder')
+        $addressFactory = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['getRegionBuilder', 'create'])
             ->getMock();
         $region = $this->getMockForAbstractClass('Magento\Customer\Api\Data\RegionInterface', [], '', false);
-        $regionBuilder
+        $regionFactory
             ->expects($this->any())
             ->method('setRegionId')
-            ->will($this->returnValue($regionBuilder));
-        $regionBuilder
+            ->will($this->returnValue($regionFactory));
+        $regionFactory
             ->expects($this->any())
             ->method('create')
             ->will($this->returnValue($region));
-        $addressBuilder
+        $addressFactory
             ->expects($this->any())
             ->method('getRegionBuilder')
-            ->will($this->returnValue($regionBuilder));
+            ->will($this->returnValue($regionFactory));
 
         $product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $item = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')

@@ -8,9 +8,9 @@
 
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Customer\Api\Data\AddressDataBuilder as CustomerAddressBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
-use Magento\Customer\Api\Data\RegionDataBuilder as CustomerAddressRegionBuilder;
+use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
 use Magento\Framework\Object;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
@@ -113,14 +113,14 @@ class CommonTaxCollector extends AbstractTotal
     protected $quoteDetailsBuilder;
 
     /**
-     * @var CustomerAddressBuilder
+     * @var CustomerAddressInterface
      */
-    protected $customerAddressBuilder;
+    protected $customerAddressInterface;
 
     /**
-     * @var CustomerAddressRegionBuilder
+     * @var CustomerAddressRegionFactory
      */
-    protected $customerAddressRegionBuilder;
+    protected $customerAddressRegionFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\TaxClassKeyDataBuilder
@@ -140,8 +140,8 @@ class CommonTaxCollector extends AbstractTotal
      * @param QuoteDetailsDataBuilder $quoteDetailsBuilder
      * @param \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder
      * @param \Magento\Tax\Api\Data\TaxClassKeyDataBuilder $taxClassKeyBuilder
-     * @param CustomerAddressBuilder $customerAddressBuilder
-     * @param CustomerAddressRegionBuilder $customerAddressRegionBuilder
+     * @param CustomerAddressFactory $customerAddressFactory
+     * @param CustomerAddressRegionFactory $customerAddressRegionFactory
      */
     public function __construct(
         \Magento\Tax\Model\Config $taxConfig,
@@ -149,16 +149,16 @@ class CommonTaxCollector extends AbstractTotal
         \Magento\Tax\Api\Data\QuoteDetailsDataBuilder $quoteDetailsBuilder,
         \Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder $quoteDetailsItemBuilder,
         \Magento\Tax\Api\Data\TaxClassKeyDataBuilder $taxClassKeyBuilder,
-        CustomerAddressBuilder $customerAddressBuilder,
-        CustomerAddressRegionBuilder $customerAddressRegionBuilder
+        CustomerAddressFactory $customerAddressFactory,
+        CustomerAddressRegionFactory $customerAddressRegionFactory
     ) {
         $this->taxCalculationService = $taxCalculationService;
         $this->quoteDetailsBuilder = $quoteDetailsBuilder;
         $this->_config = $taxConfig;
         $this->taxClassKeyBuilder = $taxClassKeyBuilder;
         $this->quoteDetailsItemBuilder = $quoteDetailsItemBuilder;
-        $this->customerAddressBuilder = $customerAddressBuilder;
-        $this->customerAddressRegionBuilder = $customerAddressRegionBuilder;
+        $this->customerAddressFactory = $customerAddressFactory;
+        $this->customerAddressRegionFactory = $customerAddressRegionFactory;
     }
 
     /**
@@ -169,15 +169,16 @@ class CommonTaxCollector extends AbstractTotal
      */
     public function mapAddress(QuoteAddress $address)
     {
-        $this->customerAddressBuilder->setCountryId($address->getCountryId());
-        $this->customerAddressBuilder->setRegion(
-            $this->customerAddressRegionBuilder->setRegionId($address->getRegionId())->create()
+        $customerAddress = $this->customerAddressFactory->create();
+        $customerAddress->setCountryId($address->getCountryId());
+        $customerAddress->setRegion(
+            $this->customerAddressRegionFactory->create()->setRegionId($address->getRegionId())
         );
-        $this->customerAddressBuilder->setPostcode($address->getPostcode());
-        $this->customerAddressBuilder->setCity($address->getCity());
-        $this->customerAddressBuilder->setStreet($address->getStreet());
+        $customerAddress->setPostcode($address->getPostcode());
+        $customerAddress->setCity($address->getCity());
+        $customerAddress->setStreet($address->getStreet());
 
-        return $this->customerAddressBuilder->create();
+        return $customerAddress;
     }
 
     /**
