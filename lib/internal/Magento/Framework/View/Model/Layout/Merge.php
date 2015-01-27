@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Layout;
+namespace Magento\Framework\View\Model\Layout;
 
-use Magento\Core\Model\Layout\Update\Validator;
+use Magento\Framework\View\Model\Layout\Update\Validator;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
@@ -111,7 +111,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected $_cache;
 
     /**
-     * @var \Magento\Core\Model\Layout\Update\Validator
+     * @var \Magento\Framework\View\Model\Layout\Update\Validator
      */
     protected $_layoutValidator;
 
@@ -166,7 +166,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Core\Model\Resource\Layout\Update $resource
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param \Magento\Core\Model\Layout\Update\Validator $validator
+     * @param \Magento\Framework\View\Model\Layout\Update\Validator $validator
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
@@ -181,7 +181,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Core\Model\Resource\Layout\Update $resource,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Core\Model\Layout\Update\Validator $validator,
+        \Magento\Framework\View\Model\Layout\Update\Validator $validator,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Design\ThemeInterface $theme = null,

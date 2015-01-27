@@ -3219,6 +3219,7 @@
         "phpmd/phpmd": 0
     },
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": "~5.4.11|~5.5.0|~5.6.0"
     },

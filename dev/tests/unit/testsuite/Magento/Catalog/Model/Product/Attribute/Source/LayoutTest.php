@@ -16,12 +16,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Core\Model\PageLayout\Config\Builder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Model\PageLayout\Config\Builder|\PHPUnit_Framework_MockObject_MockObject */
     protected $pageLayoutBuilder;
 
     protected function setUp()
     {
-        $this->pageLayoutBuilder = $this->getMockBuilder('Magento\Core\Model\PageLayout\Config\Builder')
+        $this->pageLayoutBuilder = $this->getMockBuilder('Magento\Framework\View\Model\PageLayout\Config\Builder')
             ->disableOriginalConstructor()
             ->getMock();
 

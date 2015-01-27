@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Layout\Update;
+namespace Magento\Framework\View\Model\Layout\Update;
 
-use Magento\Core\Model\Layout\Update\Validator;
+use Magento\Framework\View\Model\Layout\Update\Validator;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,7 +62,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         );
 
         $model = $this->_objectHelper->getObject(
-            'Magento\Core\Model\Layout\Update\Validator',
+            'Magento\Framework\View\Model\Layout\Update\Validator',
             ['dirList' => $dirList, 'domConfigFactory' => $domConfigFactory]
         );
 

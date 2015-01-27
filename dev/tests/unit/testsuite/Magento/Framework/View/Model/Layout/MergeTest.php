@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Layout;
+namespace Magento\Framework\View\Model\Layout;
 
 class MergeTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     const FIXTURE_LAYOUT_XML = '<block class="Magento\Framework\View\Element\Template" template="fixture.phtml"/>';
 
     /**
-     * @var \Magento\Core\Model\Layout\Merge
+     * @var \Magento\Framework\View\Model\Layout\Merge
      */
     protected $_model;
 
@@ -83,7 +83,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->_logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->_layoutValidator = $this->getMock(
-            'Magento\Core\Model\Layout\Update\Validator',
+            'Magento\Framework\View\Model\Layout\Update\Validator',
             [],
             [],
             '',
@@ -118,7 +118,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->_model = $objectHelper->getObject(
-            'Magento\Core\Model\Layout\Merge',
+            'Magento\Framework\View\Model\Layout\Merge',
             [
                 'design' => $design,
                 'storeManager' => $storeManager,

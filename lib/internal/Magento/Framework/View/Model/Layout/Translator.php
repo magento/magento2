@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Core\Model\Layout;
+namespace Magento\Framework\View\Model\Layout;
 
 use Magento\Framework\Simplexml\Element;
 
