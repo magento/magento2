@@ -5,6 +5,8 @@
  */
 namespace Magento\TestFramework\ErrorLog;
 
+use Monolog\Handler\HandlerInterface;
+
 class Logger extends \Magento\Framework\Logger\Monolog
 {
     /**
@@ -20,10 +22,15 @@ class Logger extends \Magento\Framework\Logger\Monolog
      */
     protected $minimumErrorLevel;
 
-    public function __construct()
+    /**
+     * @param string             $name       The logging channel
+     * @param HandlerInterface[] $handlers   Optional stack of handlers, the first one in the array is called first, etc
+     * @param callable[]         $processors Optional array of processors
+     */
+    public function __construct($name, array $handlers = array(), array $processors = array())
     {
         $this->minimumErrorLevel = defined('TESTS_ERROR_LOG_LISTENER_LEVEL') ? TESTS_ERROR_LOG_LISTENER_LEVEL : -1;
-        parent::__construct('integration-test');
+        parent::__construct($name, $handlers, $processors);
     }
 
     /**
