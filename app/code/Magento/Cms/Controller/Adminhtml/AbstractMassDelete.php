@@ -82,7 +82,7 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
             $this->messageManager->addError($e->getMessage());
         }
 
-        $resultRedirect->setPath(static::REDIRECT_URL);
+        return $resultRedirect->setPath(static::REDIRECT_URL);
     }
 
     /**

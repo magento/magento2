@@ -41,7 +41,7 @@ class NoCookies extends \Magento\Framework\App\Action\Action
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (!$this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId)) {
-            $resultForward->forward('defaultNoCookies');
+            return $resultForward->forward('defaultNoCookies');
         }
     }
 }
