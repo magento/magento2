@@ -11,21 +11,21 @@ use Magento\Backend\App\Action;
 class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var \Magento\Framework\Controller\Result\RawFactory
      */
-    protected $resultLayoutFactory;
+    protected $resultRawFactory;
 
     /**
      * @param Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\View\Result\LayoutFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
-        $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->resultRawFactory = $resultRawFactory;
         parent::__construct($context, $coreRegistry);
     }
 
@@ -40,12 +40,15 @@ class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
         $file = $this->getRequest()->getParam('file');
         $file = $this->_objectManager->get('Magento\Cms\Helper\Wysiwyg\Images')->idDecode($file);
         $thumb = $this->getStorage()->resizeOnTheFly($file);
-        $resultLayout = $this->resultLayoutFactory->create();
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
         if ($thumb !== false) {
             /** @var \Magento\Framework\Image\Adapter\AdapterInterface $image */
             $image = $this->_objectManager->get('Magento\Framework\Image\AdapterFactory')->create();
             $image->open($thumb);
-            $resultLayout->setHeader('Content-Type', $image->getMimeType())->setBody($image->getImage());
+            $resultRaw->setHeader('Content-Type', $image->getMimeType());
+            $resultRaw->setContents($image->getImage());
+            return $resultRaw;
         } else {
             // todo: generate some placeholder
         }
