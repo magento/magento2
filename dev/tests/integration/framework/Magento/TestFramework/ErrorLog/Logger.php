@@ -27,7 +27,7 @@ class Logger extends \Magento\Framework\Logger\Monolog
      * @param HandlerInterface[] $handlers   Optional stack of handlers, the first one in the array is called first, etc
      * @param callable[]         $processors Optional array of processors
      */
-    public function __construct($name, array $handlers = array(), array $processors = array())
+    public function __construct($name, array $handlers = [], array $processors = [])
     {
         $this->minimumErrorLevel = defined('TESTS_ERROR_LOG_LISTENER_LEVEL') ? TESTS_ERROR_LOG_LISTENER_LEVEL : -1;
         parent::__construct($name, $handlers, $processors);
