@@ -264,6 +264,37 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testHelpActionForModuleList()
+    {
+        $this->request->expects($this->once())->method('getParam')->willReturn(ConsoleController::HELP_LIST_OF_MODULES);
+        $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
+        $moduleListMock
+            ->expects($this->once())
+            ->method('getNames')
+            ->will($this->returnValue(['Magento_Core', 'Magento_Store']));
+        $fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
+        $fullModuleListMock
+            ->expects($this->once())
+            ->method('getNames')
+            ->will($this->returnValue(['Magento_Core', 'Magento_Store', 'Magento_Directory']));
+        $returnValueMap = [
+            [
+                'Magento\Framework\Module\ModuleList',
+                [],
+                $moduleListMock,
+            ],
+            [
+                'Magento\Framework\Module\FullModuleList',
+                [],
+                $fullModuleListMock,
+            ],
+        ];
+        $this->objectManager->expects($this->exactly(2))
+            ->method('create')
+            ->will($this->returnValueMap($returnValueMap));
+        $this->controller->helpAction();
+    }
+
     public function testHelpActionNoType()
     {
         $beginHelpString = "\n==-------------------==\n"
