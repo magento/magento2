@@ -11,6 +11,14 @@
             <data name="description">Creating tax rule with default values</data>
             <data name="taxRule/data/code">TaxIdentifier%isolation%</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_0">US-CA-*-Rate 1</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_1">-</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_2">-</data>
+            <data name="taxRule/data/tax_customer_class/dataSet/class_0">-</data>
+            <data name="taxRule/data/tax_customer_class/dataSet/class_1">-</data>
+            <data name="taxRule/data/tax_product_class/dataSet/class_0">-</data>
+            <data name="taxRule/data/tax_product_class/dataSet/class_1">-</data>
+            <data name="taxRule/data/priority">-</data>
+            <data name="taxRule/data/position">-</data>
             <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm</data>
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation2">
@@ -18,8 +26,11 @@
             <data name="taxRule/data/code">TaxIdentifier%isolation%</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_0">US-CA-*-Rate 1</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_1">US-NY-*-Rate 1</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_2">-</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_0">customer_tax_class</data>
+            <data name="taxRule/data/tax_customer_class/dataSet/class_1">-</data>
             <data name="taxRule/data/tax_product_class/dataSet/class_0">product_tax_class</data>
+            <data name="taxRule/data/tax_product_class/dataSet/class_1">-</data>
             <data name="taxRule/data/priority">1</data>
             <data name="taxRule/data/position">1</data>
             <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm</data>
@@ -33,6 +44,8 @@
             <data name="taxRule/data/tax_customer_class/dataSet/class_0">Retail Customer</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_1">customer_tax_class</data>
             <data name="taxRule/data/tax_product_class/dataSet/class_0">Taxable Goods</data>
+            <data name="taxRule/data/tax_product_class/dataSet/class_1">-</data>
+            <data name="taxRule/data/priority">-</data>
             <data name="taxRule/data/position">1</data>
             <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm</data>
         </variation>
@@ -41,11 +54,13 @@
             <data name="taxRule/data/code">TaxIdentifier%isolation%</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_0">withZipRange</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_1">US-CA-*-Rate 1</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_2">-</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_0">Retail Customer</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_1">customer_tax_class</data>
             <data name="taxRule/data/tax_product_class/dataSet/class_0">Taxable Goods</data>
             <data name="taxRule/data/tax_product_class/dataSet/class_1">product_tax_class</data>
             <data name="taxRule/data/priority">1</data>
+            <data name="taxRule/data/position">-</data>
             <data name="constraint">assertTaxRuleSuccessSaveMessage, assertTaxRuleInGrid, assertTaxRuleForm</data>
         </variation>
         <variation name="CreateTaxRuleEntityTestVariation5">
@@ -53,6 +68,7 @@
             <data name="taxRule/data/code">TaxIdentifier%isolation%</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_0">US-CA-*-Rate 1</data>
             <data name="taxRule/data/tax_rate/dataSet/rate_1">us_ny_rate_8_1</data>
+            <data name="taxRule/data/tax_rate/dataSet/rate_2">-</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_0">Retail Customer</data>
             <data name="taxRule/data/tax_customer_class/dataSet/class_1">customer_tax_class</data>
             <data name="taxRule/data/tax_product_class/dataSet/class_0">Taxable Goods</data>

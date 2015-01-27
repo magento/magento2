@@ -10,8 +10,17 @@
         <variation name="UpdateCatalogPriceRuleEntityTestVariation1">
             <data name="catalogPriceRuleOriginal/dataSet">active_catalog_price_rule_with_conditions</data>
             <data name="catalogPriceRule/data/name">New Catalog Price Rule Name %isolation%</data>
+            <data name="catalogPriceRule/data/description">-</data>
             <data name="catalogPriceRule/data/is_active">Inactive</data>
+            <data name="catalogPriceRule/data/conditions">-</data>
+            <data name="catalogPriceRule/data/simple_action">-</data>
+            <data name="catalogPriceRule/data/discount_amount">-</data>
             <data name="saveAction">save</data>
+            <data name="price/sub_total">-</data>
+            <data name="price/grand_total">-</data>
+            <data name="price/discount_amount">-</data>
+            <data name="price/special">-</data>
+            <data name="price/regular">-</data>
             <data name="constraint">assertCatalogPriceRuleSuccessSaveMessage, assertCatalogPriceRuleNoticeMessage, assertCatalogPriceRuleForm, assertCatalogPriceRuleInGrid</data>
         </variation>
         <variation name="UpdateCatalogPriceRuleEntityTestVariation2">

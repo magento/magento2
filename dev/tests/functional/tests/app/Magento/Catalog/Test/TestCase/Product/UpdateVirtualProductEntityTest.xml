@@ -15,8 +15,11 @@
             <data name="product/data/quantity_and_stock_status/qty">999</data>
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">default_subcategory</data>
+            <data name="product/data/group_price/preset">-</data>
+            <data name="product/data/special_price">-</data>
             <data name="product/data/tier_price/preset">MAGETWO-23002</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductVisibleInCategory, assertProductInCategory, assertProductTierPriceOnProductPage, assertProductSearchableBySku</data>
         </variation>
@@ -27,8 +30,12 @@
             <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
             <data name="product/data/quantity_and_stock_status/qty">999</data>
             <data name="product/data/is_virtual">Yes</data>
+            <data name="product/data/category_ids/presets">-</data>
+            <data name="product/data/group_price/preset">-</data>
             <data name="product/data/special_price">45</data>
+            <data name="product/data/tier_price/preset">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog, Search</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductVisibleInCategory, assertProductInCategory, assertProductPage, assertProductSpecialPriceOnProductPage, assertProductSearchableBySku</data>
         </variation>
@@ -40,8 +47,11 @@
             <data name="product/data/quantity_and_stock_status/qty">999</data>
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">default_subcategory</data>
+            <data name="product/data/group_price/preset">-</data>
+            <data name="product/data/special_price">-</data>
             <data name="product/data/tier_price/preset">MAGETWO-23002</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
+            <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog, Search</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductVisibleInCategory, assertProductPage, assertProductOutOfStock, assertProductTierPriceOnProductPage, assertProductSearchableBySku</data>
         </variation>
@@ -50,8 +60,14 @@
             <data name="product/data/sku">virtual_sku_%isolation%</data>
             <data name="product/data/price/value">99.99</data>
             <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/quantity_and_stock_status/qty">-</data>
             <data name="product/data/is_virtual">Yes</data>
+            <data name="product/data/category_ids/presets">-</data>
+            <data name="product/data/group_price/preset">-</data>
+            <data name="product/data/special_price">-</data>
+            <data name="product/data/tier_price/preset">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
+            <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Search</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductOutOfStock, assertProductSearchableBySku</data>
         </variation>
@@ -60,8 +76,14 @@
             <data name="product/data/sku">virtual_sku_%isolation%</data>
             <data name="product/data/price/value">5.00</data>
             <data name="product/data/tax_class_id/dataSet">None</data>
+            <data name="product/data/quantity_and_stock_status/qty">-</data>
             <data name="product/data/is_virtual">Yes</data>
+            <data name="product/data/category_ids/presets">-</data>
+            <data name="product/data/group_price/preset">-</data>
+            <data name="product/data/special_price">-</data>
+            <data name="product/data/tier_price/preset">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
+            <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductOutOfStock, assertProductSearchableBySku</data>
         </variation>
@@ -74,8 +96,10 @@
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">default_subcategory</data>
             <data name="product/data/group_price/preset">MAGETWO-23055</data>
+            <data name="product/data/special_price">-</data>
             <data name="product/data/tier_price/preset">MAGETWO-23002</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog, Search</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductVisibleInCategory, assertProductGroupedPriceOnProductPage, assertProductTierPriceOnProductPage, assertProductSearchableBySku</data>
         </variation>
@@ -84,10 +108,14 @@
             <data name="product/data/sku">virtual_sku_%isolation%</data>
             <data name="product/data/price/value">99.99</data>
             <data name="product/data/tax_class_id/dataSet">None</data>
+            <data name="product/data/quantity_and_stock_status/qty">-</data>
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">default_subcategory</data>
+            <data name="product/data/group_price/preset">-</data>
             <data name="product/data/special_price">45</data>
+            <data name="product/data/tier_price/preset">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
+            <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog, Search</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductOutOfStock, assertProductSearchableBySku</data>
         </variation>
@@ -96,9 +124,14 @@
             <data name="product/data/sku">virtual_sku_%isolation%</data>
             <data name="product/data/price/value">5.00</data>
             <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/quantity_and_stock_status/qty">-</data>
             <data name="product/data/is_virtual">Yes</data>
+            <data name="product/data/category_ids/presets">-</data>
             <data name="product/data/group_price/preset">MAGETWO-23055</data>
+            <data name="product/data/special_price">-</data>
+            <data name="product/data/tier_price/preset">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
+            <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Search</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductOutOfStock,  assertProductSearchableBySku</data>
         </variation>
@@ -110,6 +143,9 @@
             <data name="product/data/quantity_and_stock_status/qty">999</data>
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">default_subcategory</data>
+            <data name="product/data/group_price/preset">-</data>
+            <data name="product/data/special_price">-</data>
+            <data name="product/data/tier_price/preset">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
             <data name="product/data/custom_options/preset">options-suite</data>
             <data name="product/data/visibility">Search</data>
@@ -120,9 +156,14 @@
             <data name="product/data/sku">virtual_sku_%isolation%</data>
             <data name="product/data/price/value">99.99</data>
             <data name="product/data/tax_class_id/dataSet">Taxable Goods</data>
+            <data name="product/data/quantity_and_stock_status/qty">-</data>
             <data name="product/data/is_virtual">Yes</data>
+            <data name="product/data/category_ids/presets">-</data>
             <data name="product/data/group_price/preset">MAGETWO-23055</data>
+            <data name="product/data/special_price">-</data>
+            <data name="product/data/tier_price/preset">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">Out of Stock</data>
+            <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog, Search</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductOutOfStock, assertProductSearchableBySku</data>
         </variation>
@@ -135,8 +176,10 @@
             <data name="product/data/is_virtual">Yes</data>
             <data name="product/data/category_ids/presets">default_subcategory</data>
             <data name="product/data/group_price/preset">MAGETWO-23055</data>
+            <data name="product/data/special_price">-</data>
             <data name="product/data/tier_price/preset">MAGETWO-23002</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock">In Stock</data>
+            <data name="product/data/custom_options/preset">-</data>
             <data name="product/data/visibility">Catalog</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertProductForm, assertProductPage, assertProductVisibleInCategory, assertProductSpecialPriceOnProductPage, assertProductPage, assertProductGroupedPriceOnProductPage, assertProductTierPriceOnProductPage, assertProductInCategory, assertProductSearchableBySku</data>
         </variation>

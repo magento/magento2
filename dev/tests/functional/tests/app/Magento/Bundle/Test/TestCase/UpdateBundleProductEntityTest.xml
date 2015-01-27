@@ -15,10 +15,12 @@
             <data name="product/data/price/preset">dynamic-100</data>
             <data name="product/data/weight_type">Fixed</data>
             <data name="product/data/weight">1</data>
+            <data name="product/data/category_ids/presets">-</data>
             <data name="product/data/description">Bundle Product Fixed Required</data>
             <data name="product/data/bundle_shipment_type">Together</data>
             <data name="product/data/bundle_selections/preset">default_dynamic</data>
             <data name="product/data/checkout_data/preset">default</data>
+            <data name="product/data/visibility">-</data>
             <data name="constraint">assertProductSaveMessage, assertProductInGrid, assertBundleItemsOnProductPage, assertBundleProductForm, assertBundleProductPage, assertProductInStock, assertBundlePriceView, assertBundlePriceType</data>
         </variation>
         <variation name="UpdateBundleProductEntityTestVariation2">
@@ -28,7 +30,9 @@
             <data name="product/data/sku">bundle_sku_%isolation%</data>
             <data name="product/data/price/preset">fixed-756</data>
             <data name="product/data/weight_type">Dynamic</data>
+            <data name="product/data/weight">-</data>
             <data name="product/data/category_ids/presets">default_subcategory</data>
+            <data name="product/data/description">-</data>
             <data name="product/data/bundle_shipment_type">Separately</data>
             <data name="product/data/bundle_selections/preset">default_fixed</data>
             <data name="product/data/checkout_data/preset">default</data>
