@@ -13,27 +13,25 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Group
     /**
      * Delete customer group.
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             try {
                 $this->groupRepository->deleteById($id);
                 $this->messageManager->addSuccess(__('The customer group has been deleted.'));
-                $this->getResponse()->setRedirect($this->getUrl('customer/group'));
-                return;
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addError(__('The customer group no longer exists.'));
-                $this->getResponse()->setRedirect($this->getUrl('customer/*/'));
-                return;
+                return $resultRedirect->setPath('customer/*/');
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->getResponse()->setRedirect($this->getUrl('customer/group/edit', ['id' => $id]));
-                return;
+                return $resultRedirect->setPath('customer/group/edit', ['id' => $id]);
             }
         }
-        $this->_redirect('customer/group');
+        return $resultRedirect->setPath('customer/group');
     }
 }
