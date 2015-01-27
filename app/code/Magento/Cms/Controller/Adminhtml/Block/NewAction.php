@@ -30,7 +30,7 @@ class NewAction extends \Magento\Cms\Controller\Adminhtml\Block
     /**
      * Create new CMS block
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {

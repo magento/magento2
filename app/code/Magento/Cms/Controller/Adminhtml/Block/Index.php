@@ -30,7 +30,7 @@ class Index extends \Magento\Cms\Controller\Adminhtml\Block
     /**
      * Index action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {

@@ -81,6 +81,11 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     protected $pageConfig;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -93,6 +98,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -105,7 +111,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\App\ViewInterface $view,
-        \Magento\Framework\View\Page\Config $pageConfig
+        \Magento\Framework\View\Page\Config $pageConfig,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->messageManager = $messageManager;
         $this->_view = $view;
@@ -117,6 +124,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_localeDate = $localeDate;
         $this->_escaper = $escaper;
         $this->pageConfig = $pageConfig;
+        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 
@@ -127,7 +135,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param Action $action
      * @param int $pageId
-     * @return bool
+     * @return bool|\Magento\Framework\View\Result\Page
      */
     public function renderPage(Action $action, $pageId = null)
     {
@@ -139,12 +147,12 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param Action $action
      * @param int $pageId
-     * @param bool $renderLayout
-     * @return bool
+     * @param bool $returnPage
+     * @return bool|\Magento\Framework\View\Result\Page
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _renderPage(Action $action, $pageId = null, $renderLayout = true)
+    protected function _renderPage(Action $action, $pageId = null, $returnPage = true)
     {
         if (!is_null($pageId) && $pageId !== $this->_page->getId()) {
             $delimiterPosition = strrpos($pageId, '|');
@@ -173,7 +181,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
                 $this->_design->setDesignTheme($this->_page->getCustomTheme());
             }
         }
-        $resultPage = $this->_view->getPage();
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
         if ($this->_page->getPageLayout()) {
             if ($this->_page->getCustomPageLayout()
                 && $this->_page->getCustomPageLayout() != 'empty'
@@ -214,8 +223,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
         $messageBlock->addStorageType($this->messageManager->getDefaultGroup());
         $messageBlock->addMessages($this->messageManager->getMessages(true));
 
-        if ($renderLayout) {
-            $this->_view->renderLayout();
+        if ($returnPage) {
+            return $resultPage;
         }
 
         return true;
@@ -229,7 +238,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Action $action
      * @param int $pageId
      * @param bool $renderLayout
-     * @return bool
+     * @return bool|\Magento\Framework\View\Result\Page
      */
     public function renderPageExtended(Action $action, $pageId = null, $renderLayout = true)
     {

@@ -30,7 +30,7 @@ class Save extends \Magento\Cms\Controller\Adminhtml\Block
     /**
      * Save action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {

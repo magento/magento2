@@ -28,14 +28,16 @@ class View extends \Magento\Framework\App\Action\Action
     /**
      * View CMS page action
      *
-     * @return \Magento\Backend\Model\View\Result\ForwardFactory
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        $resultForward = $this->resultForwardFactory->create();
         $pageId = $this->getRequest()->getParam('page_id', $this->getRequest()->getParam('id', false));
-        if (!$this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId)) {
+        $resultPage = $this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId);
+        if (!$resultPage) {
+            $resultForward = $this->resultForwardFactory->create();
             return $resultForward->forward('noroute');
         }
+        return $resultPage;
     }
 }

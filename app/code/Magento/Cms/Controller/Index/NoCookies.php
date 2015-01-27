@@ -28,11 +28,10 @@ class NoCookies extends \Magento\Framework\App\Action\Action
     /**
      * Render Disable cookies page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        $resultForward = $this->resultForwardFactory->create();
         $pageId = $this->_objectManager->get(
             'Magento\Framework\App\Config\ScopeConfigInterface',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -40,8 +39,11 @@ class NoCookies extends \Magento\Framework\App\Action\Action
             \Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        if (!$this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId)) {
+        $resultPage = $this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId);
+        if (!$resultPage) {
+            $resultForward = $this->resultForwardFactory->create();
             return $resultForward->forward('defaultNoCookies');
         }
+        return $resultPage;
     }
 }
