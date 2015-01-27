@@ -22,6 +22,7 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param CustomerCart $cart
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
@@ -31,6 +32,7 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         CustomerCart $cart,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         $this->quoteRepository = $quoteRepository;
@@ -40,14 +42,15 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
             $checkoutSession,
             $storeManager,
             $formKeyValidator,
-            $cart
+            $cart,
+            $resultRedirectFactory
         );
     }
 
     /**
      * Initialize shipping information
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -57,20 +60,14 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
         $regionId = (string)$this->getRequest()->getParam('region_id');
         $region = (string)$this->getRequest()->getParam('region');
 
-        $this->cart->getQuote()->getShippingAddress()->setCountryId(
-            $country
-        )->setCity(
-            $city
-        )->setPostcode(
-            $postcode
-        )->setRegionId(
-            $regionId
-        )->setRegion(
-            $region
-        )->setCollectShippingRates(
-            true
-        );
+        $this->cart->getQuote()->getShippingAddress()
+            ->setCountryId($country)
+            ->setCity($city)
+            ->setPostcode($postcode)
+            ->setRegionId($regionId)
+            ->setRegion($region)
+            ->setCollectShippingRates(true);
         $this->quoteRepository->save($this->cart->getQuote());
-        $this->_goBack();
+        return $this->_goBack();
     }
 }
