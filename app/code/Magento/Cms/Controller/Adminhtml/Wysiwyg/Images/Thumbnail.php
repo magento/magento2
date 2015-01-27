@@ -33,7 +33,7 @@ class Thumbnail extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     /**
      * Generate image thumbnail on the fly
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
