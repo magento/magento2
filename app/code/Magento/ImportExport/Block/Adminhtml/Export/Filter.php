@@ -379,6 +379,8 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param Attribute $row
      * @return string|false
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getRowUrl($row)
     {
