@@ -66,8 +66,9 @@ class InstallTest extends Injectable
      *
      * @return array
      */
-    public function __prepare(GlobalConfig $config)
+    public function __prepare()
     {
+        $config = ObjectManagerFactory::getObjectManager()->get('Magento\Mtf\Config\GlobalConfig');
         // Prepare config data
         $configData['dbHost'] = $config->get('install/host');
         $configData['dbUser'] = $config->get('install/user');
