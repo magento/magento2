@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Core\Model\Layout;
+namespace Magento\PageCache\Model\Layout;
 
 /**
  * Class DepersonalizePlugin

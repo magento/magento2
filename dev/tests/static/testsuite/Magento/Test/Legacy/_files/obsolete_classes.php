@@ -2910,4 +2910,5 @@ return [
     ['Magento\Core\Model\Layout\Translator', 'Magento\Framework\View\Model\Layout\Translator'],
     ['Magento\Core\Model\Layout\Update\Validator', 'Magento\Framework\View\Model\Layout\Update\Validator'],
     ['Magento\Core\Model\PageLayout\Config\Builder', 'Magento\Framework\View\Model\PageLayout\Config\Builder'],
+    ['Magento\Core\Model\Layout\DepersonalizePlugin', 'Magento\PageCache\Model\Layout\DepersonalizePlugin'],
 ];

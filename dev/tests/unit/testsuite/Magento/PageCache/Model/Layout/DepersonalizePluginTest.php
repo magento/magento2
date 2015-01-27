@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Core\Model\Layout;
+namespace Magento\PageCache\Model\Layout;
 
 /**
  * Class DepersonalizePluginTest
@@ -14,7 +14,7 @@ namespace Magento\Core\Model\Layout;
 class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Layout\DepersonalizePluginTest
+     * @var \Magento\PageCache\Model\Layout\DepersonalizePlugin
      */
     protected $plugin;
 
