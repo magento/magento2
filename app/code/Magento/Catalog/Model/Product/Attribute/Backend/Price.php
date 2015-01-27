@@ -96,6 +96,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      *
      * @param \Magento\Catalog\Model\Product $object
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterSave($object)
     {

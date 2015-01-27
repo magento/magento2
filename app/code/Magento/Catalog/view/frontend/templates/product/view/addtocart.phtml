@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $this \Magento\Catalog\Block\Product\View */
 ?>
 <?php $_product = $this->getProduct(); ?>
@@ -45,7 +47,8 @@
 <script>
 require([
     "jquery",
-    "mage/mage"
+    "mage/mage",
+    "Magento_Catalog/product/view/validation"
 ], function($){
     $('#product_addtocart_form').mage('validation', {
         radioCheckboxClosest: '.nested'

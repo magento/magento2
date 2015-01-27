@@ -16,6 +16,7 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 
 /**
  * Catalog inventory module observer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
 {

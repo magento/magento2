@@ -90,6 +90,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

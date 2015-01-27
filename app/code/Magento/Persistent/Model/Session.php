@@ -110,6 +110,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -163,6 +164,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Get if model loads expired sessions
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getLoadExpired()
     {

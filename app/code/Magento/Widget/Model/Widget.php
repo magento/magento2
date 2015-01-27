@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * Widget model for different purposes
  *
@@ -117,6 +119,8 @@ class Widget
      *
      * @param string $type Widget type
      * @return \Magento\Framework\Object
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getConfigAsObject($type)
     {

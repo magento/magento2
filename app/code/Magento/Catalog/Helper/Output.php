@@ -133,6 +133,7 @@ class Output extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $attributeHtml
      * @param string $attributeName
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function productAttribute($product, $attributeHtml, $attributeName)
     {

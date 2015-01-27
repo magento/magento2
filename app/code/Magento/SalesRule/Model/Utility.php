@@ -77,6 +77,8 @@ class Utility
      * @param \Magento\SalesRule\Model\Rule $rule
      * @param \Magento\Quote\Model\Quote\Address $address
      * @return bool
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function canProcessRule($rule, $address)
     {
@@ -180,6 +182,7 @@ class Utility
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deltaRoundingFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,

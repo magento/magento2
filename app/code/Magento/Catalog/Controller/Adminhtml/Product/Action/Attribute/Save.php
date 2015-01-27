@@ -10,6 +10,7 @@ use Magento\Backend\App\Action;
 
 /**
  * Class Save
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
@@ -80,6 +81,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * Update product attributes
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function execute()
     {

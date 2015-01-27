@@ -207,6 +207,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function bindCustomerLogout(\Magento\Framework\Event\Observer $observer = null)
     {

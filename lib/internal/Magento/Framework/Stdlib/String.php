@@ -66,6 +66,8 @@ class String
      * @param bool $trim
      * @param string $wordSeparatorRegex
      * @return string[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function split($value, $length = 1, $keepWords = false, $trim = false, $wordSeparatorRegex = '\s')
     {

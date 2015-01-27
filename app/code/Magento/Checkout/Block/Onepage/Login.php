@@ -11,6 +11,7 @@ use Magento\Framework\Message\Collection;
 
 /**
  * One page checkout status
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Login extends AbstractOnepage
 {
@@ -54,6 +55,7 @@ class Login extends AbstractOnepage
      * @param \Magento\Customer\Model\Registration $registration
      * @param \Magento\Customer\Model\Address\Mapper $dataObjectConverter
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
