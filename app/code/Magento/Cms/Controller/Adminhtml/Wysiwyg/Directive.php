@@ -32,7 +32,7 @@ class Directive extends \Magento\Backend\App\Action
     ) {
         parent::__construct($context);
         $this->urlDecoder = $urlDecoder;
-        $this->resultRaw = $resultRawFactory;
+        $this->resultRawFactory = $resultRawFactory;
     }
 
     /**
