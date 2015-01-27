@@ -75,6 +75,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
      */
     protected $urlInterface;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);

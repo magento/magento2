@@ -11,6 +11,10 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\EncoderInterface;
 
+/**
+ * Class LinkRepository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterface
 {
     /**
@@ -172,6 +176,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save($productSku, LinkContentInterface $linkContent, $linkId = null, $isGlobalScopeContent = false)
     {

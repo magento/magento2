@@ -10,6 +10,10 @@ use Magento\Bundle\Model\Resource\Selection\Collection as SelectionCollection;
 use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Framework\Model\Exception;
 
+/**
+ * Class TypeTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -114,6 +118,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareForCartAdvancedWithoutOptions()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
@@ -219,6 +226,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Please specify product option(s).', $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareForCartAdvancedWithShoppingCart()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Type\Price $priceModel */
@@ -455,6 +465,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$product, $productType], $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareForCartAdvancedEmptyShoppingCart()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Type\Price $priceModel */
@@ -670,6 +683,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('We cannot add this item to your shopping cart.', $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareForCartAdvancedStringInResult()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Type\Price $priceModel */
@@ -885,6 +901,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('string', $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareForCartAdvancedWithoutSelections()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
@@ -964,7 +983,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())
             ->method('getData')
             ->willReturnCallback(
-                function ($key) use ($optionCollection, $selectionCollection) {
+                function ($key) use ($optionCollection) {
                     $resultValue = null;
                     switch ($key) {
                         case '_cache_instance_options_collection':
@@ -991,6 +1010,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([$product], $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareForCartAdvancedSelectionsSelectionIdsExists()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
@@ -1115,6 +1137,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Please specify product option(s).', $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPrepareForCartAdvancedSelectRequiredOptions()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultType $group */
@@ -1254,6 +1279,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals($exceptedResult, $result);
     }
+
 
     public function testPrepareForCartAdvancedAllrequiredOption()
     {
@@ -1800,6 +1826,9 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetSelectionsByIds()
     {
         $selectionIds = [1, 2, 3];

@@ -223,6 +223,7 @@ class Category extends AbstractResource
      *
      * @param \Magento\Framework\Object $object
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _beforeSave(\Magento\Framework\Object $object)
     {

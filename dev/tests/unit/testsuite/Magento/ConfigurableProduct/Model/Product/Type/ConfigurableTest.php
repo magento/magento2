@@ -81,6 +81,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectHelper;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -701,6 +704,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->_model->setImageFromChildProduct($productMock);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGenerateSimpleProducts()
     {
         $productsData = [

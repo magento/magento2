@@ -154,10 +154,9 @@ class SampleTest extends \PHPUnit_Framework_TestCase
     /**
      * @param \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product
      * @param array $modelData
-     * @param bool $isUnlimited
      * @return \Magento\Downloadable\Model\Sample|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createSampleModel($product, array $modelData, $isUnlimited)
+    private function createSampleModel($product, array $modelData)
     {
         $sample = $this->getMockBuilder('\Magento\Downloadable\Model\Sample')
             ->disableOriginalConstructor()
