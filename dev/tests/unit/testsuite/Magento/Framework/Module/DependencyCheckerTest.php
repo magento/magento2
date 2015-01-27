@@ -47,7 +47,14 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ->method('getRequire')
             ->will($this->returnValueMap($requireMap));
 
-        $this->packageInfoFactoryMock = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
+        $this->packageInfoFactoryMock = $this->getMock(
+            'Magento\Framework\Module\PackageInfoFactory'
+            ,
+            [],
+            [],
+            '',
+            false
+        );
         $this->packageInfoFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->packageInfoMock));

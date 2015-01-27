@@ -90,7 +90,7 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
         $setupModule->applyRecurringUpdates();
     }
 
-    public  function testApplyUpdatesWithNullResource()
+    public function testApplyUpdatesWithNullResource()
     {
         $fileResolver = $this->getMock('Magento\Setup\Module\Setup\FileResolver', [], [], '', false);
         $fileResolver
@@ -108,7 +108,7 @@ class SetupModuleTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Setup\Module\SetupModule', $setupModule);
     }
 
-    public  function testApplyUpdatesWithNoVersions()
+    public function testApplyUpdatesWithNoVersions()
     {
         $fileResolver = $this->getMock('Magento\Setup\Module\Setup\FileResolver', [], [], '', false);
         $setupModule = new SetupModule(

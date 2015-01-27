@@ -66,10 +66,4 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         // Invalid module name
         $this->assertNull($this->fileResolver->getResourceCode('Magento_Module5'));
     }
-
-
-
-
-
-
 }

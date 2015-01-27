@@ -113,12 +113,8 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetEventManager()
     {
-        $controller = $this->controller;
-        $closureMock = function () use ($controller) {
-        };
-
         $eventManager = $this->getMock('Zend\EventManager\EventManagerInterface');
-        $eventManager->expects($this->atLeastOnce())->method('attach')->will($this->returnCallback($closureMock));
+        $eventManager->expects($this->atLeastOnce())->method('attach');
         $returnValue = $this->controller->setEventManager($eventManager);
         $this->assertSame($returnValue, $this->controller);
     }
@@ -497,7 +493,8 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $usage = $this->controller->getCommandUsage();
         $expectedValue = explode(' ', (strlen($usage[$option]) > 0 ? $usage[$option] : $noParameters));
         $returnValue = explode(
-            ' ', trim(str_replace([PHP_EOL, 'Available parameters:'], '', $this->controller->helpAction()))
+            ' ',
+            trim(str_replace([PHP_EOL, 'Available parameters:'], '', $this->controller->helpAction()))
         );
         $expectedValue = asort($expectedValue);
         $returnValue = asort($returnValue);

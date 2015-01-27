@@ -10,6 +10,10 @@ use Magento\Framework\App\DeploymentConfig\EncryptConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InstallerTest extends \PHPUnit_Framework_TestCase
 {
     /**

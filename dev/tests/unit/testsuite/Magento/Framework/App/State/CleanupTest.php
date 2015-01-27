@@ -80,7 +80,7 @@ class CleanupTest extends \PHPUnit_Framework_TestCase
         $var = $this->getDirectoryCleanMock(Source::TMP_MATERIALIZATION_DIR);
         $this->filesystem->expects($this->exactly(2))->method('getDirectoryWrite')->will($this->returnValueMap([
             [DirectoryList::STATIC_VIEW, DriverPool::FILE, $static],
-            [DirectoryList::VAR_DIR, DriverPool::FILE,  $var],
+            [DirectoryList::VAR_DIR, DriverPool::FILE, $var],
         ]));
         $this->object->clearMaterializedViewFiles();
     }

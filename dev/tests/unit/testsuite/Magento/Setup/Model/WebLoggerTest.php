@@ -84,7 +84,8 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             '<span class="text-success">[SUCCESS] ' . 'Success1' . '</span><br/>' .
             '<span class="text-success">[SUCCESS] ' . 'Success2' . '</span><br/>',
-            self::$log);
+            self::$log
+        );
     }
 
     public function testLogError()
@@ -181,6 +182,9 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
         return self::$log;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public static function writeToLog($logFile, $message)
     {
         self::$log .= $message;

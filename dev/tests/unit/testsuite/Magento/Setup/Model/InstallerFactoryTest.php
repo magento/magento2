@@ -5,7 +5,7 @@
 
 namespace Magento\Setup\Model;
 
-class InstallerFactoryTest Extends \PHPUnit_Framework_TestCase
+class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreate()
     {
