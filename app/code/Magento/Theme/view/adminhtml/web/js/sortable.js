@@ -44,6 +44,6 @@ define([
             data.item.insertAfter(data.item.next());
         }
     });
-    
+
     return $.mage.sortable;
 });
