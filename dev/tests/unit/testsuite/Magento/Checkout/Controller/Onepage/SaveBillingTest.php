@@ -134,6 +134,7 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $resultRawFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $resultRawFactory->expects($this->any())
             ->method('create')
@@ -144,6 +145,7 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $resultJsonFactory->expects($this->any())
             ->method('create')

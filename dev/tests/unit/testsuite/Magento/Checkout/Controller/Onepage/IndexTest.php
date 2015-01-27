@@ -122,6 +122,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $resultPageFactoryMock->expects($this->any())
             ->method('create')
@@ -129,6 +130,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $resultRedirectFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $resultRedirectFactoryMock->expects($this->any())
             ->method('create')

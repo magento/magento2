@@ -62,6 +62,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $resultRedirectFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $resultRedirectFactoryMock->expects($this->any())
             ->method('create')
