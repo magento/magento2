@@ -57,7 +57,7 @@ class Logger extends \Magento\Framework\Logger\Monolog
      * @param  array   $context The log context
      * @return Boolean Whether the record has been processed
      */
-    public function addRecord($level, $message, array $context = array())
+    public function addRecord($level, $message, array $context = [])
     {
         if ($level <= $this->minimumErrorLevel) {
             $this->messages[] = [
