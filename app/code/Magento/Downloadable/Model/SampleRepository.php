@@ -59,6 +59,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save(
         $productSku,

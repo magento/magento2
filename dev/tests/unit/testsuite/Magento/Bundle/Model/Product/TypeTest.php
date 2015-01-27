@@ -934,11 +934,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|SelectionCollection $selectionCollection */
-        $selectionCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
-            ->setMethods(['getItems'])
-            ->disableOriginalConstructor()
-            ->getMock();
+
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $product */
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(
