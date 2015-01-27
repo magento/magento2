@@ -7,6 +7,10 @@ namespace Magento\Framework\View\Layout\Generator;
 
 use Magento\Framework\View\Layout;
 
+/**
+ * Class Block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Block implements Layout\GeneratorInterface
 {
     /**
