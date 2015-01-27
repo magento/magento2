@@ -26,7 +26,7 @@ class User extends AbstractRepository
     {
         /** @var \Magento\Mtf\Config $systemConfig */
         $systemConfig = ObjectManager::getInstance()->create('Magento\Mtf\Config');
-        $superAdminPassword = $systemConfig->getConfigParam('application/backendPassword');
+        $superAdminPassword = $systemConfig->get('application/backendPassword');
         $this->_data['default'] = [
             'username' => 'admin',
             'firstname' => 'FirstName%isolation%',

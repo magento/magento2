@@ -47,9 +47,9 @@ class AdminUser extends DataFixture
      */
     protected function _initData()
     {
-        /** @var \Mtf\Config $systemConfig */
+        /** @var \Magento\Mtf\Config $systemConfig */
         $systemConfig = ObjectManager::getInstance()->create('Magento\Mtf\Config');
-        $superAdminPassword = $systemConfig->getConfigParam('application/backendPassword');
+        $superAdminPassword = $systemConfig->get('application/backendPassword');
         $this->_data = [
             'fields' => [
                 'email' => [
