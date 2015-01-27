@@ -6,7 +6,8 @@ define([
     "jquery",
     "jquery/ui",
     "jquery/template",
-    "js/theme"
+    "useDefault",
+    "collapsable"
 ], function($){
     "use strict";
     

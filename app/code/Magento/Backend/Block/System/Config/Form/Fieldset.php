@@ -214,7 +214,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
     protected function _getExtraJs($element)
     {
         $htmlId = $element->getHtmlId();
-        $output = "Fieldset.applyCollapse('{$htmlId}');";
+        $output = "require(['prototype'], function(){Fieldset.applyCollapse('{$htmlId}');});";
         return $this->_jsHelper->getScript($output);
     }
 

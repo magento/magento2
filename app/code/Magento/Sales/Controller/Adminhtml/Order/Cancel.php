@@ -6,17 +6,17 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-
 class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
      * Cancel order
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $order = $this->_initOrder();
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($order) {
             try {
                 $order->cancel()->save();
@@ -27,7 +27,8 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
                 $this->messageManager->addError(__('You have not canceled the item.'));
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             }
-            $this->_redirect('sales/order/view', ['order_id' => $order->getId()]);
+            return $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);
         }
+        return $resultRedirect->setPath('sales/*/');
     }
 }

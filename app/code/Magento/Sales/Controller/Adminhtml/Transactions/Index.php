@@ -6,17 +6,20 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Transactions;
 
+use Magento\Backend\Model\View\Result\Page;
 
 class Index extends \Magento\Sales\Controller\Adminhtml\Transactions
 {
     /**
-     * @return void
+     * @return Page
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Sales::sales_transactions');
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Transactions'));
-        $this->_view->renderLayout();
+        /** @var Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Sales::sales_transactions');
+        $resultPage->getConfig()->getTitle()->prepend(__('Transactions'));
+
+        return $resultPage;
     }
 }

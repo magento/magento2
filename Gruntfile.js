@@ -11,6 +11,8 @@ module.exports = function (grunt) {
     // Require
     // --------------------------------------
 
+    require('./dev/tools/grunt/tasks/mage-minify')(grunt);
+
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
@@ -33,7 +35,10 @@ module.exports = function (grunt) {
                 blank: 'app/design/frontend/Magento/blank',
                 luma: 'app/design/frontend/luma'
             },
-            doc: 'lib/web/css/docs'
+            doc: 'lib/web/css/docs',
+            uglify: {
+                legacy: 'lib/web/legacy-build.min.js'
+            }
         },
         doc: {
             styleName: 'docs'
@@ -110,7 +115,7 @@ module.exports = function (grunt) {
             },
             documentation: {
                 files: {
-                    '<%= config.path.doc %>/<%= config.doc.styleName %>.css': "<%= config.path.doc %>/source/<%= config.doc.styleName %>.less"
+                    '<%= config.path.doc %>/<%= config.doc.styleName %>.css': '<%= config.path.doc %>/source/<%= config.doc.styleName %>.less'
                 }
             }
         },
@@ -131,9 +136,39 @@ module.exports = function (grunt) {
                     '<%= config.path.doc %>': '<%= config.path.doc %>/source' // Todo UI: Check out JS for Styledocco
                 }
             }
-        }
+        },
 
+        'mage-minify': {
+            legacy: {
+                options: {
+                    type: 'yui-js',
+                    tempPath: 'var/cache/',
+                    options: ['--nomunge=true']
+                },
+                files: {
+                    '<%= config.path.uglify.legacy %>': [
+                        'lib/web/prototype/prototype.js',
+                        'lib/web/prototype/window.js',
+                        'lib/web/scriptaculous/builder.js',
+                        'lib/web/scriptaculous/effects.js',
+                        'lib/web/lib/ccard.js',
+                        'lib/web/prototype/validation.js',
+                        'lib/web/varien/js.js',
+                        'lib/web/mage/adminhtml/varienLoader.js',
+                        'lib/web/mage/adminhtml/tools.js'
+                    ]
+                }
+            }
+        }
     });
+
+    /**
+     * Creates build of a legacy files.
+     * Mostly prototype dependant libraries.
+     */
+    grunt.registerTask('legacy-build', [
+        'mage-minify:legacy'
+    ]);
 
     // Default task
     // --------------------------------------

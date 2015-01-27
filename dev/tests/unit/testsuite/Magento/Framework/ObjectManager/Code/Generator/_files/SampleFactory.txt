@@ -1,7 +1,7 @@
 namespace \Magento\Framework\ObjectManager\Code\Generator;
 
 /**
- * Factory class for \Magento\Framework\ObjectManager\Code\Generator\Sample
+ * Factory class for @see \Magento\Framework\ObjectManager\Code\Generator\Sample
  */
 class SampleFactory
 {

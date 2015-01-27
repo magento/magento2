@@ -10,6 +10,7 @@ use Magento\TestFramework\Helper\ObjectManager;
 /**
  * Class NewActionTest
  * @package Magento\Sales\Controller\Adminhtml\Order\Invoice
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class NewActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,7 +50,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
     protected $sessionMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultPageMock;
 
@@ -72,6 +73,17 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $messageManagerMock;
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultPageFactoryMock;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactoryMock;
+
 
     public function setUp()
     {
@@ -112,8 +124,9 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCommentText', 'setIsUrlNotice'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+        $this->resultPageMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Page')
             ->disableOriginalConstructor()
+            ->setMethods([])
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
             ->disableOriginalConstructor()
@@ -166,9 +179,23 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
 
+        $this->resultPageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\NewAction',
-            ['context' => $contextMock]
+            [
+                'context' => $contextMock,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
+                'resultPageFactory' => $this->resultPageFactoryMock
+            ]
         );
     }
 
@@ -230,19 +257,6 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->with('Magento_Sales::sales_order')
             ->will($this->returnValue([]));
 
-        $layoutMock = $this->getMockBuilder('Magento\Framework\View\Layout')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $layoutMock->expects($this->once())
-            ->method('getBlock')
-            ->with('menu')
-            ->will($this->returnValue($menuBlockMock));
-
-        $this->viewMock->expects($this->once())
-            ->method('getLayout')
-            ->will($this->returnValue($layoutMock));
-
         $this->sessionMock->expects($this->once())
             ->method('getCommentText')
             ->with(true)
@@ -261,7 +275,12 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Backend\Model\Session')
             ->will($this->returnValue($this->sessionMock));
 
-        $this->assertNull($this->controller->execute());
+        $this->resultPageMock->expects($this->once())->method('setActiveMenu')->with('Magento_Sales::sales_order');
+        $this->resultPageFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->resultPageMock));
+
+        $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
 
     public function testExecuteNoOrder()
@@ -295,6 +314,16 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Sales\Model\Order')
             ->willReturn($orderMock);
 
-        $this->assertNull($this->controller->execute());
+        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $resultRedirect->expects($this->once())->method('setPath')->with('sales/order/view', ['order_id' => $orderId]);
+
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($resultRedirect));
+
+        $this->assertSame($resultRedirect, $this->controller->execute());
     }
 }
