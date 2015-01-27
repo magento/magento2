@@ -24,4 +24,7 @@
     <assertTermAbsentInGrid module="Magento_CheckoutAgreements">
         <severity>low</severity>
     </assertTermAbsentInGrid>
+    <assertTermRequireMessageOnMultishippingCheckout module="Magento_CheckoutAgreements">
+        <severity>high</severity>
+    </assertTermRequireMessageOnMultishippingCheckout>
 </constraint>
