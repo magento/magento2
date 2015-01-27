@@ -1,0 +1,58 @@
+<?php
+/**
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ */
+?>
+
+<div class="step-controls">
+    <a href="" class="btn btn-primary" ng-click="previousState()">Previous</a>
+    <a href="" class="btn btn-primary" ng-click="nextState()">Next</a>
+</div>
+
+<div class="page-header">
+    <h1>{{$state.current.header}}</h1>
+</div>
+
+<form role="form">
+    <?php
+    $numberOfColumns = 3;
+    $rowsPerColumn = floor(sizeof($this->modules)/$numberOfColumns);
+
+    //creating columns
+    for($column = 0; $column<$numberOfColumns; $column++) {
+        ?>
+        {{addColumn('<?php echo $column?>');}}
+        <?php
+    }
+
+    //adding modules to columns
+    $rows = 0;
+    $column = 0;
+    foreach ( $this->modules as  $label => $value) {
+        if($rows == $rowsPerColumn  && ($column+1)<$numberOfColumns) {
+            $column++;
+            $rows=0;
+        }
+        ?>
+        {{add(<?php echo '"' . $label . '", "' .$value['select'] .'", "'. $value['mvp'] . '","' . $column .'"'; ?>);}}
+    <?php $rows++;
+    } ?>
+
+    <table border="0" >
+    <tr>
+        <td valign="top" ng-repeat="column in list">
+            <label class="col-md-12 col-md-offset-1" ng-repeat="module in column.modules">
+                <input name="{{module.label}}" ng-click="verifyDependencies()" type="checkbox" ng-checked="{{module
+                .select}}"
+                       ng-disabled="{{module.mvp}}"> {{module
+                .label}}
+             </label><hr/>
+        </td>
+    </tr>
+    </table>
+</form>
+
+<div class="step-controls">
+    <a href="" class="btn btn-primary" ng-click="previousState()">Previous</a>
+    <a href="" class="btn btn-primary" ng-click="nextState()">Next</a>
+</div>
